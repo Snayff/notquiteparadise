@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul class="current">
@@ -276,6 +277,13 @@ This returns an int indicating the number of tile moves between the two points.<
 <dt id="scripts.engine.utility.convert_direction_to_name">
 <code class="sig-name descname">convert_direction_to_name</code><span class="sig-paren">(</span><em class="sig-param">direction: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#convert_direction_to_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.convert_direction_to_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the direction name from the direction. (0,1) = ‘up’ etc.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.utility.build_sprites_from_paths">
+<code class="sig-name descname">build_sprites_from_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData" title="scripts.engine.core.definitions.TraitSpritePathsData">scripts.engine.core.definitions.TraitSpritePathsData</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_size</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">64, 64</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData" title="scripts.engine.core.definitions.TraitSpritesData">scripts.engine.core.definitions.TraitSpritesData</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#build_sprites_from_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.build_sprites_from_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
+combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.</p>
 </dd></dl>
 
 </div>

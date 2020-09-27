@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -190,22 +191,19 @@
 
 <span class="c1">####################### UTILITY ############################</span>
 
+
 <div class="viewcode-block" id="deserialise_dataclasses"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.extend_json.deserialise_dataclasses">[docs]</a><span class="k">def</span> <span class="nf">deserialise_dataclasses</span><span class="p">(</span><span class="n">dct</span><span class="p">):</span>
     <span class="k">if</span> <span class="s2">&quot;__dataclass__&quot;</span> <span class="ow">in</span> <span class="n">dct</span><span class="p">:</span>
         <span class="n">dataclass_</span> <span class="o">=</span> <span class="n">ExtendedJsonEncoder</span><span class="o">.</span><span class="n">__dataclassses__</span><span class="p">[</span><span class="n">dct</span><span class="p">[</span><span class="s2">&quot;__dataclass__&quot;</span><span class="p">]]</span>
         <span class="k">del</span> <span class="n">dct</span><span class="p">[</span><span class="s2">&quot;__dataclass__&quot;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">dataclass_</span><span class="p">(</span>
-            <span class="o">**</span><span class="p">{</span>
-                <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="n">deserialise_dataclasses</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="p">}</span>
-        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">dataclass_</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="n">deserialise_dataclasses</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
     <span class="k">return</span> <span class="n">dct</span></div>
 
 
 <div class="viewcode-block" id="register_dataclass_with_json"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.extend_json.register_dataclass_with_json">[docs]</a><span class="k">def</span> <span class="nf">register_dataclass_with_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
     <span class="n">ExtendedJsonEncoder</span><span class="o">.</span><span class="n">__dataclassses__</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
     <span class="k">return</span> <span class="bp">cls</span></div>
+
 
 <span class="c1">####################### JSON ENCODING ############################</span>
 
@@ -217,6 +215,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extend the json Encoder to handle dataclass types</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">__dataclassses__</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
 <div class="viewcode-block" id="ExtendedJsonEncoder.default"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.extend_json.ExtendedJsonEncoder.default">[docs]</a>    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
@@ -226,10 +225,7 @@
         <span class="k">if</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">is_dataclass</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">{</span>
                 <span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">__dataclass__</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
-                <span class="o">**</span><span class="p">{</span>
-                    <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
-                    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-                <span class="p">},</span>
+                <span class="o">**</span><span class="p">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">))</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">obj</span><span class="p">)},</span>
             <span class="p">}</span>
         <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">in</span> <span class="n">JSON_TYPES</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">obj</span>

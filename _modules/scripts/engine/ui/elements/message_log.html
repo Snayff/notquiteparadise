@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -206,11 +207,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># complete base class init</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">UI_BASE</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">element_id</span><span class="o">=</span><span class="s2">&quot;message_log&quot;</span><span class="p">,</span>
-                         <span class="n">anchors</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">})</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">rect</span><span class="p">,</span>
+            <span class="n">RenderLayer</span><span class="o">.</span><span class="n">UI_BASE</span><span class="p">,</span>
+            <span class="n">manager</span><span class="p">,</span>
+            <span class="n">element_id</span><span class="o">=</span><span class="s2">&quot;message_log&quot;</span><span class="p">,</span>
+            <span class="n">anchors</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">},</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_text_box</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="s2">&quot;Welcome to Not Quite Paradise!&quot;</span><span class="p">)</span>
@@ -237,8 +240,15 @@
 <span class="sd">        Create the text box to show the messages</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
-        <span class="n">textbox</span> <span class="o">=</span> <span class="n">UITextBox</span><span class="p">(</span><span class="n">html_text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
-                  <span class="n">wrap_to_height</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">layer_starting_height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#text_box&quot;</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">())</span>
+        <span class="n">textbox</span> <span class="o">=</span> <span class="n">UITextBox</span><span class="p">(</span>
+            <span class="n">html_text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span>
+            <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
+            <span class="n">wrap_to_height</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">layer_starting_height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#text_box&quot;</span><span class="p">,</span>
+            <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+        <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">textbox</span></div>
 
@@ -268,12 +278,18 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span><span class="o">.</span><span class="n">scroll_bar</span><span class="p">:</span>
             <span class="n">scroll_bar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span><span class="o">.</span><span class="n">scroll_bar</span>
             <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_wheel_down</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">+=</span> <span class="p">(</span><span class="mf">250.0</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span><span class="p">,</span>
-                                             <span class="n">scroll_bar</span><span class="o">.</span><span class="n">bottom_limit</span> <span class="o">-</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">sliding_button</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+            <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">+=</span> <span class="mf">250.0</span> <span class="o">*</span> <span class="mi">1</span>
+            <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span><span class="p">,</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">bottom_limit</span> <span class="o">-</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">sliding_button</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+            <span class="p">)</span>
             <span class="n">x_pos</span> <span class="o">=</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">shadow_width</span> <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">border_width</span>
-            <span class="n">y_pos</span> <span class="o">=</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">shadow_width</span> <span class="o">+</span> \
-                    <span class="n">scroll_bar</span><span class="o">.</span><span class="n">border_width</span> <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">button_height</span>
+            <span class="n">y_pos</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span>
+                <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span>
+                <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">shadow_width</span>
+                <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">border_width</span>
+                <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">button_height</span>
+            <span class="p">)</span>
             <span class="n">scroll_bar</span><span class="o">.</span><span class="n">sliding_button</span><span class="o">.</span><span class="n">set_position</span><span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">))</span>
 
             <span class="n">scroll_bar</span><span class="o">.</span><span class="n">start_percentage</span> <span class="o">=</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">/</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scrollable_height</span>

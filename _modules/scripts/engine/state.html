@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -234,6 +235,7 @@
 
 <span class="c1">################### SET ##############################</span>
 
+
 <div class="viewcode-block" id="set_active_skill"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.set_active_skill">[docs]</a><span class="k">def</span> <span class="nf">set_active_skill</span><span class="p">(</span><span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set the active skill. Used for targeting mode.</span>
@@ -242,6 +244,7 @@
 
 
 <span class="c1">################### MANAGING STATE ###################</span>
+
 
 <div class="viewcode-block" id="update_clock"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.update_clock">[docs]</a><span class="k">def</span> <span class="nf">update_clock</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -290,17 +293,16 @@
     <span class="n">save_name_prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="n">new_save_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">save_name_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">date_and_time</span><span class="si">}</span><span class="s2">&quot;</span>
 
-
     <span class="c1"># clear old saves</span>
     <span class="n">existing_saves</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># get existing save files and check if they match</span>
-    <span class="k">for</span> <span class="n">save_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">full_save_path</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">save_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_save_path</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">save_name_prefix</span> <span class="ow">in</span> <span class="n">save_name</span><span class="p">:</span>
             <span class="n">existing_saves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">save_name</span><span class="p">)</span>
     <span class="n">existing_saves</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">existing_saves</span><span class="p">)</span>
     <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">existing_saves</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MAX_SAVES</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># -1 to handle the offset</span>
         <span class="n">save_name</span> <span class="o">=</span> <span class="n">existing_saves</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">full_save_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">save_name</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_save_path</span> <span class="o">/</span> <span class="n">save_name</span><span class="p">))</span>
 
     <span class="c1"># update save data</span>
     <span class="n">_SAVE</span><span class="p">[</span><span class="n">new_save_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">save</span></div>
@@ -315,7 +317,8 @@
     <span class="k">for</span> <span class="n">save_name</span><span class="p">,</span> <span class="n">save_values</span> <span class="ow">in</span> <span class="n">_SAVE</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
         <span class="c1"># write to json</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">SAVE_PATH</span> <span class="o">+</span> <span class="n">save_name</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">str_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">SAVE_PATH</span> <span class="o">/</span> <span class="n">save_name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">str_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">save_values</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Save file dumped.&quot;</span><span class="p">)</span></div>
 
@@ -325,7 +328,8 @@
 <span class="sd">    Deserialise the game data from a file. Filename does not include path to save folder.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># read from json</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">SAVE_PATH</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">str_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">SAVE_PATH</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">str_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">save</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
     <span class="c1"># check the version</span>

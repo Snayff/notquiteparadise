@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -195,11 +196,22 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">INFINITE</span><span class="p">,</span> <span class="n">VERSION</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Callable</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;update&quot;</span><span class="p">,</span> <span class="s2">&quot;initialise_logging&quot;</span><span class="p">,</span> <span class="s2">&quot;kill_logging&quot;</span><span class="p">,</span> <span class="s2">&quot;is_logging&quot;</span><span class="p">,</span> <span class="s2">&quot;enable_profiling&quot;</span><span class="p">,</span> <span class="s2">&quot;disable_profiling&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;kill_profiler&quot;</span><span class="p">,</span> <span class="s2">&quot;performance_test&quot;</span><span class="p">,</span> <span class="s2">&quot;is_profiling&quot;</span><span class="p">,</span> <span class="s2">&quot;print_values_to_console&quot;</span><span class="p">,</span> <span class="s2">&quot;set_fps_visibility&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;get_visible_values&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;update&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;initialise_logging&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;kill_logging&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;is_logging&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;enable_profiling&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;disable_profiling&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;kill_profiler&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;performance_test&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;is_profiling&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;print_values_to_console&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;set_fps_visibility&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_visible_values&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <span class="k">class</span> <span class="nc">Debugger</span><span class="p">:</span>
@@ -247,16 +259,18 @@
 <span class="k">if</span> <span class="s2">&quot;GENERATING_SPHINX_DOCS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>  <span class="c1"># when building in CI these fail</span>
     <span class="n">_debugger</span> <span class="o">=</span> <span class="n">Debugger</span><span class="p">()</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">_debugger</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">_debugger</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># type: ignore</span>
 
 
 <span class="c1">########################## UPDATE #####################################</span>
+
 
 <div class="viewcode-block" id="update"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.update">[docs]</a><span class="k">def</span> <span class="nf">update</span><span class="p">():</span>
     <span class="n">_debugger</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
 
 <span class="c1">########################## LOGGING  #####################################</span>
+
 
 <div class="viewcode-block" id="initialise_logging"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.initialise_logging">[docs]</a><span class="k">def</span> <span class="nf">initialise_logging</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -286,8 +300,7 @@
 
     <span class="c1"># 8 adds space for 8 characters (# CRITICAL)</span>
     <span class="n">log_format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2">| </span><span class="si">%(levelname)-8s</span><span class="s2">| </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">log_file_name</span><span class="p">,</span> <span class="n">filemode</span><span class="o">=</span><span class="n">file_mode</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">log_level</span><span class="p">,</span>
-                        <span class="nb">format</span><span class="o">=</span><span class="n">log_format</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">log_file_name</span><span class="p">,</span> <span class="n">filemode</span><span class="o">=</span><span class="n">file_mode</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">log_level</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">log_format</span><span class="p">)</span>
 
     <span class="c1"># format into uk time</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="o">.</span><span class="n">converter</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span></div>
@@ -309,6 +322,7 @@
 
 
 <span class="c1">########################## PROFILING  #####################################</span>
+
 
 <span class="k">def</span> <span class="nf">_create_profiler</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -374,8 +388,13 @@
     <span class="n">ps</span><span class="o">.</span><span class="n">strip_dirs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">&quot;cumulative&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="performance_test"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.performance_test">[docs]</a><span class="k">def</span> <span class="nf">performance_test</span><span class="p">(</span><span class="n">method_descs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">old_methods</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">],</span> <span class="nb">str</span><span class="p">]],</span>
-        <span class="n">new_methods</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">],</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">num_runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="performance_test"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.performance_test">[docs]</a><span class="k">def</span> <span class="nf">performance_test</span><span class="p">(</span>
+    <span class="n">method_descs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">old_methods</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">],</span> <span class="nb">str</span><span class="p">]],</span>
+    <span class="n">new_methods</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">],</span> <span class="nb">str</span><span class="p">]],</span>
+    <span class="n">num_runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="n">repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run performance testing on a collection of methods/functions. Returns a formatted string detailing performance of</span>
 <span class="sd">     old, new and % change between them.</span>
@@ -401,8 +420,10 @@
         <span class="n">name</span> <span class="o">=</span> <span class="n">method_descs</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
         <span class="n">old</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">old_methods</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">setup</span><span class="o">=</span><span class="n">old_methods</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">number</span><span class="o">=</span><span class="n">num_runs</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">repeats</span><span class="p">))</span>
         <span class="n">new</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">new_methods</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">setup</span><span class="o">=</span><span class="n">new_methods</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">number</span><span class="o">=</span><span class="n">num_runs</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">repeats</span><span class="p">))</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="s1">&#39;0.5f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="s1">&#39;0.5f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> \
-                  <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="nb">format</span><span class="p">(((</span><span class="n">old</span> <span class="o">-</span> <span class="n">new</span><span class="p">)</span> <span class="o">/</span> <span class="n">old</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;0.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">%)&quot;</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="s1">&#39;0.5f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="s1">&#39;0.5f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="nb">format</span><span class="p">(((</span><span class="n">old</span> <span class="o">-</span> <span class="n">new</span><span class="p">)</span> <span class="o">/</span> <span class="n">old</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;0.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">%)&quot;</span>
+        <span class="p">)</span>
 
     <span class="n">gc</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">result</span></div>
@@ -417,6 +438,7 @@
 
 <span class="c1">########################## FPS #####################################</span>
 
+
 <span class="k">def</span> <span class="nf">is_fps_visible</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns true if fps stats are visible</span>
@@ -426,12 +448,12 @@
 
 <span class="c1">########################## GET OR SET VALUES #####################################</span>
 
+
 <div class="viewcode-block" id="print_values_to_console"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.print_values_to_console">[docs]</a><span class="k">def</span> <span class="nf">print_values_to_console</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Print the debuggers stats.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Avg FPS: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
-          <span class="sa">f</span><span class="s2">&quot;R_Avg: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Avg FPS: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span> <span class="sa">f</span><span class="s2">&quot;R_Avg: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="set_fps_visibility"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.set_fps_visibility">[docs]</a><span class="k">def</span> <span class="nf">set_fps_visibility</span><span class="p">(</span><span class="n">is_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
@@ -447,9 +469,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">is_fps_visible</span><span class="p">:</span>
-        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FPS: C=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">current_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
-                      <span class="sa">f</span><span class="s2">&quot;R_Avg=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
-                      <span class="sa">f</span><span class="s2">&quot;Avg=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;FPS: C=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">current_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;R_Avg=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Avg=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">values</span></div>
 </pre></div>

@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -191,7 +192,14 @@
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.core.html#module-scripts.engine.core.data">scripts.engine.core.data module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.core.html#module-scripts.engine.core.definitions">scripts.engine.core.definitions module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.core.html#module-scripts.engine.core.extend_json">scripts.engine.core.extend_json module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.engine.core.html#module-scripts.engine.core.queries">scripts.engine.core.queries module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.core.html#module-scripts.engine.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.engine.systems.html">scripts.engine.systems package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts.engine.systems.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.engine.systems.html#module-scripts.engine.systems.vision">scripts.engine.systems.vision module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.engine.systems.html#module-scripts.engine.systems">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="scripts.engine.ui.html">scripts.engine.ui package</a><ul>
@@ -224,7 +232,7 @@
 <li class="toctree-l1"><a class="reference internal" href="scripts.engine.world_objects.html">scripts.engine.world_objects package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.combat_stats">scripts.engine.world_objects.combat_stats module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.gamemap">scripts.engine.world_objects.gamemap module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.game_map">scripts.engine.world_objects.game_map module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.tile">scripts.engine.world_objects.tile module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#module-scripts.engine.world_objects">Module contents</a></li>
 </ul>
@@ -1196,16 +1204,6 @@ full-World serialization feature.</p>
 <em class="property">class </em><code class="sig-name descname">FOV</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fov_map</span><span class="p">:</span> <span class="n">numpy.array</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#FOV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.FOV" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
 <p>An entity’s field of view.</p>
-<dl class="py attribute">
-<dt id="scripts.engine.component.FOV.algorithm">
-<code class="sig-name descname">algorithm</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></em><em class="property"> = 0</em><a class="headerlink" href="#scripts.engine.component.FOV.algorithm" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.component.FOV.light_walls">
-<code class="sig-name descname">light_walls</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></em><em class="property"> = True</em><a class="headerlink" href="#scripts.engine.component.FOV.light_walls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt id="scripts.engine.component.FOV.serialize">
 <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#FOV.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.FOV.serialize" title="Permalink to this definition">¶</a></dt>
@@ -1231,6 +1229,40 @@ full-World serialization feature.</p>
 <dl class="py attribute">
 <dt id="scripts.engine.component.FOV._bitmask">
 <code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 65536</em><a class="headerlink" href="#scripts.engine.component.FOV._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.LightSource">
+<em class="property">class </em><code class="sig-name descname">LightSource</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">radius</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">colour</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#LightSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.LightSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An emitter of light.</p>
+<dl class="py method">
+<dt id="scripts.engine.component.LightSource.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#LightSource.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.LightSource.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize an instance of this component into a simpler type.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.component.LightSource.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#LightSource.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.LightSource.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize a serialized instance of this component.</p>
+<p>Will get the output of <cite>serialize</cite> as an argument.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.LightSource._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.LightSource._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.LightSource._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 131072</em><a class="headerlink" href="#scripts.engine.component.LightSource._bitmask" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1802,13 +1834,20 @@ This returns an int indicating the number of tile moves between the two points.<
 <dd><p>Get the direction name from the direction. (0,1) = ‘up’ etc.</p>
 </dd></dl>
 
+<dl class="py function">
+<dt id="scripts.engine.utility.build_sprites_from_paths">
+<code class="sig-name descname">build_sprites_from_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData" title="scripts.engine.core.definitions.TraitSpritePathsData">scripts.engine.core.definitions.TraitSpritePathsData</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_size</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">64, 64</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData" title="scripts.engine.core.definitions.TraitSpritesData">scripts.engine.core.definitions.TraitSpritesData</a><a class="reference internal" href="_modules/scripts/engine/utility.html#build_sprites_from_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.build_sprites_from_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
+combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-scripts.engine.world">
 <span id="scripts-engine-world-module"></span><h2>scripts.engine.world module<a class="headerlink" href="#module-scripts.engine.world" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="scripts.engine.world.create_entity">
 <code class="sig-name descname">create_entity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">components</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>snecs.component.Component<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#create_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_entity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use each component in a list of components to create_entity an entity</p>
+<dd><p>Use each component in a list of components to create an entity</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1836,13 +1875,6 @@ This returns an int indicating the number of tile moves between the two points.<
 </dd></dl>
 
 <dl class="py function">
-<dt id="scripts.engine.world.build_sprites_from_paths">
-<code class="sig-name descname">build_sprites_from_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData" title="scripts.engine.core.definitions.TraitSpritePathsData">scripts.engine.core.definitions.TraitSpritePathsData</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_size</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">64, 64</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData" title="scripts.engine.core.definitions.TraitSpritesData">scripts.engine.core.definitions.TraitSpritesData</a><a class="reference internal" href="_modules/scripts/engine/world.html#build_sprites_from_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.build_sprites_from_paths" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
-combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt id="scripts.engine.world.create_fov_map">
 <code class="sig-name descname">create_fov_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; numpy.array<a class="reference internal" href="_modules/scripts/engine/world.html#create_fov_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_fov_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a blank fov map</p>
@@ -1855,9 +1887,9 @@ combines the sprites from each TraitSpritePathsData in the  list and flattens to
 </dd></dl>
 
 <dl class="py function">
-<dt id="scripts.engine.world.get_gamemap">
-<code class="sig-name descname">get_gamemap</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.gamemap.Gamemap" title="scripts.engine.world_objects.gamemap.Gamemap">scripts.engine.world_objects.gamemap.Gamemap</a><a class="reference internal" href="_modules/scripts/engine/world.html#get_gamemap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_gamemap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get current gamemap</p>
+<dt id="scripts.engine.world.get_game_map">
+<code class="sig-name descname">get_game_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap" title="scripts.engine.world_objects.game_map.GameMap">scripts.engine.world_objects.game_map.GameMap</a><a class="reference internal" href="_modules/scripts/engine/world.html#get_game_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_game_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current game_map</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2044,12 +2076,6 @@ have Position, Resources to be eligible.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="scripts.engine.world.recompute_fov">
-<code class="sig-name descname">recompute_fov</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#recompute_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.recompute_fov" title="Permalink to this definition">¶</a></dt>
-<dd><p>Recalculate an entity’s FOV</p>
-</dd></dl>
-
-<dl class="py function">
 <dt id="scripts.engine.world.pay_resource_cost">
 <code class="sig-name descname">pay_resource_cost</code><span class="sig-paren">(</span><em class="sig-param">entity: int</em>, <em class="sig-param">resource: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">cost: int</em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#pay_resource_cost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.pay_resource_cost" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the resource cost from the using entity</p>
@@ -2114,12 +2140,6 @@ False if not.</p>
 <dt id="scripts.engine.world.add_component">
 <code class="sig-name descname">add_component</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">component</span><span class="p">:</span> <span class="n">snecs.component.Component</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#add_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.add_component" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a component to the entity</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="scripts.engine.world.update_tile_visibility">
-<code class="sig-name descname">update_tile_visibility</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fov_map</span><span class="p">:</span> <span class="n">numpy.array</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#update_tile_visibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.update_tile_visibility" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the the visibility of the tiles on the came map</p>
 </dd></dl>
 
 <dl class="py function">

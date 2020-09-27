@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -191,7 +192,6 @@
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 
-
 <div class="viewcode-block" id="convert_vector_to_intent"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.key.convert_vector_to_intent">[docs]</a><span class="k">def</span> <span class="nf">convert_vector_to_intent</span><span class="p">(</span><span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">InputIntentType</span><span class="p">]:</span>
     <span class="n">direction_map</span> <span class="o">=</span> <span class="p">{</span>
         <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
@@ -201,7 +201,7 @@
         <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
         <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
         <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
-        <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">DOWN_LEFT</span>
+        <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">direction_map</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">direction_map</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span>
@@ -214,11 +214,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">intent</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="mi">1</span><span class="p">:</span> <span class="n">_check_directions</span><span class="p">,</span>
-        <span class="mi">2</span><span class="p">:</span> <span class="n">_check_actions</span><span class="p">,</span>
-        <span class="mi">3</span><span class="p">:</span> <span class="n">_check_dev_actions</span>
-    <span class="p">}</span>
+    <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">_check_directions</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="n">_check_actions</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="n">_check_dev_actions</span><span class="p">}</span>
 
     <span class="c1"># loop each check in turn and return first value found</span>
     <span class="k">for</span> <span class="n">check</span> <span class="ow">in</span> <span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>

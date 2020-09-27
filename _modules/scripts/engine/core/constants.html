@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -181,11 +182,13 @@
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
 <span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">tcod</span>
 
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NewType</span><span class="p">,</span> <span class="n">Tuple</span>
-
 
 <span class="c1">######################## TOP LEVEL CONSTANTS ######################################</span>
 
@@ -199,18 +202,22 @@
 <span class="n">GAP_SIZE</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">SKILL_BUTTON_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
 <span class="n">INFINITE</span> <span class="o">=</span> <span class="mi">999</span>
+<span class="n">MAX_ACTIVATION_DISTANCE</span> <span class="o">=</span> <span class="mi">7</span>  <span class="c1"># this is how far from the player an entity can be and still be considered active</span>
+<span class="c1"># TODO - add an active component and then we can look for this (and only update once per turn!)</span>
+<span class="n">FOV_LIGHT_WALLS</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">FOV_ALGORITHM</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">FOV_RESTRICTIVE</span>
 
 <span class="c1">######################## PATHS ######################################</span>
-<span class="k">if</span> <span class="s2">&quot;GENERATING_SPHINX_DOCS&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-    <span class="c1"># to move up from docs and handle being in Ubuntu in CI</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">))</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+<span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>  <span class="c1"># constants.py is three directories deep</span>
 
-<span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>  <span class="s2">&quot;data/&quot;</span><span class="p">)</span>
-<span class="n">ASSET_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;assets/&quot;</span><span class="p">)</span>
-<span class="n">IMAGE_NOT_FOUND_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ASSET_PATH</span><span class="p">,</span> <span class="s2">&quot;image_not_found.png&quot;</span><span class="p">)</span>
-<span class="n">SAVE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">,</span> <span class="s2">&quot;saves/&quot;</span><span class="p">)</span>
+<span class="c1"># to move up from docs and handle being in Ubuntu in CI</span>
+<span class="k">if</span> <span class="s2">&quot;GENERATING_SPHINX_DOCS&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+    <span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">ROOT_PATH</span> <span class="o">/</span> <span class="n">os</span><span class="o">.</span><span class="n">pardir</span>
+
+<span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">ROOT_PATH</span> <span class="o">/</span> <span class="s2">&quot;data/&quot;</span>
+<span class="n">ASSET_PATH</span> <span class="o">=</span> <span class="n">ROOT_PATH</span> <span class="o">/</span> <span class="s2">&quot;assets/&quot;</span>
+<span class="n">IMAGE_NOT_FOUND_PATH</span> <span class="o">=</span> <span class="n">ASSET_PATH</span> <span class="o">/</span> <span class="s2">&quot;image_not_found.png&quot;</span>
+<span class="n">SAVE_PATH</span> <span class="o">=</span> <span class="n">DATA_PATH</span> <span class="o">/</span> <span class="s2">&quot;saves/&quot;</span>
 
 <span class="c1">######################## NEW TYPES ######################################</span>
 <span class="c1"># NewType guarantees you don&#39;t accidentally pass in a normal str instead of a value explicitly defined as a member of</span>
@@ -242,10 +249,12 @@
 
 <span class="c1">#################### INTERNAL, NON-SERIALISED ###########################################</span>
 
+
 <div class="viewcode-block" id="EventType"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.EventType">[docs]</a><span class="k">class</span> <span class="nc">EventType</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Constant info about the different custom event names that we can pass to pygame</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">TILE_CLICK</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">SKILL_BAR_CLICK</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">2</span>
     <span class="n">EXIT_MENU</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">3</span></div>
@@ -255,6 +264,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The possible render layers. Lower number is further down the stack.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">BOTTOM</span> <span class="o">=</span> <span class="n">RenderLayerType</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
     <span class="n">TILE</span> <span class="o">=</span> <span class="n">RenderLayerType</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
     <span class="n">ASPECT</span> <span class="o">=</span> <span class="n">RenderLayerType</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
@@ -267,8 +277,9 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    States the game can be in.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LOADING</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># while loading, to prevent key press.</span>
-    <span class="n">GAMEMAP</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># while player moving around the gamemap</span>
+    <span class="n">GAMEMAP</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># while player moving around the game_map</span>
     <span class="n">PLAYER_DEAD</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># while player is dead</span>
     <span class="n">TARGETING</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># while player is targeting</span>
     <span class="n">EXIT_GAME</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># while exiting</span>
@@ -280,6 +291,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The different, single instance UI elements</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">MESSAGE_LOG</span> <span class="o">=</span> <span class="n">UIElementType</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">ACTOR_INFO</span> <span class="o">=</span> <span class="n">UIElementType</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">SKILL_BAR</span> <span class="o">=</span> <span class="n">UIElementType</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
@@ -294,6 +306,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Values of the conversion from input to intent. Strings.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">UP</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">&quot;up&quot;</span><span class="p">)</span>
     <span class="n">DOWN</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">&quot;down&quot;</span><span class="p">)</span>
     <span class="n">LEFT</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
@@ -321,12 +334,14 @@
 
 
 <span class="c1">#################### EXTERNAL, SERIALISED  ###########################################</span>
-<span class="c1"># i.e used externally</span>
+<span class="c1"># i.e used in the data files</span>
+
 
 <div class="viewcode-block" id="Direction"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.Direction">[docs]</a><span class="k">class</span> <span class="nc">Direction</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Holds a tuple as (x, y) for the relative direction.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="c1"># N.B external values  must be actively mapped to these on load as they are not held as strings</span>
     <span class="n">UP_LEFT</span> <span class="o">=</span> <span class="n">DirectionType</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
     <span class="n">UP</span> <span class="o">=</span> <span class="n">DirectionType</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
@@ -343,6 +358,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Types of target</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">SELF</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;self&quot;</span><span class="p">)</span>
     <span class="n">OTHER_ENTITY</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;other_entity&quot;</span><span class="p">)</span>
     <span class="n">NO_ENTITY</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;no_entity&quot;</span><span class="p">)</span>
@@ -358,6 +374,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The types of player traits</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">PEOPLE</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;people&quot;</span><span class="p">)</span>
     <span class="n">SAVVY</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;savvy&quot;</span><span class="p">)</span>
     <span class="n">HOMELAND</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;homeland&quot;</span><span class="p">)</span>
@@ -368,6 +385,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Damage types</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">BURN</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;burn&quot;</span><span class="p">)</span>
     <span class="n">CHEMICAL</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;chemical&quot;</span><span class="p">)</span>
     <span class="n">ASTRAL</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;astral&quot;</span><span class="p">)</span>
@@ -379,6 +397,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Primary stats. Values are strings.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">VIGOUR</span> <span class="o">=</span> <span class="n">PrimaryStatType</span><span class="p">(</span><span class="s2">&quot;vigour&quot;</span><span class="p">)</span>
     <span class="n">CLOUT</span> <span class="o">=</span> <span class="n">PrimaryStatType</span><span class="p">(</span><span class="s2">&quot;clout&quot;</span><span class="p">)</span>
     <span class="n">SKULLDUGGERY</span> <span class="o">=</span> <span class="n">PrimaryStatType</span><span class="p">(</span><span class="s2">&quot;skullduggery&quot;</span><span class="p">)</span>
@@ -390,6 +409,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Secondary stats</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">MAX_HEALTH</span> <span class="o">=</span> <span class="n">SecondaryStatType</span><span class="p">(</span><span class="s2">&quot;max_health&quot;</span><span class="p">)</span>
     <span class="n">MAX_STAMINA</span> <span class="o">=</span> <span class="n">SecondaryStatType</span><span class="p">(</span><span class="s2">&quot;max_stamina&quot;</span><span class="p">)</span>
     <span class="n">HEALTH</span> <span class="o">=</span> <span class="n">SecondaryStatType</span><span class="p">(</span><span class="s2">&quot;health&quot;</span><span class="p">)</span>
@@ -408,6 +428,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Resources that can be used. Must map to secondary stats.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">HEALTH</span> <span class="o">=</span> <span class="n">ResourceType</span><span class="p">(</span><span class="s2">&quot;health&quot;</span><span class="p">)</span>
     <span class="n">STAMINA</span> <span class="o">=</span> <span class="n">ResourceType</span><span class="p">(</span><span class="s2">&quot;stamina&quot;</span><span class="p">)</span></div>
 
@@ -416,6 +437,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The value of each hit type. The value is the starting amount.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">GRAZE</span> <span class="o">=</span> <span class="n">HitTypeType</span><span class="p">(</span><span class="s2">&quot;graze&quot;</span><span class="p">)</span>
     <span class="n">HIT</span> <span class="o">=</span> <span class="n">HitTypeType</span><span class="p">(</span><span class="s2">&quot;hit&quot;</span><span class="p">)</span>
     <span class="n">CRIT</span> <span class="o">=</span> <span class="n">HitTypeType</span><span class="p">(</span><span class="s2">&quot;crit&quot;</span><span class="p">)</span></div>
@@ -425,6 +447,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Types of effects</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">APPLY_AFFLICTION</span> <span class="o">=</span> <span class="n">EffectTypeType</span><span class="p">(</span><span class="s2">&quot;apply_affliction&quot;</span><span class="p">)</span>
     <span class="n">DAMAGE</span> <span class="o">=</span> <span class="n">EffectTypeType</span><span class="p">(</span><span class="s2">&quot;damage&quot;</span><span class="p">)</span>
     <span class="n">MOVE</span> <span class="o">=</span> <span class="n">EffectTypeType</span><span class="p">(</span><span class="s2">&quot;move&quot;</span><span class="p">)</span>
@@ -439,6 +462,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Type of trigger for the affliction</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">MOVEMENT</span> <span class="o">=</span> <span class="n">AfflictionTriggerType</span><span class="p">(</span><span class="s2">&quot;movement&quot;</span><span class="p">)</span>
     <span class="n">TAKE_DAMAGE</span> <span class="o">=</span> <span class="n">AfflictionTriggerType</span><span class="p">(</span><span class="s2">&quot;take_damage&quot;</span><span class="p">)</span></div>
 
@@ -447,6 +471,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Boon or Bane</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">BANE</span> <span class="o">=</span> <span class="n">AfflictionCategoryType</span><span class="p">(</span><span class="s2">&quot;boon&quot;</span><span class="p">)</span>
     <span class="n">BOON</span> <span class="o">=</span> <span class="n">AfflictionCategoryType</span><span class="p">(</span><span class="s2">&quot;bane&quot;</span><span class="p">)</span></div>
 
@@ -455,6 +480,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specify the way in which as skill is targeted</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">AUTO</span> <span class="o">=</span> <span class="n">TargetingMethodType</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
     <span class="n">TARGET</span> <span class="o">=</span> <span class="n">TargetingMethodType</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">)</span></div>
 
@@ -463,10 +489,11 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    When to trigger the afflictions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">TARGET</span> <span class="o">=</span> <span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">)</span>  <span class="c1"># single target</span>
     <span class="n">SQUARE</span> <span class="o">=</span> <span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;square&quot;</span><span class="p">)</span>
     <span class="n">CIRCLE</span> <span class="o">=</span> <span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-    <span class="n">CROSS</span> <span class="o">=</span> <span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;cross&quot;</span><span class="p">),</span>
+    <span class="n">CROSS</span> <span class="o">=</span> <span class="p">(</span><span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;cross&quot;</span><span class="p">),)</span>
     <span class="n">CONE</span> <span class="o">=</span> <span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;cone&quot;</span><span class="p">)</span></div>
 
 
@@ -474,6 +501,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    What to do when a skill hits terrain</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">REFLECT</span> <span class="o">=</span> <span class="n">TerrainCollisionType</span><span class="p">(</span><span class="s2">&quot;reflect&quot;</span><span class="p">)</span>  <span class="c1"># bounce back</span>
     <span class="n">ACTIVATE</span> <span class="o">=</span> <span class="n">TerrainCollisionType</span><span class="p">(</span><span class="s2">&quot;activate&quot;</span><span class="p">)</span>  <span class="c1"># trigger effects</span>
     <span class="n">FIZZLE</span> <span class="o">=</span> <span class="n">TerrainCollisionType</span><span class="p">(</span><span class="s2">&quot;fizzle&quot;</span><span class="p">)</span>  <span class="c1"># kill self</span></div>
@@ -483,6 +511,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    How the skill travels</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">STANDARD</span> <span class="o">=</span> <span class="n">TravelMethodType</span><span class="p">(</span><span class="s2">&quot;standard&quot;</span><span class="p">)</span>  <span class="c1"># travels tile by tile</span>
     <span class="n">ARC</span> <span class="o">=</span> <span class="n">TravelMethodType</span><span class="p">(</span><span class="s2">&quot;arc&quot;</span><span class="p">)</span>  <span class="c1"># only impacts last tile in range, can reflect if hits terrain early.</span></div>
 
@@ -491,6 +520,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    What happens when the skill reaches the range limit</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">FIZZLE</span> <span class="o">=</span> <span class="n">ProjectileExpiryType</span><span class="p">(</span><span class="s2">&quot;fizzle&quot;</span><span class="p">)</span>
     <span class="n">ACTIVATE</span> <span class="o">=</span> <span class="n">ProjectileExpiryType</span><span class="p">(</span><span class="s2">&quot;activate&quot;</span><span class="p">)</span></div>
 
@@ -500,6 +530,7 @@
 <span class="sd">    The speed at which a projectile travels; how much time to move a tile.</span>
 <span class="sd">    N.B. does not use base move_cost</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="c1"># N.B external values  must be actively mapped to these on load as they are not held as strings</span>
     <span class="n">SLOW</span> <span class="o">=</span> <span class="n">ProjectileSpeedType</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
     <span class="n">AVERAGE</span> <span class="o">=</span> <span class="n">ProjectileSpeedType</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">SLOW</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
@@ -511,6 +542,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The type of tile to be placed</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">FLOOR</span> <span class="o">=</span> <span class="n">TileCategoryType</span><span class="p">(</span><span class="s2">&quot;floor&quot;</span><span class="p">)</span>
     <span class="n">WALL</span> <span class="o">=</span> <span class="n">TileCategoryType</span><span class="p">(</span><span class="s2">&quot;wall&quot;</span><span class="p">)</span>
     <span class="n">ACTOR</span> <span class="o">=</span> <span class="n">TileCategoryType</span><span class="p">(</span><span class="s2">&quot;actor&quot;</span><span class="p">)</span>

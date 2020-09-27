@@ -1,7 +1,6 @@
-
-Key
+Queries
 ============================================
 
-.. automodule:: scripts.engine.key
+.. automodule:: scripts.engine.core.queries
     :show-inheritance:
     :members:

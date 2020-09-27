@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -186,6 +187,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">RegisteredComponent</span>
 
+<span class="kn">import</span> <span class="nn">scripts.engine.utility</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">EffectType</span><span class="p">,</span> <span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">RenderLayerType</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -202,10 +204,12 @@
 
 <span class="c1">########################### FLAGS ##############################</span>
 
+
 <div class="viewcode-block" id="IsPlayer"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsPlayer">[docs]</a><span class="k">class</span> <span class="nc">IsPlayer</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Whether the entity is the player.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>  <span class="c1"># reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance</span>
 
 <div class="viewcode-block" id="IsPlayer.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsPlayer.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -220,6 +224,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Whether the entity is an actor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 
 <div class="viewcode-block" id="IsActor.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsActor.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -234,6 +239,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Whether the entity is a god.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 
 <div class="viewcode-block" id="IsGod.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsGod.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -248,6 +254,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A flag to show if an entity has stats used for combat.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 
 <div class="viewcode-block" id="HasCombatStats.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.HasCombatStats.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -260,6 +267,7 @@
 
 <span class="c1">#################### OTHERS #########################</span>
 
+
 <div class="viewcode-block" id="Position"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Position">[docs]</a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s position on the map. At initiation provide all positions the entity holds. After initiation only need</span>
@@ -269,9 +277,9 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">positions</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
         <span class="c1"># Sort the positions from top-left to down-right</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">positions</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Must provide at least 1 coordinate for the entity.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must provide at least 1 coordinate for the entity.&quot;</span><span class="p">)</span>
 
-        <span class="n">sorted_positions</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">sorted_positions</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
         <span class="n">top_left</span> <span class="o">=</span> <span class="n">sorted_positions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">offsets</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span> <span class="o">-</span> <span class="n">top_left</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span> <span class="o">-</span> <span class="n">top_left</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">sorted_positions</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reference_position</span> <span class="o">=</span> <span class="n">top_left</span>
@@ -300,7 +308,7 @@
         <span class="n">arg_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">transformed</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">transformed</span><span class="p">))</span>
         <span class="c1"># From all the nearest coordinates find the one nearest to the center of the entity</span>
         <span class="n">arg_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">transformed</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">transformed</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arg_max</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">transformed</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">transformed</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arg_max</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">coordinates</span><span class="p">[</span><span class="n">arg_max</span><span class="p">[</span><span class="n">arg_min</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordinates</span><span class="p">[</span><span class="n">arg_max</span><span class="p">[</span><span class="n">arg_min</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span></div>
 
@@ -341,8 +349,14 @@
 <span class="sd">    An entity&#39;s sprite.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">sprites</span><span class="p">:</span> <span class="n">TraitSpritesData</span><span class="p">,</span>
-            <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TraitSpritePathsData</span><span class="p">],</span> <span class="n">render_layer</span><span class="p">:</span> <span class="n">RenderLayerType</span><span class="p">,</span> <span class="n">draw_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">current_sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span>
+        <span class="n">sprites</span><span class="p">:</span> <span class="n">TraitSpritesData</span><span class="p">,</span>
+        <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TraitSpritePathsData</span><span class="p">],</span>
+        <span class="n">render_layer</span><span class="p">:</span> <span class="n">RenderLayerType</span><span class="p">,</span>
+        <span class="n">draw_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sprite_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TraitSpritePathsData</span><span class="p">]</span> <span class="o">=</span> <span class="n">sprite_paths</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="n">current_sprite</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sprites</span><span class="p">:</span> <span class="n">TraitSpritesData</span> <span class="o">=</span> <span class="n">sprites</span>
@@ -366,7 +380,7 @@
         <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;draw_pos&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_y</span><span class="p">),</span>
             <span class="s2">&quot;render_layer&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_layer</span><span class="p">,</span>
-            <span class="s2">&quot;sprite_paths&quot;</span><span class="p">:</span> <span class="n">sprite_paths</span>
+            <span class="s2">&quot;sprite_paths&quot;</span><span class="p">:</span> <span class="n">sprite_paths</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">_dict</span></div>
 
@@ -380,12 +394,14 @@
         <span class="c1"># unpack sprite paths</span>
         <span class="n">sprite_paths</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">TraitSpritePathsData</span>
+
         <span class="k">for</span> <span class="n">sprite_path</span> <span class="ow">in</span> <span class="n">_sprite_paths</span><span class="p">:</span>
             <span class="n">sprite_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="o">**</span><span class="n">sprite_path</span><span class="p">))</span>
 
         <span class="c1"># convert sprite paths to sprites</span>
         <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
-        <span class="n">sprites</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">build_sprites_from_paths</span><span class="p">(</span><span class="n">sprite_paths</span><span class="p">)</span>
+
+        <span class="n">sprites</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">build_sprites_from_paths</span><span class="p">(</span><span class="n">sprite_paths</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span><span class="p">,</span> <span class="n">sprites</span><span class="p">,</span> <span class="n">sprite_paths</span><span class="p">,</span> <span class="n">render_layer</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span></div></div>
 
@@ -488,6 +504,7 @@
 <div class="viewcode-block" id="Behaviour.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Behaviour.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">scripts.engine.thought</span> <span class="kn">import</span> <span class="n">SkipTurnBehaviour</span>
+
         <span class="n">skip_turn</span> <span class="o">=</span> <span class="n">SkipTurnBehaviour</span><span class="p">(</span><span class="n">serialised</span><span class="p">)</span>
         <span class="c1"># FIXME - need to deserialise behaviour properly</span>
         <span class="k">return</span> <span class="n">Behaviour</span><span class="p">(</span><span class="n">skip_turn</span><span class="p">)</span></div></div>
@@ -498,8 +515,12 @@
 <span class="sd">    An entity&#39;s knowledge, including skills.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">]],</span> <span class="n">skill_order</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">cooldowns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">]],</span>
+        <span class="n">skill_order</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">cooldowns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="n">skills</span> <span class="o">=</span> <span class="n">skills</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">skill_order</span> <span class="o">=</span> <span class="n">skill_order</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">cooldowns</span> <span class="o">=</span> <span class="n">cooldowns</span> <span class="ow">or</span> <span class="p">{}</span>
@@ -541,13 +562,8 @@
         <span class="k">if</span> <span class="n">set_cooldown</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-
 <div class="viewcode-block" id="Knowledge.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Knowledge.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;skill_names&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="p">,</span>
-            <span class="s2">&quot;cooldowns&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">,</span>
-            <span class="s2">&quot;skill_order&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_order</span>
-        <span class="p">}</span>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;skill_names&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="p">,</span> <span class="s2">&quot;cooldowns&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">,</span> <span class="s2">&quot;skill_order&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_order</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">_dict</span></div>
 
 <div class="viewcode-block" id="Knowledge.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Knowledge.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
@@ -558,6 +574,7 @@
 
         <span class="n">skills</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">action</span>
+
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">skill_names</span><span class="p">:</span>
             <span class="n">skills</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
 
@@ -568,8 +585,12 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s Boons and Banes. held in .active as a list of Affliction.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">active</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Affliction</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">stat_modifiers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">active</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Affliction</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">stat_modifiers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="n">active</span> <span class="o">=</span> <span class="n">active</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">stat_modifiers</span> <span class="o">=</span> <span class="n">stat_modifiers</span> <span class="ow">or</span> <span class="p">{}</span>
 
@@ -579,13 +600,13 @@
 <div class="viewcode-block" id="Afflictions.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Afflictions.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">active</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
-            <span class="n">active</span><span class="p">[</span><span class="n">affliction</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">creator</span><span class="p">,</span> <span class="n">affliction</span><span class="o">.</span><span class="n">affected_entity</span><span class="p">,</span>
-                                                    <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+            <span class="n">active</span><span class="p">[</span><span class="n">affliction</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">affliction</span><span class="o">.</span><span class="n">creator</span><span class="p">,</span>
+                <span class="n">affliction</span><span class="o">.</span><span class="n">affected_entity</span><span class="p">,</span>
+                <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+            <span class="p">)</span>
 
-        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">active</span><span class="p">,</span>
-            <span class="s2">&quot;stat_modifiers&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stat_modifiers</span>
-        <span class="p">}</span>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">active</span><span class="p">,</span> <span class="s2">&quot;stat_modifiers&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="p">}</span>
 
         <span class="k">return</span> <span class="n">_dict</span></div>
 
@@ -595,6 +616,7 @@
 
         <span class="n">active_instances</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">action</span>
+
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value_tuple</span> <span class="ow">in</span> <span class="n">active_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">_affliction</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">affliction_registry</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="n">affliction</span> <span class="o">=</span> <span class="n">_affliction</span><span class="p">(</span><span class="n">value_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">value_tuple</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
@@ -653,8 +675,6 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s field of view.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">algorithm</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">light_walls</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fov_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">fov_map</span>
@@ -667,6 +687,29 @@
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
         <span class="n">fov_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">serialised</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">FOV</span><span class="p">(</span><span class="n">fov_map</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="LightSource"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.LightSource">[docs]</a><span class="k">class</span> <span class="nc">LightSource</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An emitter of light.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">colour</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">colour</span><span class="p">:</span>
+            <span class="n">_colour</span> <span class="o">=</span> <span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mi">182</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_colour</span> <span class="o">=</span> <span class="n">colour</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">_colour</span>
+
+<div class="viewcode-block" id="LightSource.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.LightSource.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radius&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="s2">&quot;colour&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LightSource.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.LightSource.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">LightSource</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

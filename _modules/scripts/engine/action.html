@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -189,27 +190,21 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">AfflictionCategoryType</span><span class="p">,</span>
     <span class="n">AfflictionTriggerType</span><span class="p">,</span>
-    <span class="n">Direction</span><span class="p">,</span>
     <span class="n">DirectionType</span><span class="p">,</span>
     <span class="n">EffectTypeType</span><span class="p">,</span>
-    <span class="n">Resource</span><span class="p">,</span>
     <span class="n">ResourceType</span><span class="p">,</span>
-    <span class="n">Shape</span><span class="p">,</span>
     <span class="n">ShapeType</span><span class="p">,</span>
-    <span class="n">TargetingMethod</span><span class="p">,</span>
     <span class="n">TargetingMethodType</span><span class="p">,</span>
-    <span class="n">TargetTag</span><span class="p">,</span>
     <span class="n">TargetTagType</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ProjectileData</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.effect</span> <span class="kn">import</span> <span class="n">Effect</span><span class="p">,</span> <span class="n">MoveActorEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.effect</span> <span class="kn">import</span> <span class="n">Effect</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Skill&quot;</span><span class="p">,</span> <span class="s2">&quot;Affliction&quot;</span><span class="p">,</span> <span class="s2">&quot;properties_set_by_data&quot;</span><span class="p">,</span> <span class="s2">&quot;register_action&quot;</span><span class="p">,</span> <span class="s2">&quot;skill_registry&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;affliction_registry&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Skill&quot;</span><span class="p">,</span> <span class="s2">&quot;Affliction&quot;</span><span class="p">,</span> <span class="s2">&quot;properties_set_by_data&quot;</span><span class="p">,</span> <span class="s2">&quot;register_action&quot;</span><span class="p">,</span> <span class="s2">&quot;skill_registry&quot;</span><span class="p">,</span> <span class="s2">&quot;affliction_registry&quot;</span><span class="p">]</span>
 
 <span class="n">skill_registry</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">affliction_registry</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Affliction</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -256,6 +251,7 @@
 <span class="sd">        If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
+
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; used &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
 
         <span class="c1"># animate the skill user</span>
@@ -286,6 +282,7 @@
 <span class="sd">        Play the provided animation on the entity&#39;s aesthetic component</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
+
         <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
         <span class="n">animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_animation</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">aesthetic</span> <span class="ow">and</span> <span class="n">animation</span><span class="p">:</span>
@@ -298,8 +295,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">entity_names</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
-        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_affected_entities</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-                                                  <span class="bp">self</span><span class="o">.</span><span class="n">shape_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_affected_entities</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
+        <span class="p">):</span>
             <span class="k">yield</span> <span class="n">entity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_effects</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
             <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
 
@@ -325,6 +324,7 @@
 <span class="sd">        Sets the class properties of the skill from the class key</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span>
+
         <span class="bp">cls</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">SKILLS</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">key</span><span class="p">]</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">name</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">required_tags</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">required_tags</span>
@@ -374,6 +374,7 @@
 <span class="sd">        An iterator over pairs of (affected entity, [effects])</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
+
         <span class="n">entities</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">position</span><span class="p">:</span>

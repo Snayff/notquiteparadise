@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -186,6 +187,7 @@
 
 <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">UIElement</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.utility</span> <span class="kn">import</span> <span class="n">is_close</span>
 
@@ -205,7 +207,7 @@
 <span class="sd">    Update real-time timers on entities, such as entity animations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># move entities screen position towards target</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">aesthetic</span><span class="p">:</span>
         <span class="c1"># cast for typing</span>
         <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">aesthetic</span><span class="p">)</span>
 
@@ -221,8 +223,9 @@
         <span class="k">if</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span> <span class="o">!=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span> <span class="ow">or</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">!=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span><span class="p">:</span>
 
             <span class="c1"># time for animation exceeded or animation very close to end</span>
-            <span class="k">if</span> <span class="n">time_exceeded</span> <span class="ow">or</span> <span class="n">is_close</span><span class="p">((</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span><span class="p">),</span>
-                                         <span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">time_exceeded</span> <span class="ow">or</span> <span class="n">is_close</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span><span class="p">),</span> <span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span><span class="p">)</span>
+            <span class="p">):</span>
 
                 <span class="c1"># set to target</span>
                 <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span>

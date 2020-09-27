@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    scripts.engine.core
+   scripts.engine.systems
    scripts.engine.ui
    scripts.engine.world_objects
 

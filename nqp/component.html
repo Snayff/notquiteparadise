@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul class="current">
@@ -800,16 +801,6 @@ full-World serialization feature.</p>
 <em class="property">class </em><code class="sig-name descname">FOV</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fov_map</span><span class="p">:</span> <span class="n">numpy.array</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/component.html#FOV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.FOV" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
 <p>An entity’s field of view.</p>
-<dl class="py attribute">
-<dt id="scripts.engine.component.FOV.algorithm">
-<code class="sig-name descname">algorithm</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></em><em class="property"> = 0</em><a class="headerlink" href="#scripts.engine.component.FOV.algorithm" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.component.FOV.light_walls">
-<code class="sig-name descname">light_walls</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></em><em class="property"> = True</em><a class="headerlink" href="#scripts.engine.component.FOV.light_walls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt id="scripts.engine.component.FOV.serialize">
 <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/component.html#FOV.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.FOV.serialize" title="Permalink to this definition">¶</a></dt>
@@ -835,6 +826,40 @@ full-World serialization feature.</p>
 <dl class="py attribute">
 <dt id="scripts.engine.component.FOV._bitmask">
 <code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 65536</em><a class="headerlink" href="#scripts.engine.component.FOV._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.LightSource">
+<em class="property">class </em><code class="sig-name descname">LightSource</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">radius</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">colour</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/component.html#LightSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.LightSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An emitter of light.</p>
+<dl class="py method">
+<dt id="scripts.engine.component.LightSource.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/component.html#LightSource.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.LightSource.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize an instance of this component into a simpler type.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.component.LightSource.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/component.html#LightSource.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.LightSource.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize a serialized instance of this component.</p>
+<p>Will get the output of <cite>serialize</cite> as an argument.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.LightSource._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.LightSource._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.LightSource._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 131072</em><a class="headerlink" href="#scripts.engine.component.LightSource._bitmask" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

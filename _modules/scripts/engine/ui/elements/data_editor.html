@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -216,67 +217,70 @@
 
 <div class="viewcode-block" id="DataEditor"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.data_editor.DataEditor">[docs]</a><span class="k">class</span> <span class="nc">DataEditor</span><span class="p">(</span><span class="n">UIWindow</span><span class="p">):</span>
     <span class="k">pass</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Dev tool to allow creating and editing data.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1">#     def __init__(self, rect, manager):</span>
-<span class="c1">#         super().__init__(rect, manager, &quot;data_editor&quot;)</span>
-<span class="c1">#</span>
-<span class="c1">#         # data holders</span>
-<span class="c1">#         self.all_data: Dict[str, Dict[str, dataclass()]] = {}</span>
-<span class="c1">#         self.current_data_category: str = None</span>
-<span class="c1">#         self.current_data_instance: str = None</span>
-<span class="c1">#         self.current_primary_field: str = None</span>
-<span class="c1">#         self.current_secondary_field: str = None</span>
-<span class="c1">#         self.key_being_edited: str = None</span>
-<span class="c1">#         self.field_options: Dict[str, Tuple[List[str], Optional[dataclass]]] = {}</span>
-<span class="c1">#</span>
-<span class="c1">#         # data selectors</span>
-<span class="c1">#         self.category_selector: UIDropDownMenu = None</span>
-<span class="c1">#         self.instance_selector: UIDropDownMenu = None</span>
-<span class="c1">#</span>
-<span class="c1">#         # dicts of data fields</span>
-<span class="c1">#         self.primary_data_fields: Dict[str, DataField] = {}</span>
-<span class="c1">#         self.secondary_data_fields: Dict[str, DataField] = {}</span>
-<span class="c1">#</span>
-<span class="c1">#         # size info</span>
-<span class="c1">#         self.start_x = 2</span>
-<span class="c1">#         self.start_y = 2</span>
-<span class="c1">#         self.width = self.rect.width</span>
-<span class="c1">#         self.height = self.rect.height</span>
-<span class="c1">#         self.row_height = 25</span>
-<span class="c1">#         self.max_rows = self.height // self.row_height</span>
-<span class="c1">#         self.selectors_end_y = self.start_y + (self.row_height * 2)  # 2 is number of selectors</span>
-<span class="c1">#</span>
-<span class="c1">#         self.primary_x = self.start_x</span>
-<span class="c1">#         self.primary_y = self.selectors_end_y</span>
-<span class="c1">#         self.primary_width = self.width // 2</span>
-<span class="c1">#</span>
-<span class="c1">#         self.secondary_x = self.primary_x + self.primary_width</span>
-<span class="c1">#         self.secondary_y = self.selectors_end_y</span>
-<span class="c1">#         self.secondary_width = self.width - self.primary_width</span>
-<span class="c1">#</span>
-<span class="c1">#         self.label_width_mod = 0.3  # decimal % of row width that label takes up</span>
-<span class="c1">#</span>
-<span class="c1">#         self.max_y = self.height</span>
-<span class="c1">#</span>
-<span class="c1">#         # get the data &amp; field options</span>
-<span class="c1">#         self._load_library_data()</span>
-<span class="c1">#         self._load_field_options()</span>
-<span class="c1">#</span>
-<span class="c1">#         # display the initial selector</span>
-<span class="c1">#         self.category_selector = self._create_data_category_selector()</span>
-<span class="c1">#</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     Dev tool to allow creating and editing data.</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#</span>
+    <span class="c1">#     def __init__(self, rect, manager):</span>
+    <span class="c1">#         super().__init__(rect, manager, &quot;data_editor&quot;)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         # data holders</span>
+    <span class="c1">#         self.all_data: Dict[str, Dict[str, dataclass()]] = {}</span>
+    <span class="c1">#         self.current_data_category: str = None</span>
+    <span class="c1">#         self.current_data_instance: str = None</span>
+    <span class="c1">#         self.current_primary_field: str = None</span>
+    <span class="c1">#         self.current_secondary_field: str = None</span>
+    <span class="c1">#         self.key_being_edited: str = None</span>
+    <span class="c1">#         self.field_options: Dict[str, Tuple[List[str], Optional[dataclass]]] = {}</span>
+    <span class="c1">#</span>
+    <span class="c1">#         # data selectors</span>
+    <span class="c1">#         self.category_selector: UIDropDownMenu = None</span>
+    <span class="c1">#         self.instance_selector: UIDropDownMenu = None</span>
+    <span class="c1">#</span>
+    <span class="c1">#         # dicts of data fields</span>
+    <span class="c1">#         self.primary_data_fields: Dict[str, DataField] = {}</span>
+    <span class="c1">#         self.secondary_data_fields: Dict[str, DataField] = {}</span>
+    <span class="c1">#</span>
+    <span class="c1">#         # size info</span>
+    <span class="c1">#         self.start_x = 2</span>
+    <span class="c1">#         self.start_y = 2</span>
+    <span class="c1">#         self.width = self.rect.width</span>
+    <span class="c1">#         self.height = self.rect.height</span>
+    <span class="c1">#         self.row_height = 25</span>
+    <span class="c1">#         self.max_rows = self.height // self.row_height</span>
+    <span class="c1">#         self.selectors_end_y = self.start_y + (self.row_height * 2)  # 2 is number of selectors</span>
+    <span class="c1">#</span>
+    <span class="c1">#         self.primary_x = self.start_x</span>
+    <span class="c1">#         self.primary_y = self.selectors_end_y</span>
+    <span class="c1">#         self.primary_width = self.width // 2</span>
+    <span class="c1">#</span>
+    <span class="c1">#         self.secondary_x = self.primary_x + self.primary_width</span>
+    <span class="c1">#         self.secondary_y = self.selectors_end_y</span>
+    <span class="c1">#         self.secondary_width = self.width - self.primary_width</span>
+    <span class="c1">#</span>
+    <span class="c1">#         self.label_width_mod = 0.3  # decimal % of row width that label takes up</span>
+    <span class="c1">#</span>
+    <span class="c1">#         self.max_y = self.height</span>
+    <span class="c1">#</span>
+    <span class="c1">#         # get the data &amp; field options</span>
+    <span class="c1">#         self._load_library_data()</span>
+    <span class="c1">#         self._load_field_options()</span>
+    <span class="c1">#</span>
+    <span class="c1">#         # display the initial selector</span>
+    <span class="c1">#         self.category_selector = self._create_data_category_selector()</span>
+    <span class="c1">#</span>
 <div class="viewcode-block" id="DataEditor.update"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.data_editor.DataEditor.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="k">pass</span></div>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Update based on current state and data. Run every frame.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         super().update(time_delta)</span>
-<span class="c1">#</span>
+
+    <span class="c1">#         &quot;&quot;&quot;</span>
+    <span class="c1">#         Update based on current state and data. Run every frame.</span>
+    <span class="c1">#         &quot;&quot;&quot;</span>
+    <span class="c1">#         super().update(time_delta)</span>
+    <span class="c1">#</span>
 <div class="viewcode-block" id="DataEditor.handle_events"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.data_editor.DataEditor.handle_events">[docs]</a>    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-         <span class="k">pass</span></div></div>
+        <span class="k">pass</span></div></div>
+
+
 <span class="c1">#         &quot;&quot;&quot;</span>
 <span class="c1">#         Handle events created by this UI widget</span>
 <span class="c1">#         &quot;&quot;&quot;</span>

@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -194,10 +195,19 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Show messages on the centre of the screen for a limited time</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">,):</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">html_text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span> <span class="n">wrap_to_height</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                         <span class="n">layer_starting_height</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;screen_message&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">html_text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span>
+            <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span>
+            <span class="n">wrap_to_height</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">layer_starting_height</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+            <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;screen_message&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">view_time</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># time in seconds</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lifespan</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># time in seconds</span>

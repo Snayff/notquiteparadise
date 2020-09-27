@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -182,18 +183,20 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">cast</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Tracked</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">INFINITE</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.data</span> <span class="kn">import</span> <span class="n">store</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.systems.vision</span> <span class="kn">import</span> <span class="n">process_fov</span><span class="p">,</span> <span class="n">process_light_map</span><span class="p">,</span> <span class="n">process_tile_visibility</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 
 <span class="c1">############ ACTIONS ##################</span>
+
 
 <div class="viewcode-block" id="rebuild_turn_queue"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.chronicle.rebuild_turn_queue">[docs]</a><span class="k">def</span> <span class="nf">rebuild_turn_queue</span><span class="p">(</span><span class="n">entity_to_exclude</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -204,7 +207,9 @@
 
     <span class="c1"># create a turn queue from the entities list</span>
     <span class="n">new_queue</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">tracked</span><span class="p">,</span> <span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Tracked</span><span class="p">]):</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
+
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">tracked</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">tracked</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">entity</span> <span class="o">!=</span> <span class="n">entity_to_exclude</span><span class="p">:</span>
             <span class="n">tracked</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Tracked</span><span class="p">,</span> <span class="n">tracked</span><span class="p">)</span>
             <span class="n">new_queue</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="n">tracked</span><span class="o">.</span><span class="n">time_spent</span>
@@ -249,6 +254,12 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">set_time_in_round</span><span class="p">(</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span>
 
+    <span class="c1"># update visibility</span>
+    <span class="c1"># TODO - implement scheduling so this doesnt need to be called here</span>
+    <span class="n">process_light_map</span><span class="p">()</span>
+    <span class="n">process_fov</span><span class="p">()</span>
+    <span class="n">process_tile_visibility</span><span class="p">()</span>
+
     <span class="c1"># log new turn holder</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">turn_holder</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; Current time is </span><span class="si">{</span><span class="n">get_time</span><span class="p">()</span><span class="si">}</span><span class="s2">. We are </span><span class="si">{</span><span class="n">get_time_in_round</span><span class="p">()</span><span class="si">}</span><span class="s2"> TU`s into round </span><span class="si">{</span><span class="n">get_round</span><span class="p">()</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
@@ -260,7 +271,9 @@
 <span class="sd">    Move to the next round and trigger end of round events, like cooldown and affliction reduction.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1">## skill cooldowns</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">knowledge</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Knowledge</span><span class="p">]):</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
+
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">knowledge</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">knowledge</span><span class="p">:</span>
         <span class="n">knowledge</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Knowledge</span><span class="p">,</span> <span class="n">knowledge</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">skill_name</span> <span class="ow">in</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">skill_names</span><span class="p">:</span>
             <span class="n">skill_cooldown</span> <span class="o">=</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span>
@@ -268,7 +281,7 @@
                 <span class="n">knowledge</span><span class="o">.</span><span class="n">set_skill_cooldown</span><span class="p">(</span><span class="n">skill_name</span><span class="p">,</span> <span class="n">skill_cooldown</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="c1">## affliction durations</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">afflictions</span><span class="p">,</span> <span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Afflictions</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">afflictions</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">affliction</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">afflictions</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>  <span class="c1"># handle mypy type error</span>
         <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -281,8 +294,7 @@
 
     <span class="c1">## time management</span>
     <span class="c1"># add progressed time and minus time_in_round to keep the remaining time</span>
-    <span class="n">set_time_in_round</span><span class="p">((</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span> <span class="o">-</span>
-                      <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span><span class="p">)</span>
+    <span class="n">set_time_in_round</span><span class="p">((</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span> <span class="o">-</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span><span class="p">)</span>
 
     <span class="c1"># increment rounds</span>
     <span class="n">_increment_round_number</span><span class="p">()</span>
@@ -305,6 +317,7 @@
 
 
 <span class="c1">############# GET ###################</span>
+
 
 <div class="viewcode-block" id="get_turn_holder"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.chronicle.get_turn_holder">[docs]</a><span class="k">def</span> <span class="nf">get_turn_holder</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -364,6 +377,7 @@
 
 
 <span class="c1">############# SET ###################</span>
+
 
 <div class="viewcode-block" id="set_turn_holder"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.chronicle.set_turn_holder">[docs]</a><span class="k">def</span> <span class="nf">set_turn_holder</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>

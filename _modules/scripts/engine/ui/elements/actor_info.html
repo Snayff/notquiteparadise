@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -220,9 +221,14 @@
 
         <span class="c1"># setup scroll bar</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span> <span class="o">=</span> <span class="mi">50</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar</span> <span class="o">=</span> <span class="n">UIVerticalScrollBar</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-                                                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">)),</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;#scrollbar&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar</span> <span class="o">=</span> <span class="n">UIVerticalScrollBar</span><span class="p">(</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">)),</span>
+            <span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">manager</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="s2">&quot;#scrollbar&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># block mouse clicks outside of menu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_blocking</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -253,27 +259,29 @@
 <span class="sd">        NOTE: Copied from pygame_gui UIWindow to allow overwriting use of close button.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">MOUSEBUTTONDOWN</span> <span class="ow">and</span>
-                <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_LEFT</span><span class="p">,</span>
-                                 <span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_MIDDLE</span><span class="p">,</span>
-                                 <span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_RIGHT</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">MOUSEBUTTONDOWN</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_LEFT</span><span class="p">,</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_MIDDLE</span><span class="p">,</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_RIGHT</span><span class="p">,</span>
+        <span class="p">]:</span>
             <span class="n">scaled_mouse_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="o">.</span><span class="n">calculate_scaled_mouse_position</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 
-            <span class="n">edge_hovered</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edge_hovering</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_hovering</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">edge_hovering</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_hovering</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_enabled</span> <span class="ow">and</span>
-                    <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_LEFT</span> <span class="ow">and</span>
-                    <span class="n">edge_hovered</span><span class="p">):</span>
+            <span class="n">edge_hovered</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">edge_hovering</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_hovering</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_hovering</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_hovering</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_enabled</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_LEFT</span> <span class="ow">and</span> <span class="n">edge_hovered</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">resizing_mode_active</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">start_resize_point</span> <span class="o">=</span> <span class="n">scaled_mouse_pos</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">start_resize_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">MOUSEBUTTONUP</span> <span class="ow">and</span>
-                <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_LEFT</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">resizing_mode_active</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">MOUSEBUTTONUP</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_LEFT</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">resizing_mode_active</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">resizing_mode_active</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">user_type</span> <span class="o">==</span> <span class="n">UI_BUTTON_PRESSED</span>
-                <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">ui_element</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">close_window_button</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span>
+            <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">user_type</span> <span class="o">==</span> <span class="n">UI_BUTTON_PRESSED</span>
+            <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">ui_element</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">close_window_button</span>
+        <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_close_button</span><span class="p">()</span></div>
 
     <span class="c1">############## GET / SET ########################</span>
@@ -301,8 +309,9 @@
         <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
 
             <span class="n">info</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">section_break_image</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="n">ASSET_PATH</span> <span class="o">+</span> <span class="s2">&quot;ui/menu_window_n_repeat.png&quot;</span><span class="p">,</span>
-                                                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+            <span class="n">section_break_image</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span>
+                <span class="n">ASSET_PATH</span> <span class="o">/</span> <span class="s2">&quot;ui/menu_window_n_repeat.png&quot;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+            <span class="p">)</span>
 
             <span class="c1"># get aesthetic</span>
             <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
@@ -334,7 +343,6 @@
                     <span class="c1"># in case it fails to pull expected attribute</span>
                     <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
                         <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ActorInfo: attribute </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> not found in primary stats.&quot;</span><span class="p">)</span>
-
 
                 <span class="n">secondary_stats</span> <span class="o">=</span> <span class="n">get_class_members</span><span class="p">(</span><span class="n">SecondaryStat</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">secondary_stats</span><span class="p">:</span>
@@ -422,7 +430,7 @@
         <span class="k">for</span> <span class="n">type_str</span><span class="p">,</span> <span class="n">text_or_image</span> <span class="ow">in</span> <span class="n">info</span><span class="p">:</span>
             <span class="c1"># build current text block</span>
             <span class="k">if</span> <span class="n">type_str</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
-                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text_or_image</span><span class="p">,</span><span class="nb">str</span><span class="p">)</span>  <span class="c1"># handle mypy error</span>
+                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text_or_image</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>  <span class="c1"># handle mypy error</span>
                 <span class="n">current_text_block</span> <span class="o">+=</span> <span class="n">text_or_image</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span>
 
             <span class="k">elif</span> <span class="n">type_str</span> <span class="o">==</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span>
@@ -431,9 +439,14 @@
                 <span class="k">if</span> <span class="n">current_text_block</span><span class="p">:</span>
                     <span class="c1">## Display text</span>
                     <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">),</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">text_height</span><span class="p">))</span>
-                    <span class="n">ui_text</span> <span class="o">=</span> <span class="n">UITextBox</span><span class="p">(</span><span class="n">html_text</span><span class="o">=</span><span class="n">current_text_block</span><span class="p">,</span> <span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
-                                        <span class="n">wrap_to_height</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">layer_starting_height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                        <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">())</span>
+                    <span class="n">ui_text</span> <span class="o">=</span> <span class="n">UITextBox</span><span class="p">(</span>
+                        <span class="n">html_text</span><span class="o">=</span><span class="n">current_text_block</span><span class="p">,</span>
+                        <span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span>
+                        <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
+                        <span class="n">wrap_to_height</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">layer_starting_height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+                    <span class="p">)</span>
                     <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_text</span><span class="p">)</span>
 
                     <span class="c1"># update position</span>
@@ -442,7 +455,6 @@
                     <span class="c1"># clear to prevent any carry over</span>
                     <span class="n">ui_text</span> <span class="o">=</span> <span class="kc">None</span>
                     <span class="n">current_text_block</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
 
                 <span class="c1">##  Display image</span>
                 <span class="c1"># draw info</span>
@@ -457,8 +469,12 @@
 
                 <span class="c1"># create rect and image element</span>
                 <span class="n">image_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">draw_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">),</span> <span class="p">(</span><span class="n">image_width</span><span class="p">,</span> <span class="n">image_height</span><span class="p">))</span>
-                <span class="n">ui_image</span> <span class="o">=</span> <span class="n">UIImage</span><span class="p">(</span><span class="n">relative_rect</span><span class="o">=</span><span class="n">image_rect</span><span class="p">,</span> <span class="n">image_surface</span><span class="o">=</span><span class="n">text_or_image</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
-                                   <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">())</span>
+                <span class="n">ui_image</span> <span class="o">=</span> <span class="n">UIImage</span><span class="p">(</span>
+                    <span class="n">relative_rect</span><span class="o">=</span><span class="n">image_rect</span><span class="p">,</span>
+                    <span class="n">image_surface</span><span class="o">=</span><span class="n">text_or_image</span><span class="p">,</span>
+                    <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
+                    <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+                <span class="p">)</span>
                 <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_image</span><span class="p">)</span>
 
                 <span class="c1"># update position</span>
@@ -471,12 +487,15 @@
         <span class="k">if</span> <span class="n">current_text_block</span><span class="p">:</span>
             <span class="c1">## Display text</span>
             <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">),</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">text_height</span><span class="p">))</span>
-            <span class="n">ui_text</span> <span class="o">=</span> <span class="n">UITextBox</span><span class="p">(</span><span class="n">html_text</span><span class="o">=</span><span class="n">current_text_block</span><span class="p">,</span> <span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
-                                <span class="n">wrap_to_height</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">layer_starting_height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">())</span>
+            <span class="n">ui_text</span> <span class="o">=</span> <span class="n">UITextBox</span><span class="p">(</span>
+                <span class="n">html_text</span><span class="o">=</span><span class="n">current_text_block</span><span class="p">,</span>
+                <span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span>
+                <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
+                <span class="n">wrap_to_height</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">layer_starting_height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+            <span class="p">)</span>
             <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_text</span><span class="p">)</span>
-
-
 
         <span class="c1"># update main sections list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="n">sections</span></div></div>

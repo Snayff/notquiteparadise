@@ -1,0 +1,21 @@
+scripts.engine.systems package
+==============================
+
+Submodules
+----------
+
+scripts.engine.systems.vision module
+------------------------------------
+
+.. automodule:: scripts.engine.systems.vision
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: scripts.engine.systems
+   :members:
+   :undoc-members:
+   :show-inheritance:

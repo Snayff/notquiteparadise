@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.queries.html">Queries</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -224,12 +225,14 @@
 
 <span class="c1">######################### Aesthetics ##################################</span>
 
+
 <div class="viewcode-block" id="TraitSpritesData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">TraitSpritesData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Possible sprites.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">icon</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">idle</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">attack</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -244,6 +247,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Possible sprites paths for a trait</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">render_order</span><span class="p">:</span> <span class="n">RenderLayerType</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">RenderLayer</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">)</span>
     <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
     <span class="n">idle</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
@@ -255,12 +259,14 @@
 
 <span class="c1">##################### ACTORS #################################</span>
 
+
 <div class="viewcode-block" id="ActorData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.ActorData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">ActorData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for an actor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
     <span class="n">possible_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
@@ -275,6 +281,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for a trait.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
     <span class="n">group</span><span class="p">:</span> <span class="n">TraitGroupType</span> <span class="o">=</span> <span class="n">TraitGroup</span><span class="o">.</span><span class="n">NPC</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
@@ -291,12 +298,7 @@
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># update sprite path render order</span>
         <span class="c1"># FIXME - this should be handled prior to coming to the dataclass</span>
-        <span class="n">trait_render_order</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;npc&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;people&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="s2">&quot;homeland&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="s2">&quot;savvy&quot;</span><span class="p">:</span> <span class="mi">3</span>
-        <span class="p">}</span>
+        <span class="n">trait_render_order</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;npc&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;people&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;homeland&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;savvy&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sprite_paths</span><span class="o">.</span><span class="n">render_order</span> <span class="o">=</span> <span class="n">trait_render_order</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">)</span></div>
 
 
@@ -306,6 +308,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class to contain primary and secondary stats</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">primary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BasePrimaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">secondary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BaseSecondaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
 
@@ -316,6 +319,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for primary  stats</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
     <span class="n">primary_stat_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">base_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
@@ -327,6 +331,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for secondary stats</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
     <span class="n">secondary_stat_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SecondaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">base_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -339,12 +344,14 @@
 
 <span class="c1">####################### NON-ACTOR ENTITIES ######################</span>
 
+
 <div class="viewcode-block" id="ProjectileData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">ProjectileData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for a projectile</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="c1"># what created it?</span>
     <span class="n">creator</span><span class="p">:</span> <span class="n">EntityID</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">EntityID</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># this will be overwritten or will break, but need defaults to allow passing</span>
     <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
@@ -374,13 +381,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ProjectileSpeed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
 
 
-
 <div class="viewcode-block" id="AspectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AspectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">AspectData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for an aspects</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
     <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -391,12 +398,14 @@
 
 <span class="c1">################### GODS ###################################################</span>
 
+
 <div class="viewcode-block" id="AttitudeData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AttitudeData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">AttitudeData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for  a god&#39;s attitude</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">action</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
     <span class="n">opinion_change</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
@@ -407,6 +416,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for a god&#39;s intervention</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">skill_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
     <span class="n">required_opinion</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
@@ -417,6 +427,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for a god</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
     <span class="n">attitudes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AttitudeData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
@@ -425,6 +436,7 @@
 
 <span class="c1">####################### WORLD ######################</span>
 
+
 <div class="viewcode-block" id="MapData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.MapData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">MapData</span><span class="p">:</span>
@@ -432,6 +444,7 @@
 <span class="sd">    Data class for a Map, specifically for generation. A map is a collection of rooms. Defines the rooms on</span>
 <span class="sd">    the map, how they are placed and joined up (tunnels).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
 
@@ -460,6 +473,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for a RoomConcept. Only used in generation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
 
@@ -485,12 +499,14 @@
 
 <span class="c1">######################### ACTIONS ##################################</span>
 
+
 <div class="viewcode-block" id="SkillData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.SkillData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">SkillData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for a skill. Used by the library to load from json.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="c1"># how do we know it?</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
@@ -534,6 +550,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for an Afflictions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
@@ -552,6 +569,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base data class for an effect.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="c1"># who am I?</span>
     <span class="n">originator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># actor</span>
     <span class="n">creators_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># skill, projectile, etc.&#39;s name</span>
@@ -574,6 +592,7 @@
 
 
 <span class="c1">################### CONFIG ###################################################</span>
+
 
 <div class="viewcode-block" id="Dimensions"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.Dimensions">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>

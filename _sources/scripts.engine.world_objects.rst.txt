@@ -12,10 +12,10 @@ scripts.engine.world\_objects.combat\_stats module
    :undoc-members:
    :show-inheritance:
 
-scripts.engine.world\_objects.gamemap module
---------------------------------------------
+scripts.engine.world\_objects.game\_map module
+----------------------------------------------
 
-.. automodule:: scripts.engine.world_objects.gamemap
+.. automodule:: scripts.engine.world_objects.game_map
    :members:
    :undoc-members:
    :show-inheritance:
