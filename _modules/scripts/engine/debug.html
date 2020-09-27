@@ -292,6 +292,12 @@
     <span class="n">_debugger</span><span class="o">.</span><span class="n">is_logging</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="n">log_file_name</span> <span class="o">=</span> <span class="s2">&quot;logs/&quot;</span> <span class="o">+</span> <span class="s2">&quot;game.log&quot;</span>
+
+    <span class="c1"># Creating directory &quot;logs/&quot; if it does not exist, as logging.basicConfig() appears</span>
+    <span class="c1"># to be unable to create the directory itself, resulting in FileNotFoundError</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="s2">&quot;logs/&quot;</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s2">&quot;logs&quot;</span><span class="p">)</span>
+
     <span class="n">log_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
     <span class="n">file_mode</span> <span class="o">=</span> <span class="s2">&quot;w&quot;</span>
 
