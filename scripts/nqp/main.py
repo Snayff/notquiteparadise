@@ -42,9 +42,8 @@ def main():
         logging.critical(f"Something went wrong and killed the game loop!")
         exc_type, exc_value, exc_traceback = sys.exc_info()
         tb_list = traceback.format_exception(exc_type, exc_value, exc_traceback)
-        for line in tb_list:
-            clean_line = line.replace("\n", "")
-            logging.critical(f"{clean_line}")
+        for line in tb_list.readline():
+            logging.critical(f"{line}")
         traceback.print_exc()
 
     # dump any held save data
