@@ -977,11 +977,11 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
     skill_cast = skill(user, target_tile, direction)
 
     # ensure they are the right target type
-    if tile_has_tags(skill_cast.target_tile, skill_cast.required_tags, user):
+    if tile_has_tags(skill_cast.target_tile, skill_cast.target_tags, user):
         skill_cast.use()
         return True
     else:
-        logging.info(f"Could not use skill, target tile does not have required tags ({skill.required_tags}).")
+        logging.info(f"Could not use skill, target tile does not have required tags ({skill.target_tags}).")
 
     return False
 
@@ -992,7 +992,7 @@ def apply_skill(skill_instance: Skill) -> bool:
     """
     skill = skill_instance
     # ensure they are the right target type
-    if tile_has_tags(skill.target_tile, skill.required_tags, skill.user):
+    if tile_has_tags(skill.target_tile, skill.target_tags, skill.user):
         for entity, effects in skill_instance.apply():
             if entity not in skill.ignore_entities:
                 effect_queue = list(effects)
@@ -1002,7 +1002,7 @@ def apply_skill(skill_instance: Skill) -> bool:
         return True
     else:
         logging.info(
-            f'Could not apply skill "{skill.key}", target tile does not have required tags ({skill.required_tags}).'
+            f'Could not apply skill "{skill.key}", target tile does not have required tags ({skill.target_tags}).'
         )
 
     return False
@@ -1033,7 +1033,7 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
         target_tile = get_tile((position.x, position.y))
 
         # ensure they are the right target type
-        if tile_has_tags(target_tile, affliction.required_tags, affliction.creator):
+        if tile_has_tags(target_tile, affliction.target_tags, affliction.creator):
             for entity, effects in affliction.apply():
                 effect_queue = list(effects)
                 while effect_queue:
@@ -1043,7 +1043,7 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
         else:
             logging.info(
                 f'Could not apply affliction "{affliction.key}", target tile does not have required '
-                f"tags ({affliction.required_tags})."
+                f"tags ({affliction.target_tags})."
             )
 
     return False

@@ -26,7 +26,7 @@ class MockAffliction(Affliction):
     triggers = [
         AfflictionTrigger.MOVEMENT
     ]
-    required_tags = [
+    target_tags = [
         TargetTag.OTHER_ENTITY
     ]
 
@@ -53,7 +53,7 @@ class MockAfflictionMovement(MockAffliction):
 
 class MockSkill(Skill):
     key = "mock_skill"
-    required_tags = [TargetTag.SELF]
+    target_tags = [TargetTag.SELF]
     description = "this is the normal movement."
     icon_path = ""
     resource_type = Resource.STAMINA

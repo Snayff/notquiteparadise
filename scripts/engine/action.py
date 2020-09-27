@@ -52,7 +52,7 @@ class Skill(ABC):
     target_directions: List[DirectionType]
     shape: ShapeType
     shape_size: int
-    required_tags: List[TargetTagType]
+    target_tags: List[TargetTagType]
     uses_projectile: bool
     projectile_data: ProjectileData
 
@@ -81,20 +81,27 @@ class Skill(ABC):
 
         # create the projectile
         if self.uses_projectile:
-            # update projectile values
-            projectile_data = self.projectile_data
-            projectile_data.creator = self.user
-            projectile_data.skill_name = self.key
-            projectile_data.skill_instance = self
-            projectile_data.direction = self.direction
-
-            # create the projectile
-            projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
-
-            # save the reference to the projectile entity
-            self.projectile = projectile
+            self._create_projectile()
         else:
             world.apply_skill(self)
+
+    def _create_projectile(self):
+        """
+        Create a projectile carrying the skill's effects
+        """
+        from scripts.engine import world
+        # update projectile values
+        projectile_data = self.projectile_data
+        projectile_data.creator = self.user
+        projectile_data.skill_name = self.key
+        projectile_data.skill_instance = self
+        projectile_data.direction = self.direction
+
+        # create the projectile
+        projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
+
+        # save the reference to the projectile entity
+        self.projectile = projectile
 
     def _play_animation(self):
         """
@@ -146,7 +153,7 @@ class Skill(ABC):
 
         cls.data = library.SKILLS[cls.key]
         cls.name = cls.data.name
-        cls.required_tags = cls.data.required_tags
+        cls.target_tags = cls.data.target_tags
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.resource_type = cls.data.resource_type
@@ -176,7 +183,7 @@ class Affliction(ABC):
     name: str
     description: str
     icon_path: str
-    required_tags: List[TargetTagType]
+    target_tags: List[TargetTagType]
     identity_tags: List[EffectTypeType]
     triggers: List[AfflictionTriggerType]
     category: AfflictionCategoryType
@@ -224,14 +231,14 @@ class Affliction(ABC):
         cls.category = cls.data.category
         cls.shape = cls.data.shape
         cls.shape_size = cls.data.shape_size
-        cls.required_tags = cls.data.required_tags
+        cls.target_tags = cls.data.target_tags
         cls.identity_tags = cls.data.identity_tags
         cls.triggers = cls.data.triggers
 
 
 def properties_set_by_data(cls):
     """
-    Class decorator used for initializing class with a  set properties method so as to avoid repeating code.
+    Class decorator used for initializing class with a set properties method so as to avoid repeating code.
     """
     cls.set_properties()
     return cls

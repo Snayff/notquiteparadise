@@ -173,45 +173,6 @@ class Direction(SimpleNamespace):
     DOWN_RIGHT = DirectionType((1, 1))
 
 
-class TargetTag(SimpleNamespace):
-    """
-    Types of target
-    """
-
-    SELF = TargetTagType("self")
-    OTHER_ENTITY = TargetTagType("other_entity")
-    NO_ENTITY = TargetTagType("no_entity")
-    ANY = TargetTagType("any")
-    OPEN_SPACE = TargetTagType("open_space")
-    BLOCKED_MOVEMENT = TargetTagType("blocked_movement")
-    IS_VISIBLE = TargetTagType("is_visible")
-    NO_BLOCKING_TILE = TargetTagType("no_blocking_tile")
-    ACTOR = TargetTagType("actor")
-
-
-class TraitGroup(SimpleNamespace):
-    """
-    The types of player traits
-    """
-
-    PEOPLE = TraitGroupType("people")
-    SAVVY = TraitGroupType("savvy")
-    HOMELAND = TraitGroupType("homeland")
-    NPC = TraitGroupType("npc")
-
-
-class DamageType(SimpleNamespace):
-    """
-    Damage types
-    """
-
-    BURN = DamageTypeType("burn")
-    CHEMICAL = DamageTypeType("chemical")
-    ASTRAL = DamageTypeType("astral")
-    COLD = DamageTypeType("cold")
-    MUNDANE = DamageTypeType("mundane")
-
-
 class PrimaryStat(SimpleNamespace):
     """
     Primary stats. Values are strings.
@@ -262,6 +223,17 @@ class HitType(SimpleNamespace):
     CRIT = HitTypeType("crit")
 
 
+class TraitGroup(SimpleNamespace):
+    """
+    The types of player traits
+    """
+
+    PEOPLE = TraitGroupType("people")
+    SAVVY = TraitGroupType("savvy")
+    HOMELAND = TraitGroupType("homeland")
+    NPC = TraitGroupType("npc")
+
+
 class EffectType(SimpleNamespace):
     """
     Types of effects
@@ -275,6 +247,34 @@ class EffectType(SimpleNamespace):
     REMOVE_ASPECT = EffectTypeType("remove_aspect")
     TRIGGER_SKILL = EffectTypeType("trigger_skill")
     KILL = EffectTypeType("kill")
+
+
+class TargetTag(SimpleNamespace):
+    """
+    Types of target
+    """
+
+    SELF = TargetTagType("self")
+    OTHER_ENTITY = TargetTagType("other_entity")
+    NO_ENTITY = TargetTagType("no_entity")
+    ANY = TargetTagType("any")
+    OPEN_SPACE = TargetTagType("open_space")
+    BLOCKED_MOVEMENT = TargetTagType("blocked_movement")
+    IS_VISIBLE = TargetTagType("is_visible")
+    NO_BLOCKING_TILE = TargetTagType("no_blocking_tile")
+    ACTOR = TargetTagType("actor")
+
+
+class DamageType(SimpleNamespace):
+    """
+    Damage types
+    """
+
+    BURN = DamageTypeType("burn")
+    CHEMICAL = DamageTypeType("chemical")
+    ASTRAL = DamageTypeType("astral")
+    COLD = DamageTypeType("cold")
+    MUNDANE = DamageTypeType("mundane")
 
 
 class AfflictionTrigger(SimpleNamespace):
@@ -312,7 +312,7 @@ class Shape(SimpleNamespace):
     TARGET = ShapeType("target")  # single target
     SQUARE = ShapeType("square")
     CIRCLE = ShapeType("circle")
-    CROSS = (ShapeType("cross"),)
+    CROSS = ShapeType("cross")
     CONE = ShapeType("cone")
 
 
@@ -359,7 +359,7 @@ class ProjectileSpeed(SimpleNamespace):
 
 class TileCategory(SimpleNamespace):
     """
-    The type of tile to be placed
+    The type of tile to be placed. Used in Dungen
     """
 
     FLOOR = TileCategoryType("floor")

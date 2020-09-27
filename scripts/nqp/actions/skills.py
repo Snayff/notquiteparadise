@@ -42,7 +42,7 @@ class Move(Skill):
     from scripts.engine import library
 
     key = "move"
-    required_tags = [TargetTag.SELF]
+    target_tags = [TargetTag.SELF]
     description = "this is the normal movement."
     icon_path = ""
     resource_type = Resource.STAMINA
