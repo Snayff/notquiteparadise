@@ -280,6 +280,10 @@
     <span class="n">full_save_path</span> <span class="o">=</span> <span class="n">SAVE_PATH</span>
     <span class="n">save</span> <span class="o">=</span> <span class="p">{}</span>
 
+    <span class="c1"># Prevent FileNotFoundError</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">full_save_path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">full_save_path</span><span class="p">)</span>
+
     <span class="c1"># add data to dict</span>
     <span class="n">save</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">VERSION</span>
     <span class="n">save</span><span class="p">[</span><span class="s2">&quot;world&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">serialise</span><span class="p">()</span>
