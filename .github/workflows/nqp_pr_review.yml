@@ -1,4 +1,4 @@
-name: NQP - PR Review - Run Lint and Tests (Write)
+name: NQP - PR Review
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Run Lint and Tests (Write)
+    name: PR Review
     runs-on: windows-latest
 
     steps:
