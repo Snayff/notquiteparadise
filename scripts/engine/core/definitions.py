@@ -44,12 +44,14 @@ if TYPE_CHECKING:
 
 ######################### Aesthetics ##################################
 
+
 @register_dataclass_with_json
 @dataclass
 class TraitSpritesData:
     """
     Possible sprites.
     """
+
     icon: Optional[pygame.Surface] = None
     idle: Optional[pygame.Surface] = None
     attack: Optional[pygame.Surface] = None
@@ -64,6 +66,7 @@ class TraitSpritePathsData:
     """
     Possible sprites paths for a trait
     """
+
     render_order: RenderLayerType = field(default=RenderLayer.BOTTOM)
     icon: str = field(default="none")
     idle: str = field(default="none")
@@ -75,12 +78,14 @@ class TraitSpritePathsData:
 
 ##################### ACTORS #################################
 
+
 @register_dataclass_with_json
 @dataclass
 class ActorData:
     """
     Data class for an actor
     """
+
     key: str = "none"
     possible_names: List[str] = field(default_factory=list)
     description: str = "none"
@@ -95,6 +100,7 @@ class TraitData:
     """
     Data class for a trait.
     """
+
     name: str = "none"
     group: TraitGroupType = TraitGroup.NPC
     description: str = "none"
@@ -111,12 +117,7 @@ class TraitData:
     def __post_init__(self):
         # update sprite path render order
         # FIXME - this should be handled prior to coming to the dataclass
-        trait_render_order = {
-            "npc": 0,
-            "people": 1,
-            "homeland": 2,
-            "savvy": 3
-        }
+        trait_render_order = {"npc": 0, "people": 1, "homeland": 2, "savvy": 3}
         self.sprite_paths.render_order = trait_render_order.get(self.group)
 
 
@@ -126,6 +127,7 @@ class BaseStatData:
     """
     Data class to contain primary and secondary stats
     """
+
     primary: Dict[str, BasePrimaryStatData] = field(default_factory=dict)
     secondary: Dict[str, BaseSecondaryStatData] = field(default_factory=dict)
 
@@ -136,6 +138,7 @@ class BasePrimaryStatData:
     """
     Data class for primary  stats
     """
+
     name: str = field(default="none")
     primary_stat_type: Optional[PrimaryStatType] = None
     base_value: int = 0
@@ -147,6 +150,7 @@ class BaseSecondaryStatData:
     """
     Data class for secondary stats
     """
+
     name: str = field(default="none")
     secondary_stat_type: Optional[SecondaryStatType] = None
     base_value: int = 0
@@ -159,12 +163,14 @@ class BaseSecondaryStatData:
 
 ####################### NON-ACTOR ENTITIES ######################
 
+
 @register_dataclass_with_json
 @dataclass
 class ProjectileData:
     """
     Data class for a projectile
     """
+
     # what created it?
     creator: EntityID = cast(EntityID, 0)  # this will be overwritten or will break, but need defaults to allow passing
     skill_name: str = "none"
@@ -194,13 +200,13 @@ class ProjectileData:
         self.speed = getattr(ProjectileSpeed, self.speed.upper())
 
 
-
 @register_dataclass_with_json
 @dataclass
 class AspectData:
     """
     Data class for an aspects
     """
+
     name: str = field(default="none")
     description: str = field(default="none")
     duration: int = 0
@@ -211,12 +217,14 @@ class AspectData:
 
 ################### GODS ###################################################
 
+
 @register_dataclass_with_json
 @dataclass
 class AttitudeData:
     """
     Data class for  a god's attitude
     """
+
     action: str = field(default="none")
     opinion_change: int = 0
 
@@ -227,6 +235,7 @@ class InterventionData:
     """
     Data class for a god's intervention
     """
+
     skill_key: str = field(default="none")
     required_opinion: int = 0
 
@@ -237,6 +246,7 @@ class GodData:
     """
     Data class for a god
     """
+
     name: str = field(default="none")
     description: str = field(default="none")
     attitudes: Dict[str, AttitudeData] = field(default_factory=dict)
@@ -245,6 +255,7 @@ class GodData:
 
 ####################### WORLD ######################
 
+
 @register_dataclass_with_json
 @dataclass
 class MapData:
@@ -252,6 +263,7 @@ class MapData:
     Data class for a Map, specifically for generation. A map is a collection of rooms. Defines the rooms on
     the map, how they are placed and joined up (tunnels).
     """
+
     name: str = "none"
     key: str = "none"
 
@@ -280,6 +292,7 @@ class RoomConceptData:
     """
     Data class for a RoomConcept. Only used in generation.
     """
+
     name: str = "none"
     key: str = "none"
 
@@ -305,12 +318,14 @@ class RoomConceptData:
 
 ######################### ACTIONS ##################################
 
+
 @register_dataclass_with_json
 @dataclass
 class SkillData:
     """
     Data class for a skill. Used by the library to load from json.
     """
+
     # how do we know it?
     name: str = "none"
     key: str = "none"
@@ -354,6 +369,7 @@ class AfflictionData:
     """
     Data class for an Afflictions
     """
+
     name: str = "none"
     key: str = "none"
     description: str = "none"
@@ -372,6 +388,7 @@ class EffectData:
     """
     Base data class for an effect.
     """
+
     # who am I?
     originator: Optional[EntityID] = None  # actor
     creators_name: Optional[str] = None  # skill, projectile, etc.'s name
@@ -394,6 +411,7 @@ class EffectData:
 
 
 ################### CONFIG ###################################################
+
 
 @register_dataclass_with_json
 @dataclass

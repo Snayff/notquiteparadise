@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Union
 import pygame
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement as PygameGuiElement
-
 from scripts.engine import debug, library, utility
 from scripts.engine.core.constants import (
     ASSET_PATH,
@@ -66,7 +65,7 @@ class UI:
         self._window: pygame.display = pygame.display.set_mode((self._desired_width, self._desired_height))
 
         # now that the display is configured  init the pygame_gui
-        self._gui = UIManager((self._base_width, self._base_height), DATA_PATH + "ui/themes.json")
+        self._gui = UIManager((self._base_width, self._base_height), DATA_PATH / "ui/themes.json")
 
         # elements info
         self._elements = {}  # dict of all init'd ui_manager elements
@@ -163,12 +162,10 @@ class UI:
         pygame.display.set_icon(utility.get_image("ui/nqp_icon.png"))
 
     def _load_fonts(self):
-        self._gui.add_font_paths("barlow", ASSET_PATH + "fonts/Barlow-Light.otf")
-        self.debug_font = pygame.font.Font(ASSET_PATH + "fonts/Kenney Future Narrow.ttf", 12)
+        self._gui.add_font_paths("barlow", str(ASSET_PATH / "fonts/Barlow-Light.otf"))
+        self.debug_font = pygame.font.Font(str(ASSET_PATH / "fonts/Kenney Future Narrow.ttf"), 12)
 
-        fonts = [
-            {'name': 'barlow', 'point_size': 24, 'style': 'regular'}
-            ]
+        fonts = [{"name": "barlow", "point_size": 24, "style": "regular"}]
 
         self._gui.preload_fonts(fonts)
 
@@ -217,13 +214,19 @@ class UI:
 
         layout = {
             UIElement.MESSAGE_LOG: (MessageLog, pygame.Rect((message_x, message_y), (message_width, message_height))),
-            UIElement.TILE_INFO: (TileInfo, pygame.Rect((tile_info_x, tile_info_y),
-                                                        (tile_info_width, tile_info_height))),
+            UIElement.TILE_INFO: (
+                TileInfo,
+                pygame.Rect((tile_info_x, tile_info_y), (tile_info_width, tile_info_height)),
+            ),
             UIElement.SKILL_BAR: (SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))),
             UIElement.CAMERA: (Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))),
             UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height))),
-            UIElement.DUNGEN_VIEWER: (DungenViewer, pygame.Rect((dungeon_dev_view_x, dungeon_dev_view_y),
-                                                                (dungeon_dev_view_width, dungeon_dev_view_height))),
+            UIElement.DUNGEN_VIEWER: (
+                DungenViewer,
+                pygame.Rect(
+                    (dungeon_dev_view_x, dungeon_dev_view_y), (dungeon_dev_view_width, dungeon_dev_view_height)
+                ),
+            ),
             UIElement.ACTOR_INFO: (ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height))),
         }
         self._element_details = layout
@@ -264,7 +267,7 @@ class UI:
         """
         col = "#531B75"
         text = f"<font face=barlow color={col} size={size}>{message}</font>"
-        rect = pygame.Rect((self._base_width / 4, self._base_height/4), (self._base_width / 2, -1))
+        rect = pygame.Rect((self._base_width / 4, self._base_height / 4), (self._base_width / 2, -1))
         screen_message = ScreenMessage(rect, text, self.get_gui_manager())
 
     ######################## KILL ###############################################
@@ -320,8 +323,9 @@ class UI:
         # if camera has been init'd
         if camera:
             return camera.world_to_draw_position(pos)
-        logging.warning("Tried to get screen position but camera not init`d. Likely to draw in wrong place, "
-                        "if it draws at all.")
+        logging.warning(
+            "Tried to get screen position but camera not init`d. Likely to draw in wrong place, " "if it draws at all."
+        )
         return 0, 0
 
     def update_targeting_overlay(self, is_visible: bool, skill_name: str = None):
@@ -383,4 +387,4 @@ class UI:
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
     ui = UI()
 else:
-    ui = ""
+    ui = ""  # type: ignore

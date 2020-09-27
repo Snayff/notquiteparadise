@@ -26,11 +26,13 @@ class MessageLog(UIPanel):
         self.text_box = None
 
         # complete base class init
-        super().__init__(rect, RenderLayer.UI_BASE, manager, element_id="message_log",
-                         anchors={"left": "left",
-                             "right": "right",
-                             "top": "bottom",
-                             "bottom": "bottom"})
+        super().__init__(
+            rect,
+            RenderLayer.UI_BASE,
+            manager,
+            element_id="message_log",
+            anchors={"left": "left", "right": "right", "top": "bottom", "bottom": "bottom"},
+        )
 
         self.text_box = self._create_text_box()
         self.add_message("Welcome to Not Quite Paradise!")
@@ -57,8 +59,15 @@ class MessageLog(UIPanel):
         Create the text box to show the messages
         """
         rect = pygame.Rect((0, 0), (self.rect.width, self.rect.height))
-        textbox = UITextBox(html_text=self.text, relative_rect=rect, manager=self.ui_manager,
-                  wrap_to_height=False, layer_starting_height=1, object_id="#text_box", container=self.get_container())
+        textbox = UITextBox(
+            html_text=self.text,
+            relative_rect=rect,
+            manager=self.ui_manager,
+            wrap_to_height=False,
+            layer_starting_height=1,
+            object_id="#text_box",
+            container=self.get_container(),
+        )
 
         return textbox
 
@@ -88,12 +97,18 @@ class MessageLog(UIPanel):
         if self.text_box.scroll_bar:
             scroll_bar = self.text_box.scroll_bar
             scroll_bar.scroll_wheel_down = False
-            scroll_bar.scroll_position += (250.0 * 1)
-            scroll_bar.scroll_position = min(scroll_bar.scroll_position,
-                                             scroll_bar.bottom_limit - scroll_bar.sliding_button.rect.height)
+            scroll_bar.scroll_position += 250.0 * 1
+            scroll_bar.scroll_position = min(
+                scroll_bar.scroll_position, scroll_bar.bottom_limit - scroll_bar.sliding_button.rect.height
+            )
             x_pos = scroll_bar.rect.x + scroll_bar.shadow_width + scroll_bar.border_width
-            y_pos = scroll_bar.scroll_position + scroll_bar.rect.y + scroll_bar.shadow_width + \
-                    scroll_bar.border_width + scroll_bar.button_height
+            y_pos = (
+                scroll_bar.scroll_position
+                + scroll_bar.rect.y
+                + scroll_bar.shadow_width
+                + scroll_bar.border_width
+                + scroll_bar.button_height
+            )
             scroll_bar.sliding_button.set_position(Vector2(x_pos, y_pos))
 
             scroll_bar.start_percentage = scroll_bar.scroll_position / scroll_bar.scrollable_height

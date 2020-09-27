@@ -14,10 +14,19 @@ class ScreenMessage(UITextBox):
     """
     Show messages on the centre of the screen for a limited time
     """
-    def __init__(self, rect: Rect, text: str, manager: UIManager,):
 
-        super().__init__(html_text=text, relative_rect=rect, manager=manager, wrap_to_height=True,
-                         layer_starting_height=100, object_id="screen_message")
+    def __init__(
+        self, rect: Rect, text: str, manager: UIManager,
+    ):
+
+        super().__init__(
+            html_text=text,
+            relative_rect=rect,
+            manager=manager,
+            wrap_to_height=True,
+            layer_starting_height=100,
+            object_id="screen_message",
+        )
 
         self.view_time = 2  # time in seconds
         self.lifespan = 3  # time in seconds

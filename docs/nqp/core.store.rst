@@ -1,5 +1,5 @@
 Store
 ==============================
-.. automodule:: scripts.engine.core.definitions
+.. automodule:: scripts.engine.core.data
     :show-inheritance:
     :members:

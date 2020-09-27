@@ -1,20 +1,48 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+
+import dataclasses
+import logging
+from typing import Dict, List, TYPE_CHECKING, Tuple
 
 import logging
 import pygame
 
-from scripts.engine.core.constants import ASSET_PATH, IMAGE_NOT_FOUND_PATH, TILE_SIZE, DirectionType, Shape, ShapeType
+from scripts.engine.core.constants import (
+    ASSET_PATH,
+    ICON_SIZE,
+    IMAGE_NOT_FOUND_PATH,
+    TILE_SIZE,
+    DirectionType,
+    Shape,
+    ShapeType,
+)
+from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 if TYPE_CHECKING:
-    from typing import (Any, Callable, Dict, List, Optional, Tuple, Type, Union)
+    from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
-__all__ = ["get_image", "get_images", "flatten_images", "recursive_replace", "recursive_find_in_dict",
-    "get_class_members", "lerp", "clamp", "get_euclidean_distance", "get_chebyshev_distance",
-    "get_coords_from_shape", "is_close", "value_to_member", "convert_tile_string_to_xy", "convert_direction_to_name"]
+__all__ = [
+    "get_image",
+    "get_images",
+    "flatten_images",
+    "recursive_replace",
+    "recursive_find_in_dict",
+    "get_class_members",
+    "lerp",
+    "clamp",
+    "get_euclidean_distance",
+    "get_chebyshev_distance",
+    "get_coords_from_shape",
+    "is_close",
+    "value_to_member",
+    "convert_tile_string_to_xy",
+    "convert_direction_to_name",
+    "build_sprites_from_paths",
+]
 
 
 ################################### IMAGES ########################################
+
 
 def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)) -> pygame.Surface:
     """
@@ -32,12 +60,13 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, T
         else:
             try:
                 # try and get the image provided
-                image = pygame.image.load(ASSET_PATH + img_path).convert_alpha()
+                image = pygame.image.load(str(ASSET_PATH / img_path)).convert_alpha()
 
             except:
-                image = pygame.image.load(IMAGE_NOT_FOUND_PATH).convert_alpha()
-                logging.warning(f"Get_image: Tried to use {img_path} but it wasn`t found. Used the not_found image "
-                                f"instead.")
+                image = pygame.image.load(str(IMAGE_NOT_FOUND_PATH)).convert_alpha()
+                logging.warning(
+                    f"Get_image: Tried to use {img_path} but it wasn`t found. Used the not_found image " f"instead."
+                )
     else:
         image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         image.set_alpha(0)
@@ -53,8 +82,9 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, T
     return image
 
 
-def get_images(img_paths: List[str],
-        desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)) -> List[pygame.Surface]:
+def get_images(
+    img_paths: List[str], desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)
+) -> List[pygame.Surface]:
     """
     Get a collection of images.
     """
@@ -75,8 +105,9 @@ def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
     biggest_image_index = -1
     for i in range(len(images)):
         img = images[i]
-        if (biggest_image is None) or (img.get_width() > biggest_image.get_width()
-                                       and img.get_height() > biggest_image.get_height()):
+        if (biggest_image is None) or (
+            img.get_width() > biggest_image.get_width() and img.get_height() > biggest_image.get_height()
+        ):
             biggest_image = img
             biggest_image_index = i
 
@@ -88,7 +119,48 @@ def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
     return base
 
 
+def build_sprites_from_paths(
+    sprite_paths: List[TraitSpritePathsData], desired_size: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)
+) -> TraitSpritesData:
+    """
+    Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
+    combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.
+    """
+    paths: Dict[str, List[str]] = {}
+    sprites: Dict[str, List[pygame.Surface]] = {}
+    flattened_sprites: Dict[str, pygame.Surface] = {}
+
+    # bundle into cross-trait sprite path lists
+    for sprite_path in sprite_paths:
+        char_dict = dataclasses.asdict(sprite_path)
+        for name, path in char_dict.items():
+            if name != "render_order":
+                # check if key exists
+                if name in paths:
+                    paths[name].append(path)
+                # if not init the dict
+                else:
+                    paths[name] = [path]
+
+    # convert to sprites
+    for name, path_list in paths.items():
+        # override size for icon
+        if name == "icon_path":
+            desired_size = (ICON_SIZE, ICON_SIZE)
+
+        sprites[name] = get_images(path_list, desired_size)
+
+    # flatten the images
+    for name, surface_list in sprites.items():
+        flattened_sprites[name] = flatten_images(surface_list)
+
+    # convert to dataclass
+    converted = TraitSpritesData(**flattened_sprites)
+    return converted
+
+
 ################################### QUERY TOOLS ########################################
+
 
 def recursive_replace(obj: Union[Dict, List], key: str, value_to_replace: Any, new_value: Any):
     """
@@ -145,6 +217,7 @@ def get_class_members(cls: Type[Any]) -> List[str]:
 
 ################################### MATHS ########################################
 
+
 def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> float:
     """
     Linear interpolation between initial and target by amount. Fraction clamped between 0 and 1.
@@ -172,6 +245,7 @@ def get_euclidean_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     dx = target_pos[0] - start_pos[0]
     dy = target_pos[1] - start_pos[1]
     import math  # only used in this method
+
     return math.sqrt(dx ** 2 + dy ** 2)
 
 
@@ -181,6 +255,7 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     This returns an int indicating the number of tile moves between the two points.
     """
     import scipy  # only used in this method
+
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 
@@ -192,6 +267,7 @@ def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], 
 
 
 ################################### SHAPES  ########################################
+
 
 def get_coords_from_shape(shape: ShapeType, size: int, direction: Optional[Tuple[int, int]]) -> List[Tuple[int, int]]:
     """
@@ -293,6 +369,7 @@ def _calculate_cone_shape(size: int, direction: Tuple[int, int]) -> List[Tuple[i
 
 ################################### CONVERSIONS ########################################
 
+
 def value_to_member(value: Any, cls: Type[Any]) -> str:
     """
     Get a member of a class that matches the value given
@@ -328,7 +405,7 @@ def convert_direction_to_name(direction: DirectionType) -> str:
         (1, 1): "up_right",
         (-1, 1): "up_left",
         (1, -1): "down_right",
-        (-1, -1): "down_left"
+        (-1, -1): "down_left",
     }
 
     try:

@@ -8,6 +8,7 @@ Current position:
 ![GitHub tag (latest by date
   )](https://img.shields.io/github/v/tag/Snayff/notquiteparadise?label=version)
  [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=ncloc)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
+ [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Quality of last commit:  
 
@@ -31,10 +32,12 @@ Quality of last commit:
 
 ## Table of Contents
 - [Motivation and Intent](#motivation-and-intent)
-- [Engine Design Goals](#engine-design-goals)
-- [Engine Documentation](#engine-documentation)
+- [Design Goals](#design-goals-&-pillars)
+- [Documentation](#documentation)
+- [Dependencies](#dependencies)
 - [Contributing](#contributing)
-- [NQP MVP Roadmap](#nqp-mvp-roadmap)
+- [NQP Roadmap](#nqp-roadmap)
+- [NQP Philosophies](#nqp-philosophies)
 - [License](#license)
 
 ## Motivation and Intent
@@ -46,31 +49,55 @@ To create a fast, dynamic, combat-focused, traditional roguelike where the envir
    gameplay. Eventually these sections will be separated entirely but for now, to simplify development, they are held
     together.
 
-## Engine Design Goals
+## Design Goals & Pillars
+Like a lot of people attempts to make a game ended up creating an engine. As it's grown so to has the ethos behind it
+. That ethos is usability first, readability second and performance third. Of course it should be performant, but in
+ this case a friendly user experience is more important.   
+
+The design pillars that the NQP engine are as follows:
 * [x] Data Driven Design - entities and maps are built using external data held in json files. Skills use external
  data for their values but currently require some internal code to be created. 
 * [x] Procedural -  maps are created procedurally.
 * [x] Extensible - base classes for all core actions are provided in the engine.
 * [x] Composable - built with an entity component system, all entities are expressed by their attached components.
 * [x] Explicit - using mypy and consistent naming all methods, functions and classes have a clear purpose.
+
+In progress:
 * [ ] Configurable - control remapping is in place ready for controller support, as are the foundations for
  accessibility and player configuration of their game. 
 * [ ] Interaction-focused - initial tag systems are in place but are yet to be embedded across the different systems
 . Basic interactions between actions and entities are in place.   
  
 
-
-## Engine Documentation
+## Documentation
 See the project's Github [Pages].
 
 [Pages]: https://snayff.github.io/notquiteparadise/
 
+## Dependencies
+The NQP engine has several dependencies, though most of these will be removed over time as the engine is optimised I
+ wanted to call out a few special ones that will always be included.
+ 
+ * [snecs] is a blazing fast, super-simple to use [ECS].
+ * [python-tcod] is a staple of every python roguelike out there and provides performant field of view, line of sight
+  and
+  pathfinding operations.
+ * [pygame-gui] is an accessible, flexible gui library.
+ * [pygame] is an SDL wrapper and provides input handling and rendering.
+ 
+ [snecs]: https://snecs.slavfox.space/
+ [ECS]: https://snecs.slavfox.space/ecs/
+ [python-tcod]: https://python-tcod.readthedocs.io/en/latest/index.html
+ [pygame-gui]: https://pygame-gui.readthedocs.io/en/latest/index.html
+ [pygame]: https://www.pygame.org/docs/
+ 
+
 ## Contributing
-See the [Contributing] document for details in how you can get involved.
+See the [Contributing] document for details on how you can get involved.
 
 [Contributing]: CONTRIBUTING.md
 
-## NQP MVP Roadmap
+## NQP Roadmap
 Following advice from a knowledgeable sage, for the time being this project is focused on achieving an MVP. That is
  to say that the aim is to achieve a basic level of functionality and a core set of features on which to build.
 
@@ -78,6 +105,19 @@ All planned features and known issues are held on the [NQP Issue Tracker].
 
 [NQP Issue Tracker]: https://nqp.myjetbrains.com/youtrack/issues
 
+## NQP Philosophies 
+For NQP, the game, the design is underpinned by the following philosophies:
+* **Flow** - Periods of impetus to ensure the player is driven forward appropriately. Periods of openness to allow self
+ pacing, reflection and exploration.
+* **Coherent** - Information pertinent to the player is always made available and easy to parse, utilising a mix of
+ art and text. Avoid need for external resource use e.g. a wiki.
+* **Flexible**  - Never a best way, always a different one. The only limitations in place should be those that drive
+ diversity of play.
+* **Accessible** - Supports different kinds of players, e.g. can use keyboard, mouse or controller interchangeably, with
+ minimal
+ difference in experience. e.g. Colour scheme is colour-blind aware.
+* **Customisable** - Near-core game settings can be influenced or set by the player allowing for extensive
+ personalisation.
 
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)

@@ -3,9 +3,7 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, cast
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Afflictions, Blocking, Knowledge, Position, Resources
 from scripts.engine.core.constants import (
@@ -23,8 +21,7 @@ if TYPE_CHECKING:
 
 
 class Effect(ABC):
-    def __init__(self, origin: EntityID, success_effects: List[Effect],
-            failure_effects: List[Effect]):
+    def __init__(self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect]):
         self.origin = origin
         self.success_effects: List[Effect] = success_effects
         self.failure_effects: List[Effect] = failure_effects
@@ -41,9 +38,19 @@ class Effect(ABC):
 
 
 class DamageEffect(Effect):
-    def __init__(self, origin: EntityID, target: EntityID, success_effects: List[Effect],
-                failure_effects: List[Effect], stat_to_target: PrimaryStatType, accuracy: int,
-                damage: int, damage_type: DamageTypeType, mod_stat: PrimaryStatType, mod_amount: float):
+    def __init__(
+        self,
+        origin: EntityID,
+        target: EntityID,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+        stat_to_target: PrimaryStatType,
+        accuracy: int,
+        damage: int,
+        damage_type: DamageTypeType,
+        mod_stat: PrimaryStatType,
+        mod_amount: float,
+    ):
 
         super().__init__(origin, success_effects, failure_effects)
 
@@ -54,9 +61,7 @@ class DamageEffect(Effect):
         self.damage_type = damage_type
         self.mod_amount = mod_amount
         self.mod_stat = mod_stat
-        self.success_triggers = [
-            self._create_affliction_trigger(AfflictionTrigger.TAKE_DAMAGE, self.target)
-        ]
+        self.success_triggers = [self._create_affliction_trigger(AfflictionTrigger.TAKE_DAMAGE, self.target)]
 
     def evaluate(self) -> List[Effect]:
         """
@@ -89,17 +94,22 @@ class DamageEffect(Effect):
 
 
 class MoveActorEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Effect],
-            failure_effects: List[Effect], target: EntityID, direction: DirectionType, move_amount: int):
+    def __init__(
+        self,
+        origin: EntityID,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+        target: EntityID,
+        direction: DirectionType,
+        move_amount: int,
+    ):
 
         super().__init__(origin, success_effects, failure_effects)
 
         self.target = target
         self.direction = direction
         self.move_amount = move_amount
-        self.success_triggers = [
-            self._create_affliction_trigger(AfflictionTrigger.MOVEMENT, self.target)
-        ]
+        self.success_triggers = [self._create_affliction_trigger(AfflictionTrigger.MOVEMENT, self.target)]
 
     def evaluate(self) -> List[Effect]:
         """
@@ -137,9 +147,6 @@ class MoveActorEffect(Effect):
                     aesthetic.target_draw_x, aesthetic.target_draw_y = (new_x, new_y)
                     aesthetic.current_sprite = aesthetic.sprites.move
 
-                # update fov
-                world.recompute_fov(entity)
-
         if success:
             return self.success_effects + self.success_triggers
         else:
@@ -175,13 +182,17 @@ class MoveActorEffect(Effect):
 
             # check for no entity in way but tile is blocked
             if not is_entity_on_tile and is_tile_blocking_movement and target_tile:
-                logging.debug(f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was"
-                              f" blocked by terrain. ")
+                logging.debug(
+                    f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was"
+                    f" blocked by terrain. "
+                )
                 collides = True
 
             # check if entity blocking tile
             elif is_entity_on_tile and target_tile:
-                for blocking_entity, (position, blocking) in world.get_components([Position, Blocking]):
+                from scripts.engine.core import queries
+
+                for blocking_entity, (position, blocking) in queries.position_and_blocking:
                     # cast for typing
                     position = cast(Position, position)
                     blocking = cast(Blocking, blocking)
@@ -190,7 +201,8 @@ class MoveActorEffect(Effect):
                         blockers_name = world.get_name(blocking_entity)
                         logging.debug(
                             f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
-                            f" by '{blockers_name}'. ")
+                            f" by '{blockers_name}'. "
+                        )
                         collides = True
                         break
 
@@ -198,8 +210,14 @@ class MoveActorEffect(Effect):
 
 
 class TriggerAfflictionsEffect(Effect):
-    def __init__(self, origin: EntityID, target: EntityID, trigger_type: AfflictionTriggerType,
-            success_effects: List[Effect], failure_effects: List[Effect]):
+    def __init__(
+        self,
+        origin: EntityID,
+        target: EntityID,
+        trigger_type: AfflictionTriggerType,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+    ):
 
         super().__init__(origin, success_effects, failure_effects)
 
@@ -226,9 +244,16 @@ class TriggerAfflictionsEffect(Effect):
 
 
 class AffectStatEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Effect],
-            failure_effects: List[Effect], cause_name: str,  target: EntityID,
-            stat_to_target: PrimaryStatType, affect_amount: int):
+    def __init__(
+        self,
+        origin: EntityID,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+        cause_name: str,
+        target: EntityID,
+        stat_to_target: PrimaryStatType,
+        affect_amount: int,
+    ):
 
         super().__init__(origin, success_effects, failure_effects)
 
@@ -258,8 +283,15 @@ class AffectStatEffect(Effect):
 
 
 class ApplyAfflictionEffect(Effect):
-    def __init__(self, origin: EntityID, target: EntityID, affliction_name: str, duration: int,
-                 success_effects: List[Effect], failure_effects: List[Effect]):
+    def __init__(
+        self,
+        origin: EntityID,
+        target: EntityID,
+        affliction_name: str,
+        duration: int,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+    ):
         super().__init__(origin, success_effects, failure_effects)
 
         self.affliction_name = affliction_name
@@ -283,8 +315,15 @@ class ApplyAfflictionEffect(Effect):
 
 
 class ReduceSkillCooldownEffect(Effect):
-    def __init__(self, origin: EntityID, target: EntityID, skill_name: str, amount: int,
-                 success_effects: List[Effect], failure_effects: List[Effect]):
+    def __init__(
+        self,
+        origin: EntityID,
+        target: EntityID,
+        skill_name: str,
+        amount: int,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+    ):
         super().__init__(origin, success_effects, failure_effects)
 
         self.target = target
@@ -302,16 +341,19 @@ class ReduceSkillCooldownEffect(Effect):
         if knowledge:
             current_cooldown = knowledge.cooldowns[self.skill_name]
             knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.amount)
-            logging.debug(f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to "
-                          f"{knowledge.cooldowns[self.skill_name]}")
+            logging.debug(
+                f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to "
+                f"{knowledge.cooldowns[self.skill_name]}"
+            )
             return self.success_effects
 
         return self.failure_effects
 
 
 class AddAspectEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Effect],
-            failure_effects: List[Effect], ):
+    def __init__(
+        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
+    ):
         super().__init__(origin, success_effects, failure_effects)
 
     def evaluate(self) -> List[Effect]:
@@ -325,8 +367,9 @@ class AddAspectEffect(Effect):
 
 
 class RemoveAspectEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Effect],
-            failure_effects: List[Effect], ):
+    def __init__(
+        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
+    ):
         super().__init__(origin, success_effects, failure_effects)
 
     def evaluate(self) -> List[Effect]:
@@ -340,8 +383,9 @@ class RemoveAspectEffect(Effect):
 
 
 class TriggerSkillEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Effect],
-            failure_effects: List[Effect], ):
+    def __init__(
+        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
+    ):
         super().__init__(origin, success_effects, failure_effects)
 
     def evaluate(self) -> List[Effect]:
@@ -355,8 +399,9 @@ class TriggerSkillEffect(Effect):
 
 
 class KillEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Effect],
-            failure_effects: List[Effect],):
+    def __init__(
+        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
+    ):
         super().__init__(origin, success_effects, failure_effects)
 
     def evaluate(self) -> List[Effect]:

@@ -4,19 +4,6 @@
 Provide a way for people to contribute updates, fix bugs, try out ideas, etc.
 
 
-## Design Philosophies 
-* **Flow** - Periods of impetus to ensure the player is driven forward appropriately. Periods of openness to allow self
- pacing, reflection and exploration.
-* **Coherent** - Information pertinent to the player is always made available and easy to parse, utilising a mix of
- art and text. Avoid need for external resource use e.g. a wiki.
-* **Flexible**  - Never a best way, always a different one. The only limitations in place should be those that drive
- diversity of play.
-* **Accessible** - Supports different kinds of players, e.g. can use keyboard, mouse or controller interchangeably, with
- minimal
- difference in experience. e.g. Colour scheme is colour-blind aware.
-* **Customisable** - Near-core game settings can be influenced or set by the player allowing for extensive
- personalisation.
-
 ## Coding Style Guide
 There are a number of conventions followed, including using the following tool:
 

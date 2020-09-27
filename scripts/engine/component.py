@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
+import scripts.engine.utility
 from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
@@ -22,10 +23,12 @@ if TYPE_CHECKING:
 
 ########################### FLAGS ##############################
 
+
 class IsPlayer(RegisteredComponent):
     """
     Whether the entity is the player.
     """
+
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
     def serialize(self):
@@ -40,6 +43,7 @@ class IsActor(RegisteredComponent):
     """
     Whether the entity is an actor.
     """
+
     __slots__ = ()
 
     def serialize(self):
@@ -54,6 +58,7 @@ class IsGod(RegisteredComponent):
     """
     Whether the entity is a god.
     """
+
     __slots__ = ()
 
     def serialize(self):
@@ -68,6 +73,7 @@ class HasCombatStats(RegisteredComponent):
     """
     A flag to show if an entity has stats used for combat.
     """
+
     __slots__ = ()
 
     def serialize(self):
@@ -80,6 +86,7 @@ class HasCombatStats(RegisteredComponent):
 
 #################### OTHERS #########################
 
+
 class Position(RegisteredComponent):
     """
     An entity's position on the map. At initiation provide all positions the entity holds. After initiation only need
@@ -89,9 +96,9 @@ class Position(RegisteredComponent):
     def __init__(self, *positions: Tuple[int, int]):
         # Sort the positions from top-left to down-right
         if not positions:
-            raise ValueError('Must provide at least 1 coordinate for the entity.')
+            raise ValueError("Must provide at least 1 coordinate for the entity.")
 
-        sorted_positions = sorted(positions, key=lambda x: (x[0]**2 + x[1]**2))
+        sorted_positions = sorted(positions, key=lambda x: (x[0] ** 2 + x[1] ** 2))
         top_left = sorted_positions[0]
         self.offsets = [(x - top_left[0], y - top_left[1]) for x, y in sorted_positions]
         self.reference_position = top_left
@@ -120,7 +127,7 @@ class Position(RegisteredComponent):
         arg_max = np.argwhere(transformed == np.amax(transformed))
         # From all the nearest coordinates find the one nearest to the center of the entity
         arg_min = np.argmin(
-            np.sqrt((center[0] - transformed[i[0]][0])**2 + (center[1] - transformed[i[0]][1])**2) for i in arg_max
+            np.sqrt((center[0] - transformed[i[0]][0]) ** 2 + (center[1] - transformed[i[0]][1]) ** 2) for i in arg_max
         )
         return coordinates[arg_max[arg_min][0]][0], coordinates[arg_max[arg_min][0]][1]
 
@@ -161,8 +168,14 @@ class Aesthetic(RegisteredComponent):
     An entity's sprite.
     """
 
-    def __init__(self, current_sprite: pygame.Surface, sprites: TraitSpritesData,
-            sprite_paths: List[TraitSpritePathsData], render_layer: RenderLayerType, draw_pos: Tuple[float, float]):
+    def __init__(
+        self,
+        current_sprite: pygame.Surface,
+        sprites: TraitSpritesData,
+        sprite_paths: List[TraitSpritePathsData],
+        render_layer: RenderLayerType,
+        draw_pos: Tuple[float, float],
+    ):
         self._sprite_paths: List[TraitSpritePathsData] = sprite_paths
         self.current_sprite: pygame.Surface = current_sprite
         self.sprites: TraitSpritesData = sprites
@@ -186,7 +199,7 @@ class Aesthetic(RegisteredComponent):
         _dict = {
             "draw_pos": (self.draw_x, self.draw_y),
             "render_layer": self.render_layer,
-            "sprite_paths": sprite_paths
+            "sprite_paths": sprite_paths,
         }
         return _dict
 
@@ -200,12 +213,14 @@ class Aesthetic(RegisteredComponent):
         # unpack sprite paths
         sprite_paths = []
         from scripts.engine.core.definitions import TraitSpritePathsData
+
         for sprite_path in _sprite_paths:
             sprite_paths.append(TraitSpritePathsData(**sprite_path))
 
         # convert sprite paths to sprites
         from scripts.engine import world
-        sprites = world.build_sprites_from_paths(sprite_paths)
+
+        sprites = scripts.engine.utility.build_sprites_from_paths(sprite_paths)
 
         return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
 
@@ -308,6 +323,7 @@ class Behaviour(RegisteredComponent):
     @classmethod
     def deserialize(cls, serialised):
         from scripts.engine.thought import SkipTurnBehaviour
+
         skip_turn = SkipTurnBehaviour(serialised)
         # FIXME - need to deserialise behaviour properly
         return Behaviour(skip_turn)
@@ -318,8 +334,12 @@ class Knowledge(RegisteredComponent):
     An entity's knowledge, including skills.
     """
 
-    def __init__(self, skills: List[Type[Skill]], skill_order: Optional[List[str]] = None,
-            cooldowns: Optional[Dict[str, int]] = None):
+    def __init__(
+        self,
+        skills: List[Type[Skill]],
+        skill_order: Optional[List[str]] = None,
+        cooldowns: Optional[Dict[str, int]] = None,
+    ):
         skills = skills or []
         skill_order = skill_order or []
         cooldowns = cooldowns or {}
@@ -361,13 +381,8 @@ class Knowledge(RegisteredComponent):
         if set_cooldown:
             self.cooldowns[skill.key] = 0
 
-
     def serialize(self):
-        _dict = {
-            "skill_names": self.skill_names,
-            "cooldowns": self.cooldowns,
-            "skill_order": self.skill_order
-        }
+        _dict = {"skill_names": self.skill_names, "cooldowns": self.cooldowns, "skill_order": self.skill_order}
         return _dict
 
     @classmethod
@@ -378,6 +393,7 @@ class Knowledge(RegisteredComponent):
 
         skills = []
         from scripts.engine import action
+
         for name in skill_names:
             skills.append(action.skill_registry[name])
 
@@ -388,8 +404,12 @@ class Afflictions(RegisteredComponent):
     """
     An entity's Boons and Banes. held in .active as a list of Affliction.
     """
-    def __init__(self, active: Optional[List[Affliction]] = None,
-            stat_modifiers: Optional[Dict[str, Tuple[PrimaryStatType, int]]] = None):
+
+    def __init__(
+        self,
+        active: Optional[List[Affliction]] = None,
+        stat_modifiers: Optional[Dict[str, Tuple[PrimaryStatType, int]]] = None,
+    ):
         active = active or []
         stat_modifiers = stat_modifiers or {}
 
@@ -399,13 +419,13 @@ class Afflictions(RegisteredComponent):
     def serialize(self):
         active = {}
         for affliction in self.active:
-            active[affliction.__class__.__name__] = (affliction.creator, affliction.affected_entity,
-                                                    affliction.duration)
+            active[affliction.__class__.__name__] = (
+                affliction.creator,
+                affliction.affected_entity,
+                affliction.duration,
+            )
 
-        _dict = {
-            "active": active,
-            "stat_modifiers": self.stat_modifiers
-        }
+        _dict = {"active": active, "stat_modifiers": self.stat_modifiers}
 
         return _dict
 
@@ -415,6 +435,7 @@ class Afflictions(RegisteredComponent):
 
         active_instances = []
         from scripts.engine import action
+
         for name, value_tuple in active_dict.items():
             _affliction = action.affliction_registry[name]
             affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])
@@ -473,8 +494,6 @@ class FOV(RegisteredComponent):
     """
     An entity's field of view.
     """
-    algorithm: int = 0
-    light_walls: bool = True
 
     def __init__(self, fov_map: np.array):
         self.map: np.array = fov_map
@@ -487,3 +506,26 @@ class FOV(RegisteredComponent):
     def deserialize(cls, serialised):
         fov_map = np.array(serialised)
         return FOV(fov_map)
+
+
+class LightSource(RegisteredComponent):
+    """
+    An emitter of light.
+    """
+
+    def __init__(self, radius: int, colour: Optional[Tuple[int, int, int, int]] = None):
+        if not colour:
+            _colour = (230, 182, 41, 80)
+        else:
+            _colour = colour
+
+        self.radius: int = radius
+        self.colour: Tuple[int, int, int, int] = _colour
+
+    def serialize(self):
+        data = {"radius": self.radius, "colour": self.colour}
+        return data
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return LightSource(*serialised)

@@ -54,6 +54,7 @@ def get_current() -> GameStateType:
 
 ################### SET ##############################
 
+
 def set_active_skill(skill_name: str):
     """
     Set the active skill. Used for targeting mode.
@@ -62,6 +63,7 @@ def set_active_skill(skill_name: str):
 
 
 ################### MANAGING STATE ###################
+
 
 def update_clock() -> float:
     """
@@ -110,17 +112,16 @@ def save_game():
     save_name_prefix = f"{name}"
     new_save_name = f"{save_name_prefix}_{date_and_time}"
 
-
     # clear old saves
     existing_saves = []
     # get existing save files and check if they match
-    for save_name in os.listdir(full_save_path):
+    for save_name in os.listdir(str(full_save_path)):
         if save_name_prefix in save_name:
             existing_saves.append(save_name)
     existing_saves = sorted(existing_saves)
     while len(existing_saves) > MAX_SAVES - 1:  # -1 to handle the offset
         save_name = existing_saves.pop(0)
-        os.remove(full_save_path + "/" + save_name)
+        os.remove(str(full_save_path / save_name))
 
     # update save data
     _SAVE[new_save_name] = save
@@ -135,7 +136,8 @@ def dump_save_game():
     for save_name, save_values in _SAVE.items():
 
         # write to json
-        with open(SAVE_PATH + save_name + ".json", "w") as file:
+        str_path = str(SAVE_PATH / save_name) + ".json"
+        with open(str_path, "w") as file:
             json.dump(save_values, file, indent=4)
             logging.info("Save file dumped.")
 
@@ -145,7 +147,8 @@ def load_game(filename: str):
     Deserialise the game data from a file. Filename does not include path to save folder.
     """
     # read from json
-    with open(SAVE_PATH + filename + ".json", "r") as file:
+    str_path = str(SAVE_PATH / filename) + ".json"
+    with open(str_path, "r") as file:
         save = json.load(file)
 
     # check the version

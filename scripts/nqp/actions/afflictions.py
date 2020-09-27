@@ -28,7 +28,7 @@ class BoggedDown(Affliction):
             failure_effects=[],
             target=self.affected_entity,
             stat_to_target=PrimaryStat.BUSTLE,
-            affect_amount=2
+            affect_amount=2,
         )
 
         return [affect_stat_effect]
@@ -54,7 +54,7 @@ class Flaming(Affliction):
             damage=int(library.GAME_CONFIG.base_values.damage / 2),
             damage_type=DamageType.BURN,
             mod_stat=PrimaryStat.SKULLDUGGERY,
-            mod_amount=0.1
+            mod_amount=0.1,
         )
 
         return [damage_effect]

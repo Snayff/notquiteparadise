@@ -9,27 +9,21 @@ from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (
     AfflictionCategoryType,
     AfflictionTriggerType,
-    Direction,
     DirectionType,
     EffectTypeType,
-    Resource,
     ResourceType,
-    Shape,
     ShapeType,
-    TargetingMethod,
     TargetingMethodType,
-    TargetTag,
     TargetTagType,
 )
 from scripts.engine.core.definitions import ProjectileData
-from scripts.engine.effect import Effect, MoveActorEffect
+from scripts.engine.effect import Effect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import Tuple, List
 
-__all__ = ["Skill", "Affliction", "properties_set_by_data", "register_action", "skill_registry",
-    "affliction_registry"]
+__all__ = ["Skill", "Affliction", "properties_set_by_data", "register_action", "skill_registry", "affliction_registry"]
 
 skill_registry: Dict[str, Type[Skill]] = {}
 affliction_registry: Dict[str, Type[Affliction]] = {}
@@ -76,6 +70,7 @@ class Skill(ABC):
         If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
         """
         from scripts.engine import world
+
         logging.debug(f"'{world.get_name(self.user)}' used '{self.key}'.")
 
         # animate the skill user
@@ -106,6 +101,7 @@ class Skill(ABC):
         Play the provided animation on the entity's aesthetic component
         """
         from scripts.engine import world
+
         aesthetic = world.get_entitys_component(self.user, Aesthetic)
         animation = self.get_animation(aesthetic)
         if aesthetic and animation:
@@ -118,8 +114,10 @@ class Skill(ABC):
         """
         entity_names = []
         from scripts.engine import world
-        for entity in world.get_affected_entities((self.target_tile.x, self.target_tile.y), self.shape,
-                                                  self.shape_size, self.direction):
+
+        for entity in world.get_affected_entities(
+            (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
+        ):
             yield entity, self.build_effects(entity)
             entity_names.append(world.get_name(entity))
 
@@ -145,6 +143,7 @@ class Skill(ABC):
         Sets the class properties of the skill from the class key
         """
         from scripts.engine import library
+
         cls.data = library.SKILLS[cls.key]
         cls.name = cls.data.name
         cls.required_tags = cls.data.required_tags
@@ -194,6 +193,7 @@ class Affliction(ABC):
         An iterator over pairs of (affected entity, [effects])
         """
         from scripts.engine import world
+
         entities = set()
         position = world.get_entitys_component(self.affected_entity, Position)
         if position:

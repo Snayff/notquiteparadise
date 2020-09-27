@@ -7,7 +7,7 @@ import pygame
 
 from snecs.typedefs import EntityID
 from scripts.engine.core.constants import GameState, GameStateType
-from scripts.engine.world_objects.gamemap import Gamemap
+from scripts.engine.world_objects.game_map import GameMap
 
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict
@@ -20,6 +20,7 @@ class Store:
     Hold the current state info required by the engine. Must be serialised.
     Should only be accessed via getters and setters, not directly.
     """
+
     def __init__(self):
         self.internal_clock = pygame.time.Clock()
 
@@ -29,7 +30,7 @@ class Store:
         self.active_skill = None
 
         # used in world
-        self.current_gamemap: Optional[Gamemap] = None
+        self.current_game_map: Optional[GameMap] = None
 
         # used in chronicle
         self.turn_queue: Dict[EntityID, int] = {}  # (entity, time)
@@ -41,26 +42,26 @@ class Store:
 
         # used to hold images called during runtime so only one copy ever exists. Not serialised.
         self.images: Dict[str, pygame.Surface] = {}
-        
+
     def serialise(self) -> Dict[str, Any]:
         """
         Serialise all data held in the store.
         """
-        if self.current_gamemap:
-            game_map = self.current_gamemap.serialise()
+        if self.current_game_map:
+            game_map = self.current_game_map.serialise()
         else:
             game_map = {}
 
         _dict = {
             "current_game_state": self.current_game_state,
             "previous_game_state": self.previous_game_state,
-            "current_gamemap":  game_map,
+            "current_game_map": game_map,
             "turn_queue": self.turn_queue,
             "round": self.round,
             "time": self.time,
             "time_of_last_turn": self.time_of_last_turn,
             "round_time": self.round_time,
-            "turn_holder": self.turn_holder
+            "turn_holder": self.turn_holder,
         }
         return _dict
 
@@ -71,11 +72,11 @@ class Store:
         try:
             self.current_game_state = serialised["current_game_state"]
             self.previous_game_state = serialised["previous_game_state"]
-            if serialised["current_gamemap"]:
-                game_map = Gamemap.deserialise(serialised["current_gamemap"])
+            if serialised["current_game_map"]:
+                game_map = GameMap.deserialise(serialised["current_game_map"])
             else:
                 game_map = None
-            self.current_gamemap = game_map
+            self.current_game_map = game_map
             self.turn_queue = serialised["turn_queue"]
             self.round = serialised["round"]
             self.time = serialised["time"]
@@ -89,4 +90,4 @@ class Store:
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
     store = Store()
 else:
-    store = ""
+    store = ""  # type: ignore

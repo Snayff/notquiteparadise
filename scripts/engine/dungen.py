@@ -169,8 +169,7 @@ class DungeonGenerator:
                 for y in range(room.height):
                     target_x = min(start_x + x, map_width - 1)
                     target_y = min(start_y + y, map_height - 1)
-                    tile = _create_tile_from_category(target_x, target_y, room.tile_categories[x][y],
-                                                      sprite_paths)
+                    tile = _create_tile_from_category(target_x, target_y, room.tile_categories[x][y], sprite_paths)
                     generated_level[target_x][target_y] = tile
 
         # update self
@@ -300,6 +299,7 @@ class RoomConcept:
     """
     Details of a room. Used for world generation.
     """
+
     # what to place in a tile. Needed to hold values when returning room
     tile_categories: List[List[TileCategoryType]]
     design: str  # algorithm used to generate
@@ -368,8 +368,10 @@ class RoomConcept:
         """
         Return the generation information about the room
         """
-        gen_info = f"{self.key} | {self.design} | (w:{self.width}, h:{self.height}) " \
-                   f"| available:{self.available_area}/ total:{self.total_area}. Actors:{self.actors}"
+        gen_info = (
+            f"{self.key} | {self.design} | (w:{self.width}, h:{self.height}) "
+            f"| available:{self.available_area}/ total:{self.total_area}. Actors:{self.actors}"
+        )
 
         return gen_info
 
@@ -393,14 +395,16 @@ class RoomConcept:
         """
         Check if this room intersects with another.
         """
-        if (self.start_x <= room.end_x and self.end_x >= room.start_x) and \
-                (self.start_y <= room.end_y and self.end_y >= room.start_y):
+        if (self.start_x <= room.end_x and self.end_x >= room.start_x) and (
+            self.start_y <= room.end_y and self.end_y >= room.start_y
+        ):
             return True
 
         return False
 
 
 ############################ GENERATE MAP ############################
+
 
 def generate(map_name: str, rng: random.Random, player_data: ActorData) -> Tuple[List[List[Tile]], str]:
     """
@@ -613,6 +617,7 @@ def _generate_entities_in_steps(dungen: DungeonGenerator, player_data: Optional[
 
 ############################ ROOMS ############################
 
+
 def _generate_room(dungen: DungeonGenerator, room_names: List[str], room_weights: List[float]) -> RoomConcept:
     """
     Select a room type to generate and return that room. If a generation method isnt provided then one is picked at
@@ -682,6 +687,7 @@ def _place_room(dungen: DungeonGenerator, room: RoomConcept) -> bool:
 
 ####################### MAP AMENDMENTS ##############################
 
+
 def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
     """
     Follow a path from origin (xy) setting relevant position in map_of_categories to TileCategory.FLOOR. Uses flood
@@ -725,15 +731,18 @@ def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
             # must also not be adjacent to a room - i.e. can connect to a tunnel but not a room.
             # N.B. the lower the num walls the more overlapping and joined up the tunnels are
             if in_bounds and not in_room and not in_border and num_walls >= 3:
-                if dungen.map_of_categories[x_check][y_check] == TileCategory.WALL and \
-                        not dungen.is_in_room(_x + (x_dir * 2), _y + (y_dir * 2)):
+                if dungen.map_of_categories[x_check][y_check] == TileCategory.WALL and not dungen.is_in_room(
+                    _x + (x_dir * 2), _y + (y_dir * 2)
+                ):
                     possible_directions.append((x_dir, y_dir))
 
         # choose next direction to go in
         if possible_directions:
             # pick a possible position, preferring previous direction, unless tunnel winds
-            if last_direction in possible_directions and \
-                    dungen.rng.randint(1, 100) > dungen.map_data.chance_of_tunnel_winding:
+            if (
+                last_direction in possible_directions
+                and dungen.rng.randint(1, 100) > dungen.map_data.chance_of_tunnel_winding
+            ):
                 new_direction = last_direction
             else:
                 new_direction = dungen.rng.choice(possible_directions)
@@ -776,7 +785,7 @@ def _add_entrances(dungen: DungeonGenerator, room: RoomConcept):
     attempts = 0
     placed_entrances = set()
 
-    #print(f"Add entrance to room: x:{room.start_x} | end_x:{room.end_x} | y:{room.start_y} | end_y:{room.end_y}")
+    # print(f"Add entrance to room: x:{room.start_x} | end_x:{room.end_x} | y:{room.start_y} | end_y:{room.end_y}")
 
     # roll for an extra entrance
     base_num_entrances = dungen.map_data.max_room_entrances
@@ -810,11 +819,7 @@ def _add_entrances(dungen: DungeonGenerator, room: RoomConcept):
         #       f":{left_pos2} | right:{right_pos}:{right_pos2}")
 
         # note which ones are applicable
-        for _pos, _pos2 in (
-                (top_pos, top_pos2),
-                (bot_pos, bot_pos2),
-                (left_pos, left_pos2),
-                (right_pos, right_pos2)):
+        for _pos, _pos2 in ((top_pos, top_pos2), (bot_pos, bot_pos2), (left_pos, left_pos2), (right_pos, right_pos2)):
             pos2_is_floor = False
             x, y = _pos2
 
@@ -847,8 +852,7 @@ def _remove_deadends(dungen: DungeonGenerator):
     # find initial deadends
     for x in range(0, dungen.map_data.width):
         for y in range(0, dungen.map_data.height):
-            if dungen.map_of_categories[x][y] == TileCategory.FLOOR and\
-                    dungen.count_adjacent_walls(x, y) >= 3:
+            if dungen.map_of_categories[x][y] == TileCategory.FLOOR and dungen.count_adjacent_walls(x, y) >= 3:
                 deadends.add((x, y))
 
     while deadends:
@@ -858,8 +862,16 @@ def _remove_deadends(dungen: DungeonGenerator):
         dungen.set_tile_category(_x, _y, TileCategory.WALL)
 
         # check around where we just amended for new deadends
-        for x_dir, y_dir in (Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP_LEFT,
-        Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT):
+        for x_dir, y_dir in (
+            Direction.UP,
+            Direction.DOWN,
+            Direction.LEFT,
+            Direction.RIGHT,
+            Direction.UP_LEFT,
+            Direction.UP_RIGHT,
+            Direction.DOWN_LEFT,
+            Direction.DOWN_RIGHT,
+        ):
             x_check = _x + x_dir
             y_check = _y + y_dir
 
@@ -943,8 +955,9 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
                 connections[anchor_room.id] = [room.id]
 
 
-def _get_nearest_room(dungen: DungeonGenerator, base_room: RoomConcept,
-        id_ignore_list: List[str]) -> Optional[RoomConcept]:
+def _get_nearest_room(
+    dungen: DungeonGenerator, base_room: RoomConcept, id_ignore_list: List[str]
+) -> Optional[RoomConcept]:
     """
     Starting from xy find the directly nearest room. Treats all tiles as floors.
     """
@@ -983,6 +996,7 @@ def _get_nearest_room(dungen: DungeonGenerator, base_room: RoomConcept,
 
 ####################### ENTITIES ##############################
 
+
 def _generate_actor(dungen: DungeonGenerator, room_data: RoomConceptData) -> ActorData:
     """
     Pick an actor using the possible options in the room and their weighting and return the actor's data.
@@ -1001,8 +1015,9 @@ def _generate_actor(dungen: DungeonGenerator, room_data: RoomConceptData) -> Act
     return actor_data
 
 
-def _find_place_for_actor(dungen: DungeonGenerator, room: RoomConcept,
-        actor_data: ActorData) -> Optional[Tuple[int, int]]:
+def _find_place_for_actor(
+    dungen: DungeonGenerator, room: RoomConcept, actor_data: ActorData
+) -> Optional[Tuple[int, int]]:
     """
     Keep picking random locations in a room to place the actor. Returns xy if successful.
     """
@@ -1031,8 +1046,8 @@ def _find_place_for_actor(dungen: DungeonGenerator, room: RoomConcept,
 
 ####################### HELPER FUNCTIONS ##############################
 
-def _create_tile_from_category(x: int, y: int, tile_category: TileCategoryType,
-        sprite_paths: Dict[str, str]) -> Tile:
+
+def _create_tile_from_category(x: int, y: int, tile_category: TileCategoryType, sprite_paths: Dict[str, str]) -> Tile:
     """
     Convert a tile category into the relevant tile. If it isnt a wall it is floor by default.
     """

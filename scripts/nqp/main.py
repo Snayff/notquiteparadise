@@ -8,13 +8,14 @@ import snecs
 
 from snecs.world import default_world
 from scripts.engine import chronicle, debug, state, world
-from scripts.engine.component import Position
+from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import GameState, UIElement
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData
 from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
+from scripts.engine.systems.vision import process_fov, process_light_map, process_tile_visibility
 from scripts.engine.ui.manager import ui
-from scripts.engine.world_objects.gamemap import Gamemap
+from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.processors import display_processors, input_processors
 
 
@@ -106,17 +107,21 @@ def initialise_game():
     Init the game`s required info
     """
     # init and save map
-    game_map = Gamemap("cave", 10)
-    store.current_gamemap = game_map
+    game_map = GameMap("cave", 10)
+    store.current_game_map = game_map
 
     # populate the map
-    player_data = ActorData(key="player", possible_names=["player"], description="a desc",
-                            position_offsets=[(0, 0)], trait_names=["shoom", "soft_tops", "dandy"])
+    player_data = ActorData(
+        key="player",
+        possible_names=["player"],
+        description="a desc",
+        position_offsets=[(0, 0)],
+        trait_names=["shoom", "soft_tops", "dandy"],
+    )
     game_map.generate_new_map(player_data)
 
     # init the player
     player = world.get_player()
-    world.recompute_fov(player)
 
     # tell places about the player
     chronicle.set_turn_holder(player)
@@ -137,15 +142,15 @@ def initialise_game():
 
     # FIXME - entities load before camera so they cant get their screen position.
     #  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.
-    from scripts.engine.component import Aesthetic, FOV
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
         aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
         aesthetic.target_draw_x = aesthetic.draw_x
         aesthetic.target_draw_y = aesthetic.draw_y
 
     # entities load with a blank fov, update them now
-    for entity, (fov, position) in world.get_components([FOV, Position]):
-        world.recompute_fov(entity)
+    process_light_map()
+    process_fov()
+    process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
     pos = world.get_entitys_component(player, Position)

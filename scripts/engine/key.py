@@ -11,7 +11,6 @@ if TYPE_CHECKING:
     from typing import Optional, Tuple
 
 
-
 def convert_vector_to_intent(direction: Tuple[int, int]) -> Optional[InputIntentType]:
     direction_map = {
         (0, 1): InputIntent.UP,
@@ -21,7 +20,7 @@ def convert_vector_to_intent(direction: Tuple[int, int]) -> Optional[InputIntent
         (1, 1): InputIntent.UP_RIGHT,
         (-1, 1): InputIntent.UP_LEFT,
         (1, -1): InputIntent.DOWN_RIGHT,
-        (-1, -1): InputIntent.DOWN_LEFT
+        (-1, -1): InputIntent.DOWN_LEFT,
     }
     if direction in direction_map:
         return direction_map[direction]
@@ -34,11 +33,7 @@ def convert_to_intent(event: pygame.event) -> Optional[InputIntentType]:
     """
     intent = None
 
-    checks = {
-        1: _check_directions,
-        2: _check_actions,
-        3: _check_dev_actions
-    }
+    checks = {1: _check_directions, 2: _check_actions, 3: _check_dev_actions}
 
     # loop each check in turn and return first value found
     for check in checks.values():

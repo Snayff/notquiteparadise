@@ -61,7 +61,7 @@
         "description": "Often found in their ancestral home of the Soft Tops they have spent most of the last century being drafted into a war over which of the causes it the right one. Not that anyone can quite remember which cause they're fighting for.",
         "exactitude": 2,
         "name": "shoom",
-        "sight_range": 4,
+        "sight_range": 5,
         "known_skills": [
             "none"
         ],

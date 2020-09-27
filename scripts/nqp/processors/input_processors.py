@@ -1,13 +1,14 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING, Optional, Type
 
 import logging
 import pygame
 
-from typing import TYPE_CHECKING, Optional, Type
 from snecs.typedefs import EntityID
 from scripts.engine import chronicle, debug, key, library, state, utility, world
 from scripts.engine.action import Skill
 from scripts.engine.component import IsActor, Knowledge, Position
+from scripts.engine.core import queries
 from scripts.engine.core.constants import (
     SAVE_PATH,
     Direction,
@@ -32,6 +33,7 @@ if TYPE_CHECKING:
 
 ########################## OUTER LAYER PROCESSORS - EXTERNAL FACING #####################################
 
+
 def process_event(event: pygame.event, game_state: GameStateType):
     """
     Extract the intent from the event and process them in the context of the game state
@@ -53,7 +55,7 @@ def process_event(event: pygame.event, game_state: GameStateType):
             ## Activate Actor Info Menu
             x, y = event.tile_pos
             # get entity on tile
-            for entity, (position, *other) in world.get_components([Position, IsActor]):  # type: ignore
+            for entity, (position, _) in queries.position_and_actor:  # type: ignore
                 if (x, y) in position:
                     # found entity, set to selected
                     actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
@@ -83,7 +85,7 @@ def process_intent(intent: InputIntentType, game_state: GameStateType):
     _process_stateless_intents(intent)
 
     if game_state == GameState.GAMEMAP:
-        _process_gamemap_intents(intent)
+        _process_game_map_intents(intent)
     elif game_state == GameState.TARGETING:
         _process_targeting_mode_intents(intent)
     elif game_state == GameState.MENU:
@@ -91,6 +93,7 @@ def process_intent(intent: InputIntentType, game_state: GameStateType):
 
 
 ############################### INNER PROCESSORS - LOCAL ONLY ################################
+
 
 def _process_stateless_intents(intent: InputIntentType):
     """
@@ -133,13 +136,14 @@ def _process_stateless_intents(intent: InputIntentType):
     elif intent == InputIntent.TEST:
         # add whatever we want to test here
         import os
-        full_save_path = os.getcwd() + "/" + SAVE_PATH
+
+        full_save_path = str(SAVE_PATH)
         for save_name in os.listdir(full_save_path):
             save = save_name.replace(".json", "")
             state.load_game(save)
 
 
-def _process_gamemap_intents(intent: InputIntentType):
+def _process_game_map_intents(intent: InputIntentType):
     """
     Process intents for the player turn game state.
     """
@@ -147,8 +151,14 @@ def _process_gamemap_intents(intent: InputIntentType):
     position = world.get_entitys_component(player, Position)
 
     possible_move_intents = [InputIntent.DOWN, InputIntent.UP, InputIntent.LEFT, InputIntent.RIGHT]
-    possible_skill_intents = [InputIntent.SKILL0, InputIntent.SKILL1, InputIntent.SKILL2, InputIntent.SKILL3,
-    InputIntent.SKILL4, InputIntent.SKILL5]
+    possible_skill_intents = [
+        InputIntent.SKILL0,
+        InputIntent.SKILL1,
+        InputIntent.SKILL2,
+        InputIntent.SKILL3,
+        InputIntent.SKILL4,
+        InputIntent.SKILL5,
+    ]
 
     ## Player movement
     if intent in possible_move_intents and position:
@@ -157,7 +167,6 @@ def _process_gamemap_intents(intent: InputIntentType):
         possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
         if direction in possible_moves:
             _process_skill_use(player, Move, target_tile, direction)
-
 
     ## Use a skill
     elif intent in possible_skill_intents and position:
@@ -200,8 +209,14 @@ def _process_targeting_mode_intents(intent):
     active_skill_name = state.get_active_skill()
     skill = world.get_known_skill(player, active_skill_name)
 
-    possible_skill_intents = [InputIntent.SKILL0, InputIntent.SKILL1, InputIntent.SKILL2, InputIntent.SKILL3,
-        InputIntent.SKILL4, InputIntent.SKILL5]
+    possible_skill_intents = [
+        InputIntent.SKILL0,
+        InputIntent.SKILL1,
+        InputIntent.SKILL2,
+        InputIntent.SKILL3,
+        InputIntent.SKILL4,
+        InputIntent.SKILL5,
+    ]
 
     ## Cancel use
     if intent == InputIntent.CANCEL:
@@ -241,6 +256,7 @@ def _process_menu_intents(intent):
         state.set_new(state.get_previous())
         ui.set_element_visibility(UIElement.ACTOR_INFO, False)
 
+
 ################## HELPER FUNCTIONS ############################
 
 
@@ -268,7 +284,9 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
         except KeyError:
             logging.warning("Process skill use: tried to call camera but not init`d.")
 
+
 ######################### GET ##########################
+
 
 def _get_pressed_direction(intent: InputIntentType) -> DirectionType:
     """

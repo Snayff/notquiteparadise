@@ -15,11 +15,22 @@ from scripts.engine import state
 from scripts.engine.core.constants import INFINITE, VERSION
 
 if TYPE_CHECKING:
-    from typing import (Callable, TYPE_CHECKING, List, Optional, Tuple, Union)
+    from typing import Callable, TYPE_CHECKING, List, Optional, Tuple, Union
 
-__all__ = ["update", "initialise_logging", "kill_logging", "is_logging", "enable_profiling", "disable_profiling",
-    "kill_profiler", "performance_test", "is_profiling", "print_values_to_console", "set_fps_visibility",
-    "get_visible_values"]
+__all__ = [
+    "update",
+    "initialise_logging",
+    "kill_logging",
+    "is_logging",
+    "enable_profiling",
+    "disable_profiling",
+    "kill_profiler",
+    "performance_test",
+    "is_profiling",
+    "print_values_to_console",
+    "set_fps_visibility",
+    "get_visible_values",
+]
 
 
 class Debugger:
@@ -67,16 +78,18 @@ class Debugger:
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
     _debugger = Debugger()
 else:
-    _debugger = ""
+    _debugger = ""  # type: ignore
 
 
 ########################## UPDATE #####################################
+
 
 def update():
     _debugger.update()
 
 
 ########################## LOGGING  #####################################
+
 
 def initialise_logging():
     """
@@ -106,8 +119,7 @@ def initialise_logging():
 
     # 8 adds space for 8 characters (# CRITICAL)
     log_format = "%(asctime)s| %(levelname)-8s| %(message)s"
-    logging.basicConfig(filename=log_file_name, filemode=file_mode, level=log_level,
-                        format=log_format)
+    logging.basicConfig(filename=log_file_name, filemode=file_mode, level=log_level, format=log_format)
 
     # format into uk time
     logging.Formatter.converter = time.gmtime
@@ -129,6 +141,7 @@ def is_logging() -> bool:
 
 
 ########################## PROFILING  #####################################
+
 
 def _create_profiler():
     """
@@ -194,8 +207,13 @@ def _dump_profiling_data():
     ps.strip_dirs().sort_stats("cumulative").print_stats()
 
 
-def performance_test(method_descs: List[str], old_methods: List[Tuple[Union[str, Callable], str]],
-        new_methods: List[Tuple[Union[str, Callable], str]], num_runs: int = 1000, repeats: int = 3) -> str:
+def performance_test(
+    method_descs: List[str],
+    old_methods: List[Tuple[Union[str, Callable], str]],
+    new_methods: List[Tuple[Union[str, Callable], str]],
+    num_runs: int = 1000,
+    repeats: int = 3,
+) -> str:
     """
     Run performance testing on a collection of methods/functions. Returns a formatted string detailing performance of
      old, new and % change between them.
@@ -221,8 +239,10 @@ def performance_test(method_descs: List[str], old_methods: List[Tuple[Union[str,
         name = method_descs[x]
         old = min(timeit.repeat(old_methods[x][0], setup=old_methods[x][1], number=num_runs, repeat=repeats))
         new = min(timeit.repeat(new_methods[x][0], setup=new_methods[x][1], number=num_runs, repeat=repeats))
-        result += f"\n{name}: {format(old, '0.5f')} -> {format(new, '0.5f')}" \
-                  f"({format(((old - new) / old) * 100, '0.2f')}%)"
+        result += (
+            f"\n{name}: {format(old, '0.5f')} -> {format(new, '0.5f')}"
+            f"({format(((old - new) / old) * 100, '0.2f')}%)"
+        )
 
     gc.enable()
     return result
@@ -237,6 +257,7 @@ def is_profiling() -> bool:
 
 ########################## FPS #####################################
 
+
 def is_fps_visible() -> bool:
     """
     Returns true if fps stats are visible
@@ -246,12 +267,12 @@ def is_fps_visible() -> bool:
 
 ########################## GET OR SET VALUES #####################################
 
+
 def print_values_to_console():
     """
     Print the debuggers stats.
     """
-    print(f"Avg FPS: {format(_debugger.average_fps, '.2f')}, "
-          f"R_Avg: {format(_debugger.recent_average_fps, '.2f')}")
+    print(f"Avg FPS: {format(_debugger.average_fps, '.2f')}, " f"R_Avg: {format(_debugger.recent_average_fps, '.2f')}")
 
 
 def set_fps_visibility(is_visible: bool = True):
@@ -267,8 +288,10 @@ def get_visible_values() -> List[str]:
     """
     values = []
     if _debugger.is_fps_visible:
-        values.append(f"FPS: C={format(_debugger.current_fps, '.2f')}, "
-                      f"R_Avg={format(_debugger.recent_average_fps, '.2f')}, "
-                      f"Avg={format(_debugger.average_fps, '.2f')}")
+        values.append(
+            f"FPS: C={format(_debugger.current_fps, '.2f')}, "
+            f"R_Avg={format(_debugger.recent_average_fps, '.2f')}, "
+            f"Avg={format(_debugger.average_fps, '.2f')}"
+        )
 
     return values
