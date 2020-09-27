@@ -71,13 +71,17 @@ To run the current suite of tests and confirm they're all passing, use:
 ```shell
 pytest --cov=nqp
 ```
+
+And to check that all the types are what they should be:
+```shell
+mypy
+```
  
 ### Merging
 When you're ready, submit a [pull request] to have your changes added to the main repository. Any pull request must
  the checks in the Github Actions, currently mypy type checking and pytest's testing. The code must remain compatible with the building of the [Sphinx] documentation, so that the docs are always up to date. 
  
 [Sphinx]: https://www.sphinx-doc.org/en/master/  
-
 [pull request]: https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
 
 ### Existing Issues

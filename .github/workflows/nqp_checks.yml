@@ -1,7 +1,9 @@
 name: NQP - Checks
 
 on: push
-  branches-ignore: [develop, master]
+  branches-ignore:
+  - '!develop'
+  - '!master'
 
 
 jobs:

@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import library
-from scripts.engine.action import Affliction, properties_set_by_data, register_action
+from scripts.engine.action import Affliction, init_action
 from scripts.engine.core.constants import DamageType, PrimaryStat
 from scripts.engine.effect import AffectStatEffect, DamageEffect
 
@@ -13,13 +11,11 @@ if TYPE_CHECKING:
     from typing import List
 
 
-@properties_set_by_data
-@register_action
+@init_action
 class BoggedDown(Affliction):
     key = "bogged_down"
 
-    def build_effects(self, entity: EntityID) -> List[AffectStatEffect]:
-        # TODO - externalise effect data to allow specifying in json
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[AffectStatEffect]:  # type: ignore
 
         affect_stat_effect = AffectStatEffect(
             origin=self.origin,
@@ -34,16 +30,14 @@ class BoggedDown(Affliction):
         return [affect_stat_effect]
 
 
-@properties_set_by_data
-@register_action
+@init_action
 class Flaming(Affliction):
     key = "flaming"
 
-    def build_effects(self, entity: EntityID) -> List[DamageEffect]:
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type: ignore
         """
         Build the effects of this skill applying to a single entity.
         """
-        # TODO - externalise effect data to allow specifying in json
         damage_effect = DamageEffect(
             origin=self.origin,
             success_effects=[],
