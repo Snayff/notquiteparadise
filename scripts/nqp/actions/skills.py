@@ -2,21 +2,15 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import library, world
-from scripts.engine.action import Skill, properties_set_by_data, register_action
+from scripts.engine.action import Skill, init_action
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (
     DamageType,
-    Direction,
     DirectionType,
     PrimaryStat,
-    Resource,
     Shape,
-    TargetingMethod,
-    TargetTag,
 )
 from scripts.engine.effect import (
     ApplyAfflictionEffect,
@@ -31,39 +25,13 @@ if TYPE_CHECKING:
     from typing import List, Optional
 
 
-@register_action
+@init_action
 class Move(Skill):
     """
     Basic move for an entity.
     """
 
-    # FIXME - define in json, as per other skills
-    # Move's definitions are not defined in the json. They are set here and only here.
-    from scripts.engine import library
-
     key = "move"
-    target_tags = [TargetTag.SELF]
-    description = "this is the normal movement."
-    icon_path = ""
-    resource_type = Resource.STAMINA
-    resource_cost = 0
-    time_cost = library.GAME_CONFIG.base_values.move_cost
-    base_cooldown = 0
-    targeting_method = TargetingMethod.TARGET
-    target_directions = [
-        Direction.UP_LEFT,
-        Direction.UP,
-        Direction.UP_RIGHT,
-        Direction.LEFT,
-        Direction.CENTRE,
-        Direction.RIGHT,
-        Direction.DOWN_LEFT,
-        Direction.DOWN,
-        Direction.DOWN_RIGHT,
-    ]
-    shape = Shape.TARGET
-    shape_size = 1
-    uses_projectile = False
 
     def __init__(self, user: EntityID, target_tile: Tile, direction):
         """
@@ -79,6 +47,7 @@ class Move(Skill):
             tile = world.get_tile((0, 0))
 
         super().__init__(user, tile, direction)
+
 
     def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[MoveActorEffect]:  # type:ignore
         """
@@ -100,8 +69,7 @@ class Move(Skill):
         return None
 
 
-@properties_set_by_data
-@register_action
+@init_action
 class BasicAttack(Skill):
     """
     Basic attack for an entity
@@ -134,8 +102,7 @@ class BasicAttack(Skill):
         return aesthetic.sprites.attack
 
 
-@properties_set_by_data
-@register_action
+@init_action
 class Lunge(Skill):
     """
     Lunge skill for an entity
@@ -231,8 +198,7 @@ class Lunge(Skill):
         return aesthetic.sprites.attack
 
 
-@properties_set_by_data
-@register_action
+@init_action
 class TarAndFeather(Skill):
     """
     TarAndFeather skill for an entity

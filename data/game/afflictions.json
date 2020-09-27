@@ -8,7 +8,7 @@
         "key": "bogged_down",
         "shape": "target",
         "shape_size": 1,
-        "required_tags": [
+        "target_tags": [
             "other_entity"
         ],
         "identity_tags": [
@@ -27,7 +27,7 @@
         "key": "flaming",
         "shape": "target",
         "shape_size": 1,
-        "required_tags": [
+        "target_tags": [
             "other_entity"
         ],
         "identity_tags": [

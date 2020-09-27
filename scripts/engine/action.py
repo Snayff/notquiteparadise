@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Dict, Iterator, Type
+from typing import Optional, TYPE_CHECKING, Dict, Iterator, Type
 from snecs.typedefs import EntityID
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (
@@ -23,13 +23,31 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Tuple, List
 
-__all__ = ["Skill", "Affliction", "properties_set_by_data", "register_action", "skill_registry", "affliction_registry"]
+__all__ = ["Skill", "Affliction", "init_action", "skill_registry", "affliction_registry"]
 
 skill_registry: Dict[str, Type[Skill]] = {}
 affliction_registry: Dict[str, Type[Affliction]] = {}
 
 
-class Skill(ABC):
+class Action(ABC):
+    key: str
+    name: str
+    description: str
+    icon_path: str
+    target_tags: List[TargetTagType]
+    effects: List[Effect]
+    shape: ShapeType
+    shape_size: int
+
+    @abstractmethod
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+        """
+        Build the effects of this skill applying to a single entity. Must be overridden in subclass.
+        """
+        pass
+
+
+class Skill(Action):
     """
     A subclass of Skill represents a skill and holds all the data that is
     not dependent on the individual cast - stuff like shape, base accuracy, etc.
@@ -40,24 +58,17 @@ class Skill(ABC):
     """
 
     # to be overwritten in subclass, including being set by external data
-    key: str
-    name: str
-    description: str
-    icon_path: str
     resource_type: ResourceType
     resource_cost: int
     time_cost: int
     base_cooldown: int
     targeting_method: TargetingMethodType
     target_directions: List[DirectionType]
-    shape: ShapeType
-    shape_size: int
-    target_tags: List[TargetTagType]
     uses_projectile: bool
-    projectile_data: ProjectileData
+    projectile_data: Optional[ProjectileData]
 
     # vars needed to keep track of changes
-    ignore_entities: List[int] = []
+    ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         self.user = user
@@ -65,70 +76,12 @@ class Skill(ABC):
         self.direction = direction
         self.projectile = None
 
-    def use(self):
+    @abstractmethod
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
-        If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
+        Build the effects of this skill applying to a single entity. Must be overridden in subclass.
         """
-        from scripts.engine import world
-
-        logging.debug(f"'{world.get_name(self.user)}' used '{self.key}'.")
-
-        # animate the skill user
-        self._play_animation()
-
-        # set the skill on cooldown
-        world.set_skill_on_cooldown(self)
-
-        # create the projectile
-        if self.uses_projectile:
-            self._create_projectile()
-        else:
-            world.apply_skill(self)
-
-    def _create_projectile(self):
-        """
-        Create a projectile carrying the skill's effects
-        """
-        from scripts.engine import world
-        # update projectile values
-        projectile_data = self.projectile_data
-        projectile_data.creator = self.user
-        projectile_data.skill_name = self.key
-        projectile_data.skill_instance = self
-        projectile_data.direction = self.direction
-
-        # create the projectile
-        projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
-
-        # save the reference to the projectile entity
-        self.projectile = projectile
-
-    def _play_animation(self):
-        """
-        Play the provided animation on the entity's aesthetic component
-        """
-        from scripts.engine import world
-
-        aesthetic = world.get_entitys_component(self.user, Aesthetic)
-        animation = self.get_animation(aesthetic)
-        if aesthetic and animation:
-            aesthetic.current_sprite = animation
-            aesthetic.current_sprite_duration = 0
-
-    def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
-        """
-        An iterator over pairs of (affected entity, [effects])
-        """
-        entity_names = []
-        from scripts.engine import world
-
-        for entity in world.get_affected_entities(
-            (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
-        ):
-            yield entity, self.build_effects(entity)
-            entity_names.append(world.get_name(entity))
-
-        logging.debug(f"'{world.get_name(self.user)}' applied '{self.key}' to {entity_names}.")
+        pass
 
     @abstractmethod
     def get_animation(self, aesthetic: Aesthetic):
@@ -137,15 +90,8 @@ class Skill(ABC):
         """
         pass
 
-    @abstractmethod
-    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[Effect]:
-        """
-        Build the effects of this skill applying to a single entity. Must be overridden by subclass.
-        """
-        pass
-
     @classmethod
-    def set_properties(cls):
+    def _init_properties(cls):
         """
         Sets the class properties of the skill from the class key
         """
@@ -167,8 +113,74 @@ class Skill(ABC):
         cls.uses_projectile = cls.data.uses_projectile
         cls.projectile_data = cls.data.projectile_data
 
+    def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
+        """
+        An iterator over pairs of (affected entity, [effects])
+        """
+        entity_names = []
+        from scripts.engine import world
 
-class Affliction(ABC):
+        for entity in world.get_affected_entities(
+            (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
+        ):
+            yield entity, self.build_effects(entity)
+            entity_names.append(world.get_name(entity))
+
+        logging.debug(f"'{world.get_name(self.user)}' applied '{self.key}' to {entity_names}.")
+
+    def use(self):
+        """
+        If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
+        """
+        from scripts.engine import world
+
+        logging.debug(f"'{world.get_name(self.user)}' used '{self.key}'.")
+
+        # animate the skill user
+        self._play_animation()
+
+        # create the projectile
+        if self.uses_projectile:
+            self._create_projectile()
+        else:
+            world.apply_skill(self)
+
+        # set the skill on cooldown
+        world.set_skill_on_cooldown(self)
+
+    def _create_projectile(self):
+        """
+        Create a projectile carrying the skill's effects
+        """
+        projectile_data = self.projectile_data
+
+        # update projectile values
+        projectile_data.creator = self.user
+        projectile_data.skill_name = self.name
+        projectile_data.skill_instance = self
+        projectile_data.direction = self.direction
+
+        # create the projectile
+        from scripts.engine import world
+        projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
+
+        # save the reference to the projectile entity
+        self.projectile = projectile
+
+    def _play_animation(self):
+        """
+        Play the provided animation on the entity's aesthetic component
+        """
+        from scripts.engine import world
+
+        aesthetic = world.get_entitys_component(self.user, Aesthetic)
+        animation = self.get_animation(aesthetic)
+        if aesthetic and animation:
+            aesthetic.current_sprite = animation
+            aesthetic.current_sprite_duration = 0
+
+
+class Affliction(Action):
     """
     A subclass of Affliction represents an affliction (a semi-permanent modifier) and holds all the data that is
     not dependent on the individual instances -  stuff like applicable targets etc.
@@ -179,46 +191,25 @@ class Affliction(ABC):
     """
 
     # to be overwritten in subclass, including being set by external data
-    key: str
-    name: str
-    description: str
-    icon_path: str
-    target_tags: List[TargetTagType]
     identity_tags: List[EffectTypeType]
     triggers: List[AfflictionTriggerType]
     category: AfflictionCategoryType
-    shape: ShapeType
-    shape_size: int
+
 
     def __init__(self, creator: EntityID, affected_entity: EntityID, duration: int):
         self.creator = creator
         self.affected_entity = affected_entity
         self.duration = duration
 
-    def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
-        """
-        An iterator over pairs of (affected entity, [effects])
-        """
-        from scripts.engine import world
-
-        entities = set()
-        position = world.get_entitys_component(self.affected_entity, Position)
-        if position:
-            for coordinate in position.coordinates:
-                for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
-                    if entity not in entities:
-                        entities.add(entity)
-                        yield entity, self.build_effects(entity)
-
     @abstractmethod
-    def build_effects(self, entity: EntityID):
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
-        Build the effects of this affliction applying to a single entity. Must be overridden by subclass.
+        Build the effects of this skill applying to a single entity. Must be overridden in subclass.
         """
         pass
 
     @classmethod
-    def set_properties(cls):
+    def _init_properties(cls):
         """
         Sets the class properties of the affliction from the class key
         """
@@ -235,22 +226,33 @@ class Affliction(ABC):
         cls.identity_tags = cls.data.identity_tags
         cls.triggers = cls.data.triggers
 
+    def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
+        """
+        An iterator over pairs of (affected entity, [effects])
+        """
+        from scripts.engine import world
 
-def properties_set_by_data(cls):
-    """
-    Class decorator used for initializing class with a set properties method so as to avoid repeating code.
-    """
-    cls.set_properties()
-    return cls
+        entities = set()
+        position = world.get_entitys_component(self.affected_entity, Position)
+        if position:
+            for coordinate in position.coordinates:
+                for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
+                    if entity not in entities:
+                        entities.add(entity)
+                        yield entity, self.build_effects(entity)
 
 
-def register_action(cls):
+def init_action(cls):
     """
-    Class decorator used to register an action with the engine.
+    Class decorator used for initialising class with properties from external data and also add to the registry for
+    use by the engine.
     """
+    cls._init_properties()
+
     if issubclass(cls, Skill):
         skill_registry[cls.key] = cls
     elif issubclass(cls, Affliction):
         affliction_registry[cls.key] = cls
 
-    return cls
+
+

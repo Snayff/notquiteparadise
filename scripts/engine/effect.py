@@ -21,10 +21,15 @@ if TYPE_CHECKING:
 
 
 class Effect(ABC):
-    def __init__(self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect]):
+    """
+    A collection of parameters and instructions to apply a change to an entity's or tile's state.
+    """
+    def __init__(self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
+            potency: float = 1.0):
         self.origin = origin
         self.success_effects: List[Effect] = success_effects
         self.failure_effects: List[Effect] = failure_effects
+        self.potency: float = potency
 
     @abstractmethod
     def evaluate(self):

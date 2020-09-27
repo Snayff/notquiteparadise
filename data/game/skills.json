@@ -1,4 +1,28 @@
 {
+    "move": {
+        "__dataclass__": "SkillData",
+        "cooldown": 0,
+        "description": "This is normal movement",
+        "icon_path": "skills/basic_attack.png",
+        "name": "move",
+        "key": "move",
+        "resource_cost": 0,
+        "resource_type": "stamina",
+        "targeting_method": "target",
+        "target_directions": [
+            "down",
+            "left",
+            "right",
+            "up"
+        ],
+        "time_cost": 20,
+        "target_tags": [
+            "self"
+        ],
+        "shape": "target",
+        "shape_size": 1,
+        "uses_projectile": false
+    },
     "basic_attack": {
         "__dataclass__": "SkillData",
         "cooldown": 2,
@@ -20,7 +44,7 @@
             "up_right"
         ],
         "time_cost": 20,
-        "required_tags": [
+        "target_tags": [
             "no_blocking_tile"
         ],
         "shape": "target",
@@ -59,7 +83,7 @@
             "up"
         ],
         "time_cost": 30,
-        "required_tags": [
+        "target_tags": [
             "no_blocking_tile"
         ],
         "shape": "target",
@@ -82,7 +106,7 @@
             "up"
         ],
         "time_cost": 30,
-        "required_tags": [
+        "target_tags": [
             "no_blocking_tile"
         ],
         "shape": "target",

@@ -1,17 +1,16 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
-
 import pygame
 import tcod
 
+from pathlib import Path
 from types import SimpleNamespace
-from typing import NewType, Tuple
+from typing import NewType, Tuple, Union
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.123.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.124.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -27,6 +26,7 @@ FOV_LIGHT_WALLS = True
 FOV_ALGORITHM = tcod.FOV_RESTRICTIVE
 
 ######################## PATHS ######################################
+
 ROOT_PATH = Path(__file__).parent.parent.parent.parent  # constants.py is three directories deep
 
 # to move up from docs and handle being in Ubuntu in CI
@@ -64,6 +64,8 @@ TraitGroupType = NewType("TraitGroupType", str)
 AfflictionTriggerType = NewType("AfflictionTriggerType", str)
 RenderLayerType = NewType("RenderLayerType", int)
 TileCategoryType = NewType("TileCategoryType", str)
+
+TagType = Union[TargetTagType, DamageTypeType, AfflictionCategoryType]
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
