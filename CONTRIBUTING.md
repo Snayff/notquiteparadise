@@ -1,16 +1,29 @@
 # Developer Guide
 
-## Motivation
+## Table of Contents
+- [Motivation and Intent](#motivation-and-intent)
+- [Coding Style Guide](#coding-style-guide)
+- [Getting Started](#getting-started)
+- [Testing](#testing)
+- [Merging](#merging)
+
+## Motivation and Intent
 Provide a way for people to contribute updates, fix bugs, try out ideas, etc.
 
 
 ## Coding Style Guide
-There are a number of conventions followed, including using the following tool:
+### Tools
+The following tools are used as standard.
 
-* [mypy] - python's static linter
+* [mypy] - python's static type checker
+* [black] - opinionated python linter 
 
 [mypy]: http://mypy-lang.org/
+[black]: https://github.com/psf/black
 
+When you submit a pull request the CI, Github Actions, will run these tools automatically. 
+
+### Naming conventions
 Below are the naming conventions followed in this project:
 * If only one of a class should exist the creation function is called "init_[object]", otherwise "create_[object]".
 * Where the object is taken as an argument the function name should default to "create_[object_type]".
@@ -41,18 +54,20 @@ python -m scripts
 ```
 
 ## Testing
-Updates to the software should also include updates to testing where needed.  Please add where appropriate.  To
+Updates to the software should also include updates to testing where needed and possible.  Please add where
+ appropriate, if you can
+.  To
 run the current suite of tests, simply run:
 
 ```shell
-pytest
+pytest --cov=nqp
 ```
 
 ## Merging
-To include any development into NQP you can submit a pull request. 
+To include any changes into the NQP engine you can submit a pull request. 
 
 Any pull request must pass mypy's typing check
- and must remain compatible with the building of the [Sphinx] documentation so that the docs are always up to date
- . As you'd expect, all tests must pass, too and new code should include tests. 
+ and must remain compatible with the building of the [Sphinx] documentation, so that the docs are always up to date
+ . As you'd expect, all tests must pass, too.
  
 [Sphinx]: https://www.sphinx-doc.org/en/master/  

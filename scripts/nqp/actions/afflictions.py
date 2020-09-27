@@ -22,7 +22,7 @@ class BoggedDown(Affliction):
         # TODO - externalise effect data to allow specifying in json
 
         affect_stat_effect = AffectStatEffect(
-            origin=self.creator,
+            origin=self.origin,
             cause_name=self.key,
             success_effects=[],
             failure_effects=[],
@@ -45,7 +45,7 @@ class Flaming(Affliction):
         """
         # TODO - externalise effect data to allow specifying in json
         damage_effect = DamageEffect(
-            origin=self.creator,
+            origin=self.origin,
             success_effects=[],
             failure_effects=[],
             target=entity,

@@ -1033,7 +1033,7 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
         target_tile = get_tile((position.x, position.y))
 
         # ensure they are the right target type
-        if tile_has_tags(target_tile, affliction.target_tags, affliction.creator):
+        if tile_has_tags(target_tile, affliction.target_tags, affliction.origin):
             for entity, effects in affliction.apply():
                 effect_queue = list(effects)
                 while effect_queue:

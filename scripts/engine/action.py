@@ -196,8 +196,8 @@ class Affliction(Action):
     category: AfflictionCategoryType
 
 
-    def __init__(self, creator: EntityID, affected_entity: EntityID, duration: int):
-        self.creator = creator
+    def __init__(self, origin: EntityID, affected_entity: EntityID, duration: int):
+        self.origin = origin
         self.affected_entity = affected_entity
         self.duration = duration
 
