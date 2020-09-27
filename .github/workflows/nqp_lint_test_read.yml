@@ -2,7 +2,7 @@ name: NQP - Feature Check - Test (Read Only)
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, synchronize]
 
 
 jobs:
