@@ -58,6 +58,7 @@ jobs:
         poetry run python -m pytest --cov=nqp
 
     - name: Push changes
+      if: github.repository == 'Snayff/notquiteparadise'
       run: |
         git config --global user.name 'snayff'
         git config --global user.email 'snayff@users.noreply.github.com'
