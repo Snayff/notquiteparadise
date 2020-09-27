@@ -1,6 +1,7 @@
 name: NQP - Feature Check - Run Tests (Read)
 
 on: push
+  branches: [develop, master]
 
 
 jobs:
