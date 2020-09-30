@@ -11,7 +11,6 @@ from pygame_gui.elements import UIButton, UIPanel
 
 from scripts.engine.core.constants import (
     GAP_SIZE,
-    MAX_SKILLS,
     SKILL_BUTTON_SIZE,
     EventType,
     InputIntent,
@@ -20,7 +19,7 @@ from scripts.engine.core.constants import (
 )
 
 if TYPE_CHECKING:
-    from typing import List, Optional, Dict, Callable
+    from typing import List
 
 
 class SkillBar(UIPanel):
@@ -36,11 +35,12 @@ class SkillBar(UIPanel):
             InputIntent.SKILL2,
             InputIntent.SKILL3,
             InputIntent.SKILL4,
+            InputIntent.SKILL5,
         ]
         self.skill_buttons: List[UIButton] = []
 
-        self.start_x = 0
-        self.start_y = 0
+        self.start_x = GAP_SIZE
+        self.start_y = GAP_SIZE
 
         # complete base class init
         super().__init__(
@@ -84,10 +84,11 @@ class SkillBar(UIPanel):
         super().show()
 
         y = self.start_y
+        start_x = self.start_x
         manager = self.ui_manager
 
         for skill_slot in range(0, len(self.intents)):
-            x = self.start_x + ((SKILL_BUTTON_SIZE + GAP_SIZE) * skill_slot)
+            x = start_x + ((SKILL_BUTTON_SIZE + GAP_SIZE) * skill_slot)
             skill_button = UIButton(
                 relative_rect=Rect((x, y), (SKILL_BUTTON_SIZE, SKILL_BUTTON_SIZE)),
                 text=f"{skill_slot + 1}",

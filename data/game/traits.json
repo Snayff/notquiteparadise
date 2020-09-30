@@ -21,7 +21,7 @@
             "attack": "actor/homeland/soft_tops_attack.png",
             "hit": "actor/homeland/soft_tops_hit.png",
             "dead": "actor/homeland/soft_tops_dead.png",
-            "icon": "actor/homeland/soft_tops_idle.png",
+            "icon": "actor/homeland/soft_tops_icon.png",
             "move": "actor/homeland/soft_tops_move.png"
         },
         "vigour": 1
@@ -102,7 +102,7 @@
             "attack": "actor/savvy/fungechist_attack.png",
             "hit": "actor/savvy/fungechist_hit.png",
             "dead": "actor/savvy/fungechist_dead.png",
-            "icon": "actor/savvy/fungechist_idle.png",
+            "icon": "actor/savvy/fungechist_icon.png",
             "move": "actor/savvy/fungechist_move.png"
         },
         "vigour": -1
@@ -130,7 +130,7 @@
             "attack": "actor/savvy/dandy_attack.png",
             "hit": "actor/savvy/dandy_hit.png",
             "dead": "actor/savvy/dandy_dead.png",
-            "icon": "actor/savvy/dandy_idle.png",
+            "icon": "actor/savvy/dandy_icon.png",
             "move": "actor/savvy/dandy_move.png"
         },
         "vigour": -1

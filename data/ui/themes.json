@@ -60,7 +60,11 @@
              "selected_border": "#8080B0",
              "active_border": "#8080B0"
          },
-
+         "font": {
+             "name": "barlow",
+             "size": "8",
+             "regular_path": "assets/fonts/Barlow-Light.otf"
+         },
          "misc":
          {
              "tool_tip_delay": "1.5",
@@ -145,6 +149,25 @@
          }
      },
      "#skill_button4":
+     {
+         "images":
+         {
+             "normal_image":
+             {
+                 "path": "assets/skills/basic_attack.png"
+             },
+             "hovered_image":
+             {
+                 "path": "assets/skills/basic_attack.png"
+             }
+         },
+         "misc":
+         {
+             "text_horiz_alignment": "left",
+             "text_vert_alignment": "bottom"
+         }
+     },
+          "#skill_button5":
      {
          "images":
          {

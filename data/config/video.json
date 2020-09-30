@@ -2,8 +2,8 @@
     "__dataclass__": "VideoConfigData",
     "base_window": {
         "__dataclass__": "Dimensions",
-        "height": 720,
-        "width": 1280
+        "height": 360,
+        "width": 640
     },
     "desired_window": {
         "__dataclass__": "Dimensions",
