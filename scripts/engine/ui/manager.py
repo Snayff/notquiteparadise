@@ -190,8 +190,8 @@ class UI:
         message_y = -message_height
 
         # Skill Bar
-        skill_width = MAX_SKILLS * (SKILL_BUTTON_SIZE + GAP_SIZE)
-        skill_height = SKILL_BUTTON_SIZE
+        skill_width = (MAX_SKILLS * (SKILL_BUTTON_SIZE + GAP_SIZE)) + (GAP_SIZE * 2)  # gap * 2 for borders
+        skill_height = SKILL_BUTTON_SIZE + (GAP_SIZE * 2)
         skill_x = (base_width // 2) - (skill_width // 2)
         skill_y = -SKILL_BUTTON_SIZE
 

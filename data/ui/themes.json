@@ -167,6 +167,25 @@
              "text_vert_alignment": "bottom"
          }
      },
+          "#skill_button5":
+     {
+         "images":
+         {
+             "normal_image":
+             {
+                 "path": "assets/skills/basic_attack.png"
+             },
+             "hovered_image":
+             {
+                 "path": "assets/skills/basic_attack.png"
+             }
+         },
+         "misc":
+         {
+             "text_horiz_alignment": "left",
+             "text_vert_alignment": "bottom"
+         }
+     },
      "#grid.button":
      {
          "colours":

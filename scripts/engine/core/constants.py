@@ -18,7 +18,7 @@ TILE_SIZE = 32
 ICON_IN_TEXT_SIZE = TILE_SIZE // 4
 ICON_SIZE = TILE_SIZE // 2
 GAP_SIZE = 2
-SKILL_BUTTON_SIZE = 16
+SKILL_BUTTON_SIZE = 32
 INFINITE = 999
 MAX_ACTIVATION_DISTANCE = 7  # this is how far from the player an entity can be and still be considered active
 # TODO - add an active component and then we can look for this (and only update once per turn!)

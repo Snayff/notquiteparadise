@@ -7,8 +7,8 @@
     },
     "desired_window": {
         "__dataclass__": "Dimensions",
-        "height": 360,
-        "width": 640
+        "height": 720,
+        "width": 1280
     },
     "fps_limit": 60
 }

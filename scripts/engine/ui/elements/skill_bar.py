@@ -35,11 +35,12 @@ class SkillBar(UIPanel):
             InputIntent.SKILL2,
             InputIntent.SKILL3,
             InputIntent.SKILL4,
+            InputIntent.SKILL5,
         ]
         self.skill_buttons: List[UIButton] = []
 
-        self.start_x = 0
-        self.start_y = 0
+        self.start_x = GAP_SIZE
+        self.start_y = GAP_SIZE
 
         # complete base class init
         super().__init__(
