@@ -52,21 +52,27 @@ class UI:
         base_window_data = library.VIDEO_CONFIG.base_window
         desired_window_data = library.VIDEO_CONFIG.desired_window
 
+        # pull out to reduce use of accessor
+        base_width = base_window_data.width
+        base_height = base_window_data.height
+        desired_width = desired_window_data.width
+        desired_height = desired_window_data.height
+
         ##  set the display
         # base values
-        self._base_width = base_window_data.width
-        self._base_height = base_window_data.height
-        self._main_surface: pygame.Surface = pygame.Surface((self._base_width, self._base_height), pygame.SRCALPHA)
+        self._base_width = base_width
+        self._base_height = base_height
+        self._main_surface: pygame.Surface = pygame.Surface((base_width, base_height), pygame.SRCALPHA)
 
         # values to scale to
-        self._desired_width = desired_window_data.width
-        self._desired_height = desired_window_data.height
-        self._screen_scaling_mod_x = self._desired_width // self._base_width
-        self._screen_scaling_mod_y = self._desired_height // self._base_height
-        self._window: pygame.display = pygame.display.set_mode((self._desired_width, self._desired_height))
+        self._desired_width = desired_width
+        self._desired_height = desired_height
+        self._screen_scaling_mod_x = desired_width // base_width
+        self._screen_scaling_mod_y = desired_height // base_height
+        self._window: pygame.display = pygame.display.set_mode((desired_width, desired_height))
 
         # now that the display is configured  init the pygame_gui
-        self._gui = UIManager((self._base_width, self._base_height), DATA_PATH / "ui/themes.json")
+        self._gui = UIManager((base_width, base_height), DATA_PATH / "ui/themes.json")
 
         # elements info
         self._elements = {}  # dict of all init'd ui_manager elements
@@ -164,52 +170,58 @@ class UI:
 
     def _load_fonts(self):
         self._gui.add_font_paths("barlow", str(ASSET_PATH / "fonts/Barlow-Light.otf"))
-        self.debug_font = pygame.font.Font(str(ASSET_PATH / "fonts/Kenney Future Narrow.ttf"), 12)
+        self.debug_font = pygame.font.Font(str(ASSET_PATH / "fonts/Kenney Future Narrow.ttf"), 6)
 
-        fonts = [{"name": "barlow", "point_size": 24, "style": "regular"}]
+        fonts = [
+            {"name": "barlow", "point_size": 12, "style": "regular"},
+            {"name": "barlow", "point_size": 14, "style": "regular"}
+        ]
 
         self._gui.preload_fonts(fonts)
 
     def _load_element_layout(self):
+        base_width = self._base_width
+        base_height = self._base_height
+
         # Message Log
-        message_width = 400
-        message_height = 200
+        message_width = int(base_width * 0.31)
+        message_height = int(base_height * 0.28)
         message_x = 0
         message_y = -message_height
 
         # Skill Bar
         skill_width = MAX_SKILLS * (SKILL_BUTTON_SIZE + GAP_SIZE)
         skill_height = SKILL_BUTTON_SIZE
-        skill_x = (self._base_width // 2) - (skill_width // 2)
+        skill_x = (base_width // 2) - (skill_width // 2)
         skill_y = -SKILL_BUTTON_SIZE
 
         # Camera
-        camera_width = self._base_width
-        camera_height = self._base_height
+        camera_width = base_width
+        camera_height = base_height
         camera_x = 0
         camera_y = 0
 
         # Dungeon dev view
-        dungeon_dev_view_width = self._base_width
-        dungeon_dev_view_height = self._base_height
+        dungeon_dev_view_width = base_width
+        dungeon_dev_view_height = base_height
         dungeon_dev_view_x = 0
         dungeon_dev_view_y = 0
 
         # Tile Info
-        tile_info_width = 240
-        tile_info_height = 160
+        tile_info_width = int(base_width * 0.19)
+        tile_info_height = int(base_height * 0.22)
         tile_info_x = -tile_info_width
         tile_info_y = -tile_info_height
 
         # Data Editor
-        data_width = self._base_width
-        data_height = self._base_height
+        data_width = base_width
+        data_height = base_height
         data_x = 5
         data_y = 10
 
         # Npc info
-        npc_info_width = self._base_width / 2
-        npc_info_height = self._base_height - (self._base_height / 4)
+        npc_info_width = base_width / 2
+        npc_info_height = base_height - (base_height / 4)
         npc_info_x = 5
         npc_info_y = 10
 

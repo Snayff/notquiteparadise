@@ -21,6 +21,8 @@ class MessageLog(UIPanel):
     """
 
     def __init__(self, rect: Rect, manager: pygame_gui.ui_manager.UIManager):
+        self.text_size = 1
+
         # hold state info
         self.text = ""
         self.text_box = None
@@ -86,7 +88,8 @@ class MessageLog(UIPanel):
         <br> - to start a new line.
         <font face=’verdana’ color=’#000000’ size=3.5></font> - To set the font, colour and size of encased text.
         """
-        self.text += message + "<br>"
+        col = "#ffffff"
+        self.text += f"<font face=barlow color={col} size={self.text_size}>{message}</font> <br>"
 
         if self.text_box:
             self.text_box.kill()

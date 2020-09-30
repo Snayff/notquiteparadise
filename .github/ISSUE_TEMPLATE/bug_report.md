@@ -17,15 +17,15 @@ Steps to reproduce the behavior:
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
+**Expected behaviour**
 A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. Windows 10]
- - Version [e.g. 0.122.0]
+**Platform:**
+ - OS: e.g. Windows 10
+ - Engine Version: e.g. 0.122.0
 
 **Log Output/Stack Trace**
 Add the game.log output or stack trace.

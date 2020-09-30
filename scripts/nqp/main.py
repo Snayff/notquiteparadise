@@ -139,7 +139,7 @@ def initialise_game():
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
     # welcome message
-    ui.create_screen_message("Welcome to Not Quite Paradise", "", 6)
+    ui.create_screen_message("Welcome to Not Quite Paradise", "", 4)
 
     # FIXME - entities load before camera so they cant get their screen position.
     #  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.
