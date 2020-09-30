@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.124.0
+                0.125.0
               </div>
             
           
@@ -192,7 +192,6 @@
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">GAP_SIZE</span><span class="p">,</span>
-    <span class="n">MAX_SKILLS</span><span class="p">,</span>
     <span class="n">SKILL_BUTTON_SIZE</span><span class="p">,</span>
     <span class="n">EventType</span><span class="p">,</span>
     <span class="n">InputIntent</span><span class="p">,</span>
@@ -201,7 +200,7 @@
 <span class="p">)</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
 
 <div class="viewcode-block" id="SkillBar"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.skill_bar.SkillBar">[docs]</a><span class="k">class</span> <span class="nc">SkillBar</span><span class="p">(</span><span class="n">UIPanel</span><span class="p">):</span>
@@ -217,11 +216,12 @@
             <span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL2</span><span class="p">,</span>
             <span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL3</span><span class="p">,</span>
             <span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL4</span><span class="p">,</span>
+            <span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL5</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_buttons</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UIButton</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span> <span class="o">=</span> <span class="n">GAP_SIZE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">=</span> <span class="n">GAP_SIZE</span>
 
         <span class="c1"># complete base class init</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -265,10 +265,11 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span>
+        <span class="n">start_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span>
         <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span>
 
         <span class="k">for</span> <span class="n">skill_slot</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intents</span><span class="p">)):</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span> <span class="o">+</span> <span class="p">((</span><span class="n">SKILL_BUTTON_SIZE</span> <span class="o">+</span> <span class="n">GAP_SIZE</span><span class="p">)</span> <span class="o">*</span> <span class="n">skill_slot</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">start_x</span> <span class="o">+</span> <span class="p">((</span><span class="n">SKILL_BUTTON_SIZE</span> <span class="o">+</span> <span class="n">GAP_SIZE</span><span class="p">)</span> <span class="o">*</span> <span class="n">skill_slot</span><span class="p">)</span>
             <span class="n">skill_button</span> <span class="o">=</span> <span class="n">UIButton</span><span class="p">(</span>
                 <span class="n">relative_rect</span><span class="o">=</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">SKILL_BUTTON_SIZE</span><span class="p">,</span> <span class="n">SKILL_BUTTON_SIZE</span><span class="p">)),</span>
                 <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">skill_slot</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>

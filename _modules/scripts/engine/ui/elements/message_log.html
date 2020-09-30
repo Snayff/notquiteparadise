@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.124.0
+                0.125.0
               </div>
             
           
@@ -202,6 +202,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">ui_manager</span><span class="o">.</span><span class="n">UIManager</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_size</span> <span class="o">=</span> <span class="mi">1</span>
+
         <span class="c1"># hold state info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span> <span class="o">=</span> <span class="kc">None</span>
@@ -267,7 +269,8 @@
 <span class="sd">        &lt;br&gt; - to start a new line.</span>
 <span class="sd">        &lt;font face=’verdana’ color=’#000000’ size=3.5&gt;&lt;/font&gt; - To set the font, colour and size of encased text.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="n">message</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;font face=barlow color=</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text_size</span><span class="si">}</span><span class="s2">&gt;</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&lt;/font&gt; &lt;br&gt;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
