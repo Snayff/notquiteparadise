@@ -144,7 +144,7 @@ def build_sprites_from_paths(
     # convert to sprites
     for name, path_list in paths.items():
         # override size for icon
-        if name == "icon_path":
+        if name == "path":
             desired_size = (ICON_SIZE, ICON_SIZE)
 
         sprites[name] = get_images(path_list, desired_size)
