@@ -174,7 +174,7 @@ class UI:
 
         fonts = [
             {"name": "barlow", "point_size": 12, "style": "regular"},
-            {"name": "barlow", "point_size": 14, "style": "regular"}
+            {"name": "barlow", "point_size": 14, "style": "regular"},
         ]
 
         self._gui.preload_fonts(fonts)
