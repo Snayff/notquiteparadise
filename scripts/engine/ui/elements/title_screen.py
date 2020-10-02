@@ -5,9 +5,10 @@ from typing import TYPE_CHECKING, Type
 
 import pygame
 import pygame_gui
-from pygame_gui.elements import UIButton, UIPanel
-from scripts.engine.core.constants import EventType, RenderLayer
 from pygame import Rect
+from pygame_gui.elements import UIButton, UIPanel
+
+from scripts.engine.core.constants import EventType, RenderLayer
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -18,13 +19,13 @@ class TitleScreen(UIPanel):
     """
     Initial screen menu
     """
-    
+
     def __init__(self, rect: Rect, manager: UIManager):
 
         self.buttons_info = {
             "new_game": pygame.event.Event(EventType.NEW_GAME),
             "load_game": pygame.event.Event(EventType.LOAD_GAME),
-            "exit_game": pygame.event.Event(EventType.EXIT_GAME)
+            "exit_game": pygame.event.Event(EventType.EXIT_GAME),
         }
 
         width = rect.width
@@ -33,9 +34,7 @@ class TitleScreen(UIPanel):
         self.button_width = int(width / 4)
         self.button_start_x = int((width / 2) - (self.button_width / 2))
         self.button_start_y = int(height / 4)
-        self.space_between_buttons = int(((height - self.button_start_y) / len(self.buttons_info)) -
-                                     self.button_height)
-
+        self.space_between_buttons = int(((height - self.button_start_y) / len(self.buttons_info)) - self.button_height)
 
         self.buttons: List[UIButton] = []
 

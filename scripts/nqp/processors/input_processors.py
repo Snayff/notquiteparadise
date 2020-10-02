@@ -3,8 +3,10 @@ from __future__ import annotations
 import logging
 import os
 from typing import TYPE_CHECKING, Optional, Type
+
 import pygame
 from snecs.typedefs import EntityID
+
 from scripts.engine import chronicle, debug, key, library, state, utility, world
 from scripts.engine.action import Skill
 from scripts.engine.component import Aesthetic, IsActor, Knowledge, Position
@@ -85,7 +87,6 @@ def process_event(event: pygame.event, game_state: GameStateType):
     elif event.type == EventType.EXIT_GAME:
         _exit_game()
 
-
     else:
         intent = key.convert_to_intent(event)
 
@@ -109,6 +110,7 @@ def process_intent(intent: InputIntentType, game_state: GameStateType):
 
 
 ############################### INNER PROCESSORS - LOCAL ONLY ################################
+
 
 def _process_stateless_intents(intent: InputIntentType):
     """
@@ -270,6 +272,7 @@ def _process_menu_intents(intent):
 
 ################## HELPER FUNCTIONS ############################
 
+
 def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, direction: DirectionType):
     """
     Process the use of specified skill. Wrapper for actions needed to handle a full skill use. Assumed
@@ -296,6 +299,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
 
 
 ######################### GET ##########################
+
 
 def _get_pressed_direction(intent: InputIntentType) -> DirectionType:
     """
@@ -355,6 +359,7 @@ def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
 
 ############### DIRECT ACTIONS ############################
 
+
 def _new_game():
     """
     Create a new game
@@ -386,7 +391,6 @@ def _new_game():
     ui.set_element_visibility(UIElement.CAMERA, True)
     ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
-
 
     # welcome message
     ui.create_screen_message("Welcome to Not Quite Paradise", "", 4)
@@ -441,4 +445,3 @@ def _exit_game():
     Exit the game
     """
     state.set_new(GameState.EXIT_GAME)
-

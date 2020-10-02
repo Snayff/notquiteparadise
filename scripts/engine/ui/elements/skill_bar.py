@@ -9,13 +9,7 @@ from pygame.rect import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIPanel
 
-from scripts.engine.core.constants import (
-    GAP_SIZE,
-    SKILL_BUTTON_SIZE,
-    EventType,
-    InputIntent,
-    RenderLayer,
-)
+from scripts.engine.core.constants import GAP_SIZE, SKILL_BUTTON_SIZE, EventType, InputIntent, RenderLayer
 
 if TYPE_CHECKING:
     from typing import List
@@ -57,7 +51,6 @@ class SkillBar(UIPanel):
 
         # confirm init complete
         logging.debug(f"SkillBar initialised.")
-
 
     def update(self, time_delta: float):
         """
@@ -113,4 +106,3 @@ class SkillBar(UIPanel):
             self.buttons.append(button)
 
             count += 1
-

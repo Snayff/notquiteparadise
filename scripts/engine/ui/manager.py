@@ -233,35 +233,25 @@ class UI:
         npc_info_y = 10
 
         layout = {
-            UIElement.MESSAGE_LOG: (
-                MessageLog, pygame.Rect((message_x, message_y), (message_width, message_height))
-            ),
+            UIElement.MESSAGE_LOG: (MessageLog, pygame.Rect((message_x, message_y), (message_width, message_height))),
             UIElement.TILE_INFO: (
                 TileInfo,
                 pygame.Rect((tile_info_x, tile_info_y), (tile_info_width, tile_info_height)),
             ),
-            UIElement.SKILL_BAR: (
-                SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))
-            ),
-            UIElement.CAMERA: (
-                Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))
-            ),
-            UIElement.DATA_EDITOR: (
-                DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height))
-            ),
+            UIElement.SKILL_BAR: (SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))),
+            UIElement.CAMERA: (Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))),
+            UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height))),
             UIElement.DUNGEN_VIEWER: (
                 DungenViewer,
                 pygame.Rect(
                     (dungeon_dev_view_x, dungeon_dev_view_y), (dungeon_dev_view_width, dungeon_dev_view_height)
                 ),
             ),
-            UIElement.ACTOR_INFO: (
-                ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height))
-            ),
+            UIElement.ACTOR_INFO: (ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height))),
             UIElement.TITLE_SCREEN: (
-                TitleScreen, pygame.Rect((title_screen_x, title_screen_y), (title_screen_width, title_screen_height))
-            )
-
+                TitleScreen,
+                pygame.Rect((title_screen_x, title_screen_y), (title_screen_width, title_screen_height)),
+            ),
         }
         self._element_details = layout
 

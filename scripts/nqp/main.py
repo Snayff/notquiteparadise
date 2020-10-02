@@ -16,7 +16,6 @@ from scripts.nqp.actions import skills  # must import to register skills
 from scripts.nqp.processors import display_processors, input_processors
 
 
-
 def main():
     """
     The entry for the game initialisation and game loop
