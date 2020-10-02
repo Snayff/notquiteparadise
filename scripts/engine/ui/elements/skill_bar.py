@@ -14,7 +14,6 @@ from scripts.engine.core.constants import (
     SKILL_BUTTON_SIZE,
     EventType,
     InputIntent,
-    InputIntentType,
     RenderLayer,
 )
 
@@ -28,19 +27,22 @@ class SkillBar(UIPanel):
     """
 
     def __init__(self, rect: Rect, manager: UIManager):
-        # state info
-        self.intents: List[InputIntentType] = [
-            InputIntent.SKILL0,
-            InputIntent.SKILL1,
-            InputIntent.SKILL2,
-            InputIntent.SKILL3,
-            InputIntent.SKILL4,
-            InputIntent.SKILL5,
-        ]
-        self.skill_buttons: List[UIButton] = []
+        self.buttons_info = {
+            "skill_0": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL0),
+            "skill_1": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL1),
+            "skill_2": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL2),
+            "skill_3": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL3),
+            "skill_4": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL4),
+            "skill_5": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL5),
+        }
 
-        self.start_x = GAP_SIZE
-        self.start_y = GAP_SIZE
+        self.buttons: List[UIButton] = []
+
+        self.button_start_x = GAP_SIZE
+        self.button_start_y = GAP_SIZE
+        self.button_width = SKILL_BUTTON_SIZE
+        self.button_height = SKILL_BUTTON_SIZE
+        self.space_between_buttons = GAP_SIZE
 
         # complete base class init
         super().__init__(
@@ -51,11 +53,11 @@ class SkillBar(UIPanel):
             anchors={"left": "left", "right": "right", "top": "bottom", "bottom": "bottom"},
         )
 
-        # show self
-        self.show()
+        self._init_buttons()
 
         # confirm init complete
         logging.debug(f"SkillBar initialised.")
+
 
     def update(self, time_delta: float):
         """
@@ -68,32 +70,47 @@ class SkillBar(UIPanel):
         Handle events created by this UI widget
         """
         if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+
             # Find out which button we are clicking
             button = event.ui_element
-            if button in self.skill_buttons:
-                slot_number = self.skill_buttons.index(button)
-                # execute a skill clicked event
-                event = pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=self.intents[slot_number])
-                pygame.event.post(event)
 
-                logging.debug(f"SkillBar button '{slot_number}' was pressed.")
+            # post the new event
+            if button in self.buttons:
+                # get the id
+                ids = event.ui_object_id.split(".")
+                button_id = ids[-1]  # get last element
+                new_event = self.buttons_info[button_id]
+                pygame.event.post(new_event)
 
-    ############### ACTIONS #################
+                logging.debug(f"SkillBar button '{ids}' was pressed.")
 
-    def show(self):
-        super().show()
-
-        y = self.start_y
-        start_x = self.start_x
+    def _init_buttons(self):
+        """
+        Init the buttons for the menu
+        """
+        # extract values for performance
+        start_x = self.button_start_x
+        y = self.button_start_y
+        info = self.buttons_info
+        width = self.button_width
+        height = self.button_height
+        gap = self.space_between_buttons
         manager = self.ui_manager
 
-        for skill_slot in range(0, len(self.intents)):
-            x = start_x + ((SKILL_BUTTON_SIZE + GAP_SIZE) * skill_slot)
-            skill_button = UIButton(
-                relative_rect=Rect((x, y), (SKILL_BUTTON_SIZE, SKILL_BUTTON_SIZE)),
-                text=f"{skill_slot + 1}",
+        count = 0
+        for name in info.keys():
+            x = start_x + ((width + gap) * count)
+            friendly_name = name.replace("_", " ")
+
+            button = UIButton(
+                relative_rect=Rect((x, y), (width, height)),
+                text=friendly_name.title(),
                 manager=manager,
                 container=self.get_container(),
-                object_id=f"#skill_button{skill_slot}",
+                object_id=f"{name}",
             )
-            self.skill_buttons.append(skill_button)
+
+            self.buttons.append(button)
+
+            count += 1
+

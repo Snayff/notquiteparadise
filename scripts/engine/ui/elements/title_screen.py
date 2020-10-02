@@ -22,9 +22,9 @@ class TitleScreen(UIPanel):
     def __init__(self, rect: Rect, manager: UIManager):
 
         self.buttons_info = {
-            "new_game": EventType.NEW_GAME,
-            "load_game": EventType.LOAD_GAME,
-            "exit_game": EventType.EXIT_GAME
+            "new_game": pygame.event.Event(EventType.NEW_GAME),
+            "load_game": pygame.event.Event(EventType.LOAD_GAME),
+            "exit_game": pygame.event.Event(EventType.EXIT_GAME)
         }
 
         width = rect.width
@@ -44,6 +44,9 @@ class TitleScreen(UIPanel):
 
         self._init_buttons()
 
+        # confirm init complete
+        logging.debug(f"TitleScreen initialised.")
+
     def update(self, time_delta: float):
         """
         Update based on current state and data. Run every frame.
@@ -52,6 +55,7 @@ class TitleScreen(UIPanel):
 
     def handle_events(self, event):
         if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+
             # Find out which button we are clicking
             button = event.ui_element
 
@@ -60,9 +64,7 @@ class TitleScreen(UIPanel):
                 # get the id
                 ids = event.ui_object_id.split(".")
                 button_id = ids[-1]  # get last element
-
-                event_type = self.buttons_info[button_id]
-                new_event = pygame.event.Event(event_type)
+                new_event = self.buttons_info[button_id]
                 pygame.event.post(new_event)
 
                 logging.debug(f"TitleScreen button '{button_id}' pressed.")

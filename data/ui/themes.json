@@ -71,7 +71,7 @@
              "shadow_width": 0
          }
      },
-     "#skill_button0":
+     "skill_0":
      {
          "images":
          {
@@ -90,7 +90,7 @@
              "text_vert_alignment": "bottom"
          }
      },
-     "#skill_button1":
+     "skill_1":
      {
          "images":
          {
@@ -109,7 +109,7 @@
              "text_vert_alignment": "bottom"
          }
      },
-     "#skill_button2":
+     "skill_2":
      {
          "images":
          {
@@ -128,7 +128,7 @@
              "text_vert_alignment": "bottom"
          }
      },
-     "#skill_button3":
+     "skill_3":
      {
           
          "images":
@@ -148,7 +148,7 @@
              "text_vert_alignment": "bottom"
          }
      },
-     "#skill_button4":
+     "skill_4":
      {
          "images":
          {
@@ -167,7 +167,7 @@
              "text_vert_alignment": "bottom"
          }
      },
-          "#skill_button5":
+          "skill_5":
      {
          "images":
          {
