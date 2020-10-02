@@ -55,7 +55,7 @@ jobs:
     - name: Pytest with Coverage
       if: always()
       run: |
-        poetry run python -m pytest --cov=nqp
+        poetry run python -m pytest --cov=.
 
     - name: Push changes
       if: github.repository == 'Snayff/notquiteparadise'

@@ -10,7 +10,7 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.125.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.126.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
