@@ -151,7 +151,7 @@ class UI:
         else:
             element_name = utility.value_to_member(element_type, UIElement)
             logging.info(f"Tried to get {element_name} ui element but key not found; new one created.")
-            return self.create_element(element_type)
+            return self._create_element(element_type)
 
     def get_gui_manager(self) -> UIManager:
         """
@@ -265,7 +265,7 @@ class UI:
         }
         self._element_details = layout
 
-    def create_element(self, element_type: UIElementType) -> _ui_element_union:
+    def _create_element(self, element_type: UIElementType) -> _ui_element_union:
         """
         Create the specified UI element. Object is returned for convenience, it is already held and can be returned
         with get_element at a later date. If it already exists current instance will be overwritten.

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from typing import TYPE_CHECKING, Optional, Type
 import pygame
 from snecs.typedefs import EntityID
@@ -77,6 +78,14 @@ def process_event(event: pygame.event, game_state: GameStateType):
         ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
         _new_game()
 
+    elif event.type == EventType.LOAD_GAME:
+        ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
+        _load_game()
+
+    elif event.type == EventType.EXIT_GAME:
+        _exit_game()
+
+
     else:
         intent = key.convert_to_intent(event)
 
@@ -100,7 +109,6 @@ def process_intent(intent: InputIntentType, game_state: GameStateType):
 
 
 ############################### INNER PROCESSORS - LOCAL ONLY ################################
-
 
 def _process_stateless_intents(intent: InputIntentType):
     """
@@ -134,7 +142,7 @@ def _process_stateless_intents(intent: InputIntentType):
             ui.set_element_visibility(UIElement.DATA_EDITOR, False)
             state.set_new(state.get_previous())
         else:
-            ui.create_element(UIElement.DATA_EDITOR)
+            ui.set_element_visibility(UIElement.DATA_EDITOR, True)
             state.set_new(GameState.DEVELOPER)
 
     elif intent == InputIntent.BURST_PROFILE:
@@ -202,10 +210,6 @@ def _process_game_map_intents(intent: InputIntentType):
         state.set_new(GameState.MENU)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
 
-    ## Exit game
-    elif intent == InputIntent.EXIT:
-        state.set_new(GameState.EXIT_GAME)
-
 
 def _process_targeting_mode_intents(intent):
     """
@@ -266,7 +270,6 @@ def _process_menu_intents(intent):
 
 ################## HELPER FUNCTIONS ############################
 
-
 def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, direction: DirectionType):
     """
     Process the use of specified skill. Wrapper for actions needed to handle a full skill use. Assumed
@@ -293,7 +296,6 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
 
 
 ######################### GET ##########################
-
 
 def _get_pressed_direction(intent: InputIntentType) -> DirectionType:
     """
@@ -411,3 +413,32 @@ def _new_game():
 
     # prompt turn actions
     chronicle.end_turn(player, 0)
+
+
+def _load_game():
+    """
+    Load existing game state
+    """
+    full_save_path = str(SAVE_PATH)
+    for save_name in os.listdir(full_save_path):
+        save = save_name.replace(".json", "")
+        state.load_game(save)
+
+        # show the in game screens
+        ui.set_element_visibility(UIElement.CAMERA, True)
+        ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+        ui.set_element_visibility(UIElement.SKILL_BAR, True)
+
+        # welcome message
+        ui.create_screen_message("Welcome back to Not Quite Paradise", "", 4)
+
+        # loading finished, give player control
+        state.set_new(GameState.GAMEMAP)
+
+
+def _exit_game():
+    """
+    Exit the game
+    """
+    state.set_new(GameState.EXIT_GAME)
+

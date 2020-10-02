@@ -8,7 +8,7 @@ import pygame
 import snecs
 from snecs.world import default_world
 
-from scripts.engine import action, chronicle, debug, state, world
+from scripts.engine import chronicle, debug, state, world
 from scripts.engine.core.constants import GameState, UIElement
 from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.engine.ui.manager import ui
