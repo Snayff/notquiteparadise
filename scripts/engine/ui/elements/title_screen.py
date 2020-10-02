@@ -1,56 +1,50 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 import pygame
 import pygame_gui
-from pygame.rect import Rect
-from pygame_gui import UIManager
+from pygame import Rect
 from pygame_gui.elements import UIButton, UIPanel
 
-from scripts.engine.core.constants import GAP_SIZE, SKILL_BUTTON_SIZE, EventType, InputIntent, RenderLayer
+from scripts.engine.core.constants import EventType, RenderLayer
 
 if TYPE_CHECKING:
-    from typing import List
+    from typing import Union, Optional, Any, Tuple, Dict, List
+    from pygame_gui import UIManager
 
 
-class SkillBar(UIPanel):
+class TitleScreen(UIPanel):
     """
-    Display and hold the info for the skills in the skill bar.
+    Initial screen menu
     """
 
     def __init__(self, rect: Rect, manager: UIManager):
+
         self.buttons_info = {
-            "skill_0": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL0),
-            "skill_1": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL1),
-            "skill_2": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL2),
-            "skill_3": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL3),
-            "skill_4": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL4),
-            "skill_5": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL5),
+            "new_game": pygame.event.Event(EventType.NEW_GAME),
+            "load_game": pygame.event.Event(EventType.LOAD_GAME),
+            "exit_game": pygame.event.Event(EventType.EXIT_GAME),
         }
+
+        width = rect.width
+        height = rect.height
+        self.button_height = int(height / 8)
+        self.button_width = int(width / 4)
+        self.button_start_x = int((width / 2) - (self.button_width / 2))
+        self.button_start_y = int(height / 4)
+        self.space_between_buttons = int(((height - self.button_start_y) / len(self.buttons_info)) - self.button_height)
 
         self.buttons: List[UIButton] = []
 
-        self.button_start_x = GAP_SIZE
-        self.button_start_y = GAP_SIZE
-        self.button_width = SKILL_BUTTON_SIZE
-        self.button_height = SKILL_BUTTON_SIZE
-        self.space_between_buttons = GAP_SIZE
-
         # complete base class init
-        super().__init__(
-            rect,
-            RenderLayer.UI_BASE,
-            manager,
-            element_id="skill_bar",
-            anchors={"left": "left", "right": "right", "top": "bottom", "bottom": "bottom"},
-        )
+        super().__init__(rect, RenderLayer.BOTTOM, manager, element_id="title_screen")
 
         self._init_buttons()
 
         # confirm init complete
-        logging.debug(f"SkillBar initialised.")
+        logging.debug(f"TitleScreen initialised.")
 
     def update(self, time_delta: float):
         """
@@ -59,9 +53,6 @@ class SkillBar(UIPanel):
         super().update(time_delta)
 
     def handle_events(self, event):
-        """
-        Handle events created by this UI widget
-        """
         if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
 
             # Find out which button we are clicking
@@ -75,15 +66,15 @@ class SkillBar(UIPanel):
                 new_event = self.buttons_info[button_id]
                 pygame.event.post(new_event)
 
-                logging.debug(f"SkillBar button '{ids}' was pressed.")
+                logging.debug(f"TitleScreen button '{button_id}' pressed.")
 
     def _init_buttons(self):
         """
         Init the buttons for the menu
         """
         # extract values for performance
-        start_x = self.button_start_x
-        y = self.button_start_y
+        x = self.button_start_x
+        start_y = self.button_start_y
         info = self.buttons_info
         width = self.button_width
         height = self.button_height
@@ -92,7 +83,7 @@ class SkillBar(UIPanel):
 
         count = 0
         for name in info.keys():
-            x = start_x + ((width + gap) * count)
+            y = start_y + ((height + gap) * count)
             friendly_name = name.replace("_", " ")
 
             button = UIButton(

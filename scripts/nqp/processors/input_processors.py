@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from typing import TYPE_CHECKING, Optional, Type
 
 import pygame
@@ -8,7 +9,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, debug, key, library, state, utility, world
 from scripts.engine.action import Skill
-from scripts.engine.component import IsActor, Knowledge, Position
+from scripts.engine.component import Aesthetic, IsActor, Knowledge, Position
 from scripts.engine.core import queries
 from scripts.engine.core.constants import (
     SAVE_PATH,
@@ -22,10 +23,13 @@ from scripts.engine.core.constants import (
     TargetingMethod,
     UIElement,
 )
+from scripts.engine.core.data import store
+from scripts.engine.core.definitions import ActorData
+from scripts.engine.systems import vision
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
+from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp.actions.skills import Move
 from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:
@@ -37,7 +41,8 @@ if TYPE_CHECKING:
 
 def process_event(event: pygame.event, game_state: GameStateType):
     """
-    Extract the intent from the event and process them in the context of the game state
+    Extract the intent from the event and process them in the context of the game state. If an event can only be
+    called in one way then no intent is generated and the event will directly go to the relevant action.
     """
     intent = None
     # some events only apply to certain GameStates, we need to process them and separate them
@@ -70,6 +75,17 @@ def process_event(event: pygame.event, game_state: GameStateType):
         ## Exit Actor Info
         if event.menu == UIElement.ACTOR_INFO:
             intent = InputIntent.ACTOR_INFO_TOGGLE
+
+    elif event.type == EventType.NEW_GAME:
+        ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
+        _new_game()
+
+    elif event.type == EventType.LOAD_GAME:
+        ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
+        _load_game()
+
+    elif event.type == EventType.EXIT_GAME:
+        _exit_game()
 
     else:
         intent = key.convert_to_intent(event)
@@ -128,7 +144,7 @@ def _process_stateless_intents(intent: InputIntentType):
             ui.set_element_visibility(UIElement.DATA_EDITOR, False)
             state.set_new(state.get_previous())
         else:
-            ui.create_element(UIElement.DATA_EDITOR)
+            ui.set_element_visibility(UIElement.DATA_EDITOR, True)
             state.set_new(GameState.DEVELOPER)
 
     elif intent == InputIntent.BURST_PROFILE:
@@ -195,10 +211,6 @@ def _process_game_map_intents(intent: InputIntentType):
         # show
         state.set_new(GameState.MENU)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
-
-    ## Exit game
-    elif intent == InputIntent.EXIT:
-        state.set_new(GameState.EXIT_GAME)
 
 
 def _process_targeting_mode_intents(intent):
@@ -343,3 +355,93 @@ def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
             except IndexError:
                 logging.warning(f"_get_pressed_skills_name: Tried to use skill {intent} but no skill in that slot.")
     return skill_name
+
+
+############### DIRECT ACTIONS ############################
+
+
+def _new_game():
+    """
+    Create a new game
+    """
+    # init and save map
+    game_map = GameMap("cave", 10)
+    store.current_game_map = game_map
+
+    # populate the map
+    player_data = ActorData(
+        key="player",
+        possible_names=["player"],
+        description="a desc",
+        position_offsets=[(0, 0)],
+        trait_names=["shoom", "soft_tops", "dandy"],
+    )
+    game_map.generate_new_map(player_data)
+
+    # init the player
+    player = world.get_player()
+
+    # tell places about the player
+    chronicle.set_turn_holder(player)
+
+    # create a god
+    world.create_god("the_small_gods")
+
+    # show the in game screens
+    ui.set_element_visibility(UIElement.CAMERA, True)
+    ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+    ui.set_element_visibility(UIElement.SKILL_BAR, True)
+
+    # welcome message
+    ui.create_screen_message("Welcome to Not Quite Paradise", "", 4)
+
+    # FIXME - entities load before camera so they cant get their screen position.
+    #  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.
+    for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
+        aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
+        aesthetic.target_draw_x = aesthetic.draw_x
+        aesthetic.target_draw_y = aesthetic.draw_y
+
+    # entities load with a blank fov, update them now
+    vision.process_light_map()
+    vision.process_fov()
+    vision.process_tile_visibility()
+
+    # point the camera at the player, now that FOV is updated
+    pos = world.get_entitys_component(player, Position)
+    camera = ui.get_element(UIElement.CAMERA)
+    camera.set_target((pos.x, pos.y), True)
+
+    # loading finished, give player control
+    state.set_new(GameState.GAMEMAP)
+
+    # prompt turn actions
+    chronicle.end_turn(player, 0)
+
+
+def _load_game():
+    """
+    Load existing game state
+    """
+    full_save_path = str(SAVE_PATH)
+    for save_name in os.listdir(full_save_path):
+        save = save_name.replace(".json", "")
+        state.load_game(save)
+
+        # show the in game screens
+        ui.set_element_visibility(UIElement.CAMERA, True)
+        ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+        ui.set_element_visibility(UIElement.SKILL_BAR, True)
+
+        # welcome message
+        ui.create_screen_message("Welcome back to Not Quite Paradise", "", 4)
+
+        # loading finished, give player control
+        state.set_new(GameState.GAMEMAP)
+
+
+def _exit_game():
+    """
+    Exit the game
+    """
+    state.set_new(GameState.EXIT_GAME)

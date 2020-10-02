@@ -25,6 +25,7 @@ from scripts.engine.ui.elements.dungen_viewer import DungenViewer
 from scripts.engine.ui.elements.message_log import MessageLog
 from scripts.engine.ui.elements.skill_bar import SkillBar
 from scripts.engine.ui.elements.tile_info import TileInfo
+from scripts.engine.ui.elements.title_screen import TitleScreen
 from scripts.engine.ui.widgets.screen_message import ScreenMessage
 from scripts.engine.world_objects.tile import Tile
 
@@ -150,7 +151,7 @@ class UI:
         else:
             element_name = utility.value_to_member(element_type, UIElement)
             logging.info(f"Tried to get {element_name} ui element but key not found; new one created.")
-            return self.create_element(element_type)
+            return self._create_element(element_type)
 
     def get_gui_manager(self) -> UIManager:
         """
@@ -201,6 +202,12 @@ class UI:
         camera_x = 0
         camera_y = 0
 
+        # Title Screen
+        title_screen_width = base_width
+        title_screen_height = base_height
+        title_screen_x = 0
+        title_screen_y = 0
+
         # Dungeon dev view
         dungeon_dev_view_width = base_width
         dungeon_dev_view_height = base_height
@@ -241,22 +248,14 @@ class UI:
                 ),
             ),
             UIElement.ACTOR_INFO: (ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height))),
+            UIElement.TITLE_SCREEN: (
+                TitleScreen,
+                pygame.Rect((title_screen_x, title_screen_y), (title_screen_width, title_screen_height)),
+            ),
         }
         self._element_details = layout
 
-    def init_all_ui_elements(self, visible: bool = False):
-        """
-        Initialise the game's UI elements with specified visibility.
-        """
-        for element_type in utility.get_class_members(UIElement):
-            _element_type = getattr(UIElement, element_type)
-
-            # in case we add an element to the UIElement class before creating the object and adding to load
-            if _element_type in self._element_details:
-                self.create_element(_element_type)
-                self.set_element_visibility(_element_type, visible)
-
-    def create_element(self, element_type: UIElementType) -> _ui_element_union:
+    def _create_element(self, element_type: UIElementType) -> _ui_element_union:
         """
         Create the specified UI element. Object is returned for convenience, it is already held and can be returned
         with get_element at a later date. If it already exists current instance will be overwritten.
