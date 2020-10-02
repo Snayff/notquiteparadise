@@ -79,6 +79,9 @@ class EventType(SimpleNamespace):
     TILE_CLICK = pygame.USEREVENT + 1
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
     EXIT_MENU = pygame.USEREVENT + 3
+    NEW_GAME = pygame.USEREVENT + 4
+    LOAD_GAME = pygame.USEREVENT + 5
+    EXIT_GAME = pygame.USEREVENT + 6
 
 
 class RenderLayer(SimpleNamespace):
@@ -121,6 +124,7 @@ class UIElement(SimpleNamespace):
     DATA_EDITOR = UIElementType(7)
     TILE_INFO = UIElementType(8)
     DUNGEN_VIEWER = UIElementType(9)
+    TITLE_SCREEN = UIElementType(10)
 
 
 class InputIntent(SimpleNamespace):

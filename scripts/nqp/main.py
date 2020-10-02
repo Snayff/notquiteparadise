@@ -8,16 +8,13 @@ import pygame
 import snecs
 from snecs.world import default_world
 
-from scripts.engine import chronicle, debug, state, world
-from scripts.engine.component import Aesthetic, Position
+from scripts.engine import action, chronicle, debug, state, world
 from scripts.engine.core.constants import GameState, UIElement
-from scripts.engine.core.data import store
-from scripts.engine.core.definitions import ActorData
 from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
-from scripts.engine.systems.vision import process_fov, process_light_map, process_tile_visibility
 from scripts.engine.ui.manager import ui
-from scripts.engine.world_objects.game_map import GameMap
+from scripts.nqp.actions import skills  # must import to register skills
 from scripts.nqp.processors import display_processors, input_processors
+
 
 
 def main():
@@ -107,62 +104,8 @@ def initialise_game():
     """
     Init the game`s required info
     """
-    # init and save map
-    game_map = GameMap("cave", 10)
-    store.current_game_map = game_map
-
-    # populate the map
-    player_data = ActorData(
-        key="player",
-        possible_names=["player"],
-        description="a desc",
-        position_offsets=[(0, 0)],
-        trait_names=["shoom", "soft_tops", "dandy"],
-    )
-    game_map.generate_new_map(player_data)
-
-    # init the player
-    player = world.get_player()
-
-    # tell places about the player
-    chronicle.set_turn_holder(player)
-
-    # create a god
-    world.create_god("the_small_gods")
-
-    # turn on the ui
-    ui.init_all_ui_elements()
-
-    # show the ui
-    ui.set_element_visibility(UIElement.CAMERA, True)
-    ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
-    ui.set_element_visibility(UIElement.SKILL_BAR, True)
-
-    # welcome message
-    ui.create_screen_message("Welcome to Not Quite Paradise", "", 4)
-
-    # FIXME - entities load before camera so they cant get their screen position.
-    #  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.
-    for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
-        aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
-        aesthetic.target_draw_x = aesthetic.draw_x
-        aesthetic.target_draw_y = aesthetic.draw_y
-
-    # entities load with a blank fov, update them now
-    process_light_map()
-    process_fov()
-    process_tile_visibility()
-
-    # point the camera at the player, now that FOV is updated
-    pos = world.get_entitys_component(player, Position)
-    camera = ui.get_element(UIElement.CAMERA)
-    camera.set_target((pos.x, pos.y), True)
-
-    # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
-
-    # prompt turn actions
-    chronicle.end_turn(player, 0)
+    ui.set_element_visibility(UIElement.TITLE_SCREEN, True)
+    state.set_new(GameState.MENU)
 
 
 if __name__ == "__main__":  # prevents being run from other modules
