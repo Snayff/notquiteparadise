@@ -60,6 +60,14 @@ scripts.engine.ui.elements.tile\_info module
    :undoc-members:
    :show-inheritance:
 
+scripts.engine.ui.elements.title\_screen module
+-----------------------------------------------
+
+.. automodule:: scripts.engine.ui.elements.title_screen
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>scripts.engine.ui.elements.skill_bar &mdash; NotQuiteParadise  documentation</title>
+  <title>scripts.engine.ui.elements.title_screen &mdash; NotQuiteParadise  documentation</title>
   
 
   
@@ -163,7 +163,7 @@
         
           <li><a href="../../../../index.html">Module code</a> &raquo;</li>
         
-      <li>scripts.engine.ui.elements.skill_bar</li>
+      <li>scripts.engine.ui.elements.title_screen</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -178,71 +178,62 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for scripts.engine.ui.elements.skill_bar</h1><div class="highlight"><pre>
+  <h1>Source code for scripts.engine.ui.elements.title_screen</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Type</span>
 
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">pygame_gui</span>
-<span class="kn">from</span> <span class="nn">pygame.rect</span> <span class="kn">import</span> <span class="n">Rect</span>
-<span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UIManager</span>
+<span class="kn">from</span> <span class="nn">pygame</span> <span class="kn">import</span> <span class="n">Rect</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIPanel</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">GAP_SIZE</span><span class="p">,</span> <span class="n">SKILL_BUTTON_SIZE</span><span class="p">,</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">RenderLayer</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">RenderLayer</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+    <span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UIManager</span>
 
 
-<div class="viewcode-block" id="SkillBar"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.skill_bar.SkillBar">[docs]</a><span class="k">class</span> <span class="nc">SkillBar</span><span class="p">(</span><span class="n">UIPanel</span><span class="p">):</span>
+<div class="viewcode-block" id="TitleScreen"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.title_screen.TitleScreen">[docs]</a><span class="k">class</span> <span class="nc">TitleScreen</span><span class="p">(</span><span class="n">UIPanel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Display and hold the info for the skills in the skill bar.</span>
+<span class="sd">    Initial screen menu</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">):</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">buttons_info</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;skill_0&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL0</span><span class="p">),</span>
-            <span class="s2">&quot;skill_1&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL1</span><span class="p">),</span>
-            <span class="s2">&quot;skill_2&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL2</span><span class="p">),</span>
-            <span class="s2">&quot;skill_3&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL3</span><span class="p">),</span>
-            <span class="s2">&quot;skill_4&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL4</span><span class="p">),</span>
-            <span class="s2">&quot;skill_5&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL5</span><span class="p">),</span>
+            <span class="s2">&quot;new_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">NEW_GAME</span><span class="p">),</span>
+            <span class="s2">&quot;load_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">LOAD_GAME</span><span class="p">),</span>
+            <span class="s2">&quot;exit_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">),</span>
         <span class="p">}</span>
+
+        <span class="n">width</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_start_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_start_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">space_between_buttons</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(((</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_start_y</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buttons_info</span><span class="p">))</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_height</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UIButton</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">button_start_x</span> <span class="o">=</span> <span class="n">GAP_SIZE</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">button_start_y</span> <span class="o">=</span> <span class="n">GAP_SIZE</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">button_width</span> <span class="o">=</span> <span class="n">SKILL_BUTTON_SIZE</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">button_height</span> <span class="o">=</span> <span class="n">SKILL_BUTTON_SIZE</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">space_between_buttons</span> <span class="o">=</span> <span class="n">GAP_SIZE</span>
-
         <span class="c1"># complete base class init</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">rect</span><span class="p">,</span>
-            <span class="n">RenderLayer</span><span class="o">.</span><span class="n">UI_BASE</span><span class="p">,</span>
-            <span class="n">manager</span><span class="p">,</span>
-            <span class="n">element_id</span><span class="o">=</span><span class="s2">&quot;skill_bar&quot;</span><span class="p">,</span>
-            <span class="n">anchors</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">},</span>
-        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">element_id</span><span class="o">=</span><span class="s2">&quot;title_screen&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_buttons</span><span class="p">()</span>
 
         <span class="c1"># confirm init complete</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SkillBar initialised.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TitleScreen initialised.&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SkillBar.update"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.skill_bar.SkillBar.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<div class="viewcode-block" id="TitleScreen.update"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.title_screen.TitleScreen.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update based on current state and data. Run every frame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SkillBar.handle_events"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.skill_bar.SkillBar.handle_events">[docs]</a>    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Handle events created by this UI widget</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TitleScreen.handle_events"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.title_screen.TitleScreen.handle_events">[docs]</a>    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">user_type</span> <span class="o">==</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">UI_BUTTON_PRESSED</span><span class="p">:</span>
 
             <span class="c1"># Find out which button we are clicking</span>
@@ -256,15 +247,15 @@
                 <span class="n">new_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons_info</span><span class="p">[</span><span class="n">button_id</span><span class="p">]</span>
                 <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">new_event</span><span class="p">)</span>
 
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SkillBar button &#39;</span><span class="si">{</span><span class="n">ids</span><span class="si">}</span><span class="s2">&#39; was pressed.&quot;</span><span class="p">)</span></div>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TitleScreen button &#39;</span><span class="si">{</span><span class="n">button_id</span><span class="si">}</span><span class="s2">&#39; pressed.&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SkillBar._init_buttons"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.skill_bar.SkillBar._init_buttons">[docs]</a>    <span class="k">def</span> <span class="nf">_init_buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TitleScreen._init_buttons"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.title_screen.TitleScreen._init_buttons">[docs]</a>    <span class="k">def</span> <span class="nf">_init_buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Init the buttons for the menu</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># extract values for performance</span>
-        <span class="n">start_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_start_x</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_start_y</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_start_x</span>
+        <span class="n">start_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_start_y</span>
         <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons_info</span>
         <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_width</span>
         <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_height</span>
@@ -273,7 +264,7 @@
 
         <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">start_x</span> <span class="o">+</span> <span class="p">((</span><span class="n">width</span> <span class="o">+</span> <span class="n">gap</span><span class="p">)</span> <span class="o">*</span> <span class="n">count</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">start_y</span> <span class="o">+</span> <span class="p">((</span><span class="n">height</span> <span class="o">+</span> <span class="n">gap</span><span class="p">)</span> <span class="o">*</span> <span class="n">count</span><span class="p">)</span>
             <span class="n">friendly_name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
             <span class="n">button</span> <span class="o">=</span> <span class="n">UIButton</span><span class="p">(</span>
