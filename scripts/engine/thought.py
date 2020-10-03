@@ -92,7 +92,6 @@ class ProjectileBehaviour(AIBehaviour):
             self.distance_travelled += 1
             chronicle.end_turn(entity, self.data.speed)
 
-
     def _handle_collision(self, current_tile: Tile, target_tile: Tile) -> Tuple[bool, bool]:
         """
         Handle collisions, returning should_activate, should_move and updating target tile and direction if needed

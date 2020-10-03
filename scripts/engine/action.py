@@ -164,6 +164,7 @@ class Skill(Action):
 
         # create the projectile
         from scripts.engine import world
+
         projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
 
         # add projectile to ignore list
