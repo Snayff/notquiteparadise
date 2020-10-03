@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-__all__ = ["process_event"]
-
 import pygame
 
 from scripts.engine.core.constants import GameEvent, GameStateType, InputIntent, UIElement
 from scripts.engine.ui.manager import ui
 from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent
+
+__all__ = ["process_event"]
+
+
 
 
 def process_event(event: pygame.event, game_state: GameStateType):

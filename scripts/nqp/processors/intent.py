@@ -8,10 +8,17 @@ from snecs.typedefs import EntityID
 from scripts.engine import chronicle, debug, library, state, utility, world
 from scripts.engine.action import Skill
 from scripts.engine.component import Knowledge, Position
-from scripts.engine.core.constants import Direction, DirectionType, GameState, GameStateType, InputIntent, \
-    InputIntentType, \
-    SAVE_PATH, \
-    TargetingMethod, UIElement
+from scripts.engine.core.constants import (
+    SAVE_PATH,
+    Direction,
+    DirectionType,
+    GameState,
+    GameStateType,
+    InputIntent,
+    InputIntentType,
+    TargetingMethod,
+    UIElement,
+)
 from scripts.engine.systems import behaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile

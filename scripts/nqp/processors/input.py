@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-__all__ = ["process_event"]
-
 import pygame
 
 from scripts.engine import key, world
@@ -11,6 +9,10 @@ from scripts.engine.core.constants import GameState, GameStateType, InputEvent, 
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.nqp.processors.intent import process_intent
+
+__all__ = ["process_event"]
+
+
 
 
 def process_event(event: pygame.event, game_state: GameStateType):
@@ -45,7 +47,6 @@ def process_event(event: pygame.event, game_state: GameStateType):
 
     elif event.type == InputEvent.SKILL_BAR_CLICK:
         intent = event.skill_intent
-
 
     else:
         intent = key.convert_to_intent(event)

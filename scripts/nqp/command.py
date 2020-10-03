@@ -7,13 +7,12 @@ import snecs
 
 from scripts.engine import chronicle, state, utility, world
 from scripts.engine.component import Aesthetic, Position, WinCondition
-from scripts.engine.core.constants import ASSET_PATH, GameState, RenderLayer, SAVE_PATH, UIElement
+from scripts.engine.core.constants import ASSET_PATH, SAVE_PATH, GameState, RenderLayer, UIElement
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, TraitSpritePathsData
 from scripts.engine.systems import vision
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.game_map import GameMap
-
 
 __all__ = ["initialise_game", "new_game", "load_game", "exit_game", "win_game"]
 
@@ -155,6 +154,3 @@ def win_game():
     # quit to main menu after a few seconds
     timer = Timer(2.0, quit_to_title)
     timer.start()
-
-
-
