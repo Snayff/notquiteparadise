@@ -273,12 +273,11 @@ class UI:
 
         return element
 
-    def create_screen_message(self, message: str, colour, size: int):
+    def create_screen_message(self, message: str, colour: str = "#531B75", size: int = 4):
         """
         Create a message on the screen.
         """
-        col = "#531B75"
-        text = f"<font face=barlow color={col} size={size}>{message}</font>"
+        text = f"<font face=barlow color={colour} size={size}>{message}</font>"
         rect = pygame.Rect((self._base_width / 4, self._base_height / 4), (self._base_width / 2, -1))
         screen_message = ScreenMessage(rect, text, self.get_gui_manager())
 

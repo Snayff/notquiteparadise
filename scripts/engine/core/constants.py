@@ -71,17 +71,26 @@ TagType = Union[TargetTagType, DamageTypeType, AfflictionCategoryType]
 #################### INTERNAL, NON-SERIALISED ###########################################
 
 
-class EventType(SimpleNamespace):
+class InputEvent(SimpleNamespace):
     """
-    Constant info about the different custom event names that we can pass to pygame
+    Custom pygame event names triggered by input. These need to be interpreted into intents.
     """
 
     TILE_CLICK = pygame.USEREVENT + 1
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
-    EXIT_MENU = pygame.USEREVENT + 3
-    NEW_GAME = pygame.USEREVENT + 4
-    LOAD_GAME = pygame.USEREVENT + 5
-    EXIT_GAME = pygame.USEREVENT + 6
+
+
+
+class GameEvent(SimpleNamespace):
+    """
+    Custom pygame event names triggered by the game
+    """
+
+    EXIT_MENU = pygame.USEREVENT + 100
+    NEW_GAME = pygame.USEREVENT + 101
+    LOAD_GAME = pygame.USEREVENT + 102
+    EXIT_GAME = pygame.USEREVENT + 103
+    WIN_CONDITION_MET = pygame.USEREVENT + 104
 
 
 class RenderLayer(SimpleNamespace):
@@ -106,7 +115,7 @@ class GameState(SimpleNamespace):
     GAMEMAP = GameStateType(2)  # while player moving around the game_map
     PLAYER_DEAD = GameStateType(3)  # while player is dead
     TARGETING = GameStateType(4)  # while player is targeting
-    EXIT_GAME = GameStateType(5)  # while exiting
+    EXITING = GameStateType(5)  # while exiting
     DEVELOPER = GameStateType(6)  # while using dev mode
     MENU = GameStateType(7)  # while using a menu
 

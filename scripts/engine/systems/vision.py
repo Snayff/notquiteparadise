@@ -12,6 +12,8 @@ from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_AC
 if TYPE_CHECKING:
     pass
 
+__all__ = ["process_light_map", "process_fov", "process_tile_visibility"]
+
 
 def process_light_map():
     """

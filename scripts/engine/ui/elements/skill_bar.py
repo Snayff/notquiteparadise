@@ -9,7 +9,7 @@ from pygame.rect import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIPanel
 
-from scripts.engine.core.constants import GAP_SIZE, SKILL_BUTTON_SIZE, EventType, InputIntent, RenderLayer
+from scripts.engine.core.constants import GAP_SIZE, SKILL_BUTTON_SIZE, InputEvent, InputIntent, RenderLayer
 
 if TYPE_CHECKING:
     from typing import List
@@ -22,12 +22,12 @@ class SkillBar(UIPanel):
 
     def __init__(self, rect: Rect, manager: UIManager):
         self.buttons_info = {
-            "skill_0": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL0),
-            "skill_1": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL1),
-            "skill_2": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL2),
-            "skill_3": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL3),
-            "skill_4": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL4),
-            "skill_5": pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL5),
+            "skill_0": pygame.event.Event(InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL0),
+            "skill_1": pygame.event.Event(InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL1),
+            "skill_2": pygame.event.Event(InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL2),
+            "skill_3": pygame.event.Event(InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL3),
+            "skill_4": pygame.event.Event(InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL4),
+            "skill_5": pygame.event.Event(InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL5),
         }
 
         self.buttons: List[UIButton] = []

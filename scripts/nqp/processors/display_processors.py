@@ -4,14 +4,15 @@ from typing import TYPE_CHECKING, cast
 
 import pytweening
 
-from scripts.engine import utility, world
+from scripts.engine import utility
 from scripts.engine.component import Aesthetic
 from scripts.engine.core import queries
-from scripts.engine.core.constants import UIElement
 from scripts.engine.utility import is_close
 
 if TYPE_CHECKING:
     pass
+
+__all__ = ["process_display_updates"]
 
 
 def process_display_updates(time_delta: float):
@@ -23,7 +24,7 @@ def process_display_updates(time_delta: float):
 
 def _process_aesthetic_update(time_delta: float):
     """
-    Update real-time timers on entities, such as entity animations.
+    Update aesthetics, such as entity animations.
     """
     # move entities screen position towards target
     for entity, (aesthetic,) in queries.aesthetic:

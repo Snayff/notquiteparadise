@@ -5,17 +5,18 @@ import os
 from typing import TYPE_CHECKING, Optional, Type
 
 import pygame
+import snecs
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, debug, key, library, state, utility, world
 from scripts.engine.action import Skill
-from scripts.engine.component import Aesthetic, IsActor, Knowledge, Position
+from scripts.engine.component import Aesthetic, IsActor, Knowledge, Position, WinCondition
 from scripts.engine.core import queries
 from scripts.engine.core.constants import (
-    SAVE_PATH,
+    ASSET_PATH, GameEvent, RenderLayer, SAVE_PATH,
     Direction,
     DirectionType,
-    EventType,
+    InputEvent,
     GameState,
     GameStateType,
     InputIntent,
@@ -24,13 +25,12 @@ from scripts.engine.core.constants import (
     UIElement,
 )
 from scripts.engine.core.data import store
-from scripts.engine.core.definitions import ActorData
-from scripts.engine.systems import vision
+from scripts.engine.core.definitions import ActorData, TraitSpritePathsData
+from scripts.engine.systems import behaviour, vision
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:
     from typing import Optional
@@ -46,7 +46,7 @@ def process_event(event: pygame.event, game_state: GameStateType):
     """
     intent = None
     # some events only apply to certain GameStates, we need to process them and separate them
-    if event.type == EventType.TILE_CLICK:
+    if event.type == InputEvent.TILE_CLICK:
 
         if game_state == GameState.TARGETING:
             ## Activate skill on mouse click while in targeting mode
@@ -68,24 +68,27 @@ def process_event(event: pygame.event, game_state: GameStateType):
                     actor_info.set_entity(entity)
                     intent = InputIntent.ACTOR_INFO_TOGGLE
 
-    elif event.type == EventType.SKILL_BAR_CLICK:
+    elif event.type == InputEvent.SKILL_BAR_CLICK:
         intent = event.skill_intent
 
-    elif event.type == EventType.EXIT_MENU:
+    elif event.type == GameEvent.EXIT_MENU:
         ## Exit Actor Info
         if event.menu == UIElement.ACTOR_INFO:
             intent = InputIntent.ACTOR_INFO_TOGGLE
 
-    elif event.type == EventType.NEW_GAME:
+    elif event.type == GameEvent.NEW_GAME:
         ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
         _new_game()
 
-    elif event.type == EventType.LOAD_GAME:
+    elif event.type == GameEvent.LOAD_GAME:
         ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
         _load_game()
 
-    elif event.type == EventType.EXIT_GAME:
+    elif event.type == GameEvent.EXIT_GAME:
         _exit_game()
+
+    elif event.type == GameEvent.WIN_CONDITION_MET:
+        _win_game()
 
     else:
         intent = key.convert_to_intent(event)
@@ -285,7 +288,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
         world.judge_action(player, skill.key)
-        ai_processors.process_interventions()
+        behaviour.process_interventions()
         chronicle.end_turn(player, skill.time_cost)
 
         state.save_game()
@@ -364,6 +367,10 @@ def _new_game():
     """
     Create a new game
     """
+    # create clean snecs.world
+    empty_world = snecs.World()
+    world.move_world(empty_world)
+
     # init and save map
     game_map = GameMap("cave", 10)
     store.current_game_map = game_map
@@ -381,6 +388,18 @@ def _new_game():
     # init the player
     player = world.get_player()
 
+    # create win condition and place next to player
+    player_pos = world.get_entitys_component(player, Position)
+    win_x = player_pos.x + 1
+    win_y = player_pos.y
+    components = []
+    components.append(Position((win_x, win_y)))  # lets hope this doesnt spawn in a wall
+    components.append(WinCondition())
+    traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/win_flag.png"))]
+    sprites = utility.build_sprites_from_paths(traits_paths)
+    components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
+    world.create_entity(components)
+
     # tell places about the player
     chronicle.set_turn_holder(player)
 
@@ -393,7 +412,7 @@ def _new_game():
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
     # welcome message
-    ui.create_screen_message("Welcome to Not Quite Paradise", "", 4)
+    ui.create_screen_message("Welcome to Not Quite Paradise")
 
     # FIXME - entities load before camera so they cant get their screen position.
     #  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.
@@ -434,7 +453,7 @@ def _load_game():
         ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
         # welcome message
-        ui.create_screen_message("Welcome back to Not Quite Paradise", "", 4)
+        ui.create_screen_message("Welcome back to Not Quite Paradise")
 
         # loading finished, give player control
         state.set_new(GameState.GAMEMAP)
@@ -444,4 +463,28 @@ def _exit_game():
     """
     Exit the game
     """
-    state.set_new(GameState.EXIT_GAME)
+    state.set_new(GameState.EXITING)
+
+
+def _quit_to_title():
+    """
+    Quit out of the game back to the title screen
+    """
+    state.set_new(GameState.MENU)
+
+    # hide the in game screens
+    ui.set_element_visibility(UIElement.CAMERA, False)
+    ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
+    ui.set_element_visibility(UIElement.SKILL_BAR, False)
+
+    # show the title screen
+    ui.set_element_visibility(UIElement.TITLE_SCREEN, True)
+
+
+def _win_game():
+    """
+    Trigger the win game actions
+    """
+    ui.create_screen_message("You wonned. Huzzah.")
+    _quit_to_title()
+
