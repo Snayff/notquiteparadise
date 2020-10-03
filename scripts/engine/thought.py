@@ -129,7 +129,6 @@ class ProjectileBehaviour(AIBehaviour):
             assert isinstance(self.data.skill_instance, Skill)
             self.data.skill_instance.target_tile = target_tile
 
-        # return outcomes
         return should_activate, should_move
 
 
