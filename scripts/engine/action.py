@@ -167,6 +167,9 @@ class Skill(Action):
 
         projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
 
+        # add projectile to ignore list
+        self.ignore_entities.append(projectile)
+
         # save the reference to the projectile entity
         self.projectile = projectile
 
