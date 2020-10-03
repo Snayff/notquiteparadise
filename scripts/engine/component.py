@@ -544,4 +544,3 @@ class LightSource(RegisteredComponent):
     @classmethod
     def deserialize(cls, serialised):
         return LightSource(*serialised)
-

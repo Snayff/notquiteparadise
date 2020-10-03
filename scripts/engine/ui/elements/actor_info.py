@@ -14,8 +14,9 @@ from scripts.engine.component import Aesthetic, Afflictions, Identity, Resources
 from scripts.engine.core.constants import (
     ASSET_PATH,
     GAP_SIZE,
-    GameEvent, ICON_SIZE,
+    ICON_SIZE,
     INFINITE,
+    GameEvent,
     InputEvent,
     PrimaryStat,
     SecondaryStat,

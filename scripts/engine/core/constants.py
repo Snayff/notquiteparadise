@@ -80,7 +80,6 @@ class InputEvent(SimpleNamespace):
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
 
 
-
 class GameEvent(SimpleNamespace):
     """
     Custom pygame event names triggered by the game

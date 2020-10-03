@@ -15,7 +15,8 @@ from scripts.engine.component import (
     Knowledge,
     LightSource,
     Position,
-    Tracked, WinCondition,
+    Tracked,
+    WinCondition,
 )
 
 if TYPE_CHECKING:
@@ -33,7 +34,7 @@ __all__ = [
     "position_and_aesthetic",
     "position_and_identity_and_aesthetic",
     "position_and_actor",
-    "position_and_win_condition"
+    "position_and_win_condition",
 ]
 
 

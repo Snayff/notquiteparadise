@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 import pygame
@@ -12,7 +13,6 @@ if TYPE_CHECKING:
     pass
 
 __all__ = ["process_win_condition"]
-
 
 
 def process_win_condition():

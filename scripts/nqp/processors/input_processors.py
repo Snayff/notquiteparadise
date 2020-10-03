@@ -13,14 +13,17 @@ from scripts.engine.action import Skill
 from scripts.engine.component import Aesthetic, IsActor, Knowledge, Position, WinCondition
 from scripts.engine.core import queries
 from scripts.engine.core.constants import (
-    ASSET_PATH, GameEvent, RenderLayer, SAVE_PATH,
+    ASSET_PATH,
+    SAVE_PATH,
     Direction,
     DirectionType,
-    InputEvent,
+    GameEvent,
     GameState,
     GameStateType,
+    InputEvent,
     InputIntent,
     InputIntentType,
+    RenderLayer,
     TargetingMethod,
     UIElement,
 )
@@ -487,4 +490,3 @@ def _win_game():
     """
     ui.create_screen_message("You wonned. Huzzah.")
     _quit_to_title()
-
