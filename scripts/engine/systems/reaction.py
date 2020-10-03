@@ -7,7 +7,6 @@ from scripts.engine.component import Position
 from scripts.engine.core import queries
 from scripts.engine.core.constants import GameEvent
 
-
 __all__ = ["process_win_condition"]
 
 
