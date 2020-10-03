@@ -29,15 +29,25 @@ Last updated on |today| for version |version|.
     nqp/utility
     nqp/world
 
+
 ..  toctree::
     :maxdepth: 2
-    :caption: UI API
+    :caption: Systems API
 
-    nqp/ui.elements
-    nqp/ui.widgets
+    nqp/systems
+
 
 ..  toctree::
     :maxdepth: 2
     :caption: World Objects API
 
     nqp/world_objects
+
+
+
+..  toctree::
+    :maxdepth: 2
+    :caption: UI API
+
+    nqp/ui.elements
+    nqp/ui.widgets
