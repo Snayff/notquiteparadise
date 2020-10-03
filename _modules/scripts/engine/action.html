@@ -348,6 +348,9 @@
 
         <span class="n">projectile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_projectile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">projectile_data</span><span class="p">)</span>
 
+        <span class="c1"># add projectile to ignore list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">projectile</span><span class="p">)</span>
+
         <span class="c1"># save the reference to the projectile entity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">projectile</span> <span class="o">=</span> <span class="n">projectile</span></div>
 
