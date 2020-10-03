@@ -8,12 +8,15 @@ import pygame
 import snecs
 from snecs.world import default_world
 
+import scripts.nqp.processors.input
 from scripts.engine import chronicle, debug, state, world
-from scripts.engine.core.constants import GameState, UIElement
+from scripts.engine.core.constants import GameState
 from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.engine.ui.manager import ui
+from scripts.nqp import processors
 from scripts.nqp.actions import skills  # must import to register skills
-from scripts.nqp.processors import display_processors, input_processors
+from scripts.nqp.command import initialise_game
+from scripts.nqp.processors import display, game
 
 
 def main():
@@ -87,24 +90,17 @@ def game_loop():
 
         # update based on input events
         for event in pygame.event.get():
-            input_processors.process_event(event, current_state)
+            processors.input.process_event(event, current_state)
+            processors.game.process_event(event, current_state)
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state
-        display_processors.process_display_updates(time_delta)
+        display.process_display_updates(time_delta)
         debug.update()
         ui.update(time_delta)
 
         # show the new state
         ui.draw()
-
-
-def initialise_game():
-    """
-    Init the game`s required info
-    """
-    state.set_new(GameState.MENU)
-    ui.set_element_visibility(UIElement.TITLE_SCREEN, True)
 
 
 if __name__ == "__main__":  # prevents being run from other modules
