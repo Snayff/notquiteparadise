@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import pygame
 
 from scripts.engine import world
@@ -9,8 +7,6 @@ from scripts.engine.component import Position
 from scripts.engine.core import queries
 from scripts.engine.core.constants import GameEvent
 
-if TYPE_CHECKING:
-    pass
 
 __all__ = ["process_win_condition"]
 
