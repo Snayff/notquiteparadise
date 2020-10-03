@@ -84,6 +84,21 @@ class HasCombatStats(RegisteredComponent):
         return HasCombatStats()
 
 
+class WinCondition(RegisteredComponent):
+    """
+    A flag to show that an entity is a win objective
+    """
+
+    __slots__ = ()
+
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return WinCondition()
+
+
 #################### OTHERS #########################
 
 

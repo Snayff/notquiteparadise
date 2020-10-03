@@ -66,7 +66,7 @@ def game_loop():
     """
     The core game loop, handling input, rendering and logic.
     """
-    while not state.get_current() == GameState.EXIT_GAME:
+    while not state.get_current() == GameState.EXITING:
         # progress frame
         time_delta = state.update_clock()
 
@@ -103,8 +103,8 @@ def initialise_game():
     """
     Init the game`s required info
     """
-    ui.set_element_visibility(UIElement.TITLE_SCREEN, True)
     state.set_new(GameState.MENU)
+    ui.set_element_visibility(UIElement.TITLE_SCREEN, True)
 
 
 if __name__ == "__main__":  # prevents being run from other modules

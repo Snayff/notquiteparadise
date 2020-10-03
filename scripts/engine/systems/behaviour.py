@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    pass
+__all__ = ["process_interventions"]
 
 
 def process_interventions():
@@ -13,7 +10,7 @@ def process_interventions():
     # TODO - update in line with judge_actions to use skills
     # TODO - reactivate the interventions
     pass
-    #
+
     # skill_name = event.skill_name
     # entity = event.entity
     # position = world.get_entitys_component(entity, Position)

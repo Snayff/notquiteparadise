@@ -16,6 +16,7 @@ from scripts.engine.component import (
     LightSource,
     Position,
     Tracked,
+    WinCondition,
 )
 
 if TYPE_CHECKING:
@@ -33,6 +34,7 @@ __all__ = [
     "position_and_aesthetic",
     "position_and_identity_and_aesthetic",
     "position_and_actor",
+    "position_and_win_condition",
 ]
 
 
@@ -61,5 +63,7 @@ position_and_blocking = get_components([Position, Blocking]).compile()
 position_and_aesthetic = get_components([Position, Aesthetic]).compile()
 
 position_and_actor = get_components([Position, IsActor]).compile()
+
+position_and_win_condition = get_components([Position, WinCondition]).compile()
 
 position_and_identity_and_aesthetic = get_components([Position, Identity, Aesthetic]).compile()

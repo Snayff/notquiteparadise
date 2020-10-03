@@ -16,7 +16,8 @@ from scripts.engine.core.constants import (
     GAP_SIZE,
     ICON_SIZE,
     INFINITE,
-    EventType,
+    GameEvent,
+    InputEvent,
     PrimaryStat,
     SecondaryStat,
     UIElement,
@@ -227,7 +228,7 @@ class ActorInfo(UIWindow):
         """
         Override close button to post an Exit Menu event.
         """
-        event = pygame.event.Event(EventType.EXIT_MENU, menu=UIElement.ACTOR_INFO)
+        event = pygame.event.Event(GameEvent.EXIT_MENU, menu=UIElement.ACTOR_INFO)
         pygame.event.post(event)
 
     ############## CREATE ########################

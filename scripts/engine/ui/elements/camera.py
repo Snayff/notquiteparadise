@@ -13,7 +13,7 @@ from pygame_gui.elements import UIButton, UIImage, UIPanel
 
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import TILE_SIZE, DirectionType, EventType, RenderLayer, UIElement
+from scripts.engine.core.constants import TILE_SIZE, DirectionType, InputEvent, RenderLayer, UIElement
 from scripts.engine.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.world_objects.tile import Tile
 
@@ -141,7 +141,7 @@ class Camera(UIPanel):
 
             # clicking a tile
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
-                event = pygame.event.Event(EventType.TILE_CLICK, tile_pos=(x, y))
+                event = pygame.event.Event(InputEvent.TILE_CLICK, tile_pos=(x, y))
                 pygame.event.post(event)
 
             # hovering a tile
