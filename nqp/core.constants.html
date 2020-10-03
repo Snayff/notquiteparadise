@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.126.0
+                0.128.0
               </div>
             
           
@@ -109,14 +109,18 @@
 <li class="toctree-l1"><a class="reference internal" href="utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
 </ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
+<p class="caption"><span class="caption-text">Systems API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ui.widgets.html">UI Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ui.widgets.html">UI Widgets</a></li>
 </ul>
 
             
@@ -185,38 +189,50 @@
   <div class="section" id="module-scripts.engine.core.constants">
 <span id="constants"></span><h1>Constants<a class="headerlink" href="#module-scripts.engine.core.constants" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="scripts.engine.core.constants.EventType">
-<em class="property">class </em><code class="sig-name descname">EventType</code><a class="reference internal" href="../_modules/scripts/engine/core/constants.html#EventType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.constants.EventType" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.InputEvent">
+<em class="property">class </em><code class="sig-name descname">InputEvent</code><a class="reference internal" href="../_modules/scripts/engine/core/constants.html#InputEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.constants.InputEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
-<p>Constant info about the different custom event names that we can pass to pygame</p>
+<p>Custom pygame event names triggered by input. These need to be interpreted into intents.</p>
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.EventType.TILE_CLICK">
-<code class="sig-name descname">TILE_CLICK</code><em class="property"> = 32775</em><a class="headerlink" href="#scripts.engine.core.constants.EventType.TILE_CLICK" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.InputEvent.TILE_CLICK">
+<code class="sig-name descname">TILE_CLICK</code><em class="property"> = 32775</em><a class="headerlink" href="#scripts.engine.core.constants.InputEvent.TILE_CLICK" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.EventType.SKILL_BAR_CLICK">
-<code class="sig-name descname">SKILL_BAR_CLICK</code><em class="property"> = 32776</em><a class="headerlink" href="#scripts.engine.core.constants.EventType.SKILL_BAR_CLICK" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.InputEvent.SKILL_BAR_CLICK">
+<code class="sig-name descname">SKILL_BAR_CLICK</code><em class="property"> = 32776</em><a class="headerlink" href="#scripts.engine.core.constants.InputEvent.SKILL_BAR_CLICK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.core.constants.GameEvent">
+<em class="property">class </em><code class="sig-name descname">GameEvent</code><a class="reference internal" href="../_modules/scripts/engine/core/constants.html#GameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.constants.GameEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
+<p>Custom pygame event names triggered by the game</p>
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.GameEvent.EXIT_MENU">
+<code class="sig-name descname">EXIT_MENU</code><em class="property"> = 32874</em><a class="headerlink" href="#scripts.engine.core.constants.GameEvent.EXIT_MENU" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.EventType.EXIT_MENU">
-<code class="sig-name descname">EXIT_MENU</code><em class="property"> = 32777</em><a class="headerlink" href="#scripts.engine.core.constants.EventType.EXIT_MENU" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.GameEvent.NEW_GAME">
+<code class="sig-name descname">NEW_GAME</code><em class="property"> = 32875</em><a class="headerlink" href="#scripts.engine.core.constants.GameEvent.NEW_GAME" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.EventType.NEW_GAME">
-<code class="sig-name descname">NEW_GAME</code><em class="property"> = 32778</em><a class="headerlink" href="#scripts.engine.core.constants.EventType.NEW_GAME" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.GameEvent.LOAD_GAME">
+<code class="sig-name descname">LOAD_GAME</code><em class="property"> = 32876</em><a class="headerlink" href="#scripts.engine.core.constants.GameEvent.LOAD_GAME" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.EventType.LOAD_GAME">
-<code class="sig-name descname">LOAD_GAME</code><em class="property"> = 32779</em><a class="headerlink" href="#scripts.engine.core.constants.EventType.LOAD_GAME" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.GameEvent.EXIT_GAME">
+<code class="sig-name descname">EXIT_GAME</code><em class="property"> = 32877</em><a class="headerlink" href="#scripts.engine.core.constants.GameEvent.EXIT_GAME" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.EventType.EXIT_GAME">
-<code class="sig-name descname">EXIT_GAME</code><em class="property"> = 32780</em><a class="headerlink" href="#scripts.engine.core.constants.EventType.EXIT_GAME" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.GameEvent.WIN_CONDITION_MET">
+<code class="sig-name descname">WIN_CONDITION_MET</code><em class="property"> = 32878</em><a class="headerlink" href="#scripts.engine.core.constants.GameEvent.WIN_CONDITION_MET" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -284,8 +300,8 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.GameState.EXIT_GAME">
-<code class="sig-name descname">EXIT_GAME</code><em class="property"> = 5</em><a class="headerlink" href="#scripts.engine.core.constants.GameState.EXIT_GAME" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.GameState.EXITING">
+<code class="sig-name descname">EXITING</code><em class="property"> = 5</em><a class="headerlink" href="#scripts.engine.core.constants.GameState.EXITING" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">

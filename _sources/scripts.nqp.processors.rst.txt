@@ -4,14 +4,6 @@ scripts.nqp.processors package
 Submodules
 ----------
 
-scripts.nqp.processors.ai\_processors module
---------------------------------------------
-
-.. automodule:: scripts.nqp.processors.ai_processors
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 scripts.nqp.processors.display\_processors module
 -------------------------------------------------
 

@@ -4,6 +4,22 @@ scripts.engine.systems package
 Submodules
 ----------
 
+scripts.engine.systems.behaviour module
+---------------------------------------
+
+.. automodule:: scripts.engine.systems.behaviour
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.systems.reaction module
+--------------------------------------
+
+.. automodule:: scripts.engine.systems.reaction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.engine.systems.vision module
 ------------------------------------
 

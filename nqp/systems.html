@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>UI Widgets &mdash; NotQuiteParadise  documentation</title>
+  <title>Systems &mdash; NotQuiteParadise  documentation</title>
   
 
   
@@ -36,7 +36,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="UI Elements" href="ui.elements.html" /> 
+    <link rel="next" title="World Objects" href="world_objects.html" />
+    <link rel="prev" title="World" href="world.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -109,20 +110,22 @@
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="systems.html">Systems</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Systems</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.systems.behaviour">Behaviour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.systems.reaction">Reaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.systems.vision">Vision</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="world_objects.html">World Objects</a></li>
 </ul>
 <p class="caption"><span class="caption-text">UI API</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">UI Widgets</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.ui.widgets.screen_message">Screen Message</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="ui.widgets.html">UI Widgets</a></li>
 </ul>
 
             
@@ -169,13 +172,13 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>UI Widgets</li>
+      <li>Systems</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/nqp/ui.widgets.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/nqp/systems.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -188,32 +191,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ui-widgets">
-<h1>UI Widgets<a class="headerlink" href="#ui-widgets" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-scripts.engine.ui.widgets.screen_message">
-<span id="screen-message"></span><h2>Screen Message<a class="headerlink" href="#module-scripts.engine.ui.widgets.screen_message" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="scripts.engine.ui.widgets.screen_message.ScreenMessage">
-<em class="property">class </em><code class="sig-name descname">ScreenMessage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rect</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/rect.html#pygame.Rect" title="(in pygame v2.0.0.dev7)">pygame.Rect</a></span></em>, <em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">manager</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pygame-gui.readthedocs.io/en/latest/pygame_gui.html#pygame_gui.ui_manager.UIManager" title="(in Pygame GUI v0.6.0)">pygame_gui.ui_manager.UIManager</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/widgets/screen_message.html#ScreenMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.widgets.screen_message.ScreenMessage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://pygame-gui.readthedocs.io/en/latest/pygame_gui.elements.html#pygame_gui.elements.ui_text_box.UITextBox" title="(in Pygame GUI v0.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygame_gui.elements.ui_text_box.UITextBox</span></code></a></p>
-<p>Show messages on the centre of the screen for a limited time</p>
-<dl class="py method">
-<dt id="scripts.engine.ui.widgets.screen_message.ScreenMessage.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_delta</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/widgets/screen_message.html#ScreenMessage.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.widgets.screen_message.ScreenMessage.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update based on current state and data. Run every frame.</p>
+  <div class="section" id="systems">
+<h1>Systems<a class="headerlink" href="#systems" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-scripts.engine.systems.behaviour">
+<span id="behaviour"></span><h2>Behaviour<a class="headerlink" href="#module-scripts.engine.systems.behaviour" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="scripts.engine.systems.behaviour.process_interventions">
+<code class="sig-name descname">process_interventions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/systems/behaviour.html#process_interventions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.systems.behaviour.process_interventions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Consider taking possible interventions and then take them.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="scripts.engine.ui.widgets.screen_message.ScreenMessage.handle_events">
-<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/widgets/screen_message.html#ScreenMessage.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.widgets.screen_message.ScreenMessage.handle_events" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handle events created by this UI widget</p>
+</div>
+<div class="section" id="module-scripts.engine.systems.reaction">
+<span id="reaction"></span><h2>Reaction<a class="headerlink" href="#module-scripts.engine.systems.reaction" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="scripts.engine.systems.reaction.process_win_condition">
+<code class="sig-name descname">process_win_condition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/systems/reaction.html#process_win_condition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.systems.reaction.process_win_condition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the win condition, checking if it has been met.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt id="scripts.engine.ui.widgets.screen_message.ScreenMessage._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.ui.widgets.screen_message.ScreenMessage._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+</div>
+<div class="section" id="module-scripts.engine.systems.vision">
+<span id="vision"></span><h2>Vision<a class="headerlink" href="#module-scripts.engine.systems.vision" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="scripts.engine.systems.vision.process_light_map">
+<code class="sig-name descname">process_light_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/systems/vision.html#process_light_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.systems.vision.process_light_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update light map using light sources of all entities</p>
+</dd></dl>
 
+<dl class="py function">
+<dt id="scripts.engine.systems.vision.process_fov">
+<code class="sig-name descname">process_fov</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/systems/vision.html#process_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.systems.vision.process_fov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update FOV for all entities within MAX_ACTIVATION_DISTANCE of player.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.systems.vision.process_tile_visibility">
+<code class="sig-name descname">process_tile_visibility</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/systems/vision.html#process_tile_visibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.systems.vision.process_tile_visibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update tile visibility based on player fov</p>
 </dd></dl>
 
 </div>
@@ -227,8 +242,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="world_objects.html" class="btn btn-neutral float-right" title="World Objects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="ui.elements.html" class="btn btn-neutral float-left" title="UI Elements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="world.html" class="btn btn-neutral float-left" title="World" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

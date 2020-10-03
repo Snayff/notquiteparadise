@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.126.0
+                0.128.0
               </div>
             
           
@@ -107,14 +107,18 @@
 <li class="toctree-l1"><a class="reference internal" href="nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/world.html">World</a></li>
 </ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
+<p class="caption"><span class="caption-text">Systems API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/ui.widgets.html">UI Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nqp/ui.widgets.html">UI Widgets</a></li>
 </ul>
 
             
@@ -307,6 +311,8 @@
 </li>
         <li><a href="nqp/effect.html#scripts.engine.effect.TriggerSkillEffect._abc_impl">(TriggerSkillEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.TriggerSkillEffect._abc_impl">[1]</a>
 </li>
+        <li><a href="nqp/component.html#scripts.engine.component.WinCondition._abc_impl">(WinCondition attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.WinCondition._abc_impl">[1]</a>
+</li>
       </ul></li>
       <li><a href="nqp/chronicle.html#scripts.engine.chronicle._add_time">_add_time() (in module scripts.engine.chronicle)</a>, <a href="scripts.engine.html#scripts.engine.chronicle._add_time">[1]</a>
 </li>
@@ -346,6 +352,8 @@
         <li><a href="nqp/component.html#scripts.engine.component.Tracked._bitmask">(Tracked attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Tracked._bitmask">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Traits._bitmask">(Traits attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Traits._bitmask">[1]</a>
+</li>
+        <li><a href="nqp/component.html#scripts.engine.component.WinCondition._bitmask">(WinCondition attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.WinCondition._bitmask">[1]</a>
 </li>
       </ul></li>
   </ul></td>
@@ -424,8 +432,6 @@
 </li>
       <li><a href="scripts.engine.html#scripts.engine.action.Skill._play_animation">_play_animation() (Skill method)</a>
 </li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.display_processors._process_aesthetic_update">_process_aesthetic_update() (in module scripts.nqp.processors.display_processors)</a>
-</li>
       <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_game_map_intents">_process_game_map_intents() (in module scripts.nqp.processors.input_processors)</a>
 </li>
       <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_menu_intents">_process_menu_intents() (in module scripts.nqp.processors.input_processors)</a>
@@ -435,6 +441,8 @@
       <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_stateless_intents">_process_stateless_intents() (in module scripts.nqp.processors.input_processors)</a>
 </li>
       <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_targeting_mode_intents">_process_targeting_mode_intents() (in module scripts.nqp.processors.input_processors)</a>
+</li>
+      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._quit_to_title">_quit_to_title() (in module scripts.nqp.processors.input_processors)</a>
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._reset">_reset() (DungenViewer method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._reset">[1]</a>
 </li>
@@ -455,6 +463,8 @@
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.camera.Camera._update_ui_element_pos">_update_ui_element_pos() (Camera method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._update_ui_element_pos">[1]</a>
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._update_view">_update_view() (DungenViewer method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._update_view">[1]</a>
+</li>
+      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._win_game">_win_game() (in module scripts.nqp.processors.input_processors)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -857,6 +867,8 @@
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Traits.deserialize">(Traits class method)</a>, <a href="scripts.engine.html#scripts.engine.component.Traits.deserialize">[1]</a>
 </li>
+        <li><a href="nqp/component.html#scripts.engine.component.WinCondition.deserialize">(WinCondition class method)</a>, <a href="scripts.engine.html#scripts.engine.component.WinCondition.deserialize">[1]</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -960,8 +972,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EventType">EventType (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EventType">[1]</a>
-</li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.PrimaryStat.EXACTITUDE">EXACTITUDE (PrimaryStat attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.PrimaryStat.EXACTITUDE">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitData.exactitude">exactitude (TraitData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitData.exactitude">[1]</a>
@@ -972,13 +982,11 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputIntent.EXIT">EXIT (InputIntent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputIntent.EXIT">[1]</a>
 </li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EventType.EXIT_GAME">EXIT_GAME (EventType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EventType.EXIT_GAME">[1]</a>
-
-      <ul>
-        <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameState.EXIT_GAME">(GameState attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameState.EXIT_GAME">[1]</a>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.EXIT_GAME">EXIT_GAME (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.EXIT_GAME">[1]</a>
 </li>
-      </ul></li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EventType.EXIT_MENU">EXIT_MENU (EventType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EventType.EXIT_MENU">[1]</a>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.EXIT_MENU">EXIT_MENU (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.EXIT_MENU">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameState.EXITING">EXITING (GameState attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameState.EXITING">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.expiry_type">expiry_type (ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.expiry_type">[1]</a>
 </li>
@@ -1019,6 +1027,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.GameConfigData">GameConfigData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.GameConfigData">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent">GameEvent (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent">[1]</a>
 </li>
       <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap">GameMap (class in scripts.engine.world_objects.game_map)</a>
 </li>
@@ -1228,6 +1238,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputEvent">InputEvent (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputEvent">[1]</a>
+</li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputIntent">InputIntent (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputIntent">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.ProjectileSpeed.INSTANT">INSTANT (ProjectileSpeed attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.ProjectileSpeed.INSTANT">[1]</a>
@@ -1324,7 +1336,7 @@
 </li>
       <li><a href="nqp/component.html#scripts.engine.component.LightSource">LightSource (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.LightSource">[1]</a>
 </li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EventType.LOAD_GAME">LOAD_GAME (EventType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EventType.LOAD_GAME">[1]</a>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.LOAD_GAME">LOAD_GAME (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.LOAD_GAME">[1]</a>
 </li>
       <li><a href="nqp/state.html#scripts.engine.state.load_game">load_game() (in module scripts.engine.state)</a>, <a href="scripts.engine.html#scripts.engine.state.load_game">[1]</a>
 </li>
@@ -1428,7 +1440,11 @@
 </li>
         <li><a href="scripts.engine.systems.html#module-scripts.engine.systems">scripts.engine.systems</a>
 </li>
-        <li><a href="scripts.engine.systems.html#module-scripts.engine.systems.vision">scripts.engine.systems.vision</a>
+        <li><a href="nqp/systems.html#module-scripts.engine.systems.behaviour">scripts.engine.systems.behaviour</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.behaviour">[1]</a>
+</li>
+        <li><a href="nqp/systems.html#module-scripts.engine.systems.reaction">scripts.engine.systems.reaction</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.reaction">[1]</a>
+</li>
+        <li><a href="nqp/systems.html#module-scripts.engine.systems.vision">scripts.engine.systems.vision</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.vision">[1]</a>
 </li>
         <li><a href="nqp/thought.html#module-scripts.engine.thought">scripts.engine.thought</a>, <a href="scripts.engine.html#module-scripts.engine.thought">[1]</a>
 </li>
@@ -1475,8 +1491,6 @@
         <li><a href="scripts.nqp.actions.html#module-scripts.nqp.actions">scripts.nqp.actions</a>
 </li>
         <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors">scripts.nqp.processors</a>
-</li>
-        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.ai_processors">scripts.nqp.processors.ai_processors</a>
 </li>
         <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.display_processors">scripts.nqp.processors.display_processors</a>
 </li>
@@ -1553,7 +1567,7 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EventType.NEW_GAME">NEW_GAME (EventType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EventType.NEW_GAME">[1]</a>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.NEW_GAME">NEW_GAME (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.NEW_GAME">[1]</a>
 </li>
       <li><a href="nqp/chronicle.html#scripts.engine.chronicle.next_round">next_round() (in module scripts.engine.chronicle)</a>, <a href="scripts.engine.html#scripts.engine.chronicle.next_round">[1]</a>
 </li>
@@ -1617,25 +1631,27 @@
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_close_button">process_close_button() (ActorInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_close_button">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.display_processors.process_display_updates">process_display_updates() (in module scripts.nqp.processors.display_processors)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_event">process_event() (ActorInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_event">[1]</a>
 
       <ul>
         <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors.process_event">(in module scripts.nqp.processors.input_processors)</a>
 </li>
       </ul></li>
-      <li><a href="scripts.engine.systems.html#scripts.engine.systems.vision.process_fov">process_fov() (in module scripts.engine.systems.vision)</a>
+      <li><a href="nqp/systems.html#scripts.engine.systems.vision.process_fov">process_fov() (in module scripts.engine.systems.vision)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.vision.process_fov">[1]</a>
 </li>
       <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors.process_intent">process_intent() (in module scripts.nqp.processors.input_processors)</a>
 </li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.ai_processors.process_interventions">process_interventions() (in module scripts.nqp.processors.ai_processors)</a>
+      <li><a href="nqp/systems.html#scripts.engine.systems.behaviour.process_interventions">process_interventions() (in module scripts.engine.systems.behaviour)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.behaviour.process_interventions">[1]</a>
 </li>
-      <li><a href="scripts.engine.systems.html#scripts.engine.systems.vision.process_light_map">process_light_map() (in module scripts.engine.systems.vision)</a>
+      <li><a href="nqp/systems.html#scripts.engine.systems.vision.process_light_map">process_light_map() (in module scripts.engine.systems.vision)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.vision.process_light_map">[1]</a>
 </li>
-      <li><a href="scripts.engine.systems.html#scripts.engine.systems.vision.process_tile_visibility">process_tile_visibility() (in module scripts.engine.systems.vision)</a>
+      <li><a href="nqp/systems.html#scripts.engine.systems.vision.process_tile_visibility">process_tile_visibility() (in module scripts.engine.systems.vision)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.vision.process_tile_visibility">[1]</a>
+</li>
+      <li><a href="nqp/systems.html#scripts.engine.systems.reaction.process_win_condition">process_win_condition() (in module scripts.engine.systems.reaction)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.reaction.process_win_condition">[1]</a>
 </li>
       <li><a href="tests.engine.html#tests.engine.effect_test.MockSkill.projectile_data">projectile_data (MockSkill attribute)</a>
 
@@ -1890,10 +1906,24 @@
 </li>
       </ul></li>
       <li>
+    scripts.engine.systems.behaviour
+
+      <ul>
+        <li><a href="nqp/systems.html#module-scripts.engine.systems.behaviour">module</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.behaviour">[1]</a>
+</li>
+      </ul></li>
+      <li>
+    scripts.engine.systems.reaction
+
+      <ul>
+        <li><a href="nqp/systems.html#module-scripts.engine.systems.reaction">module</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.reaction">[1]</a>
+</li>
+      </ul></li>
+      <li>
     scripts.engine.systems.vision
 
       <ul>
-        <li><a href="scripts.engine.systems.html#module-scripts.engine.systems.vision">module</a>
+        <li><a href="nqp/systems.html#module-scripts.engine.systems.vision">module</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.vision">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -2057,13 +2087,6 @@
         <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors">module</a>
 </li>
       </ul></li>
-      <li>
-    scripts.nqp.processors.ai_processors
-
-      <ul>
-        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.ai_processors">module</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
@@ -2130,6 +2153,8 @@
         <li><a href="nqp/component.html#scripts.engine.component.Tracked.serialize">(Tracked method)</a>, <a href="scripts.engine.html#scripts.engine.component.Tracked.serialize">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Traits.serialize">(Traits method)</a>, <a href="scripts.engine.html#scripts.engine.component.Traits.serialize">[1]</a>
+</li>
+        <li><a href="nqp/component.html#scripts.engine.component.WinCondition.serialize">(WinCondition method)</a>, <a href="scripts.engine.html#scripts.engine.component.WinCondition.serialize">[1]</a>
 </li>
       </ul></li>
       <li><a href="nqp/component.html#scripts.engine.component.Position.set">set() (Position method)</a>, <a href="scripts.engine.html#scripts.engine.component.Position.set">[1]</a>
@@ -2212,7 +2237,7 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.UIElement.SKILL_BAR">SKILL_BAR (UIElement attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.UIElement.SKILL_BAR">[1]</a>
 </li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EventType.SKILL_BAR_CLICK">SKILL_BAR_CLICK (EventType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EventType.SKILL_BAR_CLICK">[1]</a>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputEvent.SKILL_BAR_CLICK">SKILL_BAR_CLICK (InputEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputEvent.SKILL_BAR_CLICK">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.skill_instance">skill_instance (ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.skill_instance">[1]</a>
 </li>
@@ -2428,7 +2453,7 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.RenderLayer.TILE">TILE (RenderLayer attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.RenderLayer.TILE">[1]</a>
 </li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EventType.TILE_CLICK">TILE_CLICK (EventType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EventType.TILE_CLICK">[1]</a>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputEvent.TILE_CLICK">TILE_CLICK (InputEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputEvent.TILE_CLICK">[1]</a>
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.tile_has_tag">tile_has_tag() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.tile_has_tag">[1]</a>
 </li>
@@ -2596,6 +2621,10 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.WIN_CONDITION_MET">WIN_CONDITION_MET (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.WIN_CONDITION_MET">[1]</a>
+</li>
+      <li><a href="nqp/component.html#scripts.engine.component.WinCondition">WinCondition (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.WinCondition">[1]</a>
+</li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.camera.Camera.world_to_draw_position">world_to_draw_position() (Camera method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera.world_to_draw_position">[1]</a>
 </li>
   </ul></td>

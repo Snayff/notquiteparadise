@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>scripts.nqp.processors.ai_processors &mdash; NotQuiteParadise  documentation</title>
+  <title>scripts.engine.systems.reaction &mdash; NotQuiteParadise  documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.126.0
+                0.128.0
               </div>
             
           
@@ -107,14 +107,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world.html">World</a></li>
 </ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
+<p class="caption"><span class="caption-text">Systems API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.widgets.html">UI Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.widgets.html">UI Widgets</a></li>
 </ul>
 
             
@@ -163,7 +167,7 @@
         
           <li><a href="../../../index.html">Module code</a> &raquo;</li>
         
-      <li>scripts.nqp.processors.ai_processors</li>
+      <li>scripts.engine.systems.reaction</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -178,34 +182,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for scripts.nqp.processors.ai_processors</h1><div class="highlight"><pre>
+  <h1>Source code for scripts.engine.systems.reaction</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
 
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="k">pass</span>
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Position</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">GameEvent</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;process_win_condition&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="process_interventions"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.ai_processors.process_interventions">[docs]</a><span class="k">def</span> <span class="nf">process_interventions</span><span class="p">():</span>
+<div class="viewcode-block" id="process_win_condition"><a class="viewcode-back" href="../../../../scripts.engine.systems.html#scripts.engine.systems.reaction.process_win_condition">[docs]</a><span class="k">def</span> <span class="nf">process_win_condition</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Consider taking possible interventions and then take them.</span>
+<span class="sd">    Process the win condition, checking if it has been met.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># TODO - update in line with judge_actions to use skills</span>
-    <span class="c1"># TODO - reactivate the interventions</span>
-    <span class="k">pass</span></div>
-    <span class="c1">#</span>
-    <span class="c1"># skill_name = event.skill_name</span>
-    <span class="c1"># entity = event.entity</span>
-    <span class="c1"># position = world.get_entitys_component(entity, Position)</span>
-    <span class="c1"># interventions = world.choose_interventions(entity, skill_name)</span>
-    <span class="c1">#</span>
-    <span class="c1"># for god_entity_id, intervention_name in interventions:</span>
-    <span class="c1">#     # create use skill event with direction of centre</span>
-    <span class="c1">#     if world.can_use_skill(god_entity_id, intervention_name):</span>
-    <span class="c1">#         skill = world.get_known_skill(god_entity_id, intervention_name)</span>
-    <span class="c1">#         tile = world.get_tile((position.x, position.y))</span>
-    <span class="c1">#         world.use_skill(god_entity_id, skill, tile, Direction.CENTRE)</span>
+
+    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_win_condition</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">WIN_CONDITION_MET</span><span class="p">)</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="k">break</span></div>
 </pre></div>
 
            </div>

@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.126.0
+                0.128.0
               </div>
             
           
@@ -107,14 +107,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world.html">World</a></li>
 </ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
+<p class="caption"><span class="caption-text">Systems API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.widgets.html">UI Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.widgets.html">UI Widgets</a></li>
 </ul>
 
             
@@ -197,7 +201,8 @@
     <span class="n">GAP_SIZE</span><span class="p">,</span>
     <span class="n">ICON_SIZE</span><span class="p">,</span>
     <span class="n">INFINITE</span><span class="p">,</span>
-    <span class="n">EventType</span><span class="p">,</span>
+    <span class="n">GameEvent</span><span class="p">,</span>
+    <span class="n">InputEvent</span><span class="p">,</span>
     <span class="n">PrimaryStat</span><span class="p">,</span>
     <span class="n">SecondaryStat</span><span class="p">,</span>
     <span class="n">UIElement</span><span class="p">,</span>
@@ -408,7 +413,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override close button to post an Exit Menu event.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">EXIT_MENU</span><span class="p">,</span> <span class="n">menu</span><span class="o">=</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">)</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_MENU</span><span class="p">,</span> <span class="n">menu</span><span class="o">=</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">)</span>
         <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
     <span class="c1">############## CREATE ########################</span>

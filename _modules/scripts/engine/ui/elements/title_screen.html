@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.126.0
+                0.128.0
               </div>
             
           
@@ -107,14 +107,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world.html">World</a></li>
 </ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
+<p class="caption"><span class="caption-text">Systems API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.widgets.html">UI Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.widgets.html">UI Widgets</a></li>
 </ul>
 
             
@@ -189,7 +193,7 @@
 <span class="kn">from</span> <span class="nn">pygame</span> <span class="kn">import</span> <span class="n">Rect</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIPanel</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">RenderLayer</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">GameEvent</span><span class="p">,</span> <span class="n">InputEvent</span><span class="p">,</span> <span class="n">RenderLayer</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
@@ -204,9 +208,9 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">buttons_info</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;new_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">NEW_GAME</span><span class="p">),</span>
-            <span class="s2">&quot;load_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">LOAD_GAME</span><span class="p">),</span>
-            <span class="s2">&quot;exit_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">),</span>
+            <span class="s2">&quot;new_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_GAME</span><span class="p">),</span>
+            <span class="s2">&quot;load_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">LOAD_GAME</span><span class="p">),</span>
+            <span class="s2">&quot;exit_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="n">width</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">width</span>

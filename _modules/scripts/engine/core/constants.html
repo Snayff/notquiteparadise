@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.126.0
+                0.128.0
               </div>
             
           
@@ -107,14 +107,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world.html">World</a></li>
 </ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
+<p class="caption"><span class="caption-text">Systems API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.widgets.html">UI Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.widgets.html">UI Widgets</a></li>
 </ul>
 
             
@@ -191,7 +195,7 @@
 
 <span class="c1">######################## TOP LEVEL CONSTANTS ######################################</span>
 
-<span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.126.0&quot;</span>  <span class="c1"># DONT FORGET TO UPDATE SPHINX VERSION</span>
+<span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.128.0&quot;</span>  <span class="c1"># DONT FORGET TO UPDATE SPHINX VERSION</span>
 
 <span class="n">MAX_SKILLS</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="n">MAX_SAVES</span> <span class="o">=</span> <span class="mi">1</span>
@@ -252,17 +256,25 @@
 <span class="c1">#################### INTERNAL, NON-SERIALISED ###########################################</span>
 
 
-<div class="viewcode-block" id="EventType"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.EventType">[docs]</a><span class="k">class</span> <span class="nc">EventType</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
+<div class="viewcode-block" id="InputEvent"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.InputEvent">[docs]</a><span class="k">class</span> <span class="nc">InputEvent</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Constant info about the different custom event names that we can pass to pygame</span>
+<span class="sd">    Custom pygame event names triggered by input. These need to be interpreted into intents.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">TILE_CLICK</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">SKILL_BAR_CLICK</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">2</span>
-    <span class="n">EXIT_MENU</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">3</span>
-    <span class="n">NEW_GAME</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">4</span>
-    <span class="n">LOAD_GAME</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">5</span>
-    <span class="n">EXIT_GAME</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">6</span></div>
+    <span class="n">SKILL_BAR_CLICK</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="GameEvent"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.GameEvent">[docs]</a><span class="k">class</span> <span class="nc">GameEvent</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Custom pygame event names triggered by the game</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">EXIT_MENU</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">100</span>
+    <span class="n">NEW_GAME</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">101</span>
+    <span class="n">LOAD_GAME</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">102</span>
+    <span class="n">EXIT_GAME</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">103</span>
+    <span class="n">WIN_CONDITION_MET</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span> <span class="o">+</span> <span class="mi">104</span></div>
 
 
 <div class="viewcode-block" id="RenderLayer"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.RenderLayer">[docs]</a><span class="k">class</span> <span class="nc">RenderLayer</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
@@ -287,7 +299,7 @@
     <span class="n">GAMEMAP</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># while player moving around the game_map</span>
     <span class="n">PLAYER_DEAD</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># while player is dead</span>
     <span class="n">TARGETING</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># while player is targeting</span>
-    <span class="n">EXIT_GAME</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># while exiting</span>
+    <span class="n">EXITING</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># while exiting</span>
     <span class="n">DEVELOPER</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>  <span class="c1"># while using dev mode</span>
     <span class="n">MENU</span> <span class="o">=</span> <span class="n">GameStateType</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>  <span class="c1"># while using a menu</span></div>
 

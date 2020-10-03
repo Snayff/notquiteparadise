@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.126.0
+                0.128.0
               </div>
             
           
@@ -107,14 +107,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/world.html">World</a></li>
 </ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
+<p class="caption"><span class="caption-text">Systems API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.widgets.html">UI Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.widgets.html">UI Widgets</a></li>
 </ul>
 
             
@@ -263,6 +267,21 @@
 <div class="viewcode-block" id="HasCombatStats.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.HasCombatStats.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">HasCombatStats</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="WinCondition"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.WinCondition">[docs]</a><span class="k">class</span> <span class="nc">WinCondition</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A flag to show that an entity is a win objective</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+
+<div class="viewcode-block" id="WinCondition.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.WinCondition.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="WinCondition.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.WinCondition.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">WinCondition</span><span class="p">()</span></div></div>
 
 
 <span class="c1">#################### OTHERS #########################</span>

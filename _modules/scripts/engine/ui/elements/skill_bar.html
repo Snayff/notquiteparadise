@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.126.0
+                0.128.0
               </div>
             
           
@@ -107,14 +107,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world.html">World</a></li>
 </ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
+<p class="caption"><span class="caption-text">Systems API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.widgets.html">UI Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.widgets.html">UI Widgets</a></li>
 </ul>
 
             
@@ -190,7 +194,7 @@
 <span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UIManager</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIPanel</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">GAP_SIZE</span><span class="p">,</span> <span class="n">SKILL_BUTTON_SIZE</span><span class="p">,</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">RenderLayer</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">GAP_SIZE</span><span class="p">,</span> <span class="n">SKILL_BUTTON_SIZE</span><span class="p">,</span> <span class="n">InputEvent</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">RenderLayer</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
@@ -203,12 +207,12 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">buttons_info</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;skill_0&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL0</span><span class="p">),</span>
-            <span class="s2">&quot;skill_1&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL1</span><span class="p">),</span>
-            <span class="s2">&quot;skill_2&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL2</span><span class="p">),</span>
-            <span class="s2">&quot;skill_3&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL3</span><span class="p">),</span>
-            <span class="s2">&quot;skill_4&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL4</span><span class="p">),</span>
-            <span class="s2">&quot;skill_5&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL5</span><span class="p">),</span>
+            <span class="s2">&quot;skill_0&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">InputEvent</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL0</span><span class="p">),</span>
+            <span class="s2">&quot;skill_1&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">InputEvent</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL1</span><span class="p">),</span>
+            <span class="s2">&quot;skill_2&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">InputEvent</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL2</span><span class="p">),</span>
+            <span class="s2">&quot;skill_3&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">InputEvent</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL3</span><span class="p">),</span>
+            <span class="s2">&quot;skill_4&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">InputEvent</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL4</span><span class="p">),</span>
+            <span class="s2">&quot;skill_5&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">InputEvent</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">,</span> <span class="n">skill_intent</span><span class="o">=</span><span class="n">InputIntent</span><span class="o">.</span><span class="n">SKILL5</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UIButton</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>

@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.126.0
+                0.128.0
               </div>
             
           
@@ -107,14 +107,18 @@
 <li class="toctree-l1"><a class="reference internal" href="nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/world.html">World</a></li>
 </ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
+<p class="caption"><span class="caption-text">Systems API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/ui.widgets.html">UI Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nqp/ui.widgets.html">UI Widgets</a></li>
 </ul>
 
             
@@ -185,27 +189,12 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-scripts.nqp.processors.ai_processors">
-<span id="scripts-nqp-processors-ai-processors-module"></span><h2>scripts.nqp.processors.ai_processors module<a class="headerlink" href="#module-scripts.nqp.processors.ai_processors" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt id="scripts.nqp.processors.ai_processors.process_interventions">
-<code class="sig-name descname">process_interventions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/ai_processors.html#process_interventions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.ai_processors.process_interventions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Consider taking possible interventions and then take them.</p>
-</dd></dl>
-
-</div>
 <div class="section" id="module-scripts.nqp.processors.display_processors">
 <span id="scripts-nqp-processors-display-processors-module"></span><h2>scripts.nqp.processors.display_processors module<a class="headerlink" href="#module-scripts.nqp.processors.display_processors" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="scripts.nqp.processors.display_processors.process_display_updates">
 <code class="sig-name descname">process_display_updates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_delta</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/display_processors.html#process_display_updates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.display_processors.process_display_updates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fire realtime processors.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="scripts.nqp.processors.display_processors._process_aesthetic_update">
-<code class="sig-name descname">_process_aesthetic_update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_delta</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/display_processors.html#_process_aesthetic_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.display_processors._process_aesthetic_update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update real-time timers on entities, such as entity animations.</p>
 </dd></dl>
 
 </div>
@@ -282,6 +271,18 @@ called in one way then no intent is generated and the event will directly go to 
 <dt id="scripts.nqp.processors.input_processors._exit_game">
 <code class="sig-name descname">_exit_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/input_processors.html#_exit_game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.input_processors._exit_game" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exit the game</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.nqp.processors.input_processors._quit_to_title">
+<code class="sig-name descname">_quit_to_title</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/input_processors.html#_quit_to_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.input_processors._quit_to_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quit out of the game back to the title screen</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.nqp.processors.input_processors._win_game">
+<code class="sig-name descname">_win_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/input_processors.html#_win_game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.input_processors._win_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the win game actions</p>
 </dd></dl>
 
 </div>
