@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.128.0
+                0.129.0
               </div>
             
           
@@ -388,15 +388,9 @@
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.camera.Camera._draw_surface">_draw_surface() (Camera method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._draw_surface">[1]</a>
 </li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._exit_game">_exit_game() (in module scripts.nqp.processors.input_processors)</a>
-</li>
       <li><a href="nqp/world.html#scripts.engine.world._get_furthest_free_position">_get_furthest_free_position() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world._get_furthest_free_position">[1]</a>
 </li>
       <li><a href="nqp/chronicle.html#scripts.engine.chronicle._get_next_entity_in_queue">_get_next_entity_in_queue() (in module scripts.engine.chronicle)</a>, <a href="scripts.engine.html#scripts.engine.chronicle._get_next_entity_in_queue">[1]</a>
-</li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._get_pressed_direction">_get_pressed_direction() (in module scripts.nqp.processors.input_processors)</a>
-</li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._get_pressed_skills_name">_get_pressed_skills_name() (in module scripts.nqp.processors.input_processors)</a>
 </li>
       <li><a href="nqp/chronicle.html#scripts.engine.chronicle._get_pretty_queue">_get_pretty_queue() (in module scripts.engine.chronicle)</a>, <a href="scripts.engine.html#scripts.engine.chronicle._get_pretty_queue">[1]</a>
 </li>
@@ -426,23 +420,7 @@
 </li>
       <li><a href="nqp/world.html#scripts.engine.world._is_tile_visible_to_player">_is_tile_visible_to_player() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world._is_tile_visible_to_player">[1]</a>
 </li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._load_game">_load_game() (in module scripts.nqp.processors.input_processors)</a>
-</li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._new_game">_new_game() (in module scripts.nqp.processors.input_processors)</a>
-</li>
       <li><a href="scripts.engine.html#scripts.engine.action.Skill._play_animation">_play_animation() (Skill method)</a>
-</li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_game_map_intents">_process_game_map_intents() (in module scripts.nqp.processors.input_processors)</a>
-</li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_menu_intents">_process_menu_intents() (in module scripts.nqp.processors.input_processors)</a>
-</li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_skill_use">_process_skill_use() (in module scripts.nqp.processors.input_processors)</a>
-</li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_stateless_intents">_process_stateless_intents() (in module scripts.nqp.processors.input_processors)</a>
-</li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_targeting_mode_intents">_process_targeting_mode_intents() (in module scripts.nqp.processors.input_processors)</a>
-</li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._quit_to_title">_quit_to_title() (in module scripts.nqp.processors.input_processors)</a>
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._reset">_reset() (DungenViewer method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._reset">[1]</a>
 </li>
@@ -463,8 +441,6 @@
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.camera.Camera._update_ui_element_pos">_update_ui_element_pos() (Camera method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._update_ui_element_pos">[1]</a>
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._update_view">_update_view() (DungenViewer method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._update_view">[1]</a>
-</li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors._win_game">_win_game() (in module scripts.nqp.processors.input_processors)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -984,6 +960,8 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.EXIT_GAME">EXIT_GAME (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.EXIT_GAME">[1]</a>
 </li>
+      <li><a href="scripts.nqp.html#scripts.nqp.command.exit_game">exit_game() (in module scripts.nqp.command)</a>
+</li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.EXIT_MENU">EXIT_MENU (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.EXIT_MENU">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameState.EXITING">EXITING (GameState attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameState.EXITING">[1]</a>
@@ -1234,6 +1212,8 @@
 </li>
       <li><a href="scripts.engine.html#scripts.engine.action.init_action">init_action() (in module scripts.engine.action)</a>
 </li>
+      <li><a href="scripts.nqp.html#scripts.nqp.command.initialise_game">initialise_game() (in module scripts.nqp.command)</a>
+</li>
       <li><a href="nqp/debug.html#scripts.engine.debug.initialise_logging">initialise_logging() (in module scripts.engine.debug)</a>, <a href="scripts.engine.html#scripts.engine.debug.initialise_logging">[1]</a>
 </li>
   </ul></td>
@@ -1330,16 +1310,20 @@
         <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputIntent.LEFT">(InputIntent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputIntent.LEFT">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/utility.html#scripts.engine.utility.lerp">lerp() (in module scripts.engine.utility)</a>, <a href="scripts.engine.html#scripts.engine.utility.lerp">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/component.html#scripts.engine.component.LightSource">LightSource (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.LightSource">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.LOAD_GAME">LOAD_GAME (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.LOAD_GAME">[1]</a>
 </li>
       <li><a href="nqp/state.html#scripts.engine.state.load_game">load_game() (in module scripts.engine.state)</a>, <a href="scripts.engine.html#scripts.engine.state.load_game">[1]</a>
+
+      <ul>
+        <li><a href="scripts.nqp.html#scripts.nqp.command.load_game">(in module scripts.nqp.command)</a>
 </li>
+      </ul></li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameState.LOADING">LOADING (GameState attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameState.LOADING">[1]</a>
 </li>
   </ul></td>
@@ -1490,11 +1474,17 @@
 </li>
         <li><a href="scripts.nqp.actions.html#module-scripts.nqp.actions">scripts.nqp.actions</a>
 </li>
+        <li><a href="scripts.nqp.html#module-scripts.nqp.command">scripts.nqp.command</a>
+</li>
         <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors">scripts.nqp.processors</a>
 </li>
-        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.display_processors">scripts.nqp.processors.display_processors</a>
+        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.display">scripts.nqp.processors.display</a>
 </li>
-        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.input_processors">scripts.nqp.processors.input_processors</a>
+        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.game">scripts.nqp.processors.game</a>
+</li>
+        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.input">scripts.nqp.processors.input</a>
+</li>
+        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.intent">scripts.nqp.processors.intent</a>
 </li>
         <li><a href="tests.html#module-tests">tests</a>
 </li>
@@ -1569,6 +1559,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.NEW_GAME">NEW_GAME (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.NEW_GAME">[1]</a>
 </li>
+      <li><a href="scripts.nqp.html#scripts.nqp.command.new_game">new_game() (in module scripts.nqp.command)</a>
+</li>
       <li><a href="nqp/chronicle.html#scripts.engine.chronicle.next_round">next_round() (in module scripts.engine.chronicle)</a>, <a href="scripts.engine.html#scripts.engine.chronicle.next_round">[1]</a>
 </li>
       <li><a href="nqp/chronicle.html#scripts.engine.chronicle.next_turn">next_turn() (in module scripts.engine.chronicle)</a>, <a href="scripts.engine.html#scripts.engine.chronicle.next_turn">[1]</a>
@@ -1631,19 +1623,21 @@
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_close_button">process_close_button() (ActorInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_close_button">[1]</a>
 </li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.display_processors.process_display_updates">process_display_updates() (in module scripts.nqp.processors.display_processors)</a>
+      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.display.process_display_updates">process_display_updates() (in module scripts.nqp.processors.display)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_event">process_event() (ActorInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_event">[1]</a>
 
       <ul>
-        <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors.process_event">(in module scripts.nqp.processors.input_processors)</a>
+        <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.game.process_event">(in module scripts.nqp.processors.game)</a>
+</li>
+        <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input.process_event">(in module scripts.nqp.processors.input)</a>
 </li>
       </ul></li>
       <li><a href="nqp/systems.html#scripts.engine.systems.vision.process_fov">process_fov() (in module scripts.engine.systems.vision)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.vision.process_fov">[1]</a>
 </li>
-      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input_processors.process_intent">process_intent() (in module scripts.nqp.processors.input_processors)</a>
+      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.intent.process_intent">process_intent() (in module scripts.nqp.processors.intent)</a>
 </li>
       <li><a href="nqp/systems.html#scripts.engine.systems.behaviour.process_interventions">process_interventions() (in module scripts.engine.systems.behaviour)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.behaviour.process_interventions">[1]</a>
 </li>
@@ -2081,26 +2075,47 @@
 </li>
       </ul></li>
       <li>
+    scripts.nqp.command
+
+      <ul>
+        <li><a href="scripts.nqp.html#module-scripts.nqp.command">module</a>
+</li>
+      </ul></li>
+      <li>
     scripts.nqp.processors
 
       <ul>
         <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors">module</a>
 </li>
       </ul></li>
+      <li>
+    scripts.nqp.processors.display
+
+      <ul>
+        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.display">module</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
-    scripts.nqp.processors.display_processors
+    scripts.nqp.processors.game
 
       <ul>
-        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.display_processors">module</a>
+        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.game">module</a>
 </li>
       </ul></li>
       <li>
-    scripts.nqp.processors.input_processors
+    scripts.nqp.processors.input
 
       <ul>
-        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.input_processors">module</a>
+        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.input">module</a>
+</li>
+      </ul></li>
+      <li>
+    scripts.nqp.processors.intent
+
+      <ul>
+        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.intent">module</a>
 </li>
       </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.BaseStatData.secondary">secondary (BaseStatData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.BaseStatData.secondary">[1]</a>
@@ -2622,6 +2637,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.WIN_CONDITION_MET">WIN_CONDITION_MET (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.WIN_CONDITION_MET">[1]</a>
+</li>
+      <li><a href="scripts.nqp.html#scripts.nqp.command.win_game">win_game() (in module scripts.nqp.command)</a>
 </li>
       <li><a href="nqp/component.html#scripts.engine.component.WinCondition">WinCondition (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.WinCondition">[1]</a>
 </li>

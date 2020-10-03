@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>scripts.engine.systems.behaviour &mdash; NotQuiteParadise  documentation</title>
+  <title>scripts.nqp.processors.game &mdash; NotQuiteParadise  documentation</title>
   
 
   
@@ -167,7 +167,7 @@
         
           <li><a href="../../../index.html">Module code</a> &raquo;</li>
         
-      <li>scripts.engine.systems.behaviour</li>
+      <li>scripts.nqp.processors.game</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -182,31 +182,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for scripts.engine.systems.behaviour</h1><div class="highlight"><pre>
+  <h1>Source code for scripts.nqp.processors.game</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;process_interventions&quot;</span><span class="p">]</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
+
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">GameEvent</span><span class="p">,</span> <span class="n">GameStateType</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">UIElement</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.ui.manager</span> <span class="kn">import</span> <span class="n">ui</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">command</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.processors.intent</span> <span class="kn">import</span> <span class="n">process_intent</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;process_event&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="process_interventions"><a class="viewcode-back" href="../../../../scripts.engine.systems.html#scripts.engine.systems.behaviour.process_interventions">[docs]</a><span class="k">def</span> <span class="nf">process_interventions</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Consider taking possible interventions and then take them.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># TODO - update in line with judge_actions to use skills</span>
-    <span class="c1"># TODO - reactivate the interventions</span>
-    <span class="k">pass</span></div>
 
-    <span class="c1"># skill_name = event.skill_name</span>
-    <span class="c1"># entity = event.entity</span>
-    <span class="c1"># position = world.get_entitys_component(entity, Position)</span>
-    <span class="c1"># interventions = world.choose_interventions(entity, skill_name)</span>
-    <span class="c1">#</span>
-    <span class="c1"># for god_entity_id, intervention_name in interventions:</span>
-    <span class="c1">#     # create use skill event with direction of centre</span>
-    <span class="c1">#     if world.can_use_skill(god_entity_id, intervention_name):</span>
-    <span class="c1">#         skill = world.get_known_skill(god_entity_id, intervention_name)</span>
-    <span class="c1">#         tile = world.get_tile((position.x, position.y))</span>
-    <span class="c1">#         world.use_skill(god_entity_id, skill, tile, Direction.CENTRE)</span>
+
+<div class="viewcode-block" id="process_event"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.game.process_event">[docs]</a><span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
+    <span class="n">intent</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_MENU</span><span class="p">:</span>
+        <span class="c1">## Exit Actor Info</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">menu</span> <span class="o">==</span> <span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">:</span>
+            <span class="n">intent</span> <span class="o">=</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span>
+
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_GAME</span><span class="p">:</span>
+        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">new_game</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">LOAD_GAME</span><span class="p">:</span>
+        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">load_game</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">:</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">exit_game</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">WIN_CONDITION_MET</span><span class="p">:</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">win_game</span><span class="p">()</span>
+
+    <span class="c1"># if we have an intent we need to process, do so</span>
+    <span class="k">if</span> <span class="n">intent</span><span class="p">:</span>
+        <span class="n">process_intent</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span> <span class="n">game_state</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

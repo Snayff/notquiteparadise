@@ -13,6 +13,14 @@ Subpackages
 Submodules
 ----------
 
+scripts.nqp.command module
+--------------------------
+
+.. automodule:: scripts.nqp.command
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.nqp.main module
 -----------------------
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>scripts.nqp.processors.input_processors &mdash; NotQuiteParadise  documentation</title>
+  <title>scripts.nqp.processors.intent &mdash; NotQuiteParadise  documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.128.0
+                0.129.0
               </div>
             
           
@@ -167,7 +167,7 @@
         
           <li><a href="../../../index.html">Module code</a> &raquo;</li>
         
-      <li>scripts.nqp.processors.input_processors</li>
+      <li>scripts.nqp.processors.intent</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -182,113 +182,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for scripts.nqp.processors.input_processors</h1><div class="highlight"><pre>
+  <h1>Source code for scripts.nqp.processors.intent</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span>
 
-<span class="kn">import</span> <span class="nn">pygame</span>
-<span class="kn">import</span> <span class="nn">snecs</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">library</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">library</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.action</span> <span class="kn">import</span> <span class="n">Skill</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">IsActor</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">WinCondition</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Position</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">ASSET_PATH</span><span class="p">,</span>
     <span class="n">SAVE_PATH</span><span class="p">,</span>
     <span class="n">Direction</span><span class="p">,</span>
     <span class="n">DirectionType</span><span class="p">,</span>
-    <span class="n">GameEvent</span><span class="p">,</span>
     <span class="n">GameState</span><span class="p">,</span>
     <span class="n">GameStateType</span><span class="p">,</span>
-    <span class="n">InputEvent</span><span class="p">,</span>
     <span class="n">InputIntent</span><span class="p">,</span>
     <span class="n">InputIntentType</span><span class="p">,</span>
-    <span class="n">RenderLayer</span><span class="p">,</span>
     <span class="n">TargetingMethod</span><span class="p">,</span>
     <span class="n">UIElement</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.data</span> <span class="kn">import</span> <span class="n">store</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">TraitSpritePathsData</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.systems</span> <span class="kn">import</span> <span class="n">behaviour</span><span class="p">,</span> <span class="n">vision</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.ui.elements.actor_info</span> <span class="kn">import</span> <span class="n">ActorInfo</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.systems</span> <span class="kn">import</span> <span class="n">behaviour</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.ui.manager</span> <span class="kn">import</span> <span class="n">ui</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;process_intent&quot;</span><span class="p">]</span>
 
 
-<span class="c1">########################## OUTER LAYER PROCESSORS - EXTERNAL FACING #####################################</span>
-
-
-<div class="viewcode-block" id="process_event"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors.process_event">[docs]</a><span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
+<div class="viewcode-block" id="process_intent"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.intent.process_intent">[docs]</a><span class="k">def</span> <span class="nf">process_intent</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Extract the intent from the event and process them in the context of the game state. If an event can only be</span>
-<span class="sd">    called in one way then no intent is generated and the event will directly go to the relevant action.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">intent</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="c1"># some events only apply to certain GameStates, we need to process them and separate them</span>
-    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">InputEvent</span><span class="o">.</span><span class="n">TILE_CLICK</span><span class="p">:</span>
-
-        <span class="k">if</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">TARGETING</span><span class="p">:</span>
-            <span class="c1">## Activate skill on mouse click while in targeting mode</span>
-            <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-            <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">position</span><span class="p">:</span>
-                <span class="n">event_x</span><span class="p">,</span> <span class="n">event_y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">tile_pos</span>
-                <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">event_x</span> <span class="o">-</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">)),</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">event_y</span><span class="p">)))</span>
-                <span class="n">intent</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">convert_vector_to_intent</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">:</span>
-            <span class="c1">## Activate Actor Info Menu</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">tile_pos</span>
-            <span class="c1"># get entity on tile</span>
-            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_actor</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">position</span><span class="p">:</span>
-                    <span class="c1"># found entity, set to selected</span>
-                    <span class="n">actor_info</span><span class="p">:</span> <span class="n">ActorInfo</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">)</span>
-                    <span class="n">actor_info</span><span class="o">.</span><span class="n">set_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-                    <span class="n">intent</span> <span class="o">=</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span>
-
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">InputEvent</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">:</span>
-        <span class="n">intent</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">skill_intent</span>
-
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_MENU</span><span class="p">:</span>
-        <span class="c1">## Exit Actor Info</span>
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">menu</span> <span class="o">==</span> <span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">:</span>
-            <span class="n">intent</span> <span class="o">=</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span>
-
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_GAME</span><span class="p">:</span>
-        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="n">_new_game</span><span class="p">()</span>
-
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">LOAD_GAME</span><span class="p">:</span>
-        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="n">_load_game</span><span class="p">()</span>
-
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">:</span>
-        <span class="n">_exit_game</span><span class="p">()</span>
-
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">WIN_CONDITION_MET</span><span class="p">:</span>
-        <span class="n">_win_game</span><span class="p">()</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">intent</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">convert_to_intent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-
-    <span class="c1"># if we have an intent we need to process, do so</span>
-    <span class="k">if</span> <span class="n">intent</span><span class="p">:</span>
-        <span class="n">process_intent</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span> <span class="n">game_state</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="process_intent"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors.process_intent">[docs]</a><span class="k">def</span> <span class="nf">process_intent</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Process the intent in the context of the game state</span>
+<span class="sd">    Process the intent in the context of the game state. Intents are game state sensitive.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_process_stateless_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span>
 
@@ -300,10 +225,7 @@
         <span class="n">_process_menu_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span></div>
 
 
-<span class="c1">############################### INNER PROCESSORS - LOCAL ONLY ################################</span>
-
-
-<div class="viewcode-block" id="_process_stateless_intents"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_stateless_intents">[docs]</a><span class="k">def</span> <span class="nf">_process_stateless_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_process_stateless_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process intents that don&#39;t rely on game state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -348,10 +270,10 @@
         <span class="n">full_save_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">SAVE_PATH</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">save_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">full_save_path</span><span class="p">):</span>
             <span class="n">save</span> <span class="o">=</span> <span class="n">save_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">load_game</span><span class="p">(</span><span class="n">save</span><span class="p">)</span></div>
+            <span class="n">state</span><span class="o">.</span><span class="n">load_game</span><span class="p">(</span><span class="n">save</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="_process_game_map_intents"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_game_map_intents">[docs]</a><span class="k">def</span> <span class="nf">_process_game_map_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_process_game_map_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process intents for the player turn game state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -401,10 +323,10 @@
     <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span><span class="p">:</span>
         <span class="c1"># show</span>
         <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">MENU</span><span class="p">)</span>
-        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="_process_targeting_mode_intents"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_targeting_mode_intents">[docs]</a><span class="k">def</span> <span class="nf">_process_targeting_mode_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_process_targeting_mode_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process intents for the player turn game state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -451,20 +373,20 @@
 
                 <span class="c1"># resume previous state</span>
                 <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_previous</span><span class="p">())</span>
-                <span class="n">ui</span><span class="o">.</span><span class="n">update_targeting_overlay</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+                <span class="n">ui</span><span class="o">.</span><span class="n">update_targeting_overlay</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="_process_menu_intents"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_menu_intents">[docs]</a><span class="k">def</span> <span class="nf">_process_menu_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_process_menu_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">):</span>
     <span class="c1">## Exit current menu</span>
     <span class="k">if</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span><span class="p">:</span>
         <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_previous</span><span class="p">())</span>
-        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
 
 <span class="c1">################## HELPER FUNCTIONS ############################</span>
 
 
-<div class="viewcode-block" id="_process_skill_use"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._process_skill_use">[docs]</a><span class="k">def</span> <span class="nf">_process_skill_use</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_process_skill_use</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process the use of specified skill. Wrapper for actions needed to handle a full skill use. Assumed</span>
 <span class="sd">    &#39;can_use_skill&#39; already completed.</span>
@@ -486,13 +408,10 @@
             <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">!=</span> <span class="n">start_pos</span><span class="p">:</span>
                 <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">)</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Process skill use: tried to call camera but not init`d.&quot;</span><span class="p">)</span></div>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Process skill use: tried to call camera but not init`d.&quot;</span><span class="p">)</span>
 
 
-<span class="c1">######################### GET ##########################</span>
-
-
-<div class="viewcode-block" id="_get_pressed_direction"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._get_pressed_direction">[docs]</a><span class="k">def</span> <span class="nf">_get_pressed_direction</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DirectionType</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_get_pressed_direction</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DirectionType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the value of the directions pressed. Returns as (x, y). Values are ints between -1 and 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -516,10 +435,10 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">direction</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTRE</span>
 
-    <span class="k">return</span> <span class="n">direction</span></div>
+    <span class="k">return</span> <span class="n">direction</span>
 
 
-<div class="viewcode-block" id="_get_pressed_skills_name"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._get_pressed_skills_name">[docs]</a><span class="k">def</span> <span class="nf">_get_pressed_skills_name</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_get_pressed_skills_name</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the pressed skill number. Returns value of skill number pressed. If not found returns None.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -545,136 +464,7 @@
                     <span class="n">skill_name</span> <span class="o">=</span> <span class="n">skill_order</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;_get_pressed_skills_name: Tried to use skill </span><span class="si">{</span><span class="n">intent</span><span class="si">}</span><span class="s2"> but no skill in that slot.&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">skill_name</span></div>
-
-
-<span class="c1">############### DIRECT ACTIONS ############################</span>
-
-
-<div class="viewcode-block" id="_new_game"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._new_game">[docs]</a><span class="k">def</span> <span class="nf">_new_game</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a new game</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># create clean snecs.world</span>
-    <span class="n">empty_world</span> <span class="o">=</span> <span class="n">snecs</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">move_world</span><span class="p">(</span><span class="n">empty_world</span><span class="p">)</span>
-
-    <span class="c1"># init and save map</span>
-    <span class="n">game_map</span> <span class="o">=</span> <span class="n">GameMap</span><span class="p">(</span><span class="s2">&quot;cave&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span> <span class="o">=</span> <span class="n">game_map</span>
-
-    <span class="c1"># populate the map</span>
-    <span class="n">player_data</span> <span class="o">=</span> <span class="n">ActorData</span><span class="p">(</span>
-        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;player&quot;</span><span class="p">,</span>
-        <span class="n">possible_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;player&quot;</span><span class="p">],</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;a desc&quot;</span><span class="p">,</span>
-        <span class="n">position_offsets</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
-        <span class="n">trait_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;shoom&quot;</span><span class="p">,</span> <span class="s2">&quot;soft_tops&quot;</span><span class="p">,</span> <span class="s2">&quot;dandy&quot;</span><span class="p">],</span>
-    <span class="p">)</span>
-    <span class="n">game_map</span><span class="o">.</span><span class="n">generate_new_map</span><span class="p">(</span><span class="n">player_data</span><span class="p">)</span>
-
-    <span class="c1"># init the player</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-
-    <span class="c1"># create win condition and place next to player</span>
-    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-    <span class="n">win_x</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">win_y</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span>
-    <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">win_x</span><span class="p">,</span> <span class="n">win_y</span><span class="p">)))</span>  <span class="c1"># lets hope this doesnt spawn in a wall</span>
-    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">WinCondition</span><span class="p">())</span>
-    <span class="n">traits_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="n">idle</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">ASSET_PATH</span> <span class="o">/</span> <span class="s2">&quot;world/win_flag.png&quot;</span><span class="p">))]</span>
-    <span class="n">sprites</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">build_sprites_from_paths</span><span class="p">(</span><span class="n">traits_paths</span><span class="p">)</span>
-    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span><span class="p">,</span> <span class="n">sprites</span><span class="p">,</span> <span class="n">traits_paths</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">,</span> <span class="p">(</span><span class="n">win_x</span><span class="p">,</span> <span class="n">win_y</span><span class="p">)))</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_entity</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
-
-    <span class="c1"># tell places about the player</span>
-    <span class="n">chronicle</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
-
-    <span class="c1"># create a god</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="s2">&quot;the_small_gods&quot;</span><span class="p">)</span>
-
-    <span class="c1"># show the in game screens</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-
-    <span class="c1"># welcome message</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">create_screen_message</span><span class="p">(</span><span class="s2">&quot;Welcome to Not Quite Paradise&quot;</span><span class="p">)</span>
-
-    <span class="c1"># FIXME - entities load before camera so they cant get their screen position.</span>
-    <span class="c1">#  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">]):</span>
-        <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span>
-        <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span>
-
-    <span class="c1"># entities load with a blank fov, update them now</span>
-    <span class="n">vision</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
-    <span class="n">vision</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
-    <span class="n">vision</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
-
-    <span class="c1"># point the camera at the player, now that FOV is updated</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-    <span class="n">camera</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">)</span>
-    <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
-
-    <span class="c1"># loading finished, give player control</span>
-    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">)</span>
-
-    <span class="c1"># prompt turn actions</span>
-    <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="_load_game"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._load_game">[docs]</a><span class="k">def</span> <span class="nf">_load_game</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load existing game state</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">full_save_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">SAVE_PATH</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">save_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">full_save_path</span><span class="p">):</span>
-        <span class="n">save</span> <span class="o">=</span> <span class="n">save_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">load_game</span><span class="p">(</span><span class="n">save</span><span class="p">)</span>
-
-        <span class="c1"># show the in game screens</span>
-        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-
-        <span class="c1"># welcome message</span>
-        <span class="n">ui</span><span class="o">.</span><span class="n">create_screen_message</span><span class="p">(</span><span class="s2">&quot;Welcome back to Not Quite Paradise&quot;</span><span class="p">)</span>
-
-        <span class="c1"># loading finished, give player control</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="_exit_game"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._exit_game">[docs]</a><span class="k">def</span> <span class="nf">_exit_game</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Exit the game</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">EXITING</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="_quit_to_title"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._quit_to_title">[docs]</a><span class="k">def</span> <span class="nf">_quit_to_title</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Quit out of the game back to the title screen</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">MENU</span><span class="p">)</span>
-
-    <span class="c1"># hide the in game screens</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-
-    <span class="c1"># show the title screen</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="_win_game"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input_processors._win_game">[docs]</a><span class="k">def</span> <span class="nf">_win_game</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Trigger the win game actions</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">create_screen_message</span><span class="p">(</span><span class="s2">&quot;You wonned. Huzzah.&quot;</span><span class="p">)</span>
-    <span class="n">_quit_to_title</span><span class="p">()</span></div>
+    <span class="k">return</span> <span class="n">skill_name</span>
 </pre></div>
 
            </div>

@@ -4,18 +4,34 @@ scripts.nqp.processors package
 Submodules
 ----------
 
-scripts.nqp.processors.display\_processors module
--------------------------------------------------
+scripts.nqp.processors.display module
+-------------------------------------
 
-.. automodule:: scripts.nqp.processors.display_processors
+.. automodule:: scripts.nqp.processors.display
    :members:
    :undoc-members:
    :show-inheritance:
 
-scripts.nqp.processors.input\_processors module
------------------------------------------------
+scripts.nqp.processors.game module
+----------------------------------
 
-.. automodule:: scripts.nqp.processors.input_processors
+.. automodule:: scripts.nqp.processors.game
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.nqp.processors.input module
+-----------------------------------
+
+.. automodule:: scripts.nqp.processors.input
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.nqp.processors.intent module
+------------------------------------
+
+.. automodule:: scripts.nqp.processors.intent
    :members:
    :undoc-members:
    :show-inheritance:
