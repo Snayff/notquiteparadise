@@ -192,12 +192,12 @@ class CharacterSelector(UIPanel):
                 # f"{trait.name} <br>",
                 f"{trait.description} <br>",
                 f"<br>",
-                f"Clout: {trait.clout} <br>"
-                f"Vigour: {trait.vigour} <br>"
-                f"Skullduggery: {trait.skullduggery} <br>"
-                f"Bustle: {trait.bustle} <br>"
-                f"Exactitude: {trait.exactitude} <br>"
-                f"Permanent Afflictions: {trait.permanent_afflictions} <br>"
+                f"Clout: {trait.clout} <br>",
+                f"Vigour: {trait.vigour} <br>",
+                f"Skullduggery: {trait.skullduggery} <br>",
+                f"Bustle: {trait.bustle} <br>",
+                f"Exactitude: {trait.exactitude} <br>",
+                f"Permanent Afflictions: {trait.permanent_afflictions} <br>",
                 f"</font",
             ]
 
