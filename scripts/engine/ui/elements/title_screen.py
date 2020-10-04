@@ -28,14 +28,7 @@ class TitleScreen(UIPanel):
             "exit_game": pygame.event.Event(GameEvent.EXIT_GAME),
         }
 
-        width = rect.width
-        height = rect.height
-        self.button_height = int(height / 8)
-        self.button_width = int(width / 4)
-        self.button_start_x = int((width / 2) - (self.button_width / 2))
-        self.button_start_y = int(height / 4)
-        self.space_between_buttons = int(((height - self.button_start_y) / len(self.button_events)) -
-                                         self.button_height)
+
 
         self.buttons: List[UIButton] = []
 
@@ -73,14 +66,19 @@ class TitleScreen(UIPanel):
         """
         Init the buttons for the menu
         """
-        # extract values for performance
-        x = self.button_start_x
-        start_y = self.button_start_y
         info = self.button_events
-        width = self.button_width
-        height = self.button_height
-        gap = self.space_between_buttons
         manager = self.ui_manager
+
+        # set button dimensions
+        max_width = self.rect.width
+        max_height = self.rect.height
+        height = int(max_height / 8)
+        width = int(max_width / 4)
+        x = int((max_width / 2) - (width / 2))
+        start_y = int(max_height / 4)
+        gap = int(((max_height - start_y) / len(info)) - height)
+
+
 
         count = 0
         for name in info.keys():

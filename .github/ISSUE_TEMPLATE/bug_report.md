@@ -24,8 +24,8 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Platform:**
- - OS: e.g. Windows 10
- - Engine Version: e.g. 0.122.0
+ - OS: Windows 10
+ - Engine Version: 0.122.0
 
 **Log Output/Stack Trace**
 Add the game.log output or stack trace.

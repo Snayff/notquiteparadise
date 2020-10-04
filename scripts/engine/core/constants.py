@@ -90,6 +90,7 @@ class GameEvent(SimpleNamespace):
     LOAD_GAME = pygame.USEREVENT + 102
     EXIT_GAME = pygame.USEREVENT + 103
     WIN_CONDITION_MET = pygame.USEREVENT + 104
+    START_GAME = pygame.USEREVENT + 105
 
 
 class RenderLayer(SimpleNamespace):

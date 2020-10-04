@@ -7,12 +7,13 @@ import pygame
 import pygame_gui
 from pygame import Rect
 from pygame_gui import UIManager
-from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UIPanel
+from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UIPanel, UITextBox
 
 __all__ = ["CharacterSelector"]
 
 from scripts.engine import library
-from scripts.engine.core.constants import GAP_SIZE, RenderLayer, TILE_SIZE, TraitGroup
+from scripts.engine.core.constants import GAP_SIZE, GameEvent, RenderLayer, TILE_SIZE, TraitGroup
+from scripts.engine.core.definitions import ActorData
 from scripts.engine.utility import build_sprites_from_paths
 
 if TYPE_CHECKING:
@@ -27,11 +28,14 @@ class CharacterSelector(UIPanel):
 
     def __init__(self, rect: Rect, manager: UIManager):
 
-        self.button_events: Dict[str, Union[pygame.event.Event, Callable]] = {}
+        self.button_events: Dict[str, Union[pygame.event.Event, Callable]] = {
+            "confirm": self._post_confirm_event,
+        }
 
         # containers for created widgets
         self.buttons: List[UIButton] = []
         self.drop_downs: List[UIDropDownMenu] = []
+        self.text_boxes: List[UITextBox] = []
         self.ui_image: Optional[UIImage] = None
 
         # complete base class init
@@ -39,7 +43,7 @@ class CharacterSelector(UIPanel):
 
         self._init_buttons()
         self._init_drop_downs()
-        self._refresh_image()
+        self._refresh_info()
 
         # confirm init complete
         logging.debug(f"CharacterSelector initialised.")
@@ -64,7 +68,8 @@ class CharacterSelector(UIPanel):
                 button_id = ids[-1]  # get last element
                 new_event = self.button_events[button_id]
 
-                if isinstance(new_event, pygame.event.Event):
+                # post a blank event or process the func
+                if isinstance(new_event, pygame.event.EventType):
                     pygame.event.post(new_event)
                 else:
                     new_event()
@@ -73,13 +78,33 @@ class CharacterSelector(UIPanel):
 
         # handle new selection in drop downs
         if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
-            self._refresh_image()
+            self._refresh_info()
 
     def _init_buttons(self):
         """
         Init the buttons for the menu
         """
-        pass
+        manager = self.ui_manager
+
+        # set button dimensions
+        max_width = self.rect.width
+        max_height = self.rect.height
+        height = int(max_height / 12)
+        width = int(max_width / 6)
+        x = -width  # anchor top right
+        y = 0
+
+        button = UIButton(
+            relative_rect=Rect((x, y), (width, height)),
+            anchors={"left": "right", "right": "right", "top": "top", "bottom": "bottom"},
+            manager=manager,
+            container=self.get_container(),
+            text="Embark",
+            tool_tip_text="Confirm your selection and embark on your adventure.",
+            object_id="confirm"
+        )
+
+        self.buttons.append(button)
 
     def _init_drop_downs(self):
         """
@@ -97,7 +122,7 @@ class CharacterSelector(UIPanel):
         width = int((max_width / num_drop_downs) - (gap * num_drop_downs + 2))
         height = int(max_height / 12)
         start_x = 0
-        start_y = int((max_height / 3) * 2)  # anchored to the bottom left
+        start_y = int(max_height / 2)  # anchored to the bottom left
         max_expansion = int(start_y - height)
 
         # get traits
@@ -134,37 +159,106 @@ class CharacterSelector(UIPanel):
             count += 1
             self.drop_downs.append(drop_down)
 
-    def _refresh_image(self):
+    def _refresh_info(self):
         """
-        Update the image in line with drop down selections
+        Update the image and text in line with drop down selections
         """
-        width = TILE_SIZE * 4
-        height = TILE_SIZE * 4
-        x = int((self.rect.width / 2) - (width / 2))
-        y = int(self.rect.height / 10)
-        rect = Rect((x, y), (width, height))
+        # image dimensions
+        image_width = TILE_SIZE * 4
+        image_height = TILE_SIZE * 4
+        image_x = int((self.rect.width / 2) - (image_width / 2))
+        image_y = int(self.rect.height / 10)
+        image_rect = Rect((image_x, image_y), (image_width, image_height))
 
         # clear ui image if it exists
         if self.ui_image:
             self.ui_image.kill()
             self.ui_image = None
 
-        # get sprite paths from traits
+        # clear text box if it exists
+        if self.text_boxes:
+            for text_box in self.text_boxes:
+                text_box.kill()
+            self.text_boxes = []
+
+        # get info from traits
         sprite_paths = []
+        info = {}
+        info_rects = []
+        text_size = 4
+        col = "#ffffff"
         for drop_down in self.drop_downs:
             trait = library.TRAITS[drop_down.selected_option]
             sprite_paths.append(trait.sprite_paths)
+            info[trait.name] = [
+                f"<font face=barlow color={col} size={text_size}>"
+                # f"{trait.name} <br>",
+                f"{trait.description} <br>",
+                f"<br>",
+                f"Clout: {trait.clout} <br>"
+                f"Vigour: {trait.vigour} <br>"
+                f"Skullduggery: {trait.skullduggery} <br>"
+                f"Bustle: {trait.bustle} <br>"
+                f"Exactitude: {trait.exactitude} <br>"
+                f"Permanent Afflictions: {trait.permanent_afflictions} <br>"
+                f"</font"
+            ]
+            
+            # info dimensions
+            drop_down_rect = drop_down.rect
+            info_width = drop_down_rect.width
+            info_height = int((self.rect.height - drop_down_rect.y) - drop_down_rect.height)
+            info_x = drop_down_rect.x
+            info_y = drop_down_rect.y + drop_down_rect.height
+            info_rects.append(Rect((info_x, info_y), (info_width, info_height)))
 
         # sort and build into sprites
         sprite_paths.sort(key=lambda path: path.render_order, reverse=True)
-        sprites = build_sprites_from_paths(sprite_paths, (width, height))
+        sprites = build_sprites_from_paths(sprite_paths, (image_width, image_height))
 
         # create UI image
         ui_image = UIImage(
-            relative_rect=rect,
+            relative_rect=image_rect,
             image_surface=sprites.idle,
             manager=self.ui_manager,
             container=self.get_container()
         )
-
         self.ui_image = ui_image
+
+        # create the text boxes
+        count = 0
+        for name, details in info.items():
+            text_box = UITextBox(
+                html_text=" ".join(details),
+                relative_rect=info_rects[count],
+                manager=self.ui_manager,
+                object_id="name",
+                container=self.get_container(),
+                
+            )
+            count += 1
+            self.text_boxes.append(text_box)
+
+    def _post_confirm_event(self):
+        """
+        Post the confirm event to be picked up elsewhere. Includes the selected data.
+        """
+        # get trait names
+        traits = []
+        for drop_down in self.drop_downs:
+            traits.append(drop_down.selected_option)
+
+        # get player data
+        player_data = ActorData(
+            key="player",
+            possible_names=["player"],
+            description="Player desc",
+            position_offsets=[(0, 0)],
+            trait_names=traits,
+        )
+
+        # fire event
+        new_event = pygame.event.Event(GameEvent.START_GAME, player_data=player_data)
+        pygame.event.post(new_event)
+
+

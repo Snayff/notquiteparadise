@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import os
 from threading import Timer
+from typing import List
 
 import snecs
+from snecs import Component
 
 from scripts.engine import chronicle, state, utility, world
 from scripts.engine.component import Aesthetic, Position, WinCondition
@@ -14,7 +16,7 @@ from scripts.engine.systems import vision
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.game_map import GameMap
 
-__all__ = ["initialise_game", "new_game", "load_game", "exit_game", "win_game"]
+__all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game"]
 
 
 def initialise_game():
@@ -25,13 +27,17 @@ def initialise_game():
     ui.set_element_visibility(UIElement.TITLE_SCREEN, True)
 
 
-def new_game():
+def goto_character_select():
     """
     Create a new game
     """
     ui.set_element_visibility(UIElement.CHARACTER_SELECTOR, True)
-    return
 
+
+def start_game(player_data: ActorData):
+    """
+    Create a new game and show the gamemap
+    """
     # create clean snecs.world
     empty_world = snecs.World()
     world.move_world(empty_world)
@@ -41,13 +47,6 @@ def new_game():
     store.current_game_map = game_map
 
     # populate the map
-    player_data = ActorData(
-        key="player",
-        possible_names=["player"],
-        description="a desc",
-        position_offsets=[(0, 0)],
-        trait_names=["shoom", "soft_tops", "dandy"],
-    )
     game_map.generate_new_map(player_data)
 
     # init the player
@@ -57,7 +56,7 @@ def new_game():
     player_pos = world.get_entitys_component(player, Position)
     win_x = player_pos.x + 1
     win_y = player_pos.y
-    components = []
+    components: List[Component] = []
     components.append(Position((win_x, win_y)))  # lets hope this doesnt spawn in a wall
     components.append(WinCondition())
     traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/win_flag.png"))]
@@ -82,6 +81,8 @@ def new_game():
     # FIXME - entities load before camera so they cant get their screen position.
     #  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
+        assert isinstance(aesthetic, Aesthetic)
+        assert isinstance(position, Position)
         aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
         aesthetic.target_draw_x = aesthetic.draw_x
         aesthetic.target_draw_y = aesthetic.draw_y
