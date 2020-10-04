@@ -13,8 +13,6 @@ from scripts.nqp.processors.intent import process_intent
 __all__ = ["process_event"]
 
 
-
-
 def process_event(event: pygame.event, game_state: GameStateType):
     """
     Extract the intent from the event and process them in the context of the game state. If an event can only be

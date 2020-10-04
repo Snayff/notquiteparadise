@@ -20,6 +20,7 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.elements.camera import Camera
+from scripts.engine.ui.elements.character_selector import CharacterSelector
 from scripts.engine.ui.elements.data_editor import DataEditor
 from scripts.engine.ui.elements.dungen_viewer import DungenViewer
 from scripts.engine.ui.elements.message_log import MessageLog
@@ -32,7 +33,9 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict, Tuple
 
-_ui_element_union = Union[MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo, DungenViewer]
+_ui_element_union = Union[
+    MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo, DungenViewer, TitleScreen, CharacterSelector
+]
 
 __all__ = ["ui"]
 
@@ -209,10 +212,10 @@ class UI:
         title_screen_y = 0
 
         # Dungeon dev view
-        dungeon_dev_view_width = base_width
-        dungeon_dev_view_height = base_height
-        dungeon_dev_view_x = 0
-        dungeon_dev_view_y = 0
+        dungen_viewer_width = base_width
+        dungen_viewer_height = base_height
+        dungen_viewer_x = 0
+        dungen_viewer_y = 0
 
         # Tile Info
         tile_info_width = int(base_width * 0.19)
@@ -223,14 +226,20 @@ class UI:
         # Data Editor
         data_width = base_width
         data_height = base_height
-        data_x = 5
-        data_y = 10
+        data_x = 0
+        data_y = 0
 
         # Npc info
         npc_info_width = base_width / 2
         npc_info_height = base_height - (base_height / 4)
         npc_info_x = 5
         npc_info_y = 10
+
+        # character selector
+        char_selector_width = base_width
+        char_selector_height = base_height
+        char_selector_x = 0
+        char_selector_y = 0
 
         layout = {
             UIElement.MESSAGE_LOG: (MessageLog, pygame.Rect((message_x, message_y), (message_width, message_height))),
@@ -243,14 +252,16 @@ class UI:
             UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height))),
             UIElement.DUNGEN_VIEWER: (
                 DungenViewer,
-                pygame.Rect(
-                    (dungeon_dev_view_x, dungeon_dev_view_y), (dungeon_dev_view_width, dungeon_dev_view_height)
-                ),
+                pygame.Rect((dungen_viewer_x, dungen_viewer_y), (dungen_viewer_width, dungen_viewer_height)),
             ),
             UIElement.ACTOR_INFO: (ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height))),
             UIElement.TITLE_SCREEN: (
                 TitleScreen,
                 pygame.Rect((title_screen_x, title_screen_y), (title_screen_width, title_screen_height)),
+            ),
+            UIElement.CHARACTER_SELECTOR: (
+                CharacterSelector,
+                pygame.Rect((char_selector_x, char_selector_y), (char_selector_width, char_selector_height)),
             ),
         }
         self._element_details = layout

@@ -10,8 +10,6 @@ from scripts.nqp.processors.intent import process_intent
 __all__ = ["process_event"]
 
 
-
-
 def process_event(event: pygame.event, game_state: GameStateType):
     intent = None
 
@@ -22,7 +20,11 @@ def process_event(event: pygame.event, game_state: GameStateType):
 
     elif event.type == GameEvent.NEW_GAME:
         ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
-        command.new_game()
+        command.goto_character_select()
+
+    elif event.type == GameEvent.START_GAME:
+        ui.set_element_visibility(UIElement.CHARACTER_SELECTOR, False)
+        command.start_game(event.player_data)
 
     elif event.type == GameEvent.LOAD_GAME:
         ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
