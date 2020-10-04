@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.129.0
+                0.130.0
               </div>
             
           
@@ -187,8 +187,10 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">snecs</span>
+<span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">Component</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">WinCondition</span>
@@ -199,7 +201,7 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.ui.manager</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;initialise_game&quot;</span><span class="p">,</span> <span class="s2">&quot;new_game&quot;</span><span class="p">,</span> <span class="s2">&quot;load_game&quot;</span><span class="p">,</span> <span class="s2">&quot;exit_game&quot;</span><span class="p">,</span> <span class="s2">&quot;win_game&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;initialise_game&quot;</span><span class="p">,</span> <span class="s2">&quot;goto_character_select&quot;</span><span class="p">,</span> <span class="s2">&quot;load_game&quot;</span><span class="p">,</span> <span class="s2">&quot;exit_game&quot;</span><span class="p">,</span> <span class="s2">&quot;win_game&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="initialise_game"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.initialise_game">[docs]</a><span class="k">def</span> <span class="nf">initialise_game</span><span class="p">():</span>
@@ -210,9 +212,16 @@
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="new_game"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.new_game">[docs]</a><span class="k">def</span> <span class="nf">new_game</span><span class="p">():</span>
+<div class="viewcode-block" id="goto_character_select"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.goto_character_select">[docs]</a><span class="k">def</span> <span class="nf">goto_character_select</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a new game</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CHARACTER_SELECTOR</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">start_game</span><span class="p">(</span><span class="n">player_data</span><span class="p">:</span> <span class="n">ActorData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a new game and show the gamemap</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># create clean snecs.world</span>
     <span class="n">empty_world</span> <span class="o">=</span> <span class="n">snecs</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
@@ -223,13 +232,6 @@
     <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span> <span class="o">=</span> <span class="n">game_map</span>
 
     <span class="c1"># populate the map</span>
-    <span class="n">player_data</span> <span class="o">=</span> <span class="n">ActorData</span><span class="p">(</span>
-        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;player&quot;</span><span class="p">,</span>
-        <span class="n">possible_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;player&quot;</span><span class="p">],</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;a desc&quot;</span><span class="p">,</span>
-        <span class="n">position_offsets</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
-        <span class="n">trait_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;shoom&quot;</span><span class="p">,</span> <span class="s2">&quot;soft_tops&quot;</span><span class="p">,</span> <span class="s2">&quot;dandy&quot;</span><span class="p">],</span>
-    <span class="p">)</span>
     <span class="n">game_map</span><span class="o">.</span><span class="n">generate_new_map</span><span class="p">(</span><span class="n">player_data</span><span class="p">)</span>
 
     <span class="c1"># init the player</span>
@@ -239,7 +241,7 @@
     <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="n">win_x</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">win_y</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span>
-    <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">components</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">win_x</span><span class="p">,</span> <span class="n">win_y</span><span class="p">)))</span>  <span class="c1"># lets hope this doesnt spawn in a wall</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">WinCondition</span><span class="p">())</span>
     <span class="n">traits_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="n">idle</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">ASSET_PATH</span> <span class="o">/</span> <span class="s2">&quot;world/win_flag.png&quot;</span><span class="p">))]</span>
@@ -264,6 +266,8 @@
     <span class="c1"># FIXME - entities load before camera so they cant get their screen position.</span>
     <span class="c1">#  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.</span>
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span>
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span>
@@ -282,7 +286,7 @@
     <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">)</span>
 
     <span class="c1"># prompt turn actions</span>
-    <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+    <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="load_game"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.load_game">[docs]</a><span class="k">def</span> <span class="nf">load_game</span><span class="p">():</span>

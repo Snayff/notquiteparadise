@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.129.0
+                0.130.0
               </div>
             
           
@@ -228,7 +228,9 @@
 <span class="c1">################################### IMAGES ########################################</span>
 
 
-<div class="viewcode-block" id="get_image"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.get_image">[docs]</a><span class="k">def</span> <span class="nf">get_image</span><span class="p">(</span><span class="n">img_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">:</span>
+<div class="viewcode-block" id="get_image"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.get_image">[docs]</a><span class="k">def</span> <span class="nf">get_image</span><span class="p">(</span>
+    <span class="n">img_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">),</span> <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the specified image and resize if dimensions provided. Dimensions are in (width, height) format. If img</span>
 <span class="sd">    path is &quot;none&quot; then a blank surface is created to the size of the desired dimensions, or TILE_SIZE if no</span>
@@ -249,7 +251,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">IMAGE_NOT_FOUND_PATH</span><span class="p">))</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Get_image: Tried to use </span><span class="si">{</span><span class="n">img_path</span><span class="si">}</span><span class="s2"> but it wasn`t found. Used the not_found image &quot;</span> <span class="sa">f</span><span class="s2">&quot;instead.&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Get_image: Tried to use </span><span class="si">{</span><span class="n">img_path</span><span class="si">}</span><span class="s2"> but it wasn`t found. Used the not_found image instead.&quot;</span>
                 <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
@@ -263,11 +265,15 @@
         <span class="c1"># add to storage</span>
         <span class="n">store</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">img_path</span><span class="si">}{</span><span class="n">desired_dimensions</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span>
 
-    <span class="k">return</span> <span class="n">image</span></div>
+    <span class="c1"># return a copy if requested</span>
+    <span class="k">if</span> <span class="n">copy</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">image</span></div>
 
 
 <div class="viewcode-block" id="get_images"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.get_images">[docs]</a><span class="k">def</span> <span class="nf">get_images</span><span class="p">(</span>
-    <span class="n">img_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
+    <span class="n">img_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">),</span> <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get a collection of images.</span>
@@ -275,7 +281,7 @@
     <span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">img_paths</span><span class="p">:</span>
-        <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_image</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">desired_dimensions</span><span class="p">))</span>
+        <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_image</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">desired_dimensions</span><span class="p">,</span> <span class="n">copy</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">images</span></div>
 
@@ -332,7 +338,7 @@
         <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span>
             <span class="n">desired_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">ICON_SIZE</span><span class="p">,</span> <span class="n">ICON_SIZE</span><span class="p">)</span>
 
-        <span class="n">sprites</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_images</span><span class="p">(</span><span class="n">path_list</span><span class="p">,</span> <span class="n">desired_size</span><span class="p">)</span>
+        <span class="n">sprites</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_images</span><span class="p">(</span><span class="n">path_list</span><span class="p">,</span> <span class="n">desired_size</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>  <span class="c1"># make sure to get copies</span>
 
     <span class="c1"># flatten the images</span>
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface_list</span> <span class="ow">in</span> <span class="n">sprites</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>

@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.129.0
+                0.130.0
               </div>
             
           
@@ -394,6 +394,57 @@ windows should super() call this class if they implement their own process_event
 <dl class="py attribute">
 <dt id="scripts.engine.ui.elements.camera.Camera._abc_impl">
 <code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.ui.elements.camera.Camera._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.engine.ui.elements.character_selector">
+<span id="scripts-engine-ui-elements-character-selector-module"></span><h2>scripts.engine.ui.elements.character_selector module<a class="headerlink" href="#module-scripts.engine.ui.elements.character_selector" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.ui.elements.character_selector.CharacterSelector">
+<em class="property">class </em><code class="sig-name descname">CharacterSelector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rect</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/rect.html#pygame.Rect" title="(in pygame v2.0.0.dev7)">pygame.Rect</a></span></em>, <em class="sig-param"><span class="n">manager</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pygame-gui.readthedocs.io/en/latest/pygame_gui.html#pygame_gui.ui_manager.UIManager" title="(in Pygame GUI v0.6.0)">pygame_gui.ui_manager.UIManager</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/ui/elements/character_selector.html#CharacterSelector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.character_selector.CharacterSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://pygame-gui.readthedocs.io/en/latest/pygame_gui.elements.html#pygame_gui.elements.ui_panel.UIPanel" title="(in Pygame GUI v0.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygame_gui.elements.ui_panel.UIPanel</span></code></a></p>
+<p>A menu widget. Used to hold a collection of text, images, buttons etc. Expects to have buttons and provides
+functionality to handle the clicks</p>
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.character_selector.CharacterSelector.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_delta</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/ui/elements/character_selector.html#CharacterSelector.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.character_selector.CharacterSelector.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update based on current state and data. Run every frame.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.character_selector.CharacterSelector.handle_events">
+<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/ui/elements/character_selector.html#CharacterSelector.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.character_selector.CharacterSelector.handle_events" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.character_selector.CharacterSelector._init_buttons">
+<code class="sig-name descname">_init_buttons</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/ui/elements/character_selector.html#CharacterSelector._init_buttons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.character_selector.CharacterSelector._init_buttons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init the buttons for the menu</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.character_selector.CharacterSelector._init_drop_downs">
+<code class="sig-name descname">_init_drop_downs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/ui/elements/character_selector.html#CharacterSelector._init_drop_downs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.character_selector.CharacterSelector._init_drop_downs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise the drop downs for the menu</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.character_selector.CharacterSelector._refresh_info">
+<code class="sig-name descname">_refresh_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/ui/elements/character_selector.html#CharacterSelector._refresh_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.character_selector.CharacterSelector._refresh_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the image and text in line with drop down selections</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.character_selector.CharacterSelector._post_confirm_event">
+<code class="sig-name descname">_post_confirm_event</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/ui/elements/character_selector.html#CharacterSelector._post_confirm_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.character_selector.CharacterSelector._post_confirm_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post the confirm event to be picked up elsewhere. Includes the selected data.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.ui.elements.character_selector.CharacterSelector._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.ui.elements.character_selector.CharacterSelector._abc_impl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

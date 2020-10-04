@@ -20,6 +20,14 @@ scripts.engine.ui.elements.camera module
    :undoc-members:
    :show-inheritance:
 
+scripts.engine.ui.elements.character\_selector module
+-----------------------------------------------------
+
+.. automodule:: scripts.engine.ui.elements.character_selector
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.engine.ui.elements.data\_editor module
 ----------------------------------------------
 

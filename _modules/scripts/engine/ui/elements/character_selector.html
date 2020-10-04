@@ -1,0 +1,492 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>scripts.engine.ui.elements.character_selector &mdash; NotQuiteParadise  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.130.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Core API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.extend_json.html">Extend Json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.queries.html">Queries</a></li>
+</ul>
+<p class="caption"><span class="caption-text">General API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/action.html">Action</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/chronicle.html">Chronicle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/debug.html">Debug</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/dungen.html">Dungen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/effect.html">Effect</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/key.html">Key</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/library.html">Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/state.html">State</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/thought.html">Thought</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/utility.html">Utility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world.html">World</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Systems API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/systems.html">Systems</a></li>
+</ul>
+<p class="caption"><span class="caption-text">World Objects API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.widgets.html">UI Widgets</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">NotQuiteParadise</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>scripts.engine.ui.elements.character_selector</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for scripts.engine.ui.elements.character_selector</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">pygame_gui</span>
+<span class="kn">from</span> <span class="nn">pygame</span> <span class="kn">import</span> <span class="n">Rect</span>
+<span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UIManager</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIDropDownMenu</span><span class="p">,</span> <span class="n">UIImage</span><span class="p">,</span> <span class="n">UIPanel</span><span class="p">,</span> <span class="n">UITextBox</span>
+
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">GAP_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">GameEvent</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">TraitGroup</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ActorData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.utility</span> <span class="kn">import</span> <span class="n">build_sprites_from_paths</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CharacterSelector&quot;</span><span class="p">]</span>
+
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="CharacterSelector"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.character_selector.CharacterSelector">[docs]</a><span class="k">class</span> <span class="nc">CharacterSelector</span><span class="p">(</span><span class="n">UIPanel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A menu widget. Used to hold a collection of text, images, buttons etc. Expects to have buttons and provides</span>
+<span class="sd">    functionality to handle the clicks</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_events</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;confirm&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post_confirm_event</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># containers for created widgets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UIButton</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drop_downs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UIDropDownMenu</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_boxes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UITextBox</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui_image</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UIImage</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># complete base class init</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">element_id</span><span class="o">=</span><span class="s2">&quot;character_selector&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_buttons</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_drop_downs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_info</span><span class="p">()</span>
+
+        <span class="c1"># confirm init complete</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CharacterSelector initialised.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CharacterSelector.update"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.character_selector.CharacterSelector.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update based on current state and data. Run every frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CharacterSelector.handle_events"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.character_selector.CharacterSelector.handle_events">[docs]</a>    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="c1"># handle button presses</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">user_type</span> <span class="o">==</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">UI_BUTTON_PRESSED</span><span class="p">:</span>
+
+            <span class="c1"># Find out which button we are clicking</span>
+            <span class="n">button</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ui_element</span>
+
+            <span class="c1"># post the new event</span>
+            <span class="k">if</span> <span class="n">button</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span>
+                <span class="c1"># get the id</span>
+                <span class="n">ids</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ui_object_id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+                <span class="n">button_id</span> <span class="o">=</span> <span class="n">ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># get last element</span>
+                <span class="n">new_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_events</span><span class="p">[</span><span class="n">button_id</span><span class="p">]</span>
+
+                <span class="c1"># post a blank event or process the func</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_event</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">EventType</span><span class="p">):</span>
+                    <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">new_event</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">new_event</span><span class="p">()</span>
+
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CharacterSelector button &#39;</span><span class="si">{</span><span class="n">button_id</span><span class="si">}</span><span class="s2">&#39; pressed.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># handle new selection in drop downs</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">user_type</span> <span class="o">==</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">UI_DROP_DOWN_MENU_CHANGED</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_info</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CharacterSelector._init_buttons"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.character_selector.CharacterSelector._init_buttons">[docs]</a>    <span class="k">def</span> <span class="nf">_init_buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Init the buttons for the menu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span>
+
+        <span class="c1"># set button dimensions</span>
+        <span class="n">max_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">max_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_height</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_width</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="n">width</span>  <span class="c1"># anchor top right</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">button</span> <span class="o">=</span> <span class="n">UIButton</span><span class="p">(</span>
+            <span class="n">relative_rect</span><span class="o">=</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)),</span>
+            <span class="n">anchors</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">},</span>
+            <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span>
+            <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Embark&quot;</span><span class="p">,</span>
+            <span class="n">tool_tip_text</span><span class="o">=</span><span class="s2">&quot;Confirm your selection and embark on your adventure.&quot;</span><span class="p">,</span>
+            <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;confirm&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">button</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CharacterSelector._init_drop_downs"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.character_selector.CharacterSelector._init_drop_downs">[docs]</a>    <span class="k">def</span> <span class="nf">_init_drop_downs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise the drop downs for the menu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">people</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">savvy</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">homeland</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span>
+        <span class="n">max_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">max_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+        <span class="n">num_drop_downs</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">gap</span> <span class="o">=</span> <span class="n">GAP_SIZE</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">max_width</span> <span class="o">/</span> <span class="n">num_drop_downs</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">gap</span> <span class="o">*</span> <span class="n">num_drop_downs</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_height</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="n">start_x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">start_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># anchored to the bottom left</span>
+        <span class="n">max_expansion</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_y</span> <span class="o">-</span> <span class="n">height</span><span class="p">)</span>
+
+        <span class="c1"># get traits</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">trait</span> <span class="ow">in</span> <span class="n">library</span><span class="o">.</span><span class="n">TRAITS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">trait</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">TraitGroup</span><span class="o">.</span><span class="n">PEOPLE</span><span class="p">:</span>
+                <span class="n">people</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">trait</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">TraitGroup</span><span class="o">.</span><span class="n">SAVVY</span><span class="p">:</span>
+                <span class="n">savvy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">trait</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">TraitGroup</span><span class="o">.</span><span class="n">HOMELAND</span><span class="p">:</span>
+                <span class="n">homeland</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="c1"># bundle trait lists with group name</span>
+        <span class="n">all_traits</span> <span class="o">=</span> <span class="p">[(</span><span class="n">people</span><span class="p">,</span> <span class="n">TraitGroup</span><span class="o">.</span><span class="n">PEOPLE</span><span class="p">),</span> <span class="p">(</span><span class="n">savvy</span><span class="p">,</span> <span class="n">TraitGroup</span><span class="o">.</span><span class="n">SAVVY</span><span class="p">),</span> <span class="p">(</span><span class="n">homeland</span><span class="p">,</span> <span class="n">TraitGroup</span><span class="o">.</span><span class="n">SAVVY</span><span class="p">)]</span>
+
+        <span class="c1"># create drop downs</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">traits</span><span class="p">,</span> <span class="n">trait_group</span> <span class="ow">in</span> <span class="n">all_traits</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">start_x</span> <span class="o">+</span> <span class="p">(</span><span class="n">count</span> <span class="o">*</span> <span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="n">gap</span><span class="p">))</span>
+            <span class="n">rect</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">start_y</span><span class="p">),</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+            <span class="n">drop_down</span> <span class="o">=</span> <span class="n">UIDropDownMenu</span><span class="p">(</span>
+                <span class="n">options_list</span><span class="o">=</span><span class="n">traits</span><span class="p">,</span>
+                <span class="n">starting_option</span><span class="o">=</span><span class="n">traits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span>
+                <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span>
+                <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+                <span class="n">object_id</span><span class="o">=</span><span class="n">trait_group</span><span class="p">,</span>
+                <span class="n">expansion_height_limit</span><span class="o">=</span><span class="n">max_expansion</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drop_downs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">drop_down</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CharacterSelector._refresh_info"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.character_selector.CharacterSelector._refresh_info">[docs]</a>    <span class="k">def</span> <span class="nf">_refresh_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the image and text in line with drop down selections</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># image dimensions</span>
+        <span class="n">image_width</span> <span class="o">=</span> <span class="n">TILE_SIZE</span> <span class="o">*</span> <span class="mi">4</span>
+        <span class="n">image_height</span> <span class="o">=</span> <span class="n">TILE_SIZE</span> <span class="o">*</span> <span class="mi">4</span>
+        <span class="n">image_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">image_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">image_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">image_rect</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">((</span><span class="n">image_x</span><span class="p">,</span> <span class="n">image_y</span><span class="p">),</span> <span class="p">(</span><span class="n">image_width</span><span class="p">,</span> <span class="n">image_height</span><span class="p">))</span>
+
+        <span class="c1"># clear ui image if it exists</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_image</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui_image</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui_image</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># clear text box if it exists</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_boxes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">text_box</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_boxes</span><span class="p">:</span>
+                <span class="n">text_box</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">text_boxes</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># get info from traits</span>
+        <span class="n">sprite_paths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">info_rects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">text_size</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span>
+        <span class="k">for</span> <span class="n">drop_down</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_downs</span><span class="p">:</span>
+            <span class="n">trait</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">TRAITS</span><span class="p">[</span><span class="n">drop_down</span><span class="o">.</span><span class="n">selected_option</span><span class="p">]</span>
+            <span class="n">sprite_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trait</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">[</span><span class="n">trait</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font face=barlow color=</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> size=</span><span class="si">{</span><span class="n">text_size</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+                <span class="c1"># f&quot;{trait.name} &lt;br&gt;&quot;,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">trait</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2"> &lt;br&gt;&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Clout: </span><span class="si">{</span><span class="n">trait</span><span class="o">.</span><span class="n">clout</span><span class="si">}</span><span class="s2"> &lt;br&gt;&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Vigour: </span><span class="si">{</span><span class="n">trait</span><span class="o">.</span><span class="n">vigour</span><span class="si">}</span><span class="s2"> &lt;br&gt;&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Skullduggery: </span><span class="si">{</span><span class="n">trait</span><span class="o">.</span><span class="n">skullduggery</span><span class="si">}</span><span class="s2"> &lt;br&gt;&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Bustle: </span><span class="si">{</span><span class="n">trait</span><span class="o">.</span><span class="n">bustle</span><span class="si">}</span><span class="s2"> &lt;br&gt;&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Exactitude: </span><span class="si">{</span><span class="n">trait</span><span class="o">.</span><span class="n">exactitude</span><span class="si">}</span><span class="s2"> &lt;br&gt;&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Permanent Afflictions: </span><span class="si">{</span><span class="n">trait</span><span class="o">.</span><span class="n">permanent_afflictions</span><span class="si">}</span><span class="s2"> &lt;br&gt;&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+
+            <span class="c1"># info dimensions</span>
+            <span class="n">drop_down_rect</span> <span class="o">=</span> <span class="n">drop_down</span><span class="o">.</span><span class="n">rect</span>
+            <span class="n">info_width</span> <span class="o">=</span> <span class="n">drop_down_rect</span><span class="o">.</span><span class="n">width</span>
+            <span class="n">info_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">drop_down_rect</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">drop_down_rect</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+            <span class="n">info_x</span> <span class="o">=</span> <span class="n">drop_down_rect</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">info_y</span> <span class="o">=</span> <span class="n">drop_down_rect</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">drop_down_rect</span><span class="o">.</span><span class="n">height</span>
+            <span class="n">info_rects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Rect</span><span class="p">((</span><span class="n">info_x</span><span class="p">,</span> <span class="n">info_y</span><span class="p">),</span> <span class="p">(</span><span class="n">info_width</span><span class="p">,</span> <span class="n">info_height</span><span class="p">)))</span>
+
+        <span class="c1"># sort and build into sprites</span>
+        <span class="n">sprite_paths</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">path</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">render_order</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sprites</span> <span class="o">=</span> <span class="n">build_sprites_from_paths</span><span class="p">(</span><span class="n">sprite_paths</span><span class="p">,</span> <span class="p">(</span><span class="n">image_width</span><span class="p">,</span> <span class="n">image_height</span><span class="p">))</span>
+
+        <span class="c1"># create UI image</span>
+        <span class="n">ui_image</span> <span class="o">=</span> <span class="n">UIImage</span><span class="p">(</span>
+            <span class="n">relative_rect</span><span class="o">=</span><span class="n">image_rect</span><span class="p">,</span>
+            <span class="n">image_surface</span><span class="o">=</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span><span class="p">,</span>
+            <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
+            <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui_image</span> <span class="o">=</span> <span class="n">ui_image</span>
+
+        <span class="c1"># create the text boxes</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">details</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">text_box</span> <span class="o">=</span> <span class="n">UITextBox</span><span class="p">(</span>
+                <span class="n">html_text</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">details</span><span class="p">),</span>
+                <span class="n">relative_rect</span><span class="o">=</span><span class="n">info_rects</span><span class="p">[</span><span class="n">count</span><span class="p">],</span>
+                <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
+                <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+            <span class="p">)</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">text_boxes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text_box</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CharacterSelector._post_confirm_event"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.character_selector.CharacterSelector._post_confirm_event">[docs]</a>    <span class="k">def</span> <span class="nf">_post_confirm_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Post the confirm event to be picked up elsewhere. Includes the selected data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># get trait names</span>
+        <span class="n">traits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">drop_down</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_downs</span><span class="p">:</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">drop_down</span><span class="o">.</span><span class="n">selected_option</span><span class="p">)</span>
+
+        <span class="c1"># get player data</span>
+        <span class="n">player_data</span> <span class="o">=</span> <span class="n">ActorData</span><span class="p">(</span>
+            <span class="n">key</span><span class="o">=</span><span class="s2">&quot;player&quot;</span><span class="p">,</span>
+            <span class="n">possible_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;player&quot;</span><span class="p">],</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Player desc&quot;</span><span class="p">,</span>
+            <span class="n">position_offsets</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
+            <span class="n">trait_names</span><span class="o">=</span><span class="n">traits</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># fire event</span>
+        <span class="n">new_event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">START_GAME</span><span class="p">,</span> <span class="n">player_data</span><span class="o">=</span><span class="n">player_data</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">new_event</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019-2020, Josh Snaith
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

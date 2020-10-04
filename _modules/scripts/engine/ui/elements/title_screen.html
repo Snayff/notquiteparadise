@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.129.0
+                0.130.0
               </div>
             
           
@@ -207,19 +207,11 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">buttons_info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_events</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;new_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_GAME</span><span class="p">),</span>
             <span class="s2">&quot;load_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">LOAD_GAME</span><span class="p">),</span>
             <span class="s2">&quot;exit_game&quot;</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">),</span>
         <span class="p">}</span>
-
-        <span class="n">width</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">width</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">button_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">button_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">button_start_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">button_start_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">space_between_buttons</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(((</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_start_y</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buttons_info</span><span class="p">))</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_height</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UIButton</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -248,7 +240,7 @@
                 <span class="c1"># get the id</span>
                 <span class="n">ids</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ui_object_id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
                 <span class="n">button_id</span> <span class="o">=</span> <span class="n">ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># get last element</span>
-                <span class="n">new_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons_info</span><span class="p">[</span><span class="n">button_id</span><span class="p">]</span>
+                <span class="n">new_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_events</span><span class="p">[</span><span class="n">button_id</span><span class="p">]</span>
                 <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">new_event</span><span class="p">)</span>
 
                 <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TitleScreen button &#39;</span><span class="si">{</span><span class="n">button_id</span><span class="si">}</span><span class="s2">&#39; pressed.&quot;</span><span class="p">)</span></div>
@@ -257,14 +249,17 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Init the buttons for the menu</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># extract values for performance</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_start_x</span>
-        <span class="n">start_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_start_y</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons_info</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_width</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_height</span>
-        <span class="n">gap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">space_between_buttons</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_events</span>
         <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span>
+
+        <span class="c1"># set button dimensions</span>
+        <span class="n">max_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">max_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_height</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_width</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">max_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">start_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_height</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">gap</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(((</span><span class="n">max_height</span> <span class="o">-</span> <span class="n">start_y</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">))</span> <span class="o">-</span> <span class="n">height</span><span class="p">)</span>
 
         <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
