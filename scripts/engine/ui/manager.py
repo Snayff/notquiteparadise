@@ -20,6 +20,7 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.elements.camera import Camera
+from scripts.engine.ui.elements.character_selector import CharacterSelector
 from scripts.engine.ui.elements.data_editor import DataEditor
 from scripts.engine.ui.elements.dungen_viewer import DungenViewer
 from scripts.engine.ui.elements.message_log import MessageLog
@@ -32,7 +33,8 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict, Tuple
 
-_ui_element_union = Union[MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo, DungenViewer]
+_ui_element_union = Union[MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo, DungenViewer, TitleScreen,
+CharacterSelector]
 
 __all__ = ["ui"]
 
@@ -231,6 +233,9 @@ class UI:
         npc_info_height = base_height - (base_height / 4)
         npc_info_x = 5
         npc_info_y = 10
+
+        # character selector
+
 
         layout = {
             UIElement.MESSAGE_LOG: (MessageLog, pygame.Rect((message_x, message_y), (message_width, message_height))),

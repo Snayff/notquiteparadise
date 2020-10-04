@@ -57,7 +57,7 @@ TerrainCollisionType = NewType("TerrainCollisionType", str)
 TravelMethodType = NewType("TravelMethodType", str)
 ProjectileExpiryType = NewType("ProjectileExpiryType", str)
 ProjectileSpeedType = NewType("ProjectileSpeedType", int)
-UIElementType = NewType("UIElementType", int)
+UIElementType = NewType("UIElementType", str)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
 TraitGroupType = NewType("TraitGroupType", str)
@@ -124,15 +124,16 @@ class UIElement(SimpleNamespace):
     The different, single instance UI elements
     """
 
-    MESSAGE_LOG = UIElementType(1)
-    ACTOR_INFO = UIElementType(2)
-    SKILL_BAR = UIElementType(4)
-    ENTITY_QUEUE = UIElementType(5)
-    CAMERA = UIElementType(6)
-    DATA_EDITOR = UIElementType(7)
-    TILE_INFO = UIElementType(8)
-    DUNGEN_VIEWER = UIElementType(9)
-    TITLE_SCREEN = UIElementType(10)
+    MESSAGE_LOG = UIElementType("message_log")
+    ACTOR_INFO = UIElementType("actor_info")
+    SKILL_BAR = UIElementType("skill_bar")
+    ENTITY_QUEUE = UIElementType("entity_queue")
+    CAMERA = UIElementType("camera")
+    DATA_EDITOR = UIElementType("data_editor")
+    TILE_INFO = UIElementType("tile_info")
+    DUNGEN_VIEWER = UIElementType("dungen_viewer")
+    TITLE_SCREEN = UIElementType("title_screen")
+    CHARACTER_SELECTOR = UIElementType("character_selector")
 
 
 class InputIntent(SimpleNamespace):
