@@ -21,7 +21,7 @@ class SkillBar(UIPanel):
     """
 
     def __init__(self, rect: Rect, manager: UIManager):
-        self.buttons_info = {
+        self.button_events = {
             "skill_0": pygame.event.Event(InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL0),
             "skill_1": pygame.event.Event(InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL1),
             "skill_2": pygame.event.Event(InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL2),
@@ -72,7 +72,7 @@ class SkillBar(UIPanel):
                 # get the id
                 ids = event.ui_object_id.split(".")
                 button_id = ids[-1]  # get last element
-                new_event = self.buttons_info[button_id]
+                new_event = self.button_events[button_id]
                 pygame.event.post(new_event)
 
                 logging.debug(f"SkillBar button '{ids}' was pressed.")
@@ -84,7 +84,7 @@ class SkillBar(UIPanel):
         # extract values for performance
         start_x = self.button_start_x
         y = self.button_start_y
-        info = self.buttons_info
+        info = self.button_events
         width = self.button_width
         height = self.button_height
         gap = self.space_between_buttons

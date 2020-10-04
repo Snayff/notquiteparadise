@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import cast
 
 import pytweening
 
@@ -9,8 +9,6 @@ from scripts.engine.component import Aesthetic
 from scripts.engine.core import queries
 from scripts.engine.utility import is_close
 
-if TYPE_CHECKING:
-    pass
 
 __all__ = ["process_display_updates"]
 

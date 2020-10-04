@@ -22,7 +22,7 @@ class TitleScreen(UIPanel):
 
     def __init__(self, rect: Rect, manager: UIManager):
 
-        self.buttons_info = {
+        self.button_events = {
             "new_game": pygame.event.Event(GameEvent.NEW_GAME),
             "load_game": pygame.event.Event(GameEvent.LOAD_GAME),
             "exit_game": pygame.event.Event(GameEvent.EXIT_GAME),
@@ -34,7 +34,8 @@ class TitleScreen(UIPanel):
         self.button_width = int(width / 4)
         self.button_start_x = int((width / 2) - (self.button_width / 2))
         self.button_start_y = int(height / 4)
-        self.space_between_buttons = int(((height - self.button_start_y) / len(self.buttons_info)) - self.button_height)
+        self.space_between_buttons = int(((height - self.button_start_y) / len(self.button_events)) -
+                                         self.button_height)
 
         self.buttons: List[UIButton] = []
 
@@ -63,7 +64,7 @@ class TitleScreen(UIPanel):
                 # get the id
                 ids = event.ui_object_id.split(".")
                 button_id = ids[-1]  # get last element
-                new_event = self.buttons_info[button_id]
+                new_event = self.button_events[button_id]
                 pygame.event.post(new_event)
 
                 logging.debug(f"TitleScreen button '{button_id}' pressed.")
@@ -75,7 +76,7 @@ class TitleScreen(UIPanel):
         # extract values for performance
         x = self.button_start_x
         start_y = self.button_start_y
-        info = self.buttons_info
+        info = self.button_events
         width = self.button_width
         height = self.button_height
         gap = self.space_between_buttons
