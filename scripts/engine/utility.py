@@ -43,7 +43,8 @@ __all__ = [
 ################################### IMAGES ########################################
 
 
-def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)) -> pygame.Surface:
+def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE),
+        copy: bool = False) -> pygame.Surface:
     """
     Get the specified image and resize if dimensions provided. Dimensions are in (width, height) format. If img
     path is "none" then a blank surface is created to the size of the desired dimensions, or TILE_SIZE if no
@@ -64,7 +65,7 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, T
             except:
                 image = pygame.image.load(str(IMAGE_NOT_FOUND_PATH)).convert_alpha()
                 logging.warning(
-                    f"Get_image: Tried to use {img_path} but it wasn`t found. Used the not_found image " f"instead."
+                    f"Get_image: Tried to use {img_path} but it wasn`t found. Used the not_found image instead."
                 )
     else:
         image = pygame.Surface((TILE_SIZE, TILE_SIZE))
@@ -78,19 +79,22 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, T
         # add to storage
         store.images[f"{img_path}{desired_dimensions}"] = image
 
-    return image
+    # return a copy if requested
+    if copy:
+        return image.copy()
+    else:
+        return image
 
 
-def get_images(
-    img_paths: List[str], desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)
-) -> List[pygame.Surface]:
+def get_images(img_paths: List[str], desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE),
+        copy: bool = False) -> List[pygame.Surface]:
     """
     Get a collection of images.
     """
     images = []
 
     for path in img_paths:
-        images.append(get_image(path, desired_dimensions))
+        images.append(get_image(path, desired_dimensions, copy))
 
     return images
 
@@ -147,7 +151,7 @@ def build_sprites_from_paths(
         if name == "path":
             desired_size = (ICON_SIZE, ICON_SIZE)
 
-        sprites[name] = get_images(path_list, desired_size)
+        sprites[name] = get_images(path_list, desired_size, True)  # make sure to get copies
 
     # flatten the images
     for name, surface_list in sprites.items():

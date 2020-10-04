@@ -29,6 +29,9 @@ def new_game():
     """
     Create a new game
     """
+    ui.set_element_visibility(UIElement.CHARACTER_SELECTOR, True)
+    return
+
     # create clean snecs.world
     empty_world = snecs.World()
     world.move_world(empty_world)
