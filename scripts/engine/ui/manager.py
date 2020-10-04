@@ -33,8 +33,9 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict, Tuple
 
-_ui_element_union = Union[MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo, DungenViewer, TitleScreen,
-CharacterSelector]
+_ui_element_union = Union[
+    MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo, DungenViewer, TitleScreen, CharacterSelector
+]
 
 __all__ = ["ui"]
 
@@ -241,41 +242,27 @@ class UI:
         char_selector_y = 0
 
         layout = {
-            UIElement.MESSAGE_LOG: (
-                MessageLog,
-                pygame.Rect((message_x, message_y), (message_width, message_height))
-            ),
+            UIElement.MESSAGE_LOG: (MessageLog, pygame.Rect((message_x, message_y), (message_width, message_height))),
             UIElement.TILE_INFO: (
                 TileInfo,
                 pygame.Rect((tile_info_x, tile_info_y), (tile_info_width, tile_info_height)),
             ),
-            UIElement.SKILL_BAR: (
-                SkillBar,
-                pygame.Rect((skill_x, skill_y), (skill_width, skill_height))
-            ),
-            UIElement.CAMERA: (
-                Camera,
-                pygame.Rect((camera_x, camera_y), (camera_width, camera_height))
-            ),
-            UIElement.DATA_EDITOR: (
-                DataEditor,
-                pygame.Rect((data_x, data_y), (data_width, data_height))
-            ),
+            UIElement.SKILL_BAR: (SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))),
+            UIElement.CAMERA: (Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))),
+            UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height))),
             UIElement.DUNGEN_VIEWER: (
                 DungenViewer,
                 pygame.Rect((dungen_viewer_x, dungen_viewer_y), (dungen_viewer_width, dungen_viewer_height)),
             ),
-            UIElement.ACTOR_INFO: (
-                ActorInfo,
-                pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height))),
+            UIElement.ACTOR_INFO: (ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height))),
             UIElement.TITLE_SCREEN: (
                 TitleScreen,
                 pygame.Rect((title_screen_x, title_screen_y), (title_screen_width, title_screen_height)),
             ),
             UIElement.CHARACTER_SELECTOR: (
                 CharacterSelector,
-                pygame.Rect((char_selector_x, char_selector_y), (char_selector_width, char_selector_height))
-            )
+                pygame.Rect((char_selector_x, char_selector_y), (char_selector_width, char_selector_height)),
+            ),
         }
         self._element_details = layout
 

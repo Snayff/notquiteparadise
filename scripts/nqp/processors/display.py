@@ -9,7 +9,6 @@ from scripts.engine.component import Aesthetic
 from scripts.engine.core import queries
 from scripts.engine.utility import is_close
 
-
 __all__ = ["process_display_updates"]
 
 

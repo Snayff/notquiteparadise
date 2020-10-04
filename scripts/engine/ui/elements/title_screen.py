@@ -28,8 +28,6 @@ class TitleScreen(UIPanel):
             "exit_game": pygame.event.Event(GameEvent.EXIT_GAME),
         }
 
-
-
         self.buttons: List[UIButton] = []
 
         # complete base class init
@@ -77,8 +75,6 @@ class TitleScreen(UIPanel):
         x = int((max_width / 2) - (width / 2))
         start_y = int(max_height / 4)
         gap = int(((max_height - start_y) / len(info)) - height)
-
-
 
         count = 0
         for name in info.keys():

@@ -43,8 +43,9 @@ __all__ = [
 ################################### IMAGES ########################################
 
 
-def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE),
-        copy: bool = False) -> pygame.Surface:
+def get_image(
+    img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE), copy: bool = False
+) -> pygame.Surface:
     """
     Get the specified image and resize if dimensions provided. Dimensions are in (width, height) format. If img
     path is "none" then a blank surface is created to the size of the desired dimensions, or TILE_SIZE if no
@@ -86,8 +87,9 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, T
         return image
 
 
-def get_images(img_paths: List[str], desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE),
-        copy: bool = False) -> List[pygame.Surface]:
+def get_images(
+    img_paths: List[str], desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE), copy: bool = False
+) -> List[pygame.Surface]:
     """
     Get a collection of images.
     """

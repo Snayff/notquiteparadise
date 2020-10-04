@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Callable, Optional, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Callable, Optional, Union
 
 import pygame
 import pygame_gui
@@ -9,12 +9,13 @@ from pygame import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UIPanel, UITextBox
 
-__all__ = ["CharacterSelector"]
-
 from scripts.engine import library
-from scripts.engine.core.constants import GAP_SIZE, GameEvent, RenderLayer, TILE_SIZE, TraitGroup
+from scripts.engine.core.constants import GAP_SIZE, TILE_SIZE, GameEvent, RenderLayer, TraitGroup
 from scripts.engine.core.definitions import ActorData
 from scripts.engine.utility import build_sprites_from_paths
+
+__all__ = ["CharacterSelector"]
+
 
 if TYPE_CHECKING:
     from typing import Dict, List
@@ -101,7 +102,7 @@ class CharacterSelector(UIPanel):
             container=self.get_container(),
             text="Embark",
             tool_tip_text="Confirm your selection and embark on your adventure.",
-            object_id="confirm"
+            object_id="confirm",
         )
 
         self.buttons.append(button)
@@ -135,11 +136,7 @@ class CharacterSelector(UIPanel):
                 homeland.append(key)
 
         # bundle trait lists with group name
-        all_traits = [
-            (people, TraitGroup.PEOPLE),
-            (savvy, TraitGroup.SAVVY),
-            (homeland, TraitGroup.SAVVY)
-        ]
+        all_traits = [(people, TraitGroup.PEOPLE), (savvy, TraitGroup.SAVVY), (homeland, TraitGroup.SAVVY)]
 
         # create drop downs
         count = 0
@@ -153,7 +150,7 @@ class CharacterSelector(UIPanel):
                 manager=manager,
                 container=self.get_container(),
                 object_id=trait_group,
-                expansion_height_limit=max_expansion
+                expansion_height_limit=max_expansion,
             )
 
             count += 1
@@ -201,9 +198,9 @@ class CharacterSelector(UIPanel):
                 f"Bustle: {trait.bustle} <br>"
                 f"Exactitude: {trait.exactitude} <br>"
                 f"Permanent Afflictions: {trait.permanent_afflictions} <br>"
-                f"</font"
+                f"</font",
             ]
-            
+
             # info dimensions
             drop_down_rect = drop_down.rect
             info_width = drop_down_rect.width
@@ -221,7 +218,7 @@ class CharacterSelector(UIPanel):
             relative_rect=image_rect,
             image_surface=sprites.idle,
             manager=self.ui_manager,
-            container=self.get_container()
+            container=self.get_container(),
         )
         self.ui_image = ui_image
 
@@ -234,7 +231,6 @@ class CharacterSelector(UIPanel):
                 manager=self.ui_manager,
                 object_id="name",
                 container=self.get_container(),
-                
             )
             count += 1
             self.text_boxes.append(text_box)
@@ -260,5 +256,3 @@ class CharacterSelector(UIPanel):
         # fire event
         new_event = pygame.event.Event(GameEvent.START_GAME, player_data=player_data)
         pygame.event.post(new_event)
-
-
