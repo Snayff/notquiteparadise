@@ -93,11 +93,10 @@ class SkillBar(UIPanel):
         count = 0
         for name in info.keys():
             x = start_x + ((width + gap) * count)
-            friendly_name = name.replace("_", " ")
 
             button = UIButton(
                 relative_rect=Rect((x, y), (width, height)),
-                text=friendly_name.title(),
+                text=f"{count + 1}",
                 manager=manager,
                 container=self.get_container(),
                 object_id=f"{name}",
