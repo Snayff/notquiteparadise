@@ -63,7 +63,7 @@ jobs:
       run: |
         git config --global user.name 'snayff'
         git config --global user.email 'snayff@users.noreply.github.com'
-        git add .coverage
+        git add logs/coverage.xml
         git commit -am "ci lint and test"
 
     - name: Git Status Check
