@@ -71,7 +71,7 @@ class Camera(UIPanel):
         self.overlay_directions: List[DirectionType] = []  # list of tuples
 
         # complete base class init
-        super().__init__(rect, RenderLayer.BOTTOM, manager, element_id="camera")
+        super().__init__(rect, RenderLayer.BOTTOM, manager, object_id="camera")
 
         # create game map
         blank_surf = Surface(rect.size, SRCALPHA)

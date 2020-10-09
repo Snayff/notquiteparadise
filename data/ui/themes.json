@@ -44,12 +44,26 @@
              "border_width": 0
          }
      },
-     "drop_down_menu": {
-         "misc": {
+     "#drop_down_text_prototype":
+    {
+        "font": {
+                "name": "barlow",
+                "size": "8",
+                "regular_path": "assets/fonts/Barlow-Light.otf"
+        },
+        "misc": {
              "shape": "rounded_rectangle",
              "shape_corner_radius": 10
          }
-     },
+    },
+    "drop_down_menu.button":
+    {
+        "prototype": "#drop_down_text_prototype"
+    },
+    "drop_down_menu.#drop_down_options_list.button":
+    {
+        "prototype": "#drop_down_text_prototype"
+    },
      "button": {
          "font": {
              "name": "barlow",

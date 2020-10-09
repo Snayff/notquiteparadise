@@ -19,7 +19,7 @@ class DungenViewer(UIPanel):
     """
 
     def __init__(self, rect: Rect, manager: pygame_gui.ui_manager.UIManager):
-        super().__init__(rect, RenderLayer.UI_WINDOW, manager, element_id="dungen_viewer")
+        super().__init__(rect, RenderLayer.UI_WINDOW, manager, object_id="dungen_viewer")
 
         # config of view
         self.sleep_per_room = 0.1

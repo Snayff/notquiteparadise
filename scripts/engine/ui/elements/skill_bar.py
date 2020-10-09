@@ -43,7 +43,7 @@ class SkillBar(UIPanel):
             rect,
             RenderLayer.UI_BASE,
             manager,
-            element_id="skill_bar",
+            object_id="skill_bar",
             anchors={"left": "left", "right": "right", "top": "bottom", "bottom": "bottom"},
         )
 

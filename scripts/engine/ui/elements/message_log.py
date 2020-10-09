@@ -32,7 +32,7 @@ class MessageLog(UIPanel):
             rect,
             RenderLayer.UI_BASE,
             manager,
-            element_id="message_log",
+            object_id="message_log",
             anchors={"left": "left", "right": "right", "top": "bottom", "bottom": "bottom"},
         )
 
