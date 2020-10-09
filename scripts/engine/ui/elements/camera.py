@@ -11,7 +11,7 @@ from pygame_gui import UIManager
 from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIButton, UIImage, UIPanel
 
-from scripts.engine import utility, world
+from scripts.engine import library, utility, world
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import TILE_SIZE, DirectionType, InputEvent, RenderLayer, UIElement
 from scripts.engine.utility import clamp, convert_tile_string_to_xy
@@ -26,13 +26,21 @@ class Camera(UIPanel):
     def __init__(self, rect: Rect, manager: UIManager):
         # FIXME - grid doesnt stay aligned to player movement/position
 
+        base_window_data = library.VIDEO_CONFIG.base_window
+        base_width = base_window_data.width
+        base_height = base_window_data.height
+
+        # base values
+        self._base_width = base_width
+        self._base_height = base_height
+
         # flags
         self.ignore_fov = False
         self.is_dirty = True
 
         # determine how many tiles to show
-        self.rows = rect.height // TILE_SIZE
-        self.columns = rect.width // TILE_SIZE
+        self.rows = self._base_height // TILE_SIZE
+        self.columns = self._base_width // TILE_SIZE
 
         # store this now so we can refer to it later
         game_map = world.get_game_map()
@@ -66,7 +74,7 @@ class Camera(UIPanel):
         super().__init__(rect, RenderLayer.BOTTOM, manager, element_id="camera")
 
         # create game map
-        blank_surf = Surface((rect.width, rect.height), SRCALPHA)
+        blank_surf = Surface(rect.size, SRCALPHA)
         self.game_map = UIImage(
             relative_rect=Rect((0, 0), rect.size),
             image_surface=blank_surf,
@@ -77,7 +85,10 @@ class Camera(UIPanel):
 
         # create grid
         self.grid = UIContainer(
-            relative_rect=Rect((0, 0), rect.size), manager=manager, container=self.get_container(), object_id="#grid"
+            relative_rect=Rect((0, 0), rect.size),
+            manager=manager,
+            container=self.get_container(),
+            object_id="#grid"
         )
 
         # update everything
@@ -175,7 +186,7 @@ class Camera(UIPanel):
             self._update_grid()
 
         # update entities in game map every frame
-        self._draw_game_map()
+        self._update_game_map()
         self._update_ui_element_pos()
 
         # all updates will have been processed
@@ -288,15 +299,13 @@ class Camera(UIPanel):
                 # set updated position
                 element.set_relative_position(updated_pos)
 
-    ############### DRAW ###########################
-
-    def _draw_game_map(self):
+    def _update_game_map(self):
         """
         Update the game map to show the current tiles and entities
         """
         # create new surface for the game map
-        map_width = self.game_map.rect.width
-        map_height = self.game_map.rect.height
+        map_width = self._base_width
+        map_height = self._base_height
         map_surf = Surface((map_width, map_height), SRCALPHA)
 
         # draw tiles
@@ -305,7 +314,6 @@ class Camera(UIPanel):
 
         # draw entities
         from scripts.engine.core import queries
-
         for entity, (pos, aesthetic) in queries.position_and_aesthetic:
             # if part of entity in camera view
             for offset in pos.offsets:
@@ -317,7 +325,11 @@ class Camera(UIPanel):
                     if tile.is_visible or self.ignore_fov:
                         self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
 
-        self.game_map.set_image(map_surf)
+        scaled_surf = pygame.transform.scale(map_surf, (self.game_map.rect.width, self.game_map.rect.height))
+
+        self.game_map.set_image(scaled_surf)
+
+    ############### DRAW ###########################
 
     def _draw_grid(self, tile_positions: Iterable):
         """
