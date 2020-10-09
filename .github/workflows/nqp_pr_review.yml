@@ -30,6 +30,7 @@ jobs:
         restore-keys: ${{ runner.os }}-pip-
 
     - name: Install dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
       run: |
         python -m pip install --upgrade poetry
         poetry config virtualenvs.create false
@@ -57,9 +58,15 @@ jobs:
       run: |
         poetry run python -m pytest --cov=.
 
+    - name: Git Status Check
+      if: github.repository == 'Snayff/notquiteparadise'
+      run: |
+        git status
+
     - name: Push changes
       if: github.repository == 'Snayff/notquiteparadise'
       run: |
+        git add .coverage
         git config --global user.name 'snayff'
         git config --global user.email 'snayff@users.noreply.github.com'
         git commit -am "ci lint and test"
