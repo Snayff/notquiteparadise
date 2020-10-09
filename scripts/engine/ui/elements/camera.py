@@ -79,7 +79,7 @@ class Camera(UIPanel):
             relative_rect=Rect((0, 0), rect.size),
             image_surface=blank_surf,
             manager=manager,
-            container=self.get_container(),
+            container=self,
             object_id="#game_map",
         )
 
@@ -87,7 +87,7 @@ class Camera(UIPanel):
         self.grid = UIContainer(
             relative_rect=Rect((0, 0), rect.size),
             manager=manager,
-            container=self.get_container(),
+            container=self,
             object_id="#grid"
         )
 

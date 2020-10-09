@@ -98,7 +98,7 @@ class SkillBar(UIPanel):
                 relative_rect=Rect((x, y), (width, height)),
                 text=f"{count + 1}",
                 manager=manager,
-                container=self.get_container(),
+                container=self,
                 object_id=f"{name}",
             )
 
