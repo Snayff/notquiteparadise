@@ -56,14 +56,14 @@ jobs:
     - name: Pytest with Coverage
       if: always()
       run: |
-        poetry run python -m pytest --cov=. --cov-report=xml:tests/_coverage/coverage.xml
+        poetry run python -m pytest --cov=. --cov-report=xml:./coverage.xml
 
     - name: Update Git
       if: github.repository == 'Snayff/notquiteparadise'
       run: |
         git config --global user.name 'snayff'
         git config --global user.email 'snayff@users.noreply.github.com'
-        git add tests/_coverage/coverage.xml
+        git add coverage.xml
         git commit -am "ci lint and test"
 
     - name: Git Status Check
