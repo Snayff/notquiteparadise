@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
 import snecs
+import tcod
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 
@@ -253,7 +254,6 @@ def create_combat_stats(entity: EntityID) -> CombatStats:
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 
-
 def get_game_map() -> GameMap:
     """
     Get current game_map
@@ -328,111 +328,44 @@ def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Di
     return cast(DirectionType, (dir_x, dir_y))
 
 
-def get_direct_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+def get_entity_blocking_movement_map() -> np.array:
     """
-    Get direction from an entity towards another entity`s location. Respects blocked tiles.
+    Return a Numpy array of bools, True for blocking and False for open
     """
-    # FIXME - update to use EC
-    pass
-    #
-    # log_string = f"{start_entity.name} is looking for a direct path to {target_entity.name}."
-    # logging.debug(log_string)
-    #
-    # direction_x = target_entity.x - start_entity.x
-    # direction_y = target_entity.y - start_entity.y
-    # distance = math.sqrt(direction_x ** 2 + direction_y ** 2)
-    #
-    # direction_x = int(round(direction_x / distance))
-    # direction_y = int(round(direction_y / distance))
-    #
-    # tile_is_blocked = _manager.Map._is_tile_blocking_movement(start_entity.x + direction_x,
-    #                                                               start_entity.y + direction_y)
-    #
-    # if not (tile_is_blocked or get_entity_at_position(start_entity.x + direction_x,
-    #                                                     start_entity.y + direction_y)):
-    #     log_string = f"{start_entity.name} found a direct path to {target_entity.name}."
-    #     logging.debug(log_string)
-    #
-    #     return direction_x, direction_y
-    # else:
-    #     log_string = f"{start_entity.name} did NOT find a direct path to {target_entity.name}."
-    #     logging.debug(log_string)
-    #
-    #     return start_entity.x, start_entity.y
+    # TODO - memoize
+    from scripts.engine.core import queries
+    game_map = get_game_map()
+    blocking_map = np.zeros((game_map.width, game_map.height), dtype=bool, order="F")
+    for entity, (pos, blocking) in queries.position_and_blocking:
+        if blocking.blocks_movement:
+            blocking_map[pos.x, pos.y] = True
 
 
 def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
     """
     Use a* pathfinding to get a direction from one entity to another
     """
-    pass
-    #
-    #
-    # max_path_length = 25
-    # game_map = get_game_map()
-    # entities = []
-    # for entity, (pos, blocking) in get_entitys_components([Position, Blocking]):
-    #     entities.append(entity)
-    # entity_to_move = start_entity
-    # target = target_entity
-    #
-    # log_string = f"{entity_to_move.name} is looking for a path to {target.name} with a*"
-    # logging.debug(log_string)
-    #
-    # # Create a FOV map that has the dimensions of the map
-    # fov = tcod.map_new(game_map.width, game_map.height)
-    #
-    # # Scan the current map each turn and set all the walls as unwalkable
-    # for y1 in range(game_map.height):
-    #     for x1 in range(game_map.width):
-    #         tcod.map_set_properties(fov, x1, y1, not game_map.tiles[x1][y1].blocks_sight,
-    #                                 not game_map.tiles[x1][y1].blocks_movement)
-    #
-    # # Scan all the objects to see if there are objects that must be navigated around
-    # # Check also that the object isn't  or the target (so that the start and the end points are free)
-    # # The AI class handles the situation if  is next to the target so it will not use this A* function
-    # # anyway
-    # for entity in entities:
-    #     if entity.blocks_movement and entity != entity_to_move and entity != target:
-    #         # Set the tile as a wall so it must be navigated around
-    #         tcod.map_set_properties(fov, entity.x, entity.y, True, False)
-    #
-    # # Allocate a A* path
-    # # The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited
-    # my_path = tcod.path_new_using_map(fov, 1.41)
-    #
-    # # Compute the path between `s coordinates and the target`s coordinates
-    # tcod.path_compute(my_path, entity_to_move.x, entity_to_move.y, target.x, target.y)
-    #
-    # # Check if the path exists, and in this case, also the path is shorter than max_path_length
-    # # The path size matters if you want the monster to use alternative longer paths (for example through
-    # # other rooms) if for example the player is in a corridor
-    # # It makes sense to keep path size relatively low to keep the monsters from running around the map if
-    # # there`s an alternative path really far away
-    # if not tcod.path_is_empty(my_path) and tcod.path_size(my_path) < max_path_length:
-    #     # Find the next coordinates in the computed full path
-    #     x, y = tcod.path_walk(my_path, True)
-    #
-    #     # convert to direction
-    #     direction_x = x - entity_to_move.x
-    #     direction_y = y - entity_to_move.y
-    #
-    #     log_string = f"{entity_to_move.name} found an a* path to {target.name}..."
-    #     log_string2 = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x}," \
-    #                   f"{y}] in direction " \
-    #                   f"[{direction_x},{direction_y}]"
-    #     logging.debug(log_string)
-    #     logging.debug(log_string2)
-    #
-    # else:
-    #     # no path found return no movement direction
-    #     direction_x, direction_y = 0, 0
-    #     log_string = f"{entity_to_move.name} did NOT find an a* path to {target.name}."
-    #     logging.debug(log_string)
-    #
-    # # Delete the path to free memory
-    # tcod.path_delete(my_path)
-    # return direction_x, direction_y
+    game_map = get_game_map()
+
+    # combine entity blocking and map blocking maps
+    cost_map = game_map.block_movement_map & get_entity_blocking_movement_map()
+
+    # create graph to represent the map and a pathfinder to navigate
+    graph = tcod.path.SimpleGraph(cost=np.asarray(cost_map, dtype=np.int8), cardinal=2, diagonal=0)
+    pathfinder = tcod.path.Pathfinder(graph)
+
+    # add points
+    pathfinder.add_root(start_pos)
+    path = pathfinder.path_to(target_pos)[1:].tolist()
+
+    # if there is a path then return direction
+    if path:
+        next_pos = path[0]
+        move_dir = next_pos[0] - start_pos[0], next_pos[1] - start_pos[1]
+        return move_dir
+
+    return None
+
 
 
 def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tuple[int, int]) -> DirectionType:

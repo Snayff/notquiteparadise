@@ -34,8 +34,8 @@ class GameMap:
 
         self.light_map: np.array = np.zeros((self.width, self.height), dtype=bool, order="F")
         self.tile_map: List[List[Tile]] = []
-        self._block_movement_map: np.array = np.zeros((self.width, self.height), dtype=bool, order="F")
-        self._block_sight_map: np.array = np.zeros((self.width, self.height), dtype=bool, order="F")
+        self._block_movement_map: np.ndarray = np.zeros((self.width, self.height), dtype=bool, order="F")
+        self._block_sight_map: np.ndarray = np.zeros((self.width, self.height), dtype=bool, order="F")
 
         self.generation_info: str = ""
 
@@ -138,7 +138,7 @@ class GameMap:
     ################### PROPERTIES ########################################
 
     @property
-    def block_movement_map(self) -> np.array:
+    def block_movement_map(self) -> np.ndarray:
         """
         Return a copy of an array containing ints, 0 for blocked and 1 for open
         """
@@ -149,7 +149,7 @@ class GameMap:
         return self._block_movement_map.copy("F")
 
     @property
-    def block_sight_map(self) -> np.array:
+    def block_sight_map(self) -> np.ndarray:
         """
         Return a copy of an array containing ints, 0 for blocked and 1 for open
         """
