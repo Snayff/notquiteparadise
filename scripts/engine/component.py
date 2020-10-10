@@ -507,11 +507,13 @@ class Opinion(RegisteredComponent):
 
 class FOV(RegisteredComponent):
     """
-    An entity's field of view.
+    An entity's field of view. Always starts blank.
     """
 
-    def __init__(self, fov_map: np.array):
-        self.map: np.array = fov_map
+    def __init__(self):
+        from scripts.engine import world
+        game_map = world.get_game_map()
+        self.map: np.array = game_map.block_sight_map
 
     def serialize(self):
         fov_map = self.map.tolist()
@@ -519,8 +521,9 @@ class FOV(RegisteredComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        fov_map = np.array(serialised)
-        return FOV(fov_map)
+        fov = FOV()
+        fov.map = np.array(serialised)
+        return fov
 
 
 class LightSource(RegisteredComponent):

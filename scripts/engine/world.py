@@ -132,7 +132,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(HasCombatStats())
     components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
     components.append(Traits(actor_data.trait_names))
-    components.append(FOV(create_fov_map()))
+    components.append(FOV())
     components.append(LightSource(2))
     components.append(Tracked(chronicle.get_time()))
 
@@ -241,14 +241,6 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
     affliction_data = library.AFFLICTIONS[name]
     affliction = action.affliction_registry[affliction_data.name](creator, target, duration)
     return affliction
-
-
-def create_fov_map() -> np.array:
-    """
-    Create a blank fov map
-    """
-    game_map = get_game_map()
-    return game_map.block_sight_map
 
 
 def create_combat_stats(entity: EntityID) -> CombatStats:

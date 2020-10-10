@@ -28,7 +28,7 @@ def process_light_map():
     light_map = game_map.light_map
 
     # create transparency layer
-    transparency = world.create_fov_map()
+    block_sight_map = game_map.block_sight_map
 
     # reset light map
     light_map[:] = False
@@ -44,7 +44,7 @@ def process_light_map():
         if max(abs(offset_x), abs(offset_y)) < MAX_ACTIVATION_DISTANCE:
 
             # create fov for light source
-            fov = tcod.map.compute_fov(transparency, (pos.x, pos.y), radius, FOV_LIGHT_WALLS, FOV_ALGORITHM)
+            fov = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), radius, FOV_LIGHT_WALLS, FOV_ALGORITHM)
             light_map |= fov
 
 
@@ -57,7 +57,8 @@ def process_fov():
     player_pos: Position = world.get_entitys_component(player, Position)
 
     # create transparency layer
-    transparency = world.create_fov_map()
+    game_map = world.get_game_map()
+    block_sight_map = game_map.block_sight_map
 
     for entity, (fov, pos, stats) in queries.position_and_fov_and_combat_stats:
 
@@ -69,7 +70,8 @@ def process_fov():
             stats = world.create_combat_stats(entity)
             sight_range = stats.sight_range
 
-            fov.map = tcod.map.compute_fov(transparency, (pos.x, pos.y), sight_range, FOV_LIGHT_WALLS, FOV_ALGORITHM)
+            fov.map = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), sight_range, FOV_LIGHT_WALLS,
+                                           FOV_ALGORITHM)
 
 
 def process_tile_visibility():
