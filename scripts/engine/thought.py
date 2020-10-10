@@ -16,11 +16,15 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     pass
 
+__all__ = ["Projectile"]
 
-class AIBehaviour(ABC):
+
+class AI(ABC):
     """
     Base class for AI behaviours.
     """
+    def __init__(self, attached_entity: int):
+        self.entity = attached_entity
 
     @abstractmethod
     def act(self):
@@ -30,13 +34,14 @@ class AIBehaviour(ABC):
         pass
 
 
-class ProjectileBehaviour(AIBehaviour):
+class Projectile(AI):
     """
     Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
     """
 
     def __init__(self, attached_entity: EntityID, data: ProjectileData):
-        self.entity = attached_entity  # the entity this component is attached too
+        super().__init__(attached_entity)
+
         self.data = data
         self.distance_travelled = 0
 
@@ -132,15 +137,31 @@ class ProjectileBehaviour(AIBehaviour):
         return should_activate, should_move
 
 
-class SkipTurnBehaviour(AIBehaviour):
+class SkipTurn(AI):
     """
     Just skips turn
     """
 
     def __init__(self, attached_entity: int):
-        self.entity = attached_entity
+        super().__init__(attached_entity)
 
     def act(self):
         name = world.get_name(self.entity)
         logging.debug(f"'{name}' skipped their turn.")
         chronicle.end_turn(self.entity, library.GAME_CONFIG.base_values.move_cost)
+
+
+class FollowPlayer(AI):
+    """
+    Basic AI to follow the player
+    """
+    def __init__(self, attached_entity: int):
+        super().__init__(attached_entity)
+
+    def act(self):
+        # get player position
+
+        name = world.get_name(self.entity)
+        logging.debug(f"'{name}' skipped their turn.")
+        chronicle.end_turn(self.entity, library.GAME_CONFIG.base_values.move_cost)
+

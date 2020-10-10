@@ -50,7 +50,7 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, ProjectileData
-from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
+from scripts.engine.thought import Projectile, SkipTurn
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -164,7 +164,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
 
         if data.group == TraitGroup.NPC:
             # FIXME - get behaviour
-            behaviour = SkipTurnBehaviour
+            behaviour = SkipTurn
 
     # add aesthetic
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
@@ -223,7 +223,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     entity = create_entity(projectile)
 
-    add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
+    add_component(entity, Behaviour(Projectile(entity, data)))
 
     move = action.skill_registry["move"]
     known_skills = [move]
@@ -248,9 +248,7 @@ def create_fov_map() -> np.array:
     Create a blank fov map
     """
     game_map = get_game_map()
-    return np.array(
-        [[not tile.blocks_sight for tile in column] for column in game_map.tile_map], dtype=bool, order="F",
-    )
+    return game_map.block_sight_map
 
 
 def create_combat_stats(entity: EntityID) -> CombatStats:
@@ -375,13 +373,13 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     """
     Use a* pathfinding to get a direction from one entity to another
     """
-    # FIXME - update to use EC
     pass
     #
+    #
     # max_path_length = 25
-    # game_map = _manager.game_map
+    # game_map = get_game_map()
     # entities = []
-    # for entity, (pos, blocking) in _manager.get_entitys_components(Position, Blocking):
+    # for entity, (pos, blocking) in get_entitys_components([Position, Blocking]):
     #     entities.append(entity)
     # entity_to_move = start_entity
     # target = target_entity

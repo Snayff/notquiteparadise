@@ -12,7 +12,7 @@ from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLay
 if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional, Type, Tuple
-    from scripts.engine.thought import AIBehaviour
+    from scripts.engine.thought import AI
     from scripts.engine.action import Affliction, Skill
     from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
@@ -328,7 +328,7 @@ class Behaviour(RegisteredComponent):
     An ai behaviour to control an entity.
     """
 
-    def __init__(self, behaviour: AIBehaviour):
+    def __init__(self, behaviour: AI):
         self.behaviour = behaviour
 
     def serialize(self):
@@ -337,9 +337,9 @@ class Behaviour(RegisteredComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        from scripts.engine.thought import SkipTurnBehaviour
+        from scripts.engine.thought import SkipTurn
 
-        skip_turn = SkipTurnBehaviour(serialised)
+        skip_turn = SkipTurn(serialised)
         # FIXME - need to deserialise behaviour properly
         return Behaviour(skip_turn)
 
