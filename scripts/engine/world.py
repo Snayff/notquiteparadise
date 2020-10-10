@@ -341,10 +341,15 @@ def get_entity_blocking_movement_map() -> np.array:
             blocking_map[pos.x, pos.y] = True
 
 
-def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+def get_a_star_direction(start_entity: EntityID, target_entity: EntityID) -> Optional[DirectionType]:
     """
     Use a* pathfinding to get a direction from one entity to another
     """
+    pos = get_entitys_component(start_entity, Position)
+    start_pos = (pos.x, pos.y)
+    pos = get_entitys_component(target_entity, Position)
+    target_pos = (pos.x, pos.y)
+
     game_map = get_game_map()
 
     # combine entity blocking and map blocking maps
@@ -361,7 +366,7 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     # if there is a path then return direction
     if path:
         next_pos = path[0]
-        move_dir = next_pos[0] - start_pos[0], next_pos[1] - start_pos[1]
+        move_dir = get_direction(start_pos, next_pos)
         return move_dir
 
     return None

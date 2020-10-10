@@ -16,7 +16,7 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     pass
 
-__all__ = ["Projectile"]
+__all__ = ["Projectile", "SkipTurn", "FollowPlayer"]
 
 
 class AI(ABC):
@@ -159,9 +159,24 @@ class FollowPlayer(AI):
         super().__init__(attached_entity)
 
     def act(self):
-        # get player position
+        entity = self.entity
+        
+        # get move direction
+        player = world.get_player()
+        move_dir = world.get_a_star_direction(entity, player)
 
-        name = world.get_name(self.entity)
-        logging.debug(f"'{name}' skipped their turn.")
-        chronicle.end_turn(self.entity, library.GAME_CONFIG.base_values.move_cost)
+        # get info for skill
+        move = world.get_known_skill(entity, "move")
+        pos = world.get_entitys_component(entity, Position)
+        target_tile = world.get_tile((pos.x, pos.y))
+        name = world.get_name(entity)
+
+        # attempt to use skill
+        if world.can_use_skill(entity, "move"):
+            world.use_skill(entity, move, target_tile, move_dir)
+            logging.debug(f"'{name}' moved to ({pos.x},{pos.y}).")
+        else:
+            logging.debug(f"'{name}' tried to move to ({pos.x},{pos.y}), but couldn`t.")
+
+        chronicle.end_turn(entity, library.GAME_CONFIG.base_values.move_cost)
 
