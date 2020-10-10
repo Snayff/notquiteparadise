@@ -85,10 +85,7 @@ class Camera(UIPanel):
 
         # create grid
         self.grid = UIContainer(
-            relative_rect=Rect((0, 0), rect.size),
-            manager=manager,
-            container=self,
-            object_id="#grid"
+            relative_rect=Rect((0, 0), rect.size), manager=manager, container=self, object_id="#grid"
         )
 
         # update everything
@@ -314,6 +311,7 @@ class Camera(UIPanel):
 
         # draw entities
         from scripts.engine.core import queries
+
         for entity, (pos, aesthetic) in queries.position_and_aesthetic:
             # if part of entity in camera view
             for offset in pos.offsets:
