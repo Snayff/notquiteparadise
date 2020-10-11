@@ -82,21 +82,6 @@ def _process_stateless_intents(intent: InputIntentType):
 
     elif intent == InputIntent.TEST:
         # add whatever we want to test here
-
-        player = world.get_player()
-        pos = world.get_entitys_component(player, Position)
-        start = (pos.x, pos.y)
-        goal = (pos.x - 3, pos.y)
-
-        game_map = world.get_game_map()
-        cost = [[not tile.blocks_movement for tile in columns] for columns in game_map.tile_map]
-        graph = tcod.path.SimpleGraph(cost=np.asarray(cost, dtype=np.int8), cardinal=2, diagonal=0)
-        pathfinder = tcod.path.Pathfinder(graph)
-        pathfinder.add_root(start)
-        path = pathfinder.path_to(goal)[1:].tolist()
-        if path:
-            target = path[0]
-            move_dir = target[0] - start[0], target[1] - start[1]
         breakpoint()
 
 

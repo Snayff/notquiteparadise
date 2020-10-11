@@ -332,7 +332,6 @@ def get_entity_blocking_movement_map() -> np.array:
     """
     Return a Numpy array of bools, True for blocking and False for open
     """
-    # TODO - memoize
     from scripts.engine.core import queries
     game_map = get_game_map()
     blocking_map = np.zeros((game_map.width, game_map.height), dtype=bool, order="F")
@@ -353,7 +352,7 @@ def get_a_star_direction(start_entity: EntityID, target_entity: EntityID) -> Opt
     game_map = get_game_map()
 
     # combine entity blocking and map blocking maps
-    cost_map = game_map.block_movement_map & get_entity_blocking_movement_map()
+    cost_map = game_map.block_movement_map | get_entity_blocking_movement_map()
 
     # create graph to represent the map and a pathfinder to navigate
     graph = tcod.path.SimpleGraph(cost=np.asarray(cost_map, dtype=np.int8), cardinal=2, diagonal=0)
