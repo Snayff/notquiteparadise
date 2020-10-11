@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.130.0
+                0.131.0
               </div>
             
           
@@ -188,6 +188,8 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tcod</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">library</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
@@ -265,12 +267,7 @@
 
     <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">TEST</span><span class="p">:</span>
         <span class="c1"># add whatever we want to test here</span>
-        <span class="kn">import</span> <span class="nn">os</span>
-
-        <span class="n">full_save_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">SAVE_PATH</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">save_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">full_save_path</span><span class="p">):</span>
-            <span class="n">save</span> <span class="o">=</span> <span class="n">save_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">load_game</span><span class="p">(</span><span class="n">save</span><span class="p">)</span>
+        <span class="n">breakpoint</span><span class="p">()</span>
 
 
 <span class="k">def</span> <span class="nf">_process_game_map_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">):</span>
@@ -294,7 +291,7 @@
     <span class="k">if</span> <span class="n">intent</span> <span class="ow">in</span> <span class="n">possible_move_intents</span> <span class="ow">and</span> <span class="n">position</span><span class="p">:</span>
         <span class="n">direction</span> <span class="o">=</span> <span class="n">_get_pressed_direction</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span>
         <span class="n">target_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
-        <span class="n">move</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_known_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="s2">&quot;move&quot;</span><span class="p">)</span>
+        <span class="n">move</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_known_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="s2">&quot;Move&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">move</span><span class="o">.</span><span class="n">target_directions</span><span class="p">:</span>
             <span class="n">_process_skill_use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 
@@ -397,7 +394,7 @@
 
     <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">use_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">):</span>
         <span class="n">world</span><span class="o">.</span><span class="n">pay_resource_cost</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">resource_cost</span><span class="p">)</span>
-        <span class="n">world</span><span class="o">.</span><span class="n">judge_action</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">judge_action</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="n">behaviour</span><span class="o">.</span><span class="n">process_interventions</span><span class="p">()</span>
         <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">time_cost</span><span class="p">)</span>
 

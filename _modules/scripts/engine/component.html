@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.130.0
+                0.131.0
               </div>
             
           
@@ -191,14 +191,12 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">RegisteredComponent</span>
 
-<span class="kn">import</span> <span class="nn">scripts.engine.utility</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">EffectType</span><span class="p">,</span> <span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">RenderLayerType</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pygame</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Tuple</span>
-    <span class="kn">from</span> <span class="nn">scripts.engine.thought</span> <span class="kn">import</span> <span class="n">AIBehaviour</span>
-    <span class="kn">from</span> <span class="nn">scripts.engine.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Skill</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">,</span> <span class="n">Skill</span>
     <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">TraitSpritePathsData</span><span class="p">,</span> <span class="n">TraitSpritesData</span>
 
 
@@ -418,9 +416,9 @@
             <span class="n">sprite_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="o">**</span><span class="n">sprite_path</span><span class="p">))</span>
 
         <span class="c1"># convert sprite paths to sprites</span>
-        <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span>
 
-        <span class="n">sprites</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">build_sprites_from_paths</span><span class="p">(</span><span class="n">sprite_paths</span><span class="p">)</span>
+        <span class="n">sprites</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">build_sprites_from_paths</span><span class="p">(</span><span class="n">sprite_paths</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span><span class="p">,</span> <span class="n">sprites</span><span class="p">,</span> <span class="n">sprite_paths</span><span class="p">,</span> <span class="n">render_layer</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span></div></div>
 
@@ -508,25 +506,26 @@
         <span class="k">return</span> <span class="n">Traits</span><span class="p">(</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Behaviour"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Behaviour">[docs]</a><span class="k">class</span> <span class="nc">Behaviour</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Thought"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Thought">[docs]</a><span class="k">class</span> <span class="nc">Thought</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An ai behaviour to control an entity.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">behaviour</span><span class="p">:</span> <span class="n">AIBehaviour</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">behaviour</span><span class="p">:</span> <span class="n">Behaviour</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">behaviour</span> <span class="o">=</span> <span class="n">behaviour</span>
 
-<div class="viewcode-block" id="Behaviour.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Behaviour.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># FIXME - need to deserialise behaviour properly</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">behaviour</span><span class="o">.</span><span class="n">entity</span></div>
+<div class="viewcode-block" id="Thought.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Thought.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;behaviour_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">behaviour</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">behaviour</span><span class="o">.</span><span class="n">entity</span><span class="p">}</span>
 
-<div class="viewcode-block" id="Behaviour.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Behaviour.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+        <span class="k">return</span> <span class="n">_dict</span></div>
+
+<div class="viewcode-block" id="Thought.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Thought.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">scripts.engine.thought</span> <span class="kn">import</span> <span class="n">SkipTurnBehaviour</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">action</span>
 
-        <span class="n">skip_turn</span> <span class="o">=</span> <span class="n">SkipTurnBehaviour</span><span class="p">(</span><span class="n">serialised</span><span class="p">)</span>
-        <span class="c1"># FIXME - need to deserialise behaviour properly</span>
-        <span class="k">return</span> <span class="n">Behaviour</span><span class="p">(</span><span class="n">skip_turn</span><span class="p">)</span></div></div>
+        <span class="n">behaviour</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">behaviour_registry</span><span class="p">[</span><span class="n">serialised</span><span class="p">[</span><span class="s2">&quot;behaviour_name&quot;</span><span class="p">]]</span>
+
+        <span class="k">return</span> <span class="n">Thought</span><span class="p">(</span><span class="n">behaviour</span><span class="p">(</span><span class="n">serialised</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]))</span></div></div>
 
 
 <div class="viewcode-block" id="Knowledge"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Knowledge">[docs]</a><span class="k">class</span> <span class="nc">Knowledge</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
@@ -574,12 +573,12 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Learn a new skill.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">skill</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">skill</span>
         <span class="k">if</span> <span class="n">add_to_order</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">skill_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skill_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">set_cooldown</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="Knowledge.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Knowledge.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;skill_names&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="p">,</span> <span class="s2">&quot;cooldowns&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">,</span> <span class="s2">&quot;skill_order&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_order</span><span class="p">}</span>
@@ -650,7 +649,7 @@
         <span class="k">if</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="c1"># if it is affect_stat remove the affect</span>
             <span class="k">if</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">AFFECT_STAT</span> <span class="ow">in</span> <span class="n">affliction</span><span class="o">.</span><span class="n">identity_tags</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
             <span class="c1"># remove from active list</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span></div></div>
@@ -692,11 +691,14 @@
 
 <div class="viewcode-block" id="FOV"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.FOV">[docs]</a><span class="k">class</span> <span class="nc">FOV</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    An entity&#39;s field of view.</span>
+<span class="sd">    An entity&#39;s field of view. Always starts blank.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fov_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">fov_map</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
+
+        <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">block_sight_map</span>
 
 <div class="viewcode-block" id="FOV.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.FOV.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fov_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -704,8 +706,9 @@
 
 <div class="viewcode-block" id="FOV.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.FOV.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
-        <span class="n">fov_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">serialised</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">FOV</span><span class="p">(</span><span class="n">fov_map</span><span class="p">)</span></div></div>
+        <span class="n">fov</span> <span class="o">=</span> <span class="n">FOV</span><span class="p">()</span>
+        <span class="n">fov</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">serialised</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fov</span></div></div>
 
 
 <div class="viewcode-block" id="LightSource"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.LightSource">[docs]</a><span class="k">class</span> <span class="nc">LightSource</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>

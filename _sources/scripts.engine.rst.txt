@@ -87,14 +87,6 @@ scripts.engine.state module
    :undoc-members:
    :show-inheritance:
 
-scripts.engine.thought module
------------------------------
-
-.. automodule:: scripts.engine.thought
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 scripts.engine.utility module
 -----------------------------
 

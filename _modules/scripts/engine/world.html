@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.130.0
+                0.131.0
               </div>
             
           
@@ -191,6 +191,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">snecs</span>
+<span class="kn">import</span> <span class="nn">tcod</span>
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">Component</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="n">new_entity</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
@@ -199,7 +200,6 @@
     <span class="n">FOV</span><span class="p">,</span>
     <span class="n">Aesthetic</span><span class="p">,</span>
     <span class="n">Afflictions</span><span class="p">,</span>
-    <span class="n">Behaviour</span><span class="p">,</span>
     <span class="n">Blocking</span><span class="p">,</span>
     <span class="n">HasCombatStats</span><span class="p">,</span>
     <span class="n">Identity</span><span class="p">,</span>
@@ -211,6 +211,7 @@
     <span class="n">Opinion</span><span class="p">,</span>
     <span class="n">Position</span><span class="p">,</span>
     <span class="n">Resources</span><span class="p">,</span>
+    <span class="n">Thought</span><span class="p">,</span>
     <span class="n">Tracked</span><span class="p">,</span>
     <span class="n">Traits</span><span class="p">,</span>
 <span class="p">)</span>
@@ -235,7 +236,6 @@
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.data</span> <span class="kn">import</span> <span class="n">store</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">ProjectileData</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.thought</span> <span class="kn">import</span> <span class="n">ProjectileBehaviour</span><span class="p">,</span> <span class="n">SkipTurnBehaviour</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.ui.manager</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.utility</span> <span class="kn">import</span> <span class="n">build_sprites_from_paths</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.combat_stats</span> <span class="kn">import</span> <span class="n">CombatStats</span>
@@ -244,7 +244,7 @@
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
-    <span class="kn">from</span> <span class="nn">scripts.engine.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Skill</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">,</span> <span class="n">Skill</span>
 
 <span class="c1">########################### LOCAL DEFINITIONS ##########################</span>
 
@@ -317,17 +317,17 @@
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HasCombatStats</span><span class="p">())</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Blocking</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">entity_blocks_sight</span><span class="p">))</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Traits</span><span class="p">(</span><span class="n">actor_data</span><span class="o">.</span><span class="n">trait_names</span><span class="p">))</span>
-    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FOV</span><span class="p">(</span><span class="n">create_fov_map</span><span class="p">()))</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FOV</span><span class="p">())</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LightSource</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tracked</span><span class="p">(</span><span class="n">chronicle</span><span class="o">.</span><span class="n">get_time</span><span class="p">()))</span>
 
     <span class="c1"># get info from traits</span>
     <span class="n">traits_paths</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># for aesthetic</span>
 
-    <span class="n">move</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">&quot;move&quot;</span><span class="p">]</span>
-    <span class="n">basic_attack</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">&quot;basic_attack&quot;</span><span class="p">]</span>
+    <span class="n">move</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">&quot;Move&quot;</span><span class="p">]</span>
+    <span class="n">basic_attack</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">&quot;BasicAttack&quot;</span><span class="p">]</span>
     <span class="n">known_skills</span> <span class="o">=</span> <span class="p">[</span><span class="n">move</span><span class="p">,</span> <span class="n">basic_attack</span><span class="p">]</span>  <span class="c1"># for knowledge</span>
-    <span class="n">skill_order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;basic_attack&quot;</span><span class="p">]</span>  <span class="c1"># for knowledge</span>
+    <span class="n">skill_order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BasicAttack&quot;</span><span class="p">]</span>  <span class="c1"># for knowledge</span>
     <span class="n">perm_afflictions_names</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># for affliction</span>
     <span class="n">behaviour</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -338,8 +338,7 @@
         <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">known_skills</span> <span class="o">!=</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
 
             <span class="k">for</span> <span class="n">skill_name</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">known_skills</span><span class="p">:</span>
-                <span class="n">skill_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">SKILLS</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span>
-                <span class="n">skill_class</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="n">skill_data</span><span class="o">.</span><span class="n">key</span><span class="p">]</span>
+                <span class="n">skill_class</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span>
                 <span class="n">known_skills</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill_class</span><span class="p">)</span>
                 <span class="n">skill_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill_name</span><span class="p">)</span>
 
@@ -348,8 +347,7 @@
                 <span class="n">perm_afflictions_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">group</span> <span class="o">==</span> <span class="n">TraitGroup</span><span class="o">.</span><span class="n">NPC</span><span class="p">:</span>
-            <span class="c1"># FIXME - get behaviour</span>
-            <span class="n">behaviour</span> <span class="o">=</span> <span class="n">SkipTurnBehaviour</span>
+            <span class="n">behaviour</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">behaviour_registry</span><span class="p">[</span><span class="n">actor_data</span><span class="o">.</span><span class="n">behaviour_name</span><span class="p">]</span>
 
     <span class="c1"># add aesthetic</span>
     <span class="n">traits_paths</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">path</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">render_order</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -373,7 +371,7 @@
 
     <span class="c1"># add behaviour  N.B. Can only be added once entity is created</span>
     <span class="k">if</span> <span class="n">behaviour</span><span class="p">:</span>
-        <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">(</span><span class="n">behaviour</span><span class="p">(</span><span class="n">entity</span><span class="p">)))</span>
+        <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Thought</span><span class="p">(</span><span class="n">behaviour</span><span class="p">(</span><span class="n">entity</span><span class="p">)))</span>
 
     <span class="c1"># give full resources N.B. Can only be added once entity is created</span>
     <span class="n">stats</span> <span class="o">=</span> <span class="n">create_combat_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
@@ -408,9 +406,10 @@
 
     <span class="n">entity</span> <span class="o">=</span> <span class="n">create_entity</span><span class="p">(</span><span class="n">projectile</span><span class="p">)</span>
 
-    <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">(</span><span class="n">ProjectileBehaviour</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">data</span><span class="p">)))</span>
+    <span class="n">behaviour</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">behaviour_registry</span><span class="p">[</span><span class="s2">&quot;Projectile&quot;</span><span class="p">]</span>
+    <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Thought</span><span class="p">(</span><span class="n">behaviour</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">data</span><span class="p">)))</span>  <span class="c1"># type: ignore  # this works for projecitle special case</span>
 
-    <span class="n">move</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">&quot;move&quot;</span><span class="p">]</span>
+    <span class="n">move</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">&quot;Move&quot;</span><span class="p">]</span>
     <span class="n">known_skills</span> <span class="o">=</span> <span class="p">[</span><span class="n">move</span><span class="p">]</span>
     <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">(</span><span class="n">known_skills</span><span class="p">))</span>
 
@@ -426,16 +425,6 @@
     <span class="n">affliction_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">AFFLICTIONS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
     <span class="n">affliction</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">affliction_registry</span><span class="p">[</span><span class="n">affliction_data</span><span class="o">.</span><span class="n">name</span><span class="p">](</span><span class="n">creator</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">affliction</span></div>
-
-
-<div class="viewcode-block" id="create_fov_map"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_fov_map">[docs]</a><span class="k">def</span> <span class="nf">create_fov_map</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a blank fov map</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[[</span><span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span> <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">column</span><span class="p">]</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tile_map</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">,</span>
-    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="create_combat_stats"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_combat_stats">[docs]</a><span class="k">def</span> <span class="nf">create_combat_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CombatStats</span><span class="p">:</span>
@@ -523,111 +512,52 @@
     <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">DirectionType</span><span class="p">,</span> <span class="p">(</span><span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="get_direct_direction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_direct_direction">[docs]</a><span class="k">def</span> <span class="nf">get_direct_direction</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+<div class="viewcode-block" id="get_entity_blocking_movement_map"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_entity_blocking_movement_map">[docs]</a><span class="k">def</span> <span class="nf">get_entity_blocking_movement_map</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get direction from an entity towards another entity`s location. Respects blocked tiles.</span>
+<span class="sd">    Return a Numpy array of bools, True for blocking and False for open</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># FIXME - update to use EC</span>
-    <span class="k">pass</span></div>
-    <span class="c1">#</span>
-    <span class="c1"># log_string = f&quot;{start_entity.name} is looking for a direct path to {target_entity.name}.&quot;</span>
-    <span class="c1"># logging.debug(log_string)</span>
-    <span class="c1">#</span>
-    <span class="c1"># direction_x = target_entity.x - start_entity.x</span>
-    <span class="c1"># direction_y = target_entity.y - start_entity.y</span>
-    <span class="c1"># distance = math.sqrt(direction_x ** 2 + direction_y ** 2)</span>
-    <span class="c1">#</span>
-    <span class="c1"># direction_x = int(round(direction_x / distance))</span>
-    <span class="c1"># direction_y = int(round(direction_y / distance))</span>
-    <span class="c1">#</span>
-    <span class="c1"># tile_is_blocked = _manager.Map._is_tile_blocking_movement(start_entity.x + direction_x,</span>
-    <span class="c1">#                                                               start_entity.y + direction_y)</span>
-    <span class="c1">#</span>
-    <span class="c1"># if not (tile_is_blocked or get_entity_at_position(start_entity.x + direction_x,</span>
-    <span class="c1">#                                                     start_entity.y + direction_y)):</span>
-    <span class="c1">#     log_string = f&quot;{start_entity.name} found a direct path to {target_entity.name}.&quot;</span>
-    <span class="c1">#     logging.debug(log_string)</span>
-    <span class="c1">#</span>
-    <span class="c1">#     return direction_x, direction_y</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     log_string = f&quot;{start_entity.name} did NOT find a direct path to {target_entity.name}.&quot;</span>
-    <span class="c1">#     logging.debug(log_string)</span>
-    <span class="c1">#</span>
-    <span class="c1">#     return start_entity.x, start_entity.y</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
+
+    <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
+    <span class="n">blocking_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_blocking</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocking</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
+            <span class="n">blocking_map</span><span class="p">[</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="n">blocking_map</span></div>
 
 
-<div class="viewcode-block" id="get_a_star_direction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_a_star_direction">[docs]</a><span class="k">def</span> <span class="nf">get_a_star_direction</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+<div class="viewcode-block" id="get_a_star_direction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_a_star_direction">[docs]</a><span class="k">def</span> <span class="nf">get_a_star_direction</span><span class="p">(</span><span class="n">start_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Use a* pathfinding to get a direction from one entity to another</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># FIXME - update to use EC</span>
-    <span class="k">pass</span></div>
-    <span class="c1">#</span>
-    <span class="c1"># max_path_length = 25</span>
-    <span class="c1"># game_map = _manager.game_map</span>
-    <span class="c1"># entities = []</span>
-    <span class="c1"># for entity, (pos, blocking) in _manager.get_entitys_components(Position, Blocking):</span>
-    <span class="c1">#     entities.append(entity)</span>
-    <span class="c1"># entity_to_move = start_entity</span>
-    <span class="c1"># target = target_entity</span>
-    <span class="c1">#</span>
-    <span class="c1"># log_string = f&quot;{entity_to_move.name} is looking for a path to {target.name} with a*&quot;</span>
-    <span class="c1"># logging.debug(log_string)</span>
-    <span class="c1">#</span>
-    <span class="c1"># # Create a FOV map that has the dimensions of the map</span>
-    <span class="c1"># fov = tcod.map_new(game_map.width, game_map.height)</span>
-    <span class="c1">#</span>
-    <span class="c1"># # Scan the current map each turn and set all the walls as unwalkable</span>
-    <span class="c1"># for y1 in range(game_map.height):</span>
-    <span class="c1">#     for x1 in range(game_map.width):</span>
-    <span class="c1">#         tcod.map_set_properties(fov, x1, y1, not game_map.tiles[x1][y1].blocks_sight,</span>
-    <span class="c1">#                                 not game_map.tiles[x1][y1].blocks_movement)</span>
-    <span class="c1">#</span>
-    <span class="c1"># # Scan all the objects to see if there are objects that must be navigated around</span>
-    <span class="c1"># # Check also that the object isn&#39;t  or the target (so that the start and the end points are free)</span>
-    <span class="c1"># # The AI class handles the situation if  is next to the target so it will not use this A* function</span>
-    <span class="c1"># # anyway</span>
-    <span class="c1"># for entity in entities:</span>
-    <span class="c1">#     if entity.blocks_movement and entity != entity_to_move and entity != target:</span>
-    <span class="c1">#         # Set the tile as a wall so it must be navigated around</span>
-    <span class="c1">#         tcod.map_set_properties(fov, entity.x, entity.y, True, False)</span>
-    <span class="c1">#</span>
-    <span class="c1"># # Allocate a A* path</span>
-    <span class="c1"># # The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited</span>
-    <span class="c1"># my_path = tcod.path_new_using_map(fov, 1.41)</span>
-    <span class="c1">#</span>
-    <span class="c1"># # Compute the path between `s coordinates and the target`s coordinates</span>
-    <span class="c1"># tcod.path_compute(my_path, entity_to_move.x, entity_to_move.y, target.x, target.y)</span>
-    <span class="c1">#</span>
-    <span class="c1"># # Check if the path exists, and in this case, also the path is shorter than max_path_length</span>
-    <span class="c1"># # The path size matters if you want the monster to use alternative longer paths (for example through</span>
-    <span class="c1"># # other rooms) if for example the player is in a corridor</span>
-    <span class="c1"># # It makes sense to keep path size relatively low to keep the monsters from running around the map if</span>
-    <span class="c1"># # there`s an alternative path really far away</span>
-    <span class="c1"># if not tcod.path_is_empty(my_path) and tcod.path_size(my_path) &lt; max_path_length:</span>
-    <span class="c1">#     # Find the next coordinates in the computed full path</span>
-    <span class="c1">#     x, y = tcod.path_walk(my_path, True)</span>
-    <span class="c1">#</span>
-    <span class="c1">#     # convert to direction</span>
-    <span class="c1">#     direction_x = x - entity_to_move.x</span>
-    <span class="c1">#     direction_y = y - entity_to_move.y</span>
-    <span class="c1">#</span>
-    <span class="c1">#     log_string = f&quot;{entity_to_move.name} found an a* path to {target.name}...&quot;</span>
-    <span class="c1">#     log_string2 = f&quot;-&gt; will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x},&quot; \</span>
-    <span class="c1">#                   f&quot;{y}] in direction &quot; \</span>
-    <span class="c1">#                   f&quot;[{direction_x},{direction_y}]&quot;</span>
-    <span class="c1">#     logging.debug(log_string)</span>
-    <span class="c1">#     logging.debug(log_string2)</span>
-    <span class="c1">#</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     # no path found return no movement direction</span>
-    <span class="c1">#     direction_x, direction_y = 0, 0</span>
-    <span class="c1">#     log_string = f&quot;{entity_to_move.name} did NOT find an a* path to {target.name}.&quot;</span>
-    <span class="c1">#     logging.debug(log_string)</span>
-    <span class="c1">#</span>
-    <span class="c1"># # Delete the path to free memory</span>
-    <span class="c1"># tcod.path_delete(my_path)</span>
-    <span class="c1"># return direction_x, direction_y</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">start_entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">start_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">target_entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">target_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
+
+    <span class="c1"># combine entity blocking and map blocking maps</span>
+    <span class="n">cost_map</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">block_movement_map</span> <span class="o">|</span> <span class="n">get_entity_blocking_movement_map</span><span class="p">()</span>
+
+    <span class="c1"># create graph to represent the map and a pathfinder to navigate</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">SimpleGraph</span><span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">cost_map</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">),</span> <span class="n">cardinal</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">diagonal</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">pathfinder</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Pathfinder</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
+    <span class="c1"># add points</span>
+    <span class="n">pathfinder</span><span class="o">.</span><span class="n">add_root</span><span class="p">(</span><span class="n">start_pos</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">pathfinder</span><span class="o">.</span><span class="n">path_to</span><span class="p">(</span><span class="n">target_pos</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="c1"># if there is a path then return direction</span>
+    <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
+        <span class="n">next_pos</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">move_dir</span> <span class="o">=</span> <span class="n">get_direction</span><span class="p">(</span><span class="n">start_pos</span><span class="p">,</span> <span class="n">next_pos</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">move_dir</span>
+
+    <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="get_reflected_direction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_reflected_direction">[docs]</a><span class="k">def</span> <span class="nf">get_reflected_direction</span><span class="p">(</span><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DirectionType</span><span class="p">:</span>
@@ -1186,7 +1116,7 @@
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;Could not apply skill &quot;</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s1">&quot;, target tile does not have required tags (</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">target_tags</span><span class="si">}</span><span class="s1">).&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;Could not apply skill &quot;</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">&quot;, target tile does not have required tags (</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">target_tags</span><span class="si">}</span><span class="s1">).&#39;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
@@ -1197,7 +1127,7 @@
 <span class="sd">    Sets a skill on cooldown</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">skill_instance</span><span class="o">.</span><span class="n">user</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">skill_instance</span><span class="o">.</span><span class="n">key</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">skill_instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
     <span class="n">knowledge</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">knowledge</span><span class="p">:</span>
         <span class="n">knowledge</span><span class="o">.</span><span class="n">set_skill_cooldown</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">skill_instance</span><span class="o">.</span><span class="n">base_cooldown</span><span class="p">)</span>
@@ -1226,7 +1156,7 @@
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s1">&#39;Could not apply affliction &quot;</span><span class="si">{</span><span class="n">affliction</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s1">&quot;, target tile does not have required &#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;Could not apply affliction &quot;</span><span class="si">{</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;, target tile does not have required &#39;</span>
                 <span class="sa">f</span><span class="s2">&quot;tags (</span><span class="si">{</span><span class="n">affliction</span><span class="o">.</span><span class="n">target_tags</span><span class="si">}</span><span class="s2">).&quot;</span>
             <span class="p">)</span>
 
@@ -1235,10 +1165,10 @@
 
 <div class="viewcode-block" id="take_turn"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.take_turn">[docs]</a><span class="k">def</span> <span class="nf">take_turn</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Process the entity&#39;s Behaviour component. If no component found then EndTurn event is fired.</span>
+<span class="sd">    Process the entity&#39;s Thought component. If no component found then EndTurn event is fired.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; is beginning their turn.&quot;</span><span class="p">)</span>
-    <span class="n">behaviour</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">)</span>
+    <span class="n">behaviour</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Thought</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">behaviour</span><span class="p">:</span>
         <span class="n">behaviour</span><span class="o">.</span><span class="n">behaviour</span><span class="o">.</span><span class="n">act</span><span class="p">()</span>
         <span class="k">return</span> <span class="kc">True</span>

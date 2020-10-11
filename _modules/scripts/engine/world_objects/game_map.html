@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.130.0
+                0.131.0
               </div>
             
           
@@ -188,14 +188,12 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ndarray</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">dungen</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Blocking</span><span class="p">,</span> <span class="n">Position</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TileCategory</span>
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">dungen</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">TileCategory</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ActorData</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
@@ -207,7 +205,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
-        <span class="c1"># FIXME - fix deserialisation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">map_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
@@ -219,8 +217,25 @@
         <span class="n">_map_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">MAPS</span><span class="p">[</span><span class="n">map_name</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">_map_data</span><span class="o">.</span><span class="n">width</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">_map_data</span><span class="o">.</span><span class="n">height</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">light_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tile</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_movement_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation_info</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_tile_map</span><span class="p">()</span>
+
+    <span class="c1">################ INIT ##################################################</span>
+
+<div class="viewcode-block" id="GameMap._init_tile_map"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap._init_tile_map">[docs]</a>    <span class="k">def</span> <span class="nf">_init_tile_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Only called during init to populate tile map with walls</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span>
+
+        <span class="n">_map_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">MAPS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
 
         <span class="c1"># get details for a wall tile</span>
         <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span>
@@ -234,23 +249,37 @@
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>  <span class="c1"># create new list for every col</span>
             <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">wall_sprite</span><span class="p">,</span> <span class="n">wall_sprite_path</span><span class="p">,</span> <span class="n">blocks_sight</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">wall_sprite</span><span class="p">,</span> <span class="n">wall_sprite_path</span><span class="p">,</span> <span class="n">blocks_sight</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="p">))</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">generation_info</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="c1">################## MAP GEN #############################################</span>
 
 <div class="viewcode-block" id="GameMap.generate_new_map"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap.generate_new_map">[docs]</a>    <span class="k">def</span> <span class="nf">generate_new_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_data</span><span class="p">:</span> <span class="n">ActorData</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate the map for the current game map. Creates tiles. Saves the values directly to the GameMap.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation_info</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="p">,</span> <span class="n">player_data</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation_info</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="p">,</span> <span class="n">player_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="GameMap.dump"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Dumps the dungeon tree into a file</span>
-<span class="sd">        :param path: File path</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
             <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation_info</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span></div>
+
+    <span class="c1">################### DATA MANAGEMENT ####################################</span>
+
+<div class="viewcode-block" id="GameMap.refresh_block_maps"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap.refresh_block_maps">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_block_maps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Refresh the data in the self._block_movement_map and self._block_sight_map</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">block_movement_map</span> <span class="o">=</span> <span class="p">[[</span><span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">]</span> <span class="k">for</span> <span class="n">columns</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_movement_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">block_movement_map</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+
+        <span class="n">block_sight_map</span> <span class="o">=</span> <span class="p">[[</span><span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span> <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">]</span> <span class="k">for</span> <span class="n">columns</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">block_sight_map</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span></div>
+
+    <span class="c1">################### SERIALISATION #####################################</span>
 
 <div class="viewcode-block" id="GameMap.serialise"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap.serialise">[docs]</a>    <span class="k">def</span> <span class="nf">serialise</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -273,6 +302,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the details from the serialised data back into the GameMap.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># FIXME - fix deserialisation</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">seed</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span>
             <span class="n">algo_name</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">&quot;algorithm_name&quot;</span><span class="p">]</span>
@@ -290,7 +320,31 @@
             <span class="k">return</span> <span class="n">game_map</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GameMap.Deserialise: Incorrect key (</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">) given. Data not loaded correctly.&quot;</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">Exception</span>  <span class="c1"># throw exception to hit outer error handler and exit</span></div></div>
+            <span class="k">raise</span> <span class="ne">Exception</span>  <span class="c1"># throw exception to hit outer error handler and exit</span></div>
+
+    <span class="c1">################### PROPERTIES ########################################</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">block_movement_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a copy of an array containing ints, 0 for blocked and 1 for open</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh_block_maps</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_movement_map</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">block_sight_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a copy of an array containing ints, 0 for blocked and 1 for open</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh_block_maps</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

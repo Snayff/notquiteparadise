@@ -12,6 +12,14 @@ scripts.nqp.actions.afflictions module
    :undoc-members:
    :show-inheritance:
 
+scripts.nqp.actions.behaviours module
+-------------------------------------
+
+.. automodule:: scripts.nqp.actions.behaviours
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.nqp.actions.skills module
 ---------------------------------
 
