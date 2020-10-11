@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
 import snecs
+import tcod
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 
@@ -14,7 +15,6 @@ from scripts.engine.component import (
     FOV,
     Aesthetic,
     Afflictions,
-    Behaviour,
     Blocking,
     HasCombatStats,
     Identity,
@@ -26,6 +26,7 @@ from scripts.engine.component import (
     Opinion,
     Position,
     Resources,
+    Thought,
     Tracked,
     Traits,
 )
@@ -50,7 +51,6 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, ProjectileData
-from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -59,7 +59,7 @@ from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import Optional, Tuple, List
-    from scripts.engine.action import Affliction, Skill
+    from scripts.engine.action import Affliction, Behaviour, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
 
@@ -132,17 +132,17 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(HasCombatStats())
     components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
     components.append(Traits(actor_data.trait_names))
-    components.append(FOV(create_fov_map()))
+    components.append(FOV())
     components.append(LightSource(2))
     components.append(Tracked(chronicle.get_time()))
 
     # get info from traits
     traits_paths = []  # for aesthetic
 
-    move = action.skill_registry["move"]
-    basic_attack = action.skill_registry["basic_attack"]
+    move = action.skill_registry["Move"]
+    basic_attack = action.skill_registry["BasicAttack"]
     known_skills = [move, basic_attack]  # for knowledge
-    skill_order = ["basic_attack"]  # for knowledge
+    skill_order = ["BasicAttack"]  # for knowledge
     perm_afflictions_names = []  # for affliction
     behaviour = None
 
@@ -153,8 +153,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         if data.known_skills != ["none"]:
 
             for skill_name in data.known_skills:
-                skill_data = library.SKILLS[skill_name]
-                skill_class = action.skill_registry[skill_data.key]
+                skill_class = action.skill_registry[skill_name]
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
 
@@ -163,8 +162,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
                 perm_afflictions_names.append(_name)
 
         if data.group == TraitGroup.NPC:
-            # FIXME - get behaviour
-            behaviour = SkipTurnBehaviour
+            behaviour = action.behaviour_registry[actor_data.behaviour_name]
 
     # add aesthetic
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
@@ -188,7 +186,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
 
     # add behaviour  N.B. Can only be added once entity is created
     if behaviour:
-        add_component(entity, Behaviour(behaviour(entity)))
+        add_component(entity, Thought(behaviour(entity)))
 
     # give full resources N.B. Can only be added once entity is created
     stats = create_combat_stats(entity)
@@ -223,9 +221,10 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     entity = create_entity(projectile)
 
-    add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
+    behaviour = action.behaviour_registry["Projectile"]
+    add_component(entity, Thought(behaviour(entity, data)))  # type: ignore  # this works for projecitle special case
 
-    move = action.skill_registry["move"]
+    move = action.skill_registry["Move"]
     known_skills = [move]
     add_component(entity, Knowledge(known_skills))
 
@@ -241,16 +240,6 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
     affliction_data = library.AFFLICTIONS[name]
     affliction = action.affliction_registry[affliction_data.name](creator, target, duration)
     return affliction
-
-
-def create_fov_map() -> np.array:
-    """
-    Create a blank fov map
-    """
-    game_map = get_game_map()
-    return np.array(
-        [[not tile.blocks_sight for tile in column] for column in game_map.tile_map], dtype=bool, order="F",
-    )
 
 
 def create_combat_stats(entity: EntityID) -> CombatStats:
@@ -338,111 +327,52 @@ def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Di
     return cast(DirectionType, (dir_x, dir_y))
 
 
-def get_direct_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+def get_entity_blocking_movement_map() -> np.array:
     """
-    Get direction from an entity towards another entity`s location. Respects blocked tiles.
+    Return a Numpy array of bools, True for blocking and False for open
     """
-    # FIXME - update to use EC
-    pass
-    #
-    # log_string = f"{start_entity.name} is looking for a direct path to {target_entity.name}."
-    # logging.debug(log_string)
-    #
-    # direction_x = target_entity.x - start_entity.x
-    # direction_y = target_entity.y - start_entity.y
-    # distance = math.sqrt(direction_x ** 2 + direction_y ** 2)
-    #
-    # direction_x = int(round(direction_x / distance))
-    # direction_y = int(round(direction_y / distance))
-    #
-    # tile_is_blocked = _manager.Map._is_tile_blocking_movement(start_entity.x + direction_x,
-    #                                                               start_entity.y + direction_y)
-    #
-    # if not (tile_is_blocked or get_entity_at_position(start_entity.x + direction_x,
-    #                                                     start_entity.y + direction_y)):
-    #     log_string = f"{start_entity.name} found a direct path to {target_entity.name}."
-    #     logging.debug(log_string)
-    #
-    #     return direction_x, direction_y
-    # else:
-    #     log_string = f"{start_entity.name} did NOT find a direct path to {target_entity.name}."
-    #     logging.debug(log_string)
-    #
-    #     return start_entity.x, start_entity.y
+    from scripts.engine.core import queries
+
+    game_map = get_game_map()
+    blocking_map = np.zeros((game_map.width, game_map.height), dtype=bool, order="F")
+    for entity, (pos, blocking) in queries.position_and_blocking:
+        assert isinstance(blocking, Blocking)
+        assert isinstance(pos, Position)
+        if blocking.blocks_movement:
+            blocking_map[pos.x, pos.y] = True
+
+    return blocking_map
 
 
-def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+def get_a_star_direction(start_entity: EntityID, target_entity: EntityID) -> Optional[DirectionType]:
     """
     Use a* pathfinding to get a direction from one entity to another
     """
-    # FIXME - update to use EC
-    pass
-    #
-    # max_path_length = 25
-    # game_map = _manager.game_map
-    # entities = []
-    # for entity, (pos, blocking) in _manager.get_entitys_components(Position, Blocking):
-    #     entities.append(entity)
-    # entity_to_move = start_entity
-    # target = target_entity
-    #
-    # log_string = f"{entity_to_move.name} is looking for a path to {target.name} with a*"
-    # logging.debug(log_string)
-    #
-    # # Create a FOV map that has the dimensions of the map
-    # fov = tcod.map_new(game_map.width, game_map.height)
-    #
-    # # Scan the current map each turn and set all the walls as unwalkable
-    # for y1 in range(game_map.height):
-    #     for x1 in range(game_map.width):
-    #         tcod.map_set_properties(fov, x1, y1, not game_map.tiles[x1][y1].blocks_sight,
-    #                                 not game_map.tiles[x1][y1].blocks_movement)
-    #
-    # # Scan all the objects to see if there are objects that must be navigated around
-    # # Check also that the object isn't  or the target (so that the start and the end points are free)
-    # # The AI class handles the situation if  is next to the target so it will not use this A* function
-    # # anyway
-    # for entity in entities:
-    #     if entity.blocks_movement and entity != entity_to_move and entity != target:
-    #         # Set the tile as a wall so it must be navigated around
-    #         tcod.map_set_properties(fov, entity.x, entity.y, True, False)
-    #
-    # # Allocate a A* path
-    # # The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited
-    # my_path = tcod.path_new_using_map(fov, 1.41)
-    #
-    # # Compute the path between `s coordinates and the target`s coordinates
-    # tcod.path_compute(my_path, entity_to_move.x, entity_to_move.y, target.x, target.y)
-    #
-    # # Check if the path exists, and in this case, also the path is shorter than max_path_length
-    # # The path size matters if you want the monster to use alternative longer paths (for example through
-    # # other rooms) if for example the player is in a corridor
-    # # It makes sense to keep path size relatively low to keep the monsters from running around the map if
-    # # there`s an alternative path really far away
-    # if not tcod.path_is_empty(my_path) and tcod.path_size(my_path) < max_path_length:
-    #     # Find the next coordinates in the computed full path
-    #     x, y = tcod.path_walk(my_path, True)
-    #
-    #     # convert to direction
-    #     direction_x = x - entity_to_move.x
-    #     direction_y = y - entity_to_move.y
-    #
-    #     log_string = f"{entity_to_move.name} found an a* path to {target.name}..."
-    #     log_string2 = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x}," \
-    #                   f"{y}] in direction " \
-    #                   f"[{direction_x},{direction_y}]"
-    #     logging.debug(log_string)
-    #     logging.debug(log_string2)
-    #
-    # else:
-    #     # no path found return no movement direction
-    #     direction_x, direction_y = 0, 0
-    #     log_string = f"{entity_to_move.name} did NOT find an a* path to {target.name}."
-    #     logging.debug(log_string)
-    #
-    # # Delete the path to free memory
-    # tcod.path_delete(my_path)
-    # return direction_x, direction_y
+    pos = get_entitys_component(start_entity, Position)
+    start_pos = (pos.x, pos.y)
+    pos = get_entitys_component(target_entity, Position)
+    target_pos = (pos.x, pos.y)
+
+    game_map = get_game_map()
+
+    # combine entity blocking and map blocking maps
+    cost_map = game_map.block_movement_map | get_entity_blocking_movement_map()
+
+    # create graph to represent the map and a pathfinder to navigate
+    graph = tcod.path.SimpleGraph(cost=np.asarray(cost_map, dtype=np.int8), cardinal=2, diagonal=0)
+    pathfinder = tcod.path.Pathfinder(graph)
+
+    # add points
+    pathfinder.add_root(start_pos)
+    path = pathfinder.path_to(target_pos)[1:].tolist()
+
+    # if there is a path then return direction
+    if path:
+        next_pos = path[0]
+        move_dir = get_direction(start_pos, next_pos)
+        return move_dir
+
+    return None
 
 
 def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tuple[int, int]) -> DirectionType:
@@ -1001,7 +931,7 @@ def apply_skill(skill_instance: Skill) -> bool:
         return True
     else:
         logging.info(
-            f'Could not apply skill "{skill.key}", target tile does not have required tags ({skill.target_tags}).'
+            f'Could not apply skill "{skill.__class__.__name__}", target tile does not have required tags ({skill.target_tags}).'
         )
 
     return False
@@ -1012,7 +942,7 @@ def set_skill_on_cooldown(skill_instance: Skill) -> bool:
     Sets a skill on cooldown
     """
     user = skill_instance.user
-    name = skill_instance.key
+    name = skill_instance.__class__.__name__
     knowledge = get_entitys_component(user, Knowledge)
     if knowledge:
         knowledge.set_skill_cooldown(name, skill_instance.base_cooldown)
@@ -1041,7 +971,7 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
             return True
         else:
             logging.info(
-                f'Could not apply affliction "{affliction.key}", target tile does not have required '
+                f'Could not apply affliction "{affliction.name}", target tile does not have required '
                 f"tags ({affliction.target_tags})."
             )
 
@@ -1050,10 +980,10 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
 
 def take_turn(entity: EntityID) -> bool:
     """
-    Process the entity's Behaviour component. If no component found then EndTurn event is fired.
+    Process the entity's Thought component. If no component found then EndTurn event is fired.
     """
     logging.debug(f"'{get_name(entity)}' is beginning their turn.")
-    behaviour = get_entitys_component(entity, Behaviour)
+    behaviour = get_entitys_component(entity, Thought)
     if behaviour:
         behaviour.behaviour.act()
         return True

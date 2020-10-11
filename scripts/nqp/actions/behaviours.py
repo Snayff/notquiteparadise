@@ -1,42 +1,27 @@
 from __future__ import annotations
 
 import logging
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Tuple
+from typing import Tuple
 
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, library, world
-from scripts.engine.action import Skill
+from scripts.engine.action import Behaviour, Skill, init_action
 from scripts.engine.component import Position
 from scripts.engine.core.constants import ProjectileExpiry, TargetTag, TerrainCollision
 from scripts.engine.core.definitions import ProjectileData
 from scripts.engine.world_objects.tile import Tile
 
-if TYPE_CHECKING:
-    pass
 
-
-class AIBehaviour(ABC):
-    """
-    Base class for AI behaviours.
-    """
-
-    @abstractmethod
-    def act(self):
-        """
-        Perform the behaviour
-        """
-        pass
-
-
-class ProjectileBehaviour(AIBehaviour):
+@init_action
+class Projectile(Behaviour):
     """
     Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
     """
 
     def __init__(self, attached_entity: EntityID, data: ProjectileData):
-        self.entity = attached_entity  # the entity this component is attached too
+        super().__init__(attached_entity)
+
         self.data = data
         self.distance_travelled = 0
 
@@ -52,9 +37,8 @@ class ProjectileBehaviour(AIBehaviour):
         target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
 
         # if we havent moved check for collision in current tile (it might be cast on top of enemy)
-        if self.distance_travelled == 0:
-            if world.tile_has_tag(current_tile, TargetTag.OTHER_ENTITY, entity):
-                should_activate = True
+        if self.distance_travelled == 0 and world.tile_has_tag(current_tile, TargetTag.OTHER_ENTITY, entity):
+            should_activate = True
 
         # if we havent travelled max distance or determined we should activate then move
         # N.b. not an elif because we want the precheck above to happen in isolation
@@ -85,7 +69,7 @@ class ProjectileBehaviour(AIBehaviour):
             world.kill_entity(entity)
 
         elif should_move:
-            move = world.get_known_skill(entity, "move")
+            move = world.get_known_skill(entity, "Move")
             move_cast = move(entity, self.data.skill_instance.target_tile, self.data.direction)
             world.apply_skill(move_cast)
 
@@ -132,15 +116,48 @@ class ProjectileBehaviour(AIBehaviour):
         return should_activate, should_move
 
 
-class SkipTurnBehaviour(AIBehaviour):
+@init_action
+class SkipTurn(Behaviour):
     """
     Just skips turn
     """
 
-    def __init__(self, attached_entity: int):
-        self.entity = attached_entity
+    def __init__(self, attached_entity: EntityID):
+        super().__init__(attached_entity)
 
     def act(self):
         name = world.get_name(self.entity)
         logging.debug(f"'{name}' skipped their turn.")
         chronicle.end_turn(self.entity, library.GAME_CONFIG.base_values.move_cost)
+
+
+@init_action
+class FollowPlayer(Behaviour):
+    """
+    Basic AI to follow the player
+    """
+
+    def __init__(self, attached_entity: EntityID):
+        super().__init__(attached_entity)
+
+    def act(self):
+        entity = self.entity
+
+        # get move direction
+        player = world.get_player()
+        move_dir = world.get_a_star_direction(entity, player)
+
+        # get info for skill
+        move = world.get_known_skill(entity, "Move")
+        pos = world.get_entitys_component(entity, Position)
+        target_tile = world.get_tile((pos.x, pos.y))
+        name = world.get_name(entity)
+
+        # attempt to use skill
+        if world.can_use_skill(entity, "Move"):
+            world.use_skill(entity, move, target_tile, move_dir)
+            logging.debug(f"'{name}' moved to ({pos.x},{pos.y}).")
+        else:
+            logging.debug(f"'{name}' tried to move to ({pos.x},{pos.y}), but couldn`t.")
+
+        chronicle.end_turn(entity, library.GAME_CONFIG.base_values.move_cost)

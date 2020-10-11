@@ -1,11 +1,10 @@
 {
-    "move": {
+    "Move": {
         "__dataclass__": "SkillData",
         "cooldown": 0,
         "description": "This is normal movement",
         "icon_path": "skills/basic_attack.png",
         "name": "move",
-        "key": "move",
         "resource_cost": 0,
         "resource_type": "stamina",
         "targeting_method": "target",
@@ -23,13 +22,12 @@
         "shape_size": 1,
         "uses_projectile": false
     },
-    "basic_attack": {
+    "BasicAttack": {
         "__dataclass__": "SkillData",
         "cooldown": 2,
         "description": "A simple attack.",
         "icon_path": "skills/basic_attack.png",
         "name": "basic attack",
-        "key": "basic_attack",
         "resource_cost": 10,
         "resource_type": "stamina",
         "targeting_method": "target",
@@ -64,13 +62,12 @@
             "expiry_type": "fizzle"
         }
     },
-    "lunge": {
+    "Lunge": {
         "__dataclass__": "SkillData",
         "cooldown": 4,
         "description": "Launch forwards and hit the enemy in your way.",
         "icon_path": "skills/lunge.png",
         "name": "lunge",
-        "key": "lunge",
         "resource_cost": 15,
         "resource_type": "stamina",
         "targeting_method": "target",
@@ -89,13 +86,12 @@
         "shape": "target",
         "shape_size": 1
     },
-    "tar_and_feather": {
+    "TarAndFeather": {
         "__dataclass__": "SkillData",
         "cooldown": 1,
         "description": "Launch a projectile that deals damage to enemies in the specified direction.",
         "icon_path": "none",
         "name": "tar and feather",
-        "key": "tar_and_feather",
         "resource_cost": 15,
         "resource_type": "stamina",
         "targeting_method": "target",

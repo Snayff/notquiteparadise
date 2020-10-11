@@ -51,6 +51,11 @@ __all__ = [
     "refresh_library",
 ]
 
+#################################################################
+# This module is for loading external data that is offered to the
+# rest of the engine as a reference.
+#################################################################
+
 
 ####################### DATA DICTS ##############################
 
