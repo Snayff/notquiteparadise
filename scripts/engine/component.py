@@ -332,7 +332,7 @@ class Thought(RegisteredComponent):
     def serialize(self):
         _dict = {"behaviour_name": self.behaviour.__class__.__name__, "entity": self.behaviour.entity}
 
-        return self.behaviour.entity
+        return _dict
 
     @classmethod
     def deserialize(cls, serialised):

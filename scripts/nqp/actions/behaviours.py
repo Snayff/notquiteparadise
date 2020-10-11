@@ -37,9 +37,8 @@ class Projectile(Behaviour):
         target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
 
         # if we havent moved check for collision in current tile (it might be cast on top of enemy)
-        if self.distance_travelled == 0:
-            if world.tile_has_tag(current_tile, TargetTag.OTHER_ENTITY, entity):
-                should_activate = True
+        if self.distance_travelled == 0 and world.tile_has_tag(current_tile, TargetTag.OTHER_ENTITY, entity):
+            should_activate = True
 
         # if we havent travelled max distance or determined we should activate then move
         # N.b. not an elif because we want the precheck above to happen in isolation
