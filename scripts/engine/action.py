@@ -31,7 +31,10 @@ affliction_registry: Dict[str, Type[Affliction]] = {}
 
 
 class Action(ABC):
-    key: str
+    """
+    Action taken during the game. A container for Effects.
+    """
+
     name: str
     description: str
     icon_path: str
@@ -98,7 +101,7 @@ class Skill(Action):
         """
         from scripts.engine import library
 
-        cls.data = library.SKILLS[cls.key]
+        cls.data = library.SKILLS[cls.__name__]
         cls.name = cls.data.name
         cls.target_tags = cls.data.target_tags
         cls.description = cls.data.description
@@ -128,7 +131,7 @@ class Skill(Action):
             yield entity, self.build_effects(entity)
             entity_names.append(world.get_name(entity))
 
-        logging.debug(f"'{world.get_name(self.user)}' applied '{self.key}' to {entity_names}.")
+        logging.debug(f"'{world.get_name(self.user)}' applied '{self.__class__.__name__}' to {entity_names}.")
 
     def use(self):
         """
@@ -136,7 +139,7 @@ class Skill(Action):
         """
         from scripts.engine import world
 
-        logging.debug(f"'{world.get_name(self.user)}' used '{self.key}'.")
+        logging.debug(f"'{world.get_name(self.user)}' used '{self.__class__.__name__}'.")
 
         # animate the skill user
         self._play_animation()
@@ -220,7 +223,7 @@ class Affliction(Action):
         """
         from scripts.engine import library
 
-        cls.data = library.AFFLICTIONS[cls.key]
+        cls.data = library.AFFLICTIONS[cls.__name__]
         cls.name = cls.data.name
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
@@ -237,7 +240,7 @@ class Affliction(Action):
         entity only once.
         """
         from scripts.engine import world
-
+        entity_names = []
         entities = set()
         position = world.get_entitys_component(self.affected_entity, Position)
         if position:
@@ -246,6 +249,9 @@ class Affliction(Action):
                     if entity not in entities:
                         entities.add(entity)
                         yield entity, self.build_effects(entity)
+                        entity_names.append(world.get_name(entity))
+
+        logging.debug(f"'{world.get_name(self.origin)}' applied '{self.__class__.__name__}' to {entity_names}.")
 
 
 def init_action(cls):
@@ -256,6 +262,8 @@ def init_action(cls):
     cls._init_properties()
 
     if issubclass(cls, Skill):
-        skill_registry[cls.key] = cls
+        skill_registry[cls.__name__] = cls
     elif issubclass(cls, Affliction):
-        affliction_registry[cls.key] = cls
+        affliction_registry[cls.__name__] = cls
+
+    return cls

@@ -389,12 +389,12 @@ class Knowledge(RegisteredComponent):
         """
         Learn a new skill.
         """
-        self.skill_names.append(skill.key)
-        self.skills[skill.key] = skill
+        self.skill_names.append(skill.__name__)
+        self.skills[skill.__name__] = skill
         if add_to_order:
-            self.skill_order.append(skill.key)
+            self.skill_order.append(skill.__name__)
         if set_cooldown:
-            self.cooldowns[skill.key] = 0
+            self.cooldowns[skill.__name__] = 0
 
     def serialize(self):
         _dict = {"skill_names": self.skill_names, "cooldowns": self.cooldowns, "skill_order": self.skill_order}

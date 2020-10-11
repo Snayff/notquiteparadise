@@ -172,7 +172,7 @@
         "name": "crocturion",
         "sight_range": 1,
         "known_skills": [
-            "move"
+            "Move"
         ],
         "permanent_afflictions": [
             "none"

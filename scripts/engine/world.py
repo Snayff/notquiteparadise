@@ -140,10 +140,10 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     # get info from traits
     traits_paths = []  # for aesthetic
 
-    move = action.skill_registry["move"]
-    basic_attack = action.skill_registry["basic_attack"]
+    move = action.skill_registry["Move"]
+    basic_attack = action.skill_registry["BasicAttack"]
     known_skills = [move, basic_attack]  # for knowledge
-    skill_order = ["basic_attack"]  # for knowledge
+    skill_order = ["BasicAttack"]  # for knowledge
     perm_afflictions_names = []  # for affliction
     behaviour = None
 
@@ -154,8 +154,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         if data.known_skills != ["none"]:
 
             for skill_name in data.known_skills:
-                skill_data = library.SKILLS[skill_name]
-                skill_class = action.skill_registry[skill_data.key]
+                skill_class = action.skill_registry[skill_name]
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
 
@@ -226,7 +225,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     add_component(entity, Behaviour(Projectile(entity, data)))
 
-    move = action.skill_registry["move"]
+    move = action.skill_registry["Move"]
     known_skills = [move]
     add_component(entity, Knowledge(known_skills))
 
@@ -928,7 +927,7 @@ def apply_skill(skill_instance: Skill) -> bool:
         return True
     else:
         logging.info(
-            f'Could not apply skill "{skill.key}", target tile does not have required tags ({skill.target_tags}).'
+            f'Could not apply skill "{skill.__class__.__name__}", target tile does not have required tags ({skill.target_tags}).'
         )
 
     return False
@@ -939,7 +938,7 @@ def set_skill_on_cooldown(skill_instance: Skill) -> bool:
     Sets a skill on cooldown
     """
     user = skill_instance.user
-    name = skill_instance.key
+    name = skill_instance.__class__.__name__
     knowledge = get_entitys_component(user, Knowledge)
     if knowledge:
         knowledge.set_skill_cooldown(name, skill_instance.base_cooldown)

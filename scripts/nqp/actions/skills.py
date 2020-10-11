@@ -28,8 +28,6 @@ class Move(Skill):
     Basic move for an entity.
     """
 
-    key = "move"
-
     def __init__(self, user: EntityID, target_tile: Tile, direction):
         """
         Only Move needs an init as it overrides the target tile
@@ -68,8 +66,6 @@ class BasicAttack(Skill):
     Basic attack for an entity
     """
 
-    key = "basic_attack"
-
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
@@ -100,7 +96,6 @@ class Lunge(Skill):
     Lunge skill for an entity
     """
 
-    key = "lunge"
     # FIXME - only applying damage when moving 2 spaces, anything less fails to apply.
 
     def __init__(self, user: EntityID, tile: Tile, direction: DirectionType):
@@ -193,8 +188,6 @@ class TarAndFeather(Skill):
     """
     TarAndFeather skill for an entity
     """
-
-    key = "tar_and_feather"
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         super().__init__(user, target_tile, direction)

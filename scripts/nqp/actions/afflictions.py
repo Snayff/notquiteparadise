@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 
 @init_action
 class BoggedDown(Affliction):
-    key = "bogged_down"
 
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[AffectStatEffect]:  # type: ignore
 
@@ -34,7 +33,6 @@ class BoggedDown(Affliction):
 
 @init_action
 class Flaming(Affliction):
-    key = "flaming"
 
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type: ignore
         """

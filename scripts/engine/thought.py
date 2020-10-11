@@ -90,7 +90,7 @@ class Projectile(AI):
             world.kill_entity(entity)
 
         elif should_move:
-            move = world.get_known_skill(entity, "move")
+            move = world.get_known_skill(entity, "Move")
             move_cast = move(entity, self.data.skill_instance.target_tile, self.data.direction)
             world.apply_skill(move_cast)
 
@@ -166,13 +166,13 @@ class FollowPlayer(AI):
         move_dir = world.get_a_star_direction(entity, player)
 
         # get info for skill
-        move = world.get_known_skill(entity, "move")
+        move = world.get_known_skill(entity, "Move")
         pos = world.get_entitys_component(entity, Position)
         target_tile = world.get_tile((pos.x, pos.y))
         name = world.get_name(entity)
 
         # attempt to use skill
-        if world.can_use_skill(entity, "move"):
+        if world.can_use_skill(entity, "Move"):
             world.use_skill(entity, move, target_tile, move_dir)
             logging.debug(f"'{name}' moved to ({pos.x},{pos.y}).")
         else:

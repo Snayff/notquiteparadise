@@ -1,11 +1,10 @@
 {
-    "bogged_down": {
+    "BoggedDown": {
         "__dataclass__": "AfflictionData",
         "category": "bane",
         "description": "It weakens mundane defence and makes you a little bit slower.",
         "icon_path": "skills/root.png",
         "name": "bogged down",
-        "key": "bogged_down",
         "shape": "target",
         "shape_size": 1,
         "target_tags": [
@@ -18,13 +17,12 @@
             "movement"
         ]
     },
-    "flaming": {
+    "Flaming": {
         "__dataclass__": "AfflictionData",
         "category": "bane",
         "description": "It does damage.",
         "icon_path": "skills/torch.png",
         "name": "flaming",
-        "key": "flaming",
         "shape": "target",
         "shape_size": 1,
         "target_tags": [

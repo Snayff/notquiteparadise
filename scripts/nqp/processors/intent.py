@@ -106,7 +106,7 @@ def _process_game_map_intents(intent: InputIntentType):
     if intent in possible_move_intents and position:
         direction = _get_pressed_direction(intent)
         target_tile = world.get_tile((position.x, position.y))
-        move = world.get_known_skill(player, "move")
+        move = world.get_known_skill(player, "Move")
         if direction in move.target_directions:
             _process_skill_use(player, move, target_tile, direction)
 
@@ -209,7 +209,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
 
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
-        world.judge_action(player, skill.key)
+        world.judge_action(player, skill.__class__.__name__)
         behaviour.process_interventions()
         chronicle.end_turn(player, skill.time_cost)
 

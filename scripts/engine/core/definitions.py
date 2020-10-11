@@ -328,7 +328,6 @@ class SkillData:
 
     # how do we know it?
     name: str = "none"
-    key: str = "none"
     description: str = "none"
     icon_path: str = "none"
 
@@ -371,7 +370,6 @@ class AfflictionData:
     """
 
     name: str = "none"
-    key: str = "none"
     description: str = "none"
     icon_path: str = "none"
     category: AfflictionCategoryType = AfflictionCategory.BANE
