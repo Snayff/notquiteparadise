@@ -20,7 +20,7 @@ class BoggedDown(Affliction):
 
         affect_stat_effect = AffectStatEffect(
             origin=self.origin,
-            cause_name=self.key,
+            cause_name=self.name,
             success_effects=[],
             failure_effects=[],
             target=self.affected_entity,

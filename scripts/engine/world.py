@@ -221,7 +221,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     entity = create_entity(projectile)
 
     behaviour = action.behaviour_registry["Projectile"]
-    add_component(entity, Thought(behaviour(entity, data)))
+    add_component(entity, Thought(behaviour(entity, data)))  # type: ignore  # this works for projecitle special case
 
     move = action.skill_registry["Move"]
     known_skills = [move]
@@ -333,6 +333,8 @@ def get_entity_blocking_movement_map() -> np.array:
     game_map = get_game_map()
     blocking_map = np.zeros((game_map.width, game_map.height), dtype=bool, order="F")
     for entity, (pos, blocking) in queries.position_and_blocking:
+        assert isinstance(blocking, Blocking)
+        assert isinstance(pos, Position)
         if blocking.blocks_movement:
             blocking_map[pos.x, pos.y] = True
 
@@ -967,7 +969,7 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
             return True
         else:
             logging.info(
-                f'Could not apply affliction "{affliction.key}", target tile does not have required '
+                f'Could not apply affliction "{affliction.name}", target tile does not have required '
                 f"tags ({affliction.target_tags})."
             )
 

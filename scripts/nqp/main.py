@@ -14,7 +14,7 @@ from scripts.engine.core.constants import GameState
 from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.engine.ui.manager import ui
 from scripts.nqp import processors
-from scripts.nqp.actions import skills  # must import to register skills
+from scripts.nqp.actions import skills, behaviours, afflictions  # must import to register skills
 from scripts.nqp.command import initialise_game
 from scripts.nqp.processors import display, game
 

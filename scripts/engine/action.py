@@ -261,7 +261,7 @@ class Behaviour(ABC):
     Base class for AI behaviours. Not really an Action, as such, more of a super class that determines when npcs
     will use Actions.
     """
-    def __init__(self, attached_entity: int):
+    def __init__(self, attached_entity: EntityID):
         self.entity = attached_entity
 
     @abstractmethod

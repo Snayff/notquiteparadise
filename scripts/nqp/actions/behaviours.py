@@ -123,7 +123,7 @@ class SkipTurn(Behaviour):
     Just skips turn
     """
 
-    def __init__(self, attached_entity: int):
+    def __init__(self, attached_entity: EntityID):
         super().__init__(attached_entity)
 
     def act(self):
@@ -137,7 +137,7 @@ class FollowPlayer(Behaviour):
     """
     Basic AI to follow the player
     """
-    def __init__(self, attached_entity: int):
+    def __init__(self, attached_entity: EntityID):
         super().__init__(attached_entity)
 
     def act(self):

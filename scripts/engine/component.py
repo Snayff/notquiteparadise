@@ -6,8 +6,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
-import scripts.engine.utility
-from scripts.engine import action
 from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
@@ -233,9 +231,8 @@ class Aesthetic(RegisteredComponent):
             sprite_paths.append(TraitSpritePathsData(**sprite_path))
 
         # convert sprite paths to sprites
-        from scripts.engine import world
-
-        sprites = scripts.engine.utility.build_sprites_from_paths(sprite_paths)
+        from scripts.engine import utility
+        sprites = utility.build_sprites_from_paths(sprite_paths)
 
         return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
 
@@ -341,7 +338,9 @@ class Thought(RegisteredComponent):
 
     @classmethod
     def deserialize(cls, serialised):
+        from scripts.engine import action
         behaviour = action.behaviour_registry[serialised["behaviour_name"]]
+
         return Thought(behaviour(serialised["entity"]))
 
 
@@ -466,7 +465,7 @@ class Afflictions(RegisteredComponent):
         if affliction in self.active:
             # if it is affect_stat remove the affect
             if EffectType.AFFECT_STAT in affliction.identity_tags:
-                self.stat_modifiers.pop(affliction.key)
+                self.stat_modifiers.pop(affliction.__class__.__name__)
 
             # remove from active list
             self.active.remove(affliction)
