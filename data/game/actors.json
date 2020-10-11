@@ -14,5 +14,21 @@
             "dummy"
         ],
         "behaviour_name": "SkipTurnBehaviour"
+    },
+        "crocturion": {
+        "__dataclass__": "ActorData",
+        "key": "crocturion",
+        "possible_names": [
+            "Kro'ck",
+            "Qual'ck"
+        ],
+        "description": "Cold blooded.",
+        "position_offsets": [
+            [0, 0]
+        ],
+        "trait_names": [
+            "crocturion"
+        ],
+        "behaviour_name": "FollowPlayer"
     }
 }

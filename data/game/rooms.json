@@ -36,7 +36,8 @@
             "wall": "world/wall.png"
         },
         "actors": {
-            "training_dummy": 0.9
+            "training_dummy": 0.2,
+            "crocturion": 0.8
         }
     }
 }
