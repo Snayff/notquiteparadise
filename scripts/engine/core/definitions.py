@@ -41,6 +41,10 @@ from scripts.engine.core.extend_json import register_dataclass_with_json
 if TYPE_CHECKING:
     from scripts.engine.action import Skill
 
+#################################################################
+# This module is for specifying all defined data sets.
+#################################################################
+
 
 ######################### Aesthetics ##################################
 
@@ -91,7 +95,7 @@ class ActorData:
     description: str = "none"
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     trait_names: List[str] = field(default_factory=list)
-    behaviour_name: str = "none"
+    thought_name: str = "none"
 
 
 @register_dataclass_with_json

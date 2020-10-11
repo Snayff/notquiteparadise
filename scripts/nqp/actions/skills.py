@@ -85,10 +85,6 @@ class BasicAttack(Skill):
 
         return [damage_effect]
 
-    def get_animation(self, aesthetic: Aesthetic):
-        # we can show animations depending on the direction with self.direction
-        return aesthetic.sprites.attack
-
 
 @init_action
 class Lunge(Skill):
@@ -179,9 +175,6 @@ class Lunge(Skill):
         )
         return cooldown_effect
 
-    def get_animation(self, aesthetic: Aesthetic):
-        return aesthetic.sprites.attack
-
 
 @init_action
 class TarAndFeather(Skill):
@@ -252,5 +245,3 @@ class TarAndFeather(Skill):
         )
         return damage_effect
 
-    def get_animation(self, aesthetic: Aesthetic):
-        return aesthetic.sprites.attack

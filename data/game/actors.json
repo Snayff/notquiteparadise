@@ -13,7 +13,7 @@
         "trait_names": [
             "dummy"
         ],
-        "behaviour_name": "SkipTurnBehaviour"
+        "thought_name": "SkipTurn"
     },
         "crocturion": {
         "__dataclass__": "ActorData",
@@ -29,6 +29,6 @@
         "trait_names": [
             "crocturion"
         ],
-        "behaviour_name": "FollowPlayer"
+        "thought_name": "FollowPlayer"
     }
 }

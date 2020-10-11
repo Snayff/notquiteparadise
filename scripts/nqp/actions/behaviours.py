@@ -1,40 +1,20 @@
 from __future__ import annotations
 
 import logging
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Tuple
+from typing import Tuple
 
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, library, world
-from scripts.engine.action import Skill
+from scripts.engine.action import Thought, Skill, init_action
 from scripts.engine.component import Position
 from scripts.engine.core.constants import ProjectileExpiry, TargetTag, TerrainCollision
 from scripts.engine.core.definitions import ProjectileData
 from scripts.engine.world_objects.tile import Tile
 
-if TYPE_CHECKING:
-    pass
 
-__all__ = ["Projectile", "SkipTurn", "FollowPlayer"]
-
-
-class AI(ABC):
-    """
-    Base class for AI behaviours.
-    """
-    def __init__(self, attached_entity: int):
-        self.entity = attached_entity
-
-    @abstractmethod
-    def act(self):
-        """
-        Perform the behaviour
-        """
-        pass
-
-
-class Projectile(AI):
+@init_action
+class Projectile(Thought):
     """
     Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
     """
@@ -137,7 +117,8 @@ class Projectile(AI):
         return should_activate, should_move
 
 
-class SkipTurn(AI):
+@init_action
+class SkipTurn(Thought):
     """
     Just skips turn
     """
@@ -151,7 +132,8 @@ class SkipTurn(AI):
         chronicle.end_turn(self.entity, library.GAME_CONFIG.base_values.move_cost)
 
 
-class FollowPlayer(AI):
+@init_action
+class FollowPlayer(Thought):
     """
     Basic AI to follow the player
     """
@@ -160,7 +142,7 @@ class FollowPlayer(AI):
 
     def act(self):
         entity = self.entity
-        
+
         # get move direction
         player = world.get_player()
         move_dir = world.get_a_star_direction(entity, player)
@@ -179,4 +161,3 @@ class FollowPlayer(AI):
             logging.debug(f"'{name}' tried to move to ({pos.x},{pos.y}), but couldn`t.")
 
         chronicle.end_turn(entity, library.GAME_CONFIG.base_values.move_cost)
-

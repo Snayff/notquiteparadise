@@ -12,10 +12,9 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import action, chronicle, library, utility
 from scripts.engine.component import (
-    FOV,
+    Behaviour, FOV,
     Aesthetic,
     Afflictions,
-    Behaviour,
     Blocking,
     HasCombatStats,
     Identity,
@@ -51,7 +50,7 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, ProjectileData
-from scripts.engine.thought import Projectile, SkipTurn
+from scripts.nqp.actions.behaviours import Projectile, SkipTurn
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -60,7 +59,7 @@ from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import Optional, Tuple, List
-    from scripts.engine.action import Affliction, Skill
+    from scripts.engine.action import Affliction, Thought, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
 
@@ -145,7 +144,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     known_skills = [move, basic_attack]  # for knowledge
     skill_order = ["BasicAttack"]  # for knowledge
     perm_afflictions_names = []  # for affliction
-    behaviour = None
+    thought = None
 
     # loop each trait and get info for skills etc.
     for name in actor_data.trait_names:
@@ -163,8 +162,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
                 perm_afflictions_names.append(_name)
 
         if data.group == TraitGroup.NPC:
-            # FIXME - get behaviour
-            behaviour = SkipTurn
+            thought = action.behaviour_registry[actor_data.thought_name]
 
     # add aesthetic
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
@@ -187,8 +185,8 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     add_component(entity, Afflictions(perm_afflictions))
 
     # add behaviour  N.B. Can only be added once entity is created
-    if behaviour:
-        add_component(entity, Behaviour(behaviour(entity)))
+    if thought:
+        add_component(entity, Behaviour(thought(entity)))
 
     # give full resources N.B. Can only be added once entity is created
     stats = create_combat_stats(entity)
@@ -337,6 +335,8 @@ def get_entity_blocking_movement_map() -> np.array:
     for entity, (pos, blocking) in queries.position_and_blocking:
         if blocking.blocks_movement:
             blocking_map[pos.x, pos.y] = True
+
+    return blocking_map
 
 
 def get_a_star_direction(start_entity: EntityID, target_entity: EntityID) -> Optional[DirectionType]:

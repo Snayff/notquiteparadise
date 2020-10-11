@@ -24,10 +24,11 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Tuple, List
 
-__all__ = ["Skill", "Affliction", "init_action", "skill_registry", "affliction_registry"]
+__all__ = ["Skill", "Affliction", "Thought", "init_action", "skill_registry", "affliction_registry"]
 
 skill_registry: Dict[str, Type[Skill]] = {}
 affliction_registry: Dict[str, Type[Affliction]] = {}
+behaviour_registry: Dict[str, Type[Thought]] = {}
 
 
 class Action(ABC):
@@ -80,6 +81,7 @@ class Skill(Action):
         self.direction = direction
         self.projectile = None
 
+
     @abstractmethod
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
@@ -87,12 +89,12 @@ class Skill(Action):
         """
         pass
 
-    @abstractmethod
     def get_animation(self, aesthetic: Aesthetic):
         """
-        Return the animation to play when executing the skill
+        Return the animation to play when executing the skill. Defaults to attack sprite. Override in subclass if
+        another is needed.
         """
-        pass
+        return aesthetic.sprites.attack
 
     @classmethod
     def _init_properties(cls):
@@ -254,16 +256,35 @@ class Affliction(Action):
         logging.debug(f"'{world.get_name(self.origin)}' applied '{self.__class__.__name__}' to {entity_names}.")
 
 
+class Thought(ABC):
+    """
+    Base class for AI behaviours. Not really an Action, as such, more of a super class that determines when npcs
+    will use Actions.
+    """
+    def __init__(self, attached_entity: int):
+        self.entity = attached_entity
+
+    @abstractmethod
+    def act(self):
+        """
+        Perform the behaviour
+        """
+        pass
+
+
 def init_action(cls):
     """
-    Class decorator used for initialising class with properties from external data and also add to the registry for
-    use by the engine.
+    Class decorator used for initialising class to add to the registry for use by the engine. Also initialises class
+    properties set by external data, if appropriate.
     """
-    cls._init_properties()
 
     if issubclass(cls, Skill):
         skill_registry[cls.__name__] = cls
+        cls._init_properties()
     elif issubclass(cls, Affliction):
         affliction_registry[cls.__name__] = cls
+        cls._init_properties()
+    elif issubclass(cls, Thought):
+        behaviour_registry[cls.__name__] = cls
 
     return cls
