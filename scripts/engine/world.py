@@ -12,7 +12,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import action, chronicle, library, utility
 from scripts.engine.component import (
-    Thought, FOV,
+    FOV,
     Aesthetic,
     Afflictions,
     Blocking,
@@ -26,6 +26,7 @@ from scripts.engine.component import (
     Opinion,
     Position,
     Resources,
+    Thought,
     Tracked,
     Traits,
 )
@@ -251,6 +252,7 @@ def create_combat_stats(entity: EntityID) -> CombatStats:
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 
+
 def get_game_map() -> GameMap:
     """
     Get current game_map
@@ -330,6 +332,7 @@ def get_entity_blocking_movement_map() -> np.array:
     Return a Numpy array of bools, True for blocking and False for open
     """
     from scripts.engine.core import queries
+
     game_map = get_game_map()
     blocking_map = np.zeros((game_map.width, game_map.height), dtype=bool, order="F")
     for entity, (pos, blocking) in queries.position_and_blocking:
@@ -370,7 +373,6 @@ def get_a_star_direction(start_entity: EntityID, target_entity: EntityID) -> Opt
         return move_dir
 
     return None
-
 
 
 def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tuple[int, int]) -> DirectionType:

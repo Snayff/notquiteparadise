@@ -81,7 +81,6 @@ class Skill(Action):
         self.direction = direction
         self.projectile = None
 
-
     @abstractmethod
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
@@ -242,6 +241,7 @@ class Affliction(Action):
         entity only once.
         """
         from scripts.engine import world
+
         entity_names = []
         entities = set()
         position = world.get_entitys_component(self.affected_entity, Position)
@@ -261,6 +261,7 @@ class Behaviour(ABC):
     Base class for AI behaviours. Not really an Action, as such, more of a super class that determines when npcs
     will use Actions.
     """
+
     def __init__(self, attached_entity: EntityID):
         self.entity = attached_entity
 

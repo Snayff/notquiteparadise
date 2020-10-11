@@ -70,8 +70,7 @@ def process_fov():
             stats = world.create_combat_stats(entity)
             sight_range = stats.sight_range
 
-            fov.map = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), sight_range, FOV_LIGHT_WALLS,
-                                           FOV_ALGORITHM)
+            fov.map = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), sight_range, FOV_LIGHT_WALLS, FOV_ALGORITHM)
 
 
 def process_tile_visibility():

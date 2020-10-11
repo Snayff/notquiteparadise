@@ -244,4 +244,3 @@ class TarAndFeather(Skill):
             mod_amount=0.1,
         )
         return damage_effect
-

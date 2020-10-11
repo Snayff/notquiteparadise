@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 
 @init_action
 class BoggedDown(Affliction):
-
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[AffectStatEffect]:  # type: ignore
 
         affect_stat_effect = AffectStatEffect(
@@ -33,7 +32,6 @@ class BoggedDown(Affliction):
 
 @init_action
 class Flaming(Affliction):
-
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type: ignore
         """
         Build the effects of this skill applying to a single entity.

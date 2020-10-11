@@ -28,6 +28,7 @@ class GameMap:
         self.rng.seed(self.seed)
 
         from scripts.engine import library
+
         _map_data = library.MAPS[map_name]
         self.width = _map_data.width
         self.height = _map_data.height
@@ -48,6 +49,7 @@ class GameMap:
         Only called during init to populate tile map with walls
         """
         from scripts.engine import library
+
         _map_data = library.MAPS[self.name]
 
         # get details for a wall tile
@@ -158,4 +160,3 @@ class GameMap:
             self.is_dirty = False
 
         return self._block_sight_map.copy("F")
-

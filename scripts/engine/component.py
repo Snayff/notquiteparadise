@@ -232,6 +232,7 @@ class Aesthetic(RegisteredComponent):
 
         # convert sprite paths to sprites
         from scripts.engine import utility
+
         sprites = utility.build_sprites_from_paths(sprite_paths)
 
         return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
@@ -329,16 +330,14 @@ class Thought(RegisteredComponent):
         self.behaviour = behaviour
 
     def serialize(self):
-        _dict = {
-            "behaviour_name": self.behaviour.__class__.__name__,
-            "entity": self.behaviour.entity
-        }
+        _dict = {"behaviour_name": self.behaviour.__class__.__name__, "entity": self.behaviour.entity}
 
         return self.behaviour.entity
 
     @classmethod
     def deserialize(cls, serialised):
         from scripts.engine import action
+
         behaviour = action.behaviour_registry[serialised["behaviour_name"]]
 
         return Thought(behaviour(serialised["entity"]))
@@ -512,6 +511,7 @@ class FOV(RegisteredComponent):
 
     def __init__(self):
         from scripts.engine import world
+
         game_map = world.get_game_map()
         self.map: np.array = game_map.block_sight_map
 

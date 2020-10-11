@@ -137,6 +137,7 @@ class FollowPlayer(Behaviour):
     """
     Basic AI to follow the player
     """
+
     def __init__(self, attached_entity: EntityID):
         super().__init__(attached_entity)
 
