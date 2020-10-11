@@ -117,8 +117,8 @@
         "name": "irascible dandy",
         "sight_range": 5,
         "known_skills": [
-            "lunge",
-            "tar_and_feather"
+            "Lunge",
+            "TarAndFeather"
         ],
         "permanent_afflictions": [
             "none"

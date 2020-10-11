@@ -24,11 +24,11 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Tuple, List
 
-__all__ = ["Skill", "Affliction", "Thought", "init_action", "skill_registry", "affliction_registry"]
+__all__ = ["Skill", "Affliction", "Behaviour", "init_action", "skill_registry", "affliction_registry"]
 
 skill_registry: Dict[str, Type[Skill]] = {}
 affliction_registry: Dict[str, Type[Affliction]] = {}
-behaviour_registry: Dict[str, Type[Thought]] = {}
+behaviour_registry: Dict[str, Type[Behaviour]] = {}
 
 
 class Action(ABC):
@@ -256,7 +256,7 @@ class Affliction(Action):
         logging.debug(f"'{world.get_name(self.origin)}' applied '{self.__class__.__name__}' to {entity_names}.")
 
 
-class Thought(ABC):
+class Behaviour(ABC):
     """
     Base class for AI behaviours. Not really an Action, as such, more of a super class that determines when npcs
     will use Actions.
@@ -284,7 +284,7 @@ def init_action(cls):
     elif issubclass(cls, Affliction):
         affliction_registry[cls.__name__] = cls
         cls._init_properties()
-    elif issubclass(cls, Thought):
+    elif issubclass(cls, Behaviour):
         behaviour_registry[cls.__name__] = cls
 
     return cls

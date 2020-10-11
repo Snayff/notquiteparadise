@@ -95,7 +95,7 @@ class ActorData:
     description: str = "none"
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     trait_names: List[str] = field(default_factory=list)
-    thought_name: str = "none"
+    behaviour_name: str = "none"
 
 
 @register_dataclass_with_json

@@ -7,12 +7,13 @@ import numpy as np
 from snecs import RegisteredComponent
 
 import scripts.engine.utility
+from scripts.engine import action
 from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional, Type, Tuple
-    from scripts.engine.action import Affliction, Thought, Skill
+    from scripts.engine.action import Affliction, Behaviour, Skill
     from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 
@@ -322,25 +323,26 @@ class Traits(RegisteredComponent):
         return Traits(serialised)
 
 
-class Behaviour(RegisteredComponent):
+class Thought(RegisteredComponent):
     """
     An ai behaviour to control an entity.
     """
 
-    def __init__(self, behaviour: Thought):
+    def __init__(self, behaviour: Behaviour):
         self.behaviour = behaviour
 
     def serialize(self):
-        # FIXME - need to deserialise behaviour properly
+        _dict = {
+            "behaviour_name": self.behaviour.__class__.__name__,
+            "entity": self.behaviour.entity
+        }
+
         return self.behaviour.entity
 
     @classmethod
     def deserialize(cls, serialised):
-        from scripts.nqp.actions.behaviours import SkipTurn
-
-        skip_turn = SkipTurn(serialised)
-        # FIXME - need to deserialise behaviour properly
-        return Behaviour(skip_turn)
+        behaviour = action.behaviour_registry[serialised["behaviour_name"]]
+        return Thought(behaviour(serialised["entity"]))
 
 
 class Knowledge(RegisteredComponent):

@@ -12,7 +12,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import action, chronicle, library, utility
 from scripts.engine.component import (
-    Behaviour, FOV,
+    Thought, FOV,
     Aesthetic,
     Afflictions,
     Blocking,
@@ -50,7 +50,6 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, ProjectileData
-from scripts.nqp.actions.behaviours import Projectile, SkipTurn
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -59,7 +58,7 @@ from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import Optional, Tuple, List
-    from scripts.engine.action import Affliction, Thought, Skill
+    from scripts.engine.action import Affliction, Behaviour, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
 
@@ -144,7 +143,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     known_skills = [move, basic_attack]  # for knowledge
     skill_order = ["BasicAttack"]  # for knowledge
     perm_afflictions_names = []  # for affliction
-    thought = None
+    behaviour = None
 
     # loop each trait and get info for skills etc.
     for name in actor_data.trait_names:
@@ -162,7 +161,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
                 perm_afflictions_names.append(_name)
 
         if data.group == TraitGroup.NPC:
-            thought = action.behaviour_registry[actor_data.thought_name]
+            behaviour = action.behaviour_registry[actor_data.behaviour_name]
 
     # add aesthetic
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
@@ -185,8 +184,8 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     add_component(entity, Afflictions(perm_afflictions))
 
     # add behaviour  N.B. Can only be added once entity is created
-    if thought:
-        add_component(entity, Behaviour(thought(entity)))
+    if behaviour:
+        add_component(entity, Thought(behaviour(entity)))
 
     # give full resources N.B. Can only be added once entity is created
     stats = create_combat_stats(entity)
@@ -221,7 +220,8 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     entity = create_entity(projectile)
 
-    add_component(entity, Behaviour(Projectile(entity, data)))
+    behaviour = action.behaviour_registry["Projectile"]
+    add_component(entity, Thought(behaviour(entity, data)))
 
     move = action.skill_registry["Move"]
     known_skills = [move]
@@ -976,10 +976,10 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
 
 def take_turn(entity: EntityID) -> bool:
     """
-    Process the entity's Behaviour component. If no component found then EndTurn event is fired.
+    Process the entity's Thought component. If no component found then EndTurn event is fired.
     """
     logging.debug(f"'{get_name(entity)}' is beginning their turn.")
-    behaviour = get_entitys_component(entity, Behaviour)
+    behaviour = get_entitys_component(entity, Thought)
     if behaviour:
         behaviour.behaviour.act()
         return True
