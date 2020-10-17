@@ -1,9 +1,10 @@
 name: NQP - Analyse with Sonarcloud
 
 on:
-  completion:
-    success:
-      - NQP - PR Review
+  workflow_run:
+    workflows: [ "NQP - PR Review" ]
+    types:
+      - completed
 
 jobs:
   sonarcloud:
