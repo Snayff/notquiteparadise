@@ -350,7 +350,7 @@ class Knowledge(RegisteredComponent):
 
     def __init__(
         self,
-        skills: List[Type[Skill]],
+        skills: Dict[str, Type[Skill]],
         skill_order: Optional[List[str]] = None,
         cooldowns: Optional[Dict[str, int]] = None,
     ):

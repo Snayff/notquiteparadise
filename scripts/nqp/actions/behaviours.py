@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import logging
+import random
 from typing import Tuple
 
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, library, world
 from scripts.engine.action import Behaviour, Skill, init_action
-from scripts.engine.component import Position
+from scripts.engine.component import Knowledge, Position
 from scripts.engine.core.constants import ProjectileExpiry, TargetTag, TerrainCollision
 from scripts.engine.core.definitions import ProjectileData
 from scripts.engine.world_objects.tile import Tile
@@ -161,3 +162,51 @@ class FollowPlayer(Behaviour):
             logging.debug(f"'{name}' tried to move to ({pos.x},{pos.y}), but couldn`t.")
 
         chronicle.end_turn(entity, library.GAME_CONFIG.base_values.move_cost)
+
+
+@init_action
+class HuntPlayer(Behaviour):
+    """
+    Search and attack the player
+    """
+    def __init__(self, attached_entity: EntityID):
+        super().__init__(attached_entity)
+
+    def act(self):
+        entity = self.entity
+
+        # get distance
+        player = world.get_player()
+        player_pos = world.get_entitys_component(entity, Position)
+        pos = world.get_entitys_component(entity, Position)
+        distance_to_player = world.get_chebyshev_distance((pos.x, pos.y), (player_pos.x, player_pos.y))
+
+        # are we in range to attack?
+        possible_skills = []
+        knowledge = world.get_entitys_component(entity, Knowledge)
+        for skill in knowledge.skills.values():
+            if skill.range < distance_to_player and skill.name != "move" and world.can_use_skill(entity, skill.name):
+                possible_skills.append(skill)
+
+        # get direction
+        skill_dir = world.get_a_star_direction(entity, player)
+
+        # get skill info to move or attack
+        if possible_skills:
+            # pick a skill at random
+            skill = random.choice(possible_skills)
+            target_tile = world.get_tile((pos.x + skill_dir[0], pos.y + skill_dir[1]))
+        else:
+            skill = world.get_known_skill(entity, "Move")
+            target_tile = world.get_tile((pos.x, pos.y))  # target tile is self as we need to move self
+
+        # attempt to use skill
+        name = world.get_name(entity)
+        if world.can_use_skill(entity, skill.name):
+            world.use_skill(entity, skill, target_tile, skill_dir)
+        else:
+            logging.debug(f"'{name}' tried to use {skill.name} from ({pos.x},{pos.y}) to ({target_tile.x}"
+                          f",{target_tile.y}) but couldn`t.")
+
+        chronicle.end_turn(entity, library.GAME_CONFIG.base_values.move_cost)
+

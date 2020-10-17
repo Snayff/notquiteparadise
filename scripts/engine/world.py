@@ -418,6 +418,27 @@ def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tupl
     return cast(DirectionType, (dir_x, dir_y))
 
 
+def get_euclidean_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> float:
+    """
+    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
+    This returns a float indicating the straight line distance between the two points.
+    """
+    dx = target_pos[0] - start_pos[0]
+    dy = target_pos[1] - start_pos[1]
+    import math  # only used in this method
+
+    return math.sqrt(dx ** 2 + dy ** 2)
+
+
+def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+    """
+    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
+    This returns an int indicating the number of tile moves between the two points.
+    """
+    (x1, y1), (x2, y2) = start_pos, target_pos
+    return min(abs(x1 - x2), abs(y1 - y2))
+
+
 def _get_furthest_free_position(
     start_pos: Tuple[int, int], target_direction: Tuple[int, int], max_distance: int, travel_type: TravelMethodType
 ) -> Tuple[int, int]:
@@ -623,6 +644,22 @@ def get_affected_entities(
     return affected_entities
 
 
+def get_entities_on_tile(tile: Tile) -> List[EntityID]:
+    """
+    Return a list of all the entities in that tile
+    """
+    x = tile.x
+    y = tile.y
+    entities = []
+    from scripts.engine.core import queries
+
+    for entity, (position,) in queries.position:
+        position = cast(Position, position)
+        if (x, y) in position:
+            entities.append(entity)
+    return entities
+
+
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
 
 
@@ -733,22 +770,6 @@ def _tile_has_any_entity(tile: Tile) -> bool:
     return len(get_entities_on_tile(tile)) > 0
 
 
-def get_entities_on_tile(tile: Tile) -> List[EntityID]:
-    """
-    Return a list of all the entities in that tile
-    """
-    x = tile.x
-    y = tile.y
-    entities = []
-    from scripts.engine.core import queries
-
-    for entity, (position,) in queries.position:
-        position = cast(Position, position)
-        if (x, y) in position:
-            entities.append(entity)
-    return entities
-
-
 def _tile_has_other_entities(tile: Tile, active_entity: EntityID) -> bool:
     """
     Check if the specified tile has other entities apart from the provided active entity
@@ -828,8 +849,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
         return False
 
     # flags
-    can_afford = not_on_cooldown = False
-
+    not_on_cooldown = False
     can_afford = _can_afford_cost(entity, skill.resource_type, skill.resource_cost)
 
     knowledge = get_entitys_component(entity, Knowledge)
@@ -866,7 +886,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
                 f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait " f"{cooldown_msg} more rounds."
             )
 
-    # we've reached the end, no good.
+    # we've reached the end; no good.
     return False
 
 
@@ -1232,3 +1252,5 @@ def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[Entit
             chosen_interventions.append((entity, chosen_intervention))
 
     return chosen_interventions
+
+

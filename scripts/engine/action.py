@@ -69,6 +69,7 @@ class Skill(Action):
     base_cooldown: int
     targeting_method: TargetingMethodType
     target_directions: List[DirectionType]
+    range: int
     uses_projectile: bool
     projectile_data: Optional[ProjectileData]
 
