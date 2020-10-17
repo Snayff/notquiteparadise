@@ -117,8 +117,8 @@
         "name": "irascible dandy",
         "sight_range": 5,
         "known_skills": [
-            "lunge",
-            "tar_and_feather"
+            "Lunge",
+            "TarAndFeather"
         ],
         "permanent_afflictions": [
             "none"
@@ -140,7 +140,7 @@
         "group":"npc",
         "bustle": 1,
         "clout": 1,
-        "description": "",
+        "description": "It just looks so darn punchable.",
         "exactitude": 1,
         "name": "dummy",
         "sight_range": 1,
@@ -159,6 +159,33 @@
             "dead": "actor/npc/training_dummy_idle.png",
             "icon": "actor/npc/training_dummy_idle.png",
             "move": "actor/npc/training_dummy_idle.png"
+        },
+        "vigour": 1
+    },
+    "crocturion": {
+        "__dataclass__": "TraitData",
+        "group":"npc",
+        "bustle": 1,
+        "clout": 1,
+        "description": "Crocodilic",
+        "exactitude": 1,
+        "name": "crocturion",
+        "sight_range": 1,
+        "known_skills": [
+            "Move"
+        ],
+        "permanent_afflictions": [
+            "none"
+        ],
+        "skullduggery": 1,
+        "sprite_paths": {
+            "__dataclass__": "TraitSpritePathsData",
+            "idle": "actor/npc/crocturion_idle.png",
+            "attack": "actor/npc/crocturion_attack.png",
+            "hit": "actor/npc/crocturion_hit.png",
+            "dead": "actor/npc/crocturion_dead.png",
+            "icon": "actor/npc/crocturion_icon.png",
+            "move": "actor/npc/crocturion_move.png"
         },
         "vigour": 1
     }

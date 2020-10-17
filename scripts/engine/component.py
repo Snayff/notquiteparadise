@@ -6,14 +6,12 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
-import scripts.engine.utility
 from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional, Type, Tuple
-    from scripts.engine.thought import AIBehaviour
-    from scripts.engine.action import Affliction, Skill
+    from scripts.engine.action import Affliction, Behaviour, Skill
     from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 
@@ -233,9 +231,9 @@ class Aesthetic(RegisteredComponent):
             sprite_paths.append(TraitSpritePathsData(**sprite_path))
 
         # convert sprite paths to sprites
-        from scripts.engine import world
+        from scripts.engine import utility
 
-        sprites = scripts.engine.utility.build_sprites_from_paths(sprite_paths)
+        sprites = utility.build_sprites_from_paths(sprite_paths)
 
         return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
 
@@ -323,25 +321,26 @@ class Traits(RegisteredComponent):
         return Traits(serialised)
 
 
-class Behaviour(RegisteredComponent):
+class Thought(RegisteredComponent):
     """
     An ai behaviour to control an entity.
     """
 
-    def __init__(self, behaviour: AIBehaviour):
+    def __init__(self, behaviour: Behaviour):
         self.behaviour = behaviour
 
     def serialize(self):
-        # FIXME - need to deserialise behaviour properly
-        return self.behaviour.entity
+        _dict = {"behaviour_name": self.behaviour.__class__.__name__, "entity": self.behaviour.entity}
+
+        return _dict
 
     @classmethod
     def deserialize(cls, serialised):
-        from scripts.engine.thought import SkipTurnBehaviour
+        from scripts.engine import action
 
-        skip_turn = SkipTurnBehaviour(serialised)
-        # FIXME - need to deserialise behaviour properly
-        return Behaviour(skip_turn)
+        behaviour = action.behaviour_registry[serialised["behaviour_name"]]
+
+        return Thought(behaviour(serialised["entity"]))
 
 
 class Knowledge(RegisteredComponent):
@@ -389,12 +388,12 @@ class Knowledge(RegisteredComponent):
         """
         Learn a new skill.
         """
-        self.skill_names.append(skill.key)
-        self.skills[skill.key] = skill
+        self.skill_names.append(skill.__name__)
+        self.skills[skill.__name__] = skill
         if add_to_order:
-            self.skill_order.append(skill.key)
+            self.skill_order.append(skill.__name__)
         if set_cooldown:
-            self.cooldowns[skill.key] = 0
+            self.cooldowns[skill.__name__] = 0
 
     def serialize(self):
         _dict = {"skill_names": self.skill_names, "cooldowns": self.cooldowns, "skill_order": self.skill_order}
@@ -465,7 +464,7 @@ class Afflictions(RegisteredComponent):
         if affliction in self.active:
             # if it is affect_stat remove the affect
             if EffectType.AFFECT_STAT in affliction.identity_tags:
-                self.stat_modifiers.pop(affliction.key)
+                self.stat_modifiers.pop(affliction.__class__.__name__)
 
             # remove from active list
             self.active.remove(affliction)
@@ -507,11 +506,14 @@ class Opinion(RegisteredComponent):
 
 class FOV(RegisteredComponent):
     """
-    An entity's field of view.
+    An entity's field of view. Always starts blank.
     """
 
-    def __init__(self, fov_map: np.array):
-        self.map: np.array = fov_map
+    def __init__(self):
+        from scripts.engine import world
+
+        game_map = world.get_game_map()
+        self.map: np.array = game_map.block_sight_map
 
     def serialize(self):
         fov_map = self.map.tolist()
@@ -519,8 +521,9 @@ class FOV(RegisteredComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        fov_map = np.array(serialised)
-        return FOV(fov_map)
+        fov = FOV()
+        fov.map = np.array(serialised)
+        return fov
 
 
 class LightSource(RegisteredComponent):

@@ -3,6 +3,8 @@ from __future__ import annotations
 import logging
 from typing import Optional, Type
 
+import numpy as np
+import tcod
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, debug, library, state, utility, world
@@ -80,12 +82,7 @@ def _process_stateless_intents(intent: InputIntentType):
 
     elif intent == InputIntent.TEST:
         # add whatever we want to test here
-        import os
-
-        full_save_path = str(SAVE_PATH)
-        for save_name in os.listdir(full_save_path):
-            save = save_name.replace(".json", "")
-            state.load_game(save)
+        breakpoint()
 
 
 def _process_game_map_intents(intent: InputIntentType):
@@ -109,7 +106,7 @@ def _process_game_map_intents(intent: InputIntentType):
     if intent in possible_move_intents and position:
         direction = _get_pressed_direction(intent)
         target_tile = world.get_tile((position.x, position.y))
-        move = world.get_known_skill(player, "move")
+        move = world.get_known_skill(player, "Move")
         if direction in move.target_directions:
             _process_skill_use(player, move, target_tile, direction)
 
@@ -212,7 +209,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
 
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
-        world.judge_action(player, skill.key)
+        world.judge_action(player, skill.__class__.__name__)
         behaviour.process_interventions()
         chronicle.end_turn(player, skill.time_cost)
 
