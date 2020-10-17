@@ -1,8 +1,9 @@
 name: NQP - Analyse with Sonarcloud
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  completion:
+    success:
+      - NQP - PR Review
 
 jobs:
   sonarcloud:
