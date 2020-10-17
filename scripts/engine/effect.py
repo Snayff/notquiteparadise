@@ -203,9 +203,8 @@ class MoveActorEffect(Effect):
                 from scripts.engine.core import queries
 
                 for blocking_entity, (position, blocking) in queries.position_and_blocking:
-                    # cast for typing
-                    position = cast(Position, position)
-                    blocking = cast(Blocking, blocking)
+                    assert isinstance(position, Position)
+                    assert isinstance(blocking, Blocking)
                     if blocking_entity != entity and blocking.blocks_movement and (target_x, target_y) in position:
                         # blocked by entity
                         blockers_name = world.get_name(blocking_entity)

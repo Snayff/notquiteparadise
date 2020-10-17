@@ -324,7 +324,7 @@ def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Di
     dir_x = utility.clamp(dir_x, -1, 1)
     dir_y = utility.clamp(dir_y, -1, 1)
 
-    return cast(DirectionType, (dir_x, dir_y))
+    return dir_x, dir_y  # type: ignore
 
 
 def get_entity_blocking_movement_map() -> np.array:
@@ -415,7 +415,7 @@ def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tupl
             dir_x *= -1
             dir_y *= -1
 
-    return cast(DirectionType, (dir_x, dir_y))
+    return dir_x, dir_y  # type: ignore
 
 
 def get_euclidean_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> float:
@@ -655,7 +655,7 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
     from scripts.engine.core import queries
 
     for entity, (position,) in queries.position:
-        position = cast(Position, position)
+        assert isinstance(position, Position)
         if (x, y) in position:
             entities.append(entity)
     return entities
@@ -794,8 +794,9 @@ def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
     y = tile.y
     # Any entities that block movement?
     for entity, (position, blocking) in get_components([Position, Blocking]):
-        position = cast(Position, position)
-        blocking = cast(Blocking, blocking)
+        assert isinstance(position, Position)
+        assert isinstance(blocking, Blocking)
+
         if (x, y) in position and blocking.blocks_movement:
             return True
     return False
@@ -806,8 +807,9 @@ def _tile_has_entity_blocking_sight(tile: Tile) -> bool:
     y = tile.y
     # Any entities that block sight?
     for entity, (position, blocking) in get_components([Position, Blocking]):
-        position = cast(Position, position)
-        blocking = cast(Blocking, blocking)
+        assert isinstance(position, Position)
+        assert isinstance(blocking, Blocking)
+
         if (x, y) in position and blocking.blocks_sight:
             return True
     return False
@@ -1094,9 +1096,8 @@ def judge_action(entity: EntityID, action_name: str):
     the tags in that skill.
     """
     for god, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
-        # cast for typing
-        opinion = cast(Opinion, opinion)
-        identity = cast(Identity, identity)
+        assert isinstance(opinion, Opinion)
+        assert isinstance(identity, Identity)
 
         attitudes = library.GODS[identity.name].attitudes
 
@@ -1202,10 +1203,9 @@ def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[Entit
     desire_to_do_nothing = 75  # weighting for doing nothing
 
     for entity, (is_god, opinion, identity, knowledge) in get_components([IsGod, Opinion, Identity, Knowledge]):
-        # cast for typing
-        opinion = cast(Opinion, opinion)
-        identity = cast(Identity, identity)
-        knowledge = cast(Knowledge, knowledge)
+        assert isinstance(opinion, Opinion)
+        assert isinstance(identity, Identity)
+        assert isinstance(knowledge, Knowledge)
 
         attitudes = library.GODS[identity.name].attitudes
 

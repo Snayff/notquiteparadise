@@ -29,9 +29,9 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     new_queue = {}
     from scripts.engine.core import queries
 
-    for entity, (tracked,) in queries.tracked:
+    for entity, (tracked, ) in queries.tracked:
         if entity != entity_to_exclude:
-            tracked = cast(Tracked, tracked)
+            assert isinstance(tracked, Tracked)
             new_queue[entity] = tracked.time_spent
     set_turn_queue(new_queue)
 
@@ -97,7 +97,7 @@ def next_round(time_progressed: int):
     from scripts.engine.core import queries
 
     for entity, (knowledge,) in queries.knowledge:
-        knowledge = cast(Knowledge, knowledge)
+        assert isinstance(knowledge, Knowledge)
         for skill_name in knowledge.skill_names:
             skill_cooldown = knowledge.cooldowns[skill_name]
             if skill_cooldown > 0:

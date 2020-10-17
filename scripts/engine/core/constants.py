@@ -177,7 +177,7 @@ class Direction(SimpleNamespace):
     Holds a tuple as (x, y) for the relative direction.
     """
 
-    # N.B external values  must be actively mapped to these on load as they are not held as strings
+    # N.B external values must be actively mapped to these on load as they are not held as strings
     UP_LEFT = DirectionType((-1, -1))
     UP = DirectionType((0, -1))
     UP_RIGHT = DirectionType((1, -1))
