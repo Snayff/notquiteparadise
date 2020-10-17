@@ -183,7 +183,7 @@ class HuntPlayer(Behaviour):
             can_use = world.can_use_skill(entity, skill.name)
             if in_range and can_use and (not_move or not_adjacent):
                 print(f"Can use skill; distance_to_player={distance_to_player} | skill_range={skill.range} | "
-                      f"adjacent={not not_adjacent}")
+                      f"not_adjacent={not_adjacent}")
                 possible_skills.append(skill)
 
         # get direction

@@ -435,8 +435,9 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
     This returns an int indicating the number of tile moves between the two points.
     """
-    (x1, y1), (x2, y2) = start_pos, target_pos
-    return min(abs(x1 - x2), abs(y1 - y2))
+    from scipy import spatial  # only used in this method
+    distance = spatial.distance.chebyshev(start_pos, target_pos)
+    return distance
 
 
 def _get_furthest_free_position(
