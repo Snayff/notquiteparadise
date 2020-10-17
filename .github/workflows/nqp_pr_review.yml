@@ -23,13 +23,19 @@ jobs:
       run: echo "::set-output name=dir::$(pip cache dir)"
 
     - name: Cache dependencies
+      id: cache
       uses: actions/cache@v2
       with:
         path: ${{ steps.pip-cache.outputs.dir }}
         key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
         restore-keys: ${{ runner.os }}-pip-
 
+#    - name: Add poetry to PATH
+#      if: steps.cache.outputs.cache-hit == 'true'
+#      run: echo ${{ steps.pip-cache.outputs.dir }} >> $GITHUB_PATH
+
     - name: Install dependencies
+      #if: steps.cache.outputs.cache-hit != 'true'
       run: |
         python -m pip install --upgrade poetry
         poetry config virtualenvs.create false
@@ -55,12 +61,28 @@ jobs:
     - name: Pytest with Coverage
       if: always()
       run: |
-        poetry run python -m pytest --cov=.
+        poetry run python -m pytest --cov=tests/ --cov-report=xml
+
+    - name: Upload Coverage to Code Cov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.xml
+
+    - name: Update Git
+      if: github.repository == 'Snayff/notquiteparadise'
+      run: |
+        git config --global user.name 'nqp'
+        git config --global user.email 'snayff@users.noreply.github.com'
+        git coverage.xml
+        git commit -am "ci lint and test"
+
+    - name: Git Status Check
+      if: github.repository == 'Snayff/notquiteparadise'
+      run: |
+        git status
 
     - name: Push changes
       if: github.repository == 'Snayff/notquiteparadise'
       run: |
-        git config --global user.name 'snayff'
-        git config --global user.email 'snayff@users.noreply.github.com'
-        git commit -am "ci lint and test"
         git push
