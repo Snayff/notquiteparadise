@@ -31,11 +31,11 @@ jobs:
         restore-keys: ${{ runner.os }}-pip-
 
     - name: Add poetry to PATH
-      if: steps.cache.outputs.cache-hit == 'true'
-      run: echo ${{ steps.pip-cache.outputs.dir }} >> $GITHUB_PATH
+      #if: steps.cache.outputs.cache-hit == 'true'
+      run: python -m pip install --upgrade poetry
 
     - name: Install dependencies
-      #if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true'
       run: |
         python -m pip install --upgrade poetry
         poetry config virtualenvs.create false
@@ -67,6 +67,7 @@ jobs:
       if: github.repository == 'Snayff/notquiteparadise'
       run: |
         git config --global user.name 'nqp'
+        git config --global user.email 'snayff@users.noreply.github.com'
         git add coverage.xml
         git commit -am "ci lint and test"
 
