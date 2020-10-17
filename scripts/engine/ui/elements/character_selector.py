@@ -135,7 +135,7 @@ class CharacterSelector(UIPanel):
             elif trait.group == TraitGroup.HOMELAND:
                 homeland.append(key)
 
-        # bundle trait lists with group name
+        # bundle trait lists with group f_name
         all_traits = [(people, TraitGroup.PEOPLE), (savvy, TraitGroup.SAVVY), (homeland, TraitGroup.SAVVY)]
 
         # create drop downs
@@ -189,7 +189,7 @@ class CharacterSelector(UIPanel):
             sprite_paths.append(trait.sprite_paths)
             info[trait.name] = [
                 f"<font face=barlow color={col} size={text_size}>"
-                # f"{trait.name} <br>",
+                # f"{trait.f_name} <br>",
                 f"{trait.description} <br>",
                 f"<br>",
                 f"Clout: {trait.clout} <br>",
@@ -229,7 +229,7 @@ class CharacterSelector(UIPanel):
                 html_text=" ".join(details),
                 relative_rect=info_rects[count],
                 manager=self.ui_manager,
-                object_id="name",
+                object_id="f_name",
                 container=self.get_container(),
             )
             count += 1

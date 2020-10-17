@@ -44,7 +44,7 @@ class ExtendedJsonEncoder(json.JSONEncoder):
         if dataclasses.is_dataclass(obj):
             return {
                 **dict(__dataclass__=obj.__class__.__name__),
-                **{field.name: self.default(getattr(obj, field.name)) for field in dataclasses.fields(obj)},
+                **{field.f_name: self.default(getattr(obj, field.f_name)) for field in dataclasses.fields(obj)},
             }
         elif type(obj) in JSON_TYPES:
             return obj

@@ -290,7 +290,7 @@ class Blocking(RegisteredComponent):
 
 class Identity(RegisteredComponent):
     """
-    An entity's identity, such as name and description.
+    An entity's identity, such as f_name and description.
     """
 
     def __init__(self, name: str, description: str = ""):

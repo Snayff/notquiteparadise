@@ -120,7 +120,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     for offset in actor_data.position_offsets:
         occupied_tiles.append((offset[0] + x, offset[1] + y))
 
-    #  choose a name
+    #  choose a f_name
     name = random.choice(actor_data.possible_names)
 
     # actor components
@@ -235,7 +235,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
 def create_affliction(name: str, creator: EntityID, target: EntityID, duration: int) -> Affliction:
     """
-    Creates an instance of an Affliction provided the name
+    Creates an instance of an Affliction provided the f_name
     """
     affliction_data = library.AFFLICTIONS[name]
     affliction = action.affliction_registry[affliction_data.name](creator, target, duration)
@@ -830,10 +830,8 @@ def _can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> boo
     # Check if cost can be paid
     value = getattr(resources, resource.lower())
     if value - cost >= 0:
-        logging.debug(f"'{name}' can afford cost.")
         return True
     else:
-        logging.info(f"'{name}' cannot afford cost.")
         return False
 
 
@@ -1127,7 +1125,7 @@ def remove_affliction(entity: EntityID, affliction: Affliction):
 
 def learn_skill(entity: EntityID, skill_name: str):
     """
-    Add the skill name to the entity's knowledge component.
+    Add the skill f_name to the entity's knowledge component.
     """
     if not entity_has_component(entity, Knowledge):
         add_component(entity, Knowledge([]))
@@ -1195,8 +1193,8 @@ def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_
 
 def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[EntityID, str]]:
     """
-    Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
-    or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).
+    Have all entities consider intervening. Action can be str if matching f_name, e.g. affliction f_name,
+    or class attribute, e.g. Hit Type f_name. Returns a list of tuples containing (god_entity_id, intervention f_name).
     """
     chosen_interventions = []
     desire_to_intervene = 10

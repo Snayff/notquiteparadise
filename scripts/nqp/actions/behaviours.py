@@ -177,7 +177,7 @@ class HuntPlayer(Behaviour):
 
         # get distance
         player = world.get_player()
-        player_pos = world.get_entitys_component(entity, Position)
+        player_pos = world.get_entitys_component(player, Position)
         pos = world.get_entitys_component(entity, Position)
         distance_to_player = world.get_chebyshev_distance((pos.x, pos.y), (player_pos.x, player_pos.y))
 
@@ -185,7 +185,10 @@ class HuntPlayer(Behaviour):
         possible_skills = []
         knowledge = world.get_entitys_component(entity, Knowledge)
         for skill in knowledge.skills.values():
-            if skill.range < distance_to_player and skill.name != "move" and world.can_use_skill(entity, skill.name):
+            in_range = skill.range >= distance_to_player
+            not_move = skill.name != "Move"
+            can_use = world.can_use_skill(entity, skill.name)
+            if in_range and not_move and can_use:
                 possible_skills.append(skill)
 
         # get direction
@@ -205,7 +208,7 @@ class HuntPlayer(Behaviour):
         if world.can_use_skill(entity, skill.name):
             world.use_skill(entity, skill, target_tile, skill_dir)
         else:
-            logging.debug(f"'{name}' tried to use {skill.name} from ({pos.x},{pos.y}) to ({target_tile.x}"
+            logging.debug(f"'{name}' tried to use {skill.f_name} from ({pos.x},{pos.y}) to ({target_tile.x}"
                           f",{target_tile.y}) but couldn`t.")
 
         chronicle.end_turn(entity, library.GAME_CONFIG.base_values.move_cost)

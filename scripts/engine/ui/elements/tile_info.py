@@ -83,7 +83,7 @@ class TileInfo(UIPanel):
 
                     # get universal info
                     images.append(aesthetic.sprites.icon)
-                    current_info = [identity.name]
+                    current_info = [identity.f_name]
 
                     ## is it an entity with more useful info?
                     # get resources

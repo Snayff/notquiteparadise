@@ -36,7 +36,8 @@ class Action(ABC):
     Action taken during the game. A container for Effects.
     """
 
-    name: str
+    name: str  # name of the class
+    f_name: str  # friendly name, can include spaces, slashes etc.
     description: str
     icon_path: str
     target_tags: List[TargetTagType]
@@ -104,12 +105,14 @@ class Skill(Action):
         from scripts.engine import library
 
         cls.data = library.SKILLS[cls.__name__]
-        cls.name = cls.data.name
+        cls.name = cls.__name__
+        cls.f_name = cls.data.name
         cls.target_tags = cls.data.target_tags
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.resource_type = cls.data.resource_type
         cls.resource_cost = cls.data.resource_cost
+        cls.range = cls.data.range
         cls.time_cost = cls.data.time_cost
         cls.base_cooldown = cls.data.cooldown
         cls.targeting_method = cls.data.targeting_method
@@ -226,7 +229,7 @@ class Affliction(Action):
         from scripts.engine import library
 
         cls.data = library.AFFLICTIONS[cls.__name__]
-        cls.name = cls.data.name
+        cls.f_name = cls.data.name
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.category = cls.data.category

@@ -5,6 +5,7 @@
         "description": "This is normal movement",
         "icon_path": "skills/basic_attack.png",
         "name": "move",
+        "range": 1,
         "resource_cost": 0,
         "resource_type": "stamina",
         "targeting_method": "target",
@@ -30,6 +31,7 @@
         "name": "basic attack",
         "resource_cost": 10,
         "resource_type": "stamina",
+        "range": 1,
         "targeting_method": "target",
         "target_directions": [
             "down",
@@ -60,6 +62,7 @@
         "targeting_method": "target",
         "uses_projectile": false,
         "projectile_data": null,
+        "range": 2,
         "target_directions": [
             "down",
             "left",
@@ -75,7 +78,7 @@
     },
     "TarAndFeather": {
         "__dataclass__": "SkillData",
-        "cooldown": 1,
+        "cooldown": 3,
         "description": "Launch a projectile that deals damage to enemies in the specified direction.",
         "icon_path": "none",
         "name": "tar and feather",
@@ -88,6 +91,7 @@
             "right",
             "up"
         ],
+        "range": 5,
         "time_cost": 30,
         "target_tags": [
             "no_blocking_tile"
@@ -134,6 +138,7 @@
         ],
         "shape": "target",
         "shape_size": 1,
+        "range": 2,
         "uses_projectile": true,
         "projectile_data": {
             "__dataclass__": "ProjectileData",

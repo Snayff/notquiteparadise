@@ -376,7 +376,7 @@ def convert_tile_string_to_xy(tile_pos_string: str) -> Tuple[int, int]:
 
 def convert_direction_to_name(direction: DirectionType) -> str:
     """
-    Get the direction name from the direction. (0,1) = 'up' etc.
+    Get the direction f_name from the direction. (0,1) = 'up' etc.
     """
     directions = {
         (0, 1): "up",
