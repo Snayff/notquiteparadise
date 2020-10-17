@@ -61,19 +61,20 @@ jobs:
     - name: Pytest with Coverage
       if: always()
       run: |
-        poetry run python -m pytest --cov=notquiteparadise tests/ --cov-report=xml:tests/_coverage/coverage.xml
+        poetry run python -m pytest --cov=tests/ --cov-report=xml
 
     - name: Upload Coverage to Code Cov
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.xml
 
     - name: Update Git
       if: github.repository == 'Snayff/notquiteparadise'
       run: |
         git config --global user.name 'nqp'
         git config --global user.email 'snayff@users.noreply.github.com'
-        git tests/_coverage/coverage.xml
+        git coverage.xml
         git commit -am "ci lint and test"
 
     - name: Git Status Check
