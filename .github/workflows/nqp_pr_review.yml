@@ -32,7 +32,7 @@ jobs:
 
     - name: Add poetry to PATH
       if: steps.cache.outputs.cache-hit == 'true'
-      run: echo "%USERPROFILE%\.poetry\bin" >> $GITHUB_PATH
+      run: echo steps.cache.outputs.dir >> $GITHUB_PATH
 
     - name: Install dependencies
       if: steps.cache.outputs.cache-hit != 'true'
@@ -66,8 +66,7 @@ jobs:
     - name: Update Git
       if: github.repository == 'Snayff/notquiteparadise'
       run: |
-        git config --global user.name 'snayff'
-        git config --global user.email 'snayff@users.noreply.github.com'
+        git config --global user.name 'nqp'
         git add coverage.xml
         git commit -am "ci lint and test"
 
