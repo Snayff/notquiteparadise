@@ -18,10 +18,6 @@ jobs:
       with:
         python-version: 3.8
 
-    - name: Add poetry to PATH
-      #if: steps.cache.outputs.cache-hit == 'true'
-      run: python -m pip install --upgrade poetry
-
     - name: Locate Pip Cache
       id: pip-cache
       run: echo "::set-output name=dir::$(pip cache dir)"
@@ -34,10 +30,12 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
         restore-keys: ${{ runner.os }}-pip-
 
-
+#    - name: Add poetry to PATH
+#      if: steps.cache.outputs.cache-hit == 'true'
+#      run: echo ${{ steps.pip-cache.outputs.dir }} >> $GITHUB_PATH
 
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
+      #if: steps.cache.outputs.cache-hit != 'true'
       run: |
         python -m pip install --upgrade poetry
         poetry config virtualenvs.create false
