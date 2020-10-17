@@ -3,6 +3,7 @@ name: NQP - Analyse with Sonarcloud
 on:
   workflow_run:
     workflows: [ "NQP - PR Review" ]
+    branches: [master, develop]
     types:
       - completed
 
