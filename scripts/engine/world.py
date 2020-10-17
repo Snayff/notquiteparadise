@@ -120,7 +120,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     for offset in actor_data.position_offsets:
         occupied_tiles.append((offset[0] + x, offset[1] + y))
 
-    #  choose a f_name
+    #  choose a name
     name = random.choice(actor_data.possible_names)
 
     # actor components
@@ -206,7 +206,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     x, y = tile_pos
 
     name = get_name(creating_entity)
-    projectile_name = f"{name}s {skill_name}s projectile"
+    projectile_name = f"{name}s {skill_name}`s projectile"
     desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
@@ -222,7 +222,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     entity = create_entity(projectile)
 
     behaviour = action.behaviour_registry["Projectile"]
-    add_component(entity, Thought(behaviour(entity, data)))  # type: ignore  # this works for projecitle special case
+    add_component(entity, Thought(behaviour(entity, data)))  # type: ignore  # this works for projectile special case
 
     move = action.skill_registry["Move"]
     known_skills = [move]
@@ -235,7 +235,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
 def create_affliction(name: str, creator: EntityID, target: EntityID, duration: int) -> Affliction:
     """
-    Creates an instance of an Affliction provided the f_name
+    Creates an instance of an Affliction provided the name
     """
     affliction_data = library.AFFLICTIONS[name]
     affliction = action.affliction_registry[affliction_data.name](creator, target, duration)
@@ -1125,7 +1125,7 @@ def remove_affliction(entity: EntityID, affliction: Affliction):
 
 def learn_skill(entity: EntityID, skill_name: str):
     """
-    Add the skill f_name to the entity's knowledge component.
+    Add the skill name to the entity's knowledge component.
     """
     if not entity_has_component(entity, Knowledge):
         add_component(entity, Knowledge([]))
@@ -1193,8 +1193,8 @@ def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_
 
 def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[EntityID, str]]:
     """
-    Have all entities consider intervening. Action can be str if matching f_name, e.g. affliction f_name,
-    or class attribute, e.g. Hit Type f_name. Returns a list of tuples containing (god_entity_id, intervention f_name).
+    Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
+    or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).
     """
     chosen_interventions = []
     desire_to_intervene = 10

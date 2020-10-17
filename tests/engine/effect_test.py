@@ -19,7 +19,7 @@ from tests.mocks import world_mock
 
 
 class MockAffliction(Affliction):
-    f_name = 'mock_affliction'
+    name = 'mock_affliction'
     identity_tags = [
         EffectType.AFFECT_STAT
     ]

@@ -290,7 +290,7 @@ class Blocking(RegisteredComponent):
 
 class Identity(RegisteredComponent):
     """
-    An entity's identity, such as f_name and description.
+    An entity's identity, such as name and description.
     """
 
     def __init__(self, name: str, description: str = ""):
@@ -350,7 +350,7 @@ class Knowledge(RegisteredComponent):
 
     def __init__(
         self,
-        skills: Dict[str, Type[Skill]],
+        skills: List[Type[Skill]],
         skill_order: Optional[List[str]] = None,
         cooldowns: Optional[Dict[str, int]] = None,
     ):

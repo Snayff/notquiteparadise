@@ -284,10 +284,10 @@ class MapData:
     extra_entrance_chance: int = 0
     chance_of_tunnel_winding: int = 0
 
-    rooms: Dict[str, float] = field(default_factory=dict)  # room f_name, room weight
+    rooms: Dict[str, float] = field(default_factory=dict)  # room name, room weight
 
     # aesthetics
-    sprite_paths: Dict[str, str] = field(default_factory=dict)  # sprite f_name, sprite path
+    sprite_paths: Dict[str, str] = field(default_factory=dict)  # sprite name, sprite path
 
 
 @register_dataclass_with_json
@@ -312,12 +312,12 @@ class RoomConceptData:
     chance_of_spawning_wall: float = 0.0
 
     # actor generation
-    actors: Dict[str, float] = field(default_factory=dict)  # actor f_name, actor weight
+    actors: Dict[str, float] = field(default_factory=dict)  # actor name, actor weight
     min_actors: int = 0
     max_actors: int = 0
 
     # aesthetics
-    sprite_paths: Dict[str, str] = field(default_factory=dict)  # sprite f_name, sprite path
+    sprite_paths: Dict[str, str] = field(default_factory=dict)  # sprite name, sprite path
 
 
 ######################### ACTIONS ##################################
@@ -394,7 +394,7 @@ class EffectData:
 
     # who am I?
     originator: Optional[EntityID] = None  # actor
-    creators_name: Optional[str] = None  # skill, projectile, etc.'s f_name
+    creators_name: Optional[str] = None  # skill, projectile, etc.'s name
     effect_type = EffectType.MOVE
 
     # who are we targeting?

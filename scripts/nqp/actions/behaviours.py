@@ -123,7 +123,6 @@ class SkipTurn(Behaviour):
     Just skips turn
     """
 
-
     def act(self):
         name = world.get_name(self.entity)
         logging.debug(f"'{name}' skipped their turn.")
@@ -180,8 +179,11 @@ class HuntPlayer(Behaviour):
         for skill in knowledge.skills.values():
             in_range = skill.range >= distance_to_player
             not_move = skill.name != "Move"
+            not_adjacent = distance_to_player > 1
             can_use = world.can_use_skill(entity, skill.name)
-            if in_range and not_move and can_use:
+            if in_range and can_use and (not_move or not_adjacent):
+                print(f"Can use skill; distance_to_player={distance_to_player} | skill_range={skill.range} | "
+                      f"adjacent={not not_adjacent}")
                 possible_skills.append(skill)
 
         # get direction

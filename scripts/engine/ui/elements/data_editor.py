@@ -305,7 +305,7 @@ class DataEditor(UIWindow):
 #         labels = []
 #         _options = [option.lower() for option in options]
 #
-#         # get value f_name
+#         # get value name
 #         if value:
 #             value_name = value
 #         else:
@@ -354,9 +354,9 @@ class DataEditor(UIWindow):
 #         values_list: List[str] = []
 #
 #         # Turn value into a list of strings
-#         prefixed_options.extend(f"edit#{_key}#{f_name.lower()}" for f_name in options)
+#         prefixed_options.extend(f"edit#{_key}#{name.lower()}" for name in options)
 #         if value:
-#             values_list.extend(f_name for f_name in value.keys())
+#             values_list.extend(name for name in value.keys())
 #
 #         # sort lists alphabetically
 #         prefixed_options.sort()
@@ -405,8 +405,8 @@ class DataEditor(UIWindow):
 #         values_list: List[str] = []
 #
 #         # add prefix
-#         prefixed_options.extend(f"multi#{_key}#{f_name.lower()}" for f_name in options)
-#         values_list.extend(f_name for f_name in value)
+#         prefixed_options.extend(f"multi#{_key}#{name.lower()}" for name in options)
+#         values_list.extend(name for name in value)
 #
 #         # replace spaces with underscores as object_id doesnt like spaces
 #         # values_list = [new_value.replace(" ", "_") for new_value in values_list]
@@ -483,12 +483,12 @@ class DataEditor(UIWindow):
 #         buttons = {}
 #
 #         for button_name in button_names:
-#             # split the prefix from the f_name
+#             # split the prefix from the name
 #             try:
-#                 prefix, key, f_name = button_name.lower().split("#")
+#                 prefix, key, name = button_name.lower().split("#")
 #             except ValueError:
 #                 # if no prefix
-#                 f_name = button_name.lower()
+#                 name = button_name.lower()
 #                 key = button_name
 #
 #             # ensure the object ID has no spaces
@@ -496,7 +496,7 @@ class DataEditor(UIWindow):
 #
 #             # create the button
 #             button_rect = pygame.Rect((x + offset_x, y), (width, height))
-#             button = UIButton(button_rect, f_name, self.ui_manager, container=container,
+#             button = UIButton(button_rect, name, self.ui_manager, container=container,
 #                               parent_element=self, object_id=object_id)
 #             offset_x += width
 #             buttons[object_id] = button
@@ -647,13 +647,13 @@ class DataEditor(UIWindow):
 #                                                                 row_width, row_height, container, manager)
 #                 else:
 #                     if options:
-#                         # if key f_name is plural
+#                         # if key name is plural
 #                         if key[len(key) - 1:] == "s":
 #                             data_field = self._create_multiple_from_options_field(prefix_key, value, options,
 #                                                                                   start_x,
 #                                                                                   current_y, row_width, row_height,
 #                                                                                   container, manager)
-#                         # singular f_name, only pick one
+#                         # singular name, only pick one
 #                         else:
 #                             data_field = self._create_one_from_options_field(prefix_key, value, options, start_x,
 #                                                                              current_y, row_width, row_height,
@@ -758,15 +758,15 @@ class DataEditor(UIWindow):
 #         if primary_or_secondary == "primary":
 #             # if we have a new data set
 #             if self.current_data_instance == "new":
-#                 # if we have changed the f_name
-#                 if data_field.key == "f_name":
-#                     # move the "new" key to a key using the f_name
-#                     f_name = data_field.input_element.text.lower()  # It will be a text field, as the f_name always is
-#                     self.all_data[self.current_data_category][f_name] = self.all_data[self.current_data_category].pop(
+#                 # if we have changed the name
+#                 if data_field.key == "name":
+#                     # move the "new" key to a key using the name
+#                     name = data_field.input_element.text.lower()  # It will be a text field, as the name always is
+#                     self.all_data[self.current_data_category][name] = self.all_data[self.current_data_category].pop(
 #                         self.current_data_instance)
 #
 #                     # update current instance
-#                     self.current_data_instance = f_name
+#                     self.current_data_instance = name
 #
 #             # set the primary value
 #             setattr(self.all_data[self.current_data_category][self.current_data_instance], data_field.key,

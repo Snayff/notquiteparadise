@@ -105,7 +105,7 @@ def save_game():
     # prep filename
     player = world.get_player()
     name = world.get_name(player)
-    name = name.replace(" ", "_")  # clean f_name
+    name = name.replace(" ", "_")  # clean name
     date_and_time = datetime.datetime.utcnow().strftime("%Y%m%d@%H%M%S")
     save_name_prefix = f"{name}"
     new_save_name = f"{save_name_prefix}_{date_and_time}"

@@ -177,8 +177,8 @@ class UI:
         self.debug_font = pygame.font.Font(str(ASSET_PATH / "fonts/Kenney Future Narrow.ttf"), 6)
 
         fonts = [
-            {"f_name": "barlow", "point_size": 12, "style": "regular"},
-            {"f_name": "barlow", "point_size": 14, "style": "regular"},
+            {"name": "barlow", "point_size": 12, "style": "regular"},
+            {"name": "barlow", "point_size": 14, "style": "regular"},
         ]
 
         self._gui.preload_fonts(fonts)
