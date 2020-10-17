@@ -19,10 +19,9 @@ jobs:
           args: >
             -Dsonar.organization=snayff
             -Dsonar.projectKey=Snayff_notquiteparadise
-            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.python.coverage.reportPaths=tests/_coverage/coverage.xml
             -Dsonar.sources=scripts/
             -Dsonar.tests=tests/
-            -Dsonar.verbose=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
