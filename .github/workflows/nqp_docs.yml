@@ -1,4 +1,4 @@
-name: NQP - Build Docs
+name: NQP - Build Docs & Upload Coverage
 
 on:
   push:
@@ -47,3 +47,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build
+
+      - name: Upload Coverage to Code Cov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
