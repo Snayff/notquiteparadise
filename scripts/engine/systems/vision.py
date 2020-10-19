@@ -4,20 +4,21 @@ from typing import TYPE_CHECKING
 
 import tcod
 
-from scripts.engine import world
+from scripts.engine import utility, world
 from scripts.engine.component import FOV, LightSource, Position
 from scripts.engine.core import queries
-from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_ACTIVATION_DISTANCE
+from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_ACTIVATION_DISTANCE, TILE_SIZE
+from scripts.engine.world_objects import lighting
 
 if TYPE_CHECKING:
     pass
 
-__all__ = ["process_light_map", "process_fov", "process_tile_visibility"]
+__all__ = ["process_lighting", "process_fov", "process_tile_visibility"]
 
 
-def process_light_map():
+def process_lighting():
     """
-    Update light map using light sources of all entities
+    Update light map and light box  using light sources of all entities
     """
     # get player details
     player = world.get_player()
@@ -26,6 +27,7 @@ def process_light_map():
     # get game map details
     game_map = world.get_game_map()
     light_map = game_map.light_map
+    light_box = game_map.light_box
 
     # create transparency layer
     block_sight_map = game_map.block_sight_map
@@ -33,6 +35,10 @@ def process_light_map():
     # reset light map
     light_map[:] = False
 
+    # remove existing lights in light box
+    light_box.lights = {}
+
+    # process all light sources
     for entity, (light_source, pos) in queries.light_source_and_position:
         light_source: LightSource
         pos: Position
@@ -46,6 +52,13 @@ def process_light_map():
             # create fov for light source
             fov = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), radius, FOV_LIGHT_WALLS, FOV_ALGORITHM)
             light_map |= fov
+
+            # add light to light box
+            side_length = (radius * 2) * TILE_SIZE
+            light_img = utility.get_image("world/light_mask.png", (side_length, side_length))
+            light_img.set_alpha(15)
+            light_box.add_light(lighting.Light([pos.x * TILE_SIZE, pos.y * TILE_SIZE], radius * TILE_SIZE, light_img))
+
 
 
 def process_fov():

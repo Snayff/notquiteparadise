@@ -76,7 +76,7 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
 
     # update visibility
     # TODO - implement scheduling so this doesnt need to be called here
-    vision.process_light_map()
+    vision.process_lighting()
     vision.process_fov()
     vision.process_tile_visibility()
 

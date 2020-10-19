@@ -89,7 +89,7 @@ def start_game(player_data: ActorData):
         aesthetic.target_draw_y = aesthetic.draw_y
 
     # entities load with a blank fov, update them now
-    vision.process_light_map()
+    vision.process_lighting()
     vision.process_fov()
     vision.process_tile_visibility()
 

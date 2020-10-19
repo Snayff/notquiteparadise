@@ -8,8 +8,10 @@ from typing import Any, Dict, List
 import numpy as np
 
 from scripts.engine import dungen
-from scripts.engine.core.constants import TileCategory
+from scripts.engine.core.constants import TILE_SIZE, TileCategory
 from scripts.engine.core.definitions import ActorData
+from scripts.engine.world_objects import lighting
+from scripts.engine.world_objects.lighting import LightBox
 from scripts.engine.world_objects.tile import Tile
 
 
@@ -25,18 +27,22 @@ class GameMap:
         self.name: str = map_name
         self.seed = seed
         self.rng = random.Random()
-        self.rng.seed(self.seed)
+        self.rng.seed(seed)
 
         from scripts.engine import library
-
         _map_data = library.MAPS[map_name]
         self.width = _map_data.width
         self.height = _map_data.height
+        map_size = (self.width, self.height)
 
-        self.light_map: np.array = np.zeros((self.width, self.height), dtype=bool, order="F")
-        self.tile_map: List[List[Tile]] = []
-        self._block_movement_map: np.ndarray = np.zeros((self.width, self.height), dtype=bool, order="F")
-        self._block_sight_map: np.ndarray = np.zeros((self.width, self.height), dtype=bool, order="F")
+        self.light_map: np.ndarray = np.zeros(map_size, dtype=bool, order="F")  # what positions are lit
+        self.tile_map: List[List[Tile]] = []  # array of all Tiles
+        self.light_box: LightBox = lighting.LightBox((self.width * TILE_SIZE, self.height * TILE_SIZE))  # lighting that
+        # needs processing
+
+        self._block_movement_map: np.ndarray = np.zeros(map_size, dtype=bool, order="F")  # array for move blocked
+        self._block_sight_map: np.ndarray = np.zeros(map_size, dtype=bool, order="F")  # array for sight blocked
+        self._air_tile_positions: List[List[int]] = []  # what positions dont block sight
 
         self.generation_info: str = ""
 
@@ -84,7 +90,7 @@ class GameMap:
 
     ################### DATA MANAGEMENT ####################################
 
-    def refresh_block_maps(self):
+    def _refresh_block_maps(self):
         """
         Refresh the data in the self._block_movement_map and self._block_sight_map
         """
@@ -93,6 +99,15 @@ class GameMap:
 
         block_sight_map = [[not tile.blocks_sight for tile in columns] for columns in self.tile_map]
         self._block_sight_map = np.asarray(block_sight_map, dtype=np.int8)
+
+        # get all the non-blocking, or "air", tiles.
+        self._air_tile_positions = np.argwhere(self._block_sight_map == 0).tolist()
+        # self.block_sight_map == 0 does the if not block_sight_map part of your loop. np.argwhere gets the indexes
+        # of all nonzero elements.  tolist converts this back into a nested list. If you don't need it as a list then
+        # don't use tolist.
+
+        # update the walls in the light box
+        lighting.generate_walls(self.light_box, self._air_tile_positions, TILE_SIZE)
 
     ################### SERIALISATION #####################################
 
@@ -145,7 +160,7 @@ class GameMap:
         Return a copy of an array containing ints, 0 for blocked and 1 for open
         """
         if self.is_dirty:
-            self.refresh_block_maps()
+            self._refresh_block_maps()
             self.is_dirty = False
 
         return self._block_movement_map.copy("F")
@@ -156,7 +171,18 @@ class GameMap:
         Return a copy of an array containing ints, 0 for blocked and 1 for open
         """
         if self.is_dirty:
-            self.refresh_block_maps()
+            self._refresh_block_maps()
             self.is_dirty = False
 
         return self._block_sight_map.copy("F")
+
+    @property
+    def air_tile_positions(self) -> List[List[int]]:
+        """
+        Return a copy of an array containing ints, 0 for blocked and 1 for open
+        """
+        if self.is_dirty:
+            self._refresh_block_maps()
+            self.is_dirty = False
+
+        return self._air_tile_positions.copy()

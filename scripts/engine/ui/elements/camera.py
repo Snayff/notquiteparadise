@@ -178,7 +178,7 @@ class Camera(UIPanel):
         self._draw_game_map()
         self._update_ui_element_pos()
 
-        # all updates will have been processed
+        # all updates have been processed
         self.is_dirty = False
 
     def _update_camera_position(self, time_delta):
@@ -305,7 +305,6 @@ class Camera(UIPanel):
 
         # draw entities
         from scripts.engine.core import queries
-
         for entity, (pos, aesthetic) in queries.position_and_aesthetic:
             # if part of entity in camera view
             for offset in pos.offsets:
@@ -316,6 +315,10 @@ class Camera(UIPanel):
                     tile = world.get_tile(position)
                     if tile.is_visible or self.ignore_fov:
                         self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
+
+        # draw lighting
+        light_box = world.get_game_map().light_box
+        light_box.render(map_surf, )
 
         self.game_map.set_image(map_surf)
 
