@@ -207,7 +207,6 @@ def set_turn_holder(active_entity: EntityID):
     Get the entity who has the current turn
     """
     store.turn_holder = active_entity
-    print(f"Turn holder is {active_entity}")
 
 
 def set_time_in_round(time: int):

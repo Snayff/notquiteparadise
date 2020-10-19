@@ -85,7 +85,7 @@ def game_loop():
             # just in case the turn holder has died but not been replaced as expected
             try:
                 world.take_turn(turn_holder)
-            except AttributeError:
+            except KeyError:
                 chronicle.rebuild_turn_queue()
 
         # update based on input events
