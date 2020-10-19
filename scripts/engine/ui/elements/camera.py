@@ -318,7 +318,11 @@ class Camera(UIPanel):
 
         # draw lighting
         light_box = world.get_game_map().light_box
-        light_box.render(map_surf, )
+        visible_walls = light_box.render(map_surf, [self.start_x, self.start_y])
+        for wall in visible_walls:
+            wall.render(map_surf, [self.start_x, self.start_y])
+        for light in light_box.lights.values():
+            pygame.draw.circle(map_surf, (255, 0, 0), (light.position[0], light.position[1]), 3)
 
         self.game_map.set_image(map_surf)
 

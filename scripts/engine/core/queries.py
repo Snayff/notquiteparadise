@@ -54,7 +54,7 @@ position = get_components([Position]).compile()
 
 ################## MULTI QUERIES ##########################
 
-position_and_light_source = get_components([LightSource, Position]).compile()
+position_and_light_source = get_components([Position, LightSource]).compile()
 
 position_and_fov_and_combat_stats = get_components([FOV, Position, HasCombatStats]).compile()
 

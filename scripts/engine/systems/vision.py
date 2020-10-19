@@ -4,11 +4,10 @@ from typing import TYPE_CHECKING
 
 import tcod
 
-from scripts.engine import utility, world
+from scripts.engine import world
 from scripts.engine.component import Aesthetic, FOV, LightSource, Position
 from scripts.engine.core import queries
-from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_ACTIVATION_DISTANCE, TILE_SIZE
-from scripts.engine.world_objects import lighting
+from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_ACTIVATION_DISTANCE
 
 if TYPE_CHECKING:
     pass

@@ -81,8 +81,13 @@ def _process_stateless_intents(intent: InputIntentType):
         debug.enable_profiling(120)
 
     elif intent == InputIntent.TEST:
+        # F12
+
         # add whatever we want to test here
-        breakpoint()
+        ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
+        ui.set_element_visibility(UIElement.SKILL_BAR, False)
+
+        #breakpoint()
 
 
 def _process_game_map_intents(intent: InputIntentType):

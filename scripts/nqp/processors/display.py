@@ -5,19 +5,22 @@ from typing import cast
 import pytweening
 
 from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, LightSource, Position
+from scripts.engine.component import Aesthetic, LightSource
 from scripts.engine.core import queries
+from scripts.engine.core.constants import GameState, GameStateType, UIElement
+from scripts.engine.ui.manager import ui
 from scripts.engine.utility import is_close
 
 __all__ = ["process_display_updates"]
 
 
-def process_display_updates(time_delta: float):
+def process_display_updates(time_delta: float, game_state: GameStateType):
     """
     Fire realtime processors.
     """
-    _process_aesthetic_update(time_delta)
-    _process_lighting()
+    if game_state == GameState.GAMEMAP:
+        _process_aesthetic_update(time_delta)
+        _process_lighting()
 
 
 def _process_aesthetic_update(time_delta: float):
@@ -73,6 +76,9 @@ def _process_lighting():
     game_map = world.get_game_map()
     light_box = game_map.light_box
 
+    # get camera for world pos
+    camera = ui.get_element(UIElement.CAMERA)
+
     # process all light sources
     for entity, (light_source, aesthetic) in queries.light_source_and_aesthetic:
         light_source: LightSource
@@ -80,5 +86,6 @@ def _process_lighting():
 
         # update lights in the light box
         light = light_box.get_light(light_source.light_id)
-        light.position = [aesthetic.draw_x, aesthetic.draw_y]
+        draw_pos = camera.world_to_draw_position((aesthetic.draw_x, aesthetic.draw_y))
+        light.position = [draw_pos[0], draw_pos[1]]
 
