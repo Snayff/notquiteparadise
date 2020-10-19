@@ -13,10 +13,10 @@ from scripts.engine.world_objects import lighting
 if TYPE_CHECKING:
     pass
 
-__all__ = ["process_lighting", "process_fov", "process_tile_visibility"]
+__all__ = ["process_light_map", "process_fov", "process_tile_visibility"]
 
 
-def process_lighting():
+def process_light_map():
     """
     Update light map and light box  using light sources of all entities
     """
@@ -27,7 +27,6 @@ def process_lighting():
     # get game map details
     game_map = world.get_game_map()
     light_map = game_map.light_map
-    light_box = game_map.light_box
 
     # create transparency layer
     block_sight_map = game_map.block_sight_map
@@ -36,7 +35,7 @@ def process_lighting():
     light_map[:] = False
 
     # process all light sources
-    for entity, (light_source, pos, aesthetic) in queries.light_source_and_position_and_aesthetic:
+    for entity, (pos, light_source) in queries.position_and_light_source:
         light_source: LightSource
         pos: Position
         aesthetic: Aesthetic
@@ -50,10 +49,6 @@ def process_lighting():
             # create fov for light source
             fov = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), radius, FOV_LIGHT_WALLS, FOV_ALGORITHM)
             light_map |= fov
-
-            # update lights in the light box
-            light = light_box.get_light(light_source.light_id)
-            light.position = [aesthetic.draw_x, aesthetic.draw_y]
 
 
 def process_fov():

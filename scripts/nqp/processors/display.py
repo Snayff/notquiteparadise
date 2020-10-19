@@ -4,8 +4,8 @@ from typing import cast
 
 import pytweening
 
-from scripts.engine import utility
-from scripts.engine.component import Aesthetic
+from scripts.engine import utility, world
+from scripts.engine.component import Aesthetic, LightSource, Position
 from scripts.engine.core import queries
 from scripts.engine.utility import is_close
 
@@ -17,11 +17,12 @@ def process_display_updates(time_delta: float):
     Fire realtime processors.
     """
     _process_aesthetic_update(time_delta)
+    _process_lighting()
 
 
 def _process_aesthetic_update(time_delta: float):
     """
-    Update aesthetics, such as entity animations.
+    Update aesthetics, such as entity animations and draw positions.
     """
     # move entities screen position towards target
     for entity, (aesthetic,) in queries.aesthetic:
@@ -62,3 +63,22 @@ def _process_aesthetic_update(time_delta: float):
         else:
             aesthetic.current_sprite = aesthetic.sprites.idle
             aesthetic.current_sprite_duration = 0
+
+
+def _process_lighting():
+    """
+    Update lighting draw position using light sources of all entities
+    """
+    # get game map details
+    game_map = world.get_game_map()
+    light_box = game_map.light_box
+
+    # process all light sources
+    for entity, (light_source, aesthetic) in queries.light_source_and_aesthetic:
+        light_source: LightSource
+        aesthetic: Aesthetic
+
+        # update lights in the light box
+        light = light_box.get_light(light_source.light_id)
+        light.position = [aesthetic.draw_x, aesthetic.draw_y]
+
