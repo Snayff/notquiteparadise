@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 import tcod
 
 from scripts.engine import utility, world
-from scripts.engine.component import FOV, LightSource, Position
+from scripts.engine.component import Aesthetic, FOV, LightSource, Position
 from scripts.engine.core import queries
 from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_ACTIVATION_DISTANCE, TILE_SIZE
 from scripts.engine.world_objects import lighting
@@ -35,13 +35,11 @@ def process_lighting():
     # reset light map
     light_map[:] = False
 
-    # remove existing lights in light box
-    light_box.lights = {}
-
     # process all light sources
-    for entity, (light_source, pos) in queries.light_source_and_position:
+    for entity, (light_source, pos, aesthetic) in queries.light_source_and_position_and_aesthetic:
         light_source: LightSource
         pos: Position
+        aesthetic: Aesthetic
         radius = light_source.radius
 
         # check if they're close enough that we care
@@ -53,12 +51,9 @@ def process_lighting():
             fov = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), radius, FOV_LIGHT_WALLS, FOV_ALGORITHM)
             light_map |= fov
 
-            # add light to light box
-            side_length = (radius * 2) * TILE_SIZE
-            light_img = utility.get_image("world/light_mask.png", (side_length, side_length))
-            light_img.set_alpha(15)
-            light_box.add_light(lighting.Light([pos.x * TILE_SIZE, pos.y * TILE_SIZE], radius * TILE_SIZE, light_img))
-
+            # update lights in the light box
+            light = light_box.get_light(light_source.light_id)
+            light.position = [aesthetic.draw_x, aesthetic.draw_y]
 
 
 def process_fov():

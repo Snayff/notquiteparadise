@@ -53,6 +53,7 @@ from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, ProjectileData
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
+from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
@@ -133,8 +134,16 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
     components.append(Traits(actor_data.trait_names))
     components.append(FOV())
-    components.append(LightSource(2))
     components.append(Tracked(chronicle.get_time()))
+
+    # set up light
+    radius = 2  # TODO - pull radius and colour from external data
+    light_img = utility.get_image("world/light_mask.png", (radius * TILE_SIZE, radius * TILE_SIZE))
+    light_img.set_alpha(15)
+    light_box = get_game_map().light_box
+    light = lighting.Light([spawn_pos[0] * TILE_SIZE, spawn_pos[1] * TILE_SIZE], radius * TILE_SIZE, light_img)
+    light_id = light_box.add_light(light)
+    components.append(LightSource(light_id, radius))
 
     # get info from traits
     traits_paths = []  # for aesthetic

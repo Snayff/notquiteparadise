@@ -531,7 +531,7 @@ class LightSource(RegisteredComponent):
     An emitter of light.
     """
 
-    def __init__(self, radius: int, colour: Optional[Tuple[int, int, int, int]] = None):
+    def __init__(self, light_id: str, radius: int, colour: Optional[Tuple[int, int, int, int]] = None):
         if not colour:
             _colour = (230, 182, 41, 80)
         else:
@@ -539,6 +539,7 @@ class LightSource(RegisteredComponent):
 
         self.radius: int = radius
         self.colour: Tuple[int, int, int, int] = _colour
+        self.light_id: str = light_id
 
     def serialize(self):
         data = {"radius": self.radius, "colour": self.colour}

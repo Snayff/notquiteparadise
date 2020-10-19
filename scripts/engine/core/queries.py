@@ -28,7 +28,7 @@ __all__ = [
     "knowledge",
     "affliction",
     "position",
-    "light_source_and_position",
+    "light_source_and_position_and_aesthetic",
     "position_and_fov_and_combat_stats",
     "position_and_blocking",
     "position_and_aesthetic",
@@ -54,7 +54,7 @@ position = get_components([Position]).compile()
 
 ################## MULTI QUERIES ##########################
 
-light_source_and_position = get_components([LightSource, Position]).compile()
+light_source_and_position_and_aesthetic = get_components([LightSource, Position, Aesthetic]).compile()
 
 position_and_fov_and_combat_stats = get_components([FOV, Position, HasCombatStats]).compile()
 
