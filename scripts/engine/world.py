@@ -138,8 +138,8 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
 
     # set up light
     radius = 2  # TODO - pull radius and colour from external data
-    light_img = utility.get_image("world/light_mask.png", (radius * TILE_SIZE, radius * TILE_SIZE))
-    light_img.set_alpha(15)
+    light_img = utility.get_image("world/light_mask.png", ((radius * 2) * TILE_SIZE, (radius * 2) * TILE_SIZE))
+    light_img.set_alpha(50)
     light_box = get_game_map().light_box
     light = lighting.Light([spawn_pos[0] * TILE_SIZE, spawn_pos[1] * TILE_SIZE], radius * TILE_SIZE, light_img)
     light_id = light_box.add_light(light)

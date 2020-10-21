@@ -30,14 +30,15 @@ class Camera(UIPanel):
         self.ignore_fov = False
         self.is_dirty = True
 
-        # determine how many tiles to show
-        self.rows = rect.height // TILE_SIZE
-        self.columns = rect.width // TILE_SIZE
 
         # store this now so we can refer to it later
         game_map = world.get_game_map()
         self.map_width = game_map.width
         self.map_height = game_map.height
+
+        # determine how many tiles to show; max rows and cols in game map or max we can show based on size
+        self.rows = min(rect.height // TILE_SIZE, game_map.height - 1)
+        self.columns = min(rect.width // TILE_SIZE, game_map.width - 1)
 
         # to hold the last stored end values
         self._end_x = 0
@@ -67,7 +68,7 @@ class Camera(UIPanel):
 
         # create game map
         blank_surf = Surface((rect.width, rect.height), SRCALPHA)
-        self.game_map = UIImage(
+        self.map_image = UIImage(
             relative_rect=Rect((0, 0), rect.size),
             image_surface=blank_surf,
             manager=manager,
@@ -295,8 +296,8 @@ class Camera(UIPanel):
         Update the game map to show the current tiles and entities
         """
         # create new surface for the game map
-        map_width = self.game_map.rect.width
-        map_height = self.game_map.rect.height
+        map_width = self.map_image.rect.width
+        map_height = self.map_image.rect.height
         map_surf = Surface((map_width, map_height), SRCALPHA)
 
         # draw tiles
@@ -320,11 +321,11 @@ class Camera(UIPanel):
         light_box = world.get_game_map().light_box
         visible_walls = light_box.render(map_surf, [self.start_x, self.start_y])
         for wall in visible_walls:
-            wall.render(map_surf, [self.start_x, self.start_y])
+            wall.render(map_surf, [0, 0])
         for light in light_box.lights.values():
             pygame.draw.circle(map_surf, (255, 0, 0), (light.position[0], light.position[1]), 3)
 
-        self.game_map.set_image(map_surf)
+        self.map_image.set_image(map_surf)
 
     def _draw_grid(self, tile_positions: Iterable):
         """

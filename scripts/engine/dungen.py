@@ -454,9 +454,9 @@ def _generate_map_in_steps(dungen: DungeonGenerator) -> Iterator:
     dungen.map_of_categories = []
     map_width = dungen.map_data.width
     map_height = dungen.map_data.height
-    for x in range(map_width):
+    for x in range(map_width + (dungen.border_size * 2)):
         dungen.map_of_categories.append([])  # create new list for every col
-        for y in range(map_height):
+        for y in range(map_height + (dungen.border_size * 2)):
             dungen.map_of_categories[x].append(TileCategory.WALL)
 
     yield dungen.map_of_categories
@@ -670,8 +670,8 @@ def _place_room(dungen: DungeonGenerator, room: RoomConcept) -> bool:
     border_size = dungen.border_size
 
     # pick random location to place room, not including borders
-    room.start_x = dungen.rng.randint(border_size, max(border_size, map_width - room.width - border_size - 1))
-    room.start_y = dungen.rng.randint(border_size, max(border_size, map_height - room.height - border_size - 1))
+    room.start_x = dungen.rng.randint(border_size, max(border_size, map_width - room.width - 1))
+    room.start_y = dungen.rng.randint(border_size, max(border_size, map_height - room.height - 1))
 
     # if placed there does room overlap any existing rooms?
     for _room in dungen.placed_rooms:
@@ -1031,7 +1031,8 @@ def _find_place_for_actor(
         offset_x = x + pos[0]
         offset_y = y + pos[1]
 
-        # only need to check tile category as that capture entity placement too
+
+        # only need to check tile category as that captures entity placement too
         if dungen.map_of_categories[offset_x][offset_y] == TileCategory.FLOOR:
             blocked = False
         else:

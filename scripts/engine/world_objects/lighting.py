@@ -207,7 +207,7 @@ class LightBox:
 
 
 # the wall class that makes up the core of the lighting system (since the walls cast shadows)
-class Wall():
+class Wall:
     def __init__(self, p1, p2, vertical, direction, color=(255, 255, 255)):
         self.p1 = p1
         self.p2 = p2

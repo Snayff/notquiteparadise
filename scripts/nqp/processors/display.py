@@ -7,7 +7,7 @@ import pytweening
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, LightSource
 from scripts.engine.core import queries
-from scripts.engine.core.constants import GameState, GameStateType, UIElement
+from scripts.engine.core.constants import GameState, GameStateType, TILE_SIZE, UIElement
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import is_close
 

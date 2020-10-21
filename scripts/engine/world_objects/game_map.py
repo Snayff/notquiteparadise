@@ -14,6 +14,8 @@ from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.lighting import LightBox
 from scripts.engine.world_objects.tile import Tile
 
+__all__ = ["GameMap"]
+
 
 class GameMap:
     """
@@ -37,8 +39,9 @@ class GameMap:
 
         self.light_map: np.ndarray = np.zeros(map_size, dtype=bool, order="F")  # what positions are lit
         self.tile_map: List[List[Tile]] = []  # array of all Tiles
-        self.light_box: LightBox = lighting.LightBox((self.width * TILE_SIZE, self.height * TILE_SIZE))  # lighting that
-        # needs processing
+
+        window = library.VIDEO_CONFIG.base_window
+        self.light_box: LightBox = lighting.LightBox((window.width, window.height))  # lighting that needs processing
 
         self._block_movement_map: np.ndarray = np.zeros(map_size, dtype=bool, order="F")  # array for move blocked
         self._block_sight_map: np.ndarray = np.zeros(map_size, dtype=bool, order="F")  # array for sight blocked
@@ -90,7 +93,7 @@ class GameMap:
 
     ################### DATA MANAGEMENT ####################################
 
-    def _refresh_block_maps(self):
+    def _refresh_internals(self):
         """
         Refresh the data in the self._block_movement_map and self._block_sight_map
         """
@@ -105,9 +108,6 @@ class GameMap:
         # self.block_sight_map == 0 does the if not block_sight_map part of your loop. np.argwhere gets the indexes
         # of all nonzero elements.  tolist converts this back into a nested list. If you don't need it as a list then
         # don't use tolist.
-
-        # update the walls in the light box
-        lighting.generate_walls(self.light_box, self._air_tile_positions, TILE_SIZE)
 
     ################### SERIALISATION #####################################
 
@@ -160,7 +160,7 @@ class GameMap:
         Return a copy of an array containing ints, 0 for blocked and 1 for open
         """
         if self.is_dirty:
-            self._refresh_block_maps()
+            self._refresh_internals()
             self.is_dirty = False
 
         return self._block_movement_map.copy("F")
@@ -171,7 +171,7 @@ class GameMap:
         Return a copy of an array containing ints, 0 for blocked and 1 for open
         """
         if self.is_dirty:
-            self._refresh_block_maps()
+            self._refresh_internals()
             self.is_dirty = False
 
         return self._block_sight_map.copy("F")
@@ -182,7 +182,7 @@ class GameMap:
         Return a copy of an array containing ints, 0 for blocked and 1 for open
         """
         if self.is_dirty:
-            self._refresh_block_maps()
+            self._refresh_internals()
             self.is_dirty = False
 
         return self._air_tile_positions.copy()

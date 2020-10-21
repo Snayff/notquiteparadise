@@ -11,6 +11,8 @@ import tcod
 ######################## TOP LEVEL CONSTANTS ######################################
 
 VERSION = "0.131.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+DEBUG_START = True  # Whether to start directly in debug map
+
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -21,7 +23,7 @@ GAP_SIZE = 2
 SKILL_BUTTON_SIZE = 32
 INFINITE = 999
 MAX_ACTIVATION_DISTANCE = 7  # this is how far from the player an entity can be and still be considered active
-# TODO - add an active component and then we can look for this (and only update once per turn!)
+# TODO - add an active component and then we can look for this (activation) (and only update once per turn!)
 FOV_LIGHT_WALLS = True
 FOV_ALGORITHM = tcod.FOV_RESTRICTIVE
 
@@ -35,7 +37,7 @@ if "GENERATING_SPHINX_DOCS" in os.environ:
 
 DATA_PATH = ROOT_PATH / "data/"
 ASSET_PATH = ROOT_PATH / "assets/"
-IMAGE_NOT_FOUND_PATH = ASSET_PATH / "image_not_found.png"
+IMAGE_NOT_FOUND_PATH = ASSET_PATH / "debug/image_not_found.png"
 SAVE_PATH = DATA_PATH / "saves/"
 
 ######################## NEW TYPES ######################################
