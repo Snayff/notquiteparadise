@@ -8,7 +8,7 @@ from typing import Any, Dict, List
 import numpy as np
 
 from scripts.engine import dungen
-from scripts.engine.core.constants import TILE_SIZE, TileCategory
+from scripts.engine.core.constants import MAP_BORDER_SIZE, TILE_SIZE, TileCategory
 from scripts.engine.core.definitions import ActorData
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.lighting import LightBox
@@ -33,8 +33,8 @@ class GameMap:
 
         from scripts.engine import library
         _map_data = library.MAPS[map_name]
-        self.width = _map_data.width
-        self.height = _map_data.height
+        self.width = _map_data.width + (MAP_BORDER_SIZE * 2)
+        self.height = _map_data.height + (MAP_BORDER_SIZE * 2)
         map_size = (self.width, self.height)
 
         self.light_map: np.ndarray = np.zeros(map_size, dtype=bool, order="F")  # what positions are lit

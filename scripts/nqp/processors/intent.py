@@ -61,6 +61,7 @@ def _process_stateless_intents(intent: InputIntentType):
     ## Activate data editor
     # TODO - have this trigger dev console and move skill editor to a command in the console.
     elif intent == InputIntent.DUNGEON_DEV_VIEW:
+        # key= F5
         if ui.element_is_visible(UIElement.DUNGEN_VIEWER):
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, False)
             state.set_new(state.get_previous())

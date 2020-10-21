@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 import time
 from threading import Timer
@@ -53,6 +54,7 @@ def _start_debug_game():
         trait_names=["shoom", "soft_tops", "dandy"],
     )
     game_map.generate_new_map(player_data)
+    logging.info(game_map.generation_info)
 
     # init the player
     player = world.get_player()

@@ -26,6 +26,7 @@ MAX_ACTIVATION_DISTANCE = 7  # this is how far from the player an entity can be 
 # TODO - add an active component and then we can look for this (activation) (and only update once per turn!)
 FOV_LIGHT_WALLS = True
 FOV_ALGORITHM = tcod.FOV_RESTRICTIVE
+MAP_BORDER_SIZE = 4
 
 ######################## PATHS ######################################
 

@@ -321,7 +321,7 @@ class Camera(UIPanel):
         light_box = world.get_game_map().light_box
         visible_walls = light_box.render(map_surf, [self.start_x, self.start_y])
         for wall in visible_walls:
-            wall.render(map_surf, [0, 0])
+            wall.render(map_surf, [self.start_x, self.start_y])
         for light in light_box.lights.values():
             pygame.draw.circle(map_surf, (255, 0, 0), (light.position[0], light.position[1]), 3)
 
@@ -390,8 +390,8 @@ class Camera(UIPanel):
             new_x = self.target_x + offset_x
             new_y = self.target_y + offset_y
 
-            self.target_x = int(clamp(new_x, 0 + half_width, self.map_width - half_width))
-            self.target_y = int(clamp(new_y, 0 + half_height, self.map_height - half_height))
+            self.target_x = int(clamp(new_x, 0 + self.edge_size, self.map_width))
+            self.target_y = int(clamp(new_y, 0 + self.edge_size, self.map_height))
 
         self.is_dirty = True
 
