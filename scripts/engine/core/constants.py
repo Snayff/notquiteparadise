@@ -11,7 +11,7 @@ import tcod
 ######################## TOP LEVEL CONSTANTS ######################################
 
 VERSION = "0.131.0"  # DONT FORGET TO UPDATE SPHINX VERSION
-DEBUG_START = True  # Whether to start directly in debug map
+DEBUG_START = False  # Whether to start directly in debug map
 
 
 MAX_SKILLS = 6

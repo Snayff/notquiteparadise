@@ -109,6 +109,9 @@ class GameMap:
         # of all nonzero elements.  tolist converts this back into a nested list. If you don't need it as a list then
         # don't use tolist.
 
+        # update the walls in the light box
+        lighting.generate_walls(self.light_box, self._air_tile_positions, TILE_SIZE)
+
     ################### SERIALISATION #####################################
 
     def serialise(self) -> Dict[str, Any]:

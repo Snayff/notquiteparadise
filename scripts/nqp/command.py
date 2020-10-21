@@ -237,5 +237,8 @@ def goto_to_title():
     ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
     ui.set_element_visibility(UIElement.SKILL_BAR, False)
 
+    # clear existing resource
+    store.current_game_map = None  # TODO - add better clearing method.
+
     # show the title screen
     ui.set_element_visibility(UIElement.TITLE_SCREEN, True)

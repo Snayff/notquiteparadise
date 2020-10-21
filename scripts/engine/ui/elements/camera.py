@@ -300,9 +300,10 @@ class Camera(UIPanel):
         map_height = self.map_image.rect.height
         map_surf = Surface((map_width, map_height), SRCALPHA)
 
-        # draw tiles
+        # draw floors
         for tile in self.current_tiles:
-            self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
+            if not tile.blocks_sight:
+                self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
 
         # draw entities
         from scripts.engine.core import queries
@@ -319,11 +320,13 @@ class Camera(UIPanel):
 
         # draw lighting
         light_box = world.get_game_map().light_box
-        visible_walls = light_box.render(map_surf, [self.start_x, self.start_y])
-        for wall in visible_walls:
-            wall.render(map_surf, [self.start_x, self.start_y])
-        for light in light_box.lights.values():
-            pygame.draw.circle(map_surf, (255, 0, 0), (light.position[0], light.position[1]), 3)
+        light_box.render(map_surf, [self.start_x * TILE_SIZE, self.start_y * TILE_SIZE])
+
+        # TODO - find less crappy way to separate floor and wall (split current tiles into 2?)
+        # draw walls
+        for tile in self.current_tiles:
+            if tile.blocks_sight:
+                self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
 
         self.map_image.set_image(map_surf)
 
@@ -373,15 +376,18 @@ class Camera(UIPanel):
         x, y = position
 
         if self.is_in_camera_edge(position) or recentre:
-            # centre the target
-            half_width = int((self.rect.width / TILE_SIZE) / 2)
-            half_height = int((self.rect.height / TILE_SIZE) / 2)
-
             if recentre:
+                # find centre
+                half_width = int((self.rect.width / TILE_SIZE) / 2)
+                half_height = int((self.rect.height / TILE_SIZE) / 2)
+
+                # centre the target
                 self.start_x = x
                 self.start_y = y
                 self.target_x = x
                 self.target_y = y
+
+                # move to centre
                 offset_x = -half_width
                 offset_y = -half_height
             else:
@@ -390,8 +396,8 @@ class Camera(UIPanel):
             new_x = self.target_x + offset_x
             new_y = self.target_y + offset_y
 
-            self.target_x = int(clamp(new_x, 0 + self.edge_size, self.map_width))
-            self.target_y = int(clamp(new_y, 0 + self.edge_size, self.map_height))
+            self.target_x = int(clamp(new_x, 0, self.map_width))
+            self.target_y = int(clamp(new_y, 0, self.map_height))
 
         self.is_dirty = True
 

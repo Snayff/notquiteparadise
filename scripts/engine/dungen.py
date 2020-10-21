@@ -237,7 +237,7 @@ class DungeonGenerator:
         gen_info = "==== DUNGEN ==== \n"
         gen_info += f"==== Map Details ==== \n"
         gen_info += f"{self.map_data.name} | w:{self.map_data.width}, h:{self.map_data.height} | "
-        gen_info += f"rooms: {len(self.placed_rooms)} \n"
+        gen_info += f"border:{self.border_size} | rooms: {len(self.placed_rooms)} \n"
 
         # add info from each room
         gen_info += f"==== Room Details ==== \n"

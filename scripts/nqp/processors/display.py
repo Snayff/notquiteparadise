@@ -86,6 +86,7 @@ def _process_lighting():
 
         # update lights in the light box
         light = light_box.get_light(light_source.light_id)
-        draw_pos = camera.world_to_draw_position((aesthetic.draw_x, aesthetic.draw_y))
-        light.position = [draw_pos[0], draw_pos[1]]
+        x = aesthetic.draw_x * TILE_SIZE + (TILE_SIZE / 2)
+        y = aesthetic.draw_y * TILE_SIZE + (TILE_SIZE / 2)
+        light.position = [x, y]
 

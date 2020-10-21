@@ -3,12 +3,12 @@
         "name": "Debug Map",
         "key": "debug",
         "__dataclass__": "MapData",
-        "min_rooms": 1,
-        "max_rooms": 1,
+        "min_rooms": 2,
+        "max_rooms": 2,
         "max_tunnel_length": 20,
         "min_path_distance_for_shortcut": 5,
         "width": 20,
-        "height": 19,
+        "height": 20,
         "rooms": {
             "debug": 0.1
         },
