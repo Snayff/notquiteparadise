@@ -7,8 +7,7 @@ import pytweening
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, LightSource
 from scripts.engine.core import queries
-from scripts.engine.core.constants import GameState, GameStateType, TILE_SIZE, UIElement
-from scripts.engine.ui.manager import ui
+from scripts.engine.core.constants import GameState, GameStateType, TILE_SIZE
 from scripts.engine.utility import is_close
 
 __all__ = ["process_display_updates"]
@@ -75,9 +74,6 @@ def _process_lighting():
     # get game map details
     game_map = world.get_game_map()
     light_box = game_map.light_box
-
-    # get camera for world pos
-    camera = ui.get_element(UIElement.CAMERA)
 
     # process all light sources
     for entity, (light_source, aesthetic) in queries.light_source_and_aesthetic:

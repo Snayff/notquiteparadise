@@ -1,4 +1,5 @@
 import logging
+import time
 from typing import Iterable, List, Optional, Tuple, cast
 
 import pygame
@@ -322,7 +323,6 @@ class Camera(UIPanel):
         light_box = world.get_game_map().light_box
         light_box.render(map_surf, [self.start_x * TILE_SIZE, self.start_y * TILE_SIZE])
 
-        # TODO - find less crappy way to separate floor and wall (split current tiles into 2?)
         # draw walls
         for tile in self.current_tiles:
             if tile.blocks_sight:

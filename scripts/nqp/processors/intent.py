@@ -27,6 +27,8 @@ from scripts.engine.world_objects.tile import Tile
 
 __all__ = ["process_intent"]
 
+from scripts.nqp import command
+
 
 def process_intent(intent: InputIntentType, game_state: GameStateType):
     """
@@ -48,6 +50,7 @@ def _process_stateless_intents(intent: InputIntentType):
     """
     ## Activate Debug
     if intent == InputIntent.DEBUG_TOGGLE:
+        # F1
         if debug.is_fps_visible():
             debug.set_fps_visibility(False)
         else:
@@ -142,6 +145,9 @@ def _process_game_map_intents(intent: InputIntentType):
         # show
         state.set_new(GameState.MENU)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
+
+    elif intent == InputIntent.EXIT:
+        command.exit_game()
 
 
 def _process_targeting_mode_intents(intent):
