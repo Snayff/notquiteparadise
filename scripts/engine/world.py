@@ -250,6 +250,21 @@ def create_combat_stats(entity: EntityID) -> CombatStats:
     return stats
 
 
+def create_pathfinder() -> tcod.path.Pathfinder:
+    """
+    Create an empty pathfinder using the current game map
+    """
+    game_map = get_game_map()
+
+    # combine entity blocking and map blocking maps
+    cost_map = game_map.block_movement_map | get_entity_blocking_movement_map()
+
+    # create graph to represent the map and a pathfinder to navigate
+    graph = tcod.path.SimpleGraph(cost=np.asarray(cost_map, dtype=np.int8), cardinal=2, diagonal=0)
+    pathfinder = tcod.path.Pathfinder(graph)
+
+    return pathfinder
+
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 
 
@@ -344,31 +359,30 @@ def get_entity_blocking_movement_map() -> np.array:
     return blocking_map
 
 
-def get_a_star_direction(start_entity: EntityID, target_entity: EntityID) -> Optional[DirectionType]:
+def get_a_star_path(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> List[List[int, int]]:
     """
-    Use a* pathfinding to get a direction from one entity to another
+    Get a list of coords that dictates the path between 2 entities.
     """
-    pos = get_entitys_component(start_entity, Position)
-    start_pos = (pos.x, pos.y)
-    pos = get_entitys_component(target_entity, Position)
-    target_pos = (pos.x, pos.y)
-
-    game_map = get_game_map()
-
-    # combine entity blocking and map blocking maps
-    cost_map = game_map.block_movement_map | get_entity_blocking_movement_map()
-
-    # create graph to represent the map and a pathfinder to navigate
-    graph = tcod.path.SimpleGraph(cost=np.asarray(cost_map, dtype=np.int8), cardinal=2, diagonal=0)
-    pathfinder = tcod.path.Pathfinder(graph)
+    pathfinder = create_pathfinder()
 
     # add points
     pathfinder.add_root(start_pos)
-    path = pathfinder.path_to(target_pos)[1:].tolist()
+    path = pathfinder.path_to(target_pos).tolist()
+    assert isinstance(path, list)
+
+    return path
+
+
+def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Optional[DirectionType]:
+    """
+    Use a* pathfinding to get a direction from one entity to another
+    """
+    path = get_a_star_path(start_pos, target_pos)
 
     # if there is a path then return direction
     if path:
-        next_pos = path[0]
+        start_pos = path[0]
+        next_pos = path[1]
         move_dir = get_direction(start_pos, next_pos)
         return move_dir
 
@@ -815,14 +829,6 @@ def _tile_has_entity_blocking_sight(tile: Tile) -> bool:
     return False
 
 
-def is_tile_in_fov(tile_pos: Tuple[int, int], fov_map) -> bool:
-    """
-    Check if  target tile is in player`s FOV
-    """
-    x, y = tile_pos
-    return fov_map[x][y]
-
-
 def _can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
     """
     Check if entity can afford the resource cost
@@ -889,6 +895,10 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
 
     # we've reached the end; no good.
     return False
+
+
+def is_in_los(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+    tcod.los.bresenham(start_pos, target_pos).tolist()
 
 
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############

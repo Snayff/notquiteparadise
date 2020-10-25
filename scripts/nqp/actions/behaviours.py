@@ -4,6 +4,7 @@ import logging
 import random
 from typing import Tuple
 
+import tcod
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, library, world
@@ -138,13 +139,16 @@ class FollowPlayer(Behaviour):
     def act(self):
         entity = self.entity
 
-        # get move direction
+        # get position info
+        pos = world.get_entitys_component(entity, Position)
         player = world.get_player()
-        move_dir = world.get_a_star_direction(entity, player)
+        player_pos = world.get_entitys_component(player, Position)
+
+        # get move direction
+        move_dir = world.get_a_star_direction((pos.x, pos.y), (player_pos.x, player_pos.y))
 
         # get info for skill
         move = world.get_known_skill(entity, "Move")
-        pos = world.get_entitys_component(entity, Position)
         target_tile = world.get_tile((pos.x, pos.y))
         name = world.get_name(entity)
 
@@ -166,45 +170,61 @@ class HuntPlayer(Behaviour):
 
     def act(self):
         entity = self.entity
-
-        # get distance
-        player = world.get_player()
-        player_pos = world.get_entitys_component(player, Position)
         pos = world.get_entitys_component(entity, Position)
-        distance_to_player = world.get_chebyshev_distance((pos.x, pos.y), (player_pos.x, player_pos.y))
+        target = world.get_player()
+        target_pos = world.get_entitys_component(target, Position)
+        skill_to_cast = None  # flag to indicate when we've determined able to cast
 
-        # are we in range to attack?
+        # what skills are ready to use?
         possible_skills = []
         knowledge = world.get_entitys_component(entity, Knowledge)
         for skill in knowledge.skills.values():
-            in_range = skill.range >= distance_to_player
-            not_move = skill.name != "Move"
-            not_adjacent = distance_to_player > 1
-            can_use = world.can_use_skill(entity, skill.name)
-            if in_range and can_use and (not_move or not_adjacent):
-                # print(f"Can use skill; distance_to_player={distance_to_player} | skill_range={skill.range} | "
-                #       f"not_adjacent={not_adjacent}")
+            if world.can_use_skill(entity, skill.name) and skill.name != "Move":
                 possible_skills.append(skill)
 
-        # get direction
-        skill_dir = world.get_a_star_direction(entity, player)
+        # where can we cast from?
+        cast_positions = []
+        for skill in possible_skills:
+            for direction in skill.target_directions:
+                # work out from target pos, reversing direction as we working form target, not to
+                for _range in range(0, skill.range):
+                    x = target_pos.x + (-_range * direction[0])
+                    y = target_pos.y + (-_range * direction[1])
 
-        # get skill info to move or attack
-        if possible_skills:
-            # pick a skill at random
-            skill = random.choice(possible_skills)
+                    if pos.x == x and pos. y == y:
+                        skill_to_cast = skill
+                        # TODO - find way to break early
+                    else:
+                        cast_positions.append((x, y))
+
+        # can we cast yet?
+        if skill_to_cast:
+            # get target tile
+            skill_dir = world.get_a_star_direction((pos.x, pos.y), (target_pos.x, target_pos.y))
             target_tile = world.get_tile((pos.x + skill_dir[0], pos.y + skill_dir[1]))
-        else:
-            skill = world.get_known_skill(entity, "Move")
-            target_tile = world.get_tile((pos.x, pos.y))  # target tile is self as we need to move self
 
-        # attempt to use skill
-        name = world.get_name(entity)
-        if world.can_use_skill(entity, skill.name):
-            world.use_skill(entity, skill, target_tile, skill_dir)
-        else:
-            logging.debug(f"'{name}' tried to use {skill.f_name} from ({pos.x},{pos.y}) to ({target_tile.x}"
-                          f",{target_tile.y}) but couldn`t.")
 
+        # we cant cast, find nearest cast_position
+        else:
+            # add all possible positions to pathfinder
+            pathfinder = world.create_pathfinder()
+            for cast_pos in cast_positions:
+                pathfinder.add_root(cast_pos)
+
+            # get nearest location
+            path = pathfinder.path_from((pos.x, pos.y))[1:].tolist()  # slice out starting pos
+            assert isinstance(path, list)
+            nearest_pos = path[0]
+
+            # get target tile
+            skill_dir = world.get_direction((pos.x, pos.y), (nearest_pos[0], nearest_pos[1]))
+            target_tile = world.get_tile((pos.x, pos.y))  # target tile for Move is current pos
+
+            # set skill to cast to move
+            skill_to_cast = knowledge.skills["Move"]
+
+        # cast whatever skill has been chosen, including move
+        world.use_skill(entity, skill_to_cast, target_tile, skill_dir)
+
+        # end turn
         chronicle.end_turn(entity, library.GAME_CONFIG.base_values.move_cost)
-
