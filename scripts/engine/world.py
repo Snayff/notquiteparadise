@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import TYPE_CHECKING, List, Optional, Tuple, Type, TypeVar, cast
+from typing import Dict, TYPE_CHECKING, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
 import snecs
@@ -675,6 +675,33 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
     return entities
 
 
+def get_cast_positions(target_pos: Position, skills: List[Type[Skill]]) -> Dict[Type[Skill], List[Tuple[int, int]]]:
+    """
+    Check through list of skills to find unblocked cast positions to target
+    """
+    skill_dict = {}
+
+    # loop all skills and all directions
+    for skill in skills:
+        skill_dict[skill] = []
+        for direction in skill.target_directions:
+            # work out from target pos, reversing direction as we are working from target, not towards them
+            for _range in range(0, skill.range + 1):  # +1 to be inclusive
+                x = target_pos.x + (-_range * direction[0])
+                y = target_pos.y + (-_range * direction[1])
+
+                # check tile is open and in vision
+                tile = get_tile((x, y))
+                has_tags = tile_has_tags(tile, [TargetTag.IS_VISIBLE, TargetTag.OPEN_SPACE])
+                if has_tags:
+                    skill_dict[skill].append((x, y))
+
+                else:
+                    # space blocked so further out spaces will be no good either
+                    break
+
+    return skill_dict
+
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
 
 
@@ -1050,6 +1077,14 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
         logging.warning(f"'{get_name(entity)}' has no tracked to spend time.")
 
     return False
+
+
+def choose_target(entity: EntityID) -> Optional[EntityID]:
+    """
+    Choose an appropriate target for the entity.
+    FIXME - CURRENTLY JUST RETURNS PLAYER
+    """
+    return get_player()
 
 
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############

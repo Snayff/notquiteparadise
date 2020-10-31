@@ -29,6 +29,6 @@
         "trait_names": [
             "crocturion"
         ],
-        "behaviour_name": "HuntPlayer"
+        "behaviour_name": "Basic"
     }
 }

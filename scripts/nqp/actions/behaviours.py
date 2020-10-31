@@ -3,14 +3,12 @@ from __future__ import annotations
 import logging
 import random
 from typing import Tuple
-
-import tcod
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, library, world
 from scripts.engine.action import Behaviour, Skill, init_action
 from scripts.engine.component import Knowledge, Position
-from scripts.engine.core.constants import ProjectileExpiry, TargetTag, TerrainCollision
+from scripts.engine.core.constants import Direction, ProjectileExpiry, TargetTag, TerrainCollision
 from scripts.engine.core.definitions import ProjectileData
 from scripts.engine.world_objects.tile import Tile
 
@@ -163,7 +161,7 @@ class FollowPlayer(Behaviour):
 
 
 @init_action
-class HuntPlayer(Behaviour):
+class Basic(Behaviour):
     """
     Search and attack the player
     """
@@ -171,9 +169,12 @@ class HuntPlayer(Behaviour):
     def act(self):
         entity = self.entity
         pos = world.get_entitys_component(entity, Position)
-        target = world.get_player()
-        target_pos = world.get_entitys_component(target, Position)
-        skill_to_cast = None  # flag to indicate when we've determined able to cast
+        target = world.choose_target(entity)
+
+        # if we have no target move in random direction
+        if not target:
+            self._move_randomly()
+            return  # exit
 
         # what skills are ready to use?
         possible_skills = []
@@ -183,48 +184,89 @@ class HuntPlayer(Behaviour):
                 possible_skills.append(skill)
 
         # where can we cast from?
-        cast_positions = []
-        for skill in possible_skills:
-            for direction in skill.target_directions:
-                # work out from target pos, reversing direction as we working form target, not to
-                for _range in range(0, skill.range):
-                    x = target_pos.x + (-_range * direction[0])
-                    y = target_pos.y + (-_range * direction[1])
+        skill_cast_positions = world.get_cast_positions(pos, possible_skills)
 
-                    if pos.x == x and pos. y == y:
-                        skill_to_cast = skill
-                        # TODO - find way to break early
-                    else:
-                        cast_positions.append((x, y))
+        # are we currently on a cast position?
+        skills_can_cast = []
+        for skill in skill_cast_positions.keys():
+            if (pos.x, pos.y) in skill_cast_positions[skill]:
+                skills_can_cast.append(skill)
 
-        # can we cast yet?
-        if skill_to_cast:
+        # if we can cast a skill now then pick one at random and cast
+        if skills_can_cast:
             # get target tile
+            target_pos = world.get_entitys_component(target, Position)
             skill_dir = world.get_a_star_direction((pos.x, pos.y), (target_pos.x, target_pos.y))
             target_tile = world.get_tile((pos.x + skill_dir[0], pos.y + skill_dir[1]))
 
+            # set skill to cast
+            skill_to_cast = random.choice(skills_can_cast)
+
+            # cast whatever skill has been chosen
+            world.use_skill(entity, skill_to_cast, target_tile, skill_dir)
+
+            # end turn
+            chronicle.end_turn(entity, skill_to_cast.time_cost)
 
         # we cant cast, find nearest cast_position
         else:
             # add all possible positions to pathfinder
             pathfinder = world.create_pathfinder()
-            for cast_pos in cast_positions:
-                pathfinder.add_root(cast_pos)
+            for cast_positions in skill_cast_positions.values():
+                for cast_pos in cast_positions:
+                    pathfinder.add_root(cast_pos)
 
             # get nearest location
             path = pathfinder.path_from((pos.x, pos.y))[1:].tolist()  # slice out starting pos
             assert isinstance(path, list)
-            nearest_pos = path[0]
 
-            # get target tile
-            skill_dir = world.get_direction((pos.x, pos.y), (nearest_pos[0], nearest_pos[1]))
+            # check is path has any value - there might not have been any valid cast positions
+            if path:
+                nearest_pos = path[0]
+
+                # get target tile
+                skill_dir = world.get_direction((pos.x, pos.y), (nearest_pos[0], nearest_pos[1]))
+                target_tile = world.get_tile((pos.x, pos.y))  # target tile for Move is current pos
+
+                # set skill to cast to move
+                skill_to_cast = knowledge.skills["Move"]
+
+                # cast whatever skill has been chosen
+                world.use_skill(entity, skill_to_cast, target_tile, skill_dir)
+
+                # end turn
+                chronicle.end_turn(entity, skill_to_cast.time_cost)
+            else:
+                # no valid cast position, just wander
+                self._move_randomly()
+
+
+    def _move_randomly(self):
+        """
+        Move self in random direction. End turn, whether moved or not.
+        """
+        entity = self.entity
+        pos = world.get_entitys_component(entity, Position)
+        knowledge = world.get_entitys_component(entity, Knowledge)
+        move = knowledge.skills["Move"]
+        cardinals = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
+
+        # check spaces are free
+        poss_directions = []
+        for _dir in cardinals:
+            x = pos.x + _dir[0]
+            y = pos.y + _dir[1]
+
+            tile = world.get_tile((x, y))
+            has_tags = world.tile_has_tag(tile, TargetTag.OPEN_SPACE)
+            if has_tags:
+                poss_directions.append((_dir[0], _dir[1]))
+
+        # if any space we can move to, do so
+        if poss_directions:
+            move_dir = random.choice(poss_directions)
             target_tile = world.get_tile((pos.x, pos.y))  # target tile for Move is current pos
 
-            # set skill to cast to move
-            skill_to_cast = knowledge.skills["Move"]
+            world.use_skill(entity, move, target_tile, move_dir)
 
-        # cast whatever skill has been chosen, including move
-        world.use_skill(entity, skill_to_cast, target_tile, skill_dir)
-
-        # end turn
-        chronicle.end_turn(entity, library.GAME_CONFIG.base_values.move_cost)
+        chronicle.end_turn(entity, move.time_cost)

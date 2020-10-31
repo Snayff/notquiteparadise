@@ -138,7 +138,7 @@
         ],
         "shape": "target",
         "shape_size": 1,
-        "range": 2,
+        "range": 3,
         "uses_projectile": true,
         "projectile_data": {
             "__dataclass__": "ProjectileData",
@@ -149,7 +149,7 @@
             },
             "speed": "average",
             "travel_method": "standard",
-            "range": 2,
+            "range": 3,
             "terrain_collision": "fizzle",
             "expiry_type": "fizzle"
         }
