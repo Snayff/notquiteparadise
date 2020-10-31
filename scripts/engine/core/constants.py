@@ -20,8 +20,7 @@ ICON_SIZE = TILE_SIZE // 2
 GAP_SIZE = 2
 SKILL_BUTTON_SIZE = 32
 INFINITE = 999
-MAX_ACTIVATION_DISTANCE = 7  # this is how far from the player an entity can be and still be considered active
-# TODO - add an active component and then we can look for this (and only update once per turn!)
+MAX_ACTIVATION_DISTANCE = 5  # this is how far from the player an entity can be and still be considered active
 FOV_LIGHT_WALLS = True
 FOV_ALGORITHM = tcod.FOV_RESTRICTIVE
 

@@ -29,10 +29,16 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     new_queue = {}
     from scripts.engine.core import queries
 
-    for entity, (tracked, ) in queries.tracked:
+    for entity, (is_active, tracked, ) in queries.active_and_tracked:
         if entity != entity_to_exclude:
             assert isinstance(tracked, Tracked)
             new_queue[entity] = tracked.time_spent
+
+    # did we actually allocate to anyone?
+    if not new_queue:
+        # add player to queue
+        new_queue[world.get_player()] = get_time()
+
     set_turn_queue(new_queue)
 
     # get the next entity in the queue and set as new turn holder

@@ -176,6 +176,8 @@ class Basic(Behaviour):
             self._move_randomly()
             return  # exit
 
+        target_pos = world.get_entitys_component(target, Position)
+
         # what skills are ready to use?
         possible_skills = []
         knowledge = world.get_entitys_component(entity, Knowledge)
@@ -184,18 +186,17 @@ class Basic(Behaviour):
                 possible_skills.append(skill)
 
         # where can we cast from?
-        skill_cast_positions = world.get_cast_positions(entity, pos, possible_skills)
+        skill_cast_positions = world.get_cast_positions(entity, target_pos, possible_skills)
 
         # are we currently on a cast position?
         skills_can_cast = []
-        for skill in skill_cast_positions.keys():
-            if (pos.x, pos.y) in skill_cast_positions[skill]:
+        for skill, cast_positions in skill_cast_positions.items():
+            if (pos.x, pos.y) in cast_positions:
                 skills_can_cast.append(skill)
 
         # if we can cast a skill now then pick one at random and cast
         if skills_can_cast:
             # get target tile
-            target_pos = world.get_entitys_component(target, Position)
             skill_dir = world.get_a_star_direction((pos.x, pos.y), (target_pos.x, target_pos.y))
             target_tile = world.get_tile((pos.x + skill_dir[0], pos.y + skill_dir[1]))
 

@@ -184,7 +184,7 @@ class MoveActorEffect(Effect):
 
             # check a tile was returned
             if target_tile:
-                is_tile_blocking_movement = world.tile_has_tag(entity, target_tile, TargetTag.BLOCKED_MOVEMENT, entity)
+                is_tile_blocking_movement = world.tile_has_tag(entity, target_tile, TargetTag.BLOCKED_MOVEMENT)
                 is_entity_on_tile = not world.tile_has_tag(entity, target_tile, TargetTag.NO_ENTITY)
             else:
                 is_tile_blocking_movement = True

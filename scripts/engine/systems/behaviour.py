@@ -3,7 +3,7 @@ from __future__ import annotations
 __all__ = ["process_interventions", "process_activations"]
 
 from scripts.engine import world
-from scripts.engine.component import IsActive, Position
+from scripts.engine.component import IsActive, Position, Tracked
 from scripts.engine.core import queries
 from scripts.engine.core.constants import MAX_ACTIVATION_DISTANCE
 
@@ -43,12 +43,18 @@ def process_activations():
     player_pos: Position = world.get_entitys_component(player, Position)
     for entity, (pos, ) in queries.position:
         # check if they're close enough that we care
-        offset_x = player_pos.x - pos.x
-        offset_y = player_pos.y - pos.y
-        if max(abs(offset_x), abs(offset_y)) < MAX_ACTIVATION_DISTANCE:
+        distance_x = abs(player_pos.x - pos.x)
+        distance_y = abs(player_pos.y - pos.y)
+        if max(distance_x, distance_y) < MAX_ACTIVATION_DISTANCE:
             # they're close, now check they arent already active
             if not world.entity_has_component(entity, IsActive):
                 world.add_component(entity, IsActive())
+
+                # update tracked to current time (otherwise they will be behind and act repeatedly)
+                if world.entity_has_component(entity, Tracked):
+                    tracked = world.get_entitys_component(entity, Tracked)
+                    from scripts.engine import chronicle
+                    tracked.time_spent = chronicle.get_time() + 1
 
         else:
             # not close enough, remove active

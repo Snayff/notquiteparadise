@@ -35,6 +35,7 @@ __all__ = [
     "position_and_identity_and_aesthetic",
     "position_and_actor",
     "position_and_win_condition",
+    "active_and_tracked"
 ]
 
 
@@ -70,6 +71,8 @@ position_and_identity_and_aesthetic = get_components([Position, Identity, Aesthe
 active_and_position_and_fov_and_combat_stats = get_components([IsActive, Position, FOV, HasCombatStats]).compile()
 
 active_and_light_source_and_position = get_components([IsActive, LightSource, Position]).compile()
+
+active_and_tracked = get_components([IsActive, Tracked]).compile()
 
 ##################### FILTERS ###############################
 # .filter((DOT & StatusEffect) | (~DOT & Poison & ~Antidote))

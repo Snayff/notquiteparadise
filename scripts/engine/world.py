@@ -18,7 +18,7 @@ from scripts.engine.component import (
     Blocking,
     HasCombatStats,
     Identity,
-    IsActor,
+    IsActive, IsActor,
     IsGod,
     IsPlayer,
     Knowledge,
@@ -221,6 +221,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     projectile.append(Position((x, y)))  # FIXME - check position not blocked before spawning
     projectile.append(Resources(999, 999))
     projectile.append(Afflictions())
+    projectile.append(IsActive())
 
     entity = create_entity(projectile)
 
@@ -691,14 +692,15 @@ def get_cast_positions(entity: EntityID, target_pos: Position,
         skill_dict[skill] = []
         for direction in skill.target_directions:
             # work out from target pos, reversing direction as we are working from target, not towards them
-            for _range in range(0, skill.range + 1):  # +1 to be inclusive
+            for _range in range(1, skill.range + 1):  # +1 to be inclusive
                 x = target_pos.x + (-_range * direction[0])
                 y = target_pos.y + (-_range * direction[1])
 
                 # check tile is open and in vision
                 tile = get_tile((x, y))
                 has_tags = tile_has_tags(entity, tile, [TargetTag.IS_VISIBLE, TargetTag.OPEN_SPACE])
-                if has_tags:
+                has_self = tile_has_tag(entity, tile, TargetTag.SELF)
+                if has_tags or has_self:
                     skill_dict[skill].append((x, y))
 
                 else:
@@ -749,7 +751,7 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> boo
         return True
     elif tag == TargetTag.IS_VISIBLE:
         # if player can see the tile
-        return _is_tile_visible_to_entity(tile)
+        return _is_tile_visible_to_entity(tile, active_entity)
     elif tag == TargetTag.NO_BLOCKING_TILE:
         # if tile isnt blocking movement
         if _is_tile_in_bounds(tile):
