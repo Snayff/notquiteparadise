@@ -12,7 +12,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import action, chronicle, library, utility
 from scripts.engine.component import (
-    FOV,
+    Exists, FOV,
     Aesthetic,
     Afflictions,
     Blocking,
@@ -83,6 +83,9 @@ def create_entity(components: List[Component] = None) -> EntityID:
         _components = []
     else:
         _components = components
+
+    # add Exists, as all entities need it
+    _components.append(Exists())
 
     # create the entity
     entity = new_entity(_components)
@@ -1133,6 +1136,13 @@ def add_component(entity: EntityID, component: Component):
     Add a component to the entity
     """
     snecs.add_component(entity, component)
+
+
+def remove_component(entity: EntityID, component: Type[Component]):
+    """
+    Remove a component from the entity
+    """
+    snecs.remove_component(entity, component)
 
 
 def judge_action(entity: EntityID, action_name: str):

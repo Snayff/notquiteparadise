@@ -9,7 +9,7 @@ from scripts.engine import library, world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
 from scripts.engine.core.constants import INFINITE
 from scripts.engine.core.data import store
-from scripts.engine.systems import reaction, vision
+from scripts.engine.systems import behaviour, reaction, vision
 
 if TYPE_CHECKING:
     from typing import Dict, Tuple, List, Optional
@@ -76,6 +76,7 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
 
     # update visibility
     # TODO - implement scheduling so this doesnt need to be called here
+    behaviour.process_activations()  # must be first otherwise wrong entities active
     vision.process_light_map()
     vision.process_fov()
     vision.process_tile_visibility()
