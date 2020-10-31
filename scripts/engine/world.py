@@ -392,7 +392,8 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     return None
 
 
-def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tuple[int, int]) -> DirectionType:
+def get_reflected_direction(active_entity: EntityID, current_pos: Tuple[int, int],
+        target_direction: Tuple[int, int]) -> DirectionType:
     """
     Use surrounding walls to understand how the object should be reflected.
     """
@@ -402,14 +403,14 @@ def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tupl
     # work out position of adjacent walls
     adj_tile = get_tile((current_x, current_y - dir_y))
     if adj_tile:
-        collision_adj_y = tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_y = tile_has_tag(active_entity, adj_tile, TargetTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_y = True
 
     adj_tile = get_tile((current_x - dir_x, current_y))
     if adj_tile:
-        collision_adj_x = tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_x = tile_has_tag(active_entity, adj_tile, TargetTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_x = True
@@ -457,7 +458,7 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     return distance
 
 
-def _get_furthest_free_position(
+def _get_furthest_free_position(active_entity: EntityID,
     start_pos: Tuple[int, int], target_direction: Tuple[int, int], max_distance: int, travel_type: TravelMethodType
 ) -> Tuple[int, int]:
     """
@@ -498,7 +499,7 @@ def _get_furthest_free_position(
 
         if tile:
             # did we hit something causing standard to stop
-            if tile_has_tag(tile, TargetTag.BLOCKED_MOVEMENT):
+            if tile_has_tag(active_entity, tile, TargetTag.BLOCKED_MOVEMENT):
                 # if we're ready to check for a target, do so
                 if check_for_target:
                     # we hit something, go back to last free tile
@@ -678,7 +679,8 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
     return entities
 
 
-def get_cast_positions(target_pos: Position, skills: List[Type[Skill]]) -> Dict[Type[Skill], List[Tuple[int, int]]]:
+def get_cast_positions(entity: EntityID, target_pos: Position,
+        skills: List[Type[Skill]]) -> Dict[Type[Skill], List[Tuple[int, int]]]:
     """
     Check through list of skills to find unblocked cast positions to target
     """
@@ -695,7 +697,7 @@ def get_cast_positions(target_pos: Position, skills: List[Type[Skill]]) -> Dict[
 
                 # check tile is open and in vision
                 tile = get_tile((x, y))
-                has_tags = tile_has_tags(tile, [TargetTag.IS_VISIBLE, TargetTag.OPEN_SPACE])
+                has_tags = tile_has_tags(entity, tile, [TargetTag.IS_VISIBLE, TargetTag.OPEN_SPACE])
                 if has_tags:
                     skill_dict[skill].append((x, y))
 
@@ -708,7 +710,7 @@ def get_cast_positions(target_pos: Position, skills: List[Type[Skill]]) -> Dict[
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
 
 
-def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = None) -> bool:
+def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> bool:
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
@@ -747,7 +749,7 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
         return True
     elif tag == TargetTag.IS_VISIBLE:
         # if player can see the tile
-        return _is_tile_visible_to_player(tile)
+        return _is_tile_visible_to_entity(tile)
     elif tag == TargetTag.NO_BLOCKING_TILE:
         # if tile isnt blocking movement
         if _is_tile_in_bounds(tile):
@@ -757,7 +759,7 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
     return False
 
 
-def tile_has_tags(tile: Tile, tags: List[TargetTagType], active_entity: int = None) -> bool:
+def tile_has_tags(active_entity: EntityID, tile: Tile, tags: List[TargetTagType]) -> bool:
     """
     Check a tile has all required tags
     """
@@ -765,7 +767,7 @@ def tile_has_tags(tile: Tile, tags: List[TargetTagType], active_entity: int = No
 
     # assess all tags
     for tag in tags:
-        tags_checked[tag] = tile_has_tag(tile, tag, active_entity)
+        tags_checked[tag] = tile_has_tag(active_entity, tile, tag)
 
     # if all tags came back true return true
     if all(value for value in tags_checked.values()):
@@ -778,15 +780,21 @@ def _is_tile_blocking_sight(tile: Tile) -> bool:
     """
     Check if a tile is blocking sight
     """
-    # Does the tile block sight?
     return tile.blocks_sight
 
 
-def _is_tile_visible_to_player(tile: Tile) -> bool:
+def _is_tile_visible_to_entity(tile: Tile, entity: EntityID) -> bool:
     """
-    Check if the specified tile is visible to the player
+    Check if the specified tile is visible to the entity
     """
-    return tile.is_visible
+    fov_map = get_entitys_component(entity, FOV).map
+    game_map = get_game_map()
+    light_map = game_map.light_map
+
+    # combine maps
+    visible_map = fov_map & light_map
+
+    return bool(visible_map[tile.x, tile.y])
 
 
 def _is_tile_in_bounds(tile: Tile) -> bool:
@@ -927,12 +935,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     return False
 
 
-def is_in_los(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
-    tcod.los.bresenham(start_pos, target_pos).tolist()
-
-
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
-
 
 def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
     """
@@ -967,7 +970,7 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
     skill_cast = skill(user, target_tile, direction)
 
     # ensure they are the right target type
-    if tile_has_tags(skill_cast.target_tile, skill_cast.target_tags, user):
+    if tile_has_tags(user, skill_cast.target_tile, skill_cast.target_tags):
         skill_cast.use()
         return True
     else:
@@ -982,7 +985,7 @@ def apply_skill(skill_instance: Skill) -> bool:
     """
     skill = skill_instance
     # ensure they are the right target type
-    if tile_has_tags(skill.target_tile, skill.target_tags, skill.user):
+    if tile_has_tags(skill.user, skill.target_tile, skill.target_tags):
         for entity, effects in skill_instance.apply():
             if entity not in skill.ignore_entities:
                 effect_queue = list(effects)
@@ -1023,7 +1026,7 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
         target_tile = get_tile((position.x, position.y))
 
         # ensure they are the right target type
-        if tile_has_tags(target_tile, affliction.target_tags, affliction.origin):
+        if tile_has_tags(affliction.origin, target_tile, affliction.target_tags):
             for entity, effects in affliction.apply():
                 effect_queue = list(effects)
                 while effect_queue:

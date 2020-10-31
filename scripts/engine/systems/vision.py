@@ -57,6 +57,7 @@ def process_fov():
 def process_tile_visibility():
     """
     Update tile visibility based on player fov
+    FIXME - every entity has its own fov so gamemap doesnt need visibility anymore
     """
     # get player info
     player = world.get_player()

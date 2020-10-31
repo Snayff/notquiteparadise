@@ -37,14 +37,14 @@ class Projectile(Behaviour):
         target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
 
         # if we havent moved check for collision in current tile (it might be cast on top of enemy)
-        if self.distance_travelled == 0 and world.tile_has_tag(current_tile, TargetTag.OTHER_ENTITY, entity):
+        if self.distance_travelled == 0 and world.tile_has_tag(entity, current_tile, TargetTag.OTHER_ENTITY):
             should_activate = True
 
         # if we havent travelled max distance or determined we should activate then move
         # N.b. not an elif because we want the precheck above to happen in isolation
         if self.distance_travelled < self.data.range and not should_activate:
             # can we move
-            if world.tile_has_tag(target_tile, TargetTag.OPEN_SPACE):
+            if world.tile_has_tag(entity, target_tile, TargetTag.OPEN_SPACE):
                 should_move = True
 
             else:
@@ -82,7 +82,7 @@ class Projectile(Behaviour):
         """
         should_activate = should_move = False
 
-        if world.tile_has_tags(target_tile, [TargetTag.BLOCKED_MOVEMENT, TargetTag.NO_ENTITY]):
+        if world.tile_has_tags(self.entity, target_tile, [TargetTag.BLOCKED_MOVEMENT, TargetTag.NO_ENTITY]):
             collision_type = self.data.terrain_collision
 
             if collision_type == TerrainCollision.ACTIVATE:
@@ -100,13 +100,13 @@ class Projectile(Behaviour):
                 should_move = True
 
                 # change direction and move
-                new_dir = world.get_reflected_direction(
+                new_dir = world.get_reflected_direction(self.entity,
                     (current_tile.x, current_tile.y), (target_tile.x, target_tile.y)
                 )
                 self.data.direction = new_dir
 
         # blocked by entity
-        elif world.tile_has_tag(target_tile, TargetTag.OTHER_ENTITY, self.entity):
+        elif world.tile_has_tag(self.entity, target_tile, TargetTag.OTHER_ENTITY):
             should_activate = True
 
             # update skill instance to new target
@@ -184,7 +184,7 @@ class Basic(Behaviour):
                 possible_skills.append(skill)
 
         # where can we cast from?
-        skill_cast_positions = world.get_cast_positions(pos, possible_skills)
+        skill_cast_positions = world.get_cast_positions(entity, pos, possible_skills)
 
         # are we currently on a cast position?
         skills_can_cast = []
@@ -258,7 +258,7 @@ class Basic(Behaviour):
             y = pos.y + _dir[1]
 
             tile = world.get_tile((x, y))
-            has_tags = world.tile_has_tag(tile, TargetTag.OPEN_SPACE)
+            has_tags = world.tile_has_tag(entity, tile, TargetTag.OPEN_SPACE)
             if has_tags:
                 poss_directions.append((_dir[0], _dir[1]))
 
