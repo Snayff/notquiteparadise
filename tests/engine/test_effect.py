@@ -15,7 +15,7 @@ from scripts.engine.core.constants import (
     TargetTag,
 )
 from scripts.engine.effect import Effect, ReduceSkillCooldownEffect, TriggerAfflictionsEffect
-from tests.mocks import world_mock
+from tests.mocks import mock_world
 
 
 class MockAffliction(Affliction):
@@ -101,7 +101,7 @@ class TestEffects:
             nonlocal affliction_called
             affliction_called = affliction
 
-        world_mock.mock_methods({"apply_affliction": _trigger_affliction_mock})
+        mock_world.mock_methods({"apply_affliction": _trigger_affliction_mock})
         entity = TestEffects._create_default_entity()
 
         mock_affliction_movement = MockAfflictionMovement(entity, entity, 5)
