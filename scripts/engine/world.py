@@ -379,7 +379,7 @@ def get_a_star_path(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> 
 
 def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Optional[DirectionType]:
     """
-    Use a* pathfinding to get a direction from one entity to another
+    Use a* pathfinding to get a direction from one entity to another. Does not allow diagonals.
     """
     path = get_a_star_path(start_pos, target_pos)
 
@@ -997,7 +997,8 @@ def apply_skill(skill_instance: Skill) -> bool:
         return True
     else:
         logging.info(
-            f'Could not apply skill "{skill.__class__.__name__}", target tile does not have required tags ({skill.target_tags}).'
+            f'Could not apply skill "{skill.__class__.__name__}", target tile does not have required '
+            f'tags ({skill.target_tags}).'
         )
 
     return False

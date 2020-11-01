@@ -74,14 +74,14 @@ class Skill(Action):
     uses_projectile: bool
     projectile_data: Optional[ProjectileData]
 
-    # vars needed to keep track of changes
-    ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
-
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         self.user = user
         self.target_tile = target_tile
         self.direction = direction
         self.projectile = None
+
+        # vars needed to keep track of changes
+        self.ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
 
     @abstractmethod
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:

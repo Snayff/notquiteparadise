@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, Afflictions, Blocking, Knowledge, Position, Resources
+from scripts.engine.component import Aesthetic, Afflictions, Blocking, HasCombatStats, Knowledge, Position, Resources
 from scripts.engine.core.constants import (
     AfflictionTrigger,
     AfflictionTriggerType,
@@ -78,6 +78,11 @@ class DamageEffect(Effect):
         Resolve the damage effect and return the conditional effects based on if the damage is greater than 0.
         """
         logging.debug("Evaluating Damage Effect...")
+        if not world.entity_has_component(self.origin, HasCombatStats) or not world.entity_has_component(
+                self.target, HasCombatStats):
+            logging.info(f"Either caster or target doesnt have combat stats so damage cannot be applied.")
+            return self.failure_effects  # exit
+
         defenders_stats = world.create_combat_stats(self.target)
         attackers_stats = world.create_combat_stats(self.origin)
 

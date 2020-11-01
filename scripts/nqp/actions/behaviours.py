@@ -27,18 +27,21 @@ class Projectile(Behaviour):
 
     def act(self):
         # flags
-        should_activate = should_move = False
+        should_activate = False
+        should_move = False
 
         # get info we definitely need
         entity = self.entity
-        position = world.get_entitys_component(entity, Position)
-        current_tile = world.get_tile((position.x, position.y))
+        pos = world.get_entitys_component(entity, Position)
+        current_tile = world.get_tile((pos.x, pos.y))
         dir_x, dir_y = self.data.direction[0], self.data.direction[1]
         target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
 
         # if we havent moved check for collision in current tile (it might be cast on top of enemy)
         if self.distance_travelled == 0 and world.tile_has_tag(entity, current_tile, TargetTag.OTHER_ENTITY):
             should_activate = True
+            logging.debug(f"'{world.get_name(entity)}' collided with an entity on cast at"
+                          f"({pos.x},{pos.y}).")
 
         # if we havent travelled max distance or determined we should activate then move
         # N.b. not an elif because we want the precheck above to happen in isolation
@@ -55,7 +58,7 @@ class Projectile(Behaviour):
             if self.data.expiry_type == ProjectileExpiry.ACTIVATE:
                 should_activate = True
 
-                # update skill instance to new target
+                # update skill instance to point to current position, for when it is applied
                 self.data.skill_instance.target_tile = current_tile
 
             else:
@@ -63,15 +66,21 @@ class Projectile(Behaviour):
                 world.kill_entity(entity)
 
         if should_activate:
+            logging.debug(f"'{world.get_name(entity)}' is going to activate at ({pos.x},{pos.y}).")
+
+            # apply skill, rather than using it, as the instance already exists and we are just using the effects
             world.apply_skill(self.data.skill_instance)
 
             # die after activating
             world.kill_entity(entity)
 
         elif should_move:
+            logging.debug(f"'{world.get_name(entity)}' has {self.data.range - self.distance_travelled} range left and"
+                          f" is going to move from ({pos.x},{pos.y}) to "
+                          f"({pos.x + dir_x},{pos.y + dir_y}).")
+
             move = world.get_known_skill(entity, "Move")
-            move_cast = move(entity, self.data.skill_instance.target_tile, self.data.direction)
-            world.apply_skill(move_cast)
+            world.use_skill(entity, move, current_tile, self.data.direction)
 
             self.distance_travelled += 1
             chronicle.end_turn(entity, self.data.speed)
@@ -197,7 +206,7 @@ class Basic(Behaviour):
         # if we can cast a skill now then pick one at random and cast
         if skills_can_cast:
             # get target tile
-            skill_dir = world.get_a_star_direction((pos.x, pos.y), (target_pos.x, target_pos.y))
+            skill_dir = world.get_direction((pos.x, pos.y), (target_pos.x, target_pos.y))
             target_tile = world.get_tile((pos.x + skill_dir[0], pos.y + skill_dir[1]))
 
             # set skill to cast
@@ -205,6 +214,10 @@ class Basic(Behaviour):
 
             # cast whatever skill has been chosen
             world.use_skill(entity, skill_to_cast, target_tile, skill_dir)
+
+            logging.debug(f"'{world.get_name(entity)}' cast {skill_to_cast.name} from ({pos.x},"
+                          f"{pos.y}) towards ({pos.x + skill_dir[0]},{pos.y + skill_dir[1]}), with range "
+                          f"{skill_to_cast.range}.")
 
             # end turn
             chronicle.end_turn(entity, skill_to_cast.time_cost)
@@ -226,7 +239,7 @@ class Basic(Behaviour):
                 nearest_pos = path[0]
 
                 # get target tile
-                skill_dir = world.get_direction((pos.x, pos.y), (nearest_pos[0], nearest_pos[1]))
+                skill_dir = world.get_a_star_direction((pos.x, pos.y), (nearest_pos[0], nearest_pos[1]))
                 target_tile = world.get_tile((pos.x, pos.y))  # target tile for Move is current pos
 
                 # set skill to cast to move
@@ -234,6 +247,9 @@ class Basic(Behaviour):
 
                 # cast whatever skill has been chosen
                 world.use_skill(entity, skill_to_cast, target_tile, skill_dir)
+
+                logging.debug(f"'{world.get_name(entity)}' moved towards a cast position, from ({pos.x},"
+                              f"{pos.y}) to ({pos.x + skill_dir[0]},{pos.y + skill_dir[1]}).")
 
                 # end turn
                 chronicle.end_turn(entity, skill_to_cast.time_cost)
@@ -269,5 +285,8 @@ class Basic(Behaviour):
             target_tile = world.get_tile((pos.x, pos.y))  # target tile for Move is current pos
 
             world.use_skill(entity, move, target_tile, move_dir)
+
+            logging.debug(f"'{world.get_name(entity)}' couldnt see a target so moved randomly from ({pos.x},"
+                          f"{pos.y}) to ({pos.x + move_dir[0]},{pos.y + move_dir[1]}).")
 
         chronicle.end_turn(entity, move.time_cost)
