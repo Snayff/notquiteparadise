@@ -84,14 +84,17 @@ def _process_stateless_intents(intent: InputIntentType):
     elif intent == InputIntent.BURST_PROFILE:
         debug.enable_profiling(120)
 
+    elif intent == InputIntent.TOGGLE_UI:
+        if ui.element_is_visible(UIElement.MESSAGE_LOG):
+            ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
+            ui.set_element_visibility(UIElement.SKILL_BAR, False)
+        else:
+            ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+            ui.set_element_visibility(UIElement.SKILL_BAR, True)
+
     elif intent == InputIntent.TEST:
         # F12
-
-        # add whatever we want to test here
-        ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
-        ui.set_element_visibility(UIElement.SKILL_BAR, False)
-
-        #breakpoint()
+        breakpoint()
 
 
 def _process_game_map_intents(intent: InputIntentType):

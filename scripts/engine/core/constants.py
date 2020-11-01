@@ -169,6 +169,7 @@ class InputIntent(SimpleNamespace):
     BURST_PROFILE = InputIntentType("burst_profile")
     TEST = InputIntentType("test")
     DUNGEON_DEV_VIEW = InputIntentType("dungeon_dev_toggle")
+    TOGGLE_UI = InputIntentType("toggle_ui")
 
 
 #################### EXTERNAL, SERIALISED  ###########################################
