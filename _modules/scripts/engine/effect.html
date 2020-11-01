@@ -192,7 +192,7 @@
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Resources</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">,</span> <span class="n">HasCombatStats</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Resources</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">AfflictionTrigger</span><span class="p">,</span>
     <span class="n">AfflictionTriggerType</span><span class="p">,</span>
@@ -263,6 +263,12 @@
 <span class="sd">        Resolve the damage effect and return the conditional effects based on if the damage is greater than 0.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Evaluating Damage Effect...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">HasCombatStats</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">HasCombatStats</span>
+        <span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Either caster or target doesnt have combat stats so damage cannot be applied.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_effects</span>  <span class="c1"># exit</span>
+
         <span class="n">defenders_stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_combat_stats</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
         <span class="n">attackers_stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_combat_stats</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">)</span>
 
@@ -369,8 +375,8 @@
 
             <span class="c1"># check a tile was returned</span>
             <span class="k">if</span> <span class="n">target_tile</span><span class="p">:</span>
-                <span class="n">is_tile_blocking_movement</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">target_tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
-                <span class="n">is_entity_on_tile</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">target_tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">NO_ENTITY</span><span class="p">)</span>
+                <span class="n">is_tile_blocking_movement</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">)</span>
+                <span class="n">is_entity_on_tile</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">NO_ENTITY</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">is_tile_blocking_movement</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">is_entity_on_tile</span> <span class="o">=</span> <span class="kc">False</span>
@@ -388,9 +394,8 @@
                 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
 
                 <span class="k">for</span> <span class="n">blocking_entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_blocking</span><span class="p">:</span>
-                    <span class="c1"># cast for typing</span>
-                    <span class="n">position</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
-                    <span class="n">blocking</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Blocking</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocking</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">blocking_entity</span> <span class="o">!=</span> <span class="n">entity</span> <span class="ow">and</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="ow">and</span> <span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">position</span><span class="p">:</span>
                         <span class="c1"># blocked by entity</span>
                         <span class="n">blockers_name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">blocking_entity</span><span class="p">)</span>

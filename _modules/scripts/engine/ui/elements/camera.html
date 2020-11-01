@@ -447,8 +447,7 @@
         <span class="c1"># get the first element</span>
         <span class="n">element0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="c1"># cast for typing</span>
-        <span class="n">element0</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">UIButton</span><span class="p">,</span> <span class="n">element0</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element0</span><span class="p">,</span> <span class="n">UIButton</span><span class="p">)</span>
 
         <span class="c1"># get the (x,y) position of the element</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">element0</span><span class="o">.</span><span class="n">get_relative_rect</span><span class="p">()</span>
@@ -462,9 +461,7 @@
 
         <span class="k">if</span> <span class="n">should_update</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
-
-                <span class="c1"># cast for typing</span>
-                <span class="n">element</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">UIButton</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">UIButton</span><span class="p">)</span>
 
                 <span class="c1"># get the updated position</span>
                 <span class="n">col</span><span class="p">,</span> <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tile_col_row</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">object_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>

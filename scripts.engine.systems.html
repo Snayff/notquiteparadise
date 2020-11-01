@@ -197,6 +197,12 @@
 <dd><p>Consider taking possible interventions and then take them.</p>
 </dd></dl>
 
+<dl class="py function">
+<dt id="scripts.engine.systems.behaviour.process_activations">
+<code class="sig-name descname">process_activations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/systems/behaviour.html#process_activations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.systems.behaviour.process_activations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocate active component to  appropriate NPCs. Entity with no position or with position and close to player.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-scripts.engine.systems.reaction">
 <span id="scripts-engine-systems-reaction-module"></span><h2>scripts.engine.systems.reaction module<a class="headerlink" href="#module-scripts.engine.systems.reaction" title="Permalink to this headline">¶</a></h2>
@@ -218,13 +224,14 @@
 <dl class="py function">
 <dt id="scripts.engine.systems.vision.process_fov">
 <code class="sig-name descname">process_fov</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/systems/vision.html#process_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.systems.vision.process_fov" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update FOV for all entities within MAX_ACTIVATION_DISTANCE of player.</p>
+<dd><p>Update FOV for all active entities</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="scripts.engine.systems.vision.process_tile_visibility">
 <code class="sig-name descname">process_tile_visibility</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/systems/vision.html#process_tile_visibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.systems.vision.process_tile_visibility" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update tile visibility based on player fov</p>
+<dd><p>Update tile visibility based on player fov
+FIXME - every entity has its own fov so gamemap doesnt need visibility anymore</p>
 </dd></dl>
 
 </div>

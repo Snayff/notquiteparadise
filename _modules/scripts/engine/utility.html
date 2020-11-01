@@ -203,7 +203,7 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">TraitSpritePathsData</span><span class="p">,</span> <span class="n">TraitSpritesData</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;get_image&quot;</span><span class="p">,</span>
@@ -214,8 +214,6 @@
     <span class="s2">&quot;get_class_members&quot;</span><span class="p">,</span>
     <span class="s2">&quot;lerp&quot;</span><span class="p">,</span>
     <span class="s2">&quot;clamp&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;get_euclidean_distance&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;get_chebyshev_distance&quot;</span><span class="p">,</span>
     <span class="s2">&quot;get_coords_from_shape&quot;</span><span class="p">,</span>
     <span class="s2">&quot;is_close&quot;</span><span class="p">,</span>
     <span class="s2">&quot;value_to_member&quot;</span><span class="p">,</span>
@@ -425,28 +423,6 @@
 <span class="sd">    Return the value, clamped between min and max.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">min_value</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">))</span></div>
-
-
-<div class="viewcode-block" id="get_euclidean_distance"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.get_euclidean_distance">[docs]</a><span class="k">def</span> <span class="nf">get_euclidean_distance</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).</span>
-<span class="sd">    This returns a float indicating the straight line distance between the two points.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">target_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">dy</span> <span class="o">=</span> <span class="n">target_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="kn">import</span> <span class="nn">math</span>  <span class="c1"># only used in this method</span>
-
-    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="get_chebyshev_distance"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.get_chebyshev_distance">[docs]</a><span class="k">def</span> <span class="nf">get_chebyshev_distance</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).</span>
-<span class="sd">    This returns an int indicating the number of tile moves between the two points.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span> <span class="nn">scipy</span>  <span class="c1"># only used in this method</span>
-
-    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">chebyshev</span><span class="p">(</span><span class="n">start_pos</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="is_close"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.is_close">[docs]</a><span class="k">def</span> <span class="nf">is_close</span><span class="p">(</span><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>

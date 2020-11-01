@@ -192,7 +192,7 @@
 <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">FOV</span><span class="p">,</span> <span class="n">LightSource</span><span class="p">,</span> <span class="n">Position</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">FOV_ALGORITHM</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">MAX_ACTIVATION_DISTANCE</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">FOV_ALGORITHM</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="k">pass</span>
@@ -204,10 +204,6 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update light map using light sources of all entities</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># get player details</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-    <span class="n">player_pos</span><span class="p">:</span> <span class="n">Position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-
     <span class="c1"># get game map details</span>
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
     <span class="n">light_map</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">light_map</span>
@@ -218,49 +214,35 @@
     <span class="c1"># reset light map</span>
     <span class="n">light_map</span><span class="p">[:]</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">light_source</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">light_source_and_position</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">is_active</span><span class="p">,</span> <span class="n">light_source</span><span class="p">,</span> <span class="n">pos</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">active_and_light_source_and_position</span><span class="p">:</span>
         <span class="n">light_source</span><span class="p">:</span> <span class="n">LightSource</span>
         <span class="n">pos</span><span class="p">:</span> <span class="n">Position</span>
         <span class="n">radius</span> <span class="o">=</span> <span class="n">light_source</span><span class="o">.</span><span class="n">radius</span>
 
-        <span class="c1"># check if they&#39;re close enough that we care</span>
-        <span class="n">offset_x</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">offset_y</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span>
-        <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">offset_x</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">offset_y</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">MAX_ACTIVATION_DISTANCE</span><span class="p">:</span>
-
-            <span class="c1"># create fov for light source</span>
-            <span class="n">fov</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">compute_fov</span><span class="p">(</span><span class="n">block_sight_map</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">radius</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">FOV_ALGORITHM</span><span class="p">)</span>
-            <span class="n">light_map</span> <span class="o">|=</span> <span class="n">fov</span></div>
+        <span class="c1"># create fov for light source</span>
+        <span class="n">fov</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">compute_fov</span><span class="p">(</span><span class="n">block_sight_map</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">radius</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">FOV_ALGORITHM</span><span class="p">)</span>
+        <span class="n">light_map</span> <span class="o">|=</span> <span class="n">fov</span></div>
 
 
 <div class="viewcode-block" id="process_fov"><a class="viewcode-back" href="../../../../scripts.engine.systems.html#scripts.engine.systems.vision.process_fov">[docs]</a><span class="k">def</span> <span class="nf">process_fov</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Update FOV for all entities within MAX_ACTIVATION_DISTANCE of player.</span>
+<span class="sd">    Update FOV for all active entities</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># get player details</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-    <span class="n">player_pos</span><span class="p">:</span> <span class="n">Position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-
     <span class="c1"># create transparency layer</span>
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
     <span class="n">block_sight_map</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">block_sight_map</span>
 
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">stats</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_fov_and_combat_stats</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">is_active</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">fov</span><span class="p">,</span> <span class="n">stats</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">active_and_position_and_fov_and_combat_stats</span><span class="p">:</span>
 
-        <span class="c1"># check if they&#39;re close enough that we care</span>
-        <span class="n">offset_x</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">offset_y</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span>
-        <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">offset_x</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">offset_y</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">MAX_ACTIVATION_DISTANCE</span><span class="p">:</span>
-            <span class="c1"># get sight range</span>
-            <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_combat_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-            <span class="n">sight_range</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">sight_range</span>
-
-            <span class="n">fov</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">compute_fov</span><span class="p">(</span><span class="n">block_sight_map</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">sight_range</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">FOV_ALGORITHM</span><span class="p">)</span></div>
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_combat_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="n">sight_range</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">sight_range</span>
+        <span class="n">fov</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">compute_fov</span><span class="p">(</span><span class="n">block_sight_map</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">sight_range</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">FOV_ALGORITHM</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="process_tile_visibility"><a class="viewcode-back" href="../../../../scripts.engine.systems.html#scripts.engine.systems.vision.process_tile_visibility">[docs]</a><span class="k">def</span> <span class="nf">process_tile_visibility</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update tile visibility based on player fov</span>
+<span class="sd">    FIXME - every entity has its own fov so gamemap doesnt need visibility anymore</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># get player info</span>
     <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>

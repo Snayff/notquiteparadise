@@ -207,6 +207,21 @@
 <span class="c1">########################### FLAGS ##############################</span>
 
 
+<div class="viewcode-block" id="Exists"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Exists">[docs]</a><span class="k">class</span> <span class="nc">Exists</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Empty flag for all entities. Used to allow filters to search for a single component i.e. use a single condition.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+
+<div class="viewcode-block" id="Exists.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Exists.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Exists.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Exists.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Exists</span><span class="p">()</span></div></div>
+
+
 <div class="viewcode-block" id="IsPlayer"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsPlayer">[docs]</a><span class="k">class</span> <span class="nc">IsPlayer</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Whether the entity is the player.</span>
@@ -250,6 +265,21 @@
 <div class="viewcode-block" id="IsGod.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsGod.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">IsGod</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="IsActive"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsActive">[docs]</a><span class="k">class</span> <span class="nc">IsActive</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Whether the entity is active or not. Used to limit entity processing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+
+<div class="viewcode-block" id="IsActive.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsActive.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="IsActive.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsActive.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">IsActive</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="HasCombatStats"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.HasCombatStats">[docs]</a><span class="k">class</span> <span class="nc">HasCombatStats</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
