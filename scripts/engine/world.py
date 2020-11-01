@@ -363,7 +363,7 @@ def get_entity_blocking_movement_map() -> np.array:
     return blocking_map
 
 
-def get_a_star_path(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> List[List[int, int]]:
+def get_a_star_path(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> List[List[int]]:
     """
     Get a list of coords that dictates the path between 2 entities.
     """
@@ -385,9 +385,9 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
 
     # if there is a path then return direction
     if path:
-        start_pos = path[0]
+        _start_pos = path[0]
         next_pos = path[1]
-        move_dir = get_direction(start_pos, next_pos)
+        move_dir = get_direction(_start_pos, next_pos)  # type: ignore  # list instead of tuple is fine
         return move_dir
 
     return None
@@ -685,7 +685,7 @@ def get_cast_positions(entity: EntityID, target_pos: Position,
     """
     Check through list of skills to find unblocked cast positions to target
     """
-    skill_dict = {}
+    skill_dict: Dict[Type[Skill], List[Tuple[int, int]]] = {}
 
     # loop all skills and all directions
     for skill in skills:
@@ -1067,6 +1067,7 @@ def apply_damage(entity: EntityID, damage: int) -> bool:
     resource = get_entitys_component(entity, Resources)
     if resource:
         resource.health -= damage
+        logging.info(f"'{get_name(entity)}' takes {damage} and has {resource.health} health remaining.")
         return True
     else:
         logging.warning(f"'{get_name(entity)}' has no resource so couldnt apply damage.")
