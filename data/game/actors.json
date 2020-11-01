@@ -19,8 +19,8 @@
         "__dataclass__": "ActorData",
         "key": "crocturion",
         "possible_names": [
-            "Kro'ck",
-            "Qual'ck"
+            "Kro`ck",
+            "Qual`ck"
         ],
         "description": "Cold blooded.",
         "position_offsets": [
@@ -29,6 +29,6 @@
         "trait_names": [
             "crocturion"
         ],
-        "behaviour_name": "FollowPlayer"
+        "behaviour_name": "Basic"
     }
 }

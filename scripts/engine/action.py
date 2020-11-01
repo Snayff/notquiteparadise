@@ -36,7 +36,8 @@ class Action(ABC):
     Action taken during the game. A container for Effects.
     """
 
-    name: str
+    name: str  # name of the class
+    f_name: str  # friendly name, can include spaces, slashes etc.
     description: str
     icon_path: str
     target_tags: List[TargetTagType]
@@ -69,17 +70,18 @@ class Skill(Action):
     base_cooldown: int
     targeting_method: TargetingMethodType
     target_directions: List[DirectionType]
+    range: int
     uses_projectile: bool
     projectile_data: Optional[ProjectileData]
-
-    # vars needed to keep track of changes
-    ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         self.user = user
         self.target_tile = target_tile
         self.direction = direction
         self.projectile = None
+
+        # vars needed to keep track of changes
+        self.ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
 
     @abstractmethod
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
@@ -103,12 +105,14 @@ class Skill(Action):
         from scripts.engine import library
 
         cls.data = library.SKILLS[cls.__name__]
-        cls.name = cls.data.name
+        cls.name = cls.__name__
+        cls.f_name = cls.data.name
         cls.target_tags = cls.data.target_tags
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.resource_type = cls.data.resource_type
         cls.resource_cost = cls.data.resource_cost
+        cls.range = cls.data.range
         cls.time_cost = cls.data.time_cost
         cls.base_cooldown = cls.data.cooldown
         cls.targeting_method = cls.data.targeting_method
@@ -225,7 +229,7 @@ class Affliction(Action):
         from scripts.engine import library
 
         cls.data = library.AFFLICTIONS[cls.__name__]
-        cls.name = cls.data.name
+        cls.f_name = cls.data.name
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.category = cls.data.category

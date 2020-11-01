@@ -18,7 +18,7 @@ from scripts.engine.core.constants import (
 from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 if TYPE_CHECKING:
-    from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
+    from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 __all__ = [
     "get_image",
@@ -29,8 +29,6 @@ __all__ = [
     "get_class_members",
     "lerp",
     "clamp",
-    "get_euclidean_distance",
-    "get_chebyshev_distance",
     "get_coords_from_shape",
     "is_close",
     "value_to_member",
@@ -240,28 +238,6 @@ def clamp(value, min_value, max_value):
     Return the value, clamped between min and max.
     """
     return max(min_value, min(value, max_value))
-
-
-def get_euclidean_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> float:
-    """
-    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
-    This returns a float indicating the straight line distance between the two points.
-    """
-    dx = target_pos[0] - start_pos[0]
-    dy = target_pos[1] - start_pos[1]
-    import math  # only used in this method
-
-    return math.sqrt(dx ** 2 + dy ** 2)
-
-
-def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
-    """
-    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
-    This returns an int indicating the number of tile moves between the two points.
-    """
-    import scipy  # only used in this method
-
-    return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 
 def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta=0.05) -> bool:
