@@ -244,3 +244,29 @@ class TarAndFeather(Skill):
             mod_amount=0.1,
         )
         return damage_effect
+
+
+@init_action
+class Splash(Skill):
+    """
+    Simple projectile attack
+    """
+
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
+        """
+        Build the effects of this skill applying to a single entity.
+        """
+        damage_effect = DamageEffect(
+            origin=self.user,
+            success_effects=[],
+            failure_effects=[],
+            target=entity,
+            stat_to_target=PrimaryStat.VIGOUR,
+            accuracy=library.GAME_CONFIG.base_values.accuracy,
+            damage=int(library.GAME_CONFIG.base_values.damage * potency),
+            damage_type=DamageType.MUNDANE,
+            mod_stat=PrimaryStat.CLOUT,
+            mod_amount=0.1,
+        )
+
+        return [damage_effect]
