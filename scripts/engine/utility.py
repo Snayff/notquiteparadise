@@ -170,6 +170,7 @@ def build_sprites_from_paths(
 
 ################################### QUERY TOOLS ########################################
 
+
 def get_class_members(cls: Type[Any]) -> List[str]:
     """
     Get a class' members, excluding special methods e.g. anything prefixed with '__'. Useful for use with dataclasses.
