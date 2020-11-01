@@ -8,7 +8,6 @@ from scripts.engine.core.constants import MAX_ACTIVATION_DISTANCE
 __all__ = ["process_interventions", "process_activations"]
 
 
-
 def process_interventions():
     """
     Consider taking possible interventions and then take them.
