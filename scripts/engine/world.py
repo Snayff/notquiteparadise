@@ -1267,7 +1267,7 @@ def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_
     return mitigated_to_hit_score
 
 
-def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[EntityID, str]]:
+def choose_interventions(active_entity: EntityID, action_name: str) -> List[Tuple[EntityID, str]]:
     """
     Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
     or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).
@@ -1295,7 +1295,7 @@ def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[Entit
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion
             try:
-                opinion_score = opinion.opinions[entity]
+                opinion_score = opinion.opinions[active_entity]
             except KeyError:
                 opinion_score = 0
 
@@ -1322,6 +1322,6 @@ def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[Entit
 
         # if god has chosen to take an action then add to list
         if chosen_intervention != "Nothing":
-            chosen_interventions.append((entity, chosen_intervention))
+            chosen_interventions.append((active_entity, chosen_intervention))
 
     return chosen_interventions
