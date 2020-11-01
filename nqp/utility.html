@@ -209,19 +209,6 @@ dimensions provided.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="scripts.engine.utility.recursive_replace">
-<code class="sig-name descname">recursive_replace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>Dict<span class="p">, </span>List<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">value_to_replace</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">new_value</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/utility.html#recursive_replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.recursive_replace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check through any number of nested dicts or lists for the specified key-&gt;value pair and replace the value.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="scripts.engine.utility.recursive_find_in_dict">
-<code class="sig-name descname">recursive_find_in_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>Dict<span class="p">, </span>List<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; Any<a class="reference internal" href="../_modules/scripts/engine/utility.html#recursive_find_in_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.recursive_find_in_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check through any number of nested dicts for the specified key and return the value. Returns after
-finding the first key.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt id="scripts.engine.utility.get_class_members">
 <code class="sig-name descname">get_class_members</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cls</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><a class="reference internal" href="../_modules/scripts/engine/utility.html#get_class_members"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.get_class_members" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a class’ members, excluding special methods e.g. anything prefixed with ‘__’. Useful for use with dataclasses.</p>
@@ -230,12 +217,13 @@ finding the first key.</p>
 <dl class="py function">
 <dt id="scripts.engine.utility.lerp">
 <code class="sig-name descname">lerp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">initial_value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">target_value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">lerp_fraction</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#lerp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.lerp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Linear interpolation between initial and target by amount. Fraction clamped between 0 and 1.</p>
+<dd><p>Linear interpolation between initial and target by amount. Fraction clamped between 0 and 1. &gt;=0.99 is treated
+as 1 to handle float imprecision.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="scripts.engine.utility.clamp">
-<code class="sig-name descname">clamp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">min_value</span></em>, <em class="sig-param"><span class="n">max_value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/utility.html#clamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.clamp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">clamp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">_V</span></em>, <em class="sig-param"><span class="n">min_value</span><span class="p">:</span> <span class="n">_V</span></em>, <em class="sig-param"><span class="n">max_value</span><span class="p">:</span> <span class="n">_V</span></em><span class="sig-paren">)</span> &#x2192; _V<a class="reference internal" href="../_modules/scripts/engine/utility.html#clamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.clamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the value, clamped between min and max.</p>
 </dd></dl>
 
@@ -247,8 +235,8 @@ finding the first key.</p>
 
 <dl class="py function">
 <dt id="scripts.engine.utility.is_close">
-<code class="sig-name descname">is_close</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">delta</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#is_close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.is_close" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns true if the absolute distance between both coordinates is less than delta</p>
+<code class="sig-name descname">is_close</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">delta</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.05</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#is_close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.is_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the absolute distance between both coordinates is less than delta.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -266,7 +254,7 @@ finding the first key.</p>
 <dl class="py function">
 <dt id="scripts.engine.utility.convert_direction_to_name">
 <code class="sig-name descname">convert_direction_to_name</code><span class="sig-paren">(</span><em class="sig-param">direction: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#convert_direction_to_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.convert_direction_to_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the direction name from the direction. (0,1) = ‘up’ etc.</p>
+<dd><p>Get the direction name from the direction. e.g. (0,1) = ‘up’ etc.</p>
 </dd></dl>
 
 <dl class="py function">

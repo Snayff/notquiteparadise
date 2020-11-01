@@ -4,18 +4,18 @@ tests.mocks package
 Submodules
 ----------
 
-tests.mocks.ui\_mock module
+tests.mocks.mock\_ui module
 ---------------------------
 
-.. automodule:: tests.mocks.ui_mock
+.. automodule:: tests.mocks.mock_ui
    :members:
    :undoc-members:
    :show-inheritance:
 
-tests.mocks.world\_mock module
+tests.mocks.mock\_world module
 ------------------------------
 
-.. automodule:: tests.mocks.world_mock
+.. automodule:: tests.mocks.mock_world
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1452,7 +1452,7 @@
     <span class="k">return</span> <span class="n">mitigated_to_hit_score</span></div>
 
 
-<div class="viewcode-block" id="choose_interventions"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.choose_interventions">[docs]</a><span class="k">def</span> <span class="nf">choose_interventions</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">action_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<div class="viewcode-block" id="choose_interventions"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.choose_interventions">[docs]</a><span class="k">def</span> <span class="nf">choose_interventions</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">action_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,</span>
 <span class="sd">    or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).</span>
@@ -1480,7 +1480,7 @@
 
             <span class="c1"># is the god willing to intervene i.e. does the opinion score meet the required opinion</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">opinion_score</span> <span class="o">=</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span>
+                <span class="n">opinion_score</span> <span class="o">=</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">active_entity</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="n">opinion_score</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -1507,7 +1507,7 @@
 
         <span class="c1"># if god has chosen to take an action then add to list</span>
         <span class="k">if</span> <span class="n">chosen_intervention</span> <span class="o">!=</span> <span class="s2">&quot;Nothing&quot;</span><span class="p">:</span>
-            <span class="n">chosen_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">entity</span><span class="p">,</span> <span class="n">chosen_intervention</span><span class="p">))</span>
+            <span class="n">chosen_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">chosen_intervention</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">chosen_interventions</span></div>
 </pre></div>

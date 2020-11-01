@@ -187,7 +187,7 @@
 
 <span class="kn">import</span> <span class="nn">dataclasses</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 <span class="kn">import</span> <span class="nn">pygame</span>
 
@@ -209,8 +209,6 @@
     <span class="s2">&quot;get_image&quot;</span><span class="p">,</span>
     <span class="s2">&quot;get_images&quot;</span><span class="p">,</span>
     <span class="s2">&quot;flatten_images&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;recursive_replace&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;recursive_find_in_dict&quot;</span><span class="p">,</span>
     <span class="s2">&quot;get_class_members&quot;</span><span class="p">,</span>
     <span class="s2">&quot;lerp&quot;</span><span class="p">,</span>
     <span class="s2">&quot;clamp&quot;</span><span class="p">,</span>
@@ -222,6 +220,7 @@
     <span class="s2">&quot;build_sprites_from_paths&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
+<span class="n">_V</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;_V&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>  <span class="c1"># to represent components where we don&#39;t know which is being used</span>
 
 <span class="c1">################################### IMAGES ########################################</span>
 
@@ -235,6 +234,13 @@
 <span class="sd">    dimensions provided.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">scripts.engine.core.data</span> <span class="kn">import</span> <span class="n">store</span>  <span class="c1"># circular import in testing.</span>
+
+    <span class="c1"># ensure numbers arent negative</span>
+    <span class="k">if</span> <span class="n">desired_dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">desired_dimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Get_image: Tried to use dimensions of </span><span class="si">{</span><span class="n">desired_dimensions</span><span class="si">}</span><span class="s2">, which are negative. Used tile size instead.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">desired_dimensions</span> <span class="o">=</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
 
     <span class="c1"># check if image path provided</span>
     <span class="k">if</span> <span class="n">img_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
@@ -350,46 +356,6 @@
 <span class="c1">################################### QUERY TOOLS ########################################</span>
 
 
-<div class="viewcode-block" id="recursive_replace"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.recursive_replace">[docs]</a><span class="k">def</span> <span class="nf">recursive_replace</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value_to_replace</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">new_value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Check through any number of nested dicts or lists for the specified key-&gt;value pair and replace the value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="c1"># Break the dict out and run recursively against the elements</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
-                <span class="c1"># The value may be a list so handle it if so</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                    <span class="c1"># Loop the list and replace the required value</span>
-                    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="n">value_to_replace</span><span class="p">:</span>
-                            <span class="n">v</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
-                <span class="k">elif</span> <span class="n">v</span> <span class="o">==</span> <span class="n">value_to_replace</span><span class="p">:</span>
-                    <span class="n">obj</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">recursive_replace</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_to_replace</span><span class="p">,</span> <span class="n">new_value</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="c1"># Break the list out and run recursively against the elements</span>
-        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
-            <span class="n">recursive_replace</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_to_replace</span><span class="p">,</span> <span class="n">new_value</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="recursive_find_in_dict"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.recursive_find_in_dict">[docs]</a><span class="k">def</span> <span class="nf">recursive_find_in_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Check through any number of nested dicts for the specified key and return the value. Returns after</span>
-<span class="sd">    finding the first key.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="c1"># Break the dict out and run recursively against the elements</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">v</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># go a layer down</span>
-                <span class="n">recursive_find_in_dict</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="get_class_members"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.get_class_members">[docs]</a><span class="k">def</span> <span class="nf">get_class_members</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get a class&#39; members, excluding special methods e.g. anything prefixed with &#39;__&#39;. Useful for use with dataclasses.</span>
@@ -408,7 +374,8 @@
 
 <div class="viewcode-block" id="lerp"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.lerp">[docs]</a><span class="k">def</span> <span class="nf">lerp</span><span class="p">(</span><span class="n">initial_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">target_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lerp_fraction</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Linear interpolation between initial and target by amount. Fraction clamped between 0 and 1.</span>
+<span class="sd">    Linear interpolation between initial and target by amount. Fraction clamped between 0 and 1. &gt;=0.99 is treated</span>
+<span class="sd">    as 1 to handle float imprecision.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">clamped_lerp_fraction</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">lerp_fraction</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
@@ -418,16 +385,16 @@
         <span class="k">return</span> <span class="n">initial_value</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">clamped_lerp_fraction</span><span class="p">)</span> <span class="o">+</span> <span class="n">target_value</span> <span class="o">*</span> <span class="n">clamped_lerp_fraction</span></div>
 
 
-<div class="viewcode-block" id="clamp"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.clamp">[docs]</a><span class="k">def</span> <span class="nf">clamp</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">):</span>
+<div class="viewcode-block" id="clamp"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.clamp">[docs]</a><span class="k">def</span> <span class="nf">clamp</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">_V</span><span class="p">,</span> <span class="n">min_value</span><span class="p">:</span> <span class="n">_V</span><span class="p">,</span> <span class="n">max_value</span><span class="p">:</span> <span class="n">_V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_V</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the value, clamped between min and max.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">min_value</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="is_close"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.is_close">[docs]</a><span class="k">def</span> <span class="nf">is_close</span><span class="p">(</span><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="is_close"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.is_close">[docs]</a><span class="k">def</span> <span class="nf">is_close</span><span class="p">(</span><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    returns true if the absolute distance between both coordinates is less than delta</span>
+<span class="sd">    True if the absolute distance between both coordinates is less than delta.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">target_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">delta</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">target_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">delta</span></div>
 
@@ -561,7 +528,7 @@
 
 <div class="viewcode-block" id="convert_direction_to_name"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.utility.convert_direction_to_name">[docs]</a><span class="k">def</span> <span class="nf">convert_direction_to_name</span><span class="p">(</span><span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the direction name from the direction. (0,1) = &#39;up&#39; etc.</span>
+<span class="sd">    Get the direction name from the direction. e.g. (0,1) = &#39;up&#39; etc.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">directions</span> <span class="o">=</span> <span class="p">{</span>
         <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="s2">&quot;up&quot;</span><span class="p">,</span>
