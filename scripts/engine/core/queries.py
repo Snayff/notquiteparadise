@@ -5,13 +5,15 @@ from typing import TYPE_CHECKING, Type
 from snecs import Query
 
 from scripts.engine.component import (
-    Exists, FOV,
+    FOV,
     Aesthetic,
     Afflictions,
     Blocking,
+    Exists,
     HasCombatStats,
     Identity,
-    IsActive, IsActor,
+    IsActive,
+    IsActor,
     Knowledge,
     LightSource,
     Position,
@@ -35,7 +37,7 @@ __all__ = [
     "position_and_identity_and_aesthetic",
     "position_and_actor",
     "position_and_win_condition",
-    "active_and_tracked"
+    "active_and_tracked",
 ]
 
 

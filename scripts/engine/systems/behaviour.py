@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-__all__ = ["process_interventions", "process_activations"]
-
 from scripts.engine import world
 from scripts.engine.component import IsActive, Position, Tracked
 from scripts.engine.core import queries
 from scripts.engine.core.constants import MAX_ACTIVATION_DISTANCE
+
+__all__ = ["process_interventions", "process_activations"]
+
 
 
 def process_interventions():
@@ -34,14 +35,14 @@ def process_activations():
     Allocate active component to  appropriate NPCs. Entity with no position or with position and close to player.
     """
     # all entities with no position must be active
-    for entity, (_, ) in queries.not_position:
+    for entity, (_,) in queries.not_position:
         if not world.entity_has_component(entity, IsActive):
             world.add_component(entity, IsActive())
 
     # check entities in range of player
     player = world.get_player()
     player_pos: Position = world.get_entitys_component(player, Position)
-    for entity, (pos, ) in queries.position:
+    for entity, (pos,) in queries.position:
         # check if they're close enough that we care
         distance_x = abs(player_pos.x - pos.x)
         distance_y = abs(player_pos.y - pos.y)
@@ -54,10 +55,10 @@ def process_activations():
                 if world.entity_has_component(entity, Tracked):
                     tracked = world.get_entitys_component(entity, Tracked)
                     from scripts.engine import chronicle
+
                     tracked.time_spent = chronicle.get_time() + 1
 
         else:
             # not close enough, remove active
             if world.entity_has_component(entity, IsActive):
                 world.remove_component(entity, IsActive)
-

@@ -21,6 +21,7 @@ if TYPE_CHECKING:
 
 ########################### FLAGS ##############################
 
+
 class Exists(RegisteredComponent):
     """
     Empty flag for all entities. Used to allow filters to search for a single component i.e. use a single condition.

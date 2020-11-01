@@ -29,7 +29,7 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     new_queue = {}
     from scripts.engine.core import queries
 
-    for entity, (is_active, tracked, ) in queries.active_and_tracked:
+    for entity, (is_active, tracked,) in queries.active_and_tracked:
         if entity != entity_to_exclude:
             assert isinstance(tracked, Tracked)
             new_queue[entity] = tracked.time_spent

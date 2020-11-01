@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import random
 from typing import Tuple
+
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, library, world
@@ -40,8 +41,7 @@ class Projectile(Behaviour):
         # if we havent moved check for collision in current tile (it might be cast on top of enemy)
         if self.distance_travelled == 0 and world.tile_has_tag(entity, current_tile, TargetTag.OTHER_ENTITY):
             should_activate = True
-            logging.debug(f"'{world.get_name(entity)}' collided with an entity on cast at"
-                          f"({pos.x},{pos.y}).")
+            logging.debug(f"'{world.get_name(entity)}' collided with an entity on cast at" f"({pos.x},{pos.y}).")
 
         # if we havent travelled max distance or determined we should activate then move
         # N.b. not an elif because we want the precheck above to happen in isolation
@@ -75,9 +75,11 @@ class Projectile(Behaviour):
             world.kill_entity(entity)
 
         elif should_move:
-            logging.debug(f"'{world.get_name(entity)}' has {self.data.range - self.distance_travelled} range left and"
-                          f" is going to move from ({pos.x},{pos.y}) to "
-                          f"({pos.x + dir_x},{pos.y + dir_y}).")
+            logging.debug(
+                f"'{world.get_name(entity)}' has {self.data.range - self.distance_travelled} range left and"
+                f" is going to move from ({pos.x},{pos.y}) to "
+                f"({pos.x + dir_x},{pos.y + dir_y})."
+            )
 
             move = world.get_known_skill(entity, "Move")
             world.use_skill(entity, move, current_tile, self.data.direction)
@@ -109,8 +111,8 @@ class Projectile(Behaviour):
                 should_move = True
 
                 # change direction and move
-                new_dir = world.get_reflected_direction(self.entity,
-                    (current_tile.x, current_tile.y), (target_tile.x, target_tile.y)
+                new_dir = world.get_reflected_direction(
+                    self.entity, (current_tile.x, current_tile.y), (target_tile.x, target_tile.y)
                 )
                 self.data.direction = new_dir
 
@@ -215,9 +217,11 @@ class Basic(Behaviour):
             # cast whatever skill has been chosen
             world.use_skill(entity, skill_to_cast, target_tile, skill_dir)
 
-            logging.debug(f"'{world.get_name(entity)}' cast {skill_to_cast.name} from ({pos.x},"
-                          f"{pos.y}) towards ({pos.x + skill_dir[0]},{pos.y + skill_dir[1]}), with range "
-                          f"{skill_to_cast.range}.")
+            logging.debug(
+                f"'{world.get_name(entity)}' cast {skill_to_cast.name} from ({pos.x},"
+                f"{pos.y}) towards ({pos.x + skill_dir[0]},{pos.y + skill_dir[1]}), with range "
+                f"{skill_to_cast.range}."
+            )
 
             # end turn
             chronicle.end_turn(entity, skill_to_cast.time_cost)
@@ -248,15 +252,16 @@ class Basic(Behaviour):
                 # cast whatever skill has been chosen
                 world.use_skill(entity, skill_to_cast, target_tile, skill_dir)
 
-                logging.debug(f"'{world.get_name(entity)}' moved towards a cast position, from ({pos.x},"
-                              f"{pos.y}) to ({pos.x + skill_dir[0]},{pos.y + skill_dir[1]}).")
+                logging.debug(
+                    f"'{world.get_name(entity)}' moved towards a cast position, from ({pos.x},"
+                    f"{pos.y}) to ({pos.x + skill_dir[0]},{pos.y + skill_dir[1]})."
+                )
 
                 # end turn
                 chronicle.end_turn(entity, skill_to_cast.time_cost)
             else:
                 # no valid cast position, just wander
                 self._move_randomly()
-
 
     def _move_randomly(self):
         """
@@ -286,7 +291,9 @@ class Basic(Behaviour):
 
             world.use_skill(entity, move, target_tile, move_dir)
 
-            logging.debug(f"'{world.get_name(entity)}' couldnt see a target so moved randomly from ({pos.x},"
-                          f"{pos.y}) to ({pos.x + move_dir[0]},{pos.y + move_dir[1]}).")
+            logging.debug(
+                f"'{world.get_name(entity)}' couldnt see a target so moved randomly from ({pos.x},"
+                f"{pos.y}) to ({pos.x + move_dir[0]},{pos.y + move_dir[1]})."
+            )
 
         chronicle.end_turn(entity, move.time_cost)

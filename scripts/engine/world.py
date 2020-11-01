@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import Dict, TYPE_CHECKING, List, Optional, Tuple, Type, TypeVar, cast
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
 import snecs
@@ -12,13 +12,15 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import action, chronicle, library, utility
 from scripts.engine.component import (
-    Exists, FOV,
+    FOV,
     Aesthetic,
     Afflictions,
     Blocking,
+    Exists,
     HasCombatStats,
     Identity,
-    IsActive, IsActor,
+    IsActive,
+    IsActor,
     IsGod,
     IsPlayer,
     Knowledge,
@@ -269,6 +271,7 @@ def create_pathfinder() -> tcod.path.Pathfinder:
 
     return pathfinder
 
+
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 
 
@@ -393,8 +396,9 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     return None
 
 
-def get_reflected_direction(active_entity: EntityID, current_pos: Tuple[int, int],
-        target_direction: Tuple[int, int]) -> DirectionType:
+def get_reflected_direction(
+    active_entity: EntityID, current_pos: Tuple[int, int], target_direction: Tuple[int, int]
+) -> DirectionType:
     """
     Use surrounding walls to understand how the object should be reflected.
     """
@@ -455,12 +459,17 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     This returns an int indicating the number of tile moves between the two points.
     """
     from scipy import spatial  # only used in this method
+
     distance = spatial.distance.chebyshev(start_pos, target_pos)
     return distance
 
 
-def _get_furthest_free_position(active_entity: EntityID,
-    start_pos: Tuple[int, int], target_direction: Tuple[int, int], max_distance: int, travel_type: TravelMethodType
+def _get_furthest_free_position(
+    active_entity: EntityID,
+    start_pos: Tuple[int, int],
+    target_direction: Tuple[int, int],
+    max_distance: int,
+    travel_type: TravelMethodType,
 ) -> Tuple[int, int]:
     """
     Checks each position in a line and returns the last position that doesnt block movement. If no position in
@@ -680,8 +689,9 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
     return entities
 
 
-def get_cast_positions(entity: EntityID, target_pos: Position,
-        skills: List[Type[Skill]]) -> Dict[Type[Skill], List[Tuple[int, int]]]:
+def get_cast_positions(
+    entity: EntityID, target_pos: Position, skills: List[Type[Skill]]
+) -> Dict[Type[Skill], List[Tuple[int, int]]]:
     """
     Check through list of skills to find unblocked cast positions to target
     """
@@ -708,6 +718,7 @@ def get_cast_positions(entity: EntityID, target_pos: Position,
                     break
 
     return skill_dict
+
 
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
 
@@ -939,6 +950,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
 
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
 
+
 def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
     """
     Remove the resource cost from the using entity
@@ -998,7 +1010,7 @@ def apply_skill(skill_instance: Skill) -> bool:
     else:
         logging.info(
             f'Could not apply skill "{skill.__class__.__name__}", target tile does not have required '
-            f'tags ({skill.target_tags}).'
+            f"tags ({skill.target_tags})."
         )
 
     return False
@@ -1313,5 +1325,3 @@ def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[Entit
             chosen_interventions.append((entity, chosen_intervention))
 
     return chosen_interventions
-
-

@@ -79,7 +79,8 @@ class DamageEffect(Effect):
         """
         logging.debug("Evaluating Damage Effect...")
         if not world.entity_has_component(self.origin, HasCombatStats) or not world.entity_has_component(
-                self.target, HasCombatStats):
+            self.target, HasCombatStats
+        ):
             logging.info(f"Either caster or target doesnt have combat stats so damage cannot be applied.")
             return self.failure_effects  # exit
 
