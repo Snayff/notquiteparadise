@@ -210,8 +210,9 @@ def _dump_profiling_data():
 
     # convert profiling to human readable format
     date_and_time = datetime.datetime.utcnow()
-    out_stream = open("tests/.metrics/profiling/" + date_and_time.strftime("%Y%m%d@%H%M") + "_" + VERSION +
-                      ".profile", "w")
+    out_stream = open(
+        "tests/.metrics/profiling/" + date_and_time.strftime("%Y%m%d@%H%M") + "_" + VERSION + ".profile", "w"
+    )
     ps = pstats.Stats("tests/.metrics/profiling/profile.dump", stream=out_stream)
     ps.strip_dirs().sort_stats("cumulative").print_stats()
 
