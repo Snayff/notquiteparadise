@@ -4,6 +4,14 @@ tests.mocks package
 Submodules
 ----------
 
+tests.mocks.mock\_effect module
+-------------------------------
+
+.. automodule:: tests.mocks.mock_effect
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 tests.mocks.mock\_ui module
 ---------------------------
 
