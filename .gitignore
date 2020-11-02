@@ -66,8 +66,10 @@ target/
 # radon
 radon
 
-# log files
-logs/
+# test metrics
+tests/.metrics/*
+
+
 
 # saves
 data/saves/
