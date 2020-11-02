@@ -110,14 +110,7 @@ def initialise_logging():
 
     _debugger.is_logging = True
 
-    log_file_name = "logs/" + "game.log"
-
-    # logging.basicConfig() unable to create folders and throws FileNotFoundError
-    if not os.path.isdir("logs/"):
-        os.mkdir("logs")
-    if not os.path.isdir("logs/profiling/"):
-        os.mkdir("logs/profiling")
-
+    log_file_name = "game.log"
     log_level = logging.DEBUG
     file_mode = "w"
 
@@ -202,15 +195,24 @@ def _dump_profiling_data():
 
     _ = _debugger.profiler.create_stats()
 
+    #  create folders and prevent FileNotFoundError
+    if not os.path.isdir("tests/"):
+        os.mkdir("tests")
+    if not os.path.isdir("tests/.metrics/"):
+        os.mkdir("tests/.metrics/")
+    if not os.path.isdir("tests/.metrics/profiling/"):
+        os.mkdir("tests/.metrics/profiling/")
+
     # dump the profiler stats
     s = io.StringIO()
     ps = pstats.Stats(_debugger.profiler, stream=s).sort_stats("cumulative")
-    ps.dump_stats("logs/profiling/profile.dump")
+    ps.dump_stats("tests/.metrics/profiling/profile.dump")
 
     # convert profiling to human readable format
     date_and_time = datetime.datetime.utcnow()
-    out_stream = open("logs/profiling/" + date_and_time.strftime("%Y%m%d@%H%M") + "_" + VERSION + ".profile", "w")
-    ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
+    out_stream = open("tests/.metrics/profiling/" + date_and_time.strftime("%Y%m%d@%H%M") + "_" + VERSION +
+                      ".profile", "w")
+    ps = pstats.Stats("tests/.metrics/profiling/profile.dump", stream=out_stream)
     ps.strip_dirs().sort_stats("cumulative").print_stats()
 
 
