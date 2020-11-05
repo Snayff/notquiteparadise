@@ -6,6 +6,7 @@ import random
 from typing import Any, Dict, List
 
 import numpy as np
+from pygame.constants import BLEND_RGBA_MULT
 
 from scripts.engine import dungen
 from scripts.engine.core.constants import MAP_BORDER_SIZE, TILE_SIZE, TileCategory
@@ -41,7 +42,8 @@ class GameMap:
         self.tile_map: List[List[Tile]] = []  # array of all Tiles
 
         window = library.VIDEO_CONFIG.base_window
-        self.light_box: LightBox = lighting.LightBox((window.width, window.height))  # lighting that needs processing
+        self.light_box: LightBox = lighting.LightBox((window.width, window.height), BLEND_RGBA_MULT)  # lighting that
+        # needs processing
 
         self._block_movement_map: np.ndarray = np.zeros(map_size, dtype=bool, order="F")  # array for move blocked
         self._block_sight_map: np.ndarray = np.zeros(map_size, dtype=bool, order="F")  # array for sight blocked
@@ -105,9 +107,9 @@ class GameMap:
 
         # get all the non-blocking, or "air", tiles.
         self._air_tile_positions = np.argwhere(self._block_sight_map == 0).tolist()
-        # self.block_sight_map == 0 does the if not block_sight_map part of your loop. np.argwhere gets the indexes
-        # of all nonzero elements.  tolist converts this back into a nested list. If you don't need it as a list then
-        # don't use tolist.
+        # self.block_sight_map == 0 does the if not block_sight_map part of the loop.
+        # np.argwhere gets the indexes of all nonzero elements.
+        # tolist converts this back into a nested list.
 
         # update the walls in the light box
         lighting.generate_walls(self.light_box, self._air_tile_positions, TILE_SIZE)
