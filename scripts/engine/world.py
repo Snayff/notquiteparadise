@@ -138,11 +138,9 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
 
     # set up light
     radius = 2  # TODO - pull radius and colour from external data
-    light_img = utility.get_image("world/light_mask.png", ((radius * 2) * TILE_SIZE, (radius * 2) * TILE_SIZE))
-    light_img.set_alpha(50)
-    light_box = get_game_map().light_box
-    light = lighting.Light([spawn_pos[0] * TILE_SIZE, spawn_pos[1] * TILE_SIZE], radius * TILE_SIZE, light_img)
-    light_id = light_box.add_light(light)
+    colour = (255, 255, 255)
+    alpha = 150
+    light_id = create_light(spawn_pos, radius, colour, alpha)
     components.append(LightSource(light_id, radius))
 
     # get info from traits
@@ -228,10 +226,17 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     projectile.append(Resources(999, 999))
     projectile.append(Afflictions())
 
+    # set up light
+    radius = 1  # TODO - pull radius and colour from external data
+    colour = (68, 174, 235)
+    alpha = 200
+    light_id = create_light((x, y), radius, colour, alpha)
+    projectile.append(LightSource(light_id, radius))
+
     entity = create_entity(projectile)
 
     behaviour = action.behaviour_registry["Projectile"]
-    add_component(entity, Thought(behaviour(entity, data)))  # type: ignore  # this works for projecitle special case
+    add_component(entity, Thought(behaviour(entity, data)))  # type: ignore  # this works for projectile special case
 
     move = action.skill_registry["Move"]
     known_skills = [move]
@@ -258,6 +263,21 @@ def create_combat_stats(entity: EntityID) -> CombatStats:
     stats = CombatStats(entity)
     return stats
 
+
+def create_light(pos: Tuple[int, int], radius: int, colour: Tuple[int, int, int], alpha: int) -> str:
+    """
+    Create a Light and add it to the current GameMap's Lightbox. Pos is the world position - the light will handle
+    scaling to screen.
+    Returns the light_id of the Light.
+    """
+    light_img = utility.get_image("world/light_mask.png", ((radius * 2) * TILE_SIZE, (radius * 2) * TILE_SIZE))
+    light_box = get_game_map().light_box
+    light = lighting.Light([pos[0] * TILE_SIZE, pos[1] * TILE_SIZE], radius * TILE_SIZE, light_img)
+    light.set_alpha(alpha)
+    light.set_colour(colour)
+    light_id = light_box.add_light(light)
+
+    return light_id
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 
@@ -1037,7 +1057,7 @@ def kill_entity(entity: EntityID):
     # if not player
     if entity != get_player():
         # delete from world
-        delete(entity)
+        delete_entity(entity)
 
         turn_queue = chronicle.get_turn_queue()
 
@@ -1056,7 +1076,7 @@ def kill_entity(entity: EntityID):
         ui.log_message("I should have died just then.")
 
 
-def delete(entity: EntityID):
+def delete_entity(entity: EntityID):
     """
     Queues entity for removal from the world_objects. Happens at the next run of process.
     """

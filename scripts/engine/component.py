@@ -528,22 +528,16 @@ class FOV(RegisteredComponent):
 
 class LightSource(RegisteredComponent):
     """
-    An emitter of light.
+    An emitter of light. Takes the light_id from a Light. The Light must be added to the Lightbox of the
+    Gamemap separately.
     """
 
-    def __init__(self, light_id: str, radius: int, colour: Optional[Tuple[int, int, int, int]] = None):
-        if not colour:
-            _colour = (230, 182, 41, 80)
-        else:
-            _colour = colour
-
-        self.radius: int = radius
-        self.colour: Tuple[int, int, int, int] = _colour
+    def __init__(self, light_id: str, radius: int):
         self.light_id: str = light_id
+        self.radius: int = radius
 
     def serialize(self):
-        data = {"radius": self.radius, "colour": self.colour}
-        return data
+        return self.light_id
 
     @classmethod
     def deserialize(cls, serialised):
