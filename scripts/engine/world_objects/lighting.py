@@ -22,9 +22,9 @@ class Light:
         self.alpha: int = alpha
         self.colour: Tuple[int, int, int] = colour
         self.light_img: Optional[pygame.Surface] = None
-        self.calculate_light_img()
+        self._calculate_light_img()
 
-    def calculate_light_img(self):
+    def _calculate_light_img(self):
         """
         Alter the original light image by all of the attributes given, e.g. alpha, colour, etc.
         """
@@ -47,7 +47,7 @@ class Light:
         if override_alpha:
             self.light_img = mult_colour(self.light_orig, self.colour)
         else:
-            self.calculate_light_img()
+            self._calculate_light_img()
         self.set_size(self.radius)
 
     def set_size(self, radius: int):
@@ -152,7 +152,7 @@ class LightBox:
         """
         self.dynamic_walls[group_id] = walls
 
-    def del_dynamic_walls(self, group_id: int):
+    def delete_dynamic_walls(self, group_id: int):
         """
         Delete a group of walls.
         """
@@ -173,7 +173,7 @@ class LightBox:
         """
         return self.lights[light_id]
 
-    def del_light(self, light_id: int):
+    def delete_light(self, light_id: int):
         """
         Delete a light.
         """
@@ -305,7 +305,7 @@ class Wall:
 
         return pygame.Rect(r_p1[0], r_p1[1], r_p2[0] - r_p1[0] + 1, r_p2[1] - r_p1[1] + 1)
 
-    def check_cast(self, source) -> int:
+    def _check_cast(self, source) -> int:
         # will return 1 (or True) if the direction/position of the wall logically allows a shadow to be cast
         if (source[self.vertical] - self.p1[self.vertical]) * self.direction < 0:
             return 1
@@ -313,7 +313,7 @@ class Wall:
             return 0
 
     @staticmethod
-    def determine_cast_endpoint(source, point, vision_box):
+    def _determine_cast_endpoint(source, point, vision_box):
         """
         Determine the point on the vision_box's edge that is collinear to the light and the endpoint of the Wall.
         This must be called for each endpoint of the wall.
@@ -359,7 +359,7 @@ class Wall:
             # vertical sides use numbers 0 and 1
             return vwall_p, cast_vside
 
-    def get_intermediate_points(self, p1_side, p2_side, vision_box):
+    def _get_intermediate_points(self, p1_side, p2_side, vision_box):
         """
         Get the corner points for the polygon.
         If the casted shadow points for walls are on different vision_box sides, the corners between the points must
@@ -414,14 +414,14 @@ class Wall:
         assert isinstance(offset, list)
 
         # check if a shadow needs to be casted
-        if self.check_cast(source):
+        if self._check_cast(source):
 
             # calculate the endpoints of the shadow when casted on the edge of the vision_box
-            p1_shadow, p1_side = self.determine_cast_endpoint(source, self.p1, vision_box)
-            p2_shadow, p2_side = self.determine_cast_endpoint(source, self.p2, vision_box)
+            p1_shadow, p1_side = self._determine_cast_endpoint(source, self.p1, vision_box)
+            p2_shadow, p2_side = self._determine_cast_endpoint(source, self.p2, vision_box)
 
             # calculate the intermediate points of the shadow (see the function for a more detailed description)
-            intermediate_points = self.get_intermediate_points(p1_side, p2_side, vision_box)
+            intermediate_points = self._get_intermediate_points(p1_side, p2_side, vision_box)
 
             # arrange the points of the polygon
             points = [self.p1] + [p1_shadow] + intermediate_points + [p2_shadow] + [self.p2]
