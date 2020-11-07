@@ -35,9 +35,12 @@ def process_light_map():
         aesthetic: Aesthetic
         radius = light_source.radius
 
-        # create fov for light source
+        # create fov for light source and add to light map
         fov = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), radius, FOV_LIGHT_WALLS, FOV_ALGORITHM)
         light_map |= fov
+
+    # assign back post updates
+    game_map.light_map = light_map
 
 
 def process_fov():

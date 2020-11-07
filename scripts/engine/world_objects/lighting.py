@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+import random
 from typing import Dict, List, Optional, Tuple
 
 import pygame
@@ -16,27 +18,50 @@ class Light:
 
     def __init__(self, pos: List[int], radius: int, light_img: pygame.Surface,
             colour: Tuple[int, int, int] = (255, 255, 255), alpha: int = 255):
+        self._base_position: List[int] = pos  # screen position
         self.position: List[int] = pos
+        self._base_radius: int = radius  # screen size
         self.radius: int = radius
-        self.light_orig: pygame.Surface = pygame.transform.scale(light_img, (radius * 2, radius * 2))
+        self._base_light_img: pygame.Surface = pygame.transform.scale(light_img, (radius * 2, radius * 2))
+        self._coloured_light_img: pygame.Surface = self._base_light_img.copy()
+        self.light_img: pygame.Surface = self._base_light_img.copy()
         self.alpha: int = alpha
         self.colour: Tuple[int, int, int] = colour
-        self.light_img: pygame.Surface = light_img  # updated in calculate_light_img
-        self.timer: int = 30
+        self.timer: int = 1
+
         self._calculate_light_img()
+
+    def update(self):
+        base_radius = self._base_radius
+
+        # decrement timer
+        self.timer += 1
+        self.set_size(int((1 + math.sin(self.timer / 40)) * 2 + 50))
+
+        # update for flickering effect
+        # if self.timer < 0:
+        #     # scale size
+        #     variance_size = int(base_radius / 10)
+        #     variance = random.randint(-variance_size, variance_size)
+        #     radius = base_radius + variance
+        #     self.set_size(radius)
+        #
+        #     # set new timer
+        #     self.timer = random.randint(10, 30)
 
     def _calculate_light_img(self):
         """
         Alter the original light image by all of the attributes given, e.g. alpha, colour, etc.
         """
-        self.light_img = mult_colour(set_mask_alpha(self.light_orig, self.alpha), self.colour)
+        self._coloured_light_img = mult_colour(set_mask_alpha(self._base_light_img, self.alpha), self.colour)
+        self.light_img = self._coloured_light_img.copy()
 
     def set_alpha(self, alpha: int):
         """
         Set the alpha value of the light. Refreshes the mask and size.
         """
         self.alpha = alpha
-        self.light_img = set_mask_alpha(self.light_orig, self.alpha)
+        self._coloured_light_img = set_mask_alpha(self._base_light_img, self.alpha)
         self.set_size(self.radius)
 
     def set_colour(self, colour: Tuple[int, int, int], override_alpha: bool = False):
@@ -46,17 +71,17 @@ class Light:
         """
         self.colour = colour
         if override_alpha:
-            self.light_img = mult_colour(self.light_orig, self.colour)
+            self._coloured_light_img = mult_colour(self._base_light_img, self.colour)
         else:
             self._calculate_light_img()
         self.set_size(self.radius)
 
     def set_size(self, radius: int):
         """
-        Set the size of the light.
+        Set the size of the light and rescale the image to match.
         """
         self.radius = radius
-        self.light_img = pygame.transform.scale(self.light_img, (radius * 2, radius * 2))
+        self.light_img = pygame.transform.scale(self._coloured_light_img, (radius * 2, radius * 2))
 
 
 class LightBox:
@@ -146,7 +171,7 @@ class LightBox:
         self.dynamic_walls[str(self.dynamic_wall_id)] = walls
         return str(self.dynamic_wall_id)
 
-    def update_dynamic_walls(self, group_id: int, walls: List[Wall]):
+    def update_dynamic_walls(self, group_id: str, walls: List[Wall]):
         """
         Set a group_id to contain a set of walls.
         This is useful for overwriting the walls and takes walls in the same format as `add_walls.
@@ -245,11 +270,10 @@ class LightBox:
             light_pos = [light.position[0] - offset[0], light.position[1] - offset[1]]
             # check for visibility (don't forget that the current rect is adjusted for the radii of the lights)
             if render_box_r.collidepoint(light_pos):
-                # create surface to render the shadow polygons and the lighting image onto
-                # light_instance_surf = pygame.Surface(rendered_mask.get_size())
                 # apply lighting image
                 light_instance_surf = light.light_img.copy()
                 light_offset = [light_pos[0] - light.radius, light_pos[1] - light.radius]
+
                 # draw over the light image with the shadows of each wall (the draw_shadow function only draws if
                 # applicable, so a polygon isn't drawn every time)
                 for wall in valid_walls:
@@ -257,6 +281,9 @@ class LightBox:
 
                 # blit lighting mask onto main surface with RGBA_ADD so that the lighting can accumulate
                 rendered_mask.blit(light_instance_surf, light_offset, special_flags=BLEND_RGBA_ADD)
+
+                # update the light
+                light.update()
 
         # blit the final lighting mask onto the target surface
         target_surf.blit(rendered_mask, (0, 0), special_flags=self.blit_flags)

@@ -126,6 +126,7 @@ def start_game(player_data: ActorData):
 
     # create win condition and place next to player
     player_pos = world.get_entitys_component(player, Position)
+
     win_x = player_pos.x + 1
     win_y = player_pos.y
     components: List[Component] = []
