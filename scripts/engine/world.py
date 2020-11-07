@@ -144,7 +144,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     # set up light
     radius = 2  # TODO - pull radius and colour from external data
     colour = (255, 255, 255)
-    alpha = 150
+    alpha = 200
     light_id = create_light(spawn_pos, radius, colour, alpha)
     components.append(LightSource(light_id, radius))
 
@@ -235,7 +235,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     # set up light
     radius = 1  # TODO - pull radius and colour from external data
     colour = (68, 174, 235)
-    alpha = 200
+    alpha = 240
     light_id = create_light((x, y), radius, colour, alpha)
     projectile.append(LightSource(light_id, radius))
 
