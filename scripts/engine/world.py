@@ -285,6 +285,7 @@ def create_light(pos: Tuple[int, int], radius: int, colour: Tuple[int, int, int]
 
     return light_id
 
+
 def create_pathfinder() -> tcod.path.Pathfinder:
     """
     Create an empty pathfinder using the current game map
@@ -1142,6 +1143,9 @@ def choose_target(entity: EntityID) -> Optional[EntityID]:
 
 
 def kill_entity(entity: EntityID):
+    """
+    Add entity to the deletion stack and removes them from the turn queue.
+    """
     # if not player
     if entity != get_player():
         # delete from world

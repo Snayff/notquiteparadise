@@ -78,7 +78,13 @@ def game_loop():
         turn_holder = chronicle.get_turn_holder()
 
         # process any deletions from last frame
-        snecs.process_pending_deletions(default_world)
+        # this copies snecs.process_pending_deletions() but adds extra steps.
+        for entity in list(default_world._entities_to_delete):
+            components = dict(world.get_entitys_components(entity))
+            for component in components.values():
+                component.on_delete()  # type: ignore  # NQPComponent has this method
+            snecs.delete_entity_immediately(entity, default_world)
+
 
         # have enemy take turn
         if current_state == GameState.GAMEMAP and turn_holder != world.get_player():

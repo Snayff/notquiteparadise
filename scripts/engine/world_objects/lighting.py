@@ -21,7 +21,7 @@ class Light:
         self.light_orig: pygame.Surface = pygame.transform.scale(light_img, (radius * 2, radius * 2))
         self.alpha: int = alpha
         self.colour: Tuple[int, int, int] = colour
-        self.light_img: Optional[pygame.Surface] = None
+        self.light_img: pygame.Surface = light_img  # updated in calculate_light_img
         self._calculate_light_img()
 
     def _calculate_light_img(self):
@@ -91,9 +91,10 @@ class LightBox:
         # keeps track of the IDs for dynamic walls so they have different IDs
         self.dynamic_wall_id: int = 0
 
-        self.lights: Dict = {}
+        self.lights: Dict[str, Light] = {}
 
         # keeps track of IDs for lights so that each new light has a different ID
+        # converted to str when added to dict
         self.light_id: int = 0
 
         self.blit_flags: int = blit_flags
@@ -166,14 +167,14 @@ class LightBox:
         self.lights[str(self.light_id)] = light
         return str(self.light_id)
 
-    def get_light(self, light_id: int):
+    def get_light(self, light_id: str):
         """
         Get a light object based on ID.
         Often used so that the position can then be modified.
         """
         return self.lights[light_id]
 
-    def delete_light(self, light_id: int):
+    def delete_light(self, light_id: str):
         """
         Delete a light.
         """
@@ -238,8 +239,7 @@ class LightBox:
         rendered_mask = pygame.Surface(self.vision_box_r.size)
 
         # iterate through all of the lights
-        for light in self.lights:
-            light = self.lights[light]
+        for light in self.lights.values():
             # apply the terrain offset
             light_pos = [light.position[0] - offset[0], light.position[1] - offset[1]]
             # check for visibility (don't forget that the current rect is adjusted for the radii of the lights)
@@ -247,7 +247,6 @@ class LightBox:
                 # create surface to render the shadow polygons and the lighting image onto
                 # light_instance_surf = pygame.Surface(rendered_mask.get_size())
                 # apply lighting image
-                # light_instance_surf.blit(light.light_img, (light_pos[0] - light.radius, light_pos[1] - light.radius))
                 light_instance_surf = light.light_img.copy()
                 light_offset = [light_pos[0] - light.radius, light_pos[1] - light.radius]
                 # draw over the light image with the shadows of each wall (the draw_shadow function only draws if
