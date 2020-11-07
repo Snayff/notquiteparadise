@@ -22,6 +22,7 @@ class Light:
         self.alpha: int = alpha
         self.colour: Tuple[int, int, int] = colour
         self.light_img: pygame.Surface = light_img  # updated in calculate_light_img
+        self.timer: int = 30
         self._calculate_light_img()
 
     def _calculate_light_img(self):

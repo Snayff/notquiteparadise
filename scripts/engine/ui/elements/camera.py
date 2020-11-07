@@ -31,7 +31,6 @@ class Camera(UIPanel):
         self.ignore_fov = False
         self.is_dirty = True
 
-
         # store this now so we can refer to it later
         game_map = world.get_game_map()
         self.map_width = game_map.width
@@ -65,7 +64,7 @@ class Camera(UIPanel):
         self.overlay_directions: List[DirectionType] = []  # list of tuples
 
         # complete base class init
-        super().__init__(rect, RenderLayer.BOTTOM, manager, element_id="camera")
+        super().__init__(rect, RenderLayer.BOTTOM, manager, object_id="#camera")
 
         # create game map
         blank_surf = Surface((rect.width, rect.height), SRCALPHA)
@@ -298,12 +297,19 @@ class Camera(UIPanel):
         map_height = self.map_image.rect.height
         map_surf = Surface((map_width, map_height), SRCALPHA)
 
-        # draw floors
+        self._draw_floors(map_surf)
+        self._draw_entities(map_surf)
+        self._draw_lighting(map_surf)
+        self._draw_walls(map_surf)
+
+        self.map_image.set_image(map_surf)
+
+    def _draw_floors(self, map_surf: pygame.Surface):
         for tile in self.current_tiles:
             if not tile.blocks_sight:
                 self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
 
-        # draw entities
+    def _draw_entities(self, map_surf: pygame.Surface):
         from scripts.engine.core import queries
         for entity, (pos, aesthetic) in queries.position_and_aesthetic:
             # if part of entity in camera view
@@ -316,16 +322,14 @@ class Camera(UIPanel):
                     if tile.is_visible or self.ignore_fov:
                         self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
 
-        # draw lighting
+    def _draw_lighting(self, map_surf: pygame.Surface):
         light_box = world.get_game_map().light_box
         light_box.render(map_surf, [self.start_x * TILE_SIZE, self.start_y * TILE_SIZE])
 
-        # draw walls
+    def _draw_walls(self, map_surf: pygame.Surface):
         for tile in self.current_tiles:
             if tile.blocks_sight:
                 self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
-
-        self.map_image.set_image(map_surf)
 
     def _draw_grid(self, tile_positions: Iterable):
         """

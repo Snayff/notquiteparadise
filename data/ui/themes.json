@@ -166,5 +166,14 @@
          "misc": {
              "padding": "1, 1"
          }
+     },
+     "#camera": {
+         "colours": {
+             "normal_bg": "#000000",
+             "hovered_bg": "#000000",
+             "selected_bg": "#000000",
+             "active_bg": "#000000",
+             "dark_bg":"#000000"
+         }
      }
  }
