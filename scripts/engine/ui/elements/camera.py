@@ -264,8 +264,7 @@ class Camera(UIPanel):
         # get the first element
         element0 = self.grid.elements[0]
 
-        # cast for typing
-        element0 = cast(UIButton, element0)
+        assert isinstance(element0, UIButton)
 
         # get the (x,y) position of the element
         x, y, _, _ = element0.get_relative_rect()
@@ -279,9 +278,7 @@ class Camera(UIPanel):
 
         if should_update:
             for element in self.grid.elements:
-
-                # cast for typing
-                element = cast(UIButton, element)
+                assert isinstance(element, UIButton)
 
                 # get the updated position
                 col, row = self.get_tile_col_row(element.object_ids[-1])

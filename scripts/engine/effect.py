@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, Afflictions, Blocking, Knowledge, Position, Resources
+from scripts.engine.component import Aesthetic, Afflictions, Blocking, HasCombatStats, Knowledge, Position, Resources
 from scripts.engine.core.constants import (
     AfflictionTrigger,
     AfflictionTriggerType,
@@ -78,6 +78,12 @@ class DamageEffect(Effect):
         Resolve the damage effect and return the conditional effects based on if the damage is greater than 0.
         """
         logging.debug("Evaluating Damage Effect...")
+        if not world.entity_has_component(self.origin, HasCombatStats) or not world.entity_has_component(
+            self.target, HasCombatStats
+        ):
+            logging.info(f"Either caster or target doesnt have combat stats so damage cannot be applied.")
+            return self.failure_effects  # exit
+
         defenders_stats = world.create_combat_stats(self.target)
         attackers_stats = world.create_combat_stats(self.origin)
 
@@ -184,8 +190,8 @@ class MoveActorEffect(Effect):
 
             # check a tile was returned
             if target_tile:
-                is_tile_blocking_movement = world.tile_has_tag(target_tile, TargetTag.BLOCKED_MOVEMENT, entity)
-                is_entity_on_tile = not world.tile_has_tag(target_tile, TargetTag.NO_ENTITY)
+                is_tile_blocking_movement = world.tile_has_tag(entity, target_tile, TargetTag.BLOCKED_MOVEMENT)
+                is_entity_on_tile = not world.tile_has_tag(entity, target_tile, TargetTag.NO_ENTITY)
             else:
                 is_tile_blocking_movement = True
                 is_entity_on_tile = False
@@ -203,9 +209,8 @@ class MoveActorEffect(Effect):
                 from scripts.engine.core import queries
 
                 for blocking_entity, (position, blocking) in queries.position_and_blocking:
-                    # cast for typing
-                    position = cast(Position, position)
-                    blocking = cast(Blocking, blocking)
+                    assert isinstance(position, Position)
+                    assert isinstance(blocking, Blocking)
                     if blocking_entity != entity and blocking.blocks_movement and (target_x, target_y) in position:
                         # blocked by entity
                         blockers_name = world.get_name(blocking_entity)

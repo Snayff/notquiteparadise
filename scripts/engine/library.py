@@ -31,7 +31,7 @@ from scripts.engine.core.definitions import (
 from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:
-    from typing import Dict, Any, List, Union
+    from typing import Dict, List
 
 
 __all__ = [

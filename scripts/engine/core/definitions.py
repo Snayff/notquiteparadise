@@ -347,6 +347,7 @@ class SkillData:
     # how does it travel from the user?
     targeting_method: TargetingMethodType = TargetingMethod.TARGET
     target_directions: List[DirectionType] = field(default_factory=list)
+    range: int = 1
 
     # what is the area of effect?
     shape: ShapeType = Shape.TARGET

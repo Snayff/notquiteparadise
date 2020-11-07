@@ -7,7 +7,7 @@ import tcod
 from scripts.engine import world
 from scripts.engine.component import Aesthetic, FOV, LightSource, Position
 from scripts.engine.core import queries
-from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_ACTIVATION_DISTANCE
+from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS
 
 if TYPE_CHECKING:
     pass
@@ -19,10 +19,6 @@ def process_light_map():
     """
     Update light map and light box  using light sources of all entities
     """
-    # get player details
-    player = world.get_player()
-    player_pos: Position = world.get_entitys_component(player, Position)
-
     # get game map details
     game_map = world.get_game_map()
     light_map = game_map.light_map
@@ -33,51 +29,36 @@ def process_light_map():
     # reset light map
     light_map[:] = False
 
-    # process all light sources
-    for entity, (pos, light_source) in queries.position_and_light_source:
+    for entity, (is_active, light_source, pos,) in queries.active_and_light_source_and_position:
         light_source: LightSource
         pos: Position
         aesthetic: Aesthetic
         radius = light_source.radius
 
-        # check if they're close enough that we care
-        offset_x = player_pos.x - pos.x
-        offset_y = player_pos.y - pos.y
-        if max(abs(offset_x), abs(offset_y)) < MAX_ACTIVATION_DISTANCE:
-
-            # create fov for light source
-            fov = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), radius, FOV_LIGHT_WALLS, FOV_ALGORITHM)
-            light_map |= fov
+        # create fov for light source
+        fov = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), radius, FOV_LIGHT_WALLS, FOV_ALGORITHM)
+        light_map |= fov
 
 
 def process_fov():
     """
-    Update FOV for all entities within MAX_ACTIVATION_DISTANCE of player.
+    Update FOV for all active entities
     """
-    # get player details
-    player = world.get_player()
-    player_pos: Position = world.get_entitys_component(player, Position)
-
     # create transparency layer
     game_map = world.get_game_map()
     block_sight_map = game_map.block_sight_map
 
-    for entity, (fov, pos, stats) in queries.position_and_fov_and_combat_stats:
+    for entity, (is_active, pos, fov, stats,) in queries.active_and_position_and_fov_and_combat_stats:
 
-        # check if they're close enough that we care
-        offset_x = player_pos.x - pos.x
-        offset_y = player_pos.y - pos.y
-        if max(abs(offset_x), abs(offset_y)) < MAX_ACTIVATION_DISTANCE:
-            # get sight range
-            stats = world.create_combat_stats(entity)
-            sight_range = stats.sight_range
-
-            fov.map = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), sight_range, FOV_LIGHT_WALLS, FOV_ALGORITHM)
+        stats = world.create_combat_stats(entity)
+        sight_range = stats.sight_range
+        fov.map = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), sight_range, FOV_LIGHT_WALLS, FOV_ALGORITHM)
 
 
 def process_tile_visibility():
     """
     Update tile visibility based on player fov
+    FIXME - every entity has its own fov so gamemap doesnt need visibility anymore
     """
     # get player info
     player = world.get_player()

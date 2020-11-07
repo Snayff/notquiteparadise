@@ -74,7 +74,7 @@ jobs:
       run: |
         git config --global user.name 'nqp'
         git config --global user.email 'snayff@users.noreply.github.com'
-        git coverage.xml
+        git add coverage.xml
         git commit -am "ci lint and test"
 
     - name: Git Status Check

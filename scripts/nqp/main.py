@@ -14,7 +14,7 @@ from scripts.engine.core.constants import GameState
 from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.engine.ui.manager import ui
 from scripts.nqp import processors
-from scripts.nqp.actions import afflictions, behaviours, skills  # must import to register skills
+from scripts.nqp.actions import afflictions, behaviours, skills  # must import to register in engine
 from scripts.nqp.command import initialise_game
 from scripts.nqp.processors import display, game
 
@@ -85,7 +85,7 @@ def game_loop():
             # just in case the turn holder has died but not been replaced as expected
             try:
                 world.take_turn(turn_holder)
-            except AttributeError:
+            except KeyError:
                 chronicle.rebuild_turn_queue()
 
         # update based on input events

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import logging
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, List, Tuple, TypeVar
 
 import pygame
 
@@ -18,19 +18,15 @@ from scripts.engine.core.constants import (
 from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 if TYPE_CHECKING:
-    from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
+    from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 __all__ = [
     "get_image",
     "get_images",
     "flatten_images",
-    "recursive_replace",
-    "recursive_find_in_dict",
     "get_class_members",
     "lerp",
     "clamp",
-    "get_euclidean_distance",
-    "get_chebyshev_distance",
     "get_coords_from_shape",
     "is_close",
     "value_to_member",
@@ -39,6 +35,7 @@ __all__ = [
     "build_sprites_from_paths",
 ]
 
+_V = TypeVar("_V", int, float)  # to represent components where we don't know which is being used
 
 ################################### IMAGES ########################################
 
@@ -52,6 +49,13 @@ def get_image(
     dimensions provided.
     """
     from scripts.engine.core.data import store  # circular import in testing.
+
+    # ensure numbers arent negative
+    if desired_dimensions[0] <= 0 or desired_dimensions[1] <= 0:
+        logging.warning(
+            f"Get_image: Tried to use dimensions of {desired_dimensions}, which are negative. Used tile size instead."
+        )
+        desired_dimensions = (TILE_SIZE, TILE_SIZE)
 
     # check if image path provided
     if img_path.lower() != "none":
@@ -167,46 +171,6 @@ def build_sprites_from_paths(
 ################################### QUERY TOOLS ########################################
 
 
-def recursive_replace(obj: Union[Dict, List], key: str, value_to_replace: Any, new_value: Any):
-    """
-    Check through any number of nested dicts or lists for the specified key->value pair and replace the value.
-    """
-    if isinstance(obj, dict):
-        # Break the dict out and run recursively against the elements
-        for k, v in obj.items():
-            if k == key:
-                # The value may be a list so handle it if so
-                if isinstance(v, list):
-                    # Loop the list and replace the required value
-                    for index, item in enumerate(v):
-                        if item == value_to_replace:
-                            v[index] = new_value
-                elif v == value_to_replace:
-                    obj[key] = new_value
-            else:
-                recursive_replace(v, key, value_to_replace, new_value)
-
-    elif isinstance(obj, list):
-        # Break the list out and run recursively against the elements
-        for element in obj:
-            recursive_replace(element, key, value_to_replace, new_value)
-
-
-def recursive_find_in_dict(obj: Union[Dict, List], key: str) -> Any:
-    """
-    Check through any number of nested dicts for the specified key and return the value. Returns after
-    finding the first key.
-    """
-    if isinstance(obj, dict):
-        # Break the dict out and run recursively against the elements
-        for k, v in obj.items():
-            if k == key:
-                return v
-            else:
-                # go a layer down
-                recursive_find_in_dict(v, key)
-
-
 def get_class_members(cls: Type[Any]) -> List[str]:
     """
     Get a class' members, excluding special methods e.g. anything prefixed with '__'. Useful for use with dataclasses.
@@ -225,7 +189,8 @@ def get_class_members(cls: Type[Any]) -> List[str]:
 
 def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> float:
     """
-    Linear interpolation between initial and target by amount. Fraction clamped between 0 and 1.
+    Linear interpolation between initial and target by amount. Fraction clamped between 0 and 1. >=0.99 is treated
+    as 1 to handle float imprecision.
     """
     clamped_lerp_fraction = clamp(lerp_fraction, 0, 1)
 
@@ -235,38 +200,16 @@ def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> flo
         return initial_value * (1 - clamped_lerp_fraction) + target_value * clamped_lerp_fraction
 
 
-def clamp(value, min_value, max_value):
+def clamp(value: _V, min_value: _V, max_value: _V) -> _V:
     """
     Return the value, clamped between min and max.
     """
     return max(min_value, min(value, max_value))
 
 
-def get_euclidean_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> float:
+def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta: float = 0.05) -> bool:
     """
-    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
-    This returns a float indicating the straight line distance between the two points.
-    """
-    dx = target_pos[0] - start_pos[0]
-    dy = target_pos[1] - start_pos[1]
-    import math  # only used in this method
-
-    return math.sqrt(dx ** 2 + dy ** 2)
-
-
-def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
-    """
-    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
-    This returns an int indicating the number of tile moves between the two points.
-    """
-    import scipy  # only used in this method
-
-    return scipy.spatial.distance.chebyshev(start_pos, target_pos)
-
-
-def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta=0.05) -> bool:
-    """
-    returns true if the absolute distance between both coordinates is less than delta
+    True if the absolute distance between both coordinates is less than delta.
     """
     return abs(current_pos[0] - target_pos[0]) <= delta and abs(current_pos[1] - target_pos[1]) <= delta
 
@@ -400,7 +343,7 @@ def convert_tile_string_to_xy(tile_pos_string: str) -> Tuple[int, int]:
 
 def convert_direction_to_name(direction: DirectionType) -> str:
     """
-    Get the direction name from the direction. (0,1) = 'up' etc.
+    Get the direction name from the direction. e.g. (0,1) = 'up' etc.
     """
     directions = {
         (0, 1): "up",

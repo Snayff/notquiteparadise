@@ -22,8 +22,7 @@ ICON_SIZE = TILE_SIZE // 2
 GAP_SIZE = 2
 SKILL_BUTTON_SIZE = 32
 INFINITE = 999
-MAX_ACTIVATION_DISTANCE = 7  # this is how far from the player an entity can be and still be considered active
-# TODO - add an active component and then we can look for this (activation) (and only update once per turn!)
+MAX_ACTIVATION_DISTANCE = 5  # this is how far from the player an entity can be and still be considered active
 FOV_LIGHT_WALLS = True
 FOV_ALGORITHM = tcod.FOV_RESTRICTIVE
 MAP_BORDER_SIZE = 4
@@ -181,7 +180,7 @@ class Direction(SimpleNamespace):
     Holds a tuple as (x, y) for the relative direction.
     """
 
-    # N.B external values  must be actively mapped to these on load as they are not held as strings
+    # N.B external values must be actively mapped to these on load as they are not held as strings
     UP_LEFT = DirectionType((-1, -1))
     UP = DirectionType((0, -1))
     UP_RIGHT = DirectionType((1, -1))

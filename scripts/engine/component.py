@@ -22,6 +22,21 @@ if TYPE_CHECKING:
 ########################### FLAGS ##############################
 
 
+class Exists(RegisteredComponent):
+    """
+    Empty flag for all entities. Used to allow filters to search for a single component i.e. use a single condition.
+    """
+
+    __slots__ = ()
+
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Exists()
+
+
 class IsPlayer(RegisteredComponent):
     """
     Whether the entity is the player.
@@ -65,6 +80,21 @@ class IsGod(RegisteredComponent):
     @classmethod
     def deserialize(cls, serialised):
         return IsGod()
+
+
+class IsActive(RegisteredComponent):
+    """
+    Whether the entity is active or not. Used to limit entity processing.
+    """
+
+    __slots__ = ()
+
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return IsActive()
 
 
 class HasCombatStats(RegisteredComponent):

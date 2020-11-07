@@ -28,8 +28,7 @@ def _process_aesthetic_update(time_delta: float):
     """
     # move entities screen position towards target
     for entity, (aesthetic,) in queries.aesthetic:
-        # cast for typing
-        aesthetic = cast(Aesthetic, aesthetic)
+        assert isinstance(aesthetic, Aesthetic)
 
         max_duration = 0.5
 
