@@ -29,7 +29,6 @@ from scripts.nqp import command
 __all__ = ["process_intent"]
 
 
-
 def process_intent(intent: InputIntentType, game_state: GameStateType):
     """
     Process the intent in the context of the game state. Intents are game state sensitive.
