@@ -298,8 +298,8 @@ class Camera(UIPanel):
         Update the game map to show the current tiles and entities
         """
         # create new surface for the game map
-        map_width = self._base_width
-        map_height = self._base_height
+        map_width = self.map_image.rect.width
+        map_height = self.map_image.rect.height
         map_surf = Surface((map_width, map_height), SRCALPHA)
 
         self._draw_floors(map_surf)
