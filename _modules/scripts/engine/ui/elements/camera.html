@@ -184,6 +184,7 @@
             
   <h1>Source code for scripts.engine.ui.elements.camera</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">import</span> <span class="nn">pygame</span>
@@ -215,14 +216,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ignore_fov</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="c1"># determine how many tiles to show</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="n">TILE_SIZE</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="n">TILE_SIZE</span>
-
         <span class="c1"># store this now so we can refer to it later</span>
         <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">map_width</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">map_height</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span>
+
+        <span class="c1"># determine how many tiles to show; max rows and cols in game map or max we can show based on size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># to hold the last stored end values</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_end_x</span> <span class="o">=</span> <span class="mi">0</span>
@@ -248,11 +249,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">overlay_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># list of tuples</span>
 
         <span class="c1"># complete base class init</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">element_id</span><span class="o">=</span><span class="s2">&quot;camera&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#camera&quot;</span><span class="p">)</span>
 
         <span class="c1"># create game map</span>
         <span class="n">blank_surf</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">((</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">SRCALPHA</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span> <span class="o">=</span> <span class="n">UIImage</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map_image</span> <span class="o">=</span> <span class="n">UIImage</span><span class="p">(</span>
             <span class="n">relative_rect</span><span class="o">=</span><span class="n">Rect</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">rect</span><span class="o">.</span><span class="n">size</span><span class="p">),</span>
             <span class="n">image_surface</span><span class="o">=</span><span class="n">blank_surf</span><span class="p">,</span>
             <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span>
@@ -363,7 +364,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_draw_game_map</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_ui_element_pos</span><span class="p">()</span>
 
-        <span class="c1"># all updates will have been processed</span>
+        <span class="c1"># all updates have been processed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Camera._update_camera_position"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._update_camera_position">[docs]</a>    <span class="k">def</span> <span class="nf">_update_camera_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">):</span>
@@ -477,18 +478,29 @@
 <span class="sd">        Update the game map to show the current tiles and entities</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># create new surface for the game map</span>
-        <span class="n">map_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
-        <span class="n">map_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+        <span class="n">map_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_image</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">map_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_image</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
         <span class="n">map_surf</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">((</span><span class="n">map_width</span><span class="p">,</span> <span class="n">map_height</span><span class="p">),</span> <span class="n">SRCALPHA</span><span class="p">)</span>
 
-        <span class="c1"># draw tiles</span>
-        <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_tiles</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_surface</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">,</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_floors</span><span class="p">(</span><span class="n">map_surf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_entities</span><span class="p">(</span><span class="n">map_surf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_lighting</span><span class="p">(</span><span class="n">map_surf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_walls</span><span class="p">(</span><span class="n">map_surf</span><span class="p">)</span>
 
-        <span class="c1"># draw entities</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map_image</span><span class="o">.</span><span class="n">set_image</span><span class="p">(</span><span class="n">map_surf</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Camera._draw_floors"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._draw_floors">[docs]</a>    <span class="k">def</span> <span class="nf">_draw_floors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_tiles</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_surface</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">,</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Camera._draw_entities"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._draw_entities">[docs]</a>    <span class="k">def</span> <span class="nf">_draw_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
 
         <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">aesthetic</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_aesthetic</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
+
             <span class="c1"># if part of entity in camera view</span>
             <span class="k">for</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">pos</span><span class="o">.</span><span class="n">offsets</span><span class="p">:</span>
                 <span class="n">src_area</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
@@ -497,9 +509,16 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_in_camera_view</span><span class="p">(</span><span class="n">position</span><span class="p">):</span>
                     <span class="n">tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">is_visible</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_fov</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_surface</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">,</span> <span class="n">draw_position</span><span class="p">,</span> <span class="n">src_area</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_surface</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">,</span> <span class="n">draw_position</span><span class="p">,</span> <span class="n">src_area</span><span class="p">)</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">set_image</span><span class="p">(</span><span class="n">map_surf</span><span class="p">)</span></div>
+<div class="viewcode-block" id="Camera._draw_lighting"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._draw_lighting">[docs]</a>    <span class="k">def</span> <span class="nf">_draw_lighting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
+        <span class="n">light_box</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span><span class="o">.</span><span class="n">light_box</span>
+        <span class="n">light_box</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">map_surf</span><span class="p">,</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_x</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">)])</span></div>
+
+<div class="viewcode-block" id="Camera._draw_walls"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._draw_walls">[docs]</a>    <span class="k">def</span> <span class="nf">_draw_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_tiles</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_surface</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">,</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Camera._draw_grid"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._draw_grid">[docs]</a>    <span class="k">def</span> <span class="nf">_draw_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_positions</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -547,15 +566,18 @@
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">position</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_in_camera_edge</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="ow">or</span> <span class="n">recentre</span><span class="p">:</span>
-            <span class="c1"># centre the target</span>
-            <span class="n">half_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="n">half_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-
             <span class="k">if</span> <span class="n">recentre</span><span class="p">:</span>
+                <span class="c1"># find centre</span>
+                <span class="n">half_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">half_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+                <span class="c1"># centre the target</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span> <span class="o">=</span> <span class="n">x</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">=</span> <span class="n">y</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">target_x</span> <span class="o">=</span> <span class="n">x</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">target_y</span> <span class="o">=</span> <span class="n">y</span>
+
+                <span class="c1"># move to centre</span>
                 <span class="n">offset_x</span> <span class="o">=</span> <span class="o">-</span><span class="n">half_width</span>
                 <span class="n">offset_y</span> <span class="o">=</span> <span class="o">-</span><span class="n">half_height</span>
             <span class="k">else</span><span class="p">:</span>
@@ -564,8 +586,8 @@
             <span class="n">new_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_x</span> <span class="o">+</span> <span class="n">offset_x</span>
             <span class="n">new_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_y</span> <span class="o">+</span> <span class="n">offset_y</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">target_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">clamp</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="mi">0</span> <span class="o">+</span> <span class="n">half_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_width</span> <span class="o">-</span> <span class="n">half_width</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">clamp</span><span class="p">(</span><span class="n">new_y</span><span class="p">,</span> <span class="mi">0</span> <span class="o">+</span> <span class="n">half_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_height</span> <span class="o">-</span> <span class="n">half_height</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">clamp</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_width</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">clamp</span><span class="p">(</span><span class="n">new_y</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_height</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">True</span></div>
 

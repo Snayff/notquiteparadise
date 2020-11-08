@@ -225,6 +225,14 @@
 </dd></dl>
 
 <dl class="py function">
+<dt id="scripts.engine.world.create_light">
+<code class="sig-name descname">create_light</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">radius</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">colour</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">alpha</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><a class="reference internal" href="../_modules/scripts/engine/world.html#create_light"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Light and add it to the current GameMap’s Lightbox. Pos is the world position - the light will handle
+scaling to screen.
+Returns the light_id of the Light.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="scripts.engine.world.create_pathfinder">
 <code class="sig-name descname">create_pathfinder</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; tcod.path.Pathfinder<a class="reference internal" href="../_modules/scripts/engine/world.html#create_pathfinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_pathfinder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an empty pathfinder using the current game map</p>
@@ -499,11 +507,12 @@ FIXME - CURRENTLY JUST RETURNS PLAYER</p>
 <dl class="py function">
 <dt id="scripts.engine.world.kill_entity">
 <code class="sig-name descname">kill_entity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world.html#kill_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.kill_entity" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Add entity to the deletion stack and removes them from the turn queue.</p>
+</dd></dl>
 
 <dl class="py function">
-<dt id="scripts.engine.world.delete">
-<code class="sig-name descname">delete</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world.html#delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.delete" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.world.delete_entity">
+<code class="sig-name descname">delete_entity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world.html#delete_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.delete_entity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Queues entity for removal from the world_objects. Happens at the next run of process.</p>
 </dd></dl>
 

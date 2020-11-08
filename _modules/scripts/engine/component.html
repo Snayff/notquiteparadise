@@ -204,10 +204,20 @@
 <span class="c1"># Components are to hold data that is subject to change.</span>
 <span class="c1">#########################################################</span>
 
+
+<div class="viewcode-block" id="NQPComponent"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.NQPComponent">[docs]</a><span class="k">class</span> <span class="nc">NQPComponent</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Subclass snecs&#39; RegisteredComponent to extend with an on_delete method</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NQPComponent.on_delete"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.NQPComponent.on_delete">[docs]</a>    <span class="k">def</span> <span class="nf">on_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+
 <span class="c1">########################### FLAGS ##############################</span>
 
 
-<div class="viewcode-block" id="Exists"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Exists">[docs]</a><span class="k">class</span> <span class="nc">Exists</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Exists"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Exists">[docs]</a><span class="k">class</span> <span class="nc">Exists</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Empty flag for all entities. Used to allow filters to search for a single component i.e. use a single condition.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -222,7 +232,7 @@
         <span class="k">return</span> <span class="n">Exists</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="IsPlayer"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsPlayer">[docs]</a><span class="k">class</span> <span class="nc">IsPlayer</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="IsPlayer"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsPlayer">[docs]</a><span class="k">class</span> <span class="nc">IsPlayer</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Whether the entity is the player.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -237,7 +247,7 @@
         <span class="k">return</span> <span class="n">IsPlayer</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="IsActor"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsActor">[docs]</a><span class="k">class</span> <span class="nc">IsActor</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="IsActor"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsActor">[docs]</a><span class="k">class</span> <span class="nc">IsActor</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Whether the entity is an actor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -252,7 +262,7 @@
         <span class="k">return</span> <span class="n">IsActor</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="IsGod"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsGod">[docs]</a><span class="k">class</span> <span class="nc">IsGod</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="IsGod"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsGod">[docs]</a><span class="k">class</span> <span class="nc">IsGod</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Whether the entity is a god.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -267,7 +277,7 @@
         <span class="k">return</span> <span class="n">IsGod</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="IsActive"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsActive">[docs]</a><span class="k">class</span> <span class="nc">IsActive</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="IsActive"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.IsActive">[docs]</a><span class="k">class</span> <span class="nc">IsActive</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Whether the entity is active or not. Used to limit entity processing.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -282,7 +292,7 @@
         <span class="k">return</span> <span class="n">IsActive</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="HasCombatStats"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.HasCombatStats">[docs]</a><span class="k">class</span> <span class="nc">HasCombatStats</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="HasCombatStats"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.HasCombatStats">[docs]</a><span class="k">class</span> <span class="nc">HasCombatStats</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A flag to show if an entity has stats used for combat.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -297,7 +307,7 @@
         <span class="k">return</span> <span class="n">HasCombatStats</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="WinCondition"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.WinCondition">[docs]</a><span class="k">class</span> <span class="nc">WinCondition</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="WinCondition"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.WinCondition">[docs]</a><span class="k">class</span> <span class="nc">WinCondition</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A flag to show that an entity is a win objective</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -315,7 +325,7 @@
 <span class="c1">#################### OTHERS #########################</span>
 
 
-<div class="viewcode-block" id="Position"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Position">[docs]</a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Position"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Position">[docs]</a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s position on the map. At initiation provide all positions the entity holds. After initiation only need</span>
 <span class="sd">     to set the top left, or reference position as the other coordinates are held as offsets.</span>
@@ -391,7 +401,7 @@
         <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="Aesthetic"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Aesthetic">[docs]</a><span class="k">class</span> <span class="nc">Aesthetic</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Aesthetic"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Aesthetic">[docs]</a><span class="k">class</span> <span class="nc">Aesthetic</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s sprite.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -453,7 +463,7 @@
         <span class="k">return</span> <span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span><span class="p">,</span> <span class="n">sprites</span><span class="p">,</span> <span class="n">sprite_paths</span><span class="p">,</span> <span class="n">render_layer</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span></div></div>
 
 
-<div class="viewcode-block" id="Tracked"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Tracked">[docs]</a><span class="k">class</span> <span class="nc">Tracked</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Tracked"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Tracked">[docs]</a><span class="k">class</span> <span class="nc">Tracked</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A component to hold info on activities of an entity</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -469,7 +479,7 @@
         <span class="k">return</span> <span class="n">Tracked</span><span class="p">(</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Resources"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Resources">[docs]</a><span class="k">class</span> <span class="nc">Resources</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Resources"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Resources">[docs]</a><span class="k">class</span> <span class="nc">Resources</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s resources. Members align to Resource constants.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -486,7 +496,7 @@
         <span class="k">return</span> <span class="n">Resources</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Blocking"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Blocking">[docs]</a><span class="k">class</span> <span class="nc">Blocking</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Blocking"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Blocking">[docs]</a><span class="k">class</span> <span class="nc">Blocking</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s blocking of other objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -503,7 +513,7 @@
         <span class="k">return</span> <span class="n">Blocking</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s identity, such as name and description.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -520,7 +530,7 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Traits"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Traits">[docs]</a><span class="k">class</span> <span class="nc">Traits</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Traits"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Traits">[docs]</a><span class="k">class</span> <span class="nc">Traits</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s traits. Class, archetype, skill set or otherwise defining group.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -536,7 +546,7 @@
         <span class="k">return</span> <span class="n">Traits</span><span class="p">(</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Thought"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Thought">[docs]</a><span class="k">class</span> <span class="nc">Thought</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Thought"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Thought">[docs]</a><span class="k">class</span> <span class="nc">Thought</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An ai behaviour to control an entity.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -558,7 +568,7 @@
         <span class="k">return</span> <span class="n">Thought</span><span class="p">(</span><span class="n">behaviour</span><span class="p">(</span><span class="n">serialised</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]))</span></div></div>
 
 
-<div class="viewcode-block" id="Knowledge"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Knowledge">[docs]</a><span class="k">class</span> <span class="nc">Knowledge</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Knowledge"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Knowledge">[docs]</a><span class="k">class</span> <span class="nc">Knowledge</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s knowledge, including skills.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -629,7 +639,7 @@
         <span class="k">return</span> <span class="n">Knowledge</span><span class="p">(</span><span class="n">skills</span><span class="p">,</span> <span class="n">skill_order</span><span class="p">,</span> <span class="n">cooldowns</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Afflictions"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Afflictions">[docs]</a><span class="k">class</span> <span class="nc">Afflictions</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Afflictions"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Afflictions">[docs]</a><span class="k">class</span> <span class="nc">Afflictions</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s Boons and Banes. held in .active as a list of Affliction.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -685,7 +695,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Aspect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Aspect">[docs]</a><span class="k">class</span> <span class="nc">Aspect</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Aspect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Aspect">[docs]</a><span class="k">class</span> <span class="nc">Aspect</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s aspects. A static tile modifier. Held in a dict as {aspect_name: duration}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -702,7 +712,7 @@
         <span class="k">return</span> <span class="n">Aspect</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Opinion"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Opinion">[docs]</a><span class="k">class</span> <span class="nc">Opinion</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Opinion"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Opinion">[docs]</a><span class="k">class</span> <span class="nc">Opinion</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s views on other entities. {entity, opinion}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -719,7 +729,7 @@
         <span class="k">return</span> <span class="n">Opinion</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="FOV"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.FOV">[docs]</a><span class="k">class</span> <span class="nc">FOV</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="FOV"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.FOV">[docs]</a><span class="k">class</span> <span class="nc">FOV</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An entity&#39;s field of view. Always starts blank.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -741,27 +751,31 @@
         <span class="k">return</span> <span class="n">fov</span></div></div>
 
 
-<div class="viewcode-block" id="LightSource"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.LightSource">[docs]</a><span class="k">class</span> <span class="nc">LightSource</span><span class="p">(</span><span class="n">RegisteredComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="LightSource"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.LightSource">[docs]</a><span class="k">class</span> <span class="nc">LightSource</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    An emitter of light.</span>
+<span class="sd">    An emitter of light. Takes the light_id from a Light. The Light must be added to the Lightbox of the</span>
+<span class="sd">    Gamemap separately.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">colour</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">colour</span><span class="p">:</span>
-            <span class="n">_colour</span> <span class="o">=</span> <span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mi">182</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">_colour</span> <span class="o">=</span> <span class="n">colour</span>
-
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">light_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">light_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">radius</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">_colour</span>
 
 <div class="viewcode-block" id="LightSource.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.LightSource.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;radius&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="s2">&quot;colour&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">}</span>
-        <span class="k">return</span> <span class="n">data</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_id</span></div>
 
 <div class="viewcode-block" id="LightSource.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.LightSource.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">LightSource</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">LightSource</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LightSource.on_delete"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.LightSource.on_delete">[docs]</a>    <span class="k">def</span> <span class="nf">on_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete the associated light from the Gamemap&#39;s Lightbox</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
+
+        <span class="n">light_box</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span><span class="o">.</span><span class="n">light_box</span>
+        <span class="n">light_box</span><span class="o">.</span><span class="n">delete_light</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_id</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

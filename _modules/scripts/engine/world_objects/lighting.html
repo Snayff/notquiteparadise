@@ -1,0 +1,931 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>scripts.engine.world_objects.lighting &mdash; NotQuiteParadise  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.131.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Core API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.extend_json.html">Extend Json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.store.html">Store</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.queries.html">Queries</a></li>
+</ul>
+<p class="caption"><span class="caption-text">General API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/action.html">Action</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/chronicle.html">Chronicle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/debug.html">Debug</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/dungen.html">Dungen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/effect.html">Effect</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/key.html">Key</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/library.html">Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/state.html">State</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/thought.html">Thought</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/utility.html">Utility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world.html">World</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Systems API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/systems.html">Systems</a></li>
+</ul>
+<p class="caption"><span class="caption-text">World Objects API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.widgets.html">UI Widgets</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NotQuiteParadise</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>scripts.engine.world_objects.lighting</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for scripts.engine.world_objects.lighting</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">from</span> <span class="nn">pygame</span> <span class="kn">import</span> <span class="n">BLEND_RGBA_ADD</span><span class="p">,</span> <span class="n">BLEND_RGBA_MULT</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Light&quot;</span><span class="p">,</span> <span class="s2">&quot;LightBox&quot;</span><span class="p">,</span> <span class="s2">&quot;Wall&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Light"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light">[docs]</a><span class="k">class</span> <span class="nc">Light</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Holds the attributes for the light and offers some basic interface instructions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">radius</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">light_img</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span>
+        <span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="n">alpha</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">255</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_position</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>  <span class="c1"># screen position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_radius</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">radius</span>  <span class="c1"># screen size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_light_img</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">light_img</span><span class="p">,</span> <span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coloured_light_img</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_light_img</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_img</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_light_img</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">colour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># timer for wave/pule of light</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flicker_timer</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># timer for jumping flicker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variance</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># how much variance from radius due to flicker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variance_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_radius</span> <span class="o">/</span> <span class="mi">30</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_light_img</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Light.update"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base_radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_radius</span>
+        <span class="n">variance_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variance_size</span>
+
+        <span class="c1"># increment wave timer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">/</span> <span class="mi">10</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">base_radius</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">variance</span><span class="p">)))</span>
+
+        <span class="c1"># decrement flicker timer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flicker_timer</span> <span class="o">-=</span> <span class="mi">1</span>
+
+        <span class="c1"># update for flickering effect</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flicker_timer</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># scale size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">variance</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="n">variance_size</span><span class="p">,</span> <span class="n">variance_size</span><span class="p">)</span>
+            <span class="n">radius</span> <span class="o">=</span> <span class="n">base_radius</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">variance</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
+
+            <span class="c1"># alpha variance</span>
+            <span class="n">alpha_variance</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variance</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">alpha_variance</span><span class="p">)</span>
+
+            <span class="c1"># set new timer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flicker_timer</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Light._calculate_light_img"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light._calculate_light_img">[docs]</a>    <span class="k">def</span> <span class="nf">_calculate_light_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Alter the original light image by all of the attributes given, e.g. alpha, colour, etc.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coloured_light_img</span> <span class="o">=</span> <span class="n">mult_colour</span><span class="p">(</span><span class="n">set_mask_alpha</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_light_img</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coloured_light_img</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Light.set_alpha"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.set_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">set_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the alpha value of the light. Refreshes the mask and size.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coloured_light_img</span> <span class="o">=</span> <span class="n">set_mask_alpha</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_light_img</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Light.set_colour"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.set_colour">[docs]</a>    <span class="k">def</span> <span class="nf">set_colour</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">override_alpha</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the colour of the light. Refreshes the size. If `override_alpha` is set to `True`, the alpha setting is</span>
+<span class="sd">        ignored when recalculating the light. This is better for performance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colour</span> <span class="o">=</span> <span class="n">colour</span>
+        <span class="k">if</span> <span class="n">override_alpha</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_coloured_light_img</span> <span class="o">=</span> <span class="n">mult_colour</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_light_img</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_light_img</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Light.set_size"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.set_size">[docs]</a>    <span class="k">def</span> <span class="nf">set_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the size of the light and rescale the image to match.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_img</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_coloured_light_img</span><span class="p">,</span> <span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="LightBox"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox">[docs]</a><span class="k">class</span> <span class="nc">LightBox</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles the processing of Lights.</span>
+<span class="sd">    The name &quot;LightBox&quot; comes from the idea that the lighting is only rendered within the &quot;box&quot; of the display.</span>
+
+<span class="sd">    The dimensions provided upon initialization will usually be the dimensions of your display. The `blit_flags`</span>
+<span class="sd">    argument determines the blitting flags used in `LightBox.render()`. By default, it uses the adding flags which</span>
+<span class="sd">    adds light values. However, other flags such as `BLEND_RGBA_MULT` can be used. `BLEND_RGBA_MULT` multiplies the</span>
+<span class="sd">    destination surface by the lighting surface which results in darkening the areas that aren&#39;t lit up instead of</span>
+<span class="sd">    brightening the areas that are.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">blit_flags</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">BLEND_RGBA_ADD</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vision_box_r</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1">#  The position of this rect should be `[0, 0]` as the top left of a window&#39;s coordinates are also `[0,</span>
+        <span class="c1">#  0]`. Terrain offset is applied elsewhere. We can adjust the size of this rect to adjust the size of your</span>
+        <span class="c1">#  visible area using the `pygame.Rect.width` and the `pygame.Rect.height` attributes.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">walls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Wall</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># dict for storing walls by chunk</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_walls</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># size of chunks (tweak for better performance)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span>
+        <span class="c1"># the amount of extra chunks in each direction the game should process (necessary for large lights outside</span>
+        <span class="c1"># the light box)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_overshoot</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># dict for storing dynamic walls</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_walls</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># keeps track of the IDs for dynamic walls so they have different IDs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_wall_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lights</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Light</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># keeps track of IDs for lights so that each new light has a different ID</span>
+        <span class="c1"># converted to str when added to dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">blit_flags</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">blit_flags</span>
+
+<div class="viewcode-block" id="LightBox.add_walls"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_walls">[docs]</a>    <span class="k">def</span> <span class="nf">add_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Wall</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add walls to the lightbox.</span>
+<span class="sd">        This is used for manual wall additions, however, typically, walls are loaded using generate_walls.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walls</span> <span class="o">+=</span> <span class="n">walls</span>
+
+        <span class="c1"># split walls into all the chunks they cross</span>
+        <span class="c1"># this creates duplicates, but the name keys can be put into a dict to efficiently remove duplicates</span>
+        <span class="k">for</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">walls</span><span class="p">:</span>
+            <span class="n">wall_str</span> <span class="o">=</span> <span class="n">point_str</span><span class="p">(</span><span class="n">wall</span><span class="o">.</span><span class="n">p1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span> <span class="o">+</span> <span class="n">point_str</span><span class="p">(</span><span class="n">wall</span><span class="o">.</span><span class="n">p2</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">wall</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
+            <span class="n">p1_chunk</span> <span class="o">=</span> <span class="n">get_chunk</span><span class="p">(</span><span class="n">wall</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">)</span>
+            <span class="n">p2_chunk</span> <span class="o">=</span> <span class="n">get_chunk</span><span class="p">(</span><span class="n">wall</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">)</span>
+            <span class="n">chunk_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">p1_chunk</span> <span class="o">!=</span> <span class="n">p2_chunk</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p1_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">p1_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p2_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">p1_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p2_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                        <span class="n">chunk_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">p1_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p2_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">p1_chunk</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p1_chunk</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2_chunk</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">p1_chunk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p2_chunk</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">p1_chunk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p2_chunk</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                        <span class="n">chunk_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">p1_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">min</span><span class="p">(</span><span class="n">p1_chunk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p2_chunk</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">i</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">chunk_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1_chunk</span><span class="p">,</span> <span class="n">p2_chunk</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunk_list</span><span class="p">:</span>
+                <span class="n">chunk_str</span> <span class="o">=</span> <span class="n">point_str</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">chunk_str</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_walls</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">chunk_walls</span><span class="p">[</span><span class="n">chunk_str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">chunk_walls</span><span class="p">[</span><span class="n">chunk_str</span><span class="p">][</span><span class="n">wall_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">wall</span></div>
+
+<div class="viewcode-block" id="LightBox.clear_walls"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.clear_walls">[docs]</a>    <span class="k">def</span> <span class="nf">clear_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete all walls.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walls</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_walls</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="LightBox.add_dynamic_walls"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_dynamic_walls">[docs]</a>    <span class="k">def</span> <span class="nf">add_dynamic_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Wall</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a dynamic wall and return the dynamic wall id.</span>
+<span class="sd">        This works similarly to add_walls, it just uses a different system in the background that allows</span>
+<span class="sd">        modification but performs worse.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_wall_id</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_walls</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dynamic_wall_id</span><span class="p">)]</span> <span class="o">=</span> <span class="n">walls</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dynamic_wall_id</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LightBox.update_dynamic_walls"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.update_dynamic_walls">[docs]</a>    <span class="k">def</span> <span class="nf">update_dynamic_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">walls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Wall</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a group_id to contain a set of walls.</span>
+<span class="sd">        This is useful for overwriting the walls and takes walls in the same format as `add_walls.</span>
+<span class="sd">        Existing walls can be modified directly for better performance since objects use pointers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_walls</span><span class="p">[</span><span class="n">group_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">walls</span></div>
+
+<div class="viewcode-block" id="LightBox.delete_dynamic_walls"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.delete_dynamic_walls">[docs]</a>    <span class="k">def</span> <span class="nf">delete_dynamic_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete a group of walls.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_walls</span><span class="p">[</span><span class="n">group_id</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="LightBox.add_light"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_light">[docs]</a>    <span class="k">def</span> <span class="nf">add_light</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">light</span><span class="p">:</span> <span class="n">Light</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new light with a light object. Returns the light id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_id</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lights</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_id</span><span class="p">)]</span> <span class="o">=</span> <span class="n">light</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_id</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LightBox.get_light"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.get_light">[docs]</a>    <span class="k">def</span> <span class="nf">get_light</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">light_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a light object based on ID.</span>
+<span class="sd">        Often used so that the position can then be modified.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lights</span><span class="p">[</span><span class="n">light_id</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="LightBox.delete_light"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.delete_light">[docs]</a>    <span class="k">def</span> <span class="nf">delete_light</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">light_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete a light.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">lights</span><span class="p">[</span><span class="n">light_id</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="LightBox._get_max_light_radius"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox._get_max_light_radius">[docs]</a>    <span class="k">def</span> <span class="nf">_get_max_light_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get max light radius.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">max_radius</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">light</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lights</span><span class="p">:</span>
+            <span class="n">max_radius</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lights</span><span class="p">[</span><span class="n">light</span><span class="p">]</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">max_radius</span></div>
+
+<div class="viewcode-block" id="LightBox.render"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The core rendering function that renders the lighting within the lightbox. The offset is used to specify</span>
+<span class="sd">        the terrain offset (aka camera offset or scroll) of the game relative to the viewed area.</span>
+
+<span class="sd">        The `target_surface` is the `pygame.Surface` that will have the lighting rendered onto it. If it is a black</span>
+<span class="sd">        surface, you get the internal lighting mask. This can be useful for static lighting. However, normally the</span>
+<span class="sd">        main display surface should be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># avoid mutable default</span>
+        <span class="k">if</span> <span class="n">offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+
+        <span class="c1"># get the max light radius to determine which lights need to be rendered</span>
+        <span class="c1"># if a light center is farther away from the viewing range than its radius, it&#39;s off the screen</span>
+        <span class="c1"># if the light&#39;s modifications don&#39;t reach onto the screen, then its shadows won&#39;t have an effect,</span>
+        <span class="c1"># so it&#39;s not necessary to process</span>
+        <span class="n">max_radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_max_light_radius</span><span class="p">()</span>
+
+        <span class="c1"># define an updated render_box rect with respect to the terrain offset and the light range to determine which</span>
+        <span class="c1"># walls needs to be processed</span>
+        <span class="n">render_box_r</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span>
+            <span class="o">-</span><span class="n">max_radius</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="o">-</span><span class="n">max_radius</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vision_box_r</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">max_radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vision_box_r</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">max_radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># get all visible walls by using the chunk indexes</span>
+        <span class="n">valid_wall_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vision_box_r</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_overshoot</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vision_box_r</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_overshoot</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">chunk_str</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_overshoot</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">))</span>
+                    <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_overshoot</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">))</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">chunk_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_walls</span><span class="p">:</span>
+                    <span class="n">valid_wall_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk_walls</span><span class="p">[</span><span class="n">chunk_str</span><span class="p">])</span>
+        <span class="n">valid_walls</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">valid_wall_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_walls</span><span class="p">:</span>
+            <span class="n">valid_walls</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_walls</span><span class="p">[</span><span class="n">group</span><span class="p">]</span>
+
+        <span class="c1"># adjust for offset to get the &quot;shown position&quot;</span>
+        <span class="n">valid_walls</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">wall</span><span class="o">.</span><span class="n">clone_move</span><span class="p">([</span><span class="o">-</span><span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">valid_walls</span> <span class="k">if</span> <span class="n">wall</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">colliderect</span><span class="p">(</span><span class="n">render_box_r</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># redefine the render_box rect with the terrain offset removed since the walls have been moved</span>
+        <span class="n">render_box_r</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span>
+            <span class="o">-</span><span class="n">max_radius</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">max_radius</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vision_box_r</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">max_radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vision_box_r</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">max_radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># generate a Surface to render the lighting mask onto</span>
+        <span class="n">rendered_mask</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vision_box_r</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+        <span class="c1"># iterate through all of the lights</span>
+        <span class="k">for</span> <span class="n">light</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lights</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="c1"># apply the terrain offset</span>
+            <span class="n">light_pos</span> <span class="o">=</span> <span class="p">[</span><span class="n">light</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">light</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="c1"># check for visibility (don&#39;t forget that the current rect is adjusted for the radii of the lights)</span>
+            <span class="k">if</span> <span class="n">render_box_r</span><span class="o">.</span><span class="n">collidepoint</span><span class="p">(</span><span class="n">light_pos</span><span class="p">):</span>
+                <span class="c1"># apply lighting image</span>
+                <span class="n">light_instance_surf</span> <span class="o">=</span> <span class="n">light</span><span class="o">.</span><span class="n">light_img</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">light_offset</span> <span class="o">=</span> <span class="p">[</span><span class="n">light_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">light</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="n">light_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">light</span><span class="o">.</span><span class="n">radius</span><span class="p">]</span>
+
+                <span class="c1"># draw over the light image with the shadows of each wall (the draw_shadow function only draws if</span>
+                <span class="c1"># applicable, so a polygon isn&#39;t drawn every time)</span>
+                <span class="k">for</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">valid_walls</span><span class="p">:</span>
+                    <span class="n">wall</span><span class="o">.</span><span class="n">draw_shadow</span><span class="p">(</span><span class="n">light_instance_surf</span><span class="p">,</span> <span class="n">light_pos</span><span class="p">,</span> <span class="n">render_box_r</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">light_offset</span><span class="p">)</span>
+
+                <span class="c1"># blit lighting mask onto main surface with RGBA_ADD so that the lighting can accumulate</span>
+                <span class="n">rendered_mask</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">light_instance_surf</span><span class="p">,</span> <span class="n">light_offset</span><span class="p">,</span> <span class="n">special_flags</span><span class="o">=</span><span class="n">BLEND_RGBA_ADD</span><span class="p">)</span>
+
+                <span class="c1"># update the light</span>
+                <span class="n">light</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="c1"># blit the final lighting mask onto the target surface</span>
+        <span class="n">target_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">rendered_mask</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">special_flags</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">blit_flags</span><span class="p">)</span>
+
+        <span class="c1"># return the list of visible walls in case they need to be used for anything</span>
+        <span class="k">return</span> <span class="n">valid_walls</span></div></div>
+
+
+<div class="viewcode-block" id="Wall"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall">[docs]</a><span class="k">class</span> <span class="nc">Wall</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles shadow casting within a Lightbox.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">p1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">p2</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">vertical</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">direction</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="n">p2</span>
+
+        <span class="c1"># The vertical aspect of the wall that is used to determine direction for shadows (must be `1` or `0`).</span>
+        <span class="c1"># Vertical refers to the direction of the face, not the direction of the wall, so if it&#39;s set to `1`,</span>
+        <span class="c1"># the face  is up/down and the line that makes up the wall is horizontal.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertical</span> <span class="o">=</span> <span class="n">vertical</span>
+
+        <span class="c1"># The direction of the wall (inward/outward). This must be set to `-1` or `1`. The direction refers to the</span>
+        <span class="c1"># axis the wall is on based on `Wall.vertical` with `-1` being associated with the negative direction on the</span>
+        <span class="c1"># associated axis.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">colour</span>
+
+        <span class="c1"># generate the rect for light_box collisions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_rect</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Wall.clone_move"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall.clone_move">[docs]</a>    <span class="k">def</span> <span class="nf">clone_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Wall</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a duplicate Wall with an offset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Wall</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertical</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Wall._create_rect"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._create_rect">[docs]</a>    <span class="k">def</span> <span class="nf">_create_rect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a rect using the points in the wall</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">r_p1</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="n">r_p2</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="c1"># +1 in the x_size and y_size because straight walls have a width or height of 0</span>
+
+        <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="n">r_p1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">r_p1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">r_p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">r_p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r_p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">r_p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Wall._check_cast"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._check_cast">[docs]</a>    <span class="k">def</span> <span class="nf">_check_cast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="c1"># will return 1 (or True) if the direction/position of the wall logically allows a shadow to be cast</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vertical</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vertical</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Wall._determine_cast_endpoint"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._determine_cast_endpoint">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_determine_cast_endpoint</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">vision_box</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine the point on the vision_box&#39;s edge that is collinear to the light and the endpoint of the Wall.</span>
+<span class="sd">        This must be called for each endpoint of the wall.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">difx</span> <span class="o">=</span> <span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dify</span> <span class="o">=</span> <span class="n">source</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">slope</span> <span class="o">=</span> <span class="n">dify</span> <span class="o">/</span> <span class="n">difx</span>
+        <span class="c1"># questionable, but looks alright</span>
+        <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+            <span class="n">slope</span> <span class="o">=</span> <span class="mi">999999</span>
+        <span class="k">if</span> <span class="n">slope</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">slope</span> <span class="o">=</span> <span class="mf">0.000001</span>
+
+        <span class="c1"># since the vision_box&#39;s edges are being treated as lines, there are technically 2 collinear points on the</span>
+        <span class="c1"># vision box&#39;s edge</span>
+        <span class="c1"># one must be a horizontal side and the other must be vertical since the 2 points must be on adjacent sides</span>
+
+        <span class="c1"># determine which horizontal and which vertical sides of the vision box are used (top/bottom and left/right)</span>
+        <span class="n">cast_hside</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">cast_vside</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">difx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cast_hside</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">dify</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cast_vside</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># calculate the collinear points with quick mafs</span>
+        <span class="k">if</span> <span class="n">cast_hside</span><span class="p">:</span>
+            <span class="n">hwall_p</span> <span class="o">=</span> <span class="p">[</span><span class="n">vision_box</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">slope</span> <span class="o">*</span> <span class="p">(</span><span class="n">vision_box</span><span class="o">.</span><span class="n">right</span> <span class="o">-</span> <span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">source</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hwall_p</span> <span class="o">=</span> <span class="p">[</span><span class="n">vision_box</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">slope</span> <span class="o">*</span> <span class="p">(</span><span class="n">vision_box</span><span class="o">.</span><span class="n">left</span> <span class="o">-</span> <span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">source</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">cast_vside</span><span class="p">:</span>
+            <span class="n">vwall_p</span> <span class="o">=</span> <span class="p">[(</span><span class="n">vision_box</span><span class="o">.</span><span class="n">bottom</span> <span class="o">-</span> <span class="n">source</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">slope</span> <span class="o">+</span> <span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vision_box</span><span class="o">.</span><span class="n">bottom</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">vwall_p</span> <span class="o">=</span> <span class="p">[(</span><span class="n">vision_box</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="n">source</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">slope</span> <span class="o">+</span> <span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vision_box</span><span class="o">.</span><span class="n">top</span><span class="p">]</span>
+
+        <span class="c1"># calculate closer point out of the 2 collinear points and return side used</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">hwall_p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hwall_p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">source</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="p">(</span>
+            <span class="nb">abs</span><span class="p">(</span><span class="n">vwall_p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">vwall_p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">source</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="p">):</span>
+            <span class="c1"># horizontal sides use numbers 2 and 3</span>
+            <span class="k">return</span> <span class="n">hwall_p</span><span class="p">,</span> <span class="n">cast_hside</span> <span class="o">+</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># vertical sides use numbers 0 and 1</span>
+            <span class="k">return</span> <span class="n">vwall_p</span><span class="p">,</span> <span class="n">cast_vside</span></div>
+
+<div class="viewcode-block" id="Wall._get_intermediate_points"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._get_intermediate_points">[docs]</a>    <span class="k">def</span> <span class="nf">_get_intermediate_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1_side</span><span class="p">,</span> <span class="n">p2_side</span><span class="p">,</span> <span class="n">vision_box</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the corner points for the polygon.</span>
+<span class="sd">        If the casted shadow points for walls are on different vision_box sides, the corners between the points must</span>
+<span class="sd">        be added.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># the &quot;sides&quot; refer to the sides of the vision_box that the wall endpoints casted onto</span>
+        <span class="c1"># 0 = top, 1 = bottom, 2 = left, 3 = right</span>
+        <span class="n">sides</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1_side</span><span class="p">,</span> <span class="n">p2_side</span><span class="p">]</span>
+        <span class="n">sides</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="c1"># return the appropriate sides based on the 2 sides</span>
+        <span class="c1"># the first 4 are the cases where the 2 shadow points are on adjacent sides</span>
+        <span class="k">if</span> <span class="n">sides</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">vision_box</span><span class="o">.</span><span class="n">topright</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">sides</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">vision_box</span><span class="o">.</span><span class="n">bottomright</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">sides</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">vision_box</span><span class="o">.</span><span class="n">bottomleft</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">sides</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">vision_box</span><span class="o">.</span><span class="n">topleft</span><span class="p">]</span>
+        <span class="c1"># these 2 are for when the shadow points are on opposite sides (normally happens when the light source is</span>
+        <span class="c1"># close to the wall)</span>
+        <span class="c1"># the intermediate points depend on the direction the shadow was cast in this case (they could be on either</span>
+        <span class="c1"># side without knowing the direction)</span>
+        <span class="k">elif</span> <span class="n">sides</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">vision_box</span><span class="o">.</span><span class="n">topleft</span><span class="p">,</span> <span class="n">vision_box</span><span class="o">.</span><span class="n">bottomleft</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">vision_box</span><span class="o">.</span><span class="n">topright</span><span class="p">,</span> <span class="n">vision_box</span><span class="o">.</span><span class="n">bottomright</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">sides</span> <span class="o">==</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">vision_box</span><span class="o">.</span><span class="n">topleft</span><span class="p">,</span> <span class="n">vision_box</span><span class="o">.</span><span class="n">topright</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">vision_box</span><span class="o">.</span><span class="n">bottomleft</span><span class="p">,</span> <span class="n">vision_box</span><span class="o">.</span><span class="n">bottomright</span><span class="p">]</span>
+        <span class="c1"># this happens if the sides are the same, which would mean the shadow doesn&#39;t cross sides and has no</span>
+        <span class="c1"># intermediate points</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="Wall.draw_shadow"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall.draw_shadow">[docs]</a>    <span class="k">def</span> <span class="nf">draw_shadow</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">vision_box</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">,</span>
+        <span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw a shadow, as cast by the light source.</span>
+
+<span class="sd">        Primarily used internally by the `LightBox` class, but it&#39;s available for independent use if you want to do</span>
+<span class="sd">        something crazy. In this context, `light_source` is point (`[x, y]`), not a `Light` object. The `vision_box`</span>
+<span class="sd">        is just a `pygame.Rect` that specifies the visible area. The `color` is the color of the shadow. In normal</span>
+<span class="sd">        use, the shadow is black and used to create a mask, but you can do some weird stuff by changing the color.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># avoid mutable default</span>
+        <span class="k">if</span> <span class="n">offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+
+        <span class="c1"># check if a shadow needs to be casted</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_cast</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+
+            <span class="c1"># calculate the endpoints of the shadow when casted on the edge of the vision_box</span>
+            <span class="n">p1_shadow</span><span class="p">,</span> <span class="n">p1_side</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_cast_endpoint</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">vision_box</span><span class="p">)</span>
+            <span class="n">p2_shadow</span><span class="p">,</span> <span class="n">p2_side</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_cast_endpoint</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">vision_box</span><span class="p">)</span>
+
+            <span class="c1"># calculate the intermediate points of the shadow (see the function for a more detailed description)</span>
+            <span class="n">intermediate_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_intermediate_points</span><span class="p">(</span><span class="n">p1_side</span><span class="p">,</span> <span class="n">p2_side</span><span class="p">,</span> <span class="n">vision_box</span><span class="p">)</span>
+
+            <span class="c1"># arrange the points of the polygon</span>
+            <span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">p1_shadow</span><span class="p">]</span> <span class="o">+</span> <span class="n">intermediate_points</span> <span class="o">+</span> <span class="p">[</span><span class="n">p2_shadow</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">]</span>
+
+            <span class="c1"># apply offset</span>
+            <span class="n">points</span> <span class="o">=</span> <span class="p">[[</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+
+            <span class="c1"># draw the polygon</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">polygon</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">colour</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Wall.render"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the line that makes up the wall.</span>
+<span class="sd">        Mostly just useful for debugging.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># avoid mutable default</span>
+        <span class="k">if</span> <span class="n">offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+            <span class="n">surf</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">,</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+        <span class="p">)</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">box</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">size</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a box of Walls with all walls facing outwards. The pos is the top left of the box. This list of walls can</span>
+<span class="sd">    be added to a LightBox using LightBox.add_walls. Useful for custom wall generation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">walls</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">walls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Wall</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">walls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Wall</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">walls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Wall</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">walls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Wall</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">walls</span>
+
+
+<span class="k">def</span> <span class="nf">point_str</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a point to a string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># some string conversion functions (since looking up strings in a dict is pretty fast performance-wise)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">line_str</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a line to a string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">point_str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">point</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">str_point</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert string to point</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]]</span>
+
+
+<span class="k">def</span> <span class="nf">set_mask_alpha</span><span class="p">(</span><span class="n">surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the alpha of the screen mask</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">mult_colour</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">alpha</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">mult_colour</span><span class="p">(</span><span class="n">surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Multiply the colour given on the provided surface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mult_surf</span> <span class="o">=</span> <span class="n">surf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">mult_surf</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+    <span class="n">new_surf</span> <span class="o">=</span> <span class="n">surf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">new_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">mult_surf</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">special_flags</span><span class="o">=</span><span class="n">BLEND_RGBA_MULT</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_surf</span>
+
+
+<span class="k">def</span> <span class="nf">get_chunk</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">chunk_size</span><span class="p">,</span> <span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">chunk_size</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">generate_walls</span><span class="p">(</span><span class="n">light_box</span><span class="p">:</span> <span class="n">LightBox</span><span class="p">,</span> <span class="n">map_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">tile_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Wall</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds walls to the designated light box using  a list of &quot;air&quot; (empty) tiles.</span>
+
+<span class="sd">    Bordering sides will be joined together to reduce the wall count.  The tile locations in the map_data should be</span>
+<span class="sd">    the grid positions. The positions are then multiplied by the tile_size to get the pixel positions of the</span>
+<span class="sd">    tiles along with the coordinates of the sides. The returned data is just a list of Wall objects that were</span>
+<span class="sd">    added to the given LightBox.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># looking up a string in a dict is significantly quicker than looking up in a list</span>
+    <span class="n">map_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># generate a dict with all of the tiles</span>
+    <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">map_data</span><span class="p">:</span>
+        <span class="n">map_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tile</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tile</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># add all the walls by checking air tiles for bordering solid tiles (solid tiles are where there are no tiles in</span>
+    <span class="c1"># the dict)</span>
+    <span class="k">for</span> <span class="n">air_tile</span> <span class="ow">in</span> <span class="n">map_data</span><span class="p">:</span>
+        <span class="c1"># check all sides for each air tile</span>
+        <span class="k">if</span> <span class="n">point_str</span><span class="p">([</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">map_dict</span><span class="p">:</span>
+            <span class="c1"># generate line in [p1, p2, [vertical, inside/outside]] format</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">[</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">+</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">+</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">+</span> <span class="n">tile_size</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">point_str</span><span class="p">([</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">map_dict</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">[</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">+</span> <span class="n">tile_size</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">point_str</span><span class="p">([</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">map_dict</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">[</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">+</span> <span class="n">tile_size</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">+</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">+</span> <span class="n">tile_size</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">point_str</span><span class="p">([</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">map_dict</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">[</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">air_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span> <span class="o">+</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">air_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tile_size</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+    <span class="c1"># reformat the data into a useful form for the geometry tricks later</span>
+    <span class="c1"># this adds each endpoint to a dict as a key with the associated endpoint being in the list of associated values</span>
+    <span class="c1"># (so 1 point can link to 2 bordering points where lines are connected)</span>
+    <span class="c1"># it keys with respect to the vertical/horizontal aspect and the inward/outward aspect, so all lines that use the</span>
+    <span class="c1"># same keys are part of a single joined line</span>
+    <span class="n">line_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">line_str</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="ow">in</span> <span class="n">line_dict</span><span class="p">:</span>
+                <span class="n">line_dict</span><span class="p">[</span><span class="n">line_str</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line_str</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">line_dict</span><span class="p">[</span><span class="n">line_str</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span><span class="n">line_str</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span><span class="p">)]</span>
+
+    <span class="n">final_walls</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># keep track of the processed points so that those keys can be ignored (we add 4 points per line since each point</span>
+    <span class="c1"># must be a key once and a value once)</span>
+    <span class="n">processed_points</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">line_dict</span><span class="p">:</span>
+        <span class="c1"># the length of the items in this dict are the number of connected points</span>
+        <span class="c1"># so if there&#39;s only 1 connected point, that means it&#39;s the end of a line</span>
+        <span class="c1"># we can then follow the line&#39;s points to calculate the single line based off the connections</span>
+        <span class="k">if</span> <span class="n">point</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">processed_points</span><span class="p">:</span>
+            <span class="c1"># look for the end of the line and skip all the others (since anything else must be connected to an end</span>
+            <span class="c1"># due to the respect to direction)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line_dict</span><span class="p">[</span><span class="n">point</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># add this point to the list to ignore</span>
+                <span class="n">processed_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">p1</span> <span class="o">=</span> <span class="n">str_point</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+                <span class="n">p2</span> <span class="o">=</span> <span class="n">str_point</span><span class="p">(</span><span class="n">line_dict</span><span class="p">[</span><span class="n">point</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="c1"># calculate the direction based on the 2 points</span>
+                <span class="n">direction</span> <span class="o">=</span> <span class="p">[(</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">//</span> <span class="n">tile_size</span><span class="p">,</span> <span class="p">(</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="n">tile_size</span><span class="p">]</span>
+                <span class="c1"># loop through the connected points until the other end is found</span>
+                <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># generate the string for the next point</span>
+                    <span class="n">target_pos</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">tile_size</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">tile_size</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
+                        <span class="o">+</span> <span class="n">point</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                        <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
+                        <span class="o">+</span> <span class="n">point</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="c1"># when the connected point only links to 1 point, you&#39;ve found the other end of the line</span>
+                    <span class="n">processed_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target_pos</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line_dict</span><span class="p">[</span><span class="n">target_pos</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="n">offset</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># append to the walls list based on the last point found and the starting point</span>
+                <span class="n">final_walls</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">p1</span><span class="p">,</span> <span class="n">str_point</span><span class="p">(</span><span class="n">target_pos</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)[</span><span class="mi">3</span><span class="p">])])</span>
+
+    <span class="c1"># generate Wall objects</span>
+    <span class="n">_final_walls</span> <span class="o">=</span> <span class="p">[</span><span class="n">Wall</span><span class="p">(</span><span class="o">*</span><span class="n">wall</span><span class="p">)</span> <span class="k">for</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">final_walls</span><span class="p">]</span>
+
+    <span class="c1"># apply walls</span>
+    <span class="n">light_box</span><span class="o">.</span><span class="n">add_walls</span><span class="p">(</span><span class="n">_final_walls</span><span class="p">)</span>
+
+    <span class="c1"># return the list just in case it&#39;s needed for something</span>
+    <span class="k">return</span> <span class="n">_final_walls</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019-2020, Josh Snaith
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

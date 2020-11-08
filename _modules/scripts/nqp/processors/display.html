@@ -189,24 +189,27 @@
 
 <span class="kn">import</span> <span class="nn">pytweening</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span>
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">LightSource</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">GameStateType</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.utility</span> <span class="kn">import</span> <span class="n">is_close</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;process_display_updates&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="process_display_updates"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.display.process_display_updates">[docs]</a><span class="k">def</span> <span class="nf">process_display_updates</span><span class="p">(</span><span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<div class="viewcode-block" id="process_display_updates"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.display.process_display_updates">[docs]</a><span class="k">def</span> <span class="nf">process_display_updates</span><span class="p">(</span><span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fire realtime processors.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_process_aesthetic_update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">:</span>
+        <span class="n">_process_aesthetic_update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+        <span class="n">_process_lighting</span><span class="p">()</span></div>
 
 
 <span class="k">def</span> <span class="nf">_process_aesthetic_update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Update aesthetics, such as entity animations.</span>
+<span class="sd">    Update aesthetics, such as entity animations and draw positions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># move entities screen position towards target</span>
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">aesthetic</span><span class="p">:</span>
@@ -246,6 +249,26 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span>
             <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">def</span> <span class="nf">_process_lighting</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update lighting draw position using light sources of all entities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># get game map details</span>
+    <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
+    <span class="n">light_box</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">light_box</span>
+
+    <span class="c1"># process all light sources</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">light_source</span><span class="p">,</span> <span class="n">aesthetic</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">light_source_and_aesthetic</span><span class="p">:</span>
+        <span class="n">light_source</span><span class="p">:</span> <span class="n">LightSource</span>
+        <span class="n">aesthetic</span><span class="p">:</span> <span class="n">Aesthetic</span>
+
+        <span class="c1"># update lights in the light box</span>
+        <span class="n">light</span> <span class="o">=</span> <span class="n">light_box</span><span class="o">.</span><span class="n">get_light</span><span class="p">(</span><span class="n">light_source</span><span class="o">.</span><span class="n">light_id</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span> <span class="o">*</span> <span class="n">TILE_SIZE</span> <span class="o">+</span> <span class="p">(</span><span class="n">TILE_SIZE</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">*</span> <span class="n">TILE_SIZE</span> <span class="o">+</span> <span class="p">(</span><span class="n">TILE_SIZE</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">light</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
 </pre></div>
 
            </div>

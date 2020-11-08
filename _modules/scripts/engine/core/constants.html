@@ -196,6 +196,8 @@
 <span class="c1">######################## TOP LEVEL CONSTANTS ######################################</span>
 
 <span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.131.0&quot;</span>  <span class="c1"># DONT FORGET TO UPDATE SPHINX VERSION</span>
+<span class="n">DEBUG_START</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Whether to start directly in debug map</span>
+
 
 <span class="n">MAX_SKILLS</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="n">MAX_SAVES</span> <span class="o">=</span> <span class="mi">1</span>
@@ -208,6 +210,7 @@
 <span class="n">MAX_ACTIVATION_DISTANCE</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># this is how far from the player an entity can be and still be considered active</span>
 <span class="n">FOV_LIGHT_WALLS</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">FOV_ALGORITHM</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">FOV_RESTRICTIVE</span>
+<span class="n">MAP_BORDER_SIZE</span> <span class="o">=</span> <span class="mi">4</span>
 
 <span class="c1">######################## PATHS ######################################</span>
 
@@ -219,7 +222,7 @@
 
 <span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">ROOT_PATH</span> <span class="o">/</span> <span class="s2">&quot;data/&quot;</span>
 <span class="n">ASSET_PATH</span> <span class="o">=</span> <span class="n">ROOT_PATH</span> <span class="o">/</span> <span class="s2">&quot;assets/&quot;</span>
-<span class="n">IMAGE_NOT_FOUND_PATH</span> <span class="o">=</span> <span class="n">ASSET_PATH</span> <span class="o">/</span> <span class="s2">&quot;image_not_found.png&quot;</span>
+<span class="n">IMAGE_NOT_FOUND_PATH</span> <span class="o">=</span> <span class="n">ASSET_PATH</span> <span class="o">/</span> <span class="s2">&quot;debug/image_not_found.png&quot;</span>
 <span class="n">SAVE_PATH</span> <span class="o">=</span> <span class="n">DATA_PATH</span> <span class="o">/</span> <span class="s2">&quot;saves/&quot;</span>
 
 <span class="c1">######################## NEW TYPES ######################################</span>
@@ -349,7 +352,8 @@
     <span class="n">ACTOR_INFO_TOGGLE</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">&quot;actor_info_toggle&quot;</span><span class="p">)</span>
     <span class="n">BURST_PROFILE</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">&quot;burst_profile&quot;</span><span class="p">)</span>
     <span class="n">TEST</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
-    <span class="n">DUNGEON_DEV_VIEW</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">&quot;dungeon_dev_toggle&quot;</span><span class="p">)</span></div>
+    <span class="n">DUNGEON_DEV_VIEW</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">&quot;dungeon_dev_toggle&quot;</span><span class="p">)</span>
+    <span class="n">TOGGLE_UI</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">&quot;toggle_ui&quot;</span><span class="p">)</span></div>
 
 
 <span class="c1">#################### EXTERNAL, SERIALISED  ###########################################</span>

@@ -191,11 +191,16 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pygame.constants</span> <span class="kn">import</span> <span class="n">BLEND_RGBA_MULT</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">dungen</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">TileCategory</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">MAP_BORDER_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TileCategory</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ActorData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.world_objects</span> <span class="kn">import</span> <span class="n">lighting</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.world_objects.lighting</span> <span class="kn">import</span> <span class="n">LightBox</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GameMap&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="GameMap"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap">[docs]</a><span class="k">class</span> <span class="nc">GameMap</span><span class="p">:</span>
@@ -210,18 +215,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">map_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
         <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span>
 
         <span class="n">_map_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">MAPS</span><span class="p">[</span><span class="n">map_name</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">_map_data</span><span class="o">.</span><span class="n">width</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">_map_data</span><span class="o">.</span><span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">_map_data</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="p">(</span><span class="n">MAP_BORDER_SIZE</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">_map_data</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="p">(</span><span class="n">MAP_BORDER_SIZE</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">map_size</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">light_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tile</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_block_movement_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">map_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>  <span class="c1"># what positions are lit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tile</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># array of all Tiles</span>
+
+        <span class="n">window</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">VIDEO_CONFIG</span><span class="o">.</span><span class="n">base_window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_box</span><span class="p">:</span> <span class="n">LightBox</span> <span class="o">=</span> <span class="n">lighting</span><span class="o">.</span><span class="n">LightBox</span><span class="p">((</span><span class="n">window</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">window</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">BLEND_RGBA_MULT</span><span class="p">)</span>  <span class="c1"># lighting that</span>
+        <span class="c1"># needs processing</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_movement_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">map_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>  <span class="c1"># array for move blocked</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">map_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>  <span class="c1"># array for sight blocked</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_air_tile_positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># what positions dont block sight</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">generation_info</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
@@ -269,7 +281,7 @@
 
     <span class="c1">################### DATA MANAGEMENT ####################################</span>
 
-<div class="viewcode-block" id="GameMap.refresh_block_maps"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap.refresh_block_maps">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_block_maps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GameMap._refresh_internals"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap._refresh_internals">[docs]</a>    <span class="k">def</span> <span class="nf">_refresh_internals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Refresh the data in the self._block_movement_map and self._block_sight_map</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -277,7 +289,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_block_movement_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">block_movement_map</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
 
         <span class="n">block_sight_map</span> <span class="o">=</span> <span class="p">[[</span><span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span> <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">]</span> <span class="k">for</span> <span class="n">columns</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">block_sight_map</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">block_sight_map</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+
+        <span class="c1"># get all the non-blocking, or &quot;air&quot;, tiles.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_air_tile_positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="c1"># self.block_sight_map == 0 does the if not block_sight_map part of the loop.</span>
+        <span class="c1"># np.argwhere gets the indexes of all nonzero elements.</span>
+        <span class="c1"># tolist converts this back into a nested list.</span>
+
+        <span class="c1"># update the walls in the light box</span>
+        <span class="n">lighting</span><span class="o">.</span><span class="n">generate_walls</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_box</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_air_tile_positions</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span></div>
 
     <span class="c1">################### SERIALISATION #####################################</span>
 
@@ -330,7 +351,7 @@
 <span class="sd">        Return a copy of an array containing ints, 0 for blocked and 1 for open</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">refresh_block_maps</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_internals</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_movement_map</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
@@ -341,10 +362,21 @@
 <span class="sd">        Return a copy of an array containing ints, 0 for blocked and 1 for open</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">refresh_block_maps</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_internals</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">air_tile_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a copy of an array containing ints, 0 for blocked and 1 for open</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_internals</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_air_tile_positions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 </pre></div>
 
            </div>
