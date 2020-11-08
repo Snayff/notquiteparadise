@@ -19,10 +19,12 @@ if TYPE_CHECKING:
 # Components are to hold data that is subject to change.
 #########################################################
 
+
 class NQPComponent(RegisteredComponent):
     """
     Subclass snecs' RegisteredComponent to extend with an on_delete method
     """
+
     def on_delete(self):
         pass
 
@@ -586,5 +588,6 @@ class LightSource(NQPComponent):
         Delete the associated light from the Gamemap's Lightbox
         """
         from scripts.engine import world
+
         light_box = world.get_game_map().light_box
         light_box.delete_light(self.light_id)

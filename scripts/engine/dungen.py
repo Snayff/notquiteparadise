@@ -45,7 +45,6 @@ class DungeonGenerator:
     # flags
     is_dirty: bool = False
 
-
     def is_in_bounds(self, x: int, y: int):
         """
         Check if a position is in the bounds of the map
@@ -1043,7 +1042,6 @@ def _find_place_for_actor(
     for pos in actor_data.position_offsets:
         offset_x = x + pos[0]
         offset_y = y + pos[1]
-
 
         # only need to check tile category as that captures entity placement too
         if dungen.map_of_categories[offset_x][offset_y] == TileCategory.FLOOR:

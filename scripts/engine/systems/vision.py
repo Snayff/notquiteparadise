@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 import tcod
 
 from scripts.engine import world
-from scripts.engine.component import Aesthetic, FOV, LightSource, Position
+from scripts.engine.component import FOV, Aesthetic, LightSource, Position
 from scripts.engine.core import queries
 from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS
 

@@ -32,7 +32,6 @@ def initialise_game():
         ui.set_element_visibility(UIElement.TITLE_SCREEN, True)
 
 
-
 def _start_debug_game():
     """
     Create a new game and show the gamemap
@@ -219,6 +218,7 @@ def win_game():
 
 
 ############### NAVIGATION  #####################
+
 
 def goto_character_select():
     """

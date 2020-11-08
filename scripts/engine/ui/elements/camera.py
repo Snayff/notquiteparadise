@@ -311,6 +311,7 @@ class Camera(UIPanel):
 
     def _draw_entities(self, map_surf: pygame.Surface):
         from scripts.engine.core import queries
+
         for entity, (pos, aesthetic) in queries.position_and_aesthetic:
             assert isinstance(pos, Position)
             assert isinstance(aesthetic, Aesthetic)

@@ -7,7 +7,7 @@ import pytweening
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, LightSource
 from scripts.engine.core import queries
-from scripts.engine.core.constants import GameState, GameStateType, TILE_SIZE
+from scripts.engine.core.constants import TILE_SIZE, GameState, GameStateType
 from scripts.engine.utility import is_close
 
 __all__ = ["process_display_updates"]
@@ -84,4 +84,3 @@ def _process_lighting():
         x = aesthetic.draw_x * TILE_SIZE + (TILE_SIZE / 2)
         y = aesthetic.draw_y * TILE_SIZE + (TILE_SIZE / 2)
         light.position = [x, y]
-

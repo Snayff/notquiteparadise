@@ -24,10 +24,10 @@ from scripts.engine.core.constants import (
 from scripts.engine.systems import behaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
+from scripts.nqp import command
 
 __all__ = ["process_intent"]
 
-from scripts.nqp import command
 
 
 def process_intent(intent: InputIntentType, game_state: GameStateType):

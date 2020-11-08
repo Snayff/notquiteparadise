@@ -87,7 +87,6 @@ def game_loop():
                 component.on_delete()
             snecs.delete_entity_immediately(entity, default_world)
 
-
         # have enemy take turn
         if current_state == GameState.GAMEMAP and turn_holder != world.get_player():
             # just in case the turn holder has died but not been replaced as expected

@@ -33,6 +33,7 @@ class GameMap:
         self.rng.seed(seed)
 
         from scripts.engine import library
+
         _map_data = library.MAPS[map_name]
         self.width = _map_data.width + (MAP_BORDER_SIZE * 2)
         self.height = _map_data.height + (MAP_BORDER_SIZE * 2)

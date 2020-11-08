@@ -5,7 +5,6 @@ import random
 from typing import Dict, List, Optional, Tuple
 
 import pygame
-
 from pygame import BLEND_RGBA_ADD, BLEND_RGBA_MULT
 
 __all__ = ["Light", "LightBox", "Wall"]
@@ -16,8 +15,14 @@ class Light:
     Holds the attributes for the light and offers some basic interface instructions.
     """
 
-    def __init__(self, pos: List[int], radius: int, light_img: pygame.Surface,
-            colour: Tuple[int, int, int] = (255, 255, 255), alpha: int = 255):
+    def __init__(
+        self,
+        pos: List[int],
+        radius: int,
+        light_img: pygame.Surface,
+        colour: Tuple[int, int, int] = (255, 255, 255),
+        alpha: int = 255,
+    ):
         self._base_position: List[int] = pos  # screen position
         self.position: List[int] = pos
         self._base_radius: int = radius  # screen size
@@ -145,7 +150,7 @@ class LightBox:
         # split walls into all the chunks they cross
         # this creates duplicates, but the name keys can be put into a dict to efficiently remove duplicates
         for wall in walls:
-            wall_str = point_str(wall.p1) + ';' + point_str(wall.p2) + ';' + str(wall.direction)
+            wall_str = point_str(wall.p1) + ";" + point_str(wall.p2) + ";" + str(wall.direction)
             p1_chunk = get_chunk(wall.p1, self.chunk_size)
             p2_chunk = get_chunk(wall.p2, self.chunk_size)
             chunk_list = []
@@ -248,15 +253,22 @@ class LightBox:
 
         # define an updated render_box rect with respect to the terrain offset and the light range to determine which
         # walls needs to be processed
-        render_box_r = pygame.Rect(-max_radius + offset[0], -max_radius + offset[1],
-                                   self.vision_box_r.width + max_radius * 2, self.vision_box_r.height + max_radius * 2)
+        render_box_r = pygame.Rect(
+            -max_radius + offset[0],
+            -max_radius + offset[1],
+            self.vision_box_r.width + max_radius * 2,
+            self.vision_box_r.height + max_radius * 2,
+        )
 
         # get all visible walls by using the chunk indexes
         valid_wall_dict = {}
         for y in range(self.vision_box_r.height // self.chunk_size + self.chunk_overshoot * 2 + 1):
             for x in range(self.vision_box_r.width // self.chunk_size + self.chunk_overshoot * 2 + 1):
-                chunk_str = str(int(x - self.chunk_overshoot // 2 + offset[0] // self.chunk_size)) + ';' + str(
-                    int(y - self.chunk_overshoot // 2 + offset[1] // self.chunk_size))
+                chunk_str = (
+                    str(int(x - self.chunk_overshoot // 2 + offset[0] // self.chunk_size))
+                    + ";"
+                    + str(int(y - self.chunk_overshoot // 2 + offset[1] // self.chunk_size))
+                )
                 if chunk_str in self.chunk_walls:
                     valid_wall_dict.update(self.chunk_walls[chunk_str])
         valid_walls = list(valid_wall_dict.values())
@@ -264,12 +276,17 @@ class LightBox:
             valid_walls += self.dynamic_walls[group]
 
         # adjust for offset to get the "shown position"
-        valid_walls = [wall.clone_move([-offset[0], -offset[1]]) for wall in valid_walls if
-            wall.rect.colliderect(render_box_r)]
+        valid_walls = [
+            wall.clone_move([-offset[0], -offset[1]]) for wall in valid_walls if wall.rect.colliderect(render_box_r)
+        ]
 
         # redefine the render_box rect with the terrain offset removed since the walls have been moved
-        render_box_r = pygame.Rect(-max_radius, -max_radius, self.vision_box_r.width + max_radius * 2,
-                                   self.vision_box_r.height + max_radius * 2)
+        render_box_r = pygame.Rect(
+            -max_radius,
+            -max_radius,
+            self.vision_box_r.width + max_radius * 2,
+            self.vision_box_r.height + max_radius * 2,
+        )
 
         # generate a Surface to render the lighting mask onto
         rendered_mask = pygame.Surface(self.vision_box_r.size)
@@ -306,8 +323,15 @@ class Wall:
     """
     Handles shadow casting within a Lightbox.
     """
-    def __init__(self, p1: List[int], p2: List[int], vertical: int, direction: int,
-            colour: Tuple[int, int, int] = (255, 255, 255)):
+
+    def __init__(
+        self,
+        p1: List[int],
+        p2: List[int],
+        vertical: int,
+        direction: int,
+        colour: Tuple[int, int, int] = (255, 255, 255),
+    ):
         self.p1 = p1
         self.p2 = p2
 
@@ -329,8 +353,13 @@ class Wall:
         """
         Create a duplicate Wall with an offset.
         """
-        return Wall([self.p1[0] + offset[0], self.p1[1] + offset[1]], [self.p2[0] + offset[0], self.p2[1] + offset[1]],
-                    self.vertical, self.direction, self.colour)
+        return Wall(
+            [self.p1[0] + offset[0], self.p1[1] + offset[1]],
+            [self.p2[0] + offset[0], self.p2[1] + offset[1]],
+            self.vertical,
+            self.direction,
+            self.colour,
+        )
 
     def _create_rect(self):
         """
@@ -389,7 +418,8 @@ class Wall:
 
         # calculate closer point out of the 2 collinear points and return side used
         if (abs(hwall_p[0] - source[0]) + abs(hwall_p[1] - source[1])) < (
-                abs(vwall_p[0] - source[0]) + abs(vwall_p[1] - source[1])):
+            abs(vwall_p[0] - source[0]) + abs(vwall_p[1] - source[1])
+        ):
             # horizontal sides use numbers 2 and 3
             return hwall_p, cast_hside + 2
         else:
@@ -435,8 +465,14 @@ class Wall:
         else:
             return []
 
-    def draw_shadow(self, surf: pygame.Surface, source: List[int], vision_box: pygame.Rect,
-            colour: Tuple[int, int, int], offset: Optional[List[int]] = None):
+    def draw_shadow(
+        self,
+        surf: pygame.Surface,
+        source: List[int],
+        vision_box: pygame.Rect,
+        colour: Tuple[int, int, int],
+        offset: Optional[List[int]] = None,
+    ):
         """
         Draw a shadow, as cast by the light source.
 
@@ -479,8 +515,12 @@ class Wall:
             offset = [0, 0]
         assert isinstance(offset, list)
 
-        pygame.draw.line(surf, self.colour, [self.p1[0] + offset[0], self.p1[1] + offset[1]],
-                         [self.p2[0] + offset[0], self.p2[1] + offset[1]])
+        pygame.draw.line(
+            surf,
+            self.colour,
+            [self.p1[0] + offset[0], self.p1[1] + offset[1]],
+            [self.p2[0] + offset[0], self.p2[1] + offset[1]],
+        )
 
 
 def box(pos: List[int], size: List[int]):
@@ -501,21 +541,21 @@ def point_str(point) -> str:
     Convert a point to a string
     """
     # some string conversion functions (since looking up strings in a dict is pretty fast performance-wise)
-    return str(point[0]) + ';' + str(point[1])
+    return str(point[0]) + ";" + str(point[1])
 
 
 def line_str(line, point) -> str:
     """
     Convert a line to a string
     """
-    return point_str(line[point]) + ';' + str(line[2][0]) + ';' + str(line[2][1])
+    return point_str(line[point]) + ";" + str(line[2][0]) + ";" + str(line[2][1])
 
 
 def str_point(string: str):
     """
     Convert string to point
     """
-    return [int(v) for v in string.split(';')[:2]]
+    return [int(v) for v in string.split(";")[:2]]
 
 
 def set_mask_alpha(surf: pygame.Surface, alpha: int) -> pygame.Surface:
@@ -555,7 +595,7 @@ def generate_walls(light_box: LightBox, map_data: List[List[int]], tile_size: in
 
     # generate a dict with all of the tiles
     for tile in map_data:
-        map_dict[str(tile[0]) + ';' + str(tile[1])] = 1
+        map_dict[str(tile[0]) + ";" + str(tile[1])] = 1
 
     # add all the walls by checking air tiles for bordering solid tiles (solid tiles are where there are no tiles in
     # the dict)
@@ -563,17 +603,37 @@ def generate_walls(light_box: LightBox, map_data: List[List[int]], tile_size: in
         # check all sides for each air tile
         if point_str([air_tile[0] + 1, air_tile[1]]) not in map_dict:
             # generate line in [p1, p2, [vertical, inside/outside]] format
-            lines.append([[air_tile[0] * tile_size + tile_size, air_tile[1] * tile_size],
-                             [air_tile[0] * tile_size + tile_size, air_tile[1] * tile_size + tile_size], [0, -1]])
+            lines.append(
+                [
+                    [air_tile[0] * tile_size + tile_size, air_tile[1] * tile_size],
+                    [air_tile[0] * tile_size + tile_size, air_tile[1] * tile_size + tile_size],
+                    [0, -1],
+                ]
+            )
         if point_str([air_tile[0] - 1, air_tile[1]]) not in map_dict:
-            lines.append([[air_tile[0] * tile_size, air_tile[1] * tile_size],
-                             [air_tile[0] * tile_size, air_tile[1] * tile_size + tile_size], [0, 1]])
+            lines.append(
+                [
+                    [air_tile[0] * tile_size, air_tile[1] * tile_size],
+                    [air_tile[0] * tile_size, air_tile[1] * tile_size + tile_size],
+                    [0, 1],
+                ]
+            )
         if point_str([air_tile[0], air_tile[1] + 1]) not in map_dict:
-            lines.append([[air_tile[0] * tile_size, air_tile[1] * tile_size + tile_size],
-                             [air_tile[0] * tile_size + tile_size, air_tile[1] * tile_size + tile_size], [1, -1]])
+            lines.append(
+                [
+                    [air_tile[0] * tile_size, air_tile[1] * tile_size + tile_size],
+                    [air_tile[0] * tile_size + tile_size, air_tile[1] * tile_size + tile_size],
+                    [1, -1],
+                ]
+            )
         if point_str([air_tile[0], air_tile[1] - 1]) not in map_dict:
-            lines.append([[air_tile[0] * tile_size, air_tile[1] * tile_size],
-                             [air_tile[0] * tile_size + tile_size, air_tile[1] * tile_size], [1, 1]])
+            lines.append(
+                [
+                    [air_tile[0] * tile_size, air_tile[1] * tile_size],
+                    [air_tile[0] * tile_size + tile_size, air_tile[1] * tile_size],
+                    [1, 1],
+                ]
+            )
 
     # reformat the data into a useful form for the geometry tricks later
     # this adds each endpoint to a dict as a key with the associated endpoint being in the list of associated values
@@ -610,16 +670,22 @@ def generate_walls(light_box: LightBox, map_data: List[List[int]], tile_size: in
                 # loop through the connected points until the other end is found
                 while 1:
                     # generate the string for the next point
-                    target_pos = str(p1[0] + direction[0] * offset * tile_size) + ';' + str(
-                        p1[1] + direction[1] * offset * tile_size) + ';' + \
-                                 point.split(';')[2] + ';' + point.split(';')[3]
+                    target_pos = (
+                        str(p1[0] + direction[0] * offset * tile_size)
+                        + ";"
+                        + str(p1[1] + direction[1] * offset * tile_size)
+                        + ";"
+                        + point.split(";")[2]
+                        + ";"
+                        + point.split(";")[3]
+                    )
                     # when the connected point only links to 1 point, you've found the other end of the line
                     processed_points.append(target_pos)
                     if len(line_dict[target_pos]) == 1:
                         break
                     offset += 1
                 # append to the walls list based on the last point found and the starting point
-                final_walls.append([p1, str_point(target_pos), int(point.split(';')[2]), int(point.split(';')[3])])
+                final_walls.append([p1, str_point(target_pos), int(point.split(";")[2]), int(point.split(";")[3])])
 
     # generate Wall objects
     _final_walls = [Wall(*wall) for wall in final_walls]
