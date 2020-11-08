@@ -1,6 +1,5 @@
 import logging
-import time
-from typing import Iterable, List, Optional, Tuple, cast
+from typing import Iterable, List, Optional, Tuple
 
 import pygame
 import pygame_gui
@@ -45,8 +44,8 @@ class Camera(UIPanel):
         self.map_height = game_map.height
 
         # determine how many tiles to show; max rows and cols in game map or max we can show based on size
-        self.rows = min(rect.height // TILE_SIZE, game_map.height - 1)
-        self.columns = min(rect.width // TILE_SIZE, game_map.width - 1)
+        self.rows = min(rect.width // TILE_SIZE, game_map.height - 1)
+        self.columns = min(rect.height // TILE_SIZE, game_map.width - 1)
 
         # to hold the last stored end values
         self._end_x = 0
@@ -299,8 +298,8 @@ class Camera(UIPanel):
         Update the game map to show the current tiles and entities
         """
         # create new surface for the game map
-        map_width = self.map_image.rect.width
-        map_height = self.map_image.rect.height
+        map_width = self._base_width
+        map_height = self._base_height
         map_surf = Surface((map_width, map_height), SRCALPHA)
 
         self._draw_floors(map_surf)
