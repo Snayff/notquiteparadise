@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.131.0
+                0.134.0
               </div>
             
           
@@ -184,8 +184,7 @@
             
   <h1>Source code for scripts.engine.ui.elements.camera</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">pygame_gui</span>
@@ -197,7 +196,7 @@
 <span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">UIContainer</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIImage</span><span class="p">,</span> <span class="n">UIPanel</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">DirectionType</span><span class="p">,</span> <span class="n">InputEvent</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">UIElement</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.utility</span> <span class="kn">import</span> <span class="n">clamp</span><span class="p">,</span> <span class="n">convert_tile_string_to_xy</span>
@@ -212,6 +211,14 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">):</span>
         <span class="c1"># FIXME - grid doesnt stay aligned to player movement/position</span>
 
+        <span class="n">base_window_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">VIDEO_CONFIG</span><span class="o">.</span><span class="n">base_window</span>
+        <span class="n">base_width</span> <span class="o">=</span> <span class="n">base_window_data</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">base_height</span> <span class="o">=</span> <span class="n">base_window_data</span><span class="o">.</span><span class="n">height</span>
+
+        <span class="c1"># base values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_width</span> <span class="o">=</span> <span class="n">base_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_height</span> <span class="o">=</span> <span class="n">base_height</span>
+
         <span class="c1"># flags</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ignore_fov</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">True</span>
@@ -222,8 +229,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">map_height</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span>
 
         <span class="c1"># determine how many tiles to show; max rows and cols in game map or max we can show based on size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># to hold the last stored end values</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_end_x</span> <span class="o">=</span> <span class="mi">0</span>
@@ -257,13 +264,13 @@
             <span class="n">relative_rect</span><span class="o">=</span><span class="n">Rect</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">rect</span><span class="o">.</span><span class="n">size</span><span class="p">),</span>
             <span class="n">image_surface</span><span class="o">=</span><span class="n">blank_surf</span><span class="p">,</span>
             <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span>
-            <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+            <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#game_map&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># create grid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">UIContainer</span><span class="p">(</span>
-            <span class="n">relative_rect</span><span class="o">=</span><span class="n">Rect</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">rect</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#grid&quot;</span>
+            <span class="n">relative_rect</span><span class="o">=</span><span class="n">Rect</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">rect</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#grid&quot;</span>
         <span class="p">)</span>
 
         <span class="c1"># update everything</span>
@@ -361,7 +368,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_grid</span><span class="p">()</span>
 
         <span class="c1"># update entities in game map every frame</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_game_map</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_game_map</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_ui_element_pos</span><span class="p">()</span>
 
         <span class="c1"># all updates have been processed</span>
@@ -471,9 +478,7 @@
                 <span class="c1"># set updated position</span>
                 <span class="n">element</span><span class="o">.</span><span class="n">set_relative_position</span><span class="p">(</span><span class="n">updated_pos</span><span class="p">)</span></div>
 
-    <span class="c1">############### DRAW ###########################</span>
-
-<div class="viewcode-block" id="Camera._draw_game_map"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._draw_game_map">[docs]</a>    <span class="k">def</span> <span class="nf">_draw_game_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Camera._update_game_map"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._update_game_map">[docs]</a>    <span class="k">def</span> <span class="nf">_update_game_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the game map to show the current tiles and entities</span>
 <span class="sd">        &quot;&quot;&quot;</span>
