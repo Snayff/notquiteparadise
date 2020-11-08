@@ -19,7 +19,7 @@ Quality of last commit:
  
  Quality of repo:
  
- [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=coverage)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
+[![codecov](https://codecov.io/gh/Snayff/notquiteparadise/branch/develop/graph/badge.svg?token=RDFQIMW3OC)](https://codecov.io/gh/Snayff/notquiteparadise/)
  [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=bugs)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
  [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=code_smells)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
  

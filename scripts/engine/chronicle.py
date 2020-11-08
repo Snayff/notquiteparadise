@@ -9,7 +9,7 @@ from scripts.engine import library, world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
 from scripts.engine.core.constants import INFINITE
 from scripts.engine.core.data import store
-from scripts.engine.systems import reaction, vision
+from scripts.engine.systems import behaviour, reaction, vision
 
 if TYPE_CHECKING:
     from typing import Dict, Tuple, List, Optional
@@ -29,10 +29,16 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     new_queue = {}
     from scripts.engine.core import queries
 
-    for entity, (tracked,) in queries.tracked:
+    for entity, (is_active, tracked,) in queries.active_and_tracked:
         if entity != entity_to_exclude:
-            tracked = cast(Tracked, tracked)
+            assert isinstance(tracked, Tracked)
             new_queue[entity] = tracked.time_spent
+
+    # did we actually allocate to anyone?
+    if not new_queue:
+        # add player to queue
+        new_queue[world.get_player()] = get_time()
+
     set_turn_queue(new_queue)
 
     # get the next entity in the queue and set as new turn holder
@@ -76,6 +82,7 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
 
     # update visibility
     # TODO - implement scheduling so this doesnt need to be called here
+    behaviour.process_activations()  # must be first otherwise wrong entities active
     vision.process_light_map()
     vision.process_fov()
     vision.process_tile_visibility()
@@ -97,7 +104,7 @@ def next_round(time_progressed: int):
     from scripts.engine.core import queries
 
     for entity, (knowledge,) in queries.knowledge:
-        knowledge = cast(Knowledge, knowledge)
+        assert isinstance(knowledge, Knowledge)
         for skill_name in knowledge.skill_names:
             skill_cooldown = knowledge.cooldowns[skill_name]
             if skill_cooldown > 0:

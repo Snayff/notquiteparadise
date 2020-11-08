@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - '!develop'
-      - '!master'
-
 
 jobs:
   build:
@@ -43,7 +41,7 @@ jobs:
     - name: Pytest with Coverage
       if: always()
       run: |
-        poetry run python -m pytest --cov=nqp
+        poetry run python -m pytest --cov=scripts/ tests/
 
     - name: Check Docs Build
       run: |

@@ -31,7 +31,7 @@ from scripts.engine.core.definitions import (
 from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:
-    from typing import Dict, Any, List, Union
+    from typing import Dict, List
 
 
 __all__ = [
@@ -50,6 +50,11 @@ __all__ = [
     "GAME_CONFIG",
     "refresh_library",
 ]
+
+#################################################################
+# This module is for loading external data that is offered to the
+# rest of the engine as a reference.
+#################################################################
 
 
 ####################### DATA DICTS ##############################

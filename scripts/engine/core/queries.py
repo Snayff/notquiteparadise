@@ -9,8 +9,10 @@ from scripts.engine.component import (
     Aesthetic,
     Afflictions,
     Blocking,
+    Exists,
     HasCombatStats,
     Identity,
+    IsActive,
     IsActor,
     Knowledge,
     LightSource,
@@ -28,17 +30,18 @@ __all__ = [
     "knowledge",
     "affliction",
     "position",
-    "light_source_and_position",
-    "position_and_fov_and_combat_stats",
+    "active_and_light_source_and_position",
+    "active_and_position_and_fov_and_combat_stats",
     "position_and_blocking",
     "position_and_aesthetic",
     "position_and_identity_and_aesthetic",
     "position_and_actor",
     "position_and_win_condition",
+    "active_and_tracked",
 ]
 
 
-get_components = Query  # import from snecs to avoid issues with importing from world
+get_components = Query  # import directly from snecs to avoid issues with importing from world
 
 ################### SINGLE QUERIES #######################
 
@@ -52,11 +55,11 @@ affliction = get_components([Afflictions]).compile()
 
 position = get_components([Position]).compile()
 
+active = get_components([IsActive]).compile()
+
+position_and_light_source = get_components([Position, LightSource]).compile()
+
 ################## MULTI QUERIES ##########################
-
-light_source_and_position = get_components([LightSource, Position]).compile()
-
-position_and_fov_and_combat_stats = get_components([FOV, Position, HasCombatStats]).compile()
 
 position_and_blocking = get_components([Position, Blocking]).compile()
 
@@ -67,3 +70,18 @@ position_and_actor = get_components([Position, IsActor]).compile()
 position_and_win_condition = get_components([Position, WinCondition]).compile()
 
 position_and_identity_and_aesthetic = get_components([Position, Identity, Aesthetic]).compile()
+
+active_and_position_and_fov_and_combat_stats = get_components([IsActive, Position, FOV, HasCombatStats]).compile()
+
+active_and_light_source_and_position = get_components([IsActive, LightSource, Position]).compile()
+
+active_and_tracked = get_components([IsActive, Tracked]).compile()
+
+##################### FILTERS ###############################
+# .filter((DOT & StatusEffect) | (~DOT & Poison & ~Antidote))
+# would be "return HPComponents where (if entity has DamageOverTimeComponent it also must have
+# StatusEffectComponent, otherwise it has PoisonComponent and not AntidoteComponent)
+
+not_position = get_components([Exists]).filter(~Position).compile()
+
+light_source_and_aesthetic = get_components([LightSource, Aesthetic]).compile()

@@ -3,6 +3,8 @@ from __future__ import annotations
 import logging
 from typing import Optional, Type
 
+import numpy as np
+import tcod
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, debug, library, state, utility, world
@@ -22,8 +24,10 @@ from scripts.engine.core.constants import (
 from scripts.engine.systems import behaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
+from scripts.nqp import command
 
 __all__ = ["process_intent"]
+
 
 
 def process_intent(intent: InputIntentType, game_state: GameStateType):
@@ -46,6 +50,7 @@ def _process_stateless_intents(intent: InputIntentType):
     """
     ## Activate Debug
     if intent == InputIntent.DEBUG_TOGGLE:
+        # F1
         if debug.is_fps_visible():
             debug.set_fps_visibility(False)
         else:
@@ -59,6 +64,7 @@ def _process_stateless_intents(intent: InputIntentType):
     ## Activate data editor
     # TODO - have this trigger dev console and move skill editor to a command in the console.
     elif intent == InputIntent.DUNGEON_DEV_VIEW:
+        # key= F5
         if ui.element_is_visible(UIElement.DUNGEN_VIEWER):
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, False)
             state.set_new(state.get_previous())
@@ -78,14 +84,17 @@ def _process_stateless_intents(intent: InputIntentType):
     elif intent == InputIntent.BURST_PROFILE:
         debug.enable_profiling(120)
 
-    elif intent == InputIntent.TEST:
-        # add whatever we want to test here
-        import os
+    elif intent == InputIntent.TOGGLE_UI:
+        if ui.element_is_visible(UIElement.MESSAGE_LOG):
+            ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
+            ui.set_element_visibility(UIElement.SKILL_BAR, False)
+        else:
+            ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+            ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
-        full_save_path = str(SAVE_PATH)
-        for save_name in os.listdir(full_save_path):
-            save = save_name.replace(".json", "")
-            state.load_game(save)
+    elif intent == InputIntent.TEST:
+        # F12
+        breakpoint()
 
 
 def _process_game_map_intents(intent: InputIntentType):
@@ -109,7 +118,7 @@ def _process_game_map_intents(intent: InputIntentType):
     if intent in possible_move_intents and position:
         direction = _get_pressed_direction(intent)
         target_tile = world.get_tile((position.x, position.y))
-        move = world.get_known_skill(player, "move")
+        move = world.get_known_skill(player, "Move")
         if direction in move.target_directions:
             _process_skill_use(player, move, target_tile, direction)
 
@@ -139,6 +148,9 @@ def _process_game_map_intents(intent: InputIntentType):
         # show
         state.set_new(GameState.MENU)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
+
+    elif intent == InputIntent.EXIT:
+        command.exit_game()
 
 
 def _process_targeting_mode_intents(intent):
@@ -212,7 +224,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
 
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
-        world.judge_action(player, skill.key)
+        world.judge_action(player, skill.__class__.__name__)
         behaviour.process_interventions()
         chronicle.end_turn(player, skill.time_cost)
 

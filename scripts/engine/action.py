@@ -24,15 +24,20 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Tuple, List
 
-__all__ = ["Skill", "Affliction", "init_action", "skill_registry", "affliction_registry"]
+__all__ = ["Skill", "Affliction", "Behaviour", "init_action", "skill_registry", "affliction_registry"]
 
 skill_registry: Dict[str, Type[Skill]] = {}
 affliction_registry: Dict[str, Type[Affliction]] = {}
+behaviour_registry: Dict[str, Type[Behaviour]] = {}
 
 
 class Action(ABC):
-    key: str
-    name: str
+    """
+    Action taken during the game. A container for Effects.
+    """
+
+    name: str  # name of the class
+    f_name: str  # friendly name, can include spaces, slashes etc.
     description: str
     icon_path: str
     target_tags: List[TargetTagType]
@@ -65,17 +70,18 @@ class Skill(Action):
     base_cooldown: int
     targeting_method: TargetingMethodType
     target_directions: List[DirectionType]
+    range: int
     uses_projectile: bool
     projectile_data: Optional[ProjectileData]
-
-    # vars needed to keep track of changes
-    ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         self.user = user
         self.target_tile = target_tile
         self.direction = direction
         self.projectile = None
+
+        # vars needed to keep track of changes
+        self.ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
 
     @abstractmethod
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
@@ -84,12 +90,12 @@ class Skill(Action):
         """
         pass
 
-    @abstractmethod
     def get_animation(self, aesthetic: Aesthetic):
         """
-        Return the animation to play when executing the skill
+        Return the animation to play when executing the skill. Defaults to attack sprite. Override in subclass if
+        another is needed.
         """
-        pass
+        return aesthetic.sprites.attack
 
     @classmethod
     def _init_properties(cls):
@@ -98,13 +104,15 @@ class Skill(Action):
         """
         from scripts.engine import library
 
-        cls.data = library.SKILLS[cls.key]
-        cls.name = cls.data.name
+        cls.data = library.SKILLS[cls.__name__]
+        cls.name = cls.__name__
+        cls.f_name = cls.data.name
         cls.target_tags = cls.data.target_tags
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.resource_type = cls.data.resource_type
         cls.resource_cost = cls.data.resource_cost
+        cls.range = cls.data.range
         cls.time_cost = cls.data.time_cost
         cls.base_cooldown = cls.data.cooldown
         cls.targeting_method = cls.data.targeting_method
@@ -128,7 +136,7 @@ class Skill(Action):
             yield entity, self.build_effects(entity)
             entity_names.append(world.get_name(entity))
 
-        logging.debug(f"'{world.get_name(self.user)}' applied '{self.key}' to {entity_names}.")
+        logging.debug(f"'{world.get_name(self.user)}' applied '{self.__class__.__name__}' to {entity_names}.")
 
     def use(self):
         """
@@ -136,7 +144,7 @@ class Skill(Action):
         """
         from scripts.engine import world
 
-        logging.debug(f"'{world.get_name(self.user)}' used '{self.key}'.")
+        logging.debug(f"'{world.get_name(self.user)}' used '{self.__class__.__name__}'.")
 
         # animate the skill user
         self._play_animation()
@@ -220,8 +228,8 @@ class Affliction(Action):
         """
         from scripts.engine import library
 
-        cls.data = library.AFFLICTIONS[cls.key]
-        cls.name = cls.data.name
+        cls.data = library.AFFLICTIONS[cls.__name__]
+        cls.f_name = cls.data.name
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.category = cls.data.category
@@ -238,6 +246,7 @@ class Affliction(Action):
         """
         from scripts.engine import world
 
+        entity_names = []
         entities = set()
         position = world.get_entitys_component(self.affected_entity, Position)
         if position:
@@ -246,16 +255,41 @@ class Affliction(Action):
                     if entity not in entities:
                         entities.add(entity)
                         yield entity, self.build_effects(entity)
+                        entity_names.append(world.get_name(entity))
+
+        logging.debug(f"'{world.get_name(self.origin)}' applied '{self.__class__.__name__}' to {entity_names}.")
+
+
+class Behaviour(ABC):
+    """
+    Base class for AI behaviours. Not really an Action, as such, more of a super class that determines when npcs
+    will use Actions.
+    """
+
+    def __init__(self, attached_entity: EntityID):
+        self.entity = attached_entity
+
+    @abstractmethod
+    def act(self):
+        """
+        Perform the behaviour
+        """
+        pass
 
 
 def init_action(cls):
     """
-    Class decorator used for initialising class with properties from external data and also add to the registry for
-    use by the engine.
+    Class decorator used for initialising class to add to the registry for use by the engine. Also initialises class
+    properties set by external data, if appropriate.
     """
-    cls._init_properties()
 
     if issubclass(cls, Skill):
-        skill_registry[cls.key] = cls
+        skill_registry[cls.__name__] = cls
+        cls._init_properties()
     elif issubclass(cls, Affliction):
-        affliction_registry[cls.key] = cls
+        affliction_registry[cls.__name__] = cls
+        cls._init_properties()
+    elif issubclass(cls, Behaviour):
+        behaviour_registry[cls.__name__] = cls
+
+    return cls

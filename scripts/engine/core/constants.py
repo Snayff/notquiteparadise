@@ -10,7 +10,9 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.129.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.131.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+DEBUG_START = False  # Whether to start directly in debug map
+
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -20,10 +22,10 @@ ICON_SIZE = TILE_SIZE // 2
 GAP_SIZE = 2
 SKILL_BUTTON_SIZE = 32
 INFINITE = 999
-MAX_ACTIVATION_DISTANCE = 7  # this is how far from the player an entity can be and still be considered active
-# TODO - add an active component and then we can look for this (and only update once per turn!)
+MAX_ACTIVATION_DISTANCE = 5  # this is how far from the player an entity can be and still be considered active
 FOV_LIGHT_WALLS = True
 FOV_ALGORITHM = tcod.FOV_RESTRICTIVE
+MAP_BORDER_SIZE = 4
 
 ######################## PATHS ######################################
 
@@ -35,7 +37,7 @@ if "GENERATING_SPHINX_DOCS" in os.environ:
 
 DATA_PATH = ROOT_PATH / "data/"
 ASSET_PATH = ROOT_PATH / "assets/"
-IMAGE_NOT_FOUND_PATH = ASSET_PATH / "image_not_found.png"
+IMAGE_NOT_FOUND_PATH = ASSET_PATH / "debug/image_not_found.png"
 SAVE_PATH = DATA_PATH / "saves/"
 
 ######################## NEW TYPES ######################################
@@ -166,6 +168,7 @@ class InputIntent(SimpleNamespace):
     BURST_PROFILE = InputIntentType("burst_profile")
     TEST = InputIntentType("test")
     DUNGEON_DEV_VIEW = InputIntentType("dungeon_dev_toggle")
+    TOGGLE_UI = InputIntentType("toggle_ui")
 
 
 #################### EXTERNAL, SERIALISED  ###########################################
@@ -177,7 +180,7 @@ class Direction(SimpleNamespace):
     Holds a tuple as (x, y) for the relative direction.
     """
 
-    # N.B external values  must be actively mapped to these on load as they are not held as strings
+    # N.B external values must be actively mapped to these on load as they are not held as strings
     UP_LEFT = DirectionType((-1, -1))
     UP = DirectionType((0, -1))
     UP_RIGHT = DirectionType((1, -1))

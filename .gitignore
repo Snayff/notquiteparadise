@@ -35,13 +35,13 @@ var/
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
-# N.B. Dont add .coverage as CI builds this to upload.
+# Unused unit test / coverage reports
 htmlcov/
 .tox/
 .cache
 nosetests.xml
 *,cover
+.coverage
 
 # Translations
 *.mo
@@ -66,11 +66,16 @@ target/
 # radon
 radon
 
-# log files
-logs/
+# test metrics
+tests/.metrics/*
+
+
 
 # saves
 data/saves/
 
 # local docs
 docs/_build/**
+
+# profiling
+logs/profiling/*

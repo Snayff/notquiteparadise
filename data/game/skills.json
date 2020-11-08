@@ -1,11 +1,11 @@
 {
-    "move": {
+    "Move": {
         "__dataclass__": "SkillData",
         "cooldown": 0,
         "description": "This is normal movement",
         "icon_path": "skills/basic_attack.png",
         "name": "move",
-        "key": "move",
+        "range": 1,
         "resource_cost": 0,
         "resource_type": "stamina",
         "targeting_method": "target",
@@ -23,15 +23,15 @@
         "shape_size": 1,
         "uses_projectile": false
     },
-    "basic_attack": {
+    "BasicAttack": {
         "__dataclass__": "SkillData",
-        "cooldown": 2,
+        "cooldown": 1,
         "description": "A simple attack.",
         "icon_path": "skills/basic_attack.png",
         "name": "basic attack",
-        "key": "basic_attack",
         "resource_cost": 10,
         "resource_type": "stamina",
+        "range": 1,
         "targeting_method": "target",
         "target_directions": [
             "down",
@@ -49,33 +49,20 @@
         ],
         "shape": "target",
         "shape_size": 1,
-        "uses_projectile": true,
-        "projectile_data": {
-            "__dataclass__": "ProjectileData",
-            "sprite_paths": {
-                "__dataclass__": "TraitSpritePathsData",
-                "idle": "skills/projectile.png",
-                "move": "skills/projectile.png"
-            },
-            "speed": "average",
-            "travel_method": "standard",
-            "range": 2,
-            "terrain_collision": "fizzle",
-            "expiry_type": "fizzle"
-        }
+        "uses_projectile": false
     },
-    "lunge": {
+    "Lunge": {
         "__dataclass__": "SkillData",
         "cooldown": 4,
         "description": "Launch forwards and hit the enemy in your way.",
         "icon_path": "skills/lunge.png",
         "name": "lunge",
-        "key": "lunge",
         "resource_cost": 15,
         "resource_type": "stamina",
         "targeting_method": "target",
         "uses_projectile": false,
         "projectile_data": null,
+        "range": 2,
         "target_directions": [
             "down",
             "left",
@@ -89,13 +76,12 @@
         "shape": "target",
         "shape_size": 1
     },
-    "tar_and_feather": {
+    "TarAndFeather": {
         "__dataclass__": "SkillData",
-        "cooldown": 1,
+        "cooldown": 3,
         "description": "Launch a projectile that deals damage to enemies in the specified direction.",
         "icon_path": "none",
         "name": "tar and feather",
-        "key": "tar_and_feather",
         "resource_cost": 15,
         "resource_type": "stamina",
         "targeting_method": "target",
@@ -105,6 +91,7 @@
             "right",
             "up"
         ],
+        "range": 5,
         "time_cost": 30,
         "target_tags": [
             "no_blocking_tile"
@@ -122,6 +109,47 @@
             "speed": "average",
             "travel_method": "standard",
             "range": 5,
+            "terrain_collision": "fizzle",
+            "expiry_type": "fizzle"
+        }
+    },
+    "Splash": {
+        "__dataclass__": "SkillData",
+        "cooldown": 2,
+        "description": "Through water around",
+        "icon_path": "skills/basic_attack.png",
+        "name": "splash",
+        "resource_cost": 10,
+        "resource_type": "stamina",
+        "targeting_method": "target",
+        "target_directions": [
+            "down",
+            "down_left",
+            "down_right",
+            "left",
+            "right",
+            "up",
+            "up_left",
+            "up_right"
+        ],
+        "time_cost": 35,
+        "target_tags": [
+            "no_blocking_tile"
+        ],
+        "shape": "target",
+        "shape_size": 1,
+        "range": 3,
+        "uses_projectile": true,
+        "projectile_data": {
+            "__dataclass__": "ProjectileData",
+            "sprite_paths": {
+                "__dataclass__": "TraitSpritePathsData",
+                "idle": "skills/projectile.png",
+                "move": "skills/projectile.png"
+            },
+            "speed": "average",
+            "travel_method": "standard",
+            "range": 3,
             "terrain_collision": "fizzle",
             "expiry_type": "fizzle"
         }

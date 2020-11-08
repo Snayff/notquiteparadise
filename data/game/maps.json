@@ -1,4 +1,25 @@
 {
+    "debug": {
+        "name": "Debug Map",
+        "key": "debug",
+        "__dataclass__": "MapData",
+        "min_rooms": 2,
+        "max_rooms": 2,
+        "max_tunnel_length": 20,
+        "min_path_distance_for_shortcut": 5,
+        "width": 20,
+        "height": 20,
+        "rooms": {
+            "debug": 0.1
+        },
+        "sprite_paths": {
+            "wall": "debug/wall.png",
+            "floor": "debug/floor.png"
+        },
+        "max_room_entrances": 2,
+        "extra_entrance_chance": 0,
+        "chance_of_tunnel_winding": 0
+    },
     "cave": {
         "name": "cave",
         "key": "cave",

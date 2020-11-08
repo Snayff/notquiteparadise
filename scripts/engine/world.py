@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import TYPE_CHECKING, List, Optional, Tuple, Type, TypeVar, cast
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
 import snecs
+import tcod
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 
@@ -14,10 +15,11 @@ from scripts.engine.component import (
     FOV,
     Aesthetic,
     Afflictions,
-    Behaviour,
     Blocking,
+    Exists,
     HasCombatStats,
     Identity,
+    IsActive,
     IsActor,
     IsGod,
     IsPlayer,
@@ -26,6 +28,7 @@ from scripts.engine.component import (
     Opinion,
     Position,
     Resources,
+    Thought,
     Tracked,
     Traits,
 )
@@ -50,16 +53,16 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, ProjectileData
-from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
+from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import Optional, Tuple, List
-    from scripts.engine.action import Affliction, Skill
+    from scripts.engine.action import Affliction, Behaviour, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
 
@@ -83,6 +86,9 @@ def create_entity(components: List[Component] = None) -> EntityID:
         _components = []
     else:
         _components = components
+
+    # add Exists, as all entities need it
+    _components.append(Exists())
 
     # create the entity
     entity = new_entity(_components)
@@ -132,17 +138,23 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(HasCombatStats())
     components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
     components.append(Traits(actor_data.trait_names))
-    components.append(FOV(create_fov_map()))
-    components.append(LightSource(2))
+    components.append(FOV())
     components.append(Tracked(chronicle.get_time()))
+
+    # set up light
+    radius = 2  # TODO - pull radius and colour from external data
+    colour = (255, 255, 255)
+    alpha = 200
+    light_id = create_light(spawn_pos, radius, colour, alpha)
+    components.append(LightSource(light_id, radius))
 
     # get info from traits
     traits_paths = []  # for aesthetic
 
-    move = action.skill_registry["move"]
-    basic_attack = action.skill_registry["basic_attack"]
+    move = action.skill_registry["Move"]
+    basic_attack = action.skill_registry["BasicAttack"]
     known_skills = [move, basic_attack]  # for knowledge
-    skill_order = ["basic_attack"]  # for knowledge
+    skill_order = ["BasicAttack"]  # for knowledge
     perm_afflictions_names = []  # for affliction
     behaviour = None
 
@@ -153,8 +165,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         if data.known_skills != ["none"]:
 
             for skill_name in data.known_skills:
-                skill_data = library.SKILLS[skill_name]
-                skill_class = action.skill_registry[skill_data.key]
+                skill_class = action.skill_registry[skill_name]
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
 
@@ -163,8 +174,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
                 perm_afflictions_names.append(_name)
 
         if data.group == TraitGroup.NPC:
-            # FIXME - get behaviour
-            behaviour = SkipTurnBehaviour
+            behaviour = action.behaviour_registry[actor_data.behaviour_name]
 
     # add aesthetic
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
@@ -188,7 +198,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
 
     # add behaviour  N.B. Can only be added once entity is created
     if behaviour:
-        add_component(entity, Behaviour(behaviour(entity)))
+        add_component(entity, Thought(behaviour(entity)))
 
     # give full resources N.B. Can only be added once entity is created
     stats = create_combat_stats(entity)
@@ -208,7 +218,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     x, y = tile_pos
 
     name = get_name(creating_entity)
-    projectile_name = f"{name}s {skill_name}s projectile"
+    projectile_name = f"{name}s {skill_name}`s projectile"
     desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
@@ -220,12 +230,21 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     projectile.append(Position((x, y)))  # FIXME - check position not blocked before spawning
     projectile.append(Resources(999, 999))
     projectile.append(Afflictions())
+    projectile.append(IsActive())
+
+    # set up light
+    radius = 1  # TODO - pull radius and colour from external data
+    colour = (68, 174, 235)
+    alpha = 240
+    light_id = create_light((x, y), radius, colour, alpha)
+    projectile.append(LightSource(light_id, radius))
 
     entity = create_entity(projectile)
 
-    add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
+    behaviour = action.behaviour_registry["Projectile"]
+    add_component(entity, Thought(behaviour(entity, data)))  # type: ignore  # this works for projectile special case
 
-    move = action.skill_registry["move"]
+    move = action.skill_registry["Move"]
     known_skills = [move]
     add_component(entity, Knowledge(known_skills))
 
@@ -243,22 +262,44 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
     return affliction
 
 
-def create_fov_map() -> np.array:
-    """
-    Create a blank fov map
-    """
-    game_map = get_game_map()
-    return np.array(
-        [[not tile.blocks_sight for tile in column] for column in game_map.tile_map], dtype=bool, order="F",
-    )
-
-
 def create_combat_stats(entity: EntityID) -> CombatStats:
     """
     Create and return a stat object  for an entity.
     """
     stats = CombatStats(entity)
     return stats
+
+
+def create_light(pos: Tuple[int, int], radius: int, colour: Tuple[int, int, int], alpha: int) -> str:
+    """
+    Create a Light and add it to the current GameMap's Lightbox. Pos is the world position - the light will handle
+    scaling to screen.
+    Returns the light_id of the Light.
+    """
+    light_img = utility.get_image("world/light_mask.png", ((radius * 2) * TILE_SIZE, (radius * 2) * TILE_SIZE))
+    light_box = get_game_map().light_box
+    light = lighting.Light([pos[0] * TILE_SIZE, pos[1] * TILE_SIZE], radius * TILE_SIZE, light_img)
+    light.set_alpha(alpha)
+    light.set_colour(colour)
+    light_id = light_box.add_light(light)
+
+    return light_id
+
+
+def create_pathfinder() -> tcod.path.Pathfinder:
+    """
+    Create an empty pathfinder using the current game map
+    """
+    game_map = get_game_map()
+
+    # combine entity blocking and map blocking maps
+    cost_map = game_map.block_movement_map | get_entity_blocking_movement_map()
+
+    # create graph to represent the map and a pathfinder to navigate
+    graph = tcod.path.SimpleGraph(cost=np.asarray(cost_map, dtype=np.int8), cardinal=2, diagonal=0)
+    pathfinder = tcod.path.Pathfinder(graph)
+
+    return pathfinder
 
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
@@ -335,117 +376,59 @@ def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Di
     dir_x = utility.clamp(dir_x, -1, 1)
     dir_y = utility.clamp(dir_y, -1, 1)
 
-    return cast(DirectionType, (dir_x, dir_y))
+    return dir_x, dir_y  # type: ignore
 
 
-def get_direct_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+def get_entity_blocking_movement_map() -> np.array:
     """
-    Get direction from an entity towards another entity`s location. Respects blocked tiles.
+    Return a Numpy array of bools, True for blocking and False for open
     """
-    # FIXME - update to use EC
-    pass
-    #
-    # log_string = f"{start_entity.name} is looking for a direct path to {target_entity.name}."
-    # logging.debug(log_string)
-    #
-    # direction_x = target_entity.x - start_entity.x
-    # direction_y = target_entity.y - start_entity.y
-    # distance = math.sqrt(direction_x ** 2 + direction_y ** 2)
-    #
-    # direction_x = int(round(direction_x / distance))
-    # direction_y = int(round(direction_y / distance))
-    #
-    # tile_is_blocked = _manager.Map._is_tile_blocking_movement(start_entity.x + direction_x,
-    #                                                               start_entity.y + direction_y)
-    #
-    # if not (tile_is_blocked or get_entity_at_position(start_entity.x + direction_x,
-    #                                                     start_entity.y + direction_y)):
-    #     log_string = f"{start_entity.name} found a direct path to {target_entity.name}."
-    #     logging.debug(log_string)
-    #
-    #     return direction_x, direction_y
-    # else:
-    #     log_string = f"{start_entity.name} did NOT find a direct path to {target_entity.name}."
-    #     logging.debug(log_string)
-    #
-    #     return start_entity.x, start_entity.y
+    from scripts.engine.core import queries
+
+    game_map = get_game_map()
+    blocking_map = np.zeros((game_map.width, game_map.height), dtype=bool, order="F")
+    for entity, (pos, blocking) in queries.position_and_blocking:
+        assert isinstance(blocking, Blocking)
+        assert isinstance(pos, Position)
+        if blocking.blocks_movement:
+            blocking_map[pos.x, pos.y] = True
+
+    return blocking_map
 
 
-def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+def get_a_star_path(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> List[List[int]]:
     """
-    Use a* pathfinding to get a direction from one entity to another
+    Get a list of coords that dictates the path between 2 entities.
     """
-    # FIXME - update to use EC
-    pass
-    #
-    # max_path_length = 25
-    # game_map = _manager.game_map
-    # entities = []
-    # for entity, (pos, blocking) in _manager.get_entitys_components(Position, Blocking):
-    #     entities.append(entity)
-    # entity_to_move = start_entity
-    # target = target_entity
-    #
-    # log_string = f"{entity_to_move.name} is looking for a path to {target.name} with a*"
-    # logging.debug(log_string)
-    #
-    # # Create a FOV map that has the dimensions of the map
-    # fov = tcod.map_new(game_map.width, game_map.height)
-    #
-    # # Scan the current map each turn and set all the walls as unwalkable
-    # for y1 in range(game_map.height):
-    #     for x1 in range(game_map.width):
-    #         tcod.map_set_properties(fov, x1, y1, not game_map.tiles[x1][y1].blocks_sight,
-    #                                 not game_map.tiles[x1][y1].blocks_movement)
-    #
-    # # Scan all the objects to see if there are objects that must be navigated around
-    # # Check also that the object isn't  or the target (so that the start and the end points are free)
-    # # The AI class handles the situation if  is next to the target so it will not use this A* function
-    # # anyway
-    # for entity in entities:
-    #     if entity.blocks_movement and entity != entity_to_move and entity != target:
-    #         # Set the tile as a wall so it must be navigated around
-    #         tcod.map_set_properties(fov, entity.x, entity.y, True, False)
-    #
-    # # Allocate a A* path
-    # # The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited
-    # my_path = tcod.path_new_using_map(fov, 1.41)
-    #
-    # # Compute the path between `s coordinates and the target`s coordinates
-    # tcod.path_compute(my_path, entity_to_move.x, entity_to_move.y, target.x, target.y)
-    #
-    # # Check if the path exists, and in this case, also the path is shorter than max_path_length
-    # # The path size matters if you want the monster to use alternative longer paths (for example through
-    # # other rooms) if for example the player is in a corridor
-    # # It makes sense to keep path size relatively low to keep the monsters from running around the map if
-    # # there`s an alternative path really far away
-    # if not tcod.path_is_empty(my_path) and tcod.path_size(my_path) < max_path_length:
-    #     # Find the next coordinates in the computed full path
-    #     x, y = tcod.path_walk(my_path, True)
-    #
-    #     # convert to direction
-    #     direction_x = x - entity_to_move.x
-    #     direction_y = y - entity_to_move.y
-    #
-    #     log_string = f"{entity_to_move.name} found an a* path to {target.name}..."
-    #     log_string2 = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x}," \
-    #                   f"{y}] in direction " \
-    #                   f"[{direction_x},{direction_y}]"
-    #     logging.debug(log_string)
-    #     logging.debug(log_string2)
-    #
-    # else:
-    #     # no path found return no movement direction
-    #     direction_x, direction_y = 0, 0
-    #     log_string = f"{entity_to_move.name} did NOT find an a* path to {target.name}."
-    #     logging.debug(log_string)
-    #
-    # # Delete the path to free memory
-    # tcod.path_delete(my_path)
-    # return direction_x, direction_y
+    pathfinder = create_pathfinder()
+
+    # add points
+    pathfinder.add_root(start_pos)
+    path = pathfinder.path_to(target_pos).tolist()
+    assert isinstance(path, list)
+
+    return path
 
 
-def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tuple[int, int]) -> DirectionType:
+def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Optional[DirectionType]:
+    """
+    Use a* pathfinding to get a direction from one entity to another. Does not allow diagonals.
+    """
+    path = get_a_star_path(start_pos, target_pos)
+
+    # if there is a path then return direction
+    if path:
+        _start_pos = path[0]
+        next_pos = path[1]
+        move_dir = get_direction(_start_pos, next_pos)  # type: ignore  # list instead of tuple is fine
+        return move_dir
+
+    return None
+
+
+def get_reflected_direction(
+    active_entity: EntityID, current_pos: Tuple[int, int], target_direction: Tuple[int, int]
+) -> DirectionType:
     """
     Use surrounding walls to understand how the object should be reflected.
     """
@@ -455,14 +438,14 @@ def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tupl
     # work out position of adjacent walls
     adj_tile = get_tile((current_x, current_y - dir_y))
     if adj_tile:
-        collision_adj_y = tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_y = tile_has_tag(active_entity, adj_tile, TargetTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_y = True
 
     adj_tile = get_tile((current_x - dir_x, current_y))
     if adj_tile:
-        collision_adj_x = tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_x = tile_has_tag(active_entity, adj_tile, TargetTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_x = True
@@ -485,11 +468,38 @@ def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tupl
             dir_x *= -1
             dir_y *= -1
 
-    return cast(DirectionType, (dir_x, dir_y))
+    return dir_x, dir_y  # type: ignore
+
+
+def get_euclidean_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> float:
+    """
+    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
+    This returns a float indicating the straight line distance between the two points.
+    """
+    dx = target_pos[0] - start_pos[0]
+    dy = target_pos[1] - start_pos[1]
+    import math  # only used in this method
+
+    return math.sqrt(dx ** 2 + dy ** 2)
+
+
+def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+    """
+    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
+    This returns an int indicating the number of tile moves between the two points.
+    """
+    from scipy import spatial  # only used in this method
+
+    distance = spatial.distance.chebyshev(start_pos, target_pos)
+    return distance
 
 
 def _get_furthest_free_position(
-    start_pos: Tuple[int, int], target_direction: Tuple[int, int], max_distance: int, travel_type: TravelMethodType
+    active_entity: EntityID,
+    start_pos: Tuple[int, int],
+    target_direction: Tuple[int, int],
+    max_distance: int,
+    travel_type: TravelMethodType,
 ) -> Tuple[int, int]:
     """
     Checks each position in a line and returns the last position that doesnt block movement. If no position in
@@ -529,7 +539,7 @@ def _get_furthest_free_position(
 
         if tile:
             # did we hit something causing standard to stop
-            if tile_has_tag(tile, TargetTag.BLOCKED_MOVEMENT):
+            if tile_has_tag(active_entity, tile, TargetTag.BLOCKED_MOVEMENT):
                 # if we're ready to check for a target, do so
                 if check_for_target:
                     # we hit something, go back to last free tile
@@ -693,10 +703,57 @@ def get_affected_entities(
     return affected_entities
 
 
+def get_entities_on_tile(tile: Tile) -> List[EntityID]:
+    """
+    Return a list of all the entities in that tile
+    """
+    x = tile.x
+    y = tile.y
+    entities = []
+    from scripts.engine.core import queries
+
+    for entity, (position,) in queries.position:
+        assert isinstance(position, Position)
+        if (x, y) in position:
+            entities.append(entity)
+    return entities
+
+
+def get_cast_positions(
+    entity: EntityID, target_pos: Position, skills: List[Type[Skill]]
+) -> Dict[Type[Skill], List[Tuple[int, int]]]:
+    """
+    Check through list of skills to find unblocked cast positions to target
+    """
+    skill_dict: Dict[Type[Skill], List[Tuple[int, int]]] = {}
+
+    # loop all skills and all directions
+    for skill in skills:
+        skill_dict[skill] = []
+        for direction in skill.target_directions:
+            # work out from target pos, reversing direction as we are working from target, not towards them
+            for _range in range(1, skill.range + 1):  # +1 to be inclusive
+                x = target_pos.x + (-_range * direction[0])
+                y = target_pos.y + (-_range * direction[1])
+
+                # check tile is open and in vision
+                tile = get_tile((x, y))
+                has_tags = tile_has_tags(entity, tile, [TargetTag.IS_VISIBLE, TargetTag.OPEN_SPACE])
+                has_self = tile_has_tag(entity, tile, TargetTag.SELF)
+                if has_tags or has_self:
+                    skill_dict[skill].append((x, y))
+
+                else:
+                    # space blocked so further out spaces will be no good either
+                    break
+
+    return skill_dict
+
+
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
 
 
-def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = None) -> bool:
+def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> bool:
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
@@ -735,7 +792,7 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
         return True
     elif tag == TargetTag.IS_VISIBLE:
         # if player can see the tile
-        return _is_tile_visible_to_player(tile)
+        return _is_tile_visible_to_entity(tile, active_entity)
     elif tag == TargetTag.NO_BLOCKING_TILE:
         # if tile isnt blocking movement
         if _is_tile_in_bounds(tile):
@@ -745,7 +802,7 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
     return False
 
 
-def tile_has_tags(tile: Tile, tags: List[TargetTagType], active_entity: int = None) -> bool:
+def tile_has_tags(active_entity: EntityID, tile: Tile, tags: List[TargetTagType]) -> bool:
     """
     Check a tile has all required tags
     """
@@ -753,7 +810,7 @@ def tile_has_tags(tile: Tile, tags: List[TargetTagType], active_entity: int = No
 
     # assess all tags
     for tag in tags:
-        tags_checked[tag] = tile_has_tag(tile, tag, active_entity)
+        tags_checked[tag] = tile_has_tag(active_entity, tile, tag)
 
     # if all tags came back true return true
     if all(value for value in tags_checked.values()):
@@ -766,15 +823,21 @@ def _is_tile_blocking_sight(tile: Tile) -> bool:
     """
     Check if a tile is blocking sight
     """
-    # Does the tile block sight?
     return tile.blocks_sight
 
 
-def _is_tile_visible_to_player(tile: Tile) -> bool:
+def _is_tile_visible_to_entity(tile: Tile, entity: EntityID) -> bool:
     """
-    Check if the specified tile is visible to the player
+    Check if the specified tile is visible to the entity
     """
-    return tile.is_visible
+    fov_map = get_entitys_component(entity, FOV).map
+    game_map = get_game_map()
+    light_map = game_map.light_map
+
+    # combine maps
+    visible_map = fov_map & light_map
+
+    return bool(visible_map[tile.x, tile.y])
 
 
 def _is_tile_in_bounds(tile: Tile) -> bool:
@@ -803,22 +866,6 @@ def _tile_has_any_entity(tile: Tile) -> bool:
     return len(get_entities_on_tile(tile)) > 0
 
 
-def get_entities_on_tile(tile: Tile) -> List[EntityID]:
-    """
-    Return a list of all the entities in that tile
-    """
-    x = tile.x
-    y = tile.y
-    entities = []
-    from scripts.engine.core import queries
-
-    for entity, (position,) in queries.position:
-        position = cast(Position, position)
-        if (x, y) in position:
-            entities.append(entity)
-    return entities
-
-
 def _tile_has_other_entities(tile: Tile, active_entity: EntityID) -> bool:
     """
     Check if the specified tile has other entities apart from the provided active entity
@@ -842,8 +889,9 @@ def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
     y = tile.y
     # Any entities that block movement?
     for entity, (position, blocking) in get_components([Position, Blocking]):
-        position = cast(Position, position)
-        blocking = cast(Blocking, blocking)
+        assert isinstance(position, Position)
+        assert isinstance(blocking, Blocking)
+
         if (x, y) in position and blocking.blocks_movement:
             return True
     return False
@@ -854,19 +902,12 @@ def _tile_has_entity_blocking_sight(tile: Tile) -> bool:
     y = tile.y
     # Any entities that block sight?
     for entity, (position, blocking) in get_components([Position, Blocking]):
-        position = cast(Position, position)
-        blocking = cast(Blocking, blocking)
+        assert isinstance(position, Position)
+        assert isinstance(blocking, Blocking)
+
         if (x, y) in position and blocking.blocks_sight:
             return True
     return False
-
-
-def is_tile_in_fov(tile_pos: Tuple[int, int], fov_map) -> bool:
-    """
-    Check if  target tile is in player`s FOV
-    """
-    x, y = tile_pos
-    return fov_map[x][y]
 
 
 def _can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
@@ -879,10 +920,8 @@ def _can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> boo
     # Check if cost can be paid
     value = getattr(resources, resource.lower())
     if value - cost >= 0:
-        logging.debug(f"'{name}' can afford cost.")
         return True
     else:
-        logging.info(f"'{name}' cannot afford cost.")
         return False
 
 
@@ -898,8 +937,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
         return False
 
     # flags
-    can_afford = not_on_cooldown = False
-
+    not_on_cooldown = False
     can_afford = _can_afford_cost(entity, skill.resource_type, skill.resource_cost)
 
     knowledge = get_entitys_component(entity, Knowledge)
@@ -936,7 +974,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
                 f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait " f"{cooldown_msg} more rounds."
             )
 
-    # we've reached the end, no good.
+    # we've reached the end; no good.
     return False
 
 
@@ -976,7 +1014,7 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
     skill_cast = skill(user, target_tile, direction)
 
     # ensure they are the right target type
-    if tile_has_tags(skill_cast.target_tile, skill_cast.target_tags, user):
+    if tile_has_tags(user, skill_cast.target_tile, skill_cast.target_tags):
         skill_cast.use()
         return True
     else:
@@ -991,7 +1029,7 @@ def apply_skill(skill_instance: Skill) -> bool:
     """
     skill = skill_instance
     # ensure they are the right target type
-    if tile_has_tags(skill.target_tile, skill.target_tags, skill.user):
+    if tile_has_tags(skill.user, skill.target_tile, skill.target_tags):
         for entity, effects in skill_instance.apply():
             if entity not in skill.ignore_entities:
                 effect_queue = list(effects)
@@ -1001,7 +1039,8 @@ def apply_skill(skill_instance: Skill) -> bool:
         return True
     else:
         logging.info(
-            f'Could not apply skill "{skill.key}", target tile does not have required tags ({skill.target_tags}).'
+            f'Could not apply skill "{skill.__class__.__name__}", target tile does not have required '
+            f"tags ({skill.target_tags})."
         )
 
     return False
@@ -1012,7 +1051,7 @@ def set_skill_on_cooldown(skill_instance: Skill) -> bool:
     Sets a skill on cooldown
     """
     user = skill_instance.user
-    name = skill_instance.key
+    name = skill_instance.__class__.__name__
     knowledge = get_entitys_component(user, Knowledge)
     if knowledge:
         knowledge.set_skill_cooldown(name, skill_instance.base_cooldown)
@@ -1032,7 +1071,7 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
         target_tile = get_tile((position.x, position.y))
 
         # ensure they are the right target type
-        if tile_has_tags(target_tile, affliction.target_tags, affliction.origin):
+        if tile_has_tags(affliction.origin, target_tile, affliction.target_tags):
             for entity, effects in affliction.apply():
                 effect_queue = list(effects)
                 while effect_queue:
@@ -1041,7 +1080,7 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
             return True
         else:
             logging.info(
-                f'Could not apply affliction "{affliction.key}", target tile does not have required '
+                f'Could not apply affliction "{affliction.name}", target tile does not have required '
                 f"tags ({affliction.target_tags})."
             )
 
@@ -1050,10 +1089,10 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
 
 def take_turn(entity: EntityID) -> bool:
     """
-    Process the entity's Behaviour component. If no component found then EndTurn event is fired.
+    Process the entity's Thought component. If no component found then EndTurn event is fired.
     """
     logging.debug(f"'{get_name(entity)}' is beginning their turn.")
-    behaviour = get_entitys_component(entity, Behaviour)
+    behaviour = get_entitys_component(entity, Thought)
     if behaviour:
         behaviour.behaviour.act()
         return True
@@ -1070,6 +1109,7 @@ def apply_damage(entity: EntityID, damage: int) -> bool:
     resource = get_entitys_component(entity, Resources)
     if resource:
         resource.health -= damage
+        logging.info(f"'{get_name(entity)}' takes {damage} and has {resource.health} health remaining.")
         return True
     else:
         logging.warning(f"'{get_name(entity)}' has no resource so couldnt apply damage.")
@@ -1091,14 +1131,25 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
     return False
 
 
+def choose_target(entity: EntityID) -> Optional[EntityID]:
+    """
+    Choose an appropriate target for the entity.
+    FIXME - CURRENTLY JUST RETURNS PLAYER
+    """
+    return get_player()
+
+
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
 
 
 def kill_entity(entity: EntityID):
+    """
+    Add entity to the deletion stack and removes them from the turn queue.
+    """
     # if not player
     if entity != get_player():
         # delete from world
-        delete(entity)
+        delete_entity(entity)
 
         turn_queue = chronicle.get_turn_queue()
 
@@ -1117,7 +1168,7 @@ def kill_entity(entity: EntityID):
         ui.log_message("I should have died just then.")
 
 
-def delete(entity: EntityID):
+def delete_entity(entity: EntityID):
     """
     Queues entity for removal from the world_objects. Happens at the next run of process.
     """
@@ -1139,15 +1190,21 @@ def add_component(entity: EntityID, component: Component):
     snecs.add_component(entity, component)
 
 
+def remove_component(entity: EntityID, component: Type[Component]):
+    """
+    Remove a component from the entity
+    """
+    snecs.remove_component(entity, component)
+
+
 def judge_action(entity: EntityID, action_name: str):
     """
     Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards
     the tags in that skill.
     """
     for god, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
-        # cast for typing
-        opinion = cast(Opinion, opinion)
-        identity = cast(Identity, identity)
+        assert isinstance(opinion, Opinion)
+        assert isinstance(identity, Identity)
 
         attitudes = library.GODS[identity.name].attitudes
 
@@ -1243,7 +1300,7 @@ def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_
     return mitigated_to_hit_score
 
 
-def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[EntityID, str]]:
+def choose_interventions(active_entity: EntityID, action_name: str) -> List[Tuple[EntityID, str]]:
     """
     Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
     or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).
@@ -1253,10 +1310,9 @@ def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[Entit
     desire_to_do_nothing = 75  # weighting for doing nothing
 
     for entity, (is_god, opinion, identity, knowledge) in get_components([IsGod, Opinion, Identity, Knowledge]):
-        # cast for typing
-        opinion = cast(Opinion, opinion)
-        identity = cast(Identity, identity)
-        knowledge = cast(Knowledge, knowledge)
+        assert isinstance(opinion, Opinion)
+        assert isinstance(identity, Identity)
+        assert isinstance(knowledge, Knowledge)
 
         attitudes = library.GODS[identity.name].attitudes
 
@@ -1272,7 +1328,7 @@ def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[Entit
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion
             try:
-                opinion_score = opinion.opinions[entity]
+                opinion_score = opinion.opinions[active_entity]
             except KeyError:
                 opinion_score = 0
 
@@ -1299,6 +1355,6 @@ def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[Entit
 
         # if god has chosen to take an action then add to list
         if chosen_intervention != "Nothing":
-            chosen_interventions.append((entity, chosen_intervention))
+            chosen_interventions.append((active_entity, chosen_intervention))
 
     return chosen_interventions

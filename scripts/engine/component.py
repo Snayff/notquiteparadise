@@ -6,14 +6,12 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
-import scripts.engine.utility
 from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional, Type, Tuple
-    from scripts.engine.thought import AIBehaviour
-    from scripts.engine.action import Affliction, Skill
+    from scripts.engine.action import Affliction, Behaviour, Skill
     from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 
@@ -21,10 +19,35 @@ if TYPE_CHECKING:
 # Components are to hold data that is subject to change.
 #########################################################
 
+
+class NQPComponent(RegisteredComponent):
+    """
+    Subclass snecs' RegisteredComponent to extend with an on_delete method
+    """
+
+    def on_delete(self):
+        pass
+
+
 ########################### FLAGS ##############################
 
 
-class IsPlayer(RegisteredComponent):
+class Exists(NQPComponent):
+    """
+    Empty flag for all entities. Used to allow filters to search for a single component i.e. use a single condition.
+    """
+
+    __slots__ = ()
+
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Exists()
+
+
+class IsPlayer(NQPComponent):
     """
     Whether the entity is the player.
     """
@@ -39,7 +62,7 @@ class IsPlayer(RegisteredComponent):
         return IsPlayer()
 
 
-class IsActor(RegisteredComponent):
+class IsActor(NQPComponent):
     """
     Whether the entity is an actor.
     """
@@ -54,7 +77,7 @@ class IsActor(RegisteredComponent):
         return IsActor()
 
 
-class IsGod(RegisteredComponent):
+class IsGod(NQPComponent):
     """
     Whether the entity is a god.
     """
@@ -69,7 +92,22 @@ class IsGod(RegisteredComponent):
         return IsGod()
 
 
-class HasCombatStats(RegisteredComponent):
+class IsActive(NQPComponent):
+    """
+    Whether the entity is active or not. Used to limit entity processing.
+    """
+
+    __slots__ = ()
+
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return IsActive()
+
+
+class HasCombatStats(NQPComponent):
     """
     A flag to show if an entity has stats used for combat.
     """
@@ -84,7 +122,7 @@ class HasCombatStats(RegisteredComponent):
         return HasCombatStats()
 
 
-class WinCondition(RegisteredComponent):
+class WinCondition(NQPComponent):
     """
     A flag to show that an entity is a win objective
     """
@@ -102,7 +140,7 @@ class WinCondition(RegisteredComponent):
 #################### OTHERS #########################
 
 
-class Position(RegisteredComponent):
+class Position(NQPComponent):
     """
     An entity's position on the map. At initiation provide all positions the entity holds. After initiation only need
      to set the top left, or reference position as the other coordinates are held as offsets.
@@ -178,7 +216,7 @@ class Position(RegisteredComponent):
         return False
 
 
-class Aesthetic(RegisteredComponent):
+class Aesthetic(NQPComponent):
     """
     An entity's sprite.
     """
@@ -233,14 +271,14 @@ class Aesthetic(RegisteredComponent):
             sprite_paths.append(TraitSpritePathsData(**sprite_path))
 
         # convert sprite paths to sprites
-        from scripts.engine import world
+        from scripts.engine import utility
 
-        sprites = scripts.engine.utility.build_sprites_from_paths(sprite_paths)
+        sprites = utility.build_sprites_from_paths(sprite_paths)
 
         return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
 
 
-class Tracked(RegisteredComponent):
+class Tracked(NQPComponent):
     """
     A component to hold info on activities of an entity
     """
@@ -256,7 +294,7 @@ class Tracked(RegisteredComponent):
         return Tracked(serialised)
 
 
-class Resources(RegisteredComponent):
+class Resources(NQPComponent):
     """
     An entity's resources. Members align to Resource constants.
     """
@@ -273,7 +311,7 @@ class Resources(RegisteredComponent):
         return Resources(*serialised)
 
 
-class Blocking(RegisteredComponent):
+class Blocking(NQPComponent):
     """
     An entity's blocking of other objects.
     """
@@ -290,7 +328,7 @@ class Blocking(RegisteredComponent):
         return Blocking(*serialised)
 
 
-class Identity(RegisteredComponent):
+class Identity(NQPComponent):
     """
     An entity's identity, such as name and description.
     """
@@ -307,7 +345,7 @@ class Identity(RegisteredComponent):
         return cls(*serialised)
 
 
-class Traits(RegisteredComponent):
+class Traits(NQPComponent):
     """
     An entity's traits. Class, archetype, skill set or otherwise defining group.
     """
@@ -323,28 +361,29 @@ class Traits(RegisteredComponent):
         return Traits(serialised)
 
 
-class Behaviour(RegisteredComponent):
+class Thought(NQPComponent):
     """
     An ai behaviour to control an entity.
     """
 
-    def __init__(self, behaviour: AIBehaviour):
+    def __init__(self, behaviour: Behaviour):
         self.behaviour = behaviour
 
     def serialize(self):
-        # FIXME - need to deserialise behaviour properly
-        return self.behaviour.entity
+        _dict = {"behaviour_name": self.behaviour.__class__.__name__, "entity": self.behaviour.entity}
+
+        return _dict
 
     @classmethod
     def deserialize(cls, serialised):
-        from scripts.engine.thought import SkipTurnBehaviour
+        from scripts.engine import action
 
-        skip_turn = SkipTurnBehaviour(serialised)
-        # FIXME - need to deserialise behaviour properly
-        return Behaviour(skip_turn)
+        behaviour = action.behaviour_registry[serialised["behaviour_name"]]
+
+        return Thought(behaviour(serialised["entity"]))
 
 
-class Knowledge(RegisteredComponent):
+class Knowledge(NQPComponent):
     """
     An entity's knowledge, including skills.
     """
@@ -389,12 +428,12 @@ class Knowledge(RegisteredComponent):
         """
         Learn a new skill.
         """
-        self.skill_names.append(skill.key)
-        self.skills[skill.key] = skill
+        self.skill_names.append(skill.__name__)
+        self.skills[skill.__name__] = skill
         if add_to_order:
-            self.skill_order.append(skill.key)
+            self.skill_order.append(skill.__name__)
         if set_cooldown:
-            self.cooldowns[skill.key] = 0
+            self.cooldowns[skill.__name__] = 0
 
     def serialize(self):
         _dict = {"skill_names": self.skill_names, "cooldowns": self.cooldowns, "skill_order": self.skill_order}
@@ -415,7 +454,7 @@ class Knowledge(RegisteredComponent):
         return Knowledge(skills, skill_order, cooldowns)
 
 
-class Afflictions(RegisteredComponent):
+class Afflictions(NQPComponent):
     """
     An entity's Boons and Banes. held in .active as a list of Affliction.
     """
@@ -465,13 +504,13 @@ class Afflictions(RegisteredComponent):
         if affliction in self.active:
             # if it is affect_stat remove the affect
             if EffectType.AFFECT_STAT in affliction.identity_tags:
-                self.stat_modifiers.pop(affliction.key)
+                self.stat_modifiers.pop(affliction.__class__.__name__)
 
             # remove from active list
             self.active.remove(affliction)
 
 
-class Aspect(RegisteredComponent):
+class Aspect(NQPComponent):
     """
     An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
     """
@@ -488,7 +527,7 @@ class Aspect(RegisteredComponent):
         return Aspect(*serialised)
 
 
-class Opinion(RegisteredComponent):
+class Opinion(NQPComponent):
     """
     An entity's views on other entities. {entity, opinion}
     """
@@ -505,13 +544,16 @@ class Opinion(RegisteredComponent):
         return Opinion(*serialised)
 
 
-class FOV(RegisteredComponent):
+class FOV(NQPComponent):
     """
-    An entity's field of view.
+    An entity's field of view. Always starts blank.
     """
 
-    def __init__(self, fov_map: np.array):
-        self.map: np.array = fov_map
+    def __init__(self):
+        from scripts.engine import world
+
+        game_map = world.get_game_map()
+        self.map: np.array = game_map.block_sight_map
 
     def serialize(self):
         fov_map = self.map.tolist()
@@ -519,28 +561,33 @@ class FOV(RegisteredComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        fov_map = np.array(serialised)
-        return FOV(fov_map)
+        fov = FOV()
+        fov.map = np.array(serialised)
+        return fov
 
 
-class LightSource(RegisteredComponent):
+class LightSource(NQPComponent):
     """
-    An emitter of light.
+    An emitter of light. Takes the light_id from a Light. The Light must be added to the Lightbox of the
+    Gamemap separately.
     """
 
-    def __init__(self, radius: int, colour: Optional[Tuple[int, int, int, int]] = None):
-        if not colour:
-            _colour = (230, 182, 41, 80)
-        else:
-            _colour = colour
-
+    def __init__(self, light_id: str, radius: int):
+        self.light_id: str = light_id
         self.radius: int = radius
-        self.colour: Tuple[int, int, int, int] = _colour
 
     def serialize(self):
-        data = {"radius": self.radius, "colour": self.colour}
-        return data
+        return self.light_id
 
     @classmethod
     def deserialize(cls, serialised):
         return LightSource(*serialised)
+
+    def on_delete(self):
+        """
+        Delete the associated light from the Gamemap's Lightbox
+        """
+        from scripts.engine import world
+
+        light_box = world.get_game_map().light_box
+        light_box.delete_light(self.light_id)

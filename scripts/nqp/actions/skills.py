@@ -28,8 +28,6 @@ class Move(Skill):
     Basic move for an entity.
     """
 
-    key = "move"
-
     def __init__(self, user: EntityID, target_tile: Tile, direction):
         """
         Only Move needs an init as it overrides the target tile
@@ -68,8 +66,6 @@ class BasicAttack(Skill):
     Basic attack for an entity
     """
 
-    key = "basic_attack"
-
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
@@ -89,10 +85,6 @@ class BasicAttack(Skill):
 
         return [damage_effect]
 
-    def get_animation(self, aesthetic: Aesthetic):
-        # we can show animations depending on the direction with self.direction
-        return aesthetic.sprites.attack
-
 
 @init_action
 class Lunge(Skill):
@@ -100,7 +92,6 @@ class Lunge(Skill):
     Lunge skill for an entity
     """
 
-    key = "lunge"
     # FIXME - only applying damage when moving 2 spaces, anything less fails to apply.
 
     def __init__(self, user: EntityID, tile: Tile, direction: DirectionType):
@@ -184,17 +175,12 @@ class Lunge(Skill):
         )
         return cooldown_effect
 
-    def get_animation(self, aesthetic: Aesthetic):
-        return aesthetic.sprites.attack
-
 
 @init_action
 class TarAndFeather(Skill):
     """
     TarAndFeather skill for an entity
     """
-
-    key = "tar_and_feather"
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         super().__init__(user, target_tile, direction)
@@ -259,5 +245,28 @@ class TarAndFeather(Skill):
         )
         return damage_effect
 
-    def get_animation(self, aesthetic: Aesthetic):
-        return aesthetic.sprites.attack
+
+@init_action
+class Splash(Skill):
+    """
+    Simple projectile attack
+    """
+
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
+        """
+        Build the effects of this skill applying to a single entity.
+        """
+        damage_effect = DamageEffect(
+            origin=self.user,
+            success_effects=[],
+            failure_effects=[],
+            target=entity,
+            stat_to_target=PrimaryStat.VIGOUR,
+            accuracy=library.GAME_CONFIG.base_values.accuracy,
+            damage=int(library.GAME_CONFIG.base_values.damage * potency),
+            damage_type=DamageType.MUNDANE,
+            mod_stat=PrimaryStat.CLOUT,
+            mod_amount=0.1,
+        )
+
+        return [damage_effect]
