@@ -312,6 +312,9 @@ class Camera(UIPanel):
     def _draw_entities(self, map_surf: pygame.Surface):
         from scripts.engine.core import queries
         for entity, (pos, aesthetic) in queries.position_and_aesthetic:
+            assert isinstance(pos, Position)
+            assert isinstance(aesthetic, Aesthetic)
+
             # if part of entity in camera view
             for offset in pos.offsets:
                 src_area = Rect(offset[0] * TILE_SIZE, offset[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
@@ -324,7 +327,7 @@ class Camera(UIPanel):
 
     def _draw_lighting(self, map_surf: pygame.Surface):
         light_box = world.get_game_map().light_box
-        light_box.render(map_surf, [self.start_x * TILE_SIZE, self.start_y * TILE_SIZE])
+        light_box.render(map_surf, [int(self.start_x * TILE_SIZE), int(self.start_y * TILE_SIZE)])
 
     def _draw_walls(self, map_surf: pygame.Surface):
         for tile in self.current_tiles:

@@ -27,27 +27,37 @@ class Light:
         self.light_img: pygame.Surface = self._base_light_img.copy()
         self.alpha: int = alpha
         self.colour: Tuple[int, int, int] = colour
-        self.timer: int = 1
+        self.timer: int = 1  # timer for wave/pule of light
+        self.flicker_timer: int = 1  # timer for jumping flicker
+        self.variance = 0  # how much variance from radius due to flicker
+        self.variance_size = int(self._base_radius / 30)
 
         self._calculate_light_img()
 
     def update(self):
         base_radius = self._base_radius
+        variance_size = self.variance_size
 
-        # decrement timer
+        # increment wave timer
         self.timer += 1
-        self.set_size(int((1 + math.sin(self.timer / 40)) * 2 + 50))
+        self.set_size(int((1 + math.sin(self.timer / 10)) + (base_radius + self.variance)))
+
+        # decrement flicker timer
+        self.flicker_timer -= 1
 
         # update for flickering effect
-        # if self.timer < 0:
-        #     # scale size
-        #     variance_size = int(base_radius / 10)
-        #     variance = random.randint(-variance_size, variance_size)
-        #     radius = base_radius + variance
-        #     self.set_size(radius)
-        #
-        #     # set new timer
-        #     self.timer = random.randint(10, 30)
+        if self.flicker_timer < 0:
+            # scale size
+            self.variance = random.randint(-variance_size, variance_size)
+            radius = base_radius + self.variance
+            self.set_size(radius)
+
+            # alpha variance
+            alpha_variance = int(self.variance)
+            self.set_alpha(self.alpha + alpha_variance)
+
+            # set new timer
+            self.flicker_timer = random.randint(30, 60)
 
     def _calculate_light_img(self):
         """

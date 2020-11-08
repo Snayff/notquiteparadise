@@ -10,6 +10,7 @@ from snecs.world import default_world
 
 import scripts.nqp.processors.input
 from scripts.engine import chronicle, debug, state, world
+from scripts.engine.component import NQPComponent
 from scripts.engine.core.constants import GameState
 from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.engine.ui.manager import ui
@@ -82,7 +83,8 @@ def game_loop():
         for entity in list(default_world._entities_to_delete):
             components = dict(world.get_entitys_components(entity))
             for component in components.values():
-                component.on_delete()  # type: ignore  # NQPComponent has this method
+                assert isinstance(component, NQPComponent)
+                component.on_delete()
             snecs.delete_entity_immediately(entity, default_world)
 
 

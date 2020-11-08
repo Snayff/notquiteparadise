@@ -49,7 +49,7 @@
             "hit": "actor/people/goblynn_hit.png",
             "dead": "actor/people/goblynn_dead.png",
             "icon": "actor/people/goblynn_icon.png",
-            "move": "actor/homeland/goblynn_move.png"
+            "move": "actor/people/goblynn_move.png"
         },
         "vigour": 0
     },
