@@ -551,7 +551,7 @@ class DataEditor(UIWindow):
 #             "interventions": (skill_options, InterventionData()),
 #             "skills": ("", SkillData()),
 #             "afflictions": ("", AfflictionData()),
-#             "aspects": ("", AspectData()),
+#             "aspects": ("", TerrainData()),
 #             "base_stats_primary": ("", BasePrimaryStatData()),
 #             "base_stats_secondary": ("", BaseSecondaryStatData()),
 #             "homelands": ("", TraitData()),

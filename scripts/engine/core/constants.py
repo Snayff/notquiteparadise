@@ -102,7 +102,7 @@ class RenderLayer(SimpleNamespace):
 
     BOTTOM = RenderLayerType(10)
     TILE = RenderLayerType(20)
-    ASPECT = RenderLayerType(30)
+    TERRAIN = RenderLayerType(30)
     ACTOR = RenderLayerType(40)
     UI_BASE = RenderLayerType(50)
     UI_WINDOW = RenderLayerType(60)

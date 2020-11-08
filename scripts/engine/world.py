@@ -52,7 +52,7 @@ from scripts.engine.core.constants import (
     TravelMethodType,
 )
 from scripts.engine.core.data import store
-from scripts.engine.core.definitions import ActorData, ProjectileData
+from scripts.engine.core.definitions import ActorData, ProjectileData, TerrainData
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects import lighting
@@ -189,7 +189,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     # create the entity
     entity = create_entity(components)
 
-    # add permanent afflictions, since we can only add them once an entity is created
+    # add permanent afflictions post creation,  since we can only add them once an entity is created
     perm_afflictions = []
     for name in perm_afflictions_names:
         # create the affliction with no specific source
@@ -205,6 +205,54 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
     logging.debug(f"Entity, '{name}', created.")
+
+    return entity
+
+
+def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int]) -> EntityID:
+    """
+    Create terrain
+    """
+    components: List[Component] = []
+    x, y = spawn_pos
+
+    # get dimensions of actor
+    occupied_tiles = []
+    for offset in terrain_data.position_offsets:
+        occupied_tiles.append((offset[0] + x, offset[1] + y))
+
+    # terrain components
+    components.append(IsActor())
+    components.append(Position(*occupied_tiles))
+    components.append(Identity(terrain_data.name, terrain_data.description))
+    components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
+
+    # add aesthetic N.B. translation to screen coordinates is handled by the camera
+    sprites = build_sprites_from_paths([terrain_data.sprite_paths], (TILE_SIZE, TILE_SIZE))
+    components.append(Aesthetic(sprites.idle, sprites, [terrain_data.sprite_paths], RenderLayer.TERRAIN, (x, y)))
+
+    # add light
+    if terrain_data.light:
+        _light = terrain_data.light
+        light_id = create_light(spawn_pos, _light.radius, _light.colour, _light.alpha)
+        components.append(LightSource(light_id, _light.radius))
+
+    # create the entity
+    entity = create_entity(components)
+
+    # add permanent afflictions post creation,  since we can only add them once an entity is created
+    # get names
+    perm_afflictions_names = []
+    if terrain_data.permanent_afflictions != ["none"]:
+        for _name in terrain_data.permanent_afflictions:
+            perm_afflictions_names.append(_name)
+
+    # build each affliction
+    perm_afflictions = []
+    for name in perm_afflictions_names:
+        # create the affliction with no specific source
+        perm_afflictions.append(create_affliction(name, entity, entity, INFINITE))
+    add_component(entity, Afflictions(perm_afflictions))
 
     return entity
 

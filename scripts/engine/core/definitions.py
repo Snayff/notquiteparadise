@@ -48,6 +48,16 @@ if TYPE_CHECKING:
 
 ######################### Aesthetics ##################################
 
+@register_dataclass_with_json
+@dataclass
+class LightData:
+    """
+    Data for a light source
+    """
+    radius: int = 0
+    colour: Tuple[int, int, int] = field(default_factory=tuple)
+    alpha: int = 0
+
 
 @register_dataclass_with_json
 @dataclass
@@ -206,21 +216,21 @@ class ProjectileData:
 
 @register_dataclass_with_json
 @dataclass
-class AspectData:
+class TerrainData:
     """
-    Data class for an aspects
+    Data class for terrain.
     """
-
-    name: str = field(default="none")
-    description: str = field(default="none")
-    duration: int = 0
-    sprite: str = field(default="none")
+    name: str = "none"
+    description: str = "none"
     blocks_sight: bool = False
     blocks_movement: bool = False
+    position_offsets: List[Tuple[int, int]] = field(default_factory=list)
+    sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
+    permanent_afflictions: List[str] = field(default_factory=list)
+    light: Optional[LightData] = None
 
 
 ################### GODS ###################################################
-
 
 @register_dataclass_with_json
 @dataclass

@@ -1,0 +1,20 @@
+{
+    "bog": {
+        "__dataclass__": "TerrainData",
+        "blocks_movement": false,
+        "blocks_sight": true,
+        "description": "This is a bog. It slows entities down.",
+        "name": "bog",
+        "sprite_paths": {
+            "__dataclass__": "TraitSpritePathsData",
+            "idle": "terrain/bog.png"
+        },
+        "position_offsets": [
+            [0, 0]
+        ],
+        "permanent_afflictions": [
+            "none"
+        ],
+        "light": null
+    }
+}
