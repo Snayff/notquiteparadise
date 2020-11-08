@@ -21,7 +21,7 @@ class MessageLog(UIPanel):
     """
 
     def __init__(self, rect: Rect, manager: pygame_gui.ui_manager.UIManager):
-        self.text_size = 1
+        self.text_size = 4
 
         # hold state info
         self.text = ""
@@ -32,7 +32,7 @@ class MessageLog(UIPanel):
             rect,
             RenderLayer.UI_BASE,
             manager,
-            element_id="message_log",
+            object_id="message_log",
             anchors={"left": "left", "right": "right", "top": "bottom", "bottom": "bottom"},
         )
 
@@ -60,14 +60,13 @@ class MessageLog(UIPanel):
         """
         Create the text box to show the messages
         """
-        rect = pygame.Rect((0, 0), (self.rect.width, self.rect.height))
+        rect = pygame.Rect((0, 0), (self.rect.width - 4, self.rect.height - 4))  # small numbers to allow for border
         textbox = UITextBox(
             html_text=self.text,
             relative_rect=rect,
             manager=self.ui_manager,
             wrap_to_height=False,
             layer_starting_height=1,
-            object_id="#text_box",
             container=self.get_container(),
         )
 

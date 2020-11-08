@@ -28,7 +28,7 @@ class TileInfo(UIPanel):
             rect,
             RenderLayer.UI_BASE,
             manager,
-            element_id="tile_info",
+            object_id="tile_info",
             anchors={"left": "right", "right": "right", "top": "bottom", "bottom": "bottom"},
         )
 

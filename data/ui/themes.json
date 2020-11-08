@@ -22,16 +22,13 @@
              "hovered_border": "#c28015",
              "disabled_border": "#c21515",
              "selected_border": "#c28015",
-             "active_border": "#faaf3e",
-             
-             "filled_bar":"#ff0000",
-             "unfilled_bar":"#ffffff"
+             "active_border": "#faaf3e"
          }
      },
      "panel": {
          "colours": {
-             "normal_border": "#ffffff",
-             "dark_bg":"#c21515"
+             "normal_border": "#000000",
+             "dark_bg":"#000000"
          },
          "misc": {
              "shadow_width": 0,
@@ -40,20 +37,34 @@
      },
      "text_box": {
          "misc": {
-             "shadow_width": 0,
-             "border_width": 0
+             "shape": "rectangle",
+             "shape_corner_radius": "0",
+             "border_width": "1",
+             "shadow_width": "2",
+             "padding": "10,10"
          }
      },
-     "drop_down_menu": {
-         "misc": {
+     "#drop_down_text_prototype": {
+        "font": {
+                "name": "barlow",
+                "size": "18",
+                "regular_path": "assets/fonts/Barlow-Light.otf"
+        },
+        "misc": {
              "shape": "rounded_rectangle",
-             "shape_corner_radius": 10
+             "shape_corner_radius": 50
          }
-     },
+    },
+    "drop_down_menu.button": {
+        "prototype": "#drop_down_text_prototype"
+    },
+    "drop_down_menu.#drop_down_options_list.button": {
+        "prototype": "#drop_down_text_prototype"
+    },
      "button": {
          "font": {
              "name": "barlow",
-             "size": "8",
+             "size": "14",
              "regular_path": "assets/fonts/Barlow-Light.otf"
          },
          "misc": {

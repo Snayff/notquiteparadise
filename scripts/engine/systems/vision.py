@@ -30,9 +30,6 @@ def process_light_map():
     light_map[:] = False
 
     for entity, (is_active, light_source, pos,) in queries.active_and_light_source_and_position:
-        light_source: LightSource
-        pos: Position
-        aesthetic: Aesthetic
         radius = light_source.radius
 
         # create fov for light source and add to light map

@@ -29,7 +29,6 @@ from scripts.nqp import command
 __all__ = ["process_intent"]
 
 
-
 def process_intent(intent: InputIntentType, game_state: GameStateType):
     """
     Process the intent in the context of the game state. Intents are game state sensitive.
@@ -64,7 +63,7 @@ def _process_stateless_intents(intent: InputIntentType):
     ## Activate data editor
     # TODO - have this trigger dev console and move skill editor to a command in the console.
     elif intent == InputIntent.DUNGEON_DEV_VIEW:
-        # key= F5
+        # F5
         if ui.element_is_visible(UIElement.DUNGEN_VIEWER):
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, False)
             state.set_new(state.get_previous())
@@ -74,6 +73,7 @@ def _process_stateless_intents(intent: InputIntentType):
             state.set_new(GameState.MENU)
 
     elif intent == InputIntent.DEV_TOGGLE:
+        # F2
         if ui.get_element(UIElement.DATA_EDITOR):
             ui.set_element_visibility(UIElement.DATA_EDITOR, False)
             state.set_new(state.get_previous())
@@ -82,9 +82,11 @@ def _process_stateless_intents(intent: InputIntentType):
             state.set_new(GameState.DEVELOPER)
 
     elif intent == InputIntent.BURST_PROFILE:
+        # F3
         debug.enable_profiling(120)
 
     elif intent == InputIntent.TOGGLE_UI:
+        # F6
         if ui.element_is_visible(UIElement.MESSAGE_LOG):
             ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
             ui.set_element_visibility(UIElement.SKILL_BAR, False)

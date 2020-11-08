@@ -43,7 +43,7 @@ class SkillBar(UIPanel):
             rect,
             RenderLayer.UI_BASE,
             manager,
-            element_id="skill_bar",
+            object_id="skill_bar",
             anchors={"left": "left", "right": "right", "top": "bottom", "bottom": "bottom"},
         )
 
@@ -93,13 +93,12 @@ class SkillBar(UIPanel):
         count = 0
         for name in info.keys():
             x = start_x + ((width + gap) * count)
-            friendly_name = name.replace("_", " ")
 
             button = UIButton(
                 relative_rect=Rect((x, y), (width, height)),
-                text=friendly_name.title(),
+                text=f"{count + 1}",
                 manager=manager,
-                container=self.get_container(),
+                container=self,
                 object_id=f"{name}",
             )
 

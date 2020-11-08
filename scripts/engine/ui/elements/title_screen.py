@@ -31,7 +31,7 @@ class TitleScreen(UIPanel):
         self.buttons: List[UIButton] = []
 
         # complete base class init
-        super().__init__(rect, RenderLayer.BOTTOM, manager, element_id="title_screen")
+        super().__init__(rect, RenderLayer.BOTTOM, manager, object_id="title_screen")
 
         self._init_buttons()
 

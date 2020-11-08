@@ -1,6 +1,5 @@
 import logging
-import time
-from typing import Iterable, List, Optional, Tuple, cast
+from typing import Iterable, List, Optional, Tuple
 
 import pygame
 import pygame_gui
@@ -12,7 +11,7 @@ from pygame_gui import UIManager
 from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIButton, UIImage, UIPanel
 
-from scripts.engine import utility, world
+from scripts.engine import library, utility, world
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import TILE_SIZE, DirectionType, InputEvent, RenderLayer, UIElement
 from scripts.engine.utility import clamp, convert_tile_string_to_xy
@@ -27,6 +26,14 @@ class Camera(UIPanel):
     def __init__(self, rect: Rect, manager: UIManager):
         # FIXME - grid doesnt stay aligned to player movement/position
 
+        base_window_data = library.VIDEO_CONFIG.base_window
+        base_width = base_window_data.width
+        base_height = base_window_data.height
+
+        # base values
+        self._base_width = base_width
+        self._base_height = base_height
+
         # flags
         self.ignore_fov = False
         self.is_dirty = True
@@ -37,8 +44,8 @@ class Camera(UIPanel):
         self.map_height = game_map.height
 
         # determine how many tiles to show; max rows and cols in game map or max we can show based on size
-        self.rows = min(rect.height // TILE_SIZE, game_map.height - 1)
-        self.columns = min(rect.width // TILE_SIZE, game_map.width - 1)
+        self.rows = min(rect.width // TILE_SIZE, game_map.height - 1)
+        self.columns = min(rect.height // TILE_SIZE, game_map.width - 1)
 
         # to hold the last stored end values
         self._end_x = 0
@@ -72,13 +79,13 @@ class Camera(UIPanel):
             relative_rect=Rect((0, 0), rect.size),
             image_surface=blank_surf,
             manager=manager,
-            container=self.get_container(),
+            container=self,
             object_id="#game_map",
         )
 
         # create grid
         self.grid = UIContainer(
-            relative_rect=Rect((0, 0), rect.size), manager=manager, container=self.get_container(), object_id="#grid"
+            relative_rect=Rect((0, 0), rect.size), manager=manager, container=self, object_id="#grid"
         )
 
         # update everything
@@ -176,7 +183,7 @@ class Camera(UIPanel):
             self._update_grid()
 
         # update entities in game map every frame
-        self._draw_game_map()
+        self._update_game_map()
         self._update_ui_element_pos()
 
         # all updates have been processed
@@ -286,9 +293,7 @@ class Camera(UIPanel):
                 # set updated position
                 element.set_relative_position(updated_pos)
 
-    ############### DRAW ###########################
-
-    def _draw_game_map(self):
+    def _update_game_map(self):
         """
         Update the game map to show the current tiles and entities
         """

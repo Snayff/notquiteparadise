@@ -37,7 +37,7 @@ class ActorInfo(UIWindow):
         self.sections: List[PygameUiElement] = []
 
         # complete base class init
-        super().__init__(rect, manager, element_id="actor_info")
+        super().__init__(rect, manager, object_id="actor_info")
 
         # setup scroll bar
         self.scrollbar_width = 50

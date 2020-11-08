@@ -40,7 +40,7 @@ class CharacterSelector(UIPanel):
         self.ui_image: Optional[UIImage] = None
 
         # complete base class init
-        super().__init__(rect, RenderLayer.BOTTOM, manager, element_id="character_selector")
+        super().__init__(rect, RenderLayer.BOTTOM, manager, object_id="character_selector")
 
         self._init_buttons()
         self._init_drop_downs()

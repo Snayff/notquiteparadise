@@ -66,7 +66,7 @@ class UI:
         # base values
         self._base_width = base_width
         self._base_height = base_height
-        self._main_surface: pygame.Surface = pygame.Surface((base_width, base_height), pygame.SRCALPHA)
+        self._main_surface: pygame.Surface = pygame.Surface((desired_width, desired_height), pygame.SRCALPHA)
 
         # values to scale to
         self._desired_width = desired_width
@@ -76,7 +76,7 @@ class UI:
         self._window: pygame.display = pygame.display.set_mode((desired_width, desired_height))
 
         # now that the display is configured  init the pygame_gui
-        self._gui = UIManager((base_width, base_height), DATA_PATH / "ui/themes.json")
+        self._gui = UIManager((desired_width, desired_height), DATA_PATH / "ui/themes.json")
 
         # elements info
         self._elements = {}  # dict of all init'd ui_manager elements
@@ -119,15 +119,12 @@ class UI:
         # clear previous frame
         main_surface.fill((0, 0, 0))
 
+        # draw everything
+        self._draw_debug()
         self._gui.draw_ui(main_surface)
 
-        self._draw_debug()
-
-        # resize the surface to the desired resolution
-        scaled_surface = pygame.transform.scale(main_surface, (self._desired_width, self._desired_height))
-        self._window.blit(scaled_surface, (0, 0))
-
         # update the display
+        self._window.blit(main_surface, (0, 0))
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
     def _draw_debug(self):
@@ -184,8 +181,8 @@ class UI:
         self._gui.preload_fonts(fonts)
 
     def _load_element_layout(self):
-        base_width = self._base_width
-        base_height = self._base_height
+        base_width = self._desired_width
+        base_height = self._desired_height
 
         # Message Log
         message_width = int(base_width * 0.31)
@@ -271,7 +268,7 @@ class UI:
         Create the specified UI element. Object is returned for convenience, it is already held and can be returned
         with get_element at a later date. If it already exists current instance will be overwritten.
         """
-        # if it already exists, log is being overwritten
+        # if it already exists, log that is being overwritten
         # N.B. do not use get_element to check as it will create a circular reference
         if element_type in self._elements:
             element_name = utility.value_to_member(element_type, UIElement)
@@ -321,6 +318,15 @@ class UI:
         """
         element = self.get_element(element_type)
         return element.visible
+
+    def element_is_active(self, element_type: UIElementType) -> bool:
+        """
+        Check if an element has been created and is visible
+        """
+        if element_type in self._elements:
+            return self.element_is_visible(element_type)
+        else:
+            return False
 
     ######################## WRAPPED, FREQUENTLY-USED ELEMENT METHODS ############################################
 
