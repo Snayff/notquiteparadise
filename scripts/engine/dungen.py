@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Dict, Iterator, List, Literal
 import tcod
 
 from scripts.engine import library, utility, world
-from scripts.engine.core.constants import TILE_SIZE, Direction, TileCategory, TileCategoryType
+from scripts.engine.core.constants import MAP_BORDER_SIZE, TILE_SIZE, Direction, TileCategory, TileCategoryType
 from scripts.engine.core.definitions import ActorData, MapData, RoomConceptData
 from scripts.engine.world_objects.tile import Tile
 
@@ -35,7 +35,7 @@ class DungeonGenerator:
     max_place_entrance_attempts = 50  # lower number means likely less entrances (and poss more ignorant tunnels)
     max_make_room_accessible_attempts = 100  # lower number means likely more ignorant tunnels
     max_place_entity_attempts = 50  # lower number means likely less entities
-    border_size = 4  # tiles to place around the outside of the map
+    border_size = MAP_BORDER_SIZE  # tiles to place around the outside of the map
 
     # info accessed via property but only created once requested
     _passable_map: List[List[Literal[True]]] = field(default_factory=list)
@@ -43,7 +43,7 @@ class DungeonGenerator:
     _tiles_map: List[List[Tile]] = field(default_factory=list)
 
     # flags
-    is_dirty = False
+    is_dirty: bool = False
 
     def is_in_bounds(self, x: int, y: int):
         """
@@ -147,16 +147,16 @@ class DungeonGenerator:
         Returns an array of Tiles by converting values from map_of_categories to tiles.
         """
         generated_level: List[List[Tile]] = []
-        map_width = self.map_data.width
-        map_height = self.map_data.height
+        width = len(self.map_of_categories)  # use map of categories as this accounts for border
+        height = len(self.map_of_categories[0])
 
         if self._tiles_map and not self.is_dirty:
             return self._tiles_map
 
         # build the full size map and fill with tunnel sprites
-        for x in range(map_width):
+        for x in range(width):
             generated_level.append([])
-            for y in range(map_height):
+            for y in range(height):
                 tile = _create_tile_from_category(x, y, self.map_of_categories[x][y], self.map_data.sprite_paths)
                 generated_level[x].append(tile)
 
@@ -167,8 +167,8 @@ class DungeonGenerator:
             start_y = room.start_y
             for x in range(room.width):
                 for y in range(room.height):
-                    target_x = min(start_x + x, map_width - 1)
-                    target_y = min(start_y + y, map_height - 1)
+                    target_x = min(start_x + x, width - 1)
+                    target_y = min(start_y + y, height - 1)
                     tile = _create_tile_from_category(target_x, target_y, room.tile_categories[x][y], sprite_paths)
                     generated_level[target_x][target_y] = tile
 
@@ -186,8 +186,8 @@ class DungeonGenerator:
         """
 
         bools_map: List[List[bool]] = []
-        width = self.map_data.width
-        height = self.map_data.height
+        width = len(self.map_of_categories)  # use map of categories as this accounts for border
+        height = len(self.map_of_categories[0])
 
         if self._bools_map and not self.is_dirty:
             return self._bools_map
@@ -212,8 +212,8 @@ class DungeonGenerator:
         2d array of True, matching map size
         """
         passable_map: List[List[Literal[True]]] = []
-        width = self.map_data.width
-        height = self.map_data.height
+        width = len(self.map_of_categories)  # use map of categories as this accounts for border
+        height = len(self.map_of_categories[0])
 
         # if we have the passable map already created
         if self._passable_map and not self.is_dirty:
@@ -232,9 +232,21 @@ class DungeonGenerator:
 
     @property
     def generation_string(self) -> str:
-        gen_info = f"{self.map_data.name}: \n"
+        # add map info
+        gen_info = "==== DUNGEN ==== \n"
+        gen_info += f"==== Map Details ==== \n"
+        gen_info += f"{self.map_data.name} | w:{self.map_data.width}, h:{self.map_data.height} | "
+        gen_info += f"border:{self.border_size} | rooms: {len(self.placed_rooms)} \n"
+
+        # add info from each room
+        gen_info += f"==== Room Details ==== \n"
         for room in self.placed_rooms:
             gen_info += room.generation_info + "\n"
+
+        # add tile info
+        gen_info += f"==== Tile Details ==== \n"
+        for row in self.map_of_categories:
+            gen_info += f"{row} \n"
 
         return gen_info
 
@@ -313,7 +325,7 @@ class RoomConcept:
         """
         Return the id. Uses xy.
         """
-        _id = f"{self.start_x}.{self.start_y}"
+        _id = f"{self.start_x},{self.start_y}"
         return _id
 
     @property
@@ -369,8 +381,8 @@ class RoomConcept:
         Return the generation information about the room
         """
         gen_info = (
-            f"{self.key} | {self.design} | (w:{self.width}, h:{self.height}) "
-            f"| available:{self.available_area}/ total:{self.total_area}. Actors:{self.actors}"
+            f"{self.key} | {self.design} | {self.id} | w:{self.width}, h:{self.height} | "
+            f"available:{self.available_area}/ total:{self.total_area} | actors:{self.actors}"
         )
 
         return gen_info
@@ -454,9 +466,9 @@ def _generate_map_in_steps(dungen: DungeonGenerator) -> Iterator:
     dungen.map_of_categories = []
     map_width = dungen.map_data.width
     map_height = dungen.map_data.height
-    for x in range(map_width):
+    for x in range(map_width + (dungen.border_size * 2)):
         dungen.map_of_categories.append([])  # create new list for every col
-        for y in range(map_height):
+        for y in range(map_height + (dungen.border_size * 2)):
             dungen.map_of_categories[x].append(TileCategory.WALL)
 
     yield dungen.map_of_categories
@@ -670,8 +682,8 @@ def _place_room(dungen: DungeonGenerator, room: RoomConcept) -> bool:
     border_size = dungen.border_size
 
     # pick random location to place room, not including borders
-    room.start_x = dungen.rng.randint(border_size, max(border_size, map_width - room.width - border_size - 1))
-    room.start_y = dungen.rng.randint(border_size, max(border_size, map_height - room.height - border_size - 1))
+    room.start_x = dungen.rng.randint(border_size, max(border_size, map_width - room.width - 1))
+    room.start_y = dungen.rng.randint(border_size, max(border_size, map_height - room.height - 1))
 
     # if placed there does room overlap any existing rooms?
     for _room in dungen.placed_rooms:
@@ -1031,7 +1043,7 @@ def _find_place_for_actor(
         offset_x = x + pos[0]
         offset_y = y + pos[1]
 
-        # only need to check tile category as that capture entity placement too
+        # only need to check tile category as that captures entity placement too
         if dungen.map_of_categories[offset_x][offset_y] == TileCategory.FLOOR:
             blocked = False
         else:

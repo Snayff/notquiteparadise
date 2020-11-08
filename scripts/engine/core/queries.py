@@ -57,6 +57,7 @@ position = get_components([Position]).compile()
 
 active = get_components([IsActive]).compile()
 
+position_and_light_source = get_components([Position, LightSource]).compile()
 
 ################## MULTI QUERIES ##########################
 
@@ -82,3 +83,5 @@ active_and_tracked = get_components([IsActive, Tracked]).compile()
 # StatusEffectComponent, otherwise it has PoisonComponent and not AntidoteComponent)
 
 not_position = get_components([Exists]).filter(~Position).compile()
+
+light_source_and_aesthetic = get_components([LightSource, Aesthetic]).compile()

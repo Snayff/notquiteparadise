@@ -1,4 +1,5 @@
 import logging
+import time
 from typing import Iterable, List, Optional, Tuple, cast
 
 import pygame
@@ -30,14 +31,14 @@ class Camera(UIPanel):
         self.ignore_fov = False
         self.is_dirty = True
 
-        # determine how many tiles to show
-        self.rows = rect.height // TILE_SIZE
-        self.columns = rect.width // TILE_SIZE
-
         # store this now so we can refer to it later
         game_map = world.get_game_map()
         self.map_width = game_map.width
         self.map_height = game_map.height
+
+        # determine how many tiles to show; max rows and cols in game map or max we can show based on size
+        self.rows = min(rect.height // TILE_SIZE, game_map.height - 1)
+        self.columns = min(rect.width // TILE_SIZE, game_map.width - 1)
 
         # to hold the last stored end values
         self._end_x = 0
@@ -63,11 +64,11 @@ class Camera(UIPanel):
         self.overlay_directions: List[DirectionType] = []  # list of tuples
 
         # complete base class init
-        super().__init__(rect, RenderLayer.BOTTOM, manager, element_id="camera")
+        super().__init__(rect, RenderLayer.BOTTOM, manager, object_id="#camera")
 
         # create game map
         blank_surf = Surface((rect.width, rect.height), SRCALPHA)
-        self.game_map = UIImage(
+        self.map_image = UIImage(
             relative_rect=Rect((0, 0), rect.size),
             image_surface=blank_surf,
             manager=manager,
@@ -178,7 +179,7 @@ class Camera(UIPanel):
         self._draw_game_map()
         self._update_ui_element_pos()
 
-        # all updates will have been processed
+        # all updates have been processed
         self.is_dirty = False
 
     def _update_camera_position(self, time_delta):
@@ -292,18 +293,29 @@ class Camera(UIPanel):
         Update the game map to show the current tiles and entities
         """
         # create new surface for the game map
-        map_width = self.game_map.rect.width
-        map_height = self.game_map.rect.height
+        map_width = self.map_image.rect.width
+        map_height = self.map_image.rect.height
         map_surf = Surface((map_width, map_height), SRCALPHA)
 
-        # draw tiles
-        for tile in self.current_tiles:
-            self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
+        self._draw_floors(map_surf)
+        self._draw_entities(map_surf)
+        self._draw_lighting(map_surf)
+        self._draw_walls(map_surf)
 
-        # draw entities
+        self.map_image.set_image(map_surf)
+
+    def _draw_floors(self, map_surf: pygame.Surface):
+        for tile in self.current_tiles:
+            if not tile.blocks_sight:
+                self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
+
+    def _draw_entities(self, map_surf: pygame.Surface):
         from scripts.engine.core import queries
 
         for entity, (pos, aesthetic) in queries.position_and_aesthetic:
+            assert isinstance(pos, Position)
+            assert isinstance(aesthetic, Aesthetic)
+
             # if part of entity in camera view
             for offset in pos.offsets:
                 src_area = Rect(offset[0] * TILE_SIZE, offset[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
@@ -314,7 +326,14 @@ class Camera(UIPanel):
                     if tile.is_visible or self.ignore_fov:
                         self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
 
-        self.game_map.set_image(map_surf)
+    def _draw_lighting(self, map_surf: pygame.Surface):
+        light_box = world.get_game_map().light_box
+        light_box.render(map_surf, [int(self.start_x * TILE_SIZE), int(self.start_y * TILE_SIZE)])
+
+    def _draw_walls(self, map_surf: pygame.Surface):
+        for tile in self.current_tiles:
+            if tile.blocks_sight:
+                self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
 
     def _draw_grid(self, tile_positions: Iterable):
         """
@@ -362,15 +381,18 @@ class Camera(UIPanel):
         x, y = position
 
         if self.is_in_camera_edge(position) or recentre:
-            # centre the target
-            half_width = int((self.rect.width / TILE_SIZE) / 2)
-            half_height = int((self.rect.height / TILE_SIZE) / 2)
-
             if recentre:
+                # find centre
+                half_width = int((self.rect.width / TILE_SIZE) / 2)
+                half_height = int((self.rect.height / TILE_SIZE) / 2)
+
+                # centre the target
                 self.start_x = x
                 self.start_y = y
                 self.target_x = x
                 self.target_y = y
+
+                # move to centre
                 offset_x = -half_width
                 offset_y = -half_height
             else:
@@ -379,8 +401,8 @@ class Camera(UIPanel):
             new_x = self.target_x + offset_x
             new_y = self.target_y + offset_y
 
-            self.target_x = int(clamp(new_x, 0 + half_width, self.map_width - half_width))
-            self.target_y = int(clamp(new_y, 0 + half_height, self.map_height - half_height))
+            self.target_x = int(clamp(new_x, 0, self.map_width))
+            self.target_y = int(clamp(new_y, 0, self.map_height))
 
         self.is_dirty = True
 

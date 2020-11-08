@@ -11,6 +11,8 @@ import tcod
 ######################## TOP LEVEL CONSTANTS ######################################
 
 VERSION = "0.131.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+DEBUG_START = False  # Whether to start directly in debug map
+
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -23,6 +25,7 @@ INFINITE = 999
 MAX_ACTIVATION_DISTANCE = 5  # this is how far from the player an entity can be and still be considered active
 FOV_LIGHT_WALLS = True
 FOV_ALGORITHM = tcod.FOV_RESTRICTIVE
+MAP_BORDER_SIZE = 4
 
 ######################## PATHS ######################################
 
@@ -34,7 +37,7 @@ if "GENERATING_SPHINX_DOCS" in os.environ:
 
 DATA_PATH = ROOT_PATH / "data/"
 ASSET_PATH = ROOT_PATH / "assets/"
-IMAGE_NOT_FOUND_PATH = ASSET_PATH / "image_not_found.png"
+IMAGE_NOT_FOUND_PATH = ASSET_PATH / "debug/image_not_found.png"
 SAVE_PATH = DATA_PATH / "saves/"
 
 ######################## NEW TYPES ######################################
@@ -165,6 +168,7 @@ class InputIntent(SimpleNamespace):
     BURST_PROFILE = InputIntentType("burst_profile")
     TEST = InputIntentType("test")
     DUNGEON_DEV_VIEW = InputIntentType("dungeon_dev_toggle")
+    TOGGLE_UI = InputIntentType("toggle_ui")
 
 
 #################### EXTERNAL, SERIALISED  ###########################################

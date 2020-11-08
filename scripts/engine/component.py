@@ -19,10 +19,20 @@ if TYPE_CHECKING:
 # Components are to hold data that is subject to change.
 #########################################################
 
+
+class NQPComponent(RegisteredComponent):
+    """
+    Subclass snecs' RegisteredComponent to extend with an on_delete method
+    """
+
+    def on_delete(self):
+        pass
+
+
 ########################### FLAGS ##############################
 
 
-class Exists(RegisteredComponent):
+class Exists(NQPComponent):
     """
     Empty flag for all entities. Used to allow filters to search for a single component i.e. use a single condition.
     """
@@ -37,7 +47,7 @@ class Exists(RegisteredComponent):
         return Exists()
 
 
-class IsPlayer(RegisteredComponent):
+class IsPlayer(NQPComponent):
     """
     Whether the entity is the player.
     """
@@ -52,7 +62,7 @@ class IsPlayer(RegisteredComponent):
         return IsPlayer()
 
 
-class IsActor(RegisteredComponent):
+class IsActor(NQPComponent):
     """
     Whether the entity is an actor.
     """
@@ -67,7 +77,7 @@ class IsActor(RegisteredComponent):
         return IsActor()
 
 
-class IsGod(RegisteredComponent):
+class IsGod(NQPComponent):
     """
     Whether the entity is a god.
     """
@@ -82,7 +92,7 @@ class IsGod(RegisteredComponent):
         return IsGod()
 
 
-class IsActive(RegisteredComponent):
+class IsActive(NQPComponent):
     """
     Whether the entity is active or not. Used to limit entity processing.
     """
@@ -97,7 +107,7 @@ class IsActive(RegisteredComponent):
         return IsActive()
 
 
-class HasCombatStats(RegisteredComponent):
+class HasCombatStats(NQPComponent):
     """
     A flag to show if an entity has stats used for combat.
     """
@@ -112,7 +122,7 @@ class HasCombatStats(RegisteredComponent):
         return HasCombatStats()
 
 
-class WinCondition(RegisteredComponent):
+class WinCondition(NQPComponent):
     """
     A flag to show that an entity is a win objective
     """
@@ -130,7 +140,7 @@ class WinCondition(RegisteredComponent):
 #################### OTHERS #########################
 
 
-class Position(RegisteredComponent):
+class Position(NQPComponent):
     """
     An entity's position on the map. At initiation provide all positions the entity holds. After initiation only need
      to set the top left, or reference position as the other coordinates are held as offsets.
@@ -206,7 +216,7 @@ class Position(RegisteredComponent):
         return False
 
 
-class Aesthetic(RegisteredComponent):
+class Aesthetic(NQPComponent):
     """
     An entity's sprite.
     """
@@ -268,7 +278,7 @@ class Aesthetic(RegisteredComponent):
         return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
 
 
-class Tracked(RegisteredComponent):
+class Tracked(NQPComponent):
     """
     A component to hold info on activities of an entity
     """
@@ -284,7 +294,7 @@ class Tracked(RegisteredComponent):
         return Tracked(serialised)
 
 
-class Resources(RegisteredComponent):
+class Resources(NQPComponent):
     """
     An entity's resources. Members align to Resource constants.
     """
@@ -301,7 +311,7 @@ class Resources(RegisteredComponent):
         return Resources(*serialised)
 
 
-class Blocking(RegisteredComponent):
+class Blocking(NQPComponent):
     """
     An entity's blocking of other objects.
     """
@@ -318,7 +328,7 @@ class Blocking(RegisteredComponent):
         return Blocking(*serialised)
 
 
-class Identity(RegisteredComponent):
+class Identity(NQPComponent):
     """
     An entity's identity, such as name and description.
     """
@@ -335,7 +345,7 @@ class Identity(RegisteredComponent):
         return cls(*serialised)
 
 
-class Traits(RegisteredComponent):
+class Traits(NQPComponent):
     """
     An entity's traits. Class, archetype, skill set or otherwise defining group.
     """
@@ -351,7 +361,7 @@ class Traits(RegisteredComponent):
         return Traits(serialised)
 
 
-class Thought(RegisteredComponent):
+class Thought(NQPComponent):
     """
     An ai behaviour to control an entity.
     """
@@ -373,7 +383,7 @@ class Thought(RegisteredComponent):
         return Thought(behaviour(serialised["entity"]))
 
 
-class Knowledge(RegisteredComponent):
+class Knowledge(NQPComponent):
     """
     An entity's knowledge, including skills.
     """
@@ -444,7 +454,7 @@ class Knowledge(RegisteredComponent):
         return Knowledge(skills, skill_order, cooldowns)
 
 
-class Afflictions(RegisteredComponent):
+class Afflictions(NQPComponent):
     """
     An entity's Boons and Banes. held in .active as a list of Affliction.
     """
@@ -500,7 +510,7 @@ class Afflictions(RegisteredComponent):
             self.active.remove(affliction)
 
 
-class Aspect(RegisteredComponent):
+class Aspect(NQPComponent):
     """
     An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
     """
@@ -517,7 +527,7 @@ class Aspect(RegisteredComponent):
         return Aspect(*serialised)
 
 
-class Opinion(RegisteredComponent):
+class Opinion(NQPComponent):
     """
     An entity's views on other entities. {entity, opinion}
     """
@@ -534,7 +544,7 @@ class Opinion(RegisteredComponent):
         return Opinion(*serialised)
 
 
-class FOV(RegisteredComponent):
+class FOV(NQPComponent):
     """
     An entity's field of view. Always starts blank.
     """
@@ -556,24 +566,28 @@ class FOV(RegisteredComponent):
         return fov
 
 
-class LightSource(RegisteredComponent):
+class LightSource(NQPComponent):
     """
-    An emitter of light.
+    An emitter of light. Takes the light_id from a Light. The Light must be added to the Lightbox of the
+    Gamemap separately.
     """
 
-    def __init__(self, radius: int, colour: Optional[Tuple[int, int, int, int]] = None):
-        if not colour:
-            _colour = (230, 182, 41, 80)
-        else:
-            _colour = colour
-
+    def __init__(self, light_id: str, radius: int):
+        self.light_id: str = light_id
         self.radius: int = radius
-        self.colour: Tuple[int, int, int, int] = _colour
 
     def serialize(self):
-        data = {"radius": self.radius, "colour": self.colour}
-        return data
+        return self.light_id
 
     @classmethod
     def deserialize(cls, serialised):
         return LightSource(*serialised)
+
+    def on_delete(self):
+        """
+        Delete the associated light from the Gamemap's Lightbox
+        """
+        from scripts.engine import world
+
+        light_box = world.get_game_map().light_box
+        light_box.delete_light(self.light_id)

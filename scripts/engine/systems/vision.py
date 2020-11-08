@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 import tcod
 
 from scripts.engine import world
-from scripts.engine.component import FOV, LightSource, Position
+from scripts.engine.component import FOV, Aesthetic, LightSource, Position
 from scripts.engine.core import queries
 from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS
 
@@ -17,7 +17,7 @@ __all__ = ["process_light_map", "process_fov", "process_tile_visibility"]
 
 def process_light_map():
     """
-    Update light map using light sources of all entities
+    Update light map and light box  using light sources of all entities
     """
     # get game map details
     game_map = world.get_game_map()
@@ -32,11 +32,15 @@ def process_light_map():
     for entity, (is_active, light_source, pos,) in queries.active_and_light_source_and_position:
         light_source: LightSource
         pos: Position
+        aesthetic: Aesthetic
         radius = light_source.radius
 
-        # create fov for light source
+        # create fov for light source and add to light map
         fov = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), radius, FOV_LIGHT_WALLS, FOV_ALGORITHM)
         light_map |= fov
+
+    # assign back post updates
+    game_map.light_map = light_map
 
 
 def process_fov():

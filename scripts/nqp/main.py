@@ -10,6 +10,7 @@ from snecs.world import default_world
 
 import scripts.nqp.processors.input
 from scripts.engine import chronicle, debug, state, world
+from scripts.engine.component import NQPComponent
 from scripts.engine.core.constants import GameState
 from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.engine.ui.manager import ui
@@ -78,7 +79,13 @@ def game_loop():
         turn_holder = chronicle.get_turn_holder()
 
         # process any deletions from last frame
-        snecs.process_pending_deletions(default_world)
+        # this copies snecs.process_pending_deletions() but adds extra steps.
+        for entity in list(default_world._entities_to_delete):
+            components = dict(world.get_entitys_components(entity))
+            for component in components.values():
+                assert isinstance(component, NQPComponent)
+                component.on_delete()
+            snecs.delete_entity_immediately(entity, default_world)
 
         # have enemy take turn
         if current_state == GameState.GAMEMAP and turn_holder != world.get_player():
@@ -95,7 +102,7 @@ def game_loop():
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state
-        display.process_display_updates(time_delta)
+        display.process_display_updates(time_delta, current_state)
         debug.update()
         ui.update(time_delta)
 

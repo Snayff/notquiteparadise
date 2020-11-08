@@ -55,6 +55,7 @@ from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, ProjectileData
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
+from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
@@ -138,8 +139,14 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
     components.append(Traits(actor_data.trait_names))
     components.append(FOV())
-    components.append(LightSource(2))
     components.append(Tracked(chronicle.get_time()))
+
+    # set up light
+    radius = 2  # TODO - pull radius and colour from external data
+    colour = (255, 255, 255)
+    alpha = 200
+    light_id = create_light(spawn_pos, radius, colour, alpha)
+    components.append(LightSource(light_id, radius))
 
     # get info from traits
     traits_paths = []  # for aesthetic
@@ -225,6 +232,13 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     projectile.append(Afflictions())
     projectile.append(IsActive())
 
+    # set up light
+    radius = 1  # TODO - pull radius and colour from external data
+    colour = (68, 174, 235)
+    alpha = 240
+    light_id = create_light((x, y), radius, colour, alpha)
+    projectile.append(LightSource(light_id, radius))
+
     entity = create_entity(projectile)
 
     behaviour = action.behaviour_registry["Projectile"]
@@ -254,6 +268,22 @@ def create_combat_stats(entity: EntityID) -> CombatStats:
     """
     stats = CombatStats(entity)
     return stats
+
+
+def create_light(pos: Tuple[int, int], radius: int, colour: Tuple[int, int, int], alpha: int) -> str:
+    """
+    Create a Light and add it to the current GameMap's Lightbox. Pos is the world position - the light will handle
+    scaling to screen.
+    Returns the light_id of the Light.
+    """
+    light_img = utility.get_image("world/light_mask.png", ((radius * 2) * TILE_SIZE, (radius * 2) * TILE_SIZE))
+    light_box = get_game_map().light_box
+    light = lighting.Light([pos[0] * TILE_SIZE, pos[1] * TILE_SIZE], radius * TILE_SIZE, light_img)
+    light.set_alpha(alpha)
+    light.set_colour(colour)
+    light_id = light_box.add_light(light)
+
+    return light_id
 
 
 def create_pathfinder() -> tcod.path.Pathfinder:
@@ -1113,10 +1143,13 @@ def choose_target(entity: EntityID) -> Optional[EntityID]:
 
 
 def kill_entity(entity: EntityID):
+    """
+    Add entity to the deletion stack and removes them from the turn queue.
+    """
     # if not player
     if entity != get_player():
         # delete from world
-        delete(entity)
+        delete_entity(entity)
 
         turn_queue = chronicle.get_turn_queue()
 
@@ -1135,7 +1168,7 @@ def kill_entity(entity: EntityID):
         ui.log_message("I should have died just then.")
 
 
-def delete(entity: EntityID):
+def delete_entity(entity: EntityID):
     """
     Queues entity for removal from the world_objects. Happens at the next run of process.
     """

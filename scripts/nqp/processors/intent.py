@@ -24,8 +24,10 @@ from scripts.engine.core.constants import (
 from scripts.engine.systems import behaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
+from scripts.nqp import command
 
 __all__ = ["process_intent"]
+
 
 
 def process_intent(intent: InputIntentType, game_state: GameStateType):
@@ -48,6 +50,7 @@ def _process_stateless_intents(intent: InputIntentType):
     """
     ## Activate Debug
     if intent == InputIntent.DEBUG_TOGGLE:
+        # F1
         if debug.is_fps_visible():
             debug.set_fps_visibility(False)
         else:
@@ -61,6 +64,7 @@ def _process_stateless_intents(intent: InputIntentType):
     ## Activate data editor
     # TODO - have this trigger dev console and move skill editor to a command in the console.
     elif intent == InputIntent.DUNGEON_DEV_VIEW:
+        # key= F5
         if ui.element_is_visible(UIElement.DUNGEN_VIEWER):
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, False)
             state.set_new(state.get_previous())
@@ -80,8 +84,16 @@ def _process_stateless_intents(intent: InputIntentType):
     elif intent == InputIntent.BURST_PROFILE:
         debug.enable_profiling(120)
 
+    elif intent == InputIntent.TOGGLE_UI:
+        if ui.element_is_visible(UIElement.MESSAGE_LOG):
+            ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
+            ui.set_element_visibility(UIElement.SKILL_BAR, False)
+        else:
+            ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+            ui.set_element_visibility(UIElement.SKILL_BAR, True)
+
     elif intent == InputIntent.TEST:
-        # add whatever we want to test here
+        # F12
         breakpoint()
 
 
@@ -136,6 +148,9 @@ def _process_game_map_intents(intent: InputIntentType):
         # show
         state.set_new(GameState.MENU)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
+
+    elif intent == InputIntent.EXIT:
+        command.exit_game()
 
 
 def _process_targeting_mode_intents(intent):

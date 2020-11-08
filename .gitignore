@@ -76,3 +76,6 @@ data/saves/
 
 # local docs
 docs/_build/**
+
+# profiling
+logs/profiling/*
