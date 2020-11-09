@@ -63,7 +63,7 @@ UIElementType = NewType("UIElementType", str)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
 TraitGroupType = NewType("TraitGroupType", str)
-AfflictionTriggerType = NewType("AfflictionTriggerType", str)
+InteractionTriggerType = NewType("InteractionTriggerType", str)
 RenderLayerType = NewType("RenderLayerType", int)
 TileCategoryType = NewType("TileCategoryType", str)
 
@@ -93,6 +93,16 @@ class GameEvent(SimpleNamespace):
     EXIT_GAME = pygame.USEREVENT + 103
     WIN_CONDITION_MET = pygame.USEREVENT + 104
     START_GAME = pygame.USEREVENT + 105
+
+
+class InteractionEvent(SimpleNamespace):
+    """
+    Custom pygame events to trigger interactions.
+    """
+
+    MOVEMENT = pygame.USEREVENT + 200
+    TAKE_DAMAGE = pygame.USEREVENT + 201
+    COLLISION = pygame.USEREVENT + 202
 
 
 class RenderLayer(SimpleNamespace):
@@ -296,13 +306,14 @@ class DamageType(SimpleNamespace):
     MUNDANE = DamageTypeType("mundane")
 
 
-class AfflictionTrigger(SimpleNamespace):
+class InteractionTrigger(SimpleNamespace):
     """
     Type of trigger for the affliction
     """
 
-    MOVEMENT = AfflictionTriggerType("movement")
-    TAKE_DAMAGE = AfflictionTriggerType("take_damage")
+    MOVEMENT = InteractionTriggerType("movement")
+    TAKE_DAMAGE = InteractionTriggerType("take_damage")
+    COLLISION = InteractionTriggerType("collision")
 
 
 class AfflictionCategory(SimpleNamespace):

@@ -1,18 +1,47 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import tcod
 
 from scripts.engine import world
-from scripts.engine.component import FOV, Aesthetic, LightSource, Position
+from scripts.engine.component import FOV, IsActive, Position, Tracked
 from scripts.engine.core import queries
-from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS
+from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_ACTIVATION_DISTANCE
 
-if TYPE_CHECKING:
-    pass
+__all__ = ["process_activations", "process_light_map", "process_fov", "process_tile_visibility"]
 
-__all__ = ["process_light_map", "process_fov", "process_tile_visibility"]
+
+def process_activations():
+    """
+    Allocate active component to  appropriate NPCs. Entity with no position or with position and close to player.
+    """
+    # all entities with no position must be active
+    for entity, (_,) in queries.not_position:
+        if not world.entity_has_component(entity, IsActive):
+            world.add_component(entity, IsActive())
+
+    # check entities in range of player
+    player = world.get_player()
+    player_pos: Position = world.get_entitys_component(player, Position)
+    for entity, (pos,) in queries.position:
+        # check if they're close enough that we care
+        distance_x = abs(player_pos.x - pos.x)
+        distance_y = abs(player_pos.y - pos.y)
+        if max(distance_x, distance_y) < MAX_ACTIVATION_DISTANCE:
+            # they're close, now check they arent already active
+            if not world.entity_has_component(entity, IsActive):
+                world.add_component(entity, IsActive())
+
+                # update tracked to current time (otherwise they will be behind and act repeatedly)
+                if world.entity_has_component(entity, Tracked):
+                    tracked = world.get_entitys_component(entity, Tracked)
+                    from scripts.engine import chronicle
+
+                    tracked.time_spent = chronicle.get_time() + 1
+
+        else:
+            # not close enough, remove active
+            if world.entity_has_component(entity, IsActive):
+                world.remove_component(entity, IsActive)
 
 
 def process_light_map():

@@ -21,7 +21,6 @@ from scripts.engine.core.constants import (
     TargetingMethod,
     UIElement,
 )
-from scripts.engine.systems import behaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import command
@@ -227,7 +226,6 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
         world.judge_action(player, skill.__class__.__name__)
-        behaviour.process_interventions()
         chronicle.end_turn(player, skill.time_cost)
 
         state.save_game()

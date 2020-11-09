@@ -9,12 +9,13 @@ from typing import List
 import snecs
 from snecs import Component
 
+import scripts.engine.core.systems
 from scripts.engine import chronicle, library, state, utility, world
 from scripts.engine.component import Aesthetic, Position, WinCondition
+from scripts.engine.core import systems
 from scripts.engine.core.constants import ASSET_PATH, DEBUG_START, SAVE_PATH, GameState, RenderLayer, UIElement
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, TraitSpritePathsData
-from scripts.engine.systems import vision
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.game_map import GameMap
 
@@ -72,9 +73,9 @@ def _start_debug_game():
         aesthetic.target_draw_y = aesthetic.draw_y
 
     # entities load with a blank fov, update them now
-    vision.process_light_map()
-    vision.process_fov()
-    vision.process_tile_visibility()
+    systems.process_light_map()
+    systems.process_fov()
+    systems.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
     pos = world.get_entitys_component(player, Position)
@@ -146,9 +147,9 @@ def start_game(player_data: ActorData):
         aesthetic.target_draw_y = aesthetic.draw_y
 
     # entities load with a blank fov, update them now
-    vision.process_light_map()
-    vision.process_fov()
-    vision.process_tile_visibility()
+    systems.process_light_map()
+    systems.process_fov()
+    systems.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
     pos = world.get_entitys_component(player, Position)

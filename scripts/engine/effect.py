@@ -4,13 +4,14 @@ import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, cast
 
+import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Afflictions, Blocking, HasCombatStats, Knowledge, Position, Resources
 from scripts.engine.core.constants import (
-    AfflictionTrigger,
-    AfflictionTriggerType,
+    InteractionEvent, InteractionTrigger,
+    InteractionTriggerType,
     DamageTypeType,
     Direction,
     DirectionType,
@@ -71,7 +72,7 @@ class DamageEffect(Effect):
         self.damage_type = damage_type
         self.mod_amount = mod_amount
         self.mod_stat = mod_stat
-        self.success_triggers = [self._create_affliction_trigger(AfflictionTrigger.TAKE_DAMAGE, self.target)]
+        self.success_triggers = [self._create_affliction_trigger(InteractionTrigger.TAKE_DAMAGE, self.target)]
 
     def evaluate(self) -> List[Effect]:
         """
@@ -125,7 +126,7 @@ class MoveActorEffect(Effect):
         self.target = target
         self.direction = direction
         self.move_amount = move_amount
-        self.success_triggers = [self._create_affliction_trigger(AfflictionTrigger.MOVEMENT, self.target)]
+        self.success_triggers = [self._create_affliction_trigger(InteractionTrigger.MOVEMENT, self.target)]
 
     def evaluate(self) -> List[Effect]:
         """
@@ -155,6 +156,12 @@ class MoveActorEffect(Effect):
                 # update position
                 if _position:
                     _position.set(new_x, new_y)
+
+                    # post interaction event
+                    event = pygame.event.Event(InteractionEvent.MOVEMENT, origin=self.origin, target=self.target,
+                                               direction=self.direction, new_pos=(new_x, new_y))
+                    pygame.event.post(event)
+
                     success = True
 
                 # animate change
@@ -168,14 +175,10 @@ class MoveActorEffect(Effect):
         else:
             return self.failure_effects
 
-    @staticmethod
-    def _check_collision(entity, dir_x, dir_y):
+    def _check_collision(self, entity: EntityID, dir_x: int, dir_y: int) -> bool:
         """
-        Checks if the entity will be able to move in the provided direction
-        :param entity: Entity to test
-        :param dir_x: X component of the direction
-        :param dir_y: Y component of the direction
-        :return: A bool that represents if the entity will collide if it moves in the provided direction
+        Checks if the entity will collide with something when trying to move in the provided direction. Returns True
+        if blocked.
         """
         collides = False
 
@@ -221,6 +224,12 @@ class MoveActorEffect(Effect):
                         collides = True
                         break
 
+        if collides:
+            # post interaction event
+            event = pygame.event.Event(InteractionEvent.COLLISION, origin=self.origin, target=self.target,
+                                       direction=self.direction, current_pos=(position.x, position.y))
+            pygame.event.post(event)
+
         return collides
 
 
@@ -229,7 +238,7 @@ class TriggerAfflictionsEffect(Effect):
         self,
         origin: EntityID,
         target: EntityID,
-        trigger_type: AfflictionTriggerType,
+        trigger_type: InteractionTriggerType,
         success_effects: List[Effect],
         failure_effects: List[Effect],
     ):

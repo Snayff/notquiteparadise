@@ -9,7 +9,7 @@ from snecs.typedefs import EntityID
 from scripts.engine.core.constants import (
     AfflictionCategory,
     AfflictionCategoryType,
-    AfflictionTriggerType,
+    InteractionTriggerType,
     Direction,
     DirectionType,
     EffectType,
@@ -226,7 +226,7 @@ class TerrainData:
     blocks_movement: bool = False
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
-    permanent_afflictions: List[str] = field(default_factory=list)
+    triggers: List[InteractionTriggerType] = field(default_factory=list)
     light: Optional[LightData] = None
 
 
@@ -392,7 +392,7 @@ class AfflictionData:
     shape_size: int = 1
     target_tags: List[TargetTagType] = field(default_factory=list)
     identity_tags: List[EffectTypeType] = field(default_factory=list)
-    triggers: List[AfflictionTriggerType] = field(default_factory=list)
+    triggers: List[InteractionTriggerType] = field(default_factory=list)
 
 
 @register_dataclass_with_json

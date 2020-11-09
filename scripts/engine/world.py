@@ -240,20 +240,6 @@ def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int]) -> Ent
     # create the entity
     entity = create_entity(components)
 
-    # add permanent afflictions post creation,  since we can only add them once an entity is created
-    # get names
-    perm_afflictions_names = []
-    if terrain_data.permanent_afflictions != ["none"]:
-        for _name in terrain_data.permanent_afflictions:
-            perm_afflictions_names.append(_name)
-
-    # build each affliction
-    perm_afflictions = []
-    for name in perm_afflictions_names:
-        # create the affliction with no specific source
-        perm_afflictions.append(create_affliction(name, entity, entity, INFINITE))
-    add_component(entity, Afflictions(perm_afflictions))
-
     return entity
 
 

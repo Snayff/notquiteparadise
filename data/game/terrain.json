@@ -12,9 +12,9 @@
         "position_offsets": [
             [0, 0]
         ],
-        "permanent_afflictions": [
-            "none"
-        ],
-        "light": null
+        "light": null,
+        "triggers": [
+            "collision"
+        ]
     }
 }

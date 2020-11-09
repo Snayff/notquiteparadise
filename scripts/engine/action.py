@@ -9,7 +9,7 @@ from snecs.typedefs import EntityID
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (
     AfflictionCategoryType,
-    AfflictionTriggerType,
+    InteractionTriggerType,
     DirectionType,
     EffectTypeType,
     ResourceType,
@@ -206,7 +206,7 @@ class Affliction(Action):
 
     # to be overwritten in subclass, including being set by external data
     identity_tags: List[EffectTypeType]
-    triggers: List[AfflictionTriggerType]
+    triggers: List[InteractionTriggerType]
     category: AfflictionCategoryType
 
     def __init__(self, origin: EntityID, affected_entity: EntityID, duration: int):
