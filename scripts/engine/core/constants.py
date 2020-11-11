@@ -102,7 +102,6 @@ class InteractionEvent(SimpleNamespace):
 
     MOVEMENT = pygame.USEREVENT + 200
     TAKE_DAMAGE = pygame.USEREVENT + 201
-    COLLISION = pygame.USEREVENT + 202
 
 
 class RenderLayer(SimpleNamespace):

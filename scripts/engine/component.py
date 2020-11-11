@@ -6,13 +6,13 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
-from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType
+from scripts.engine.core.constants import EffectType, InteractionTriggerType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional, Type, Tuple
     from scripts.engine.action import Affliction, Behaviour, Skill
-    from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
+    from scripts.engine.core.definitions import EffectData, TraitSpritePathsData, TraitSpritesData
 
 
 ##########################################################
@@ -591,3 +591,27 @@ class LightSource(NQPComponent):
 
         light_box = world.get_game_map().light_box
         light_box.delete_light(self.light_id)
+
+
+class Reaction(NQPComponent):
+    """
+    Holds info about what triggers are in place and what happens as a result
+    """
+
+    def __init__(self, reactions: Dict[InteractionTriggerType, EffectData]):
+        self.reactions: Dict[InteractionTriggerType, EffectData] = reactions
+
+    def serialize(self):
+        serialised = {}
+
+        for trigger, effect in self.reactions.items():
+            serialised[trigger] = asdict(effect)
+
+        return serialised
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Reaction(*serialised)
+
+
+

@@ -114,10 +114,10 @@ class MoveActorEffect(Effect):
     def __init__(
         self,
         origin: EntityID,
-        success_effects: List[Effect],
-        failure_effects: List[Effect],
         target: EntityID,
         direction: DirectionType,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
         move_amount: int,
     ):
 
@@ -146,7 +146,7 @@ class MoveActorEffect(Effect):
         for _ in range(0, self.move_amount):
             new_x = pos.x + dir_x
             new_y = pos.y + dir_y
-            collides = MoveActorEffect._check_collision(entity, dir_x, dir_y)
+            collides = self._check_collision(entity, dir_x, dir_y)
             success = not collides
 
             if not collides:
@@ -192,23 +192,12 @@ class MoveActorEffect(Effect):
             target_tile = world.get_tile((target_x, target_y))
 
             # check a tile was returned
+            is_tile_blocking_movement = False
             if target_tile:
                 is_tile_blocking_movement = world.tile_has_tag(entity, target_tile, TargetTag.BLOCKED_MOVEMENT)
-                is_entity_on_tile = not world.tile_has_tag(entity, target_tile, TargetTag.NO_ENTITY)
-            else:
-                is_tile_blocking_movement = True
-                is_entity_on_tile = False
 
-            # check for no entity in way but tile is blocked
-            if not is_entity_on_tile and is_tile_blocking_movement and target_tile:
-                logging.debug(
-                    f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was"
-                    f" blocked by terrain. "
-                )
-                collides = True
-
-            # check if entity blocking tile
-            elif is_entity_on_tile and target_tile:
+            # check if tile is blocked
+            if is_tile_blocking_movement:
                 from scripts.engine.core import queries
 
                 for blocking_entity, (position, blocking) in queries.position_and_blocking:
@@ -221,14 +210,7 @@ class MoveActorEffect(Effect):
                             f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
                             f" by '{blockers_name}'. "
                         )
-                        collides = True
-                        break
-
-        if collides:
-            # post interaction event
-            event = pygame.event.Event(InteractionEvent.COLLISION, origin=self.origin, target=self.target,
-                                       direction=self.direction, current_pos=(position.x, position.y))
-            pygame.event.post(event)
+                collides = True
 
         return collides
 
@@ -329,9 +311,10 @@ class ApplyAfflictionEffect(Effect):
         logging.debug("Evaluating Apply Affliction Effect...")
 
         affliction_instance = world.create_affliction(self.affliction_name, self.origin, self.target, self.duration)
-        afflictions = world.get_entitys_component(self.target, Afflictions)
+
         # add the affliction to the afflictions component
-        if afflictions:
+        if world.entity_has_component(self.target, Afflictions):
+            afflictions = world.get_entitys_component(self.target, Afflictions)
             afflictions.add(affliction_instance)
             return self.success_effects
         # didn't have the component, fail

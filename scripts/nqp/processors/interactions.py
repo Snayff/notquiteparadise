@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+from typing import Type
+
 import pygame
 
-from scripts.engine import world
+from scripts.engine import utility, world
 from scripts.engine.component import Position
 from scripts.engine.core import queries
 from scripts.engine.core.constants import GameEvent, InteractionEvent
@@ -15,19 +17,41 @@ def process_event(event: pygame.event):
     Passes an interaction event to the right function.
     """
     if event.type == InteractionEvent.MOVEMENT:
-        print(f"{event.origin}, {event.target}, {event.direction}, {event.new_pos}")
-        _handle_win_condition(event)
-
-    elif event.type == InteractionEvent.COLLISION:
-        print(f"{event.origin}, {event.target}, {event.direction}, {event.current_pos}")
-
-
+        print(f"Caught MOVE: {event.origin}, {event.target}, {event.direction}, {event.new_pos}")
+        _check_for_proximity(event)
+        _process_win_condition(event)
 
 
 ############################ MOVEMENT ########################
 
+def _check_for_proximity(event: pygame.event):
+    """
+    Check for any entities with a reaction to proximity and trigger that reaction.
+    """
+    from scripts.engine.core.definitions import ApplyAfflictionEffectData
+    from scripts.engine.effect import ApplyAfflictionEffect
 
-def _handle_win_condition(event: pygame.event):
+    new_x = event.new_pos[0]
+    new_y = event.new_pos[1]
+
+    # loop all entities sharing same position that have a reaction
+    for entity, (position, reaction) in queries.position_and_reaction:
+        if position.x == new_x and position.y == new_y:
+            if "proximity" in reaction.reactions:
+                data: ApplyAfflictionEffectData = reaction.reactions["proximity"]
+                effect: Type[ApplyAfflictionEffect] = utility.get_effect_from_type(data.effect_type)
+                effect_instance = effect(origin=event.origin, target=event.target,
+                                         affliction_name=data.affliction_name, duration=data.duration,
+                                         success_effects=data.success_effects, failure_effects=data.failure_effects)
+                effect_instance.evaluate()
+                # FIXME KeyError: 'bogged down'
+
+
+
+
+
+
+def _process_win_condition(event: pygame.event):
     """
     Checking if the win condition has been met. Post event if it is.
     """

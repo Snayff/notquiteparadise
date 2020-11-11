@@ -27,7 +27,7 @@ from scripts.engine.component import (
     LightSource,
     Opinion,
     Position,
-    Resources,
+    Reaction, Resources,
     Thought,
     Tracked,
     Traits,
@@ -53,6 +53,7 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, ProjectileData, TerrainData
+from scripts.engine.effect import Effect
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects import lighting
@@ -225,11 +226,15 @@ def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int]) -> Ent
     components.append(IsActor())
     components.append(Position(*occupied_tiles))
     components.append(Identity(terrain_data.name, terrain_data.description))
-    components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
+    components.append(Blocking(terrain_data.blocks_movement, terrain_data.blocks_sight))
 
     # add aesthetic N.B. translation to screen coordinates is handled by the camera
     sprites = build_sprites_from_paths([terrain_data.sprite_paths], (TILE_SIZE, TILE_SIZE))
     components.append(Aesthetic(sprites.idle, sprites, [terrain_data.sprite_paths], RenderLayer.TERRAIN, (x, y)))
+
+    # add reactions
+    components.append(Reaction(terrain_data.reactions))
+
 
     # add light
     if terrain_data.light:
@@ -1057,14 +1062,13 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
     return False
 
 
-def apply_skill(skill_instance: Skill) -> bool:
+def apply_skill(skill: Skill) -> bool:
     """
      Resolve the skill's effects. Returns True is successful if criteria to apply skill was met, False if not.
     """
-    skill = skill_instance
     # ensure they are the right target type
     if tile_has_tags(skill.user, skill.target_tile, skill.target_tags):
-        for entity, effects in skill_instance.apply():
+        for entity, effects in skill.apply():
             if entity not in skill.ignore_entities:
                 effect_queue = list(effects)
                 while effect_queue:
@@ -1078,6 +1082,7 @@ def apply_skill(skill_instance: Skill) -> bool:
         )
 
     return False
+
 
 
 def set_skill_on_cooldown(skill_instance: Skill) -> bool:

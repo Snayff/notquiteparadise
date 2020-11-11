@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, cast
 
@@ -9,12 +10,12 @@ from snecs.typedefs import EntityID
 from scripts.engine.core.constants import (
     AfflictionCategory,
     AfflictionCategoryType,
-    InteractionTriggerType,
+    DamageType, DamageTypeType, InteractionTriggerType,
     Direction,
     DirectionType,
     EffectType,
     EffectTypeType,
-    PrimaryStatType,
+    PrimaryStat, PrimaryStatType,
     ProjectileExpiry,
     ProjectileExpiryType,
     ProjectileSpeed,
@@ -226,7 +227,7 @@ class TerrainData:
     blocks_movement: bool = False
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
-    triggers: List[InteractionTriggerType] = field(default_factory=list)
+    reactions: Dict[InteractionTriggerType, EffectData] = field(default_factory=dict)
     light: Optional[LightData] = None
 
 
@@ -395,33 +396,46 @@ class AfflictionData:
     triggers: List[InteractionTriggerType] = field(default_factory=list)
 
 
-@register_dataclass_with_json
+################### EFFECTS ###################################################
+
 @dataclass
-class EffectData:
+class EffectData(ABC):
     """
     Base data class for an effect.
     """
+    effect_type: EffectTypeType
 
-    # who am I?
-    originator: Optional[EntityID] = None  # actor
-    creators_name: Optional[str] = None  # skill, projectile, etc.'s name
-    effect_type = EffectType.MOVE
+    success_effects: List[EffectData] = field(default_factory=list)
+    failure_effects: List[EffectData] = field(default_factory=list)
 
-    # who are we targeting?
-    target_tags: List[TargetTagType] = field(default_factory=list)
 
-    # how are we targeting?
+@register_dataclass_with_json
+@dataclass()
+class DamageEffectData(EffectData):
+    """
+    The data for a damage effect. Used to hold and map data from json.
+    """
+    effect_type: EffectTypeType = EffectType.DAMAGE
+
     stat_to_target: Optional[PrimaryStatType] = None
     accuracy: int = 0
+    potency: float = 1.0
+    damage: int = 0
+    damage_type: DamageTypeType = DamageType.MUNDANE
+    mod_stat: PrimaryStatType = PrimaryStat.EXACTITUDE
+    mod_amount: float = 0.0
 
-    # what is the area of effect?
-    shape: ShapeType = Shape.TARGET
-    shape_size: int = 1
 
-    # what next?
-    success_effects: List[EffectData] = field(default_factory=list)
-    fail_effects: List[EffectData] = field(default_factory=list)
+@register_dataclass_with_json
+@dataclass()
+class ApplyAfflictionEffectData(EffectData):
+    """
+    The data for a apply affliction effect. Used to hold and map data from json.
+    """
+    effect_type: EffectTypeType = EffectType.APPLY_AFFLICTION
 
+    affliction_name: str = ""
+    duration: int = 0
 
 ################### CONFIG ###################################################
 
