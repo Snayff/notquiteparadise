@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import dataclasses
 import logging
-from typing import TYPE_CHECKING, Dict, List, Tuple, TypeVar
+from typing import TYPE_CHECKING, List, Tuple, TypeVar
 
 import pygame
 
 from scripts.engine.core.constants import (
     ASSET_PATH,
-    EffectType, EffectTypeType, ICON_SIZE,
+    ICON_SIZE,
     IMAGE_NOT_FOUND_PATH,
     TILE_SIZE,
     DirectionType,
@@ -19,7 +19,6 @@ from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesDa
 
 if TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple, Type, Union
-    from scripts.engine.effect import Effect
 
 __all__ = [
     "get_image",
@@ -34,7 +33,6 @@ __all__ = [
     "convert_tile_string_to_xy",
     "convert_direction_to_name",
     "build_sprites_from_paths",
-    "get_effect_from_type",
 ]
 
 _V = TypeVar("_V", int, float)  # to represent components where we don't know which is being used
@@ -185,18 +183,6 @@ def get_class_members(cls: Type[Any]) -> List[str]:
 
     return members
 
-
-def get_effect_from_type(effect_type: EffectTypeType) -> Type[Effect]:
-    """
-    Returns effect based on the Effect Type given
-    """
-    from scripts.engine.effect import ApplyAfflictionEffect, DamageEffect, Effect
-    mapping = {
-        EffectType.DAMAGE: DamageEffect,
-        EffectType.APPLY_AFFLICTION: ApplyAfflictionEffect
-    }
-
-    return mapping[effect_type]
 
 ################################### MATHS ########################################
 

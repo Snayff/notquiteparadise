@@ -33,7 +33,7 @@ from scripts.engine.component import (
     Traits,
 )
 from scripts.engine.core.constants import (
-    INFINITE,
+    EffectType, INFINITE,
     TILE_SIZE,
     Direction,
     DirectionType,
@@ -52,8 +52,11 @@ from scripts.engine.core.constants import (
     TravelMethodType,
 )
 from scripts.engine.core.data import store
-from scripts.engine.core.definitions import ActorData, ProjectileData, TerrainData
-from scripts.engine.effect import Effect
+from scripts.engine.core.definitions import ActorData, ApplyAfflictionEffectData, DamageEffectData, EffectData, \
+    ProjectileData, \
+    TerrainData
+from scripts.engine.effect import AddAspectEffect, AffectStatEffect, ApplyAfflictionEffect, DamageEffect, Effect, \
+    KillEffect, MoveActorEffect, RemoveAspectEffect
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects import lighting
@@ -235,7 +238,6 @@ def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int]) -> Ent
     # add reactions
     components.append(Reaction(terrain_data.reactions))
 
-
     # add light
     if terrain_data.light:
         _light = terrain_data.light
@@ -296,8 +298,7 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
     """
     Creates an instance of an Affliction provided the name
     """
-    affliction_data = library.AFFLICTIONS[name]
-    affliction = action.affliction_registry[affliction_data.name](creator, target, duration)
+    affliction = action.affliction_registry[name](creator, target, duration)
     return affliction
 
 
@@ -339,6 +340,60 @@ def create_pathfinder() -> tcod.path.Pathfinder:
     pathfinder = tcod.path.Pathfinder(graph)
 
     return pathfinder
+
+
+def create_effect(origin: EntityID, target: EntityID, data: EffectData) -> Effect:
+    """
+    Create an effect from effect data.
+    """
+    effect_type = data.effect_type
+
+    if effect_type == EffectType.APPLY_AFFLICTION:
+        return _create_apply_affliction_effect(origin, target, data)
+    elif effect_type == EffectType.DAMAGE:
+        return _create_damage_effect(origin, target, data)
+    elif effect_type == EffectType.MOVE:
+        return _create_move_actor_effect(origin, target, data)
+    elif effect_type == EffectType.AFFECT_STAT:
+        return _create_affect_stat_effect(origin, target, data)
+    elif effect_type == EffectType.ADD_ASPECT:
+        return _create_add_aspect_effect(origin, target, data)
+    elif effect_type == EffectType.REMOVE_ASPECT:
+        return _create_remove_aspect_effect(origin, target, data)
+    elif effect_type == EffectType.KILL:
+        return _create_kill_effect(origin, target, data)
+
+
+def _create_apply_affliction_effect(origin: EntityID, target: EntityID,
+        data: ApplyAfflictionEffectData) -> ApplyAfflictionEffect:
+    effect = ApplyAfflictionEffect(origin=origin, target=target, affliction_name=data.affliction_name,
+                                   duration=data.duration, success_effects=data.success_effects,
+                                   failure_effects=data.failure_effects)
+    return effect
+
+
+def _create_damage_effect(origin: EntityID, target: EntityID, data: DamageEffectData) -> DamageEffect:
+    pass
+
+
+def _create_move_actor_effect(origin: EntityID, target: EntityID, data: EffectData) -> MoveActorEffect:
+    pass
+
+
+def _create_affect_stat_effect(origin: EntityID, target: EntityID, data: EffectData) -> AffectStatEffect:
+    pass
+
+
+def _create_add_aspect_effect(origin: EntityID, target: EntityID, data: EffectData) -> AddAspectEffect:
+    pass
+
+
+def _create_remove_aspect_effect(origin: EntityID, target: EntityID, data: EffectData) -> RemoveAspectEffect:
+    pass
+
+
+def _create_kill_effect(origin: EntityID, target: EntityID, data: EffectData) -> KillEffect:
+    pass
 
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
@@ -466,7 +521,7 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
 
 
 def get_reflected_direction(
-    active_entity: EntityID, current_pos: Tuple[int, int], target_direction: Tuple[int, int]
+        active_entity: EntityID, current_pos: Tuple[int, int], target_direction: Tuple[int, int]
 ) -> DirectionType:
     """
     Use surrounding walls to understand how the object should be reflected.
@@ -534,11 +589,11 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
 
 
 def _get_furthest_free_position(
-    active_entity: EntityID,
-    start_pos: Tuple[int, int],
-    target_direction: Tuple[int, int],
-    max_distance: int,
-    travel_type: TravelMethodType,
+        active_entity: EntityID,
+        start_pos: Tuple[int, int],
+        target_direction: Tuple[int, int],
+        max_distance: int,
+        travel_type: TravelMethodType,
 ) -> Tuple[int, int]:
     """
     Checks each position in a line and returns the last position that doesnt block movement. If no position in
@@ -716,7 +771,8 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
 
 
 def get_affected_entities(
-    target_pos: Tuple[int, int], shape: ShapeType, shape_size: int, shape_direction: Optional[Tuple[int, int]] = None
+        target_pos: Tuple[int, int], shape: ShapeType, shape_size: int,
+        shape_direction: Optional[Tuple[int, int]] = None
 ):
     """
     Return a list of entities that are within the shape given, using target position as a centre point. Entity must
@@ -759,7 +815,7 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
 
 
 def get_cast_positions(
-    entity: EntityID, target_pos: Position, skills: List[Type[Skill]]
+        entity: EntityID, target_pos: Position, skills: List[Type[Skill]]
 ) -> Dict[Type[Skill], List[Tuple[int, int]]]:
     """
     Check through list of skills to find unblocked cast positions to target
@@ -912,7 +968,7 @@ def _tile_has_other_entities(tile: Tile, active_entity: EntityID) -> bool:
     entities_on_tile = get_entities_on_tile(tile)
     active_entity_is_on_tile = active_entity in entities_on_tile
     return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or (
-        len(entities_on_tile) > 1 and active_entity_is_on_tile
+            len(entities_on_tile) > 1 and active_entity_is_on_tile
     )
 
 
@@ -1082,7 +1138,6 @@ def apply_skill(skill: Skill) -> bool:
         )
 
     return False
-
 
 
 def set_skill_on_cooldown(skill_instance: Skill) -> bool:

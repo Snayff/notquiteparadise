@@ -229,6 +229,7 @@ class Affliction(Action):
         from scripts.engine import library
 
         cls.data = library.AFFLICTIONS[cls.__name__]
+        cls.name = cls.__name__
         cls.f_name = cls.data.name
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path

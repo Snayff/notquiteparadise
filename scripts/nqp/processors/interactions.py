@@ -11,6 +11,8 @@ from scripts.engine.core.constants import GameEvent, InteractionEvent
 
 __all__ = ["process_event"]
 
+from scripts.engine.core.definitions import EffectData
+
 
 def process_event(event: pygame.event):
     """
@@ -28,8 +30,6 @@ def _check_for_proximity(event: pygame.event):
     """
     Check for any entities with a reaction to proximity and trigger that reaction.
     """
-    from scripts.engine.core.definitions import ApplyAfflictionEffectData
-    from scripts.engine.effect import ApplyAfflictionEffect
 
     new_x = event.new_pos[0]
     new_y = event.new_pos[1]
@@ -38,16 +38,9 @@ def _check_for_proximity(event: pygame.event):
     for entity, (position, reaction) in queries.position_and_reaction:
         if position.x == new_x and position.y == new_y:
             if "proximity" in reaction.reactions:
-                data: ApplyAfflictionEffectData = reaction.reactions["proximity"]
-                effect: Type[ApplyAfflictionEffect] = utility.get_effect_from_type(data.effect_type)
-                effect_instance = effect(origin=event.origin, target=event.target,
-                                         affliction_name=data.affliction_name, duration=data.duration,
-                                         success_effects=data.success_effects, failure_effects=data.failure_effects)
-                effect_instance.evaluate()
-                # FIXME KeyError: 'bogged down'
-
-
-
+                data = reaction.reactions["proximity"]
+                effect = world.create_effect(event.origin, event.target, data)
+                effect.evaluate()
 
 
 

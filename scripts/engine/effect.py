@@ -316,7 +316,9 @@ class ApplyAfflictionEffect(Effect):
         if world.entity_has_component(self.target, Afflictions):
             afflictions = world.get_entitys_component(self.target, Afflictions)
             afflictions.add(affliction_instance)
+            world.apply_affliction(affliction_instance)
             return self.success_effects
+
         # didn't have the component, fail
         return self.failure_effects
 

@@ -273,7 +273,6 @@ class EffectType(SimpleNamespace):
     AFFECT_STAT = EffectTypeType("affect_stat")
     ADD_ASPECT = EffectTypeType("add_aspect")
     REMOVE_ASPECT = EffectTypeType("remove_aspect")
-    TRIGGER_SKILL = EffectTypeType("trigger_skill")
     KILL = EffectTypeType("kill")
 
 
