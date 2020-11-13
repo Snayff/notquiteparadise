@@ -242,6 +242,7 @@ class Affliction(Action):
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
+        Apply the affliction to the affected entity.
         An iterator over pairs of (affected entity, [effects]). Use affected entity position.  Applies to each
         entity only once.
         """
@@ -259,6 +260,12 @@ class Affliction(Action):
                         entity_names.append(world.get_name(entity))
 
         logging.debug(f"'{world.get_name(self.origin)}' applied '{self.__class__.__name__}' to {entity_names}.")
+
+    def trigger(self):
+        """
+        Trigger the affliction on the affected entity
+        """
+        yield self.affected_entity, self.build_effects(self.affected_entity)
 
 
 class Behaviour(ABC):

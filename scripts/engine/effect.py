@@ -126,7 +126,7 @@ class MoveActorEffect(Effect):
         self.target = target
         self.direction = direction
         self.move_amount = move_amount
-        self.success_triggers = [self._create_affliction_trigger(InteractionTrigger.MOVEMENT, self.target)]
+        self.success_triggers = []
 
     def evaluate(self) -> List[Effect]:
         """
@@ -242,7 +242,8 @@ class TriggerAfflictionsEffect(Effect):
             # iterate over each affliction and trigger it if necessary
             for affliction in afflictions.active:
                 if self.trigger_type in affliction.triggers:
-                    success = world.apply_affliction(affliction)
+                    world.trigger_affliction(affliction)
+                    success = True
 
         if success:
             return self.success_effects

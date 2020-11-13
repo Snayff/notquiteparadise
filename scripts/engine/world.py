@@ -1140,26 +1140,25 @@ def apply_skill(skill: Skill) -> bool:
     return False
 
 
-def set_skill_on_cooldown(skill_instance: Skill) -> bool:
+def set_skill_on_cooldown(skill: Skill) -> bool:
     """
     Sets a skill on cooldown
     """
-    user = skill_instance.user
-    name = skill_instance.__class__.__name__
+    user = skill.user
+    name = skill.__class__.__name__
     knowledge = get_entitys_component(user, Knowledge)
     if knowledge:
-        knowledge.set_skill_cooldown(name, skill_instance.base_cooldown)
+        knowledge.set_skill_cooldown(name, skill.base_cooldown)
         return True
     return False
 
 
-def apply_affliction(affliction_instance: Affliction) -> bool:
+def apply_affliction(affliction: Affliction) -> bool:
     """
     Apply the affliction's effects. Returns True is successful if criteria to trigger the affliction was met,
     False if not.
     """
-    affliction = affliction_instance
-    target = affliction_instance.affected_entity
+    target = affliction.affected_entity
     position = get_entitys_component(target, Position)
     if position:
         target_tile = get_tile((position.x, position.y))
@@ -1179,6 +1178,17 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
             )
 
     return False
+
+
+def trigger_affliction(affliction: Affliction):
+    """
+    Trigger the affliction on the affected entity.
+    """
+    for entity, effects in affliction.trigger():
+        effect_queue = list(effects)
+        while effect_queue:
+            effect = effect_queue.pop()
+            effect_queue.extend(effect.evaluate())
 
 
 def take_turn(entity: EntityID) -> bool:

@@ -3,11 +3,12 @@ from __future__ import annotations
 from typing import Type
 
 import pygame
+from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import Position
+from scripts.engine.component import Afflictions, Position
 from scripts.engine.core import queries
-from scripts.engine.core.constants import GameEvent, InteractionEvent
+from scripts.engine.core.constants import GameEvent, InteractionEvent, InteractionTrigger, InteractionTriggerType
 
 __all__ = ["process_event"]
 
@@ -18,17 +19,17 @@ def process_event(event: pygame.event):
     """
     if event.type == InteractionEvent.MOVEMENT:
         # print(f"Caught MOVE: {event.origin}, {event.target}, {event.direction}, {event.new_pos}")
-        _check_for_proximity(event)
+        _handle_proximity(event)
+        _handle_affliction(event.target, InteractionTrigger.MOVEMENT)
         _process_win_condition(event)
 
 
 ############################ MOVEMENT ########################
 
-def _check_for_proximity(event: pygame.event):
+def _handle_proximity(event: pygame.event):
     """
     Check for any entities with a reaction to proximity and trigger that reaction.
     """
-
     new_x = event.new_pos[0]
     new_y = event.new_pos[1]
 
@@ -39,8 +40,6 @@ def _check_for_proximity(event: pygame.event):
                 data = reaction.reactions["proximity"]
                 effect = world.create_effect(event.origin, event.target, data)
                 effect.evaluate()
-                # FIXME - wrong tags when trying to apply affect - other_entity
-
 
 
 def _process_win_condition(event: pygame.event):
@@ -60,6 +59,19 @@ def _process_win_condition(event: pygame.event):
             event = pygame.event.Event(GameEvent.WIN_CONDITION_MET)
             pygame.event.post(event)
             break
+
+
+############################ GENERIC ########################
+
+def _handle_affliction(entity: EntityID, interaction_trigger: InteractionTriggerType):
+    """
+    Check for any afflictions triggered by the interaction and trigger them.
+    """
+    if world.entity_has_component(entity, Afflictions):
+        afflictions = world.get_entitys_component(entity, Afflictions)
+        for affliction in afflictions.active:
+            if interaction_trigger in affliction.triggers:
+                world.trigger_affliction(affliction)
 
 
 def _process_interventions(event: pygame.event):
