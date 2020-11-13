@@ -43,9 +43,6 @@ class Effect(ABC):
         """
         pass
 
-    def _create_affliction_trigger(self, trigger_type, target):
-        return TriggerAfflictionsEffect(self.origin, target, trigger_type, [], [])
-
 
 class DamageEffect(Effect):
     def __init__(
@@ -72,7 +69,6 @@ class DamageEffect(Effect):
         self.damage_type = damage_type
         self.mod_amount = mod_amount
         self.mod_stat = mod_stat
-        self.success_triggers = [self._create_affliction_trigger(InteractionTrigger.TAKE_DAMAGE, self.target)]
 
     def evaluate(self) -> List[Effect]:
         """
@@ -83,7 +79,7 @@ class DamageEffect(Effect):
             self.target, HasCombatStats
         ):
             logging.info(f"Either caster or target doesnt have combat stats so damage cannot be applied.")
-            return self.failure_effects  # exit
+            return self.failure_effects
 
         defenders_stats = world.create_combat_stats(self.target)
         attackers_stats = world.create_combat_stats(self.origin)
@@ -101,11 +97,18 @@ class DamageEffect(Effect):
         # apply the damage
         if world.apply_damage(self.target, damage):
             defenders_resources = world.get_entitys_component(self.target, Resources)
-            if defenders_resources:
-                if damage >= defenders_resources.health:
-                    world.kill_entity(self.target)
 
-            return self.success_effects + self.success_triggers
+            # post interaction event
+            event = pygame.event.Event(InteractionEvent.DAMAGE, origin=self.origin, target=self.target,
+                                       amount=damage, damage_type=self.damage_type,
+                                       remaining_hp=defenders_resources.health)
+            pygame.event.post(event)
+
+            # check if target is dead
+            if damage >= defenders_resources.health:
+                world.kill_entity(self.target)
+
+            return self.success_effects
         else:
             return self.failure_effects
 
@@ -115,9 +118,9 @@ class MoveActorEffect(Effect):
         self,
         origin: EntityID,
         target: EntityID,
-        direction: DirectionType,
         success_effects: List[Effect],
         failure_effects: List[Effect],
+        direction: DirectionType,
         move_amount: int,
     ):
 
@@ -126,7 +129,6 @@ class MoveActorEffect(Effect):
         self.target = target
         self.direction = direction
         self.move_amount = move_amount
-        self.success_triggers = []
 
     def evaluate(self) -> List[Effect]:
         """
@@ -158,7 +160,7 @@ class MoveActorEffect(Effect):
                     _position.set(new_x, new_y)
 
                     # post interaction event
-                    event = pygame.event.Event(InteractionEvent.MOVEMENT, origin=self.origin, target=self.target,
+                    event = pygame.event.Event(InteractionEvent.MOVE, origin=self.origin, target=self.target,
                                                direction=self.direction, new_pos=(new_x, new_y))
                     pygame.event.post(event)
 
@@ -171,11 +173,12 @@ class MoveActorEffect(Effect):
                     aesthetic.current_sprite = aesthetic.sprites.move
 
         if success:
-            return self.success_effects + self.success_triggers
+            return self.success_effects
         else:
             return self.failure_effects
 
-    def _check_collision(self, entity: EntityID, dir_x: int, dir_y: int) -> bool:
+    @staticmethod
+    def _check_collision(entity: EntityID, dir_x: int, dir_y: int) -> bool:
         """
         Checks if the entity will collide with something when trying to move in the provided direction. Returns True
         if blocked.
@@ -215,49 +218,14 @@ class MoveActorEffect(Effect):
         return collides
 
 
-class TriggerAfflictionsEffect(Effect):
-    def __init__(
-        self,
-        origin: EntityID,
-        target: EntityID,
-        trigger_type: InteractionTriggerType,
-        success_effects: List[Effect],
-        failure_effects: List[Effect],
-    ):
-
-        super().__init__(origin, success_effects, failure_effects)
-
-        self.trigger_type = trigger_type
-        self.target = target
-
-    def evaluate(self) -> List[Effect]:
-        """
-        Trigger all the afflictions on the self.target entity that match the trigger type. Fail if nothing matches
-        """
-        logging.debug(f"Evaluating Trigger Affliction Effect of type '{self.trigger_type}'...")
-        afflictions = world.get_entitys_component(self.target, Afflictions)
-        success = False
-
-        if afflictions:
-            # iterate over each affliction and trigger it if necessary
-            for affliction in afflictions.active:
-                if self.trigger_type in affliction.triggers:
-                    world.trigger_affliction(affliction)
-                    success = True
-
-        if success:
-            return self.success_effects
-        return self.failure_effects
-
-
 class AffectStatEffect(Effect):
     def __init__(
         self,
         origin: EntityID,
+        target: EntityID,
         success_effects: List[Effect],
         failure_effects: List[Effect],
         cause_name: str,
-        target: EntityID,
         stat_to_target: PrimaryStatType,
         affect_amount: int,
     ):
@@ -281,6 +249,12 @@ class AffectStatEffect(Effect):
             # if not already applied
             if self.cause_name not in afflictions.stat_modifiers:
                 afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
+
+                # post interaction event
+                event = pygame.event.Event(InteractionEvent.AFFECT_STAT, origin=self.origin, target=self.target,
+                                           stat=self.stat_to_target, amount=self.affect_amount)
+                pygame.event.post(event)
+
                 success = True
 
         if success:
@@ -294,10 +268,10 @@ class ApplyAfflictionEffect(Effect):
         self,
         origin: EntityID,
         target: EntityID,
-        affliction_name: str,
-        duration: int,
         success_effects: List[Effect],
         failure_effects: List[Effect],
+        affliction_name: str,
+        duration: int,
     ):
         super().__init__(origin, success_effects, failure_effects)
 
@@ -318,27 +292,33 @@ class ApplyAfflictionEffect(Effect):
             afflictions = world.get_entitys_component(self.target, Afflictions)
             afflictions.add(affliction_instance)
             world.apply_affliction(affliction_instance)
+
+            # post interaction event
+            event = pygame.event.Event(InteractionEvent.AFFLICTION, origin=self.origin, target=self.target,
+                                       name=self.affliction_name)
+            pygame.event.post(event)
+
             return self.success_effects
 
         # didn't have the component, fail
         return self.failure_effects
 
 
-class ReduceSkillCooldownEffect(Effect):
+class AffectCooldownEffect(Effect):
     def __init__(
         self,
         origin: EntityID,
         target: EntityID,
-        skill_name: str,
-        amount: int,
         success_effects: List[Effect],
         failure_effects: List[Effect],
+        skill_name: str,
+        affect_amount: int,
     ):
         super().__init__(origin, success_effects, failure_effects)
 
         self.target = target
         self.skill_name = skill_name
-        self.amount = amount
+        self.affect_amount = affect_amount
 
     def evaluate(self) -> List[Effect]:
         """
@@ -350,7 +330,13 @@ class ReduceSkillCooldownEffect(Effect):
 
         if knowledge:
             current_cooldown = knowledge.cooldowns[self.skill_name]
-            knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.amount)
+            knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.affect_amount)
+
+            # post interaction event
+            event = pygame.event.Event(InteractionEvent.AFFECT_COOLDOWN, origin=self.origin, target=self.target,
+                                       amount=self.affect_amount)
+            pygame.event.post(event)
+
             logging.debug(
                 f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to "
                 f"{knowledge.cooldowns[self.skill_name]}"
@@ -358,51 +344,3 @@ class ReduceSkillCooldownEffect(Effect):
             return self.success_effects
 
         return self.failure_effects
-
-
-class AddAspectEffect(Effect):
-    def __init__(
-        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
-    ):
-        super().__init__(origin, success_effects, failure_effects)
-
-    def evaluate(self) -> List[Effect]:
-        """
-        TBC - not implemented
-        """
-        logging.debug("Evaluating Add Aspect Effect...")
-        logging.warning("-> effect not implemented.")
-
-        return []
-
-
-class RemoveAspectEffect(Effect):
-    def __init__(
-        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
-    ):
-        super().__init__(origin, success_effects, failure_effects)
-
-    def evaluate(self) -> List[Effect]:
-        """
-        TBC - not implemented
-        """
-        logging.debug("Evaluating Remove Aspect Effect...")
-        logging.warning("-> effect not implemented.")
-
-        return []
-
-
-class KillEffect(Effect):
-    def __init__(
-        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
-    ):
-        super().__init__(origin, success_effects, failure_effects)
-
-    def evaluate(self) -> List[Effect]:
-        """
-        TBC - not implemented
-        """
-        logging.debug("Evaluating Kill Effect...")
-        logging.warning("-> effect not implemented.")
-
-        return []

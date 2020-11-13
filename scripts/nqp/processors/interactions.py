@@ -17,11 +17,36 @@ def process_event(event: pygame.event):
     """
     Passes an interaction event to the right function.
     """
-    if event.type == InteractionEvent.MOVEMENT:
+    if event.type == InteractionEvent.MOVE:
         # print(f"Caught MOVE: {event.origin}, {event.target}, {event.direction}, {event.new_pos}")
         _handle_proximity(event)
-        _handle_affliction(event.target, InteractionTrigger.MOVEMENT)
+        _handle_affliction(event.target, InteractionTrigger.MOVE)
         _process_win_condition(event)
+
+    elif event.type == InteractionEvent.DAMAGE:
+        # print(f"Caught DAMAGE: {event.origin}, {event.target}, {event.amount}, {event.damage_type},
+        # {event.remaining_hp}")
+        _handle_affliction(event.origin, InteractionTrigger.DEAL_DAMAGE)
+        _handle_affliction(event.target, InteractionTrigger.TAKE_DAMAGE)
+
+        if event.remaining_hp <= 0:
+            _handle_affliction(event.origin, InteractionTrigger.KILL)
+            _handle_affliction(event.target, InteractionTrigger.DIE)
+
+    elif event.type == InteractionEvent.AFFECT_STAT:
+        # print(f"Caught AFFECT_STAT: {event.origin}, {event.target}, {event.stat}, {event.amount}")
+        _handle_affliction(event.origin, InteractionTrigger.CAUSED_AFFECT_STAT)
+        _handle_affliction(event.target, InteractionTrigger.AFFECTED_STAT)
+
+    elif event.type == InteractionEvent.AFFECT_COOLDOWN:
+        # print(f"Caught AFFECT_COOLDOWN: {event.origin}, {event.target}, {event.amount}")
+        _handle_affliction(event.origin, InteractionTrigger.CAUSED_AFFECT_COOLDOWN)
+        _handle_affliction(event.target, InteractionTrigger.AFFECTED_COOLDOWN)
+
+    elif event.type == InteractionEvent.AFFLICTION:
+        # print(f"Caught AFFLICTION: {event.origin}, {event.target}, {event.name}")
+        _handle_affliction(event.origin, InteractionTrigger.CAUSED_AFFLICTION)
+        _handle_affliction(event.target, InteractionTrigger.AFFLICTED)
 
 
 ############################ MOVEMENT ########################

@@ -16,7 +16,7 @@
         "reactions": {
             "proximity":  {
                 "__dataclass__": "ApplyAfflictionEffectData",
-                "affliction_name": "Flaming",
+                "affliction_name": "BoggedDown",
                 "duration": 3
             }
         }

@@ -100,8 +100,11 @@ class InteractionEvent(SimpleNamespace):
     Custom pygame events to trigger interactions.
     """
 
-    MOVEMENT = pygame.USEREVENT + 200
-    TAKE_DAMAGE = pygame.USEREVENT + 201
+    MOVE = pygame.USEREVENT + 200
+    DAMAGE = pygame.USEREVENT + 201
+    AFFECT_STAT = pygame.USEREVENT + 202
+    AFFECT_COOLDOWN = pygame.USEREVENT + 203
+    AFFLICTION = pygame.USEREVENT + 204
 
 
 class RenderLayer(SimpleNamespace):
@@ -271,9 +274,7 @@ class EffectType(SimpleNamespace):
     DAMAGE = EffectTypeType("damage")
     MOVE = EffectTypeType("move")
     AFFECT_STAT = EffectTypeType("affect_stat")
-    ADD_ASPECT = EffectTypeType("add_aspect")
-    REMOVE_ASPECT = EffectTypeType("remove_aspect")
-    KILL = EffectTypeType("kill")
+    AFFECT_COOLDOWN = EffectTypeType("affect_cooldown")
 
 
 class TargetTag(SimpleNamespace):
@@ -309,9 +310,18 @@ class InteractionTrigger(SimpleNamespace):
     Type of trigger for the affliction
     """
 
-    MOVEMENT = InteractionTriggerType("movement")
+    MOVE = InteractionTriggerType("movement")
     TAKE_DAMAGE = InteractionTriggerType("take_damage")
+    DEAL_DAMAGE = InteractionTriggerType("deal_damage")
+    KILL = InteractionTriggerType("kill")
+    DIE = InteractionTriggerType("die")
     COLLISION = InteractionTriggerType("collision")
+    AFFECTED_STAT = InteractionTriggerType("affected_stat")
+    CAUSED_AFFECT_STAT = InteractionTriggerType("caused_affect_stat")
+    AFFECTED_COOLDOWN = InteractionTriggerType("affected_cooldown")
+    CAUSED_AFFECT_COOLDOWN = InteractionTriggerType("caused_affect_cooldown")
+    CAUSED_AFFLICTION = InteractionTriggerType("caused_affliction")
+    AFFLICTED = InteractionTriggerType("afflicted")
 
 
 class AfflictionCategory(SimpleNamespace):

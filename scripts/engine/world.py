@@ -52,11 +52,13 @@ from scripts.engine.core.constants import (
     TravelMethodType,
 )
 from scripts.engine.core.data import store
-from scripts.engine.core.definitions import ActorData, ApplyAfflictionEffectData, DamageEffectData, EffectData, \
-    ProjectileData, \
+from scripts.engine.core.definitions import ActorData, AffectCooldownEffectData, AffectStatEffectData, \
+    ApplyAfflictionEffectData, \
+    DamageEffectData, EffectData, \
+    MoveActorEffectData, ProjectileData, \
     TerrainData
-from scripts.engine.effect import AddAspectEffect, AffectStatEffect, ApplyAfflictionEffect, DamageEffect, Effect, \
-    KillEffect, MoveActorEffect, RemoveAspectEffect
+from scripts.engine.effect import AffectCooldownEffect, AffectStatEffect, ApplyAfflictionEffect, DamageEffect, Effect, \
+    MoveActorEffect
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects import lighting
@@ -356,45 +358,80 @@ def create_effect(origin: EntityID, target: EntityID, data: EffectData) -> Effec
         return _create_move_actor_effect(origin, target, data)
     elif effect_type == EffectType.AFFECT_STAT:
         return _create_affect_stat_effect(origin, target, data)
-    elif effect_type == EffectType.ADD_ASPECT:
-        return _create_add_aspect_effect(origin, target, data)
-    elif effect_type == EffectType.REMOVE_ASPECT:
-        return _create_remove_aspect_effect(origin, target, data)
-    elif effect_type == EffectType.KILL:
-        return _create_kill_effect(origin, target, data)
+    elif effect_type == EffectType.AFFECT_COOLDOWN:
+        return _create_affect_cooldown_effect(origin, target, data)
 
 
 def _create_apply_affliction_effect(origin: EntityID, target: EntityID,
         data: ApplyAfflictionEffectData) -> ApplyAfflictionEffect:
-    effect = ApplyAfflictionEffect(origin=origin, target=target, affliction_name=data.affliction_name,
-                                   duration=data.duration, success_effects=data.success_effects,
-                                   failure_effects=data.failure_effects)
+    effect = ApplyAfflictionEffect(
+        origin=origin,
+        target=target,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        affliction_name=data.affliction_name,
+        duration=data.duration,
+    )
     return effect
 
 
 def _create_damage_effect(origin: EntityID, target: EntityID, data: DamageEffectData) -> DamageEffect:
-    pass
+    effect = DamageEffect(
+        origin=origin,
+        target=target,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        stat_to_target=data.stat_to_target,
+        accuracy=data.accuracy,
+        damage=data.damage,
+        damage_type=data.damage_type,
+        mod_stat=data.mod_stat,
+        mod_amount=data.mod_amount,
+        potency=data.potency
+    )
+
+    return effect
 
 
-def _create_move_actor_effect(origin: EntityID, target: EntityID, data: EffectData) -> MoveActorEffect:
-    pass
+def _create_move_actor_effect(origin: EntityID, target: EntityID, data: MoveActorEffectData) -> MoveActorEffect:
+    effect = MoveActorEffect(
+        origin=origin,
+        target=target,
+        direction=data.direction,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        move_amount=data.move_amount
+    )
+
+    return effect
 
 
-def _create_affect_stat_effect(origin: EntityID, target: EntityID, data: EffectData) -> AffectStatEffect:
-    pass
+def _create_affect_stat_effect(origin: EntityID, target: EntityID, data: AffectStatEffectData) -> AffectStatEffect:
+    effect = AffectStatEffect(
+        origin=origin,
+        target=target,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        cause_name=data.cause_name,
+        stat_to_target=data.stat_to_target,
+        affect_amount=data.affect_amount,
+    )
+
+    return effect
 
 
-def _create_add_aspect_effect(origin: EntityID, target: EntityID, data: EffectData) -> AddAspectEffect:
-    pass
+def _create_affect_cooldown_effect(origin: EntityID, target: EntityID,
+        data: AffectCooldownEffectData) -> AffectCooldownEffect:
+    effect = AffectCooldownEffect(
+        origin=origin,
+        target=target,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        skill_name=data.skill_name,
+        affect_amount=data.affect_amount,
+    )
 
-
-def _create_remove_aspect_effect(origin: EntityID, target: EntityID, data: EffectData) -> RemoveAspectEffect:
-    pass
-
-
-def _create_kill_effect(origin: EntityID, target: EntityID, data: EffectData) -> KillEffect:
-    pass
-
+    return effect
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 

@@ -4,9 +4,6 @@ from abc import ABC
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, cast
 
-import pygame
-from snecs.typedefs import EntityID
-
 from scripts.engine.core.constants import (
     AfflictionCategory,
     AfflictionCategoryType,
@@ -41,6 +38,9 @@ from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
     from scripts.engine.action import Skill
+    from scripts.engine.effect import Effect
+    import pygame
+    from snecs.typedefs import EntityID
 
 #################################################################
 # This module is for specifying all defined data sets.
@@ -187,7 +187,7 @@ class ProjectileData:
     """
 
     # what created it?
-    creator: EntityID = cast(EntityID, 0)  # this will be overwritten or will break, but need defaults to allow passing
+    creator: EntityID = 0  # this will be overwritten or will break, but need defaults to allow passing
     skill_name: str = "none"
     skill_instance: Optional[Skill] = None
     name: str = "none"
@@ -405,8 +405,9 @@ class EffectData(ABC):
     """
     effect_type: EffectTypeType
 
-    success_effects: List[EffectData] = field(default_factory=list)
-    failure_effects: List[EffectData] = field(default_factory=list)
+    # not sure but these might come in as effect data which will crash
+    success_effects: List[Effect] = field(default_factory=list)
+    failure_effects: List[Effect] = field(default_factory=list)
 
 
 @register_dataclass_with_json
@@ -428,6 +429,18 @@ class DamageEffectData(EffectData):
 
 @register_dataclass_with_json
 @dataclass()
+class MoveActorEffectData(EffectData):
+    """
+    The data for a apply affliction effect. Used to hold and map data from json.
+    """
+    effect_type: EffectTypeType = EffectType.MOVE
+
+    direction: DirectionType = Direction.CENTRE,
+    move_amount: int = 0,
+
+
+@register_dataclass_with_json
+@dataclass()
 class ApplyAfflictionEffectData(EffectData):
     """
     The data for a apply affliction effect. Used to hold and map data from json.
@@ -436,6 +449,31 @@ class ApplyAfflictionEffectData(EffectData):
 
     affliction_name: str = ""
     duration: int = 0
+
+
+@register_dataclass_with_json
+@dataclass()
+class AffectStatEffectData(EffectData):
+    """
+    The data for an affect stat effect. Used to hold and map data from json.
+    """
+    effect_type: EffectTypeType = EffectType.AFFECT_STAT
+
+    cause_name: str = "",
+    stat_to_target: PrimaryStatType = PrimaryStat.EXACTITUDE,
+    affect_amount: int = 0,
+
+
+@register_dataclass_with_json
+@dataclass()
+class AffectCooldownEffectData(EffectData):
+    """
+    The data for a apply affliction effect. Used to hold and map data from json.
+    """
+    effect_type: EffectTypeType = EffectType.AFFECT_COOLDOWN
+
+    skill_name: str = "",
+    affect_amount: int = 0,
 
 ################### CONFIG ###################################################
 

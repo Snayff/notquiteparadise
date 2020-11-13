@@ -15,10 +15,10 @@ from scripts.engine.core.constants import (
     Shape,
     ShapeType,
 )
-from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 if TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple, Type, Union
+    from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 __all__ = [
     "get_image",
@@ -164,6 +164,7 @@ def build_sprites_from_paths(
         flattened_sprites[name] = flatten_images(surface_list)
 
     # convert to dataclass
+    from scripts.engine.core.definitions import TraitSpritesData
     converted = TraitSpritesData(**flattened_sprites)
     return converted
 
