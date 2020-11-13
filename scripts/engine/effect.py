@@ -391,22 +391,6 @@ class RemoveAspectEffect(Effect):
         return []
 
 
-class TriggerSkillEffect(Effect):
-    def __init__(
-        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
-    ):
-        super().__init__(origin, success_effects, failure_effects)
-
-    def evaluate(self) -> List[Effect]:
-        """
-        TBC - not implemented
-        """
-        logging.debug("Evaluating Trigger Skill Effect...")
-        logging.warning("-> effect not implemented.")
-
-        return []
-
-
 class KillEffect(Effect):
     def __init__(
         self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],

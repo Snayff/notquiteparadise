@@ -11,15 +11,13 @@ from scripts.engine.core.constants import GameEvent, InteractionEvent
 
 __all__ = ["process_event"]
 
-from scripts.engine.core.definitions import EffectData
-
 
 def process_event(event: pygame.event):
     """
     Passes an interaction event to the right function.
     """
     if event.type == InteractionEvent.MOVEMENT:
-        print(f"Caught MOVE: {event.origin}, {event.target}, {event.direction}, {event.new_pos}")
+        # print(f"Caught MOVE: {event.origin}, {event.target}, {event.direction}, {event.new_pos}")
         _check_for_proximity(event)
         _process_win_condition(event)
 
@@ -41,6 +39,7 @@ def _check_for_proximity(event: pygame.event):
                 data = reaction.reactions["proximity"]
                 effect = world.create_effect(event.origin, event.target, data)
                 effect.evaluate()
+                # FIXME - wrong tags when trying to apply affect - other_entity
 
 
 
