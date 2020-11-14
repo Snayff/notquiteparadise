@@ -107,7 +107,7 @@ class GameMap:
         self._block_sight_map = np.asarray(block_sight_map, dtype=np.int8)
 
         # get all the non-blocking, or "air", tiles.
-        self._air_tile_positions = np.argwhere(self._block_sight_map == 0).tolist()
+        self._air_tile_positions = np.argwhere(self._block_sight_map == 1).tolist()
         # self.block_sight_map == 0 does the if not block_sight_map part of the loop.
         # np.argwhere gets the indexes of all nonzero elements.
         # tolist converts this back into a nested list.

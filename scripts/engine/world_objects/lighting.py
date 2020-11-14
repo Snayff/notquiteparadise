@@ -687,6 +687,41 @@ def generate_walls(light_box: LightBox, map_data: List[List[int]], tile_size: in
                 # append to the walls list based on the last point found and the starting point
                 final_walls.append([p1, str_point(target_pos), int(point.split(";")[2]), int(point.split(";")[3])])
 
+    # correct overshot edges (must be done after grouping for proper results) and generate Wall objects
+    for wall in final_walls:
+        grid_pos_x = wall[0][0]
+        grid_pos_y = wall[0][1]
+
+        # get tile location of wall
+        tile_x = int(grid_pos_x // tile_size)
+        tile_y = int(grid_pos_y // tile_size)
+
+        # check for relevant bordering tiles to determine if it's okay to shorten the wall
+        if not wall[2]:
+            if wall[3] == 1:
+                if [tile_x, tile_y + 1] in map_data:
+                    wall[1][1] -= 1
+            else:
+                if [tile_x - 1, tile_y + 1] in map_data:
+                    wall[1][1] -= 1
+
+            # move right-facing wall inward
+            if wall[3] == 1:
+                wall[0][0] -= 1
+                wall[1][0] -= 1
+        else:
+            if wall[3] == 1:
+                if [tile_x + 1, tile_y] in map_data:
+                    wall[1][0] -= 1
+            else:
+                if [tile_x + 1, tile_y - 1] in map_data:
+                    wall[1][0] -= 1
+
+            # move downward-facing wall inward
+            if wall[3] == 1:
+                wall[0][1] -= 1
+                wall[1][1] -= 1
+
     # generate Wall objects
     _final_walls = [Wall(*wall) for wall in final_walls]
 
