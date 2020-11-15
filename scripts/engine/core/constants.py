@@ -275,6 +275,7 @@ class EffectType(SimpleNamespace):
     MOVE = EffectTypeType("move")
     AFFECT_STAT = EffectTypeType("affect_stat")
     AFFECT_COOLDOWN = EffectTypeType("affect_cooldown")
+    ALTER_TERRAIN = EffectTypeType("alter_terrain")
 
 
 class TargetTag(SimpleNamespace):

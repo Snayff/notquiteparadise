@@ -53,7 +53,8 @@ if TYPE_CHECKING:
 @dataclass
 class LightData:
     """
-    Data for a light source
+    Data for a light source.
+    Also used to hold and map data from json.
     """
     radius: int = 0
     colour: Tuple[int, int, int] = field(default_factory=tuple)
@@ -79,7 +80,8 @@ class TraitSpritesData:
 @dataclass
 class TraitSpritePathsData:
     """
-    Possible sprites paths for a trait
+    Possible sprites paths for a trait.
+    Also used to hold and map data from json.
     """
 
     render_order: RenderLayerType = field(default=RenderLayer.BOTTOM)
@@ -98,7 +100,8 @@ class TraitSpritePathsData:
 @dataclass
 class ActorData:
     """
-    Data class for an actor
+    Data class for an actor.
+    Also used to hold and map data from json.
     """
 
     key: str = "none"
@@ -114,6 +117,7 @@ class ActorData:
 class TraitData:
     """
     Data class for a trait.
+    Also used to hold and map data from json.
     """
 
     name: str = "none"
@@ -220,6 +224,7 @@ class ProjectileData:
 class TerrainData:
     """
     Data class for terrain.
+    Also used to hold and map data from json.
     """
     name: str = "none"
     description: str = "none"
@@ -276,7 +281,8 @@ class GodData:
 class MapData:
     """
     Data class for a Map, specifically for generation. A map is a collection of rooms. Defines the rooms on
-    the map, how they are placed and joined up (tunnels).
+    the map, how they are placed and joined up ( with tunnels).
+    Also used to hold and map data from json.
     """
 
     name: str = "none"
@@ -338,7 +344,8 @@ class RoomConceptData:
 @dataclass
 class SkillData:
     """
-    Data class for a skill. Used by the library to load from json.
+    Data class for a skill.
+    Also used to hold and map data from json.
     """
 
     # how do we know it?
@@ -414,7 +421,8 @@ class EffectData(ABC):
 @dataclass()
 class DamageEffectData(EffectData):
     """
-    The data for a damage effect. Used to hold and map data from json.
+    The data for a damage effect.
+    Also used to hold and map data from json.
     """
     effect_type: EffectTypeType = EffectType.DAMAGE
 
@@ -431,7 +439,8 @@ class DamageEffectData(EffectData):
 @dataclass()
 class MoveActorEffectData(EffectData):
     """
-    The data for a apply affliction effect. Used to hold and map data from json.
+    The data for a apply affliction effect.
+    Also used to hold and map data from json.
     """
     effect_type: EffectTypeType = EffectType.MOVE
 
@@ -443,7 +452,8 @@ class MoveActorEffectData(EffectData):
 @dataclass()
 class ApplyAfflictionEffectData(EffectData):
     """
-    The data for a apply affliction effect. Used to hold and map data from json.
+    The data for a apply affliction effect.
+    Also used to hold and map data from json.
     """
     effect_type: EffectTypeType = EffectType.APPLY_AFFLICTION
 
@@ -455,7 +465,8 @@ class ApplyAfflictionEffectData(EffectData):
 @dataclass()
 class AffectStatEffectData(EffectData):
     """
-    The data for an affect stat effect. Used to hold and map data from json.
+    The data for an affect stat effect.
+    Also used to hold and map data from json.
     """
     effect_type: EffectTypeType = EffectType.AFFECT_STAT
 
@@ -468,11 +479,25 @@ class AffectStatEffectData(EffectData):
 @dataclass()
 class AffectCooldownEffectData(EffectData):
     """
-    The data for a apply affliction effect. Used to hold and map data from json.
+    The data for a apply affliction effect.
+    Also used to hold and map data from json.
     """
     effect_type: EffectTypeType = EffectType.AFFECT_COOLDOWN
 
     skill_name: str = "",
+    affect_amount: int = 0,
+
+
+@register_dataclass_with_json
+@dataclass()
+class AlterTerrainEffectData(EffectData):
+    """
+    The data for an  alter terrain effect.
+    Also used to hold and map data from json.
+    """
+    effect_type: EffectTypeType = EffectType.ALTER_TERRAIN
+
+    terrain_name: str = "",
     affect_amount: int = 0,
 
 ################### CONFIG ###################################################

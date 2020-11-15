@@ -9,6 +9,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Afflictions, Blocking, HasCombatStats, Knowledge, Position, Resources
+from scripts.engine.core import queries
 from scripts.engine.core.constants import (
     InteractionEvent, InteractionTrigger,
     InteractionTriggerType,
@@ -29,9 +30,15 @@ class Effect(ABC):
     """
 
     def __init__(
-        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect], potency: float = 1.0
+        self,
+        origin: EntityID,
+        target: EntityID,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+        potency: float = 1.0
     ):
         self.origin = origin
+        self.target = target
         self.success_effects: List[Effect] = success_effects
         self.failure_effects: List[Effect] = failure_effects
         self.potency: float = potency
@@ -60,11 +67,10 @@ class DamageEffect(Effect):
         potency: float = 1.0,
     ):
 
-        super().__init__(origin, success_effects, failure_effects, potency)
+        super().__init__(origin, target,  success_effects, failure_effects, potency)
 
         self.accuracy = accuracy
         self.stat_to_target = stat_to_target
-        self.target = target
         self.damage = damage
         self.damage_type = damage_type
         self.mod_amount = mod_amount
@@ -124,9 +130,8 @@ class MoveActorEffect(Effect):
         move_amount: int,
     ):
 
-        super().__init__(origin, success_effects, failure_effects)
+        super().__init__(origin, target, success_effects, failure_effects)
 
-        self.target = target
         self.direction = direction
         self.move_amount = move_amount
 
@@ -230,11 +235,10 @@ class AffectStatEffect(Effect):
         affect_amount: int,
     ):
 
-        super().__init__(origin, success_effects, failure_effects)
+        super().__init__(origin, target, success_effects, failure_effects)
 
         self.stat_to_target = stat_to_target
         self.affect_amount = affect_amount
-        self.target = target
         self.cause_name = cause_name
 
     def evaluate(self) -> List[Effect]:
@@ -273,10 +277,9 @@ class ApplyAfflictionEffect(Effect):
         affliction_name: str,
         duration: int,
     ):
-        super().__init__(origin, success_effects, failure_effects)
+        super().__init__(origin, target, success_effects, failure_effects)
 
         self.affliction_name = affliction_name
-        self.target = target
         self.duration = duration
 
     def evaluate(self) -> List[Effect]:
@@ -314,9 +317,8 @@ class AffectCooldownEffect(Effect):
         skill_name: str,
         affect_amount: int,
     ):
-        super().__init__(origin, success_effects, failure_effects)
+        super().__init__(origin, target, success_effects, failure_effects)
 
-        self.target = target
         self.skill_name = skill_name
         self.affect_amount = affect_amount
 
@@ -344,3 +346,74 @@ class AffectCooldownEffect(Effect):
             return self.success_effects
 
         return self.failure_effects
+
+
+class AlterTerrainEffect(Effect):
+    def __init__(
+            self,
+            origin: EntityID,
+            target: EntityID,
+            success_effects: List[Effect],
+            failure_effects: List[Effect],
+            terrain_name: str,
+            affect_amount: int,
+    ):
+        super().__init__(origin, target, success_effects, failure_effects)
+
+        self.terrain_name = terrain_name
+        self.affect_amount = affect_amount
+
+    def evaluate(self) -> List[Effect]:
+        """
+        Create or reduce the duration of temporary terrain.
+        """
+        logging.debug("Evaluating Alter Terrain Effect...")
+
+        # check duration
+        if self.affect_amount <= 0:
+            success = self._reduce_terrain_duration()
+        else:
+            success = self._create_terrain()
+
+        # return effect sets
+        if success:
+            return self.success_effects
+        else:
+            return self.failure_effects
+
+
+    def _create_terrain(self) -> bool:
+        result = False
+        duplicate = False
+        terrain_name = self.terrain_name
+        target_pos = world.get_entitys_component(self.target, Position)
+
+        # check target location doesnt already have the given terrain
+        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+            if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
+                duplicate = True
+                break
+
+        # can we create the terrain?
+        if not duplicate:
+            # create target
+            from scripts.engine import library
+            terrain_data = library.TERRAIN[terrain_name]
+            world.create_terrain(terrain_data, (target_pos.x, target_pos.y), self.affect_amount)
+            result = True
+
+        return result
+
+
+    def _reduce_terrain_duration(self) -> bool:
+        result = False
+        terrain_name = self.terrain_name
+        target_pos = world.get_entitys_component(self.target, Position)
+
+        # check there is a terrain at target to reduce duration of
+        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+            if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
+                lifespan.duration -= self.affect_amount
+                result = True
+
+        return result

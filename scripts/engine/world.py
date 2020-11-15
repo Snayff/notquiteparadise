@@ -24,7 +24,7 @@ from scripts.engine.component import (
     IsGod,
     IsPlayer,
     Knowledge,
-    LightSource,
+    Lifespan, LightSource,
     Opinion,
     Position,
     Reaction, Resources,
@@ -215,7 +215,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     return entity
 
 
-def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int]) -> EntityID:
+def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int], lifespan: int = INFINITE) -> EntityID:
     """
     Create terrain
     """
@@ -228,7 +228,7 @@ def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int]) -> Ent
         occupied_tiles.append((offset[0] + x, offset[1] + y))
 
     # terrain components
-    components.append(IsActor())
+    components.append(Lifespan(lifespan))
     components.append(Position(*occupied_tiles))
     components.append(Identity(terrain_data.name, terrain_data.description))
     components.append(Blocking(terrain_data.blocks_movement, terrain_data.blocks_sight))

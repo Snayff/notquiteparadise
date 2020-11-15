@@ -510,23 +510,6 @@ class Afflictions(NQPComponent):
             self.active.remove(affliction)
 
 
-class Aspect(NQPComponent):
-    """
-    An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
-    """
-
-    def __init__(self, aspects: Optional[Dict[str, int]] = None):
-        aspects = aspects or {}
-        self.aspects: Dict[str, int] = aspects
-
-    def serialize(self):
-        return self.aspects
-
-    @classmethod
-    def deserialize(cls, serialised):
-        return Aspect(*serialised)
-
-
 class Opinion(NQPComponent):
     """
     An entity's views on other entities. {entity, opinion}
@@ -614,4 +597,19 @@ class Reaction(NQPComponent):
         return Reaction(*serialised)
 
 
+class Lifespan(NQPComponent):
+    """
+    Holds info relating to the limited lifespan of an entity. E.g. temporary summons.
+
+    Can be set to INFINITE, which prevents it being reduced each turn.
+    """
+    def __init__(self, duration: int):
+        self.duration = duration
+
+    def serialize(self):
+        return self.duration
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Lifespan(*serialised)
 

@@ -15,7 +15,7 @@ from scripts.engine.component import (
     IsActive,
     IsActor,
     Knowledge,
-    LightSource,
+    Lifespan, LightSource,
     Position,
     Reaction, Tracked,
     WinCondition,
@@ -42,7 +42,8 @@ __all__ = [
     "position_and_actor",
     "position_and_win_condition",
     "active_and_tracked",
-    "light_source_and_aesthetic"
+    "light_source_and_aesthetic",
+    "position_and_identity_and_lifespan"
 ]
 
 
@@ -76,6 +77,8 @@ position_and_actor = get_components([Position, IsActor]).compile()
 position_and_win_condition = get_components([Position, WinCondition]).compile()
 
 position_and_reaction = get_components([Position, Reaction]).compile()
+
+position_and_identity_and_lifespan = get_components([Position, Identity, Lifespan]).compile()
 
 position_and_identity_and_aesthetic = get_components([Position, Identity, Aesthetic]).compile()
 
