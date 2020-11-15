@@ -19,8 +19,8 @@
         "__dataclass__": "ActorData",
         "key": "crocturion",
         "possible_names": [
-            "Kro`ck",
-            "Qual`ck"
+            "Krock",
+            "Qualck"
         ],
         "description": "Cold blooded.",
         "position_offsets": [

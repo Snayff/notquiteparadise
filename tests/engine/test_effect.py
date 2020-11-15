@@ -1,56 +1,110 @@
-from scripts.engine import world
-from scripts.engine.action import Affliction
-from scripts.engine.component import Afflictions, Identity, Knowledge, Position
-from scripts.engine.core.constants import (
-    AfflictionTrigger,
-)
-from scripts.engine.effect import ReduceSkillCooldownEffect, TriggerAfflictionsEffect
-from tests.mocks import mock_world
-from tests.mocks.mock_effect import MockAfflictionDamage, MockAfflictionMovement, MockSkill
+from snecs.typedefs import EntityID
+
+from scripts.engine import utility, world
+from scripts.engine.component import Resources
+from scripts.engine.core.constants import PrimaryStat, DamageType
+from scripts.engine.core.data import store
+from scripts.engine.core.definitions import ActorData
+from scripts.engine.effect import DamageEffect
+from scripts.engine.world_objects.game_map import GameMap
+import pytest
+from scripts.nqp.actions import afflictions, behaviours, skills  # must import to register in engine
 
 
-class TestEffects:
+def _create_scenario() -> EntityID:
+    game_map = GameMap("debug", 10)
+    store.current_game_map = game_map
+    actor_data = ActorData(
+        key="test",
+        possible_names=["test_name"],
+        description="test_desc",
+        position_offsets=[(0, 0)],
+        trait_names=["shoom", "soft_tops", "dandy"],
+    )
+    game_map.generate_new_map(actor_data)
+    return world.get_player()
 
-    @staticmethod
-    def _create_default_entity():
-        components = [Identity("mock_entity"), Position((0, 0))]
-        entity = world.create_entity(components)
-        return entity
 
-    def test_trigger_afflictions_effect(self):
-        """
-        Test for the trigger afflictions effect
-        """
-        affliction_called = None
+test_damage_effect_parameters = [
+    # stat to target
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.CLOUT, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.SKULLDUGGERY, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.BUSTLE, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.EXACTITUDE, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
 
-        def _trigger_affliction_mock(affliction: Affliction):
-            nonlocal affliction_called
-            affliction_called = affliction
+    # accuracy
+    (PrimaryStat.VIGOUR, 100, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.VIGOUR, -1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
 
-        mock_world.mock_methods({"apply_affliction": _trigger_affliction_mock})
-        entity = TestEffects._create_default_entity()
+    # damage
+    (PrimaryStat.VIGOUR, 1, 100, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.VIGOUR, 1, -1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.VIGOUR, 1, 0, DamageType.BURN, PrimaryStat.VIGOUR, 1, 1),
 
-        mock_affliction_movement = MockAfflictionMovement(entity, entity, 5)
-        mock_affliction_damage = MockAfflictionDamage(entity, entity, 5)
-        afflictions = Afflictions([mock_affliction_damage, mock_affliction_movement])
-        world.add_component(entity, afflictions)
+    # damage type
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.CHEMICAL, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.ASTRAL, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.COLD, PrimaryStat.VIGOUR, 1, 1),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.MUNDANE, PrimaryStat.VIGOUR, 1, 1),
 
-        effect = TriggerAfflictionsEffect(entity, entity, AfflictionTrigger.MOVEMENT, [], [])
-        effect.evaluate()
+    # mod stats
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.CLOUT, 1, 1),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.SKULLDUGGERY, 1, 1),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.BUSTLE, 1, 1),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.EXACTITUDE, 1, 1),
 
-        assert affliction_called == mock_affliction_movement
+    # mod amount
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 100, 1),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, -1, 1),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 0, 1),
 
-    def test_reduce_skill_cooldown_effect(self):
-        """
-        Test for the reduce skill cooldown effect
-        """
-        knowledge = Knowledge([MockSkill])
-        knowledge.set_skill_cooldown("mock_skill", 15)
+    # potency
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 100),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, -1),
+    (PrimaryStat.VIGOUR, 1, 1, DamageType.BURN, PrimaryStat.VIGOUR, 1, 0),
+]
 
-        entity = TestEffects._create_default_entity()
-        world.add_component(entity, knowledge)
 
-        effect = ReduceSkillCooldownEffect(entity, entity, "mock_skill", 5, [], [])
-        effect.evaluate()
+@pytest.mark.parametrize(["stat_to_target", "accuracy", "damage", "damage_type", "mod_stat", "mod_amount",
+                             "potency"], test_damage_effect_parameters)
+def test_damage_effect(
+        benchmark,
+        stat_to_target,
+        accuracy,
+        damage,
+        damage_type,
+        mod_stat,
+        mod_amount,
+        potency,
+):
+    entity = _create_scenario()
 
-        assert knowledge.cooldowns["mock_skill"] == 10
+    effect = DamageEffect(
+        origin=entity,
+        target=entity,
+        success_effects=[],
+        failure_effects=[],
+        stat_to_target=stat_to_target,
+        accuracy=accuracy,
+        damage=damage,
+        damage_type=damage_type,
+        mod_stat=mod_stat,
+        mod_amount=mod_amount,
+        potency=potency
+    )
+
+    start_hp = world.get_entitys_component(entity, Resources).health
+    benchmark(effect.evaluate)
+    end_hp = world.get_entitys_component(entity, Resources).health
+
+    # assess results
+    # We are just testing damage can be applied, not the damage formula and as such this is simplified, otherwise
+    # would need to consider  potency, stats etc.
+    if damage > 0:
+        assert start_hp != end_hp
+    elif damage == 0:
+        assert start_hp == end_hp
+    elif damage < 0:
+        assert start_hp == end_hp

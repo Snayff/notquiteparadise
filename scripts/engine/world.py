@@ -1265,6 +1265,10 @@ def apply_damage(entity: EntityID, damage: int) -> bool:
     """
     Remove damage from entity's health. Return remaining health.
     """
+    if damage <= 1:
+        logging.info(f"Damage was {damage} and therefore nothing was done.")
+        return False
+
     resource = get_entitys_component(entity, Resources)
     if resource:
         resource.health -= damage

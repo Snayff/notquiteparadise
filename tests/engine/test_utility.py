@@ -81,7 +81,7 @@ test_clamp_parameters = [
 
 
 @pytest.mark.parametrize("value, min_value, max_value", test_clamp_parameters)
-def test_clamp(benchmark, value: Union[int, float], min_value: Union[int, float], max_value: Union[int, float]):
+def test_clamp(value: Union[int, float], min_value: Union[int, float], max_value: Union[int, float]):
     result = utility.clamp(value, min_value, max_value)
 
     assert result <= max_value
@@ -98,7 +98,7 @@ test_is_close_parameters = [
 
 
 @pytest.mark.parametrize("current_pos, target_pos, delta", test_is_close_parameters)
-def test_is_close(benchmark, current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta: float):
+def test_is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta: float):
     result = utility.is_close(current_pos, target_pos, delta)
 
     assert result
@@ -114,7 +114,7 @@ test_is_not_close_parameters = [
 
 
 @pytest.mark.parametrize("current_pos, target_pos, delta", test_is_not_close_parameters)
-def test_is_not_close(benchmark, current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta: float):
+def test_is_not_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta: float):
     result = utility.is_close(current_pos, target_pos, delta)
 
     assert not result
@@ -135,5 +135,5 @@ test_get_coordinates_from_shape_parameters = [
 @pytest.mark.parametrize("shape, size, direction, expected", test_get_coordinates_from_shape_parameters)
 def test_get_coordinates_from_shape(benchmark, shape: ShapeType, size: int, direction: Tuple[int, int],
         expected: List[Tuple[int, int]]):
-    coordinates = utility.get_coords_from_shape(shape, size, direction)
+    coordinates = benchmark(utility.get_coords_from_shape, shape, size, direction)
     assert set(coordinates) == set(expected)

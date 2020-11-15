@@ -97,12 +97,11 @@ def next_round(time_progressed: int):
     """
     Move to the next round and trigger end of round events, like cooldown and affliction reduction.
     """
+    # TODO - create end of round event and handle there.
     systems.reduce_skill_cooldowns()
     systems.reduce_affliction_durations()
     systems.reduce_lifespan_durations()
 
-
-    # time management
     # add progressed time and minus time_in_round to keep the remaining time
     set_time_in_round((get_time_in_round() + time_progressed) - library.GAME_CONFIG.default_values.time_per_round)
 
