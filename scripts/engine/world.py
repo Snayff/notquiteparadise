@@ -53,11 +53,12 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, AffectCooldownEffectData, AffectStatEffectData, \
-    ApplyAfflictionEffectData, \
+    AlterTerrainEffectData, ApplyAfflictionEffectData, \
     DamageEffectData, EffectData, \
     MoveActorEffectData, ProjectileData, \
     TerrainData
-from scripts.engine.effect import AffectCooldownEffect, AffectStatEffect, ApplyAfflictionEffect, DamageEffect, Effect, \
+from scripts.engine.effect import AffectCooldownEffect, AffectStatEffect, AlterTerrainEffect, ApplyAfflictionEffect, \
+    DamageEffect, Effect, \
     MoveActorEffect
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
@@ -360,6 +361,8 @@ def create_effect(origin: EntityID, target: EntityID, data: EffectData) -> Effec
         return _create_affect_stat_effect(origin, target, data)
     elif effect_type == EffectType.AFFECT_COOLDOWN:
         return _create_affect_cooldown_effect(origin, target, data)
+    elif effect_type == EffectType.ALTER_TERRAIN:
+        return _create_alter_terrain_effect(origin, target, data)
 
 
 def _create_apply_affliction_effect(origin: EntityID, target: EntityID,
@@ -432,6 +435,21 @@ def _create_affect_cooldown_effect(origin: EntityID, target: EntityID,
     )
 
     return effect
+
+
+def _create_alter_terrain_effect(origin: EntityID, target: EntityID,
+        data: AlterTerrainEffectData) -> AlterTerrainEffect:
+    effect = AlterTerrainEffect(
+        origin=origin,
+        target=target,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        terrain_name=data.terrain_name,
+        affect_amount=data.affect_amount,
+    )
+
+    return effect
+
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 

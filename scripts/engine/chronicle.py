@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-import scripts.engine.core.systems
 from scripts.engine import library, world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
 from scripts.engine.core import systems
