@@ -97,29 +97,12 @@ def next_round(time_progressed: int):
     """
     Move to the next round and trigger end of round events, like cooldown and affliction reduction.
     """
-    ## skill cooldowns
-    from scripts.engine.core import queries
+    systems.reduce_skill_cooldowns()
+    systems.reduce_affliction_durations()
+    systems.reduce_lifespan_durations()
 
-    for entity, (knowledge,) in queries.knowledge:
-        assert isinstance(knowledge, Knowledge)
-        for skill_name in knowledge.skill_names:
-            skill_cooldown = knowledge.cooldowns[skill_name]
-            if skill_cooldown > 0:
-                knowledge.set_skill_cooldown(skill_name, skill_cooldown - 1)
 
-    ## affliction durations
-    for entity, (afflictions,) in queries.affliction:
-        assert isinstance(afflictions, Afflictions)  # handle mypy type error
-        for affliction in afflictions.active:
-            if affliction.duration == 0:
-                # expired
-                world.remove_affliction(entity, affliction)
-
-            elif affliction.duration != INFINITE:
-                # reduce duration if not infinite
-                affliction.duration -= 1
-
-    ## time management
+    # time management
     # add progressed time and minus time_in_round to keep the remaining time
     set_time_in_round((get_time_in_round() + time_progressed) - library.GAME_CONFIG.default_values.time_per_round)
 

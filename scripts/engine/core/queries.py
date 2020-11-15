@@ -28,9 +28,10 @@ __all__ = [
     "tracked",
     "aesthetic",
     "knowledge",
-    "affliction",
+    "afflictions",
     "position",
     "active",
+    "lifespan",
     "position_and_light_source",
     "position_and_reaction",
     "not_position",
@@ -57,11 +58,13 @@ aesthetic = get_components([Aesthetic]).compile()
 
 knowledge = get_components([Knowledge]).compile()
 
-affliction = get_components([Afflictions]).compile()
+afflictions = get_components([Afflictions]).compile()
 
 position = get_components([Position]).compile()
 
 active = get_components([IsActive]).compile()
+
+lifespan = get_components([Lifespan]).compile()
 
 
 ################## MULTI QUERIES ##########################

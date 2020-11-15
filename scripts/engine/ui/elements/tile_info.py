@@ -9,7 +9,7 @@ from pygame_gui.core import UIElement
 from pygame_gui.elements import UIImage, UIPanel, UITextBox
 
 from scripts.engine import world
-from scripts.engine.component import Aesthetic, Aspect, Identity, Position, Resources, Traits
+from scripts.engine.component import Resources, Traits
 from scripts.engine.core.constants import GAP_SIZE, ICON_IN_TEXT_SIZE, RenderLayer
 
 
@@ -102,17 +102,6 @@ class TileInfo(UIPanel):
                                 names += ", "
                             names += f"{name}"
                         current_info.append(names)
-
-                    # get aspects
-                    aspect = world.get_entitys_component(entity, Aspect)
-                    if aspect:
-                        details = ""
-                        for name, duration in aspect.aspects.items():
-                            # if more than one aspect add a separator
-                            if len(details) > 1:
-                                details += ", "
-                            details += f"{name}:{duration}"
-                        current_info.append(details)
 
                     # add collected info to main info
                     info.append(current_info)

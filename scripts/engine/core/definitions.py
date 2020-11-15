@@ -389,7 +389,7 @@ class SkillData:
 @dataclass()
 class AfflictionData:
     """
-    Data class for an Afflictions
+    Data class for an Affliction
     """
 
     name: str = "none"

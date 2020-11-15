@@ -1,13 +1,16 @@
 from __future__ import annotations
 
+import logging
+
 import tcod
 
 from scripts.engine import world
-from scripts.engine.component import FOV, IsActive, Position, Tracked
+from scripts.engine.component import Afflictions, FOV, IsActive, Knowledge, Lifespan, Position, Tracked
 from scripts.engine.core import queries
-from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_ACTIVATION_DISTANCE
+from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, INFINITE, MAX_ACTIVATION_DISTANCE
 
-__all__ = ["process_activations", "process_light_map", "process_fov", "process_tile_visibility"]
+__all__ = ["process_activations", "process_light_map", "process_fov", "process_tile_visibility",
+    "reduce_skill_cooldowns", "reduce_affliction_durations", "reduce_lifespan_durations"]
 
 
 def process_activations():
@@ -112,3 +115,50 @@ def process_tile_visibility():
     for x in range(0, width):
         for y in range(0, height):
             tile_map[x][y].is_visible = bool(visible_map[x, y])  # cast to bool as it is numpy _bool
+
+
+def reduce_skill_cooldowns():
+    """
+    Reduce skill cool down for all entities.
+    """
+    for entity, (knowledge,) in queries.knowledge:
+        assert isinstance(knowledge, Knowledge)
+        for skill_name in knowledge.skill_names:
+            skill_cooldown = knowledge.cooldowns[skill_name]
+            if skill_cooldown > 0:
+                knowledge.set_skill_cooldown(skill_name, skill_cooldown - 1)
+
+
+def reduce_affliction_durations():
+    """
+    Reduce all affliction durations
+    """
+    for entity, (afflictions,) in queries.afflictions:
+        assert isinstance(afflictions, Afflictions)
+        for affliction in afflictions.active:
+
+            if affliction.duration != INFINITE:
+                # reduce duration if not infinite
+                affliction.duration -= 1
+
+            # handle expiry
+            if affliction.duration <= 0:
+                world.remove_affliction(entity, affliction)
+
+
+def reduce_lifespan_durations():
+    """
+    Reduce all lifespan durations
+    """
+    for entity, (lifespan,) in queries.lifespan:
+        assert isinstance(lifespan, Lifespan)
+
+        if lifespan.duration != INFINITE:
+            # reduce duration if not infinite
+            lifespan.duration -= 1
+
+        # handle expiry
+        if lifespan.duration <= 0:
+            logging.debug(f"{world.get_name(entity)}`s lifespan has expired. ")
+            world.kill_entity(entity)
+
