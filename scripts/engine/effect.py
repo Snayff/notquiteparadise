@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Tuple, cast
 
 import pygame
 from snecs.typedefs import EntityID
@@ -76,20 +76,20 @@ class DamageEffect(Effect):
         self.mod_amount = mod_amount
         self.mod_stat = mod_stat
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Resolve the damage effect and return the conditional effects based on if the damage is greater than 0.
         """
         logging.debug("Evaluating Damage Effect...")
         if self.damage <= 0:
             logging.info(f"Damage given to DamageEffect is {self.damage} and was therefore not executed.")
-            return self.failure_effects
+            return False, self.failure_effects
 
         if not world.entity_has_component(self.origin, HasCombatStats) or not world.entity_has_component(
             self.target, HasCombatStats
         ):
             logging.info(f"Either caster or target doesnt have combat stats so damage cannot be applied.")
-            return self.failure_effects
+            return False, self.failure_effects
 
         defenders_stats = world.create_combat_stats(self.target)
         attackers_stats = world.create_combat_stats(self.origin)
@@ -118,9 +118,9 @@ class DamageEffect(Effect):
             if damage >= defenders_resources.health:
                 world.kill_entity(self.target)
 
-            return self.success_effects
+            return True, self.success_effects
         else:
-            return self.failure_effects
+            return False, self.failure_effects
 
 
 class MoveActorEffect(Effect):
@@ -139,7 +139,7 @@ class MoveActorEffect(Effect):
         self.direction = direction
         self.move_amount = move_amount
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Resolve the move effect and return the conditional effects based on if the target moved the full amount.
         """
@@ -148,7 +148,7 @@ class MoveActorEffect(Effect):
         success = False
         pos = world.get_entitys_component(self.target, Position)
         if not pos:
-            return self.failure_effects
+            return False, self.failure_effects
 
         dir_x, dir_y = self.direction
         entity = self.target
@@ -182,9 +182,9 @@ class MoveActorEffect(Effect):
                     aesthetic.current_sprite = aesthetic.sprites.move
 
         if success:
-            return self.success_effects
+            return True, self.success_effects
         else:
-            return self.failure_effects
+            return False, self.failure_effects
 
     @staticmethod
     def _check_collision(entity: EntityID, dir_x: int, dir_y: int) -> bool:
@@ -245,7 +245,7 @@ class AffectStatEffect(Effect):
         self.affect_amount = affect_amount
         self.cause_name = cause_name
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Log the affliction and the stat modification in the Affliction component.
         """
@@ -266,9 +266,9 @@ class AffectStatEffect(Effect):
                 success = True
 
         if success:
-            return self.success_effects
+            return True, self.success_effects
         else:
-            return self.failure_effects
+            return False, self.failure_effects
 
 
 class ApplyAfflictionEffect(Effect):
@@ -286,7 +286,7 @@ class ApplyAfflictionEffect(Effect):
         self.affliction_name = affliction_name
         self.duration = duration
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Applies an affliction to an entity
         """
@@ -305,10 +305,10 @@ class ApplyAfflictionEffect(Effect):
                                        name=self.affliction_name)
             pygame.event.post(event)
 
-            return self.success_effects
+            return True, self.success_effects
 
         # didn't have the component, fail
-        return self.failure_effects
+        return False, self.failure_effects
 
 
 class AffectCooldownEffect(Effect):
@@ -326,7 +326,7 @@ class AffectCooldownEffect(Effect):
         self.skill_name = skill_name
         self.affect_amount = affect_amount
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Reduces the cooldown of a skill of an entity
         """
@@ -347,9 +347,9 @@ class AffectCooldownEffect(Effect):
                 f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to "
                 f"{knowledge.cooldowns[self.skill_name]}"
             )
-            return self.success_effects
+            return True, self.success_effects
 
-        return self.failure_effects
+        return False, self.failure_effects
 
 
 class AlterTerrainEffect(Effect):
@@ -367,7 +367,7 @@ class AlterTerrainEffect(Effect):
         self.terrain_name = terrain_name
         self.affect_amount = affect_amount
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Create or reduce the duration of temporary terrain.
         """
@@ -381,9 +381,9 @@ class AlterTerrainEffect(Effect):
 
         # return effect sets
         if success:
-            return self.success_effects
+            return True, self.success_effects
         else:
-            return self.failure_effects
+            return False, self.failure_effects
 
 
     def _create_terrain(self) -> bool:

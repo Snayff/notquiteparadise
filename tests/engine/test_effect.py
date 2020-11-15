@@ -5,7 +5,7 @@ from scripts.engine.component import Position, Resources
 from scripts.engine.core.constants import Direction, PrimaryStat, DamageType
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData
-from scripts.engine.effect import DamageEffect, MoveActorEffect
+from scripts.engine.effect import AffectStatEffect, DamageEffect, MoveActorEffect
 from scripts.engine.world_objects.game_map import GameMap
 import pytest
 from scripts.nqp.actions import afflictions, behaviours, skills  # must import to register in engine
@@ -137,7 +137,7 @@ def test_move_actor_effect(
     )
 
     start_pos = world.get_entitys_component(entity, Position)
-    success = benchmark(effect.evaluate)
+    success = benchmark(effect.evaluate)[0]
     end_pos = world.get_entitys_component(entity, Position)
 
     # assess results
@@ -145,3 +145,95 @@ def test_move_actor_effect(
         assert start_pos.x != end_pos.x or start_pos.y != end_pos.y
     else:
         assert start_pos.x == end_pos.x or start_pos.y == end_pos.y
+
+
+test_affect_stat_parameters = [
+    # stats
+    ("foo", PrimaryStat.VIGOUR, 1),
+    ("foo", PrimaryStat.CLOUT, 1),
+    ("foo", PrimaryStat.EXACTITUDE, 1),
+    ("foo", PrimaryStat.BUSTLE, 1),
+    ("foo", PrimaryStat.SKULLDUGGERY, 1),
+
+    # amounts
+    ("foo", PrimaryStat.VIGOUR, -1),
+    ("foo", PrimaryStat.VIGOUR, 100),
+    ("foo", PrimaryStat.VIGOUR, -100),
+]
+
+
+@pytest.mark.parametrize(["cause_name", "stat_to_target", "affect_amount"], test_affect_stat_parameters)
+def test_affect_stat_effect(
+        benchmark,
+        cause_name,
+        stat_to_target,
+        affect_amount,
+):
+    entity = _create_scenario()
+
+    effect = AffectStatEffect(
+        origin=entity,
+        target=entity,
+        success_effects=[],
+        failure_effects=[],
+        cause_name=cause_name,
+        stat_to_target=stat_to_target,
+        affect_amount=affect_amount,
+    )
+
+    stats = world.create_combat_stats(entity)
+    start_stat = getattr(stats, stat_to_target)
+    success = benchmark(effect.evaluate)[0]
+    stats = world.create_combat_stats(entity)
+    end_stat = getattr(stats, stat_to_target)
+
+    if success:
+        assert start_stat + affect_amount == end_stat
+    else:
+        assert start_stat == end_stat
+
+
+test_affect_stat_parameters = [
+    # stats
+    ("foo", PrimaryStat.VIGOUR, 1),
+    ("foo", PrimaryStat.CLOUT, 1),
+    ("foo", PrimaryStat.EXACTITUDE, 1),
+    ("foo", PrimaryStat.BUSTLE, 1),
+    ("foo", PrimaryStat.SKULLDUGGERY, 1),
+
+    # amounts
+    ("foo", PrimaryStat.VIGOUR, -1),
+    ("foo", PrimaryStat.VIGOUR, 100),
+    ("foo", PrimaryStat.VIGOUR, -100),
+]
+
+
+@pytest.mark.parametrize(["cause_name", "stat_to_target", "affect_amount"], test_affect_stat_parameters)
+def test_affect_stat_effect(
+        benchmark,
+        cause_name,
+        stat_to_target,
+        affect_amount,
+):
+    entity = _create_scenario()
+
+    effect = AffectStatEffect(
+        origin=entity,
+        target=entity,
+        success_effects=[],
+        failure_effects=[],
+        cause_name=cause_name,
+        stat_to_target=stat_to_target,
+        affect_amount=affect_amount,
+    )
+
+    stats = world.create_combat_stats(entity)
+    start_stat = getattr(stats, stat_to_target)
+    success = benchmark(effect.evaluate)[0]
+    stats = world.create_combat_stats(entity)
+    end_stat = getattr(stats, stat_to_target)
+
+    if success:
+        assert start_stat + affect_amount == end_stat
+    else:
+        assert start_stat == end_stat

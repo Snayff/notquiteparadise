@@ -1184,7 +1184,7 @@ def apply_skill(skill: Skill) -> bool:
                 effect_queue = list(effects)
                 while effect_queue:
                     effect = effect_queue.pop()
-                    effect_queue.extend(effect.evaluate())
+                    effect_queue.extend(effect.evaluate()[1])
         return True
     else:
         logging.info(
@@ -1224,7 +1224,7 @@ def apply_affliction(affliction: Affliction) -> bool:
                 effect_queue = list(effects)
                 while effect_queue:
                     effect = effect_queue.pop()
-                    effect_queue.extend(effect.evaluate())
+                    effect_queue.extend(effect.evaluate()[1])
             return True
         else:
             logging.info(
@@ -1243,7 +1243,7 @@ def trigger_affliction(affliction: Affliction):
         effect_queue = list(effects)
         while effect_queue:
             effect = effect_queue.pop()
-            effect_queue.extend(effect.evaluate())
+            effect_queue.extend(effect.evaluate()[1])
 
 
 def take_turn(entity: EntityID) -> bool:
