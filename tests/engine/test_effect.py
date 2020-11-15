@@ -1,11 +1,14 @@
+import snecs
 from snecs.typedefs import EntityID
 
 from scripts.engine import library, utility, world
 from scripts.engine.component import Afflictions, Knowledge, Position, Resources
+from scripts.engine.core import queries
 from scripts.engine.core.constants import Direction, PrimaryStat, DamageType
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData
-from scripts.engine.effect import AffectCooldownEffect, AffectStatEffect, ApplyAfflictionEffect, DamageEffect, \
+from scripts.engine.effect import AffectCooldownEffect, AffectStatEffect, AlterTerrainEffect, ApplyAfflictionEffect, \
+    DamageEffect, \
     MoveActorEffect
 from scripts.engine.world_objects.game_map import GameMap
 import pytest
@@ -13,6 +16,11 @@ from scripts.nqp.actions import afflictions, behaviours, skills  # must import t
 
 
 def _create_scenario() -> EntityID:
+    # new world
+    empty_world = snecs.World()
+    world.move_world(empty_world)
+
+    # new gamemap
     game_map = GameMap("debug", 10)
     store.current_game_map = game_map
     actor_data = ActorData(
@@ -23,6 +31,7 @@ def _create_scenario() -> EntityID:
         trait_names=["shoom", "soft_tops", "dandy"],
     )
     game_map.generate_new_map(actor_data)
+
     return world.get_player()
 
 
@@ -190,7 +199,7 @@ def test_affect_stat_effect(
     end_stat = getattr(stats, stat_to_target)
 
     if success:
-        assert start_stat + affect_amount == end_stat
+        assert max(start_stat + affect_amount, 1) == end_stat
     else:
         assert start_stat == end_stat
 
@@ -278,6 +287,118 @@ def test_apply_affliction_effect(
         assert max(cooldown - affect_cooldown_amount, 0) == end_cooldown
     else:
         assert cooldown == end_cooldown
+
+
+_terrain_names = []
+for name in library.TERRAIN.keys():
+    _terrain_names.append(name)
+
+
+@pytest.fixture(params=_terrain_names)
+def terrain_name(request):
+    return request.param
+
+
+@pytest.fixture(params=[1, 100])
+def affect_terrain_amount(request):
+    return request.param
+
+
+def test_alter_terrain_effect_create(
+        benchmark,
+        terrain_name,
+        affect_terrain_amount
+):
+    entity = _create_scenario()
+
+    effect = AlterTerrainEffect(
+        origin=entity,
+        target=entity,
+        success_effects=[],
+        failure_effects=[],
+        terrain_name=terrain_name,
+        affect_amount=affect_terrain_amount,
+    )
+
+    success = benchmark(effect.evaluate)[0]
+    target_pos = world.get_entitys_component(entity, Position)
+
+    if success:
+        confirmed = False
+        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+            if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
+                confirmed = True
+        assert confirmed
+    else:
+        confirmed = False
+        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+            if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
+                confirmed = True
+        assert not confirmed
+
+
+@pytest.fixture(params=[0, -1, -100])
+def affect_terrain_negative_amount(request):
+    return request.param
+
+
+def test_alter_terrain_effect_reduce_duration(
+        benchmark,
+        terrain_name,
+        affect_terrain_negative_amount
+):
+    entity = _create_scenario()
+
+    # create terrain on the spot
+    base_duration = 10
+    effect = AlterTerrainEffect(
+        origin=entity,
+        target=entity,
+        success_effects=[],
+        failure_effects=[],
+        terrain_name=terrain_name,
+        affect_amount=base_duration,
+    )
+    effect.evaluate()
+
+    effect = AlterTerrainEffect(
+        origin=entity,
+        target=entity,
+        success_effects=[],
+        failure_effects=[],
+        terrain_name=terrain_name,
+        affect_amount=affect_terrain_negative_amount,
+    )
+
+    success = benchmark(effect.evaluate)[0]
+    target_pos = world.get_entitys_component(entity, Position)
+
+    if success and (base_duration > affect_terrain_negative_amount):
+        # test case: reduced duration but still exists
+        still_exists = False
+        duration_remaining = None
+        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+            if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
+                still_exists = True
+                duration_remaining = lifespan.duration
+        assert still_exists
+        assert duration_remaining == base_duration - affect_terrain_negative_amount
+
+    elif success and (base_duration < affect_terrain_negative_amount):
+        # test case: duration sufficient to remove
+        still_exists = False
+        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+            if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
+                still_exists = True
+        assert not still_exists
+
+    else:
+        # test case: failed to create terrain; check valid reason
+        data = library.TERRAIN[terrain_name]
+        if data.blocks_movement:
+            assert True
+        else:
+            assert False
 
 
 
