@@ -410,9 +410,10 @@ class Knowledge(NQPComponent):
         else:
             _add_to_order = True
 
+        # TODO - make vars private if we should use methods
         self.skill_order: List[str] = skill_order
-        self.cooldowns: Dict[str, int] = cooldowns
-        self.skill_names: List[str] = []
+        self.cooldowns: Dict[str, int] = cooldowns  # TODO - can this be folded into skills?
+        self.skill_names: List[str] = []  # TODO - do we even need this anymore?
         self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
 
         for skill_class in skills:
@@ -467,7 +468,7 @@ class Afflictions(NQPComponent):
         active = active or []
         stat_modifiers = stat_modifiers or {}
 
-        self.active: List[Affliction] = active
+        self.active: List[Affliction] = active  # TODO - should this be a dict for easier querying?
         self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = stat_modifiers
 
     def serialize(self):

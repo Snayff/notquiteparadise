@@ -1,11 +1,12 @@
 from snecs.typedefs import EntityID
 
 from scripts.engine import library, utility, world
-from scripts.engine.component import Afflictions, Position, Resources
+from scripts.engine.component import Afflictions, Knowledge, Position, Resources
 from scripts.engine.core.constants import Direction, PrimaryStat, DamageType
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData
-from scripts.engine.effect import AffectStatEffect, ApplyAfflictionEffect, DamageEffect, MoveActorEffect
+from scripts.engine.effect import AffectCooldownEffect, AffectStatEffect, ApplyAfflictionEffect, DamageEffect, \
+    MoveActorEffect
 from scripts.engine.world_objects.game_map import GameMap
 import pytest
 from scripts.nqp.actions import afflictions, behaviours, skills  # must import to register in engine
@@ -231,3 +232,52 @@ def test_apply_affliction_effect(
         assert affliction_name in names
     else:
         assert affliction_name not in names
+
+
+_skill_names = []
+for name in library.SKILLS.keys():
+    _skill_names.append(name)
+
+
+@pytest.fixture(params=_skill_names)
+def skill_name(request):
+    return request.param
+
+
+@pytest.fixture(params=[-100, -1, 0, 1, 100])
+def affect_cooldown_amount(request):
+    return request.param
+
+
+def test_apply_affliction_effect(
+        benchmark,
+        skill_name,
+        affect_cooldown_amount
+):
+    entity = _create_scenario()
+
+    # assign skill
+    world.learn_skill(entity, skill_name)
+
+    effect = AffectCooldownEffect(
+        origin=entity,
+        target=entity,
+        success_effects=[],
+        failure_effects=[],
+        skill_name=skill_name,
+        affect_amount=affect_cooldown_amount,
+    )
+
+    cooldown = 99
+    knowledge = world.get_entitys_component(entity, Knowledge)
+    knowledge.set_skill_cooldown(skill_name, cooldown)
+    success = benchmark(effect.evaluate)[0]
+    end_cooldown = knowledge.cooldowns[skill_name]
+
+    if success:
+        assert max(cooldown - affect_cooldown_amount, 0) == end_cooldown
+    else:
+        assert cooldown == end_cooldown
+
+
+
