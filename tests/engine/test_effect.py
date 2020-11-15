@@ -1,11 +1,11 @@
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import Resources
-from scripts.engine.core.constants import PrimaryStat, DamageType
+from scripts.engine.component import Position, Resources
+from scripts.engine.core.constants import Direction, PrimaryStat, DamageType
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData
-from scripts.engine.effect import DamageEffect
+from scripts.engine.effect import DamageEffect, MoveActorEffect
 from scripts.engine.world_objects.game_map import GameMap
 import pytest
 from scripts.nqp.actions import afflictions, behaviours, skills  # must import to register in engine
@@ -104,7 +104,44 @@ def test_damage_effect(
     # would need to consider  potency, stats etc.
     if damage > 0:
         assert start_hp != end_hp
-    elif damage == 0:
+    elif damage <= 0:
         assert start_hp == end_hp
-    elif damage < 0:
-        assert start_hp == end_hp
+
+
+test_move_actor_effect_parameters = [
+    Direction.UP,
+    Direction.UP_RIGHT,
+    Direction.UP_LEFT,
+    Direction.DOWN,
+    Direction.DOWN_RIGHT,
+    Direction.DOWN_LEFT
+]
+
+
+@pytest.mark.parametrize(["x", "y"], test_move_actor_effect_parameters)
+def test_move_actor_effect(
+        benchmark,
+        x,
+        y
+):
+    entity = _create_scenario()
+    direction = (x, y)
+
+    effect = MoveActorEffect(
+        origin=entity,
+        target=entity,
+        direction=direction,
+        success_effects=[],
+        failure_effects=[],
+        move_amount=1
+    )
+
+    start_pos = world.get_entitys_component(entity, Position)
+    success = benchmark(effect.evaluate)
+    end_pos = world.get_entitys_component(entity, Position)
+
+    # assess results
+    if success:
+        assert start_pos.x != end_pos.x or start_pos.y != end_pos.y
+    else:
+        assert start_pos.x == end_pos.x or start_pos.y == end_pos.y

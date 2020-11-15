@@ -81,6 +81,10 @@ class DamageEffect(Effect):
         Resolve the damage effect and return the conditional effects based on if the damage is greater than 0.
         """
         logging.debug("Evaluating Damage Effect...")
+        if self.damage <= 0:
+            logging.info(f"Damage given to DamageEffect is {self.damage} and was therefore not executed.")
+            return self.failure_effects
+
         if not world.entity_has_component(self.origin, HasCombatStats) or not world.entity_has_component(
             self.target, HasCombatStats
         ):

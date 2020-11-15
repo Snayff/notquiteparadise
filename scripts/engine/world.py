@@ -1265,7 +1265,7 @@ def apply_damage(entity: EntityID, damage: int) -> bool:
     """
     Remove damage from entity's health. Return remaining health.
     """
-    if damage <= 1:
+    if damage <= 0:
         logging.info(f"Damage was {damage} and therefore nothing was done.")
         return False
 
@@ -1433,12 +1433,16 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
     # round down the dmg
     int_modified_damage = int(modified_damage)
 
+    # never less than 1
+    if int_modified_damage <= 0:
+        logging.debug(f"-> Damage ended at {int_modified_damage} so replaced with minimum damage value of 1.")
+        int_modified_damage = 1
+
     # log the info
-    log_string = (
+    logging.debug(
         f"-> Initial:{base_damage}, Mitigated: {format(mitigated_damage, '.2f')},  Modified"
         f":{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
     )
-    logging.debug(log_string)
 
     return int_modified_damage
 
