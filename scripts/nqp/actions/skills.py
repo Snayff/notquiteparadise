@@ -6,16 +6,10 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine import library, world
-from scripts.engine.action import Skill, init_action
+from scripts.engine.action import init_action, Skill
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import DamageType, DirectionType, PrimaryStat, Shape
-from scripts.engine.effect import (
-    ApplyAfflictionEffect,
-    DamageEffect,
-    Effect,
-    MoveActorEffect,
-    ReduceSkillCooldownEffect,
-)
+from scripts.engine.effect import AffectCooldownEffect, ApplyAfflictionEffect, DamageEffect, Effect, MoveActorEffect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -166,12 +160,17 @@ class Lunge(Skill):
             return None
         return entities[0]
 
-    def _build_cooldown_reduction_effect(self, entity: EntityID) -> ReduceSkillCooldownEffect:
+    def _build_cooldown_reduction_effect(self, entity: EntityID) -> AffectCooldownEffect:
         """
         Returns an effect that executes the cooldown effect for the lunge
         """
-        cooldown_effect = ReduceSkillCooldownEffect(
-            origin=self.user, target=entity, skill_name=self.name, amount=2, success_effects=[], failure_effects=[]
+        cooldown_effect = AffectCooldownEffect(
+            origin=self.user,
+            target=entity,
+            skill_name=self.name,
+            affect_amount=2,
+            success_effects=[],
+            failure_effects=[],
         )
         return cooldown_effect
 

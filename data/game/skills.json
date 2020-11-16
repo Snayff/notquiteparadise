@@ -116,7 +116,7 @@
     "Splash": {
         "__dataclass__": "SkillData",
         "cooldown": 2,
-        "description": "Through water around",
+        "description": "Throw water around",
         "icon_path": "skills/basic_attack.png",
         "name": "splash",
         "resource_cost": 10,

@@ -1,19 +1,20 @@
 from __future__ import annotations
 
+from abc import ABC
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, cast
-
-import pygame
-from snecs.typedefs import EntityID
+from typing import cast, Dict, List, Optional, Tuple, TYPE_CHECKING
 
 from scripts.engine.core.constants import (
     AfflictionCategory,
     AfflictionCategoryType,
-    AfflictionTriggerType,
+    DamageType,
+    DamageTypeType,
     Direction,
     DirectionType,
     EffectType,
     EffectTypeType,
+    InteractionTriggerType,
+    PrimaryStat,
     PrimaryStatType,
     ProjectileExpiry,
     ProjectileExpiryType,
@@ -39,7 +40,11 @@ from scripts.engine.core.constants import (
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
+    import pygame
+    from snecs.typedefs import EntityID
+
     from scripts.engine.action import Skill
+    from scripts.engine.effect import Effect
 
 #################################################################
 # This module is for specifying all defined data sets.
@@ -47,6 +52,19 @@ if TYPE_CHECKING:
 
 
 ######################### Aesthetics ##################################
+
+
+@register_dataclass_with_json
+@dataclass
+class LightData:
+    """
+    Data for a light source.
+    Also used to hold and map data from json.
+    """
+
+    radius: int = 0
+    colour: Tuple[int, int, int] = field(default=(0, 0, 0))
+    alpha: int = 0
 
 
 @register_dataclass_with_json
@@ -68,7 +86,8 @@ class TraitSpritesData:
 @dataclass
 class TraitSpritePathsData:
     """
-    Possible sprites paths for a trait
+    Possible sprites paths for a trait.
+    Also used to hold and map data from json.
     """
 
     render_order: RenderLayerType = field(default=RenderLayer.BOTTOM)
@@ -87,7 +106,8 @@ class TraitSpritePathsData:
 @dataclass
 class ActorData:
     """
-    Data class for an actor
+    Data class for an actor.
+    Also used to hold and map data from json.
     """
 
     key: str = "none"
@@ -103,6 +123,7 @@ class ActorData:
 class TraitData:
     """
     Data class for a trait.
+    Also used to hold and map data from json.
     """
 
     name: str = "none"
@@ -175,8 +196,9 @@ class ProjectileData:
     Data class for a projectile
     """
 
-    # what created it?
-    creator: EntityID = cast(EntityID, 0)  # this will be overwritten or will break, but need defaults to allow passing
+    # this will be overwritten or will break, but need defaults to allow passing
+    creator: EntityID = 0  # type: ignore
+
     skill_name: str = "none"
     skill_instance: Optional[Skill] = None
     name: str = "none"
@@ -206,17 +228,20 @@ class ProjectileData:
 
 @register_dataclass_with_json
 @dataclass
-class AspectData:
+class TerrainData:
     """
-    Data class for an aspects
+    Data class for terrain.
+    Also used to hold and map data from json.
     """
 
-    name: str = field(default="none")
-    description: str = field(default="none")
-    duration: int = 0
-    sprite: str = field(default="none")
+    name: str = "none"
+    description: str = "none"
     blocks_sight: bool = False
     blocks_movement: bool = False
+    position_offsets: List[Tuple[int, int]] = field(default_factory=list)
+    sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
+    reactions: Dict[InteractionTriggerType, EffectData] = field(default_factory=dict)
+    light: Optional[LightData] = None
 
 
 ################### GODS ###################################################
@@ -265,7 +290,8 @@ class GodData:
 class MapData:
     """
     Data class for a Map, specifically for generation. A map is a collection of rooms. Defines the rooms on
-    the map, how they are placed and joined up (tunnels).
+    the map, how they are placed and joined up ( with tunnels).
+    Also used to hold and map data from json.
     """
 
     name: str = "none"
@@ -327,7 +353,8 @@ class RoomConceptData:
 @dataclass
 class SkillData:
     """
-    Data class for a skill. Used by the library to load from json.
+    Data class for a skill.
+    Also used to hold and map data from json.
     """
 
     # how do we know it?
@@ -371,7 +398,7 @@ class SkillData:
 @dataclass()
 class AfflictionData:
     """
-    Data class for an Afflictions
+    Data class for an Affliction
     """
 
     name: str = "none"
@@ -382,35 +409,113 @@ class AfflictionData:
     shape_size: int = 1
     target_tags: List[TargetTagType] = field(default_factory=list)
     identity_tags: List[EffectTypeType] = field(default_factory=list)
-    triggers: List[AfflictionTriggerType] = field(default_factory=list)
+    triggers: List[InteractionTriggerType] = field(default_factory=list)
 
 
-@register_dataclass_with_json
+################### EFFECTS ###################################################
+
+
 @dataclass
-class EffectData:
+class EffectData(ABC):
     """
     Base data class for an effect.
     """
 
-    # who am I?
-    originator: Optional[EntityID] = None  # actor
-    creators_name: Optional[str] = None  # skill, projectile, etc.'s name
-    effect_type = EffectType.MOVE
+    effect_type: EffectTypeType
 
-    # who are we targeting?
-    target_tags: List[TargetTagType] = field(default_factory=list)
+    # not sure but these might come in as effect data which will crash
+    success_effects: List[Effect] = field(default_factory=list)
+    failure_effects: List[Effect] = field(default_factory=list)
 
-    # how are we targeting?
-    stat_to_target: Optional[PrimaryStatType] = None
+
+@register_dataclass_with_json
+@dataclass()
+class DamageEffectData(EffectData):
+    """
+    The data for a damage effect.
+    Also used to hold and map data from json.
+    """
+
+    effect_type: EffectTypeType = EffectType.DAMAGE
+
+    stat_to_target: PrimaryStatType = PrimaryStat.EXACTITUDE
     accuracy: int = 0
+    potency: float = 1.0
+    damage: int = 0
+    damage_type: DamageTypeType = DamageType.MUNDANE
+    mod_stat: PrimaryStatType = PrimaryStat.EXACTITUDE
+    mod_amount: float = 0.0
 
-    # what is the area of effect?
-    shape: ShapeType = Shape.TARGET
-    shape_size: int = 1
 
-    # what next?
-    success_effects: List[EffectData] = field(default_factory=list)
-    fail_effects: List[EffectData] = field(default_factory=list)
+@register_dataclass_with_json
+@dataclass()
+class MoveActorEffectData(EffectData):
+    """
+    The data for a apply affliction effect.
+    Also used to hold and map data from json.
+    """
+
+    effect_type: EffectTypeType = EffectType.MOVE
+
+    direction: DirectionType = Direction.CENTRE
+    move_amount: int = 0
+
+
+@register_dataclass_with_json
+@dataclass()
+class ApplyAfflictionEffectData(EffectData):
+    """
+    The data for a apply affliction effect.
+    Also used to hold and map data from json.
+    """
+
+    effect_type: EffectTypeType = EffectType.APPLY_AFFLICTION
+
+    affliction_name: str = ""
+    duration: int = 0
+
+
+@register_dataclass_with_json
+@dataclass()
+class AffectStatEffectData(EffectData):
+    """
+    The data for an affect stat effect.
+    Also used to hold and map data from json.
+    """
+
+    effect_type: EffectTypeType = EffectType.AFFECT_STAT
+
+    cause_name: str = ""
+    stat_to_target: PrimaryStatType = PrimaryStat.EXACTITUDE
+    affect_amount: int = 0
+
+
+@register_dataclass_with_json
+@dataclass()
+class AffectCooldownEffectData(EffectData):
+    """
+    The data for a apply affliction effect.
+    Also used to hold and map data from json.
+    """
+
+    effect_type: EffectTypeType = EffectType.AFFECT_COOLDOWN
+
+    skill_name: str = ""
+    affect_amount: int = 0
+
+
+@register_dataclass_with_json
+@dataclass()
+class AlterTerrainEffectData(EffectData):
+    """
+    The data for an  alter terrain effect.
+    Also used to hold and map data from json.
+    """
+
+    effect_type: EffectTypeType = EffectType.ALTER_TERRAIN
+
+    terrain_name: str = ""
+    affect_amount: int = 0
 
 
 ################### CONFIG ###################################################

@@ -12,7 +12,6 @@ from scripts.engine.core.constants import DATA_PATH, InputIntent
 from scripts.engine.core.definitions import (
     ActorData,
     AfflictionData,
-    AspectData,
     BasePrimaryStatData,
     BaseSecondaryStatData,
     BaseValueData,
@@ -25,6 +24,7 @@ from scripts.engine.core.definitions import (
     MapData,
     RoomConceptData,
     SkillData,
+    TerrainData,
     TraitData,
     VideoConfigData,
 )
@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 __all__ = [
     "TRAITS",
     "AFFLICTIONS",
-    "ASPECTS",
+    "TERRAIN",
     "BASE_STATS_PRIMARY",
     "BASE_STATS_SECONDARY",
     "GODS",
@@ -61,7 +61,7 @@ __all__ = [
 
 TRAITS: Dict[str, TraitData] = {}
 AFFLICTIONS: Dict[str, AfflictionData] = {}
-ASPECTS: Dict[str, AspectData] = {}
+TERRAIN: Dict[str, TerrainData] = {}
 BASE_STATS_PRIMARY: Dict[str, BasePrimaryStatData] = {}
 BASE_STATS_SECONDARY: Dict[str, BaseSecondaryStatData] = {}
 GODS: Dict[str, GodData] = {}
@@ -95,7 +95,7 @@ def refresh_library():
     if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
         _load_traits_data()
         _load_affliction_data()
-        _load_aspects_data()
+        _load_terrain_data()
         _load_base_stat_primary_data()
         _load_base_stat_secondary_data()
         _load_gods_data()
@@ -123,12 +123,12 @@ def _load_affliction_data():
     AFFLICTIONS = data
 
 
-def _load_aspects_data():
-    global ASPECTS
-    ASPECTS = {}  # FIXME - unstub when json updated inline with skills
-    # with open('data/game/aspects.json') as file:
-    #     data = json.load(file, object_hook=deserialise_dataclasses)
-    # _aspects = data
+def _load_terrain_data():
+    global TERRAIN
+    TERRAIN = {}
+    with open("data/game/terrain.json") as file:
+        data = json.load(file, object_hook=deserialise_dataclasses)
+    TERRAIN = data
 
 
 def _load_traits_data():

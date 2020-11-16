@@ -2,19 +2,18 @@ from __future__ import annotations
 
 import logging
 import os
-import time
 from threading import Timer
 from typing import List
 
 import snecs
 from snecs import Component
 
-from scripts.engine import chronicle, state, utility, world
+from scripts.engine import chronicle, library, state, utility, world
 from scripts.engine.component import Aesthetic, Position, WinCondition
-from scripts.engine.core.constants import ASSET_PATH, DEBUG_START, SAVE_PATH, GameState, RenderLayer, UIElement
+from scripts.engine.core import systems
+from scripts.engine.core.constants import ASSET_PATH, DEBUG_START, GameState, RenderLayer, SAVE_PATH, UIElement
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, TraitSpritePathsData
-from scripts.engine.systems import vision
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.game_map import GameMap
 
@@ -58,28 +57,11 @@ def _start_debug_game():
     # init the player
     player = world.get_player()
 
-    # create win condition and place next to player
-    # player_pos = world.get_entitys_component(player, Position)
-    # win_x = player_pos.x + 1
-    # win_y = player_pos.y
-    # components: List[Component] = []
-    # components.append(Position((win_x, win_y)))  # lets hope this doesnt spawn in a wall
-    # components.append(WinCondition())
-    # traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/win_flag.png"))]
-    # sprites = utility.build_sprites_from_paths(traits_paths)
-    # components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
-    # world.create_entity(components)
-
     # tell places about the player
     chronicle.set_turn_holder(player)
 
-    # create a god
-    # world.create_god("the_small_gods")
-
     # show the in game screens
     ui.set_element_visibility(UIElement.CAMERA, True)
-    # ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
-    # ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
         assert isinstance(aesthetic, Aesthetic)
@@ -89,14 +71,17 @@ def _start_debug_game():
         aesthetic.target_draw_y = aesthetic.draw_y
 
     # entities load with a blank fov, update them now
-    vision.process_light_map()
-    vision.process_fov()
-    vision.process_tile_visibility()
+    systems.process_light_map()
+    systems.process_fov()
+    systems.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
     pos = world.get_entitys_component(player, Position)
     camera = ui.get_element(UIElement.CAMERA)
     camera.set_target((pos.x, pos.y), True)
+
+    # create terrain next to the player
+    world.create_terrain(library.TERRAIN["bog"], (pos.x + 1, pos.y))
 
     # loading finished, give player control
     state.set_new(GameState.GAMEMAP)
@@ -160,9 +145,9 @@ def start_game(player_data: ActorData):
         aesthetic.target_draw_y = aesthetic.draw_y
 
     # entities load with a blank fov, update them now
-    vision.process_light_map()
-    vision.process_fov()
-    vision.process_tile_visibility()
+    systems.process_light_map()
+    systems.process_fov()
+    systems.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
     pos = world.get_entitys_component(player, Position)

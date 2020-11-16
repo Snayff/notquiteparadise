@@ -11,6 +11,7 @@ Last updated on |today| for version |version|.
     nqp/core.extend_json
     nqp/core.store
     nqp/core.queries
+    nqp/core.systems
 
 ..  toctree::
     :maxdepth: 2
@@ -25,16 +26,8 @@ Last updated on |today| for version |version|.
     nqp/key
     nqp/library
     nqp/state
-    nqp/thought
     nqp/utility
     nqp/world
-
-
-..  toctree::
-    :maxdepth: 2
-    :caption: Systems API
-
-    nqp/systems
 
 
 ..  toctree::

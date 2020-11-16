@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Type
+from typing import Type, TYPE_CHECKING
 
 import pygame
 import pygame_gui
@@ -11,7 +11,8 @@ from pygame_gui.elements import UIButton, UIPanel
 from scripts.engine.core.constants import GameEvent, InputEvent, RenderLayer
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Any, Dict, List, Optional, Tuple, Union
+
     from pygame_gui import UIManager
 
 

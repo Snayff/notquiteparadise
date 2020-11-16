@@ -2,24 +2,47 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, cast
+from typing import cast, Tuple, TYPE_CHECKING
 
+import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, Afflictions, Blocking, HasCombatStats, Knowledge, Position, Resources
+from scripts.engine.component import (
+    Aesthetic,
+    Afflictions,
+    Blocking,
+    HasCombatStats,
+    Identity,
+    Knowledge,
+    Lifespan,
+    Position,
+    Resources,
+)
+from scripts.engine.core import queries
 from scripts.engine.core.constants import (
-    AfflictionTrigger,
-    AfflictionTriggerType,
     DamageTypeType,
     Direction,
     DirectionType,
+    InteractionEvent,
+    InteractionTrigger,
+    InteractionTriggerType,
     PrimaryStatType,
     TargetTag,
 )
 
 if TYPE_CHECKING:
-    from typing import Optional, List
+    from typing import List, Optional
+
+
+__all__ = [
+    "DamageEffect",
+    "MoveActorEffect",
+    "AffectStatEffect",
+    "ApplyAfflictionEffect",
+    "AffectCooldownEffect",
+    "AlterTerrainEffect",
+]
 
 
 class Effect(ABC):
@@ -28,9 +51,15 @@ class Effect(ABC):
     """
 
     def __init__(
-        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect], potency: float = 1.0
+        self,
+        origin: EntityID,
+        target: EntityID,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+        potency: float = 1.0,
     ):
         self.origin = origin
+        self.target = target
         self.success_effects: List[Effect] = success_effects
         self.failure_effects: List[Effect] = failure_effects
         self.potency: float = potency
@@ -41,9 +70,6 @@ class Effect(ABC):
         Evaluate the effect, triggering more if needed. Must be overridden by subclass
         """
         pass
-
-    def _create_affliction_trigger(self, trigger_type, target):
-        return TriggerAfflictionsEffect(self.origin, target, trigger_type, [], [])
 
 
 class DamageEffect(Effect):
@@ -62,27 +88,29 @@ class DamageEffect(Effect):
         potency: float = 1.0,
     ):
 
-        super().__init__(origin, success_effects, failure_effects, potency)
+        super().__init__(origin, target, success_effects, failure_effects, potency)
 
         self.accuracy = accuracy
         self.stat_to_target = stat_to_target
-        self.target = target
         self.damage = damage
         self.damage_type = damage_type
         self.mod_amount = mod_amount
         self.mod_stat = mod_stat
-        self.success_triggers = [self._create_affliction_trigger(AfflictionTrigger.TAKE_DAMAGE, self.target)]
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Resolve the damage effect and return the conditional effects based on if the damage is greater than 0.
         """
         logging.debug("Evaluating Damage Effect...")
+        if self.damage <= 0:
+            logging.info(f"Damage given to DamageEffect is {self.damage} and was therefore not executed.")
+            return False, self.failure_effects
+
         if not world.entity_has_component(self.origin, HasCombatStats) or not world.entity_has_component(
             self.target, HasCombatStats
         ):
             logging.info(f"Either caster or target doesnt have combat stats so damage cannot be applied.")
-            return self.failure_effects  # exit
+            return False, self.failure_effects
 
         defenders_stats = world.create_combat_stats(self.target)
         attackers_stats = world.create_combat_stats(self.origin)
@@ -100,34 +128,44 @@ class DamageEffect(Effect):
         # apply the damage
         if world.apply_damage(self.target, damage):
             defenders_resources = world.get_entitys_component(self.target, Resources)
-            if defenders_resources:
-                if damage >= defenders_resources.health:
-                    world.kill_entity(self.target)
 
-            return self.success_effects + self.success_triggers
+            # post interaction event
+            event = pygame.event.Event(
+                InteractionEvent.DAMAGE,
+                origin=self.origin,
+                target=self.target,
+                amount=damage,
+                damage_type=self.damage_type,
+                remaining_hp=defenders_resources.health,
+            )
+            pygame.event.post(event)
+
+            # check if target is dead
+            if damage >= defenders_resources.health:
+                world.kill_entity(self.target)
+
+            return True, self.success_effects
         else:
-            return self.failure_effects
+            return False, self.failure_effects
 
 
 class MoveActorEffect(Effect):
     def __init__(
         self,
         origin: EntityID,
+        target: EntityID,
         success_effects: List[Effect],
         failure_effects: List[Effect],
-        target: EntityID,
         direction: DirectionType,
         move_amount: int,
     ):
 
-        super().__init__(origin, success_effects, failure_effects)
+        super().__init__(origin, target, success_effects, failure_effects)
 
-        self.target = target
         self.direction = direction
         self.move_amount = move_amount
-        self.success_triggers = [self._create_affliction_trigger(AfflictionTrigger.MOVEMENT, self.target)]
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Resolve the move effect and return the conditional effects based on if the target moved the full amount.
         """
@@ -136,7 +174,7 @@ class MoveActorEffect(Effect):
         success = False
         pos = world.get_entitys_component(self.target, Position)
         if not pos:
-            return self.failure_effects
+            return False, self.failure_effects
 
         dir_x, dir_y = self.direction
         entity = self.target
@@ -145,7 +183,7 @@ class MoveActorEffect(Effect):
         for _ in range(0, self.move_amount):
             new_x = pos.x + dir_x
             new_y = pos.y + dir_y
-            collides = MoveActorEffect._check_collision(entity, dir_x, dir_y)
+            collides = self._check_collision(entity, dir_x, dir_y)
             success = not collides
 
             if not collides:
@@ -155,6 +193,17 @@ class MoveActorEffect(Effect):
                 # update position
                 if _position:
                     _position.set(new_x, new_y)
+
+                    # post interaction event
+                    event = pygame.event.Event(
+                        InteractionEvent.MOVE,
+                        origin=self.origin,
+                        target=self.target,
+                        direction=self.direction,
+                        new_pos=(new_x, new_y),
+                    )
+                    pygame.event.post(event)
+
                     success = True
 
                 # animate change
@@ -164,18 +213,15 @@ class MoveActorEffect(Effect):
                     aesthetic.current_sprite = aesthetic.sprites.move
 
         if success:
-            return self.success_effects + self.success_triggers
+            return True, self.success_effects
         else:
-            return self.failure_effects
+            return False, self.failure_effects
 
     @staticmethod
-    def _check_collision(entity, dir_x, dir_y):
+    def _check_collision(entity: EntityID, dir_x: int, dir_y: int) -> bool:
         """
-        Checks if the entity will be able to move in the provided direction
-        :param entity: Entity to test
-        :param dir_x: X component of the direction
-        :param dir_y: Y component of the direction
-        :return: A bool that represents if the entity will collide if it moves in the provided direction
+        Checks if the entity will collide with something when trying to move in the provided direction. Returns True
+        if blocked.
         """
         collides = False
 
@@ -189,95 +235,53 @@ class MoveActorEffect(Effect):
             target_tile = world.get_tile((target_x, target_y))
 
             # check a tile was returned
+            is_tile_blocking_movement = False
             if target_tile:
                 is_tile_blocking_movement = world.tile_has_tag(entity, target_tile, TargetTag.BLOCKED_MOVEMENT)
-                is_entity_on_tile = not world.tile_has_tag(entity, target_tile, TargetTag.NO_ENTITY)
-            else:
-                is_tile_blocking_movement = True
-                is_entity_on_tile = False
 
-            # check for no entity in way but tile is blocked
-            if not is_entity_on_tile and is_tile_blocking_movement and target_tile:
-                logging.debug(
-                    f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was"
-                    f" blocked by terrain. "
-                )
-                collides = True
-
-            # check if entity blocking tile
-            elif is_entity_on_tile and target_tile:
+            # check if tile is blocked
+            if is_tile_blocking_movement:
                 from scripts.engine.core import queries
 
-                for blocking_entity, (position, blocking) in queries.position_and_blocking:
-                    assert isinstance(position, Position)
+                for blocking_entity, (pos, blocking) in queries.position_and_blocking:
+                    assert isinstance(pos, Position)
                     assert isinstance(blocking, Blocking)
-                    if blocking_entity != entity and blocking.blocks_movement and (target_x, target_y) in position:
+                    if (
+                        blocking_entity != entity
+                        and blocking.blocks_movement
+                        and (target_x, target_y) in pos.coordinates
+                    ):
                         # blocked by entity
                         blockers_name = world.get_name(blocking_entity)
                         logging.debug(
                             f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
                             f" by '{blockers_name}'. "
                         )
-                        collides = True
                         break
+                collides = True
 
         return collides
-
-
-class TriggerAfflictionsEffect(Effect):
-    def __init__(
-        self,
-        origin: EntityID,
-        target: EntityID,
-        trigger_type: AfflictionTriggerType,
-        success_effects: List[Effect],
-        failure_effects: List[Effect],
-    ):
-
-        super().__init__(origin, success_effects, failure_effects)
-
-        self.trigger_type = trigger_type
-        self.target = target
-
-    def evaluate(self) -> List[Effect]:
-        """
-        Trigger all the afflictions on the self.target entity that match the trigger type. Fail if nothing matches
-        """
-        logging.debug(f"Evaluating Trigger Affliction Effect of type '{self.trigger_type}'...")
-        afflictions = world.get_entitys_component(self.target, Afflictions)
-        success = False
-
-        if afflictions:
-            # iterate over each affliction and trigger it if necessary
-            for affliction in afflictions.active:
-                if self.trigger_type in affliction.triggers:
-                    success = world.apply_affliction(affliction)
-
-        if success:
-            return self.success_effects
-        return self.failure_effects
 
 
 class AffectStatEffect(Effect):
     def __init__(
         self,
         origin: EntityID,
+        target: EntityID,
         success_effects: List[Effect],
         failure_effects: List[Effect],
         cause_name: str,
-        target: EntityID,
         stat_to_target: PrimaryStatType,
         affect_amount: int,
     ):
 
-        super().__init__(origin, success_effects, failure_effects)
+        super().__init__(origin, target, success_effects, failure_effects)
 
         self.stat_to_target = stat_to_target
         self.affect_amount = affect_amount
-        self.target = target
         self.cause_name = cause_name
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Log the affliction and the stat modification in the Affliction component.
         """
@@ -289,12 +293,23 @@ class AffectStatEffect(Effect):
             # if not already applied
             if self.cause_name not in afflictions.stat_modifiers:
                 afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
+
+                # post interaction event
+                event = pygame.event.Event(
+                    InteractionEvent.AFFECT_STAT,
+                    origin=self.origin,
+                    target=self.target,
+                    stat=self.stat_to_target,
+                    amount=self.affect_amount,
+                )
+                pygame.event.post(event)
+
                 success = True
 
         if success:
-            return self.success_effects
+            return True, self.success_effects
         else:
-            return self.failure_effects
+            return False, self.failure_effects
 
 
 class ApplyAfflictionEffect(Effect):
@@ -302,50 +317,58 @@ class ApplyAfflictionEffect(Effect):
         self,
         origin: EntityID,
         target: EntityID,
-        affliction_name: str,
-        duration: int,
         success_effects: List[Effect],
         failure_effects: List[Effect],
+        affliction_name: str,
+        duration: int,
     ):
-        super().__init__(origin, success_effects, failure_effects)
+        super().__init__(origin, target, success_effects, failure_effects)
 
         self.affliction_name = affliction_name
-        self.target = target
         self.duration = duration
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Applies an affliction to an entity
         """
         logging.debug("Evaluating Apply Affliction Effect...")
 
         affliction_instance = world.create_affliction(self.affliction_name, self.origin, self.target, self.duration)
-        afflictions = world.get_entitys_component(self.target, Afflictions)
+
         # add the affliction to the afflictions component
-        if afflictions:
+        if world.entity_has_component(self.target, Afflictions):
+            afflictions = world.get_entitys_component(self.target, Afflictions)
             afflictions.add(affliction_instance)
-            return self.success_effects
+            world.apply_affliction(affliction_instance)
+
+            # post interaction event
+            event = pygame.event.Event(
+                InteractionEvent.AFFLICTION, origin=self.origin, target=self.target, name=self.affliction_name
+            )
+            pygame.event.post(event)
+
+            return True, self.success_effects
+
         # didn't have the component, fail
-        return self.failure_effects
+        return False, self.failure_effects
 
 
-class ReduceSkillCooldownEffect(Effect):
+class AffectCooldownEffect(Effect):
     def __init__(
         self,
         origin: EntityID,
         target: EntityID,
-        skill_name: str,
-        amount: int,
         success_effects: List[Effect],
         failure_effects: List[Effect],
+        skill_name: str,
+        affect_amount: int,
     ):
-        super().__init__(origin, success_effects, failure_effects)
+        super().__init__(origin, target, success_effects, failure_effects)
 
-        self.target = target
         self.skill_name = skill_name
-        self.amount = amount
+        self.affect_amount = affect_amount
 
-    def evaluate(self) -> List[Effect]:
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Reduces the cooldown of a skill of an entity
         """
@@ -355,75 +378,94 @@ class ReduceSkillCooldownEffect(Effect):
 
         if knowledge:
             current_cooldown = knowledge.cooldowns[self.skill_name]
-            knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.amount)
+            knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.affect_amount)
+
+            # post interaction event
+            event = pygame.event.Event(
+                InteractionEvent.AFFECT_COOLDOWN, origin=self.origin, target=self.target, amount=self.affect_amount
+            )
+            pygame.event.post(event)
+
             logging.debug(
                 f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to "
                 f"{knowledge.cooldowns[self.skill_name]}"
             )
-            return self.success_effects
+            return True, self.success_effects
 
-        return self.failure_effects
+        return False, self.failure_effects
 
 
-class AddAspectEffect(Effect):
+class AlterTerrainEffect(Effect):
     def __init__(
-        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
+        self,
+        origin: EntityID,
+        target: EntityID,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+        terrain_name: str,
+        affect_amount: int,
     ):
-        super().__init__(origin, success_effects, failure_effects)
+        super().__init__(origin, target, success_effects, failure_effects)
 
-    def evaluate(self) -> List[Effect]:
+        self.terrain_name = terrain_name
+        self.affect_amount = affect_amount
+
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
-        TBC - not implemented
+        Create or reduce the duration of temporary terrain.
         """
-        logging.debug("Evaluating Add Aspect Effect...")
-        logging.warning("-> effect not implemented.")
+        logging.debug("Evaluating Alter Terrain Effect...")
 
-        return []
+        # check duration
+        if self.affect_amount <= 0:
+            success = self._reduce_terrain_duration()
+        else:
+            success = self._create_terrain()
 
+        # return effect sets
+        if success:
+            return True, self.success_effects
+        else:
+            return False, self.failure_effects
 
-class RemoveAspectEffect(Effect):
-    def __init__(
-        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
-    ):
-        super().__init__(origin, success_effects, failure_effects)
+    def _create_terrain(self) -> bool:
+        result = False
+        duplicate = False
+        terrain_name = self.terrain_name
+        target_pos = world.get_entitys_component(self.target, Position)
 
-    def evaluate(self) -> List[Effect]:
-        """
-        TBC - not implemented
-        """
-        logging.debug("Evaluating Remove Aspect Effect...")
-        logging.warning("-> effect not implemented.")
+        # check target location doesnt already have the given terrain
+        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+            assert isinstance(position, Position)
+            assert isinstance(identity, Identity)
+            assert isinstance(lifespan, Lifespan)
+            if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
+                duplicate = True
+                break
 
-        return []
+        # can we create the terrain?
+        if not duplicate:
+            # create target
+            from scripts.engine import library
 
+            terrain_data = library.TERRAIN[terrain_name]
+            world.create_terrain(terrain_data, (target_pos.x, target_pos.y), self.affect_amount)
+            result = True
 
-class TriggerSkillEffect(Effect):
-    def __init__(
-        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
-    ):
-        super().__init__(origin, success_effects, failure_effects)
+        return result
 
-    def evaluate(self) -> List[Effect]:
-        """
-        TBC - not implemented
-        """
-        logging.debug("Evaluating Trigger Skill Effect...")
-        logging.warning("-> effect not implemented.")
+    def _reduce_terrain_duration(self) -> bool:
+        result = False
+        terrain_name = self.terrain_name
+        target_pos = world.get_entitys_component(self.target, Position)
 
-        return []
+        # check there is a terrain at target to reduce duration of
+        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+            assert isinstance(position, Position)
+            assert isinstance(identity, Identity)
+            assert isinstance(lifespan, Lifespan)
+            if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
+                lifespan.duration -= self.affect_amount
+                result = True
 
-
-class KillEffect(Effect):
-    def __init__(
-        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
-    ):
-        super().__init__(origin, success_effects, failure_effects)
-
-    def evaluate(self) -> List[Effect]:
-        """
-        TBC - not implemented
-        """
-        logging.debug("Evaluating Kill Effect...")
-        logging.warning("-> effect not implemented.")
-
-        return []
+        return result

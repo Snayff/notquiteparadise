@@ -2,21 +2,21 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Type, TypeVar, cast
+from typing import cast, Dict, List, Optional, Tuple, Type, TYPE_CHECKING, TypeVar
 
 import numpy as np
 import snecs
 import tcod
-from snecs import Component, Query, new_entity
+from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
 from scripts.engine import action, chronicle, library, utility
 from scripts.engine.component import (
-    FOV,
     Aesthetic,
     Afflictions,
     Blocking,
     Exists,
+    FOV,
     HasCombatStats,
     Identity,
     IsActive,
@@ -24,21 +24,23 @@ from scripts.engine.component import (
     IsGod,
     IsPlayer,
     Knowledge,
+    Lifespan,
     LightSource,
     Opinion,
     Position,
+    Reaction,
     Resources,
     Thought,
     Tracked,
     Traits,
 )
 from scripts.engine.core.constants import (
-    INFINITE,
-    TILE_SIZE,
     Direction,
     DirectionType,
+    EffectType,
     HitType,
     HitTypeType,
+    INFINITE,
     PrimaryStat,
     PrimaryStatType,
     RenderLayer,
@@ -47,12 +49,33 @@ from scripts.engine.core.constants import (
     ShapeType,
     TargetTag,
     TargetTagType,
+    TILE_SIZE,
     TraitGroup,
     TravelMethod,
     TravelMethodType,
 )
 from scripts.engine.core.data import store
-from scripts.engine.core.definitions import ActorData, ProjectileData
+from scripts.engine.core.definitions import (
+    ActorData,
+    AffectCooldownEffectData,
+    AffectStatEffectData,
+    AlterTerrainEffectData,
+    ApplyAfflictionEffectData,
+    DamageEffectData,
+    EffectData,
+    MoveActorEffectData,
+    ProjectileData,
+    TerrainData,
+)
+from scripts.engine.effect import (
+    AffectCooldownEffect,
+    AffectStatEffect,
+    AlterTerrainEffect,
+    ApplyAfflictionEffect,
+    DamageEffect,
+    Effect,
+    MoveActorEffect,
+)
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects import lighting
@@ -61,12 +84,14 @@ from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Optional, Tuple, List
+    from typing import List, Optional, Tuple
+
     from scripts.engine.action import Affliction, Behaviour, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
 
 _C = TypeVar("_C", bound=Component)  # to represent components where we don't know which is being used
+
 get_entitys_components = snecs.all_components
 get_components = Query
 entity_has_component = snecs.has_component
@@ -189,7 +214,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     # create the entity
     entity = create_entity(components)
 
-    # add permanent afflictions, since we can only add them once an entity is created
+    # add permanent afflictions post creation,  since we can only add them once an entity is created
     perm_afflictions = []
     for name in perm_afflictions_names:
         # create the affliction with no specific source
@@ -205,6 +230,43 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
     logging.debug(f"Entity, '{name}', created.")
+
+    return entity
+
+
+def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int], lifespan: int = INFINITE) -> EntityID:
+    """
+    Create terrain
+    """
+    components: List[Component] = []
+    x, y = spawn_pos
+
+    # get dimensions of actor
+    occupied_tiles = []
+    for offset in terrain_data.position_offsets:
+        occupied_tiles.append((offset[0] + x, offset[1] + y))
+
+    # terrain components
+    components.append(Lifespan(lifespan))
+    components.append(Position(*occupied_tiles))
+    components.append(Identity(terrain_data.name, terrain_data.description))
+    components.append(Blocking(terrain_data.blocks_movement, terrain_data.blocks_sight))
+
+    # add aesthetic N.B. translation to screen coordinates is handled by the camera
+    sprites = build_sprites_from_paths([terrain_data.sprite_paths], (TILE_SIZE, TILE_SIZE))
+    components.append(Aesthetic(sprites.idle, sprites, [terrain_data.sprite_paths], RenderLayer.TERRAIN, (x, y)))
+
+    # add reactions
+    components.append(Reaction(terrain_data.reactions))
+
+    # add light
+    if terrain_data.light:
+        _light = terrain_data.light
+        light_id = create_light(spawn_pos, _light.radius, _light.colour, _light.alpha)
+        components.append(LightSource(light_id, _light.radius))
+
+    # create the entity
+    entity = create_entity(components)
 
     return entity
 
@@ -257,8 +319,7 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
     """
     Creates an instance of an Affliction provided the name
     """
-    affliction_data = library.AFFLICTIONS[name]
-    affliction = action.affliction_registry[affliction_data.name](creator, target, duration)
+    affliction = action.affliction_registry[name](creator, target, duration)
     return affliction
 
 
@@ -300,6 +361,129 @@ def create_pathfinder() -> tcod.path.Pathfinder:
     pathfinder = tcod.path.Pathfinder(graph)
 
     return pathfinder
+
+
+def create_effect(origin: EntityID, target: EntityID, data: EffectData) -> Effect:
+    """
+    Create an effect from effect data.
+    """
+    effect_type = data.effect_type
+
+    if effect_type == EffectType.APPLY_AFFLICTION:
+        assert isinstance(data, ApplyAfflictionEffectData)
+        return _create_apply_affliction_effect(origin, target, data)
+
+    elif effect_type == EffectType.DAMAGE:
+        assert isinstance(data, DamageEffectData)
+        return _create_damage_effect(origin, target, data)
+
+    elif effect_type == EffectType.MOVE:
+        assert isinstance(data, MoveActorEffectData)
+        return _create_move_actor_effect(origin, target, data)
+
+    elif effect_type == EffectType.AFFECT_STAT:
+        assert isinstance(data, AffectStatEffectData)
+        return _create_affect_stat_effect(origin, target, data)
+
+    elif effect_type == EffectType.AFFECT_COOLDOWN:
+        assert isinstance(data, AffectCooldownEffectData)
+        return _create_affect_cooldown_effect(origin, target, data)
+
+    elif effect_type == EffectType.ALTER_TERRAIN:
+        assert isinstance(data, AlterTerrainEffectData)
+        return _create_alter_terrain_effect(origin, target, data)
+
+    else:
+        raise KeyError(f"Create effect: Effect provided ({effect_type}) was not handled.")
+
+
+def _create_apply_affliction_effect(
+    origin: EntityID, target: EntityID, data: ApplyAfflictionEffectData
+) -> ApplyAfflictionEffect:
+    effect = ApplyAfflictionEffect(
+        origin=origin,
+        target=target,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        affliction_name=data.affliction_name,
+        duration=data.duration,
+    )
+    return effect
+
+
+def _create_damage_effect(origin: EntityID, target: EntityID, data: DamageEffectData) -> DamageEffect:
+    effect = DamageEffect(
+        origin=origin,
+        target=target,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        stat_to_target=data.stat_to_target,
+        accuracy=data.accuracy,
+        damage=data.damage,
+        damage_type=data.damage_type,
+        mod_stat=data.mod_stat,
+        mod_amount=data.mod_amount,
+        potency=data.potency,
+    )
+
+    return effect
+
+
+def _create_move_actor_effect(origin: EntityID, target: EntityID, data: MoveActorEffectData) -> MoveActorEffect:
+    effect = MoveActorEffect(
+        origin=origin,
+        target=target,
+        direction=data.direction,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        move_amount=data.move_amount,
+    )
+
+    return effect
+
+
+def _create_affect_stat_effect(origin: EntityID, target: EntityID, data: AffectStatEffectData) -> AffectStatEffect:
+    effect = AffectStatEffect(
+        origin=origin,
+        target=target,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        cause_name=data.cause_name,
+        stat_to_target=data.stat_to_target,
+        affect_amount=data.affect_amount,
+    )
+
+    return effect
+
+
+def _create_affect_cooldown_effect(
+    origin: EntityID, target: EntityID, data: AffectCooldownEffectData
+) -> AffectCooldownEffect:
+    effect = AffectCooldownEffect(
+        origin=origin,
+        target=target,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        skill_name=data.skill_name,
+        affect_amount=data.affect_amount,
+    )
+
+    return effect
+
+
+def _create_alter_terrain_effect(
+    origin: EntityID, target: EntityID, data: AlterTerrainEffectData
+) -> AlterTerrainEffect:
+    effect = AlterTerrainEffect(
+        origin=origin,
+        target=target,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        terrain_name=data.terrain_name,
+        affect_amount=data.affect_amount,
+    )
+
+    return effect
 
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
@@ -1023,19 +1207,18 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
     return False
 
 
-def apply_skill(skill_instance: Skill) -> bool:
+def apply_skill(skill: Skill) -> bool:
     """
-     Resolve the skill's effects. Returns True is successful if criteria to apply skill was met, False if not.
+    Resolve the skill's effects. Returns True is successful if criteria to apply skill was met, False if not.
     """
-    skill = skill_instance
     # ensure they are the right target type
     if tile_has_tags(skill.user, skill.target_tile, skill.target_tags):
-        for entity, effects in skill_instance.apply():
+        for entity, effects in skill.apply():
             if entity not in skill.ignore_entities:
                 effect_queue = list(effects)
                 while effect_queue:
                     effect = effect_queue.pop()
-                    effect_queue.extend(effect.evaluate())
+                    effect_queue.extend(effect.evaluate()[1])
         return True
     else:
         logging.info(
@@ -1046,26 +1229,25 @@ def apply_skill(skill_instance: Skill) -> bool:
     return False
 
 
-def set_skill_on_cooldown(skill_instance: Skill) -> bool:
+def set_skill_on_cooldown(skill: Skill) -> bool:
     """
     Sets a skill on cooldown
     """
-    user = skill_instance.user
-    name = skill_instance.__class__.__name__
+    user = skill.user
+    name = skill.__class__.__name__
     knowledge = get_entitys_component(user, Knowledge)
     if knowledge:
-        knowledge.set_skill_cooldown(name, skill_instance.base_cooldown)
+        knowledge.set_skill_cooldown(name, skill.base_cooldown)
         return True
     return False
 
 
-def apply_affliction(affliction_instance: Affliction) -> bool:
+def apply_affliction(affliction: Affliction) -> bool:
     """
     Apply the affliction's effects. Returns True is successful if criteria to trigger the affliction was met,
     False if not.
     """
-    affliction = affliction_instance
-    target = affliction_instance.affected_entity
+    target = affliction.affected_entity
     position = get_entitys_component(target, Position)
     if position:
         target_tile = get_tile((position.x, position.y))
@@ -1076,7 +1258,7 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
                 effect_queue = list(effects)
                 while effect_queue:
                     effect = effect_queue.pop()
-                    effect_queue.extend(effect.evaluate())
+                    effect_queue.extend(effect.evaluate()[1])
             return True
         else:
             logging.info(
@@ -1085,6 +1267,17 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
             )
 
     return False
+
+
+def trigger_affliction(affliction: Affliction):
+    """
+    Trigger the affliction on the affected entity.
+    """
+    for entity, effects in affliction.trigger():
+        effect_queue = list(effects)
+        while effect_queue:
+            effect = effect_queue.pop()
+            effect_queue.extend(effect.evaluate()[1])
 
 
 def take_turn(entity: EntityID) -> bool:
@@ -1106,6 +1299,10 @@ def apply_damage(entity: EntityID, damage: int) -> bool:
     """
     Remove damage from entity's health. Return remaining health.
     """
+    if damage <= 0:
+        logging.info(f"Damage was {damage} and therefore nothing was done.")
+        return False
+
     resource = get_entitys_component(entity, Resources)
     if resource:
         resource.health -= damage
@@ -1270,12 +1467,16 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
     # round down the dmg
     int_modified_damage = int(modified_damage)
 
+    # never less than 1
+    if int_modified_damage <= 0:
+        logging.debug(f"-> Damage ended at {int_modified_damage} so replaced with minimum damage value of 1.")
+        int_modified_damage = 1
+
     # log the info
-    log_string = (
+    logging.debug(
         f"-> Initial:{base_damage}, Mitigated: {format(mitigated_damage, '.2f')},  Modified"
         f":{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
     )
-    logging.debug(log_string)
 
     return int_modified_damage
 

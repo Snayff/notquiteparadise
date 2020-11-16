@@ -2,17 +2,17 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Dict, Iterator, List, Literal
+from typing import Dict, Iterator, List, Literal, TYPE_CHECKING
 
 import tcod
 
 from scripts.engine import library, utility, world
-from scripts.engine.core.constants import MAP_BORDER_SIZE, TILE_SIZE, Direction, TileCategory, TileCategoryType
+from scripts.engine.core.constants import Direction, MAP_BORDER_SIZE, TILE_SIZE, TileCategory, TileCategoryType
 from scripts.engine.core.definitions import ActorData, MapData, RoomConceptData
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Optional, Tuple, List
+    from typing import List, Optional, Tuple
 
 __all__ = ["generate", "generate_steps"]
 

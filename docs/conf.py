@@ -14,6 +14,7 @@
 
 import os
 import sys
+
 os.environ["GENERATING_SPHINX_DOCS"] = ""
 sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), os.pardir))) # go up a folder to access scripts
 

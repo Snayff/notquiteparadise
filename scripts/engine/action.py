@@ -2,16 +2,16 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Dict, Iterator, Optional, Type
+from typing import Dict, Iterator, Optional, Type, TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (
     AfflictionCategoryType,
-    AfflictionTriggerType,
     DirectionType,
     EffectTypeType,
+    InteractionTriggerType,
     ResourceType,
     ShapeType,
     TargetingMethodType,
@@ -22,7 +22,7 @@ from scripts.engine.effect import Effect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Tuple, List
+    from typing import List, Tuple
 
 __all__ = ["Skill", "Affliction", "Behaviour", "init_action", "skill_registry", "affliction_registry"]
 
@@ -206,7 +206,7 @@ class Affliction(Action):
 
     # to be overwritten in subclass, including being set by external data
     identity_tags: List[EffectTypeType]
-    triggers: List[AfflictionTriggerType]
+    triggers: List[InteractionTriggerType]
     category: AfflictionCategoryType
 
     def __init__(self, origin: EntityID, affected_entity: EntityID, duration: int):
@@ -229,6 +229,7 @@ class Affliction(Action):
         from scripts.engine import library
 
         cls.data = library.AFFLICTIONS[cls.__name__]
+        cls.name = cls.__name__
         cls.f_name = cls.data.name
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
@@ -241,6 +242,7 @@ class Affliction(Action):
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
+        Apply the affliction to the affected entity.
         An iterator over pairs of (affected entity, [effects]). Use affected entity position.  Applies to each
         entity only once.
         """
@@ -258,6 +260,12 @@ class Affliction(Action):
                         entity_names.append(world.get_name(entity))
 
         logging.debug(f"'{world.get_name(self.origin)}' applied '{self.__class__.__name__}' to {entity_names}.")
+
+    def trigger(self):
+        """
+        Trigger the affliction on the affected entity
+        """
+        yield self.affected_entity, self.build_effects(self.affected_entity)
 
 
 class Behaviour(ABC):

@@ -1,12 +1,10 @@
 
-Thought
+Systems
 ============================================
 
-.. automodule:: scripts.engine.thought
+.. automodule:: scripts.engine.core.systems
     :show-inheritance:
     :members:
-
-
 
 
 

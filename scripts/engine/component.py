@@ -6,13 +6,15 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
-from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType
+from scripts.engine.core.constants import EffectType, InteractionTriggerType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
+    from typing import Dict, List, Optional, Tuple, Type
+
     import pygame
-    from typing import List, Dict, Optional, Type, Tuple
+
     from scripts.engine.action import Affliction, Behaviour, Skill
-    from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
+    from scripts.engine.core.definitions import EffectData, TraitSpritePathsData, TraitSpritesData
 
 
 ##########################################################
@@ -410,9 +412,10 @@ class Knowledge(NQPComponent):
         else:
             _add_to_order = True
 
+        # TODO - make vars private if we should use methods
         self.skill_order: List[str] = skill_order
-        self.cooldowns: Dict[str, int] = cooldowns
-        self.skill_names: List[str] = []
+        self.cooldowns: Dict[str, int] = cooldowns  # TODO - can this be folded into skills?
+        self.skill_names: List[str] = []  # TODO - do we even need this anymore?
         self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
 
         for skill_class in skills:
@@ -467,7 +470,7 @@ class Afflictions(NQPComponent):
         active = active or []
         stat_modifiers = stat_modifiers or {}
 
-        self.active: List[Affliction] = active
+        self.active: List[Affliction] = active  # TODO - should this be a dict for easier querying?
         self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = stat_modifiers
 
     def serialize(self):
@@ -508,23 +511,6 @@ class Afflictions(NQPComponent):
 
             # remove from active list
             self.active.remove(affliction)
-
-
-class Aspect(NQPComponent):
-    """
-    An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
-    """
-
-    def __init__(self, aspects: Optional[Dict[str, int]] = None):
-        aspects = aspects or {}
-        self.aspects: Dict[str, int] = aspects
-
-    def serialize(self):
-        return self.aspects
-
-    @classmethod
-    def deserialize(cls, serialised):
-        return Aspect(*serialised)
 
 
 class Opinion(NQPComponent):
@@ -591,3 +577,42 @@ class LightSource(NQPComponent):
 
         light_box = world.get_game_map().light_box
         light_box.delete_light(self.light_id)
+
+
+class Reaction(NQPComponent):
+    """
+    Holds info about what triggers are in place and what happens as a result
+    """
+
+    def __init__(self, reactions: Dict[InteractionTriggerType, EffectData]):
+        self.reactions: Dict[InteractionTriggerType, EffectData] = reactions
+
+    def serialize(self):
+        serialised = {}
+
+        for trigger, effect in self.reactions.items():
+            serialised[trigger] = asdict(effect)
+
+        return serialised
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Reaction(*serialised)
+
+
+class Lifespan(NQPComponent):
+    """
+    Holds info relating to the limited lifespan of an entity. E.g. temporary summons.
+
+    Can be set to INFINITE, which prevents it being reduced each turn.
+    """
+
+    def __init__(self, duration: int):
+        self.duration = duration
+
+    def serialize(self):
+        return self.duration
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Lifespan(*serialised)

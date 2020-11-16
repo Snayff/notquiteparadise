@@ -7,7 +7,7 @@ from typing import Tuple
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, library, world
-from scripts.engine.action import Behaviour, Skill, init_action
+from scripts.engine.action import Behaviour, init_action, Skill
 from scripts.engine.component import Knowledge, Position
 from scripts.engine.core.constants import Direction, ProjectileExpiry, TargetTag, TerrainCollision
 from scripts.engine.core.definitions import ProjectileData

@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
 from scripts.engine import library, world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
+from scripts.engine.core import systems
 from scripts.engine.core.constants import INFINITE
 from scripts.engine.core.data import store
-from scripts.engine.systems import behaviour, reaction, vision
 
 if TYPE_CHECKING:
-    from typing import Dict, Tuple, List, Optional
+    from typing import Dict, List, Optional, Tuple
 
 
 ############ ACTIONS ##################
@@ -29,7 +29,10 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     new_queue = {}
     from scripts.engine.core import queries
 
-    for entity, (is_active, tracked,) in queries.active_and_tracked:
+    for entity, (
+        is_active,
+        tracked,
+    ) in queries.active_and_tracked:
         if entity != entity_to_exclude:
             assert isinstance(tracked, Tracked)
             new_queue[entity] = tracked.time_spent
@@ -82,13 +85,10 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
 
     # update visibility
     # TODO - implement scheduling so this doesnt need to be called here
-    behaviour.process_activations()  # must be first otherwise wrong entities active
-    vision.process_light_map()
-    vision.process_fov()
-    vision.process_tile_visibility()
-
-    # check win condition
-    reaction.process_win_condition()
+    systems.process_activations()  # must be first otherwise wrong entities active
+    systems.process_light_map()
+    systems.process_fov()
+    systems.process_tile_visibility()
 
     # log new turn holder
     name = world.get_name(turn_holder)
@@ -100,29 +100,11 @@ def next_round(time_progressed: int):
     """
     Move to the next round and trigger end of round events, like cooldown and affliction reduction.
     """
-    ## skill cooldowns
-    from scripts.engine.core import queries
+    # TODO - create end of round event and handle there.
+    systems.reduce_skill_cooldowns()
+    systems.reduce_affliction_durations()
+    systems.reduce_lifespan_durations()
 
-    for entity, (knowledge,) in queries.knowledge:
-        assert isinstance(knowledge, Knowledge)
-        for skill_name in knowledge.skill_names:
-            skill_cooldown = knowledge.cooldowns[skill_name]
-            if skill_cooldown > 0:
-                knowledge.set_skill_cooldown(skill_name, skill_cooldown - 1)
-
-    ## affliction durations
-    for entity, (afflictions,) in queries.affliction:
-        assert isinstance(afflictions, Afflictions)  # handle mypy type error
-        for affliction in afflictions.active:
-            if affliction.duration == 0:
-                # expired
-                world.remove_affliction(entity, affliction)
-
-            elif affliction.duration != INFINITE:
-                # reduce duration if not infinite
-                affliction.duration -= 1
-
-    ## time management
     # add progressed time and minus time_in_round to keep the remaining time
     set_time_in_round((get_time_in_round() + time_progressed) - library.GAME_CONFIG.default_values.time_per_round)
 
@@ -202,7 +184,7 @@ def _get_pretty_queue() -> List[Tuple[str, int]]:
 
 def _get_next_entity_in_queue() -> EntityID:
     queue = get_turn_queue()
-    next_entity = min(queue, key=queue.get)
+    next_entity = min(queue, key=queue.get)  # type: ignore
     return next_entity
 
 
