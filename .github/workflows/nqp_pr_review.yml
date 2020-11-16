@@ -66,8 +66,8 @@ jobs:
 
     - name: Lint with Black
       if: always()
-        run: |
-          poetry run python -m black scripts/
+      run: |
+        poetry run python -m black scripts/
 
     - name: Update Git
       if: github.repository == 'Snayff/notquiteparadise'
