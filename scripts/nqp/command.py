@@ -2,14 +2,12 @@ from __future__ import annotations
 
 import logging
 import os
-import time
 from threading import Timer
 from typing import List
 
 import snecs
 from snecs import Component
 
-import scripts.engine.core.systems
 from scripts.engine import chronicle, library, state, utility, world
 from scripts.engine.component import Aesthetic, Position, WinCondition
 from scripts.engine.core import systems
