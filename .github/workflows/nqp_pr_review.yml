@@ -65,7 +65,7 @@ jobs:
         cd ..
 
     - name: Lint with Black
-        if: always()
+      if: always()
         run: |
           poetry run python -m black scripts/
 
