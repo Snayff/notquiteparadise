@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -187,21 +183,21 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">snecs</span>
 <span class="kn">import</span> <span class="nn">tcod</span>
-<span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">Component</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="n">new_entity</span>
+<span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">Component</span><span class="p">,</span> <span class="n">new_entity</span><span class="p">,</span> <span class="n">Query</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">action</span><span class="p">,</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">library</span><span class="p">,</span> <span class="n">utility</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">FOV</span><span class="p">,</span>
     <span class="n">Aesthetic</span><span class="p">,</span>
     <span class="n">Afflictions</span><span class="p">,</span>
     <span class="n">Blocking</span><span class="p">,</span>
     <span class="n">Exists</span><span class="p">,</span>
+    <span class="n">FOV</span><span class="p">,</span>
     <span class="n">HasCombatStats</span><span class="p">,</span>
     <span class="n">Identity</span><span class="p">,</span>
     <span class="n">IsActive</span><span class="p">,</span>
@@ -209,21 +205,23 @@
     <span class="n">IsGod</span><span class="p">,</span>
     <span class="n">IsPlayer</span><span class="p">,</span>
     <span class="n">Knowledge</span><span class="p">,</span>
+    <span class="n">Lifespan</span><span class="p">,</span>
     <span class="n">LightSource</span><span class="p">,</span>
     <span class="n">Opinion</span><span class="p">,</span>
     <span class="n">Position</span><span class="p">,</span>
+    <span class="n">Reaction</span><span class="p">,</span>
     <span class="n">Resources</span><span class="p">,</span>
     <span class="n">Thought</span><span class="p">,</span>
     <span class="n">Tracked</span><span class="p">,</span>
     <span class="n">Traits</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">INFINITE</span><span class="p">,</span>
-    <span class="n">TILE_SIZE</span><span class="p">,</span>
     <span class="n">Direction</span><span class="p">,</span>
     <span class="n">DirectionType</span><span class="p">,</span>
+    <span class="n">EffectType</span><span class="p">,</span>
     <span class="n">HitType</span><span class="p">,</span>
     <span class="n">HitTypeType</span><span class="p">,</span>
+    <span class="n">INFINITE</span><span class="p">,</span>
     <span class="n">PrimaryStat</span><span class="p">,</span>
     <span class="n">PrimaryStatType</span><span class="p">,</span>
     <span class="n">RenderLayer</span><span class="p">,</span>
@@ -232,12 +230,33 @@
     <span class="n">ShapeType</span><span class="p">,</span>
     <span class="n">TargetTag</span><span class="p">,</span>
     <span class="n">TargetTagType</span><span class="p">,</span>
+    <span class="n">TILE_SIZE</span><span class="p">,</span>
     <span class="n">TraitGroup</span><span class="p">,</span>
     <span class="n">TravelMethod</span><span class="p">,</span>
     <span class="n">TravelMethodType</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.data</span> <span class="kn">import</span> <span class="n">store</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">ProjectileData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ActorData</span><span class="p">,</span>
+    <span class="n">AffectCooldownEffectData</span><span class="p">,</span>
+    <span class="n">AffectStatEffectData</span><span class="p">,</span>
+    <span class="n">AlterTerrainEffectData</span><span class="p">,</span>
+    <span class="n">ApplyAfflictionEffectData</span><span class="p">,</span>
+    <span class="n">DamageEffectData</span><span class="p">,</span>
+    <span class="n">EffectData</span><span class="p">,</span>
+    <span class="n">MoveActorEffectData</span><span class="p">,</span>
+    <span class="n">ProjectileData</span><span class="p">,</span>
+    <span class="n">TerrainData</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.effect</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AffectCooldownEffect</span><span class="p">,</span>
+    <span class="n">AffectStatEffect</span><span class="p">,</span>
+    <span class="n">AlterTerrainEffect</span><span class="p">,</span>
+    <span class="n">ApplyAfflictionEffect</span><span class="p">,</span>
+    <span class="n">DamageEffect</span><span class="p">,</span>
+    <span class="n">Effect</span><span class="p">,</span>
+    <span class="n">MoveActorEffect</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.ui.manager</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.utility</span> <span class="kn">import</span> <span class="n">build_sprites_from_paths</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects</span> <span class="kn">import</span> <span class="n">lighting</span>
@@ -246,12 +265,14 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
     <span class="kn">from</span> <span class="nn">scripts.engine.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">,</span> <span class="n">Skill</span>
 
 <span class="c1">########################### LOCAL DEFINITIONS ##########################</span>
 
 <span class="n">_C</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;_C&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Component</span><span class="p">)</span>  <span class="c1"># to represent components where we don&#39;t know which is being used</span>
+
 <span class="n">get_entitys_components</span> <span class="o">=</span> <span class="n">snecs</span><span class="o">.</span><span class="n">all_components</span>
 <span class="n">get_components</span> <span class="o">=</span> <span class="n">Query</span>
 <span class="n">entity_has_component</span> <span class="o">=</span> <span class="n">snecs</span><span class="o">.</span><span class="n">has_component</span>
@@ -374,7 +395,7 @@
     <span class="c1"># create the entity</span>
     <span class="n">entity</span> <span class="o">=</span> <span class="n">create_entity</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
 
-    <span class="c1"># add permanent afflictions, since we can only add them once an entity is created</span>
+    <span class="c1"># add permanent afflictions post creation,  since we can only add them once an entity is created</span>
     <span class="n">perm_afflictions</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">perm_afflictions_names</span><span class="p">:</span>
         <span class="c1"># create the affliction with no specific source</span>
@@ -390,6 +411,43 @@
     <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">max_health</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">max_stamina</span><span class="p">))</span>
 
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entity, &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;, created.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">entity</span></div>
+
+
+<div class="viewcode-block" id="create_terrain"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_terrain">[docs]</a><span class="k">def</span> <span class="nf">create_terrain</span><span class="p">(</span><span class="n">terrain_data</span><span class="p">:</span> <span class="n">TerrainData</span><span class="p">,</span> <span class="n">spawn_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">lifespan</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">INFINITE</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create terrain</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">components</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spawn_pos</span>
+
+    <span class="c1"># get dimensions of actor</span>
+    <span class="n">occupied_tiles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">terrain_data</span><span class="o">.</span><span class="n">position_offsets</span><span class="p">:</span>
+        <span class="n">occupied_tiles</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span><span class="p">))</span>
+
+    <span class="c1"># terrain components</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lifespan</span><span class="p">(</span><span class="n">lifespan</span><span class="p">))</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">(</span><span class="o">*</span><span class="n">occupied_tiles</span><span class="p">))</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">terrain_data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">terrain_data</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Blocking</span><span class="p">(</span><span class="n">terrain_data</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">,</span> <span class="n">terrain_data</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">))</span>
+
+    <span class="c1"># add aesthetic N.B. translation to screen coordinates is handled by the camera</span>
+    <span class="n">sprites</span> <span class="o">=</span> <span class="n">build_sprites_from_paths</span><span class="p">([</span><span class="n">terrain_data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">],</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span><span class="p">,</span> <span class="n">sprites</span><span class="p">,</span> <span class="p">[</span><span class="n">terrain_data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">],</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))</span>
+
+    <span class="c1"># add reactions</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Reaction</span><span class="p">(</span><span class="n">terrain_data</span><span class="o">.</span><span class="n">reactions</span><span class="p">))</span>
+
+    <span class="c1"># add light</span>
+    <span class="k">if</span> <span class="n">terrain_data</span><span class="o">.</span><span class="n">light</span><span class="p">:</span>
+        <span class="n">_light</span> <span class="o">=</span> <span class="n">terrain_data</span><span class="o">.</span><span class="n">light</span>
+        <span class="n">light_id</span> <span class="o">=</span> <span class="n">create_light</span><span class="p">(</span><span class="n">spawn_pos</span><span class="p">,</span> <span class="n">_light</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="n">_light</span><span class="o">.</span><span class="n">colour</span><span class="p">,</span> <span class="n">_light</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LightSource</span><span class="p">(</span><span class="n">light_id</span><span class="p">,</span> <span class="n">_light</span><span class="o">.</span><span class="n">radius</span><span class="p">))</span>
+
+    <span class="c1"># create the entity</span>
+    <span class="n">entity</span> <span class="o">=</span> <span class="n">create_entity</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">entity</span></div>
 
@@ -442,8 +500,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates an instance of an Affliction provided the name</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">affliction_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">AFFLICTIONS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-    <span class="n">affliction</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">affliction_registry</span><span class="p">[</span><span class="n">affliction_data</span><span class="o">.</span><span class="n">name</span><span class="p">](</span><span class="n">creator</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+    <span class="n">affliction</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">affliction_registry</span><span class="p">[</span><span class="n">name</span><span class="p">](</span><span class="n">creator</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">affliction</span></div>
 
 
@@ -485,6 +542,129 @@
     <span class="n">pathfinder</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Pathfinder</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pathfinder</span></div>
+
+
+<div class="viewcode-block" id="create_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_effect">[docs]</a><span class="k">def</span> <span class="nf">create_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">EffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Effect</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an effect from effect data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">effect_type</span>
+
+    <span class="k">if</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">APPLY_AFFLICTION</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ApplyAfflictionEffectData</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_create_apply_affliction_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">DAMAGE</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">DamageEffectData</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_create_damage_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">MOVE</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">MoveActorEffectData</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_create_move_actor_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">AFFECT_STAT</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">AffectStatEffectData</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_create_affect_stat_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">AFFECT_COOLDOWN</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">AffectCooldownEffectData</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_create_affect_cooldown_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">ALTER_TERRAIN</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">AlterTerrainEffectData</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_create_alter_terrain_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Create effect: Effect provided (</span><span class="si">{</span><span class="n">effect_type</span><span class="si">}</span><span class="s2">) was not handled.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="_create_apply_affliction_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_apply_affliction_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_apply_affliction_effect</span><span class="p">(</span>
+    <span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ApplyAfflictionEffectData</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ApplyAfflictionEffect</span><span class="p">:</span>
+    <span class="n">effect</span> <span class="o">=</span> <span class="n">ApplyAfflictionEffect</span><span class="p">(</span>
+        <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+        <span class="n">success_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">success_effects</span><span class="p">,</span>
+        <span class="n">failure_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">failure_effects</span><span class="p">,</span>
+        <span class="n">affliction_name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">affliction_name</span><span class="p">,</span>
+        <span class="n">duration</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">effect</span></div>
+
+
+<div class="viewcode-block" id="_create_damage_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_damage_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_damage_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DamageEffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DamageEffect</span><span class="p">:</span>
+    <span class="n">effect</span> <span class="o">=</span> <span class="n">DamageEffect</span><span class="p">(</span>
+        <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+        <span class="n">success_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">success_effects</span><span class="p">,</span>
+        <span class="n">failure_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">failure_effects</span><span class="p">,</span>
+        <span class="n">stat_to_target</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">stat_to_target</span><span class="p">,</span>
+        <span class="n">accuracy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">accuracy</span><span class="p">,</span>
+        <span class="n">damage</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">damage</span><span class="p">,</span>
+        <span class="n">damage_type</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">damage_type</span><span class="p">,</span>
+        <span class="n">mod_stat</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">mod_stat</span><span class="p">,</span>
+        <span class="n">mod_amount</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">mod_amount</span><span class="p">,</span>
+        <span class="n">potency</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">potency</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">effect</span></div>
+
+
+<div class="viewcode-block" id="_create_move_actor_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_move_actor_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_move_actor_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">MoveActorEffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MoveActorEffect</span><span class="p">:</span>
+    <span class="n">effect</span> <span class="o">=</span> <span class="n">MoveActorEffect</span><span class="p">(</span>
+        <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+        <span class="n">direction</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span>
+        <span class="n">success_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">success_effects</span><span class="p">,</span>
+        <span class="n">failure_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">failure_effects</span><span class="p">,</span>
+        <span class="n">move_amount</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">move_amount</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">effect</span></div>
+
+
+<div class="viewcode-block" id="_create_affect_stat_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_affect_stat_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_affect_stat_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">AffectStatEffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AffectStatEffect</span><span class="p">:</span>
+    <span class="n">effect</span> <span class="o">=</span> <span class="n">AffectStatEffect</span><span class="p">(</span>
+        <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+        <span class="n">success_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">success_effects</span><span class="p">,</span>
+        <span class="n">failure_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">failure_effects</span><span class="p">,</span>
+        <span class="n">cause_name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">cause_name</span><span class="p">,</span>
+        <span class="n">stat_to_target</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">stat_to_target</span><span class="p">,</span>
+        <span class="n">affect_amount</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">effect</span></div>
+
+
+<div class="viewcode-block" id="_create_affect_cooldown_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_affect_cooldown_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_affect_cooldown_effect</span><span class="p">(</span>
+    <span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">AffectCooldownEffectData</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AffectCooldownEffect</span><span class="p">:</span>
+    <span class="n">effect</span> <span class="o">=</span> <span class="n">AffectCooldownEffect</span><span class="p">(</span>
+        <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+        <span class="n">success_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">success_effects</span><span class="p">,</span>
+        <span class="n">failure_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">failure_effects</span><span class="p">,</span>
+        <span class="n">skill_name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">skill_name</span><span class="p">,</span>
+        <span class="n">affect_amount</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">effect</span></div>
+
+
+<div class="viewcode-block" id="_create_alter_terrain_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_alter_terrain_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_alter_terrain_effect</span><span class="p">(</span>
+    <span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">AlterTerrainEffectData</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AlterTerrainEffect</span><span class="p">:</span>
+    <span class="n">effect</span> <span class="o">=</span> <span class="n">AlterTerrainEffect</span><span class="p">(</span>
+        <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+        <span class="n">success_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">success_effects</span><span class="p">,</span>
+        <span class="n">failure_effects</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">failure_effects</span><span class="p">,</span>
+        <span class="n">terrain_name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">terrain_name</span><span class="p">,</span>
+        <span class="n">affect_amount</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">effect</span></div>
 
 
 <span class="c1">############################# GET - RETURN AN EXISTING SOMETHING ###########################</span>
@@ -1208,19 +1388,18 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="apply_skill"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.apply_skill">[docs]</a><span class="k">def</span> <span class="nf">apply_skill</span><span class="p">(</span><span class="n">skill_instance</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="apply_skill"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.apply_skill">[docs]</a><span class="k">def</span> <span class="nf">apply_skill</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">     Resolve the skill&#39;s effects. Returns True is successful if criteria to apply skill was met, False if not.</span>
+<span class="sd">    Resolve the skill&#39;s effects. Returns True is successful if criteria to apply skill was met, False if not.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">skill</span> <span class="o">=</span> <span class="n">skill_instance</span>
     <span class="c1"># ensure they are the right target type</span>
     <span class="k">if</span> <span class="n">tile_has_tags</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">target_tile</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">target_tags</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">effects</span> <span class="ow">in</span> <span class="n">skill_instance</span><span class="o">.</span><span class="n">apply</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">effects</span> <span class="ow">in</span> <span class="n">skill</span><span class="o">.</span><span class="n">apply</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">entity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skill</span><span class="o">.</span><span class="n">ignore_entities</span><span class="p">:</span>
                 <span class="n">effect_queue</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">effects</span><span class="p">)</span>
                 <span class="k">while</span> <span class="n">effect_queue</span><span class="p">:</span>
                     <span class="n">effect</span> <span class="o">=</span> <span class="n">effect_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-                    <span class="n">effect_queue</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">effect</span><span class="o">.</span><span class="n">evaluate</span><span class="p">())</span>
+                    <span class="n">effect_queue</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">effect</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
@@ -1231,26 +1410,25 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="set_skill_on_cooldown"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.set_skill_on_cooldown">[docs]</a><span class="k">def</span> <span class="nf">set_skill_on_cooldown</span><span class="p">(</span><span class="n">skill_instance</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="set_skill_on_cooldown"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.set_skill_on_cooldown">[docs]</a><span class="k">def</span> <span class="nf">set_skill_on_cooldown</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sets a skill on cooldown</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">skill_instance</span><span class="o">.</span><span class="n">user</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">skill_instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">user</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
     <span class="n">knowledge</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">knowledge</span><span class="p">:</span>
-        <span class="n">knowledge</span><span class="o">.</span><span class="n">set_skill_cooldown</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">skill_instance</span><span class="o">.</span><span class="n">base_cooldown</span><span class="p">)</span>
+        <span class="n">knowledge</span><span class="o">.</span><span class="n">set_skill_cooldown</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">base_cooldown</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="apply_affliction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.apply_affliction">[docs]</a><span class="k">def</span> <span class="nf">apply_affliction</span><span class="p">(</span><span class="n">affliction_instance</span><span class="p">:</span> <span class="n">Affliction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="apply_affliction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.apply_affliction">[docs]</a><span class="k">def</span> <span class="nf">apply_affliction</span><span class="p">(</span><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Apply the affliction&#39;s effects. Returns True is successful if criteria to trigger the affliction was met,</span>
 <span class="sd">    False if not.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">affliction</span> <span class="o">=</span> <span class="n">affliction_instance</span>
-    <span class="n">target</span> <span class="o">=</span> <span class="n">affliction_instance</span><span class="o">.</span><span class="n">affected_entity</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">affliction</span><span class="o">.</span><span class="n">affected_entity</span>
     <span class="n">position</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">position</span><span class="p">:</span>
         <span class="n">target_tile</span> <span class="o">=</span> <span class="n">get_tile</span><span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
@@ -1261,7 +1439,7 @@
                 <span class="n">effect_queue</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">effects</span><span class="p">)</span>
                 <span class="k">while</span> <span class="n">effect_queue</span><span class="p">:</span>
                     <span class="n">effect</span> <span class="o">=</span> <span class="n">effect_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-                    <span class="n">effect_queue</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">effect</span><span class="o">.</span><span class="n">evaluate</span><span class="p">())</span>
+                    <span class="n">effect_queue</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">effect</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
@@ -1270,6 +1448,17 @@
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="trigger_affliction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.trigger_affliction">[docs]</a><span class="k">def</span> <span class="nf">trigger_affliction</span><span class="p">(</span><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Trigger the affliction on the affected entity.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">effects</span> <span class="ow">in</span> <span class="n">affliction</span><span class="o">.</span><span class="n">trigger</span><span class="p">():</span>
+        <span class="n">effect_queue</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">effects</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">effect_queue</span><span class="p">:</span>
+            <span class="n">effect</span> <span class="o">=</span> <span class="n">effect_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">effect_queue</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">effect</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="take_turn"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.take_turn">[docs]</a><span class="k">def</span> <span class="nf">take_turn</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -1291,6 +1480,10 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove damage from entity&#39;s health. Return remaining health.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">damage</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Damage was </span><span class="si">{</span><span class="n">damage</span><span class="si">}</span><span class="s2"> and therefore nothing was done.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
     <span class="n">resource</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">resource</span><span class="p">:</span>
         <span class="n">resource</span><span class="o">.</span><span class="n">health</span> <span class="o">-=</span> <span class="n">damage</span>
@@ -1455,12 +1648,16 @@
     <span class="c1"># round down the dmg</span>
     <span class="n">int_modified_damage</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">modified_damage</span><span class="p">)</span>
 
+    <span class="c1"># never less than 1</span>
+    <span class="k">if</span> <span class="n">int_modified_damage</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; Damage ended at </span><span class="si">{</span><span class="n">int_modified_damage</span><span class="si">}</span><span class="s2"> so replaced with minimum damage value of 1.&quot;</span><span class="p">)</span>
+        <span class="n">int_modified_damage</span> <span class="o">=</span> <span class="mi">1</span>
+
     <span class="c1"># log the info</span>
-    <span class="n">log_string</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;-&gt; Initial:</span><span class="si">{</span><span class="n">base_damage</span><span class="si">}</span><span class="s2">, Mitigated: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">mitigated_damage</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">,  Modified&quot;</span>
         <span class="sa">f</span><span class="s2">&quot;:</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">modified_damage</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, Final: </span><span class="si">{</span><span class="n">int_modified_damage</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">int_modified_damage</span></div>
 

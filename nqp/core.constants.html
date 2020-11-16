@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -105,13 +106,8 @@
 <li class="toctree-l1"><a class="reference internal" href="key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -243,6 +239,38 @@
 </dd></dl>
 
 <dl class="py class">
+<dt id="scripts.engine.core.constants.InteractionEvent">
+<em class="property">class </em><code class="sig-name descname">InteractionEvent</code><a class="reference internal" href="../_modules/scripts/engine/core/constants.html#InteractionEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.constants.InteractionEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
+<p>Custom pygame events to trigger interactions.</p>
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionEvent.MOVE">
+<code class="sig-name descname">MOVE</code><em class="property"> = 32974</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionEvent.MOVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionEvent.DAMAGE">
+<code class="sig-name descname">DAMAGE</code><em class="property"> = 32975</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionEvent.DAMAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionEvent.AFFECT_STAT">
+<code class="sig-name descname">AFFECT_STAT</code><em class="property"> = 32976</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionEvent.AFFECT_STAT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionEvent.AFFECT_COOLDOWN">
+<code class="sig-name descname">AFFECT_COOLDOWN</code><em class="property"> = 32977</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionEvent.AFFECT_COOLDOWN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionEvent.AFFLICTION">
+<code class="sig-name descname">AFFLICTION</code><em class="property"> = 32978</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionEvent.AFFLICTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="scripts.engine.core.constants.RenderLayer">
 <em class="property">class </em><code class="sig-name descname">RenderLayer</code><a class="reference internal" href="../_modules/scripts/engine/core/constants.html#RenderLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.constants.RenderLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
@@ -258,8 +286,8 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.RenderLayer.ASPECT">
-<code class="sig-name descname">ASPECT</code><em class="property"> = 30</em><a class="headerlink" href="#scripts.engine.core.constants.RenderLayer.ASPECT" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.RenderLayer.TERRAIN">
+<code class="sig-name descname">TERRAIN</code><em class="property"> = 30</em><a class="headerlink" href="#scripts.engine.core.constants.RenderLayer.TERRAIN" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -753,23 +781,13 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.EffectType.ADD_ASPECT">
-<code class="sig-name descname">ADD_ASPECT</code><em class="property"> = 'add_aspect'</em><a class="headerlink" href="#scripts.engine.core.constants.EffectType.ADD_ASPECT" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.EffectType.AFFECT_COOLDOWN">
+<code class="sig-name descname">AFFECT_COOLDOWN</code><em class="property"> = 'affect_cooldown'</em><a class="headerlink" href="#scripts.engine.core.constants.EffectType.AFFECT_COOLDOWN" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.EffectType.REMOVE_ASPECT">
-<code class="sig-name descname">REMOVE_ASPECT</code><em class="property"> = 'remove_aspect'</em><a class="headerlink" href="#scripts.engine.core.constants.EffectType.REMOVE_ASPECT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.core.constants.EffectType.TRIGGER_SKILL">
-<code class="sig-name descname">TRIGGER_SKILL</code><em class="property"> = 'trigger_skill'</em><a class="headerlink" href="#scripts.engine.core.constants.EffectType.TRIGGER_SKILL" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.core.constants.EffectType.KILL">
-<code class="sig-name descname">KILL</code><em class="property"> = 'kill'</em><a class="headerlink" href="#scripts.engine.core.constants.EffectType.KILL" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.EffectType.ALTER_TERRAIN">
+<code class="sig-name descname">ALTER_TERRAIN</code><em class="property"> = 'alter_terrain'</em><a class="headerlink" href="#scripts.engine.core.constants.EffectType.ALTER_TERRAIN" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -859,18 +877,73 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="scripts.engine.core.constants.AfflictionTrigger">
-<em class="property">class </em><code class="sig-name descname">AfflictionTrigger</code><a class="reference internal" href="../_modules/scripts/engine/core/constants.html#AfflictionTrigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.constants.AfflictionTrigger" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.InteractionTrigger">
+<em class="property">class </em><code class="sig-name descname">InteractionTrigger</code><a class="reference internal" href="../_modules/scripts/engine/core/constants.html#InteractionTrigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
 <p>Type of trigger for the affliction</p>
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.AfflictionTrigger.MOVEMENT">
-<code class="sig-name descname">MOVEMENT</code><em class="property"> = 'movement'</em><a class="headerlink" href="#scripts.engine.core.constants.AfflictionTrigger.MOVEMENT" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.InteractionTrigger.MOVE">
+<code class="sig-name descname">MOVE</code><em class="property"> = 'movement'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.MOVE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.constants.AfflictionTrigger.TAKE_DAMAGE">
-<code class="sig-name descname">TAKE_DAMAGE</code><em class="property"> = 'take_damage'</em><a class="headerlink" href="#scripts.engine.core.constants.AfflictionTrigger.TAKE_DAMAGE" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.constants.InteractionTrigger.PROXIMITY">
+<code class="sig-name descname">PROXIMITY</code><em class="property"> = 'proximity'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.PROXIMITY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.TAKE_DAMAGE">
+<code class="sig-name descname">TAKE_DAMAGE</code><em class="property"> = 'take_damage'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.TAKE_DAMAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.DEAL_DAMAGE">
+<code class="sig-name descname">DEAL_DAMAGE</code><em class="property"> = 'deal_damage'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.DEAL_DAMAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.KILL">
+<code class="sig-name descname">KILL</code><em class="property"> = 'kill'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.KILL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.DIE">
+<code class="sig-name descname">DIE</code><em class="property"> = 'die'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.DIE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.COLLISION">
+<code class="sig-name descname">COLLISION</code><em class="property"> = 'collision'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.COLLISION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.AFFECTED_STAT">
+<code class="sig-name descname">AFFECTED_STAT</code><em class="property"> = 'affected_stat'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.AFFECTED_STAT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFECT_STAT">
+<code class="sig-name descname">CAUSED_AFFECT_STAT</code><em class="property"> = 'caused_affect_stat'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFECT_STAT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.AFFECTED_COOLDOWN">
+<code class="sig-name descname">AFFECTED_COOLDOWN</code><em class="property"> = 'affected_cooldown'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.AFFECTED_COOLDOWN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFECT_COOLDOWN">
+<code class="sig-name descname">CAUSED_AFFECT_COOLDOWN</code><em class="property"> = 'caused_affect_cooldown'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFECT_COOLDOWN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFLICTION">
+<code class="sig-name descname">CAUSED_AFFLICTION</code><em class="property"> = 'caused_affliction'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFLICTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.core.constants.InteractionTrigger.AFFLICTED">
+<code class="sig-name descname">AFFLICTED</code><em class="property"> = 'afflicted'</em><a class="headerlink" href="#scripts.engine.core.constants.InteractionTrigger.AFFLICTED" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

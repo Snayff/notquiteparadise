@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -185,20 +181,21 @@
   <h1>Source code for scripts.engine.core.definitions</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span>
-
-<span class="kn">import</span> <span class="nn">pygame</span>
-<span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">AfflictionCategory</span><span class="p">,</span>
     <span class="n">AfflictionCategoryType</span><span class="p">,</span>
-    <span class="n">AfflictionTriggerType</span><span class="p">,</span>
+    <span class="n">DamageType</span><span class="p">,</span>
+    <span class="n">DamageTypeType</span><span class="p">,</span>
     <span class="n">Direction</span><span class="p">,</span>
     <span class="n">DirectionType</span><span class="p">,</span>
     <span class="n">EffectType</span><span class="p">,</span>
     <span class="n">EffectTypeType</span><span class="p">,</span>
+    <span class="n">InteractionTriggerType</span><span class="p">,</span>
+    <span class="n">PrimaryStat</span><span class="p">,</span>
     <span class="n">PrimaryStatType</span><span class="p">,</span>
     <span class="n">ProjectileExpiry</span><span class="p">,</span>
     <span class="n">ProjectileExpiryType</span><span class="p">,</span>
@@ -224,7 +221,11 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core.extend_json</span> <span class="kn">import</span> <span class="n">register_dataclass_with_json</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pygame</span>
+    <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
+
     <span class="kn">from</span> <span class="nn">scripts.engine.action</span> <span class="kn">import</span> <span class="n">Skill</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.effect</span> <span class="kn">import</span> <span class="n">Effect</span>
 
 <span class="c1">#################################################################</span>
 <span class="c1"># This module is for specifying all defined data sets.</span>
@@ -232,6 +233,19 @@
 
 
 <span class="c1">######################### Aesthetics ##################################</span>
+
+
+<div class="viewcode-block" id="LightData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.LightData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">LightData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data for a light source.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">radius</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="TraitSpritesData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
@@ -253,7 +267,8 @@
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">TraitSpritePathsData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Possible sprites paths for a trait</span>
+<span class="sd">    Possible sprites paths for a trait.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">render_order</span><span class="p">:</span> <span class="n">RenderLayerType</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">RenderLayer</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">)</span>
@@ -272,7 +287,8 @@
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">ActorData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for an actor</span>
+<span class="sd">    Data class for an actor.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
@@ -288,6 +304,7 @@
 <span class="k">class</span> <span class="nc">TraitData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for a trait.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
@@ -360,8 +377,9 @@
 <span class="sd">    Data class for a projectile</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># what created it?</span>
-    <span class="n">creator</span><span class="p">:</span> <span class="n">EntityID</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">EntityID</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># this will be overwritten or will break, but need defaults to allow passing</span>
+    <span class="c1"># this will be overwritten or will break, but need defaults to allow passing</span>
+    <span class="n">creator</span><span class="p">:</span> <span class="n">EntityID</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># type: ignore</span>
+
     <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
     <span class="n">skill_instance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Skill</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
@@ -389,19 +407,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ProjectileSpeed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
 
 
-<div class="viewcode-block" id="AspectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AspectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<div class="viewcode-block" id="TerrainData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.TerrainData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AspectData</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">TerrainData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for an aspects</span>
+<span class="sd">    Data class for terrain.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">sprite</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
     <span class="n">blocks_sight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+    <span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">position_offsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">TraitSpritePathsData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">TraitSpritePathsData</span><span class="p">)</span>
+    <span class="n">reactions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">InteractionTriggerType</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">light</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LightData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
 <span class="c1">################### GODS ###################################################</span>
@@ -450,7 +471,8 @@
 <span class="k">class</span> <span class="nc">MapData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for a Map, specifically for generation. A map is a collection of rooms. Defines the rooms on</span>
-<span class="sd">    the map, how they are placed and joined up (tunnels).</span>
+<span class="sd">    the map, how they are placed and joined up ( with tunnels).</span>
+<span class="sd">    Also used to hold and map data from json.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
@@ -512,7 +534,8 @@
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">SkillData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for a skill. Used by the library to load from json.</span>
+<span class="sd">    Data class for a skill.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># how do we know it?</span>
@@ -556,7 +579,7 @@
 <span class="nd">@dataclass</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">AfflictionData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for an Afflictions</span>
+<span class="sd">    Data class for an Affliction</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
@@ -567,35 +590,113 @@
     <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">identity_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EffectTypeType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">triggers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AfflictionTriggerType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
+    <span class="n">triggers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InteractionTriggerType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="EffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.EffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">EffectData</span><span class="p">:</span>
+<span class="c1">################### EFFECTS ###################################################</span>
+
+
+<div class="viewcode-block" id="EffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.EffectData">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EffectData</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base data class for an effect.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># who am I?</span>
-    <span class="n">originator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># actor</span>
-    <span class="n">creators_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># skill, projectile, etc.&#39;s name</span>
-    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">MOVE</span>
+    <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span>
 
-    <span class="c1"># who are we targeting?</span>
-    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="c1"># not sure but these might come in as effect data which will crash</span>
+    <span class="n">success_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">failure_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
 
-    <span class="c1"># how are we targeting?</span>
-    <span class="n">stat_to_target</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="DamageEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">DamageEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The data for a damage effect.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">DAMAGE</span>
+
+    <span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span> <span class="o">=</span> <span class="n">PrimaryStat</span><span class="o">.</span><span class="n">EXACTITUDE</span>
     <span class="n">accuracy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">damage</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">damage_type</span><span class="p">:</span> <span class="n">DamageTypeType</span> <span class="o">=</span> <span class="n">DamageType</span><span class="o">.</span><span class="n">MUNDANE</span>
+    <span class="n">mod_stat</span><span class="p">:</span> <span class="n">PrimaryStatType</span> <span class="o">=</span> <span class="n">PrimaryStat</span><span class="o">.</span><span class="n">EXACTITUDE</span>
+    <span class="n">mod_amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
-    <span class="c1"># what is the area of effect?</span>
-    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
-    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="c1"># what next?</span>
-    <span class="n">success_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EffectData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">fail_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EffectData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
+<div class="viewcode-block" id="MoveActorEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.MoveActorEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">MoveActorEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The data for a apply affliction effect.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">MOVE</span>
+
+    <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTRE</span>
+    <span class="n">move_amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="ApplyAfflictionEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.ApplyAfflictionEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ApplyAfflictionEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The data for a apply affliction effect.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">APPLY_AFFLICTION</span>
+
+    <span class="n">affliction_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="AffectStatEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AffectStatEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">AffectStatEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The data for an affect stat effect.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">AFFECT_STAT</span>
+
+    <span class="n">cause_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span> <span class="o">=</span> <span class="n">PrimaryStat</span><span class="o">.</span><span class="n">EXACTITUDE</span>
+    <span class="n">affect_amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="AffectCooldownEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AffectCooldownEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">AffectCooldownEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The data for a apply affliction effect.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">AFFECT_COOLDOWN</span>
+
+    <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">affect_amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="AlterTerrainEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AlterTerrainEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">AlterTerrainEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The data for an  alter terrain effect.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">ALTER_TERRAIN</span>
+
+    <span class="n">terrain_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">affect_amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
 <span class="c1">################### CONFIG ###################################################</span>

@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="World" href="world.html" />
-    <link rel="prev" title="Thought" href="thought.html" /> 
+    <link rel="prev" title="State" href="state.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul class="current">
@@ -105,13 +106,8 @@
 <li class="toctree-l1"><a class="reference internal" href="key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="thought.html">Thought</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -190,7 +186,7 @@
 <span id="utility"></span><h1>Utility<a class="headerlink" href="#module-scripts.engine.utility" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="scripts.engine.utility.get_image">
-<code class="sig-name descname">get_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">32, 32</span></em>, <em class="sig-param"><span class="n">copy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.0.dev25)">pygame.Surface</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#get_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.get_image" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(32, 32)</span></em>, <em class="sig-param"><span class="n">copy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#get_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.get_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the specified image and resize if dimensions provided. Dimensions are in (width, height) format. If img
 path is “none” then a blank surface is created to the size of the desired dimensions, or TILE_SIZE if no
 dimensions provided.</p>
@@ -198,13 +194,13 @@ dimensions provided.</p>
 
 <dl class="py function">
 <dt id="scripts.engine.utility.get_images">
-<code class="sig-name descname">get_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">32, 32</span></em>, <em class="sig-param"><span class="n">copy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.0.dev25)">pygame.Surface</a><span class="p">]</span><a class="reference internal" href="../_modules/scripts/engine/utility.html#get_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.get_images" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(32, 32)</span></em>, <em class="sig-param"><span class="n">copy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a><span class="p">]</span><a class="reference internal" href="../_modules/scripts/engine/utility.html#get_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.get_images" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a collection of images.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="scripts.engine.utility.flatten_images">
-<code class="sig-name descname">flatten_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">images</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.0.dev25)">pygame.Surface</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.0.dev25)">pygame.Surface</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#flatten_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.flatten_images" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">flatten_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">images</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#flatten_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.flatten_images" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flatten a list of images into a single image. All images must be the same size. Images are blitted in order.</p>
 </dd></dl>
 
@@ -259,7 +255,7 @@ as 1 to handle float imprecision.</p>
 
 <dl class="py function">
 <dt id="scripts.engine.utility.build_sprites_from_paths">
-<code class="sig-name descname">build_sprites_from_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData" title="scripts.engine.core.definitions.TraitSpritePathsData">scripts.engine.core.definitions.TraitSpritePathsData</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_size</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">32, 32</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData" title="scripts.engine.core.definitions.TraitSpritesData">scripts.engine.core.definitions.TraitSpritesData</a><a class="reference internal" href="../_modules/scripts/engine/utility.html#build_sprites_from_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.build_sprites_from_paths" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build_sprites_from_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span>TraitSpritePathsData<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_size</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(32, 32)</span></em><span class="sig-paren">)</span> &#x2192; TraitSpritesData<a class="reference internal" href="../_modules/scripts/engine/utility.html#build_sprites_from_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.build_sprites_from_paths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
 combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.</p>
 </dd></dl>
@@ -277,7 +273,7 @@ combines the sprites from each TraitSpritePathsData in the  list and flattens to
         <a href="world.html" class="btn btn-neutral float-right" title="World" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="thought.html" class="btn btn-neutral float-left" title="Thought" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="state.html" class="btn btn-neutral float-left" title="State" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

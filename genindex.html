@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -219,23 +215,31 @@
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo._abc_impl">_abc_impl (ActorInfo attribute)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo._abc_impl">[1]</a>
 
       <ul>
-        <li><a href="nqp/effect.html#scripts.engine.effect.AddAspectEffect._abc_impl">(AddAspectEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.AddAspectEffect._abc_impl">[1]</a>
-</li>
         <li><a href="nqp/component.html#scripts.engine.component.Aesthetic._abc_impl">(Aesthetic attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Aesthetic._abc_impl">[1]</a>
+</li>
+        <li><a href="nqp/effect.html#scripts.engine.effect.AffectCooldownEffect._abc_impl">(AffectCooldownEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.AffectCooldownEffect._abc_impl">[1]</a>
+</li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectCooldownEffectData._abc_impl">(AffectCooldownEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectCooldownEffectData._abc_impl">[1]</a>
 </li>
         <li><a href="nqp/effect.html#scripts.engine.effect.AffectStatEffect._abc_impl">(AffectStatEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.AffectStatEffect._abc_impl">[1]</a>
 </li>
-        <li><a href="nqp/action.html#scripts.engine.action.Affliction._abc_impl">(Affliction attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Affliction._abc_impl">[1]</a>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectStatEffectData._abc_impl">(AffectStatEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectStatEffectData._abc_impl">[1]</a>
+</li>
+        <li><a href="scripts.engine.html#scripts.engine.action.Affliction._abc_impl">(Affliction attribute)</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Afflictions._abc_impl">(Afflictions attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Afflictions._abc_impl">[1]</a>
 </li>
+        <li><a href="nqp/effect.html#scripts.engine.effect.AlterTerrainEffect._abc_impl">(AlterTerrainEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.AlterTerrainEffect._abc_impl">[1]</a>
+</li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AlterTerrainEffectData._abc_impl">(AlterTerrainEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AlterTerrainEffectData._abc_impl">[1]</a>
+</li>
         <li><a href="nqp/effect.html#scripts.engine.effect.ApplyAfflictionEffect._abc_impl">(ApplyAfflictionEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.ApplyAfflictionEffect._abc_impl">[1]</a>
 </li>
-        <li><a href="nqp/component.html#scripts.engine.component.Aspect._abc_impl">(Aspect attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Aspect._abc_impl">[1]</a>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ApplyAfflictionEffectData._abc_impl">(ApplyAfflictionEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ApplyAfflictionEffectData._abc_impl">[1]</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviours.Basic._abc_impl">(Basic attribute)</a>
 </li>
-        <li><a href="nqp/action.html#scripts.engine.action.Behaviour._abc_impl">(Behaviour attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Behaviour._abc_impl">[1]</a>
+        <li><a href="scripts.engine.html#scripts.engine.action.Behaviour._abc_impl">(Behaviour attribute)</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Blocking._abc_impl">(Blocking attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Blocking._abc_impl">[1]</a>
 </li>
@@ -245,11 +249,13 @@
 </li>
         <li><a href="nqp/effect.html#scripts.engine.effect.DamageEffect._abc_impl">(DamageEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.DamageEffect._abc_impl">[1]</a>
 </li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DamageEffectData._abc_impl">(DamageEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData._abc_impl">[1]</a>
+</li>
         <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.data_editor.DataEditor._abc_impl">(DataEditor attribute)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.data_editor.DataEditor._abc_impl">[1]</a>
 </li>
         <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._abc_impl">(DungenViewer attribute)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._abc_impl">[1]</a>
 </li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.Effect._abc_impl">(Effect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.Effect._abc_impl">[1]</a>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData._abc_impl">(EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData._abc_impl">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Exists._abc_impl">(Exists attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Exists._abc_impl">[1]</a>
 </li>
@@ -269,23 +275,17 @@
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.IsPlayer._abc_impl">(IsPlayer attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.IsPlayer._abc_impl">[1]</a>
 </li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.KillEffect._abc_impl">(KillEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.KillEffect._abc_impl">[1]</a>
-</li>
         <li><a href="nqp/component.html#scripts.engine.component.Knowledge._abc_impl">(Knowledge attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Knowledge._abc_impl">[1]</a>
+</li>
+        <li><a href="nqp/component.html#scripts.engine.component.Lifespan._abc_impl">(Lifespan attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Lifespan._abc_impl">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.LightSource._abc_impl">(LightSource attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.LightSource._abc_impl">[1]</a>
 </li>
         <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.message_log.MessageLog._abc_impl">(MessageLog attribute)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.message_log.MessageLog._abc_impl">[1]</a>
 </li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAffliction._abc_impl">(MockAffliction attribute)</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAfflictionDamage._abc_impl">(MockAfflictionDamage attribute)</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAfflictionMovement._abc_impl">(MockAfflictionMovement attribute)</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill._abc_impl">(MockSkill attribute)</a>
-</li>
         <li><a href="nqp/effect.html#scripts.engine.effect.MoveActorEffect._abc_impl">(MoveActorEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.MoveActorEffect._abc_impl">[1]</a>
+</li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.MoveActorEffectData._abc_impl">(MoveActorEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.MoveActorEffectData._abc_impl">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.NQPComponent._abc_impl">(NQPComponent attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.NQPComponent._abc_impl">[1]</a>
 </li>
@@ -295,15 +295,13 @@
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviours.Projectile._abc_impl">(Projectile attribute)</a>
 </li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.ReduceSkillCooldownEffect._abc_impl">(ReduceSkillCooldownEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.ReduceSkillCooldownEffect._abc_impl">[1]</a>
-</li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.RemoveAspectEffect._abc_impl">(RemoveAspectEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.RemoveAspectEffect._abc_impl">[1]</a>
+        <li><a href="nqp/component.html#scripts.engine.component.Reaction._abc_impl">(Reaction attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Reaction._abc_impl">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Resources._abc_impl">(Resources attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Resources._abc_impl">[1]</a>
 </li>
         <li><a href="nqp/ui.widgets.html#scripts.engine.ui.widgets.screen_message.ScreenMessage._abc_impl">(ScreenMessage attribute)</a>, <a href="scripts.engine.ui.widgets.html#scripts.engine.ui.widgets.screen_message.ScreenMessage._abc_impl">[1]</a>
 </li>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill._abc_impl">(Skill attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill._abc_impl">[1]</a>
+        <li><a href="scripts.engine.html#scripts.engine.action.Skill._abc_impl">(Skill attribute)</a>
 </li>
         <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.skill_bar.SkillBar._abc_impl">(SkillBar attribute)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.skill_bar.SkillBar._abc_impl">[1]</a>
 </li>
@@ -319,10 +317,6 @@
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Traits._abc_impl">(Traits attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Traits._abc_impl">[1]</a>
 </li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.TriggerAfflictionsEffect._abc_impl">(TriggerAfflictionsEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.TriggerAfflictionsEffect._abc_impl">[1]</a>
-</li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.TriggerSkillEffect._abc_impl">(TriggerSkillEffect attribute)</a>, <a href="scripts.engine.html#scripts.engine.effect.TriggerSkillEffect._abc_impl">[1]</a>
-</li>
         <li><a href="nqp/component.html#scripts.engine.component.WinCondition._abc_impl">(WinCondition attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.WinCondition._abc_impl">[1]</a>
 </li>
       </ul></li>
@@ -332,8 +326,6 @@
 
       <ul>
         <li><a href="nqp/component.html#scripts.engine.component.Afflictions._bitmask">(Afflictions attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Afflictions._bitmask">[1]</a>
-</li>
-        <li><a href="nqp/component.html#scripts.engine.component.Aspect._bitmask">(Aspect attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Aspect._bitmask">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Blocking._bitmask">(Blocking attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Blocking._bitmask">[1]</a>
 </li>
@@ -355,6 +347,8 @@
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Knowledge._bitmask">(Knowledge attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Knowledge._bitmask">[1]</a>
 </li>
+        <li><a href="nqp/component.html#scripts.engine.component.Lifespan._bitmask">(Lifespan attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Lifespan._bitmask">[1]</a>
+</li>
         <li><a href="nqp/component.html#scripts.engine.component.LightSource._bitmask">(LightSource attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.LightSource._bitmask">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.NQPComponent._bitmask">(NQPComponent attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.NQPComponent._bitmask">[1]</a>
@@ -362,6 +356,8 @@
         <li><a href="nqp/component.html#scripts.engine.component.Opinion._bitmask">(Opinion attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Opinion._bitmask">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Position._bitmask">(Position attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Position._bitmask">[1]</a>
+</li>
+        <li><a href="nqp/component.html#scripts.engine.component.Reaction._bitmask">(Reaction attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Reaction._bitmask">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Resources._bitmask">(Resources attribute)</a>, <a href="scripts.engine.html#scripts.engine.component.Resources._bitmask">[1]</a>
 </li>
@@ -376,13 +372,13 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light._calculate_light_img">_calculate_light_img() (Light method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Light._calculate_light_img">_calculate_light_img() (Light method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light._calculate_light_img">[1]</a>
 </li>
       <li><a href="nqp/world.html#scripts.engine.world._can_afford_cost">_can_afford_cost() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world._can_afford_cost">[1]</a>
 </li>
       <li><a href="nqp/key.html#scripts.engine.key._check_actions">_check_actions() (in module scripts.engine.key)</a>, <a href="scripts.engine.html#scripts.engine.key._check_actions">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._check_cast">_check_cast() (Wall method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Wall._check_cast">_check_cast() (Wall method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._check_cast">[1]</a>
 </li>
       <li><a href="nqp/effect.html#scripts.engine.effect.MoveActorEffect._check_collision">_check_collision() (MoveActorEffect static method)</a>, <a href="scripts.engine.html#scripts.engine.effect.MoveActorEffect._check_collision">[1]</a>
 </li>
@@ -390,13 +386,21 @@
 </li>
       <li><a href="nqp/key.html#scripts.engine.key._check_directions">_check_directions() (in module scripts.engine.key)</a>, <a href="scripts.engine.html#scripts.engine.key._check_directions">[1]</a>
 </li>
-      <li><a href="nqp/effect.html#scripts.engine.effect.Effect._create_affliction_trigger">_create_affliction_trigger() (Effect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.Effect._create_affliction_trigger">[1]</a>
+      <li><a href="nqp/world.html#scripts.engine.world._create_affect_cooldown_effect">_create_affect_cooldown_effect() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world._create_affect_cooldown_effect">[1]</a>
 </li>
-      <li><a href="tests.engine.html#tests.engine.test_effect.TestEffects._create_default_entity">_create_default_entity() (TestEffects static method)</a>
+      <li><a href="nqp/world.html#scripts.engine.world._create_affect_stat_effect">_create_affect_stat_effect() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world._create_affect_stat_effect">[1]</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Skill._create_projectile">_create_projectile() (Skill method)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill._create_projectile">[1]</a>
+      <li><a href="nqp/world.html#scripts.engine.world._create_alter_terrain_effect">_create_alter_terrain_effect() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world._create_alter_terrain_effect">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._create_rect">_create_rect() (Wall method)</a>
+      <li><a href="nqp/world.html#scripts.engine.world._create_apply_affliction_effect">_create_apply_affliction_effect() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world._create_apply_affliction_effect">[1]</a>
+</li>
+      <li><a href="nqp/world.html#scripts.engine.world._create_damage_effect">_create_damage_effect() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world._create_damage_effect">[1]</a>
+</li>
+      <li><a href="nqp/world.html#scripts.engine.world._create_move_actor_effect">_create_move_actor_effect() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world._create_move_actor_effect">[1]</a>
+</li>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill._create_projectile">_create_projectile() (Skill method)</a>
+</li>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Wall._create_rect">_create_rect() (Wall method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._create_rect">[1]</a>
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo._create_sections">_create_sections() (ActorInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo._create_sections">[1]</a>
 
@@ -404,9 +408,11 @@
         <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.tile_info.TileInfo._create_sections">(TileInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.tile_info.TileInfo._create_sections">[1]</a>
 </li>
       </ul></li>
+      <li><a href="nqp/effect.html#scripts.engine.effect.AlterTerrainEffect._create_terrain">_create_terrain() (AlterTerrainEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.AlterTerrainEffect._create_terrain">[1]</a>
+</li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.message_log.MessageLog._create_text_box">_create_text_box() (MessageLog method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.message_log.MessageLog._create_text_box">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._determine_cast_endpoint">_determine_cast_endpoint() (Wall static method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Wall._determine_cast_endpoint">_determine_cast_endpoint() (Wall static method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._determine_cast_endpoint">[1]</a>
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.camera.Camera._draw_entities">_draw_entities() (Camera method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera._draw_entities">[1]</a>
 </li>
@@ -422,9 +428,9 @@
 </li>
       <li><a href="nqp/world.html#scripts.engine.world._get_furthest_free_position">_get_furthest_free_position() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world._get_furthest_free_position">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._get_intermediate_points">_get_intermediate_points() (Wall method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Wall._get_intermediate_points">_get_intermediate_points() (Wall method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall._get_intermediate_points">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox._get_max_light_radius">_get_max_light_radius() (LightBox method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox._get_max_light_radius">_get_max_light_radius() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox._get_max_light_radius">[1]</a>
 </li>
       <li><a href="nqp/chronicle.html#scripts.engine.chronicle._get_next_entity_in_queue">_get_next_entity_in_queue() (in module scripts.engine.chronicle)</a>, <a href="scripts.engine.html#scripts.engine.chronicle._get_next_entity_in_queue">[1]</a>
 </li>
@@ -446,10 +452,10 @@
       </ul></li>
       <li><a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.character_selector.CharacterSelector._init_drop_downs">_init_drop_downs() (CharacterSelector method)</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Affliction._init_properties">_init_properties() (Affliction class method)</a>, <a href="scripts.engine.html#scripts.engine.action.Affliction._init_properties">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Affliction._init_properties">_init_properties() (Affliction class method)</a>
 
       <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill._init_properties">(Skill class method)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill._init_properties">[1]</a>
+        <li><a href="scripts.engine.html#scripts.engine.action.Skill._init_properties">(Skill class method)</a>
 </li>
       </ul></li>
       <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap._init_tile_map">_init_tile_map() (GameMap method)</a>
@@ -464,9 +470,11 @@
 </li>
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviours.Basic._move_randomly">_move_randomly() (Basic method)</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Skill._play_animation">_play_animation() (Skill method)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill._play_animation">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill._play_animation">_play_animation() (Skill method)</a>
 </li>
       <li><a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.character_selector.CharacterSelector._post_confirm_event">_post_confirm_event() (CharacterSelector method)</a>
+</li>
+      <li><a href="nqp/effect.html#scripts.engine.effect.AlterTerrainEffect._reduce_terrain_duration">_reduce_terrain_duration() (AlterTerrainEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.AlterTerrainEffect._reduce_terrain_duration">[1]</a>
 </li>
       <li><a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.character_selector.CharacterSelector._refresh_info">_refresh_info() (CharacterSelector method)</a>
 </li>
@@ -503,7 +511,7 @@
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.BaseValueData.accuracy">accuracy (BaseValueData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.BaseValueData.accuracy">[1]</a>
 
       <ul>
-        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.accuracy">(EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.accuracy">[1]</a>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DamageEffectData.accuracy">(DamageEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData.accuracy">[1]</a>
 </li>
       </ul></li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.SecondaryStat.ACCURACY">ACCURACY (SecondaryStat attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.SecondaryStat.ACCURACY">[1]</a>
@@ -513,7 +521,7 @@
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviours.Basic.act">act() (Basic method)</a>
 
       <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Behaviour.act">(Behaviour method)</a>, <a href="scripts.engine.html#scripts.engine.action.Behaviour.act">[1]</a>
+        <li><a href="scripts.engine.html#scripts.engine.action.Behaviour.act">(Behaviour method)</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviours.FollowPlayer.act">(FollowPlayer method)</a>
 </li>
@@ -550,29 +558,59 @@
 </li>
       <li><a href="nqp/component.html#scripts.engine.component.Afflictions.add">add() (Afflictions method)</a>, <a href="scripts.engine.html#scripts.engine.component.Afflictions.add">[1]</a>
 </li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType.ADD_ASPECT">ADD_ASPECT (EffectType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType.ADD_ASPECT">[1]</a>
-</li>
       <li><a href="nqp/world.html#scripts.engine.world.add_component">add_component() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.add_component">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_dynamic_walls">add_dynamic_walls() (LightBox method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_dynamic_walls">add_dynamic_walls() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_dynamic_walls">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_light">add_light() (LightBox method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_light">add_light() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_light">[1]</a>
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.message_log.MessageLog.add_message">add_message() (MessageLog method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.message_log.MessageLog.add_message">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_walls">add_walls() (LightBox method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_walls">add_walls() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_walls">[1]</a>
 </li>
-      <li><a href="nqp/effect.html#scripts.engine.effect.AddAspectEffect">AddAspectEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.AddAspectEffect">[1]</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/component.html#scripts.engine.component.Aesthetic">Aesthetic (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.Aesthetic">[1]</a>
 </li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectCooldownEffectData.affect_amount">affect_amount (AffectCooldownEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectCooldownEffectData.affect_amount">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectStatEffectData.affect_amount">(AffectStatEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectStatEffectData.affect_amount">[1]</a>
+</li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AlterTerrainEffectData.affect_amount">(AlterTerrainEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AlterTerrainEffectData.affect_amount">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType.AFFECT_COOLDOWN">AFFECT_COOLDOWN (EffectType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType.AFFECT_COOLDOWN">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionEvent.AFFECT_COOLDOWN">(InteractionEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionEvent.AFFECT_COOLDOWN">[1]</a>
+</li>
+      </ul></li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType.AFFECT_STAT">AFFECT_STAT (EffectType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType.AFFECT_STAT">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionEvent.AFFECT_STAT">(InteractionEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionEvent.AFFECT_STAT">[1]</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nqp/effect.html#scripts.engine.effect.AffectCooldownEffect">AffectCooldownEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.AffectCooldownEffect">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectCooldownEffectData">AffectCooldownEffectData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectCooldownEffectData">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.AFFECTED_COOLDOWN">AFFECTED_COOLDOWN (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.AFFECTED_COOLDOWN">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.AFFECTED_STAT">AFFECTED_STAT (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.AFFECTED_STAT">[1]</a>
 </li>
       <li><a href="nqp/effect.html#scripts.engine.effect.AffectStatEffect">AffectStatEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.AffectStatEffect">[1]</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Affliction">Affliction (class in scripts.engine.action)</a>, <a href="scripts.engine.html#scripts.engine.action.Affliction">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectStatEffectData">AffectStatEffectData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectStatEffectData">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.AFFLICTED">AFFLICTED (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.AFFLICTED">[1]</a>
+</li>
+      <li><a href="scripts.engine.html#scripts.engine.action.Affliction">Affliction (class in scripts.engine.action)</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionEvent.AFFLICTION">AFFLICTION (InteractionEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionEvent.AFFLICTION">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ApplyAfflictionEffectData.affliction_name">affliction_name (ApplyAfflictionEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ApplyAfflictionEffectData.affliction_name">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.AfflictionCategory">AfflictionCategory (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.AfflictionCategory">[1]</a>
 </li>
@@ -580,16 +618,22 @@
 </li>
       <li><a href="nqp/component.html#scripts.engine.component.Afflictions">Afflictions (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.Afflictions">[1]</a>
 </li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.AfflictionTrigger">AfflictionTrigger (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.AfflictionTrigger">[1]</a>
-</li>
       <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap.air_tile_positions">air_tile_positions() (GameMap property)</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.LightData.alpha">alpha (LightData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.LightData.alpha">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType.ALTER_TERRAIN">ALTER_TERRAIN (EffectType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType.ALTER_TERRAIN">[1]</a>
+</li>
+      <li><a href="nqp/effect.html#scripts.engine.effect.AlterTerrainEffect">AlterTerrainEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.AlterTerrainEffect">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AlterTerrainEffectData">AlterTerrainEffectData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AlterTerrainEffectData">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.TargetTag.ANY">ANY (TargetTag attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.TargetTag.ANY">[1]</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Affliction.apply">apply() (Affliction method)</a>, <a href="scripts.engine.html#scripts.engine.action.Affliction.apply">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Affliction.apply">apply() (Affliction method)</a>
 
       <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.apply">(Skill method)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.apply">[1]</a>
+        <li><a href="scripts.engine.html#scripts.engine.action.Skill.apply">(Skill method)</a>
 </li>
       </ul></li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType.APPLY_AFFLICTION">APPLY_AFFLICTION (EffectType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType.APPLY_AFFLICTION">[1]</a>
@@ -602,13 +646,9 @@
 </li>
       <li><a href="nqp/effect.html#scripts.engine.effect.ApplyAfflictionEffect">ApplyAfflictionEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.ApplyAfflictionEffect">[1]</a>
 </li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ApplyAfflictionEffectData">ApplyAfflictionEffectData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ApplyAfflictionEffectData">[1]</a>
+</li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.TravelMethod.ARC">ARC (TravelMethod attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.TravelMethod.ARC">[1]</a>
-</li>
-      <li><a href="nqp/component.html#scripts.engine.component.Aspect">Aspect (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.Aspect">[1]</a>
-</li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.RenderLayer.ASPECT">ASPECT (RenderLayer attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.RenderLayer.ASPECT">[1]</a>
-</li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AspectData">AspectData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AspectData">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.DamageType.ASTRAL">ASTRAL (DamageType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.DamageType.ASTRAL">[1]</a>
 </li>
@@ -634,12 +674,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.AfflictionCategory.BANE">BANE (AfflictionCategory attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.AfflictionCategory.BANE">[1]</a>
 </li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.base_cooldown">base_cooldown (MockSkill attribute)</a>
-
-      <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.base_cooldown">(Skill attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.base_cooldown">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill.base_cooldown">base_cooldown (Skill attribute)</a>
 </li>
-      </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.BasePrimaryStatData.base_value">base_value (BasePrimaryStatData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.BasePrimaryStatData.base_value">[1]</a>
 
       <ul>
@@ -660,7 +696,7 @@
 </li>
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviours.Basic">Basic (class in scripts.nqp.actions.behaviours)</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Behaviour">Behaviour (class in scripts.engine.action)</a>, <a href="scripts.engine.html#scripts.engine.action.Behaviour">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Behaviour">Behaviour (class in scripts.engine.action)</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ActorData.behaviour_name">behaviour_name (ActorData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ActorData.behaviour_name">[1]</a>
 </li>
@@ -674,22 +710,18 @@
 </li>
       <li><a href="nqp/component.html#scripts.engine.component.Blocking">Blocking (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.Blocking">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AspectData.blocks_movement">blocks_movement (AspectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AspectData.blocks_movement">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TerrainData.blocks_movement">blocks_movement (TerrainData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TerrainData.blocks_movement">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AspectData.blocks_sight">blocks_sight (AspectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AspectData.blocks_sight">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TerrainData.blocks_sight">blocks_sight (TerrainData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TerrainData.blocks_sight">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.AfflictionCategory.BOON">BOON (AfflictionCategory attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.AfflictionCategory.BOON">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.RenderLayer.BOTTOM">BOTTOM (RenderLayer attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.RenderLayer.BOTTOM">[1]</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Affliction.build_effects">build_effects() (Affliction method)</a>, <a href="scripts.engine.html#scripts.engine.action.Affliction.build_effects">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Affliction.build_effects">build_effects() (Affliction method)</a>
 
       <ul>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAffliction.build_effects">(MockAffliction method)</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.build_effects">(MockSkill method)</a>
-</li>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.build_effects">(Skill method)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.build_effects">[1]</a>
+        <li><a href="scripts.engine.html#scripts.engine.action.Skill.build_effects">(Skill method)</a>
 </li>
       </ul></li>
       <li><a href="nqp/utility.html#scripts.engine.utility.build_sprites_from_paths">build_sprites_from_paths() (in module scripts.engine.utility)</a>, <a href="scripts.engine.html#scripts.engine.utility.build_sprites_from_paths">[1]</a>
@@ -724,18 +756,20 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputIntent.CANCEL">CANCEL (InputIntent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputIntent.CANCEL">[1]</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Affliction.category">category (Affliction attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Affliction.category">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Affliction.category">category (Affliction attribute)</a>
 
       <ul>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AfflictionData.category">(AfflictionData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AfflictionData.category">[1]</a>
 </li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAffliction.category">(MockAffliction attribute)</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAfflictionDamage.category">(MockAfflictionDamage attribute)</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAfflictionMovement.category">(MockAfflictionMovement attribute)</a>
-</li>
       </ul></li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectStatEffectData.cause_name">cause_name (AffectStatEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectStatEffectData.cause_name">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFECT_COOLDOWN">CAUSED_AFFECT_COOLDOWN (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFECT_COOLDOWN">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFECT_STAT">CAUSED_AFFECT_STAT (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFECT_STAT">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFLICTION">CAUSED_AFFLICTION (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.CAUSED_AFFLICTION">[1]</a>
+</li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.Direction.CENTRE">CENTRE (Direction attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.Direction.CENTRE">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.RoomConceptData.chance_of_spawning_wall">chance_of_spawning_wall (RoomConceptData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.RoomConceptData.chance_of_spawning_wall">[1]</a>
@@ -762,21 +796,25 @@
         <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.tile_info.TileInfo.cleanse">(TileInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.tile_info.TileInfo.cleanse">[1]</a>
 </li>
       </ul></li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.clear_walls">clear_walls() (LightBox method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox.clear_walls">clear_walls() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.clear_walls">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall.clone_move">clone_move() (Wall method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Wall.clone_move">clone_move() (Wall method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall.clone_move">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.PrimaryStat.CLOUT">CLOUT (PrimaryStat attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.PrimaryStat.CLOUT">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitData.clout">clout (TraitData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitData.clout">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats.clout">clout() (CombatStats property)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats.clout">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.BaseSecondaryStatData.clout_mod">clout_mod (BaseSecondaryStatData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.BaseSecondaryStatData.clout_mod">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.DamageType.COLD">COLD (DamageType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.DamageType.COLD">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.COLLISION">COLLISION (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.COLLISION">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.LightData.colour">colour (LightData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.LightData.colour">[1]</a>
 </li>
       <li><a href="nqp/world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats">CombatStats (class in scripts.engine.world_objects.combat_stats)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats">[1]</a>
 </li>
@@ -802,6 +840,8 @@
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.create_combat_stats">create_combat_stats() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.create_combat_stats">[1]</a>
 </li>
+      <li><a href="nqp/world.html#scripts.engine.world.create_effect">create_effect() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.create_effect">[1]</a>
+</li>
       <li><a href="nqp/world.html#scripts.engine.world.create_entity">create_entity() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.create_entity">[1]</a>
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.create_god">create_god() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.create_god">[1]</a>
@@ -812,9 +852,9 @@
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.create_projectile">create_projectile() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.create_projectile">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.creator">creator (ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.creator">[1]</a>
+      <li><a href="nqp/world.html#scripts.engine.world.create_terrain">create_terrain() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.create_terrain">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.creators_name">creators_name (EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.creators_name">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.creator">creator (ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.creator">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.HitType.CRIT">CRIT (HitType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.HitType.CRIT">[1]</a>
 </li>
@@ -831,10 +871,22 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.BaseValueData.damage">damage (BaseValueData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.BaseValueData.damage">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DamageEffectData.damage">(DamageEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData.damage">[1]</a>
 </li>
+      </ul></li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType.DAMAGE">DAMAGE (EffectType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType.DAMAGE">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionEvent.DAMAGE">(InteractionEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionEvent.DAMAGE">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DamageEffectData.damage_type">damage_type (DamageEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData.damage_type">[1]</a>
 </li>
       <li><a href="nqp/effect.html#scripts.engine.effect.DamageEffect">DamageEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.DamageEffect">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DamageEffectData">DamageEffectData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.DamageType">DamageType (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.DamageType">[1]</a>
 </li>
@@ -848,6 +900,8 @@
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitSpritesData.dead">(TraitSpritesData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData.dead">[1]</a>
 </li>
       </ul></li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.DEAL_DAMAGE">DEAL_DAMAGE (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.DEAL_DAMAGE">[1]</a>
+</li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.TileCategory.DEBUG">DEBUG (TileCategory attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.TileCategory.DEBUG">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputIntent.DEBUG_TOGGLE">DEBUG_TOGGLE (InputIntent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputIntent.DEBUG_TOGGLE">[1]</a>
@@ -858,26 +912,24 @@
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DefaultValueData">DefaultValueData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DefaultValueData">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.delete_dynamic_walls">delete_dynamic_walls() (LightBox method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox.delete_dynamic_walls">delete_dynamic_walls() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.delete_dynamic_walls">[1]</a>
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.delete_entity">delete_entity() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.delete_entity">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.delete_light">delete_light() (LightBox method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox.delete_light">delete_light() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.delete_light">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ActorData.description">description (ActorData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ActorData.description">[1]</a>
 
       <ul>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AfflictionData.description">(AfflictionData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AfflictionData.description">[1]</a>
 </li>
-        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AspectData.description">(AspectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AspectData.description">[1]</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.GodData.description">(GodData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.GodData.description">[1]</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.description">(MockSkill attribute)</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.description">(ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.description">[1]</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.description">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.description">[1]</a>
+</li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TerrainData.description">(TerrainData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TerrainData.description">[1]</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitData.description">(TraitData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitData.description">[1]</a>
 </li>
@@ -894,8 +946,6 @@
 
       <ul>
         <li><a href="nqp/component.html#scripts.engine.component.Afflictions.deserialize">(Afflictions class method)</a>, <a href="scripts.engine.html#scripts.engine.component.Afflictions.deserialize">[1]</a>
-</li>
-        <li><a href="nqp/component.html#scripts.engine.component.Aspect.deserialize">(Aspect class method)</a>, <a href="scripts.engine.html#scripts.engine.component.Aspect.deserialize">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Blocking.deserialize">(Blocking class method)</a>, <a href="scripts.engine.html#scripts.engine.component.Blocking.deserialize">[1]</a>
 </li>
@@ -917,11 +967,15 @@
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Knowledge.deserialize">(Knowledge class method)</a>, <a href="scripts.engine.html#scripts.engine.component.Knowledge.deserialize">[1]</a>
 </li>
+        <li><a href="nqp/component.html#scripts.engine.component.Lifespan.deserialize">(Lifespan class method)</a>, <a href="scripts.engine.html#scripts.engine.component.Lifespan.deserialize">[1]</a>
+</li>
         <li><a href="nqp/component.html#scripts.engine.component.LightSource.deserialize">(LightSource class method)</a>, <a href="scripts.engine.html#scripts.engine.component.LightSource.deserialize">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Opinion.deserialize">(Opinion class method)</a>, <a href="scripts.engine.html#scripts.engine.component.Opinion.deserialize">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Position.deserialize">(Position class method)</a>, <a href="scripts.engine.html#scripts.engine.component.Position.deserialize">[1]</a>
+</li>
+        <li><a href="nqp/component.html#scripts.engine.component.Reaction.deserialize">(Reaction class method)</a>, <a href="scripts.engine.html#scripts.engine.component.Reaction.deserialize">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Resources.deserialize">(Resources class method)</a>, <a href="scripts.engine.html#scripts.engine.component.Resources.deserialize">[1]</a>
 </li>
@@ -944,12 +998,18 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameState.DEVELOPER">DEVELOPER (GameState attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameState.DEVELOPER">[1]</a>
 </li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.DIE">DIE (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.DIE">[1]</a>
+</li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.Dimensions">Dimensions (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.Dimensions">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.Direction">Direction (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.Direction">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.direction">direction (ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.direction">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.MoveActorEffectData.direction">direction (MoveActorEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.MoveActorEffectData.direction">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.direction">(ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.direction">[1]</a>
 </li>
+      </ul></li>
       <li><a href="nqp/debug.html#scripts.engine.debug.disable_profiling">disable_profiling() (in module scripts.engine.debug)</a>, <a href="scripts.engine.html#scripts.engine.debug.disable_profiling">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.Direction.DOWN">DOWN (Direction attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.Direction.DOWN">[1]</a>
@@ -970,7 +1030,7 @@
         <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputIntent.DOWN_RIGHT">(InputIntent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputIntent.DOWN_RIGHT">[1]</a>
 </li>
       </ul></li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall.draw_shadow">draw_shadow() (Wall method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Wall.draw_shadow">draw_shadow() (Wall method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall.draw_shadow">[1]</a>
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.camera.Camera.draw_to_world_position">draw_to_world_position() (Camera method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.camera.Camera.draw_to_world_position">[1]</a>
 </li>
@@ -984,7 +1044,7 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputIntent.DUNGEON_DEV_VIEW">DUNGEON_DEV_VIEW (InputIntent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputIntent.DUNGEON_DEV_VIEW">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AspectData.duration">duration (AspectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AspectData.duration">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ApplyAfflictionEffectData.duration">duration (ApplyAfflictionEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ApplyAfflictionEffectData.duration">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -992,10 +1052,22 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nqp/effect.html#scripts.engine.effect.Effect">Effect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.Effect">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectCooldownEffectData.effect_type">effect_type (AffectCooldownEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectCooldownEffectData.effect_type">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectStatEffectData.effect_type">(AffectStatEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectStatEffectData.effect_type">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.effect_type">effect_type (EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.effect_type">[1]</a>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AlterTerrainEffectData.effect_type">(AlterTerrainEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AlterTerrainEffectData.effect_type">[1]</a>
 </li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ApplyAfflictionEffectData.effect_type">(ApplyAfflictionEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ApplyAfflictionEffectData.effect_type">[1]</a>
+</li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DamageEffectData.effect_type">(DamageEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData.effect_type">[1]</a>
+</li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.effect_type">(EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.effect_type">[1]</a>
+</li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.MoveActorEffectData.effect_type">(MoveActorEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.MoveActorEffectData.effect_type">[1]</a>
+</li>
+      </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData">EffectData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType">EffectType (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType">[1]</a>
@@ -1012,28 +1084,18 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.UIElement.ENTITY_QUEUE">ENTITY_QUEUE (UIElement attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.UIElement.ENTITY_QUEUE">[1]</a>
 </li>
-      <li><a href="nqp/effect.html#scripts.engine.effect.AddAspectEffect.evaluate">evaluate() (AddAspectEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.AddAspectEffect.evaluate">[1]</a>
+      <li><a href="nqp/effect.html#scripts.engine.effect.AffectCooldownEffect.evaluate">evaluate() (AffectCooldownEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.AffectCooldownEffect.evaluate">[1]</a>
 
       <ul>
         <li><a href="nqp/effect.html#scripts.engine.effect.AffectStatEffect.evaluate">(AffectStatEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.AffectStatEffect.evaluate">[1]</a>
+</li>
+        <li><a href="nqp/effect.html#scripts.engine.effect.AlterTerrainEffect.evaluate">(AlterTerrainEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.AlterTerrainEffect.evaluate">[1]</a>
 </li>
         <li><a href="nqp/effect.html#scripts.engine.effect.ApplyAfflictionEffect.evaluate">(ApplyAfflictionEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.ApplyAfflictionEffect.evaluate">[1]</a>
 </li>
         <li><a href="nqp/effect.html#scripts.engine.effect.DamageEffect.evaluate">(DamageEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.DamageEffect.evaluate">[1]</a>
 </li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.Effect.evaluate">(Effect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.Effect.evaluate">[1]</a>
-</li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.KillEffect.evaluate">(KillEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.KillEffect.evaluate">[1]</a>
-</li>
         <li><a href="nqp/effect.html#scripts.engine.effect.MoveActorEffect.evaluate">(MoveActorEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.MoveActorEffect.evaluate">[1]</a>
-</li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.ReduceSkillCooldownEffect.evaluate">(ReduceSkillCooldownEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.ReduceSkillCooldownEffect.evaluate">[1]</a>
-</li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.RemoveAspectEffect.evaluate">(RemoveAspectEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.RemoveAspectEffect.evaluate">[1]</a>
-</li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.TriggerAfflictionsEffect.evaluate">(TriggerAfflictionsEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.TriggerAfflictionsEffect.evaluate">[1]</a>
-</li>
-        <li><a href="nqp/effect.html#scripts.engine.effect.TriggerSkillEffect.evaluate">(TriggerSkillEffect method)</a>, <a href="scripts.engine.html#scripts.engine.effect.TriggerSkillEffect.evaluate">[1]</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1070,7 +1132,7 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.fail_effects">fail_effects (EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.fail_effects">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.failure_effects">failure_effects (EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.failure_effects">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.ProjectileSpeed.FAST">FAST (ProjectileSpeed attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.ProjectileSpeed.FAST">[1]</a>
 </li>
@@ -1122,12 +1184,8 @@
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.get_affected_entities">get_affected_entities() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.get_affected_entities">[1]</a>
 </li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.get_animation">get_animation() (MockSkill method)</a>
-
-      <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.get_animation">(Skill method)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.get_animation">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill.get_animation">get_animation() (Skill method)</a>
 </li>
-      </ul></li>
       <li><a href="nqp/world.html#scripts.engine.world.get_cast_positions">get_cast_positions() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.get_cast_positions">[1]</a>
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.get_chebyshev_distance">get_chebyshev_distance() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.get_chebyshev_distance">[1]</a>
@@ -1164,7 +1222,7 @@
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.get_known_skill">get_known_skill() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.get_known_skill">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.get_light">get_light() (LightBox method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox.get_light">get_light() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.get_light">[1]</a>
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.get_name">get_name() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.get_name">[1]</a>
 </li>
@@ -1291,19 +1349,15 @@
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AfflictionData.icon_path">icon_path (AfflictionData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AfflictionData.icon_path">[1]</a>
 
       <ul>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.icon_path">(MockSkill attribute)</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.icon_path">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.icon_path">[1]</a>
 </li>
       </ul></li>
       <li><a href="nqp/component.html#scripts.engine.component.Identity">Identity (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.Identity">[1]</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Affliction.identity_tags">identity_tags (Affliction attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Affliction.identity_tags">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Affliction.identity_tags">identity_tags (Affliction attribute)</a>
 
       <ul>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AfflictionData.identity_tags">(AfflictionData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AfflictionData.identity_tags">[1]</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAffliction.identity_tags">(MockAffliction attribute)</a>
 </li>
       </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitSpritePathsData.idle">idle (TraitSpritePathsData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData.idle">[1]</a>
@@ -1312,19 +1366,23 @@
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitSpritesData.idle">(TraitSpritesData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData.idle">[1]</a>
 </li>
       </ul></li>
-      <li><a href="nqp/action.html#scripts.engine.action.init_action">init_action() (in module scripts.engine.action)</a>, <a href="scripts.engine.html#scripts.engine.action.init_action">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.init_action">init_action() (in module scripts.engine.action)</a>
 </li>
       <li><a href="scripts.nqp.html#scripts.nqp.command.initialise_game">initialise_game() (in module scripts.nqp.command)</a>
 </li>
       <li><a href="nqp/debug.html#scripts.engine.debug.initialise_logging">initialise_logging() (in module scripts.engine.debug)</a>, <a href="scripts.engine.html#scripts.engine.debug.initialise_logging">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputEvent">InputEvent (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputEvent">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputIntent">InputIntent (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputIntent">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.ProjectileSpeed.INSTANT">INSTANT (ProjectileSpeed attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.ProjectileSpeed.INSTANT">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionEvent">InteractionEvent (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionEvent">[1]</a>
+</li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger">InteractionTrigger (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.InterventionData">InterventionData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.InterventionData">[1]</a>
 </li>
@@ -1369,12 +1427,10 @@
       <ul>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.MapData.key">(MapData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.MapData.key">[1]</a>
 </li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.key">(MockSkill attribute)</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.RoomConceptData.key">(RoomConceptData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.RoomConceptData.key">[1]</a>
 </li>
       </ul></li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType.KILL">KILL (EffectType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType.KILL">[1]</a>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.KILL">KILL (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.KILL">[1]</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1383,8 +1439,6 @@
       <li><a href="nqp/debug.html#scripts.engine.debug.kill_logging">kill_logging() (in module scripts.engine.debug)</a>, <a href="scripts.engine.html#scripts.engine.debug.kill_logging">[1]</a>
 </li>
       <li><a href="nqp/debug.html#scripts.engine.debug.kill_profiler">kill_profiler() (in module scripts.engine.debug)</a>, <a href="scripts.engine.html#scripts.engine.debug.kill_profiler">[1]</a>
-</li>
-      <li><a href="nqp/effect.html#scripts.engine.effect.KillEffect">KillEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.KillEffect">[1]</a>
 </li>
       <li><a href="nqp/component.html#scripts.engine.component.Knowledge">Knowledge (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.Knowledge">[1]</a>
 </li>
@@ -1410,11 +1464,17 @@
       </ul></li>
       <li><a href="nqp/utility.html#scripts.engine.utility.lerp">lerp() (in module scripts.engine.utility)</a>, <a href="scripts.engine.html#scripts.engine.utility.lerp">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light">Light (class in scripts.engine.world_objects.lighting)</a>
+      <li><a href="nqp/component.html#scripts.engine.component.Lifespan">Lifespan (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.Lifespan">[1]</a>
+</li>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Light">Light (class in scripts.engine.world_objects.lighting)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light">[1]</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox">LightBox (class in scripts.engine.world_objects.lighting)</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TerrainData.light">light (TerrainData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TerrainData.light">[1]</a>
+</li>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox">LightBox (class in scripts.engine.world_objects.lighting)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.LightData">LightData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.LightData">[1]</a>
 </li>
       <li><a href="nqp/component.html#scripts.engine.component.LightSource">LightSource (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.LightSource">[1]</a>
 </li>
@@ -1474,15 +1534,9 @@
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.RoomConceptData.min_width">min_width (RoomConceptData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.RoomConceptData.min_width">[1]</a>
 </li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_world.mock_methods">mock_methods() (in module tests.mocks.mock_world)</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DamageEffectData.mod_amount">mod_amount (DamageEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData.mod_amount">[1]</a>
 </li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAffliction">MockAffliction (class in tests.mocks.mock_effect)</a>
-</li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAfflictionDamage">MockAfflictionDamage (class in tests.mocks.mock_effect)</a>
-</li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAfflictionMovement">MockAfflictionMovement (class in tests.mocks.mock_effect)</a>
-</li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill">MockSkill (class in tests.mocks.mock_effect)</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DamageEffectData.mod_stat">mod_stat (DamageEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData.mod_stat">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.HitInfoData.modifier">modifier (HitInfoData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.HitInfoData.modifier">[1]</a>
 </li>
@@ -1494,7 +1548,7 @@
 </li>
         <li><a href="scripts.engine.html#module-scripts.engine">scripts.engine</a>
 </li>
-        <li><a href="nqp/action.html#module-scripts.engine.action">scripts.engine.action</a>, <a href="scripts.engine.html#module-scripts.engine.action">[1]</a>
+        <li><a href="scripts.engine.html#module-scripts.engine.action">scripts.engine.action</a>
 </li>
         <li><a href="nqp/chronicle.html#module-scripts.engine.chronicle">scripts.engine.chronicle</a>, <a href="scripts.engine.html#module-scripts.engine.chronicle">[1]</a>
 </li>
@@ -1512,6 +1566,8 @@
 </li>
         <li><a href="nqp/core.queries.html#module-scripts.engine.core.queries">scripts.engine.core.queries</a>, <a href="scripts.engine.core.html#module-scripts.engine.core.queries">[1]</a>
 </li>
+        <li><a href="nqp/core.systems.html#module-scripts.engine.core.systems">scripts.engine.core.systems</a>, <a href="scripts.engine.core.html#module-scripts.engine.core.systems">[1]</a>
+</li>
         <li><a href="nqp/debug.html#module-scripts.engine.debug">scripts.engine.debug</a>, <a href="scripts.engine.html#module-scripts.engine.debug">[1]</a>
 </li>
         <li><a href="nqp/dungen.html#module-scripts.engine.dungen">scripts.engine.dungen</a>, <a href="scripts.engine.html#module-scripts.engine.dungen">[1]</a>
@@ -1523,14 +1579,6 @@
         <li><a href="nqp/library.html#module-scripts.engine.library">scripts.engine.library</a>, <a href="scripts.engine.html#module-scripts.engine.library">[1]</a>
 </li>
         <li><a href="nqp/state.html#module-scripts.engine.state">scripts.engine.state</a>, <a href="scripts.engine.html#module-scripts.engine.state">[1]</a>
-</li>
-        <li><a href="scripts.engine.systems.html#module-scripts.engine.systems">scripts.engine.systems</a>
-</li>
-        <li><a href="nqp/systems.html#module-scripts.engine.systems.behaviour">scripts.engine.systems.behaviour</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.behaviour">[1]</a>
-</li>
-        <li><a href="nqp/systems.html#module-scripts.engine.systems.reaction">scripts.engine.systems.reaction</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.reaction">[1]</a>
-</li>
-        <li><a href="nqp/systems.html#module-scripts.engine.systems.vision">scripts.engine.systems.vision</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.vision">[1]</a>
 </li>
         <li><a href="scripts.engine.ui.html#module-scripts.engine.ui">scripts.engine.ui</a>
 </li>
@@ -1570,7 +1618,7 @@
 </li>
         <li><a href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.game_map">scripts.engine.world_objects.game_map</a>
 </li>
-        <li><a href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.lighting">scripts.engine.world_objects.lighting</a>
+        <li><a href="nqp/world_objects.html#module-scripts.engine.world_objects.lighting">scripts.engine.world_objects.lighting</a>, <a href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.lighting">[1]</a>
 </li>
         <li><a href="nqp/world_objects.html#module-scripts.engine.world_objects.tile">scripts.engine.world_objects.tile</a>, <a href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.tile">[1]</a>
 </li>
@@ -1592,44 +1640,42 @@
 </li>
         <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.intent">scripts.nqp.processors.intent</a>
 </li>
+        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.interactions">scripts.nqp.processors.interactions</a>
+</li>
         <li><a href="tests.html#module-tests">tests</a>
 </li>
         <li><a href="tests.engine.html#module-tests.engine">tests.engine</a>
 </li>
         <li><a href="tests.engine.html#module-tests.engine.test_component">tests.engine.test_component</a>
 </li>
-        <li><a href="tests.engine.html#module-tests.engine.test_effect">tests.engine.test_effect</a>
-</li>
         <li><a href="tests.engine.html#module-tests.engine.test_state">tests.engine.test_state</a>
 </li>
         <li><a href="tests.engine.html#module-tests.engine.test_utility">tests.engine.test_utility</a>
-</li>
-        <li><a href="tests.mocks.html#module-tests.mocks">tests.mocks</a>
-</li>
-        <li><a href="tests.mocks.html#module-tests.mocks.mock_effect">tests.mocks.mock_effect</a>
-</li>
-        <li><a href="tests.mocks.html#module-tests.mocks.mock_ui">tests.mocks.mock_ui</a>
-</li>
-        <li><a href="tests.mocks.html#module-tests.mocks.mock_world">tests.mocks.mock_world</a>
-</li>
-        <li><a href="tests.nqp.html#module-tests.nqp">tests.nqp</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType.MOVE">MOVE (EffectType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType.MOVE">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionEvent.MOVE">(InteractionEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionEvent.MOVE">[1]</a>
 </li>
+        <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.MOVE">(InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.MOVE">[1]</a>
+</li>
+      </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitSpritePathsData.move">move (TraitSpritePathsData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData.move">[1]</a>
 
       <ul>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitSpritesData.move">(TraitSpritesData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData.move">[1]</a>
 </li>
       </ul></li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.MoveActorEffectData.move_amount">move_amount (MoveActorEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.MoveActorEffectData.move_amount">[1]</a>
+</li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.BaseValueData.move_cost">move_cost (BaseValueData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.BaseValueData.move_cost">[1]</a>
 </li>
       <li><a href="nqp/effect.html#scripts.engine.effect.MoveActorEffect">MoveActorEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.MoveActorEffect">[1]</a>
 </li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.AfflictionTrigger.MOVEMENT">MOVEMENT (AfflictionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.AfflictionTrigger.MOVEMENT">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.MoveActorEffectData">MoveActorEffectData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.MoveActorEffectData">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.DamageType.MUNDANE">MUNDANE (DamageType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.DamageType.MUNDANE">[1]</a>
 </li>
@@ -1642,8 +1688,6 @@
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AfflictionData.name">name (AfflictionData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AfflictionData.name">[1]</a>
 
       <ul>
-        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AspectData.name">(AspectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AspectData.name">[1]</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.BasePrimaryStatData.name">(BasePrimaryStatData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.BasePrimaryStatData.name">[1]</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.BaseSecondaryStatData.name">(BaseSecondaryStatData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.BaseSecondaryStatData.name">[1]</a>
@@ -1652,13 +1696,13 @@
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.MapData.name">(MapData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.MapData.name">[1]</a>
 </li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAffliction.name">(MockAffliction attribute)</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.name">(ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.name">[1]</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.RoomConceptData.name">(RoomConceptData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.RoomConceptData.name">[1]</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.name">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.name">[1]</a>
+</li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TerrainData.name">(TerrainData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TerrainData.name">[1]</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitData.name">(TraitData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitData.name">[1]</a>
 </li>
@@ -1699,8 +1743,6 @@
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AttitudeData.opinion_change">opinion_change (AttitudeData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AttitudeData.opinion_change">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.originator">originator (EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.originator">[1]</a>
-</li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.TargetTag.OTHER_ENTITY">OTHER_ENTITY (TargetTag attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.TargetTag.OTHER_ENTITY">[1]</a>
 </li>
   </ul></td>
@@ -1724,8 +1766,14 @@
       <li><a href="nqp/component.html#scripts.engine.component.Position">Position (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.Position">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ActorData.position_offsets">position_offsets (ActorData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ActorData.position_offsets">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TerrainData.position_offsets">(TerrainData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TerrainData.position_offsets">[1]</a>
 </li>
+      </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ActorData.possible_names">possible_names (ActorData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ActorData.possible_names">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DamageEffectData.potency">potency (DamageEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData.potency">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.BaseStatData.primary">primary (BaseStatData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.BaseStatData.primary">[1]</a>
 </li>
@@ -1735,14 +1783,14 @@
 </li>
       <li><a href="nqp/debug.html#scripts.engine.debug.print_values_to_console">print_values_to_console() (in module scripts.engine.debug)</a>, <a href="scripts.engine.html#scripts.engine.debug.print_values_to_console">[1]</a>
 </li>
-      <li><a href="nqp/systems.html#scripts.engine.systems.behaviour.process_activations">process_activations() (in module scripts.engine.systems.behaviour)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.behaviour.process_activations">[1]</a>
+      <li><a href="nqp/core.systems.html#scripts.engine.core.systems.process_activations">process_activations() (in module scripts.engine.core.systems)</a>, <a href="scripts.engine.core.html#scripts.engine.core.systems.process_activations">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_close_button">process_close_button() (ActorInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_close_button">[1]</a>
 </li>
       <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.display.process_display_updates">process_display_updates() (in module scripts.nqp.processors.display)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_event">process_event() (ActorInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.process_event">[1]</a>
 
       <ul>
@@ -1750,26 +1798,22 @@
 </li>
         <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.input.process_event">(in module scripts.nqp.processors.input)</a>
 </li>
+        <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.interactions.process_event">(in module scripts.nqp.processors.interactions)</a>
+</li>
       </ul></li>
-      <li><a href="nqp/systems.html#scripts.engine.systems.vision.process_fov">process_fov() (in module scripts.engine.systems.vision)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.vision.process_fov">[1]</a>
+      <li><a href="nqp/core.systems.html#scripts.engine.core.systems.process_fov">process_fov() (in module scripts.engine.core.systems)</a>, <a href="scripts.engine.core.html#scripts.engine.core.systems.process_fov">[1]</a>
 </li>
       <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.intent.process_intent">process_intent() (in module scripts.nqp.processors.intent)</a>
 </li>
-      <li><a href="nqp/systems.html#scripts.engine.systems.behaviour.process_interventions">process_interventions() (in module scripts.engine.systems.behaviour)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.behaviour.process_interventions">[1]</a>
+      <li><a href="nqp/core.systems.html#scripts.engine.core.systems.process_light_map">process_light_map() (in module scripts.engine.core.systems)</a>, <a href="scripts.engine.core.html#scripts.engine.core.systems.process_light_map">[1]</a>
 </li>
-      <li><a href="nqp/systems.html#scripts.engine.systems.vision.process_light_map">process_light_map() (in module scripts.engine.systems.vision)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.vision.process_light_map">[1]</a>
-</li>
-      <li><a href="nqp/systems.html#scripts.engine.systems.vision.process_tile_visibility">process_tile_visibility() (in module scripts.engine.systems.vision)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.vision.process_tile_visibility">[1]</a>
-</li>
-      <li><a href="nqp/systems.html#scripts.engine.systems.reaction.process_win_condition">process_win_condition() (in module scripts.engine.systems.reaction)</a>, <a href="scripts.engine.systems.html#scripts.engine.systems.reaction.process_win_condition">[1]</a>
+      <li><a href="nqp/core.systems.html#scripts.engine.core.systems.process_tile_visibility">process_tile_visibility() (in module scripts.engine.core.systems)</a>, <a href="scripts.engine.core.html#scripts.engine.core.systems.process_tile_visibility">[1]</a>
 </li>
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviours.Projectile">Projectile (class in scripts.nqp.actions.behaviours)</a>
 </li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.projectile_data">projectile_data (MockSkill attribute)</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill.projectile_data">projectile_data (Skill attribute)</a>
 
       <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.projectile_data">(Skill attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.projectile_data">[1]</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.projectile_data">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.projectile_data">[1]</a>
 </li>
       </ul></li>
@@ -1779,27 +1823,37 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.ProjectileSpeed">ProjectileSpeed (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.ProjectileSpeed">[1]</a>
 </li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.PROXIMITY">PROXIMITY (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.PROXIMITY">[1]</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.range">range (MockSkill attribute)</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.LightData.radius">radius (LightData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.LightData.radius">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.range">range (ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.range">[1]</a>
 
       <ul>
-        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.range">(ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.range">[1]</a>
-</li>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.range">(Skill attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.range">[1]</a>
+        <li><a href="scripts.engine.html#scripts.engine.action.Skill.range">(Skill attribute)</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.range">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.range">[1]</a>
 </li>
       </ul></li>
+      <li><a href="nqp/component.html#scripts.engine.component.Reaction">Reaction (class in scripts.engine.component)</a>, <a href="scripts.engine.html#scripts.engine.component.Reaction">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TerrainData.reactions">reactions (TerrainData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TerrainData.reactions">[1]</a>
+</li>
       <li><a href="nqp/chronicle.html#scripts.engine.chronicle.rebuild_turn_queue">rebuild_turn_queue() (in module scripts.engine.chronicle)</a>, <a href="scripts.engine.html#scripts.engine.chronicle.rebuild_turn_queue">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DefaultValueData.reduced_effectiveness_multi_tile_modifier">reduced_effectiveness_multi_tile_modifier (DefaultValueData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DefaultValueData.reduced_effectiveness_multi_tile_modifier">[1]</a>
+      <li><a href="nqp/core.systems.html#scripts.engine.core.systems.reduce_affliction_durations">reduce_affliction_durations() (in module scripts.engine.core.systems)</a>, <a href="scripts.engine.core.html#scripts.engine.core.systems.reduce_affliction_durations">[1]</a>
 </li>
-      <li><a href="nqp/effect.html#scripts.engine.effect.ReduceSkillCooldownEffect">ReduceSkillCooldownEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.ReduceSkillCooldownEffect">[1]</a>
+      <li><a href="nqp/core.systems.html#scripts.engine.core.systems.reduce_lifespan_durations">reduce_lifespan_durations() (in module scripts.engine.core.systems)</a>, <a href="scripts.engine.core.html#scripts.engine.core.systems.reduce_lifespan_durations">[1]</a>
+</li>
+      <li><a href="nqp/core.systems.html#scripts.engine.core.systems.reduce_skill_cooldowns">reduce_skill_cooldowns() (in module scripts.engine.core.systems)</a>, <a href="scripts.engine.core.html#scripts.engine.core.systems.reduce_skill_cooldowns">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DefaultValueData.reduced_effectiveness_multi_tile_modifier">reduced_effectiveness_multi_tile_modifier (DefaultValueData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DefaultValueData.reduced_effectiveness_multi_tile_modifier">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.TerrainCollision.REFLECT">REFLECT (TerrainCollision attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.TerrainCollision.REFLECT">[1]</a>
 </li>
@@ -1815,28 +1869,24 @@
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.remove_affliction">remove_affliction() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.remove_affliction">[1]</a>
 </li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType.REMOVE_ASPECT">REMOVE_ASPECT (EffectType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType.REMOVE_ASPECT">[1]</a>
-</li>
       <li><a href="nqp/world.html#scripts.engine.world.remove_component">remove_component() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.remove_component">[1]</a>
 </li>
-      <li><a href="nqp/effect.html#scripts.engine.effect.RemoveAspectEffect">RemoveAspectEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.RemoveAspectEffect">[1]</a>
-</li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.render">render() (LightBox method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox.render">render() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.render">[1]</a>
 
       <ul>
-        <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall.render">(Wall method)</a>
+        <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Wall.render">(Wall method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall.render">[1]</a>
 </li>
       </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitSpritePathsData.render_order">render_order (TraitSpritePathsData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData.render_order">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.RenderLayer">RenderLayer (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.RenderLayer">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.InterventionData.required_opinion">required_opinion (InterventionData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.InterventionData.required_opinion">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.SecondaryStat.RESIST_ASTRAL">RESIST_ASTRAL (SecondaryStat attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.SecondaryStat.RESIST_ASTRAL">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats.resist_astral">resist_astral() (CombatStats property)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats.resist_astral">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.SecondaryStat.RESIST_BURN">RESIST_BURN (SecondaryStat attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.SecondaryStat.RESIST_BURN">[1]</a>
@@ -1857,19 +1907,15 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.Resource">Resource (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.Resource">[1]</a>
 </li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.resource_cost">resource_cost (MockSkill attribute)</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill.resource_cost">resource_cost (Skill attribute)</a>
 
       <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.resource_cost">(Skill attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.resource_cost">[1]</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.resource_cost">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.resource_cost">[1]</a>
 </li>
       </ul></li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.resource_type">resource_type (MockSkill attribute)</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill.resource_type">resource_type (Skill attribute)</a>
 
       <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.resource_type">(Skill attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.resource_type">[1]</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.resource_type">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.resource_type">[1]</a>
 </li>
       </ul></li>
@@ -1919,7 +1965,7 @@
     scripts.engine.action
 
       <ul>
-        <li><a href="nqp/action.html#module-scripts.engine.action">module</a>, <a href="scripts.engine.html#module-scripts.engine.action">[1]</a>
+        <li><a href="scripts.engine.html#module-scripts.engine.action">module</a>
 </li>
       </ul></li>
       <li>
@@ -1979,6 +2025,13 @@
 </li>
       </ul></li>
       <li>
+    scripts.engine.core.systems
+
+      <ul>
+        <li><a href="nqp/core.systems.html#module-scripts.engine.core.systems">module</a>, <a href="scripts.engine.core.html#module-scripts.engine.core.systems">[1]</a>
+</li>
+      </ul></li>
+      <li>
     scripts.engine.debug
 
       <ul>
@@ -2018,34 +2071,6 @@
 
       <ul>
         <li><a href="nqp/state.html#module-scripts.engine.state">module</a>, <a href="scripts.engine.html#module-scripts.engine.state">[1]</a>
-</li>
-      </ul></li>
-      <li>
-    scripts.engine.systems
-
-      <ul>
-        <li><a href="scripts.engine.systems.html#module-scripts.engine.systems">module</a>
-</li>
-      </ul></li>
-      <li>
-    scripts.engine.systems.behaviour
-
-      <ul>
-        <li><a href="nqp/systems.html#module-scripts.engine.systems.behaviour">module</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.behaviour">[1]</a>
-</li>
-      </ul></li>
-      <li>
-    scripts.engine.systems.reaction
-
-      <ul>
-        <li><a href="nqp/systems.html#module-scripts.engine.systems.reaction">module</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.reaction">[1]</a>
-</li>
-      </ul></li>
-      <li>
-    scripts.engine.systems.vision
-
-      <ul>
-        <li><a href="nqp/systems.html#module-scripts.engine.systems.vision">module</a>, <a href="scripts.engine.systems.html#module-scripts.engine.systems.vision">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -2185,7 +2210,7 @@
     scripts.engine.world_objects.lighting
 
       <ul>
-        <li><a href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.lighting">module</a>
+        <li><a href="nqp/world_objects.html#module-scripts.engine.world_objects.lighting">module</a>, <a href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.lighting">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -2237,8 +2262,6 @@
         <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.display">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     scripts.nqp.processors.game
 
@@ -2253,11 +2276,20 @@
         <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.input">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     scripts.nqp.processors.intent
 
       <ul>
         <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.intent">module</a>
+</li>
+      </ul></li>
+      <li>
+    scripts.nqp.processors.interactions
+
+      <ul>
+        <li><a href="scripts.nqp.processors.html#module-scripts.nqp.processors.interactions">module</a>
 </li>
       </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.BaseStatData.secondary">secondary (BaseStatData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.BaseStatData.secondary">[1]</a>
@@ -2279,8 +2311,6 @@
       <ul>
         <li><a href="nqp/component.html#scripts.engine.component.Afflictions.serialize">(Afflictions method)</a>, <a href="scripts.engine.html#scripts.engine.component.Afflictions.serialize">[1]</a>
 </li>
-        <li><a href="nqp/component.html#scripts.engine.component.Aspect.serialize">(Aspect method)</a>, <a href="scripts.engine.html#scripts.engine.component.Aspect.serialize">[1]</a>
-</li>
         <li><a href="nqp/component.html#scripts.engine.component.Blocking.serialize">(Blocking method)</a>, <a href="scripts.engine.html#scripts.engine.component.Blocking.serialize">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Exists.serialize">(Exists method)</a>, <a href="scripts.engine.html#scripts.engine.component.Exists.serialize">[1]</a>
@@ -2301,11 +2331,15 @@
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Knowledge.serialize">(Knowledge method)</a>, <a href="scripts.engine.html#scripts.engine.component.Knowledge.serialize">[1]</a>
 </li>
+        <li><a href="nqp/component.html#scripts.engine.component.Lifespan.serialize">(Lifespan method)</a>, <a href="scripts.engine.html#scripts.engine.component.Lifespan.serialize">[1]</a>
+</li>
         <li><a href="nqp/component.html#scripts.engine.component.LightSource.serialize">(LightSource method)</a>, <a href="scripts.engine.html#scripts.engine.component.LightSource.serialize">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Opinion.serialize">(Opinion method)</a>, <a href="scripts.engine.html#scripts.engine.component.Opinion.serialize">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Position.serialize">(Position method)</a>, <a href="scripts.engine.html#scripts.engine.component.Position.serialize">[1]</a>
+</li>
+        <li><a href="nqp/component.html#scripts.engine.component.Reaction.serialize">(Reaction method)</a>, <a href="scripts.engine.html#scripts.engine.component.Reaction.serialize">[1]</a>
 </li>
         <li><a href="nqp/component.html#scripts.engine.component.Resources.serialize">(Resources method)</a>, <a href="scripts.engine.html#scripts.engine.component.Resources.serialize">[1]</a>
 </li>
@@ -2322,9 +2356,9 @@
 </li>
       <li><a href="nqp/state.html#scripts.engine.state.set_active_skill">set_active_skill() (in module scripts.engine.state)</a>, <a href="scripts.engine.html#scripts.engine.state.set_active_skill">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.set_alpha">set_alpha() (Light method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Light.set_alpha">set_alpha() (Light method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.set_alpha">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.set_colour">set_colour() (Light method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Light.set_colour">set_colour() (Light method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.set_colour">[1]</a>
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.set_entity">set_entity() (ActorInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.actor_info.ActorInfo.set_entity">[1]</a>
 </li>
@@ -2338,7 +2372,7 @@
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.tile_info.TileInfo.set_selected_tile_pos">set_selected_tile_pos() (TileInfo method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.tile_info.TileInfo.set_selected_tile_pos">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.set_size">set_size() (Light method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Light.set_size">set_size() (Light method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.set_size">[1]</a>
 </li>
       <li><a href="nqp/component.html#scripts.engine.component.Knowledge.set_skill_cooldown">set_skill_cooldown() (Knowledge method)</a>, <a href="scripts.engine.html#scripts.engine.component.Knowledge.set_skill_cooldown">[1]</a>
 </li>
@@ -2358,21 +2392,11 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.Shape">Shape (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.Shape">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.shape">shape (EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.shape">[1]</a>
-
-      <ul>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.shape">(MockSkill attribute)</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.shape">shape (SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.shape">[1]</a>
 </li>
-        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.shape">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.shape">[1]</a>
-</li>
-      </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AfflictionData.shape_size">shape_size (AfflictionData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AfflictionData.shape_size">[1]</a>
 
       <ul>
-        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.shape_size">(EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.shape_size">[1]</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.shape_size">(MockSkill attribute)</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.shape_size">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.shape_size">[1]</a>
 </li>
       </ul></li>
@@ -2388,7 +2412,7 @@
 </li>
       <li><a href="nqp/world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats.sight_range">sight_range() (CombatStats property)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats.sight_range">[1]</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Skill">Skill (class in scripts.engine.action)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill">Skill (class in scripts.engine.action)</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputIntent.SKILL0">SKILL0 (InputIntent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputIntent.SKILL0">[1]</a>
 </li>
@@ -2410,8 +2434,12 @@
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.InterventionData.skill_key">skill_key (InterventionData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.InterventionData.skill_key">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.skill_name">skill_name (ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.skill_name">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectCooldownEffectData.skill_name">skill_name (AffectCooldownEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectCooldownEffectData.skill_name">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.skill_name">(ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.skill_name">[1]</a>
 </li>
+      </ul></li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.skill_bar.SkillBar">SkillBar (class in scripts.engine.ui.elements.skill_bar)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.skill_bar.SkillBar">[1]</a>
 </li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData">SkillData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData">[1]</a>
@@ -2432,14 +2460,14 @@
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.spend_time">spend_time() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.spend_time">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AspectData.sprite">sprite (AspectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AspectData.sprite">[1]</a>
-</li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.MapData.sprite_paths">sprite_paths (MapData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.MapData.sprite_paths">[1]</a>
 
       <ul>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.sprite_paths">(ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.sprite_paths">[1]</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.RoomConceptData.sprite_paths">(RoomConceptData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.RoomConceptData.sprite_paths">[1]</a>
+</li>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TerrainData.sprite_paths">(TerrainData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TerrainData.sprite_paths">[1]</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TraitData.sprite_paths">(TraitData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TraitData.sprite_paths">[1]</a>
 </li>
@@ -2456,8 +2484,12 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameEvent.START_GAME">START_GAME (GameEvent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameEvent.START_GAME">[1]</a>
 </li>
-      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.stat_to_target">stat_to_target (EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.stat_to_target">[1]</a>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AffectStatEffectData.stat_to_target">stat_to_target (AffectStatEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AffectStatEffectData.stat_to_target">[1]</a>
+
+      <ul>
+        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.DamageEffectData.stat_to_target">(DamageEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData.stat_to_target">[1]</a>
 </li>
+      </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.success_effects">success_effects (EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.success_effects">[1]</a>
 </li>
   </ul></td>
@@ -2466,7 +2498,7 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.AfflictionTrigger.TAKE_DAMAGE">TAKE_DAMAGE (AfflictionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.AfflictionTrigger.TAKE_DAMAGE">[1]</a>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InteractionTrigger.TAKE_DAMAGE">TAKE_DAMAGE (InteractionTrigger attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InteractionTrigger.TAKE_DAMAGE">[1]</a>
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.take_turn">take_turn() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.take_turn">[1]</a>
 </li>
@@ -2476,23 +2508,15 @@
         <li><a href="nqp/core.constants.html#scripts.engine.core.constants.TargetingMethod.TARGET">(TargetingMethod attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.TargetingMethod.TARGET">[1]</a>
 </li>
       </ul></li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.target_directions">target_directions (MockSkill attribute)</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill.target_directions">target_directions (Skill attribute)</a>
 
       <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.target_directions">(Skill attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.target_directions">[1]</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.target_directions">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.target_directions">[1]</a>
 </li>
       </ul></li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AfflictionData.target_tags">target_tags (AfflictionData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AfflictionData.target_tags">[1]</a>
 
       <ul>
-        <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.EffectData.target_tags">(EffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData.target_tags">[1]</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAffliction.target_tags">(MockAffliction attribute)</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.target_tags">(MockSkill attribute)</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.target_tags">(ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.target_tags">[1]</a>
 </li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.target_tags">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.target_tags">[1]</a>
@@ -2500,11 +2524,9 @@
       </ul></li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.GameState.TARGETING">TARGETING (GameState attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.GameState.TARGETING">[1]</a>
 </li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.targeting_method">targeting_method (MockSkill attribute)</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill.targeting_method">targeting_method (Skill attribute)</a>
 
       <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.targeting_method">(Skill attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.targeting_method">[1]</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.targeting_method">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.targeting_method">[1]</a>
 </li>
       </ul></li>
@@ -2512,9 +2534,15 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.TargetTag">TargetTag (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.TargetTag">[1]</a>
 </li>
+      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.RenderLayer.TERRAIN">TERRAIN (RenderLayer attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.RenderLayer.TERRAIN">[1]</a>
+</li>
       <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.ProjectileData.terrain_collision">terrain_collision (ProjectileData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData.terrain_collision">[1]</a>
 </li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AlterTerrainEffectData.terrain_name">terrain_name (AlterTerrainEffectData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AlterTerrainEffectData.terrain_name">[1]</a>
+</li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.TerrainCollision">TerrainCollision (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.TerrainCollision">[1]</a>
+</li>
+      <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.TerrainData">TerrainData (class in scripts.engine.core.definitions)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.TerrainData">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.InputIntent.TEST">TEST (InputIntent attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.InputIntent.TEST">[1]</a>
 </li>
@@ -2546,13 +2574,7 @@
 </li>
       <li><a href="tests.engine.html#tests.engine.test_component.TestPosition.test_position_outmost_parameters">test_position_outmost_parameters (TestPosition attribute)</a>
 </li>
-      <li><a href="tests.engine.html#tests.engine.test_effect.TestEffects.test_reduce_skill_cooldown_effect">test_reduce_skill_cooldown_effect() (TestEffects method)</a>
-</li>
       <li><a href="tests.engine.html#tests.engine.test_state.TestState.test_set_state">test_set_state() (TestState method)</a>
-</li>
-      <li><a href="tests.engine.html#tests.engine.test_effect.TestEffects.test_trigger_afflictions_effect">test_trigger_afflictions_effect() (TestEffects method)</a>
-</li>
-      <li><a href="tests.engine.html#tests.engine.test_effect.TestEffects">TestEffects (class in tests.engine.test_effect)</a>
 </li>
       <li><a href="tests.engine.html#tests.engine.test_component.TestPosition">TestPosition (class in tests.engine.test_component)</a>
 </li>
@@ -2563,6 +2585,8 @@
         <li><a href="tests.html#module-tests">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     tests.engine
 
@@ -2578,15 +2602,6 @@
 </li>
       </ul></li>
       <li>
-    tests.engine.test_effect
-
-      <ul>
-        <li><a href="tests.engine.html#module-tests.engine.test_effect">module</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
     tests.engine.test_state
 
       <ul>
@@ -2598,41 +2613,6 @@
 
       <ul>
         <li><a href="tests.engine.html#module-tests.engine.test_utility">module</a>
-</li>
-      </ul></li>
-      <li>
-    tests.mocks
-
-      <ul>
-        <li><a href="tests.mocks.html#module-tests.mocks">module</a>
-</li>
-      </ul></li>
-      <li>
-    tests.mocks.mock_effect
-
-      <ul>
-        <li><a href="tests.mocks.html#module-tests.mocks.mock_effect">module</a>
-</li>
-      </ul></li>
-      <li>
-    tests.mocks.mock_ui
-
-      <ul>
-        <li><a href="tests.mocks.html#module-tests.mocks.mock_ui">module</a>
-</li>
-      </ul></li>
-      <li>
-    tests.mocks.mock_world
-
-      <ul>
-        <li><a href="tests.mocks.html#module-tests.mocks.mock_world">module</a>
-</li>
-      </ul></li>
-      <li>
-    tests.nqp
-
-      <ul>
-        <li><a href="tests.nqp.html#module-tests.nqp">module</a>
 </li>
       </ul></li>
       <li><a href="tests.engine.html#tests.engine.test_state.TestState">TestState (class in tests.engine.test_state)</a>
@@ -2655,11 +2635,9 @@
 </li>
       <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.tile_info.TileInfo">TileInfo (class in scripts.engine.ui.elements.tile_info)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.tile_info.TileInfo">[1]</a>
 </li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.time_cost">time_cost (MockSkill attribute)</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill.time_cost">time_cost (Skill attribute)</a>
 
       <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.time_cost">(Skill attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.time_cost">[1]</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.time_cost">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.time_cost">[1]</a>
 </li>
       </ul></li>
@@ -2689,24 +2667,16 @@
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.TravelMethod">TravelMethod (class in scripts.engine.core.constants)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.TravelMethod">[1]</a>
 </li>
-      <li><a href="nqp/core.constants.html#scripts.engine.core.constants.EffectType.TRIGGER_SKILL">TRIGGER_SKILL (EffectType attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.EffectType.TRIGGER_SKILL">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Affliction.trigger">trigger() (Affliction method)</a>
 </li>
-      <li><a href="nqp/effect.html#scripts.engine.effect.TriggerAfflictionsEffect">TriggerAfflictionsEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.TriggerAfflictionsEffect">[1]</a>
+      <li><a href="nqp/world.html#scripts.engine.world.trigger_affliction">trigger_affliction() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.trigger_affliction">[1]</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Affliction.triggers">triggers (Affliction attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Affliction.triggers">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Affliction.triggers">triggers (Affliction attribute)</a>
 
       <ul>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.AfflictionData.triggers">(AfflictionData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.AfflictionData.triggers">[1]</a>
 </li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAffliction.triggers">(MockAffliction attribute)</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAfflictionDamage.triggers">(MockAfflictionDamage attribute)</a>
-</li>
-        <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockAfflictionMovement.triggers">(MockAfflictionMovement attribute)</a>
-</li>
       </ul></li>
-      <li><a href="nqp/effect.html#scripts.engine.effect.TriggerSkillEffect">TriggerSkillEffect (class in scripts.engine.effect)</a>, <a href="scripts.engine.html#scripts.engine.effect.TriggerSkillEffect">[1]</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -2750,7 +2720,7 @@
 </li>
         <li><a href="nqp/debug.html#scripts.engine.debug.update">(in module scripts.engine.debug)</a>, <a href="scripts.engine.html#scripts.engine.debug.update">[1]</a>
 </li>
-        <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.update">(Light method)</a>
+        <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Light.update">(Light method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light.update">[1]</a>
 </li>
         <li><a href="nqp/ui.elements.html#scripts.engine.ui.elements.message_log.MessageLog.update">(MessageLog method)</a>, <a href="scripts.engine.ui.elements.html#scripts.engine.ui.elements.message_log.MessageLog.update">[1]</a>
 </li>
@@ -2767,17 +2737,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/state.html#scripts.engine.state.update_clock">update_clock() (in module scripts.engine.state)</a>, <a href="scripts.engine.html#scripts.engine.state.update_clock">[1]</a>
 </li>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.update_dynamic_walls">update_dynamic_walls() (LightBox method)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.LightBox.update_dynamic_walls">update_dynamic_walls() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.update_dynamic_walls">[1]</a>
 </li>
-      <li><a href="nqp/action.html#scripts.engine.action.Skill.use">use() (Skill method)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.use">[1]</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill.use">use() (Skill method)</a>
 </li>
       <li><a href="nqp/world.html#scripts.engine.world.use_skill">use_skill() (in module scripts.engine.world)</a>, <a href="scripts.engine.html#scripts.engine.world.use_skill">[1]</a>
 </li>
-      <li><a href="tests.mocks.html#tests.mocks.mock_effect.MockSkill.uses_projectile">uses_projectile (MockSkill attribute)</a>
+      <li><a href="scripts.engine.html#scripts.engine.action.Skill.uses_projectile">uses_projectile (Skill attribute)</a>
 
       <ul>
-        <li><a href="nqp/action.html#scripts.engine.action.Skill.uses_projectile">(Skill attribute)</a>, <a href="scripts.engine.html#scripts.engine.action.Skill.uses_projectile">[1]</a>
-</li>
         <li><a href="nqp/core.definitions.html#scripts.engine.core.definitions.SkillData.uses_projectile">(SkillData attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.definitions.SkillData.uses_projectile">[1]</a>
 </li>
       </ul></li>
@@ -2809,7 +2777,7 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall">Wall (class in scripts.engine.world_objects.lighting)</a>
+      <li><a href="nqp/world_objects.html#scripts.engine.world_objects.lighting.Wall">Wall (class in scripts.engine.world_objects.lighting)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall">[1]</a>
 </li>
       <li><a href="nqp/core.constants.html#scripts.engine.core.constants.TileCategory.WALL">WALL (TileCategory attribute)</a>, <a href="scripts.engine.core.html#scripts.engine.core.constants.TileCategory.WALL">[1]</a>
 </li>

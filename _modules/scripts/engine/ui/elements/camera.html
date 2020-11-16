@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -198,7 +194,7 @@
 
 <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">DirectionType</span><span class="p">,</span> <span class="n">InputEvent</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">UIElement</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">DirectionType</span><span class="p">,</span> <span class="n">InputEvent</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">UIElement</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.utility</span> <span class="kn">import</span> <span class="n">clamp</span><span class="p">,</span> <span class="n">convert_tile_string_to_xy</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
@@ -340,8 +336,8 @@
             <span class="c1"># hovering a tile</span>
             <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">user_type</span> <span class="o">==</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">UI_BUTTON_ON_HOVERED</span><span class="p">:</span>
                 <span class="n">updated_tile_info</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="kn">from</span> <span class="nn">scripts.engine.ui.manager</span> <span class="kn">import</span> <span class="n">ui</span>
                 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
+                <span class="kn">from</span> <span class="nn">scripts.engine.ui.manager</span> <span class="kn">import</span> <span class="n">ui</span>
 
                 <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position</span><span class="p">:</span>
                     <span class="n">position</span><span class="p">:</span> <span class="n">Position</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Thought &mdash; NotQuiteParadise  documentation</title>
+  <title>Systems &mdash; NotQuiteParadise  documentation</title>
   
 
   
@@ -36,8 +36,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Utility" href="utility.html" />
-    <link rel="prev" title="State" href="state.html" /> 
+    <link rel="next" title="Action" href="action.html" />
+    <link rel="prev" title="Queries" href="core.queries.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -87,15 +87,16 @@
             
             
               <p class="caption"><span class="caption-text">Core API</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="core.constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.queries.html">Queries</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="action.html">Action</a></li>
 <li class="toctree-l1"><a class="reference internal" href="chronicle.html">Chronicle</a></li>
 <li class="toctree-l1"><a class="reference internal" href="component.html">Component</a></li>
@@ -105,13 +106,8 @@
 <li class="toctree-l1"><a class="reference internal" href="key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="state.html">State</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -167,13 +163,13 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Thought</li>
+      <li>Systems</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/nqp/thought.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/nqp/core.systems.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -186,8 +182,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="thought">
-<h1>Thought<a class="headerlink" href="#thought" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-scripts.engine.core.systems">
+<span id="systems"></span><h1>Systems<a class="headerlink" href="#module-scripts.engine.core.systems" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="scripts.engine.core.systems.process_activations">
+<code class="sig-name descname">process_activations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/systems.html#process_activations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.systems.process_activations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocate active component to  appropriate NPCs. Entity with no position or with position and close to player.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.core.systems.process_light_map">
+<code class="sig-name descname">process_light_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/systems.html#process_light_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.systems.process_light_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update light map and light box  using light sources of all entities</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.core.systems.process_fov">
+<code class="sig-name descname">process_fov</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/systems.html#process_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.systems.process_fov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update FOV for all active entities</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.core.systems.process_tile_visibility">
+<code class="sig-name descname">process_tile_visibility</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/systems.html#process_tile_visibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.systems.process_tile_visibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update tile visibility based on player fov
+FIXME - every entity has its own fov so gamemap doesnt need visibility anymore</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.core.systems.reduce_skill_cooldowns">
+<code class="sig-name descname">reduce_skill_cooldowns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/systems.html#reduce_skill_cooldowns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.systems.reduce_skill_cooldowns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce skill cool down for all entities.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.core.systems.reduce_affliction_durations">
+<code class="sig-name descname">reduce_affliction_durations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/systems.html#reduce_affliction_durations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.systems.reduce_affliction_durations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce all affliction durations</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.core.systems.reduce_lifespan_durations">
+<code class="sig-name descname">reduce_lifespan_durations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/systems.html#reduce_lifespan_durations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.systems.reduce_lifespan_durations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce all lifespan durations</p>
+</dd></dl>
+
 </div>
 
 
@@ -198,10 +237,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="utility.html" class="btn btn-neutral float-right" title="Utility" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="action.html" class="btn btn-neutral float-right" title="Action" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="state.html" class="btn btn-neutral float-left" title="State" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="core.queries.html" class="btn btn-neutral float-left" title="Queries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

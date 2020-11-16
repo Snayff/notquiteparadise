@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -187,23 +183,24 @@
 
 <span class="kn">import</span> <span class="nn">dataclasses</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 <span class="kn">import</span> <span class="nn">pygame</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ASSET_PATH</span><span class="p">,</span>
+    <span class="n">DirectionType</span><span class="p">,</span>
     <span class="n">ICON_SIZE</span><span class="p">,</span>
     <span class="n">IMAGE_NOT_FOUND_PATH</span><span class="p">,</span>
-    <span class="n">TILE_SIZE</span><span class="p">,</span>
-    <span class="n">DirectionType</span><span class="p">,</span>
     <span class="n">Shape</span><span class="p">,</span>
     <span class="n">ShapeType</span><span class="p">,</span>
+    <span class="n">TILE_SIZE</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">TraitSpritePathsData</span><span class="p">,</span> <span class="n">TraitSpritesData</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+
+    <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">TraitSpritePathsData</span><span class="p">,</span> <span class="n">TraitSpritesData</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;get_image&quot;</span><span class="p">,</span>
@@ -349,6 +346,8 @@
         <span class="n">flattened_sprites</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">flatten_images</span><span class="p">(</span><span class="n">surface_list</span><span class="p">)</span>
 
     <span class="c1"># convert to dataclass</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">TraitSpritesData</span>
+
     <span class="n">converted</span> <span class="o">=</span> <span class="n">TraitSpritesData</span><span class="p">(</span><span class="o">**</span><span class="n">flattened_sprites</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">converted</span></div>
 

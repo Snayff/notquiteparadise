@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Chronicle" href="chronicle.html" />
-    <link rel="prev" title="Queries" href="core.queries.html" /> 
+    <link rel="prev" title="Systems" href="core.systems.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul class="current">
@@ -105,13 +106,8 @@
 <li class="toctree-l1"><a class="reference internal" href="key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -186,189 +182,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-scripts.engine.action">
-<span id="action"></span><h1>Action<a class="headerlink" href="#module-scripts.engine.action" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="scripts.engine.action.Skill">
-<em class="property">class </em><code class="sig-name descname">Skill</code><span class="sig-paren">(</span><em class="sig-param">user: int</em>, <em class="sig-param">target_tile: scripts.engine.world_objects.tile.Tile</em>, <em class="sig-param">direction: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Skill" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.action.Action</span></code></p>
-<p>A subclass of Skill represents a skill and holds all the data that is
-not dependent on the individual cast - stuff like shape, base accuracy, etc.</p>
-<p>An instance of Skill represents an individual use of that skill,
-and additionally holds only the data that is tied to the individual use - stuff like
-the user and target.</p>
-<dl class="py attribute">
-<dt id="scripts.engine.action.Skill.resource_type">
-<code class="sig-name descname">resource_type</code><em class="property">: ResourceType</em><a class="headerlink" href="#scripts.engine.action.Skill.resource_type" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Skill.resource_cost">
-<code class="sig-name descname">resource_cost</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><a class="headerlink" href="#scripts.engine.action.Skill.resource_cost" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Skill.time_cost">
-<code class="sig-name descname">time_cost</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><a class="headerlink" href="#scripts.engine.action.Skill.time_cost" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Skill.base_cooldown">
-<code class="sig-name descname">base_cooldown</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><a class="headerlink" href="#scripts.engine.action.Skill.base_cooldown" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Skill.targeting_method">
-<code class="sig-name descname">targeting_method</code><em class="property">: TargetingMethodType</em><a class="headerlink" href="#scripts.engine.action.Skill.targeting_method" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Skill.target_directions">
-<code class="sig-name descname">target_directions</code><em class="property">: List<span class="p">[</span>DirectionType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.action.Skill.target_directions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Skill.range">
-<code class="sig-name descname">range</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><a class="headerlink" href="#scripts.engine.action.Skill.range" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Skill.uses_projectile">
-<code class="sig-name descname">uses_projectile</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#scripts.engine.action.Skill.uses_projectile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Skill.projectile_data">
-<code class="sig-name descname">projectile_data</code><em class="property">: Optional<span class="p">[</span>ProjectileData<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.action.Skill.projectile_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.action.Skill.build_effects">
-<em class="property">abstract </em><code class="sig-name descname">build_effects</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Effect<span class="p">]</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Skill.build_effects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Skill.build_effects" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build the effects of this skill applying to a single entity. Must be overridden in subclass.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.action.Skill.get_animation">
-<code class="sig-name descname">get_animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aesthetic</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.html#scripts.engine.component.Aesthetic" title="scripts.engine.component.Aesthetic">scripts.engine.component.Aesthetic</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Skill.get_animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Skill.get_animation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the animation to play when executing the skill. Defaults to attack sprite. Override in subclass if
-another is needed.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.action.Skill._init_properties">
-<em class="property">classmethod </em><code class="sig-name descname">_init_properties</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Skill._init_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Skill._init_properties" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the class properties of the skill from the class key</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.action.Skill.apply">
-<code class="sig-name descname">apply</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Iterator<span class="p">[</span>Tuple<span class="p">[</span>EntityID<span class="p">, </span>List<span class="p">[</span>Effect<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Skill.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Skill.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>An iterator over pairs of (affected entity, [effects]). Uses target tile. Can apply to an entity multiple
-times.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.action.Skill.use">
-<code class="sig-name descname">use</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Skill.use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Skill.use" title="Permalink to this definition">¶</a></dt>
-<dd><p>If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.action.Skill._create_projectile">
-<code class="sig-name descname">_create_projectile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Skill._create_projectile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Skill._create_projectile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a projectile carrying the skill’s effects</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.action.Skill._play_animation">
-<code class="sig-name descname">_play_animation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Skill._play_animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Skill._play_animation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Play the provided animation on the entity’s aesthetic component</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Skill._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.action.Skill._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="scripts.engine.action.Affliction">
-<em class="property">class </em><code class="sig-name descname">Affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">affected_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Affliction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.action.Action</span></code></p>
-<p>A subclass of Affliction represents an affliction (a semi-permanent modifier) and holds all the data that is
-not dependent on the individual instances -  stuff like applicable targets etc.</p>
-<p>An instance of Affliction represents an individual application of that affliction,
-and holds only the data that is tied to the individual use - stuff like
-the user and target.</p>
-<dl class="py attribute">
-<dt id="scripts.engine.action.Affliction.identity_tags">
-<code class="sig-name descname">identity_tags</code><em class="property">: List<span class="p">[</span>EffectTypeType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.action.Affliction.identity_tags" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Affliction.triggers">
-<code class="sig-name descname">triggers</code><em class="property">: List<span class="p">[</span>AfflictionTriggerType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.action.Affliction.triggers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Affliction.category">
-<code class="sig-name descname">category</code><em class="property">: AfflictionCategoryType</em><a class="headerlink" href="#scripts.engine.action.Affliction.category" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.action.Affliction.build_effects">
-<em class="property">abstract </em><code class="sig-name descname">build_effects</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Effect<span class="p">]</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Affliction.build_effects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Affliction.build_effects" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build the effects of this skill applying to a single entity. Must be overridden in subclass.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.action.Affliction._init_properties">
-<em class="property">classmethod </em><code class="sig-name descname">_init_properties</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Affliction._init_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Affliction._init_properties" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the class properties of the affliction from the class key</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.action.Affliction.apply">
-<code class="sig-name descname">apply</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Iterator<span class="p">[</span>Tuple<span class="p">[</span>EntityID<span class="p">, </span>List<span class="p">[</span>Effect<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Affliction.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Affliction.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>An iterator over pairs of (affected entity, [effects]). Use affected entity position.  Applies to each
-entity only once.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Affliction._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.action.Affliction._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="scripts.engine.action.Behaviour">
-<em class="property">class </em><code class="sig-name descname">Behaviour</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Behaviour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Behaviour" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
-<p>Base class for AI behaviours. Not really an Action, as such, more of a super class that determines when npcs
-will use Actions.</p>
-<dl class="py method">
-<dt id="scripts.engine.action.Behaviour.act">
-<em class="property">abstract </em><code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#Behaviour.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Behaviour.act" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform the behaviour</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.action.Behaviour._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.action.Behaviour._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="scripts.engine.action.init_action">
-<code class="sig-name descname">init_action</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cls</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/action.html#init_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.init_action" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class decorator used for initialising class to add to the registry for use by the engine. Also initialises class
-properties set by external data, if appropriate.</p>
-</dd></dl>
-
+  <div class="section" id="action">
+<h1>Action<a class="headerlink" href="#action" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -382,7 +197,7 @@ properties set by external data, if appropriate.</p>
         <a href="chronicle.html" class="btn btn-neutral float-right" title="Chronicle" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="core.queries.html" class="btn btn-neutral float-left" title="Queries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="core.systems.html" class="btn btn-neutral float-left" title="Systems" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

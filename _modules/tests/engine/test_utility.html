@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -266,7 +262,7 @@
 
 
 <div class="viewcode-block" id="test_clamp"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_utility.test_clamp">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;value, min_value, max_value&quot;</span><span class="p">,</span> <span class="n">test_clamp_parameters</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">test_clamp</span><span class="p">(</span><span class="n">benchmark</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">min_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">max_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+<span class="k">def</span> <span class="nf">test_clamp</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">min_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">max_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">)</span>
 
     <span class="k">assert</span> <span class="n">result</span> <span class="o">&lt;=</span> <span class="n">max_value</span>
@@ -283,7 +279,7 @@
 
 
 <div class="viewcode-block" id="test_is_close"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_utility.test_is_close">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;current_pos, target_pos, delta&quot;</span><span class="p">,</span> <span class="n">test_is_close_parameters</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">test_is_close</span><span class="p">(</span><span class="n">benchmark</span><span class="p">,</span> <span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">test_is_close</span><span class="p">(</span><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">is_close</span><span class="p">(</span><span class="n">current_pos</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
 
     <span class="k">assert</span> <span class="n">result</span></div>
@@ -299,7 +295,7 @@
 
 
 <div class="viewcode-block" id="test_is_not_close"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_utility.test_is_not_close">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;current_pos, target_pos, delta&quot;</span><span class="p">,</span> <span class="n">test_is_not_close_parameters</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">test_is_not_close</span><span class="p">(</span><span class="n">benchmark</span><span class="p">,</span> <span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">test_is_not_close</span><span class="p">(</span><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">is_close</span><span class="p">(</span><span class="n">current_pos</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
 
     <span class="k">assert</span> <span class="ow">not</span> <span class="n">result</span></div>
@@ -320,7 +316,7 @@
 <div class="viewcode-block" id="test_get_coordinates_from_shape"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_utility.test_get_coordinates_from_shape">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;shape, size, direction, expected&quot;</span><span class="p">,</span> <span class="n">test_get_coordinates_from_shape_parameters</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">test_get_coordinates_from_shape</span><span class="p">(</span><span class="n">benchmark</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
         <span class="n">expected</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]):</span>
-    <span class="n">coordinates</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_coords_from_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="n">coordinates</span> <span class="o">=</span> <span class="n">benchmark</span><span class="p">(</span><span class="n">utility</span><span class="o">.</span><span class="n">get_coords_from_shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
     <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span></div>
 </pre></div>
 

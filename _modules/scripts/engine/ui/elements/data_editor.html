@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -214,9 +210,10 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core.extend_json</span> <span class="kn">import</span> <span class="n">ExtendedJsonEncoder</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
-    <span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UIManager</span>
     <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+    <span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UIManager</span>
 
 
 <div class="viewcode-block" id="DataEditor"><a class="viewcode-back" href="../../../../../scripts.engine.ui.elements.html#scripts.engine.ui.elements.data_editor.DataEditor">[docs]</a><span class="k">class</span> <span class="nc">DataEditor</span><span class="p">(</span><span class="n">UIWindow</span><span class="p">):</span>
@@ -736,7 +733,7 @@
 <span class="c1">#             &quot;interventions&quot;: (skill_options, InterventionData()),</span>
 <span class="c1">#             &quot;skills&quot;: (&quot;&quot;, SkillData()),</span>
 <span class="c1">#             &quot;afflictions&quot;: (&quot;&quot;, AfflictionData()),</span>
-<span class="c1">#             &quot;aspects&quot;: (&quot;&quot;, AspectData()),</span>
+<span class="c1">#             &quot;aspects&quot;: (&quot;&quot;, TerrainData()),</span>
 <span class="c1">#             &quot;base_stats_primary&quot;: (&quot;&quot;, BasePrimaryStatData()),</span>
 <span class="c1">#             &quot;base_stats_secondary&quot;: (&quot;&quot;, BaseSecondaryStatData()),</span>
 <span class="c1">#             &quot;homelands&quot;: (&quot;&quot;, TraitData()),</span>

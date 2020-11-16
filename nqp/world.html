@@ -36,7 +36,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Systems" href="systems.html" />
+    <link rel="next" title="World Objects" href="world_objects.html" />
     <link rel="prev" title="Utility" href="utility.html" /> 
 </head>
 
@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul class="current">
@@ -105,13 +106,8 @@
 <li class="toctree-l1"><a class="reference internal" href="key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utility.html">Utility</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -207,6 +203,12 @@
 </dd></dl>
 
 <dl class="py function">
+<dt id="scripts.engine.world.create_terrain">
+<code class="sig-name descname">create_terrain</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">terrain_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.TerrainData" title="scripts.engine.core.definitions.TerrainData">scripts.engine.core.definitions.TerrainData</a></span></em>, <em class="sig-param"><span class="n">spawn_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">lifespan</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">999</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="reference internal" href="../_modules/scripts/engine/world.html#create_terrain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_terrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create terrain</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="scripts.engine.world.create_projectile">
 <code class="sig-name descname">create_projectile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">creating_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">tile_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData" title="scripts.engine.core.definitions.ProjectileData">scripts.engine.core.definitions.ProjectileData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="reference internal" href="../_modules/scripts/engine/world.html#create_projectile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_projectile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an entity with all of the components to be a projectile. Returns entity ID.</p>
@@ -237,6 +239,42 @@ Returns the light_id of the Light.</p>
 <code class="sig-name descname">create_pathfinder</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; tcod.path.Pathfinder<a class="reference internal" href="../_modules/scripts/engine/world.html#create_pathfinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_pathfinder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an empty pathfinder using the current game map</p>
 </dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.create_effect">
+<code class="sig-name descname">create_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.EffectData" title="scripts.engine.core.definitions.EffectData">scripts.engine.core.definitions.EffectData</a></span></em><span class="sig-paren">)</span> &#x2192; scripts.engine.effect.Effect<a class="reference internal" href="../_modules/scripts/engine/world.html#create_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_effect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an effect from effect data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_apply_affliction_effect">
+<code class="sig-name descname">_create_apply_affliction_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.ApplyAfflictionEffectData" title="scripts.engine.core.definitions.ApplyAfflictionEffectData">scripts.engine.core.definitions.ApplyAfflictionEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../scripts.engine.html#scripts.engine.effect.ApplyAfflictionEffect" title="scripts.engine.effect.ApplyAfflictionEffect">scripts.engine.effect.ApplyAfflictionEffect</a><a class="reference internal" href="../_modules/scripts/engine/world.html#_create_apply_affliction_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_apply_affliction_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_damage_effect">
+<code class="sig-name descname">_create_damage_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData" title="scripts.engine.core.definitions.DamageEffectData">scripts.engine.core.definitions.DamageEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../scripts.engine.html#scripts.engine.effect.DamageEffect" title="scripts.engine.effect.DamageEffect">scripts.engine.effect.DamageEffect</a><a class="reference internal" href="../_modules/scripts/engine/world.html#_create_damage_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_damage_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_move_actor_effect">
+<code class="sig-name descname">_create_move_actor_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.MoveActorEffectData" title="scripts.engine.core.definitions.MoveActorEffectData">scripts.engine.core.definitions.MoveActorEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../scripts.engine.html#scripts.engine.effect.MoveActorEffect" title="scripts.engine.effect.MoveActorEffect">scripts.engine.effect.MoveActorEffect</a><a class="reference internal" href="../_modules/scripts/engine/world.html#_create_move_actor_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_move_actor_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_affect_stat_effect">
+<code class="sig-name descname">_create_affect_stat_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.AffectStatEffectData" title="scripts.engine.core.definitions.AffectStatEffectData">scripts.engine.core.definitions.AffectStatEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../scripts.engine.html#scripts.engine.effect.AffectStatEffect" title="scripts.engine.effect.AffectStatEffect">scripts.engine.effect.AffectStatEffect</a><a class="reference internal" href="../_modules/scripts/engine/world.html#_create_affect_stat_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_affect_stat_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_affect_cooldown_effect">
+<code class="sig-name descname">_create_affect_cooldown_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.AffectCooldownEffectData" title="scripts.engine.core.definitions.AffectCooldownEffectData">scripts.engine.core.definitions.AffectCooldownEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../scripts.engine.html#scripts.engine.effect.AffectCooldownEffect" title="scripts.engine.effect.AffectCooldownEffect">scripts.engine.effect.AffectCooldownEffect</a><a class="reference internal" href="../_modules/scripts/engine/world.html#_create_affect_cooldown_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_affect_cooldown_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_alter_terrain_effect">
+<code class="sig-name descname">_create_alter_terrain_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.AlterTerrainEffectData" title="scripts.engine.core.definitions.AlterTerrainEffectData">scripts.engine.core.definitions.AlterTerrainEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../scripts.engine.html#scripts.engine.effect.AlterTerrainEffect" title="scripts.engine.effect.AlterTerrainEffect">scripts.engine.effect.AlterTerrainEffect</a><a class="reference internal" href="../_modules/scripts/engine/world.html#_create_alter_terrain_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_alter_terrain_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt id="scripts.engine.world.get_game_map">
@@ -462,21 +500,27 @@ criteria to use skill was met, False if not.</p>
 
 <dl class="py function">
 <dt id="scripts.engine.world.apply_skill">
-<code class="sig-name descname">apply_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill_instance</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/scripts/engine/world.html#apply_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_skill" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/scripts/engine/world.html#apply_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_skill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resolve the skill’s effects. Returns True is successful if criteria to apply skill was met, False if not.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="scripts.engine.world.set_skill_on_cooldown">
-<code class="sig-name descname">set_skill_on_cooldown</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill_instance</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/scripts/engine/world.html#set_skill_on_cooldown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.set_skill_on_cooldown" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_skill_on_cooldown</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/scripts/engine/world.html#set_skill_on_cooldown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.set_skill_on_cooldown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets a skill on cooldown</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="scripts.engine.world.apply_affliction">
-<code class="sig-name descname">apply_affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction_instance</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/scripts/engine/world.html#apply_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_affliction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply_affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/scripts/engine/world.html#apply_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_affliction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the affliction’s effects. Returns True is successful if criteria to trigger the affliction was met,
 False if not.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.trigger_affliction">
+<code class="sig-name descname">trigger_affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world.html#trigger_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.trigger_affliction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the affliction on the affected entity.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -576,7 +620,7 @@ or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="systems.html" class="btn btn-neutral float-right" title="Systems" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="world_objects.html" class="btn btn-neutral float-right" title="World Objects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="utility.html" class="btn btn-neutral float-left" title="Utility" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

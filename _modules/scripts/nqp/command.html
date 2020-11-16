@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -187,19 +183,18 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Timer</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">snecs</span>
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">Component</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">library</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">WinCondition</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">ASSET_PATH</span><span class="p">,</span> <span class="n">DEBUG_START</span><span class="p">,</span> <span class="n">SAVE_PATH</span><span class="p">,</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">UIElement</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">systems</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">ASSET_PATH</span><span class="p">,</span> <span class="n">DEBUG_START</span><span class="p">,</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">SAVE_PATH</span><span class="p">,</span> <span class="n">UIElement</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.data</span> <span class="kn">import</span> <span class="n">store</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">TraitSpritePathsData</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.systems</span> <span class="kn">import</span> <span class="n">vision</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.ui.manager</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
 
@@ -243,28 +238,11 @@
     <span class="c1"># init the player</span>
     <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
 
-    <span class="c1"># create win condition and place next to player</span>
-    <span class="c1"># player_pos = world.get_entitys_component(player, Position)</span>
-    <span class="c1"># win_x = player_pos.x + 1</span>
-    <span class="c1"># win_y = player_pos.y</span>
-    <span class="c1"># components: List[Component] = []</span>
-    <span class="c1"># components.append(Position((win_x, win_y)))  # lets hope this doesnt spawn in a wall</span>
-    <span class="c1"># components.append(WinCondition())</span>
-    <span class="c1"># traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / &quot;world/win_flag.png&quot;))]</span>
-    <span class="c1"># sprites = utility.build_sprites_from_paths(traits_paths)</span>
-    <span class="c1"># components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))</span>
-    <span class="c1"># world.create_entity(components)</span>
-
     <span class="c1"># tell places about the player</span>
     <span class="n">chronicle</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
 
-    <span class="c1"># create a god</span>
-    <span class="c1"># world.create_god(&quot;the_small_gods&quot;)</span>
-
     <span class="c1"># show the in game screens</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="c1"># ui.set_element_visibility(UIElement.MESSAGE_LOG, True)</span>
-    <span class="c1"># ui.set_element_visibility(UIElement.SKILL_BAR, True)</span>
 
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
@@ -274,14 +252,17 @@
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span>
 
     <span class="c1"># entities load with a blank fov, update them now</span>
-    <span class="n">vision</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
-    <span class="n">vision</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
-    <span class="n">vision</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
+    <span class="n">systems</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
+    <span class="n">systems</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
+    <span class="n">systems</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
 
     <span class="c1"># point the camera at the player, now that FOV is updated</span>
     <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="n">camera</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">)</span>
     <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># create terrain next to the player</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">create_terrain</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">[</span><span class="s2">&quot;bog&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 
     <span class="c1"># loading finished, give player control</span>
     <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">)</span>
@@ -345,9 +326,9 @@
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span>
 
     <span class="c1"># entities load with a blank fov, update them now</span>
-    <span class="n">vision</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
-    <span class="n">vision</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
-    <span class="n">vision</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
+    <span class="n">systems</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
+    <span class="n">systems</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
+    <span class="n">systems</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
 
     <span class="c1"># point the camera at the player, now that FOV is updated</span>
     <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>

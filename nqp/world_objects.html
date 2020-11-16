@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="UI Elements" href="ui.elements.html" />
-    <link rel="prev" title="Systems" href="systems.html" /> 
+    <link rel="prev" title="World" href="world.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -105,13 +106,8 @@
 <li class="toctree-l1"><a class="reference internal" href="key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul class="current">
@@ -119,6 +115,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.world_objects.combat_stats">Combat Stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#gamemap">Gamemap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.world_objects.tile">Tile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.world_objects.lighting">Lighting</a></li>
 </ul>
 </li>
 </ul>
@@ -300,7 +297,7 @@
 <span id="tile"></span><h2>Tile<a class="headerlink" href="#module-scripts.engine.world_objects.tile" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="scripts.engine.world_objects.tile.Tile">
-<em class="property">class </em><code class="sig-name descname">Tile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">sprite</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.0.dev25)">pygame.Surface</a></span></em>, <em class="sig-param"><span class="n">sprite_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">blocks_sight</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">blocks_movement</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/tile.html#Tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.tile.Tile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Tile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">sprite</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a></span></em>, <em class="sig-param"><span class="n">sprite_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">blocks_sight</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">blocks_movement</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/tile.html#Tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.tile.Tile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A Tile on the GameMap.</p>
 <dl class="py method">
@@ -313,6 +310,185 @@
 <dt id="scripts.engine.world_objects.tile.Tile.deserialise">
 <em class="property">classmethod </em><code class="sig-name descname">deserialise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/tile.html#Tile.deserialise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.tile.Tile.deserialise" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the details from the serialised data back into the Tile.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.engine.world_objects.lighting">
+<span id="lighting"></span><h2>Lighting<a class="headerlink" href="#module-scripts.engine.world_objects.lighting" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.world_objects.lighting.Light">
+<em class="property">class </em><code class="sig-name descname">Light</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">radius</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">light_img</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a></span></em>, <em class="sig-param"><span class="n">colour</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(255, 255, 255)</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">255</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Light"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Holds the attributes for the light and offers some basic interface instructions.</p>
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Light.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Light.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Light.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Light._calculate_light_img">
+<code class="sig-name descname">_calculate_light_img</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Light._calculate_light_img"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Light._calculate_light_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alter the original light image by all of the attributes given, e.g. alpha, colour, etc.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Light.set_alpha">
+<code class="sig-name descname">set_alpha</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Light.set_alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Light.set_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the alpha value of the light. Refreshes the mask and size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Light.set_colour">
+<code class="sig-name descname">set_colour</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colour</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">override_alpha</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Light.set_colour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Light.set_colour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the colour of the light. Refreshes the size. If <cite>override_alpha</cite> is set to <cite>True</cite>, the alpha setting is
+ignored when recalculating the light. This is better for performance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Light.set_size">
+<code class="sig-name descname">set_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">radius</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Light.set_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Light.set_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the size of the light and rescale the image to match.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.world_objects.lighting.LightBox">
+<em class="property">class </em><code class="sig-name descname">LightBox</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">size</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">blit_flags</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">6</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Handles the processing of Lights.
+The name “LightBox” comes from the idea that the lighting is only rendered within the “box” of the display.</p>
+<p>The dimensions provided upon initialization will usually be the dimensions of your display. The <cite>blit_flags</cite>
+argument determines the blitting flags used in <cite>LightBox.render()</cite>. By default, it uses the adding flags which
+adds light values. However, other flags such as <cite>BLEND_RGBA_MULT</cite> can be used. <cite>BLEND_RGBA_MULT</cite> multiplies the
+destination surface by the lighting surface which results in darkening the areas that aren’t lit up instead of
+brightening the areas that are.</p>
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.LightBox.add_walls">
+<code class="sig-name descname">add_walls</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">walls</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall" title="scripts.engine.world_objects.lighting.Wall">scripts.engine.world_objects.lighting.Wall</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox.add_walls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox.add_walls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add walls to the lightbox.
+This is used for manual wall additions, however, typically, walls are loaded using generate_walls.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.LightBox.clear_walls">
+<code class="sig-name descname">clear_walls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox.clear_walls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox.clear_walls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all walls.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.LightBox.add_dynamic_walls">
+<code class="sig-name descname">add_dynamic_walls</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">walls</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall" title="scripts.engine.world_objects.lighting.Wall">scripts.engine.world_objects.lighting.Wall</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox.add_dynamic_walls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox.add_dynamic_walls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a dynamic wall and return the dynamic wall id.
+This works similarly to add_walls, it just uses a different system in the background that allows
+modification but performs worse.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.LightBox.update_dynamic_walls">
+<code class="sig-name descname">update_dynamic_walls</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">group_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">walls</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall" title="scripts.engine.world_objects.lighting.Wall">scripts.engine.world_objects.lighting.Wall</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox.update_dynamic_walls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox.update_dynamic_walls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a group_id to contain a set of walls.
+This is useful for overwriting the walls and takes walls in the same format as <a href="#id1"><span class="problematic" id="id2">`</span></a>add_walls.
+Existing walls can be modified directly for better performance since objects use pointers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.LightBox.delete_dynamic_walls">
+<code class="sig-name descname">delete_dynamic_walls</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">group_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox.delete_dynamic_walls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox.delete_dynamic_walls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a group of walls.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.LightBox.add_light">
+<code class="sig-name descname">add_light</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">light</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Light" title="scripts.engine.world_objects.lighting.Light">scripts.engine.world_objects.lighting.Light</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox.add_light"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox.add_light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new light with a light object. Returns the light id.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.LightBox.get_light">
+<code class="sig-name descname">get_light</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">light_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox.get_light"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox.get_light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a light object based on ID.
+Often used so that the position can then be modified.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.LightBox.delete_light">
+<code class="sig-name descname">delete_light</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">light_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox.delete_light"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox.delete_light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a light.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.LightBox._get_max_light_radius">
+<code class="sig-name descname">_get_max_light_radius</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox._get_max_light_radius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox._get_max_light_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get max light radius.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.LightBox.render">
+<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target_surf</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a></span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#LightBox.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>The core rendering function that renders the lighting within the lightbox. The offset is used to specify
+the terrain offset (aka camera offset or scroll) of the game relative to the viewed area.</p>
+<p>The <cite>target_surface</cite> is the <cite>pygame.Surface</cite> that will have the lighting rendered onto it. If it is a black
+surface, you get the internal lighting mask. This can be useful for static lighting. However, normally the
+main display surface should be used.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.world_objects.lighting.Wall">
+<em class="property">class </em><code class="sig-name descname">Wall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p1</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">p2</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">vertical</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">colour</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(255, 255, 255)</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Wall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Wall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Handles shadow casting within a Lightbox.</p>
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Wall.clone_move">
+<code class="sig-name descname">clone_move</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall" title="scripts.engine.world_objects.lighting.Wall">scripts.engine.world_objects.lighting.Wall</a><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Wall.clone_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Wall.clone_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a duplicate Wall with an offset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Wall._create_rect">
+<code class="sig-name descname">_create_rect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Wall._create_rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Wall._create_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a rect using the points in the wall</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Wall._check_cast">
+<code class="sig-name descname">_check_cast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Wall._check_cast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Wall._check_cast" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Wall._determine_cast_endpoint">
+<em class="property">static </em><code class="sig-name descname">_determine_cast_endpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">point</span></em>, <em class="sig-param"><span class="n">vision_box</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Wall._determine_cast_endpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Wall._determine_cast_endpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the point on the vision_box’s edge that is collinear to the light and the endpoint of the Wall.
+This must be called for each endpoint of the wall.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Wall._get_intermediate_points">
+<code class="sig-name descname">_get_intermediate_points</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p1_side</span></em>, <em class="sig-param"><span class="n">p2_side</span></em>, <em class="sig-param"><span class="n">vision_box</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Wall._get_intermediate_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Wall._get_intermediate_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the corner points for the polygon.
+If the casted shadow points for walls are on different vision_box sides, the corners between the points must
+be added.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Wall.draw_shadow">
+<code class="sig-name descname">draw_shadow</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">surf</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a></span></em>, <em class="sig-param"><span class="n">source</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">vision_box</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/rect.html#pygame.Rect" title="(in pygame v2.0.1.dev1)">pygame.Rect</a></span></em>, <em class="sig-param"><span class="n">colour</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Wall.draw_shadow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Wall.draw_shadow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a shadow, as cast by the light source.</p>
+<p>Primarily used internally by the <cite>LightBox</cite> class, but it’s available for independent use if you want to do
+something crazy. In this context, <cite>light_source</cite> is point (<cite>[x, y]</cite>), not a <cite>Light</cite> object. The <cite>vision_box</cite>
+is just a <cite>pygame.Rect</cite> that specifies the visible area. The <cite>color</cite> is the color of the shadow. In normal
+use, the shadow is black and used to create a mask, but you can do some weird stuff by changing the color.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.lighting.Wall.render">
+<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">surf</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a></span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/lighting.html#Wall.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.Wall.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render the line that makes up the wall.
+Mostly just useful for debugging.</p>
 </dd></dl>
 
 </dd></dl>
@@ -331,7 +507,7 @@
         <a href="ui.elements.html" class="btn btn-neutral float-right" title="UI Elements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="systems.html" class="btn btn-neutral float-left" title="Systems" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="world.html" class="btn btn-neutral float-left" title="World" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

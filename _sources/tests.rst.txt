@@ -8,8 +8,6 @@ Subpackages
    :maxdepth: 4
 
    tests.engine
-   tests.mocks
-   tests.nqp
 
 Module contents
 ---------------

@@ -44,6 +44,14 @@ scripts.engine.core.queries module
    :undoc-members:
    :show-inheritance:
 
+scripts.engine.core.systems module
+----------------------------------
+
+.. automodule:: scripts.engine.core.systems
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

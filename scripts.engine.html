@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -197,15 +193,8 @@
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.core.html#module-scripts.engine.core.definitions">scripts.engine.core.definitions module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.core.html#module-scripts.engine.core.extend_json">scripts.engine.core.extend_json module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.core.html#module-scripts.engine.core.queries">scripts.engine.core.queries module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.engine.core.html#module-scripts.engine.core.systems">scripts.engine.core.systems module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.core.html#module-scripts.engine.core">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="scripts.engine.systems.html">scripts.engine.systems package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="scripts.engine.systems.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scripts.engine.systems.html#module-scripts.engine.systems.behaviour">scripts.engine.systems.behaviour module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scripts.engine.systems.html#module-scripts.engine.systems.reaction">scripts.engine.systems.reaction module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scripts.engine.systems.html#module-scripts.engine.systems.vision">scripts.engine.systems.vision module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scripts.engine.systems.html#module-scripts.engine.systems">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="scripts.engine.ui.html">scripts.engine.ui package</a><ul>
@@ -375,7 +364,7 @@ the user and target.</p>
 
 <dl class="py attribute">
 <dt id="scripts.engine.action.Affliction.triggers">
-<code class="sig-name descname">triggers</code><em class="property">: List<span class="p">[</span>AfflictionTriggerType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.action.Affliction.triggers" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">triggers</code><em class="property">: List<span class="p">[</span>InteractionTriggerType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.action.Affliction.triggers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -398,8 +387,15 @@ the user and target.</p>
 <dl class="py method">
 <dt id="scripts.engine.action.Affliction.apply">
 <code class="sig-name descname">apply</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Iterator<span class="p">[</span>Tuple<span class="p">[</span>EntityID<span class="p">, </span>List<span class="p">[</span>Effect<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/action.html#Affliction.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Affliction.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>An iterator over pairs of (affected entity, [effects]). Use affected entity position.  Applies to each
+<dd><p>Apply the affliction to the affected entity.
+An iterator over pairs of (affected entity, [effects]). Use affected entity position.  Applies to each
 entity only once.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.action.Affliction.trigger">
+<code class="sig-name descname">trigger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/action.html#Affliction.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.action.Affliction.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the affliction on the affected entity</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -891,7 +887,7 @@ full-World serialization feature.</p>
 
 <dl class="py class">
 <dt id="scripts.engine.component.Aesthetic">
-<em class="property">class </em><code class="sig-name descname">Aesthetic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_sprite</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.0.dev25)">pygame.Surface</a></span></em>, <em class="sig-param"><span class="n">sprites</span><span class="p">:</span> <span class="n">TraitSpritesData</span></em>, <em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span>TraitSpritePathsData<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">render_layer</span><span class="p">:</span> <span class="n">RenderLayerType</span></em>, <em class="sig-param"><span class="n">draw_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Aesthetic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Aesthetic" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Aesthetic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_sprite</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a></span></em>, <em class="sig-param"><span class="n">sprites</span><span class="p">:</span> <span class="n">TraitSpritesData</span></em>, <em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span>TraitSpritePathsData<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">render_layer</span><span class="p">:</span> <span class="n">RenderLayerType</span></em>, <em class="sig-param"><span class="n">draw_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Aesthetic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Aesthetic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#scripts.engine.component.NQPComponent" title="scripts.engine.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.component.NQPComponent</span></code></a></p>
 <p>An entity’s sprite.</p>
 <dl class="py method">
@@ -1218,40 +1214,6 @@ full-World serialization feature.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="scripts.engine.component.Aspect">
-<em class="property">class </em><code class="sig-name descname">Aspect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aspects</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Aspect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Aspect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.component.NQPComponent" title="scripts.engine.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.component.NQPComponent</span></code></a></p>
-<p>An entity’s aspects. A static tile modifier. Held in a dict as {aspect_name: duration}</p>
-<dl class="py method">
-<dt id="scripts.engine.component.Aspect.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Aspect.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Aspect.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.component.Aspect.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Aspect.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Aspect.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.component.Aspect._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Aspect._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.component.Aspect._bitmask">
-<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 262144</em><a class="headerlink" href="#scripts.engine.component.Aspect._bitmask" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="scripts.engine.component.Opinion">
 <em class="property">class </em><code class="sig-name descname">Opinion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">opinions</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Opinion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Opinion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#scripts.engine.component.NQPComponent" title="scripts.engine.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.component.NQPComponent</span></code></a></p>
@@ -1280,7 +1242,7 @@ full-World serialization feature.</p>
 
 <dl class="py attribute">
 <dt id="scripts.engine.component.Opinion._bitmask">
-<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 524288</em><a class="headerlink" href="#scripts.engine.component.Opinion._bitmask" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 262144</em><a class="headerlink" href="#scripts.engine.component.Opinion._bitmask" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1314,7 +1276,7 @@ full-World serialization feature.</p>
 
 <dl class="py attribute">
 <dt id="scripts.engine.component.FOV._bitmask">
-<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 1048576</em><a class="headerlink" href="#scripts.engine.component.FOV._bitmask" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 524288</em><a class="headerlink" href="#scripts.engine.component.FOV._bitmask" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1355,7 +1317,76 @@ full-World serialization feature.</p>
 
 <dl class="py attribute">
 <dt id="scripts.engine.component.LightSource._bitmask">
-<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 2097152</em><a class="headerlink" href="#scripts.engine.component.LightSource._bitmask" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 1048576</em><a class="headerlink" href="#scripts.engine.component.LightSource._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Reaction">
+<em class="property">class </em><code class="sig-name descname">Reaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reactions</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>InteractionTriggerType<span class="p">, </span>EffectData<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Reaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Reaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.component.NQPComponent" title="scripts.engine.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.component.NQPComponent</span></code></a></p>
+<p>Holds info about what triggers are in place and what happens as a result</p>
+<dl class="py method">
+<dt id="scripts.engine.component.Reaction.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Reaction.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Reaction.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize an instance of this component into a simpler type.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.component.Reaction.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Reaction.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Reaction.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize a serialized instance of this component.</p>
+<p>Will get the output of <cite>serialize</cite> as an argument.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Reaction._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Reaction._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Reaction._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 2097152</em><a class="headerlink" href="#scripts.engine.component.Reaction._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Lifespan">
+<em class="property">class </em><code class="sig-name descname">Lifespan</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Lifespan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Lifespan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.component.NQPComponent" title="scripts.engine.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.component.NQPComponent</span></code></a></p>
+<p>Holds info relating to the limited lifespan of an entity. E.g. temporary summons.</p>
+<p>Can be set to INFINITE, which prevents it being reduced each turn.</p>
+<dl class="py method">
+<dt id="scripts.engine.component.Lifespan.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Lifespan.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Lifespan.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize an instance of this component into a simpler type.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.component.Lifespan.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Lifespan.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Lifespan.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize a serialized instance of this component.</p>
+<p>Will get the output of <cite>serialize</cite> as an argument.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Lifespan._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Lifespan._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Lifespan._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: snecs._detail.Bitmask</em><em class="property"> = 4194304</em><a class="headerlink" href="#scripts.engine.component.Lifespan._bitmask" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1467,35 +1498,12 @@ print( performance_test(method_descs, old_methods, new_methods) )</p>
 <div class="section" id="module-scripts.engine.effect">
 <span id="scripts-engine-effect-module"></span><h2>scripts.engine.effect module<a class="headerlink" href="#module-scripts.engine.effect" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="scripts.engine.effect.Effect">
-<em class="property">class </em><code class="sig-name descname">Effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#Effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.Effect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
-<p>A collection of parameters and instructions to apply a change to an entity’s or tile’s state.</p>
-<dl class="py method">
-<dt id="scripts.engine.effect.Effect.evaluate">
-<em class="property">abstract </em><code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#Effect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.Effect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the effect, triggering more if needed. Must be overridden by subclass</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="scripts.engine.effect.Effect._create_affliction_trigger">
-<code class="sig-name descname">_create_affliction_trigger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">trigger_type</span></em>, <em class="sig-param"><span class="n">target</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#Effect._create_affliction_trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.Effect._create_affliction_trigger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.effect.Effect._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.effect.Effect._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="scripts.engine.effect.DamageEffect">
-<em class="property">class </em><code class="sig-name descname">DamageEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">accuracy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">damage</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">damage_type</span><span class="p">:</span> <span class="n">DamageTypeType</span></em>, <em class="sig-param"><span class="n">mod_stat</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">mod_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#DamageEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.DamageEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></a></p>
+<em class="property">class </em><code class="sig-name descname">DamageEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">accuracy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">damage</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">damage_type</span><span class="p">:</span> <span class="n">DamageTypeType</span></em>, <em class="sig-param"><span class="n">mod_stat</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">mod_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#DamageEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.DamageEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></p>
 <dl class="py method">
 <dt id="scripts.engine.effect.DamageEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#DamageEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.DamageEffect.evaluate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span>Effect<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#DamageEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.DamageEffect.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resolve the damage effect and return the conditional effects based on if the damage is greater than 0.</p>
 </dd></dl>
 
@@ -1508,22 +1516,19 @@ print( performance_test(method_descs, old_methods, new_methods) )</p>
 
 <dl class="py class">
 <dt id="scripts.engine.effect.MoveActorEffect">
-<em class="property">class </em><code class="sig-name descname">MoveActorEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span></em>, <em class="sig-param"><span class="n">move_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#MoveActorEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.MoveActorEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></a></p>
+<em class="property">class </em><code class="sig-name descname">MoveActorEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span></em>, <em class="sig-param"><span class="n">move_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#MoveActorEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.MoveActorEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></p>
 <dl class="py method">
 <dt id="scripts.engine.effect.MoveActorEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#MoveActorEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.MoveActorEffect.evaluate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span>Effect<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#MoveActorEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.MoveActorEffect.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resolve the move effect and return the conditional effects based on if the target moved the full amount.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="scripts.engine.effect.MoveActorEffect._check_collision">
-<em class="property">static </em><code class="sig-name descname">_check_collision</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span></em>, <em class="sig-param"><span class="n">dir_x</span></em>, <em class="sig-param"><span class="n">dir_y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#MoveActorEffect._check_collision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.MoveActorEffect._check_collision" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if the entity will be able to move in the provided direction
-:param entity: Entity to test
-:param dir_x: X component of the direction
-:param dir_y: Y component of the direction
-:return: A bool that represents if the entity will collide if it moves in the provided direction</p>
+<em class="property">static </em><code class="sig-name descname">_check_collision</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">dir_x</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">dir_y</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/effect.html#MoveActorEffect._check_collision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.MoveActorEffect._check_collision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the entity will collide with something when trying to move in the provided direction. Returns True
+if blocked.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1534,29 +1539,12 @@ print( performance_test(method_descs, old_methods, new_methods) )</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="scripts.engine.effect.TriggerAfflictionsEffect">
-<em class="property">class </em><code class="sig-name descname">TriggerAfflictionsEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">trigger_type</span><span class="p">:</span> <span class="n">AfflictionTriggerType</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#TriggerAfflictionsEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.TriggerAfflictionsEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></a></p>
-<dl class="py method">
-<dt id="scripts.engine.effect.TriggerAfflictionsEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#TriggerAfflictionsEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.TriggerAfflictionsEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trigger all the afflictions on the self.target entity that match the trigger type. Fail if nothing matches</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.effect.TriggerAfflictionsEffect._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.effect.TriggerAfflictionsEffect._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="scripts.engine.effect.AffectStatEffect">
-<em class="property">class </em><code class="sig-name descname">AffectStatEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">cause_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">affect_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#AffectStatEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AffectStatEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></a></p>
+<em class="property">class </em><code class="sig-name descname">AffectStatEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">cause_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">affect_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#AffectStatEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AffectStatEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></p>
 <dl class="py method">
 <dt id="scripts.engine.effect.AffectStatEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#AffectStatEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AffectStatEffect.evaluate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span>Effect<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#AffectStatEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AffectStatEffect.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log the affliction and the stat modification in the Affliction component.</p>
 </dd></dl>
 
@@ -1569,11 +1557,11 @@ print( performance_test(method_descs, old_methods, new_methods) )</p>
 
 <dl class="py class">
 <dt id="scripts.engine.effect.ApplyAfflictionEffect">
-<em class="property">class </em><code class="sig-name descname">ApplyAfflictionEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">affliction_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#ApplyAfflictionEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.ApplyAfflictionEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></a></p>
+<em class="property">class </em><code class="sig-name descname">ApplyAfflictionEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">affliction_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#ApplyAfflictionEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.ApplyAfflictionEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></p>
 <dl class="py method">
 <dt id="scripts.engine.effect.ApplyAfflictionEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#ApplyAfflictionEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.ApplyAfflictionEffect.evaluate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span>Effect<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#ApplyAfflictionEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.ApplyAfflictionEffect.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Applies an affliction to an entity</p>
 </dd></dl>
 
@@ -1585,86 +1573,45 @@ print( performance_test(method_descs, old_methods, new_methods) )</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="scripts.engine.effect.ReduceSkillCooldownEffect">
-<em class="property">class </em><code class="sig-name descname">ReduceSkillCooldownEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#ReduceSkillCooldownEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.ReduceSkillCooldownEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></a></p>
+<dt id="scripts.engine.effect.AffectCooldownEffect">
+<em class="property">class </em><code class="sig-name descname">AffectCooldownEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">affect_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#AffectCooldownEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AffectCooldownEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></p>
 <dl class="py method">
-<dt id="scripts.engine.effect.ReduceSkillCooldownEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#ReduceSkillCooldownEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.ReduceSkillCooldownEffect.evaluate" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.effect.AffectCooldownEffect.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span>Effect<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#AffectCooldownEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AffectCooldownEffect.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reduces the cooldown of a skill of an entity</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.effect.ReduceSkillCooldownEffect._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.effect.ReduceSkillCooldownEffect._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.effect.AffectCooldownEffect._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.effect.AffectCooldownEffect._abc_impl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="scripts.engine.effect.AddAspectEffect">
-<em class="property">class </em><code class="sig-name descname">AddAspectEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#AddAspectEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AddAspectEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></a></p>
+<dt id="scripts.engine.effect.AlterTerrainEffect">
+<em class="property">class </em><code class="sig-name descname">AlterTerrainEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Effect<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">terrain_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">affect_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#AlterTerrainEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AlterTerrainEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></p>
 <dl class="py method">
-<dt id="scripts.engine.effect.AddAspectEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#AddAspectEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AddAspectEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>TBC - not implemented</p>
+<dt id="scripts.engine.effect.AlterTerrainEffect.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span>Effect<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#AlterTerrainEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AlterTerrainEffect.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create or reduce the duration of temporary terrain.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt id="scripts.engine.effect.AddAspectEffect._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.effect.AddAspectEffect._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt id="scripts.engine.effect.AlterTerrainEffect._create_terrain">
+<code class="sig-name descname">_create_terrain</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/effect.html#AlterTerrainEffect._create_terrain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AlterTerrainEffect._create_terrain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</dd></dl>
-
-<dl class="py class">
-<dt id="scripts.engine.effect.RemoveAspectEffect">
-<em class="property">class </em><code class="sig-name descname">RemoveAspectEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#RemoveAspectEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.RemoveAspectEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></a></p>
 <dl class="py method">
-<dt id="scripts.engine.effect.RemoveAspectEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#RemoveAspectEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.RemoveAspectEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>TBC - not implemented</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.effect.RemoveAspectEffect._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.effect.RemoveAspectEffect._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.effect.AlterTerrainEffect._reduce_terrain_duration">
+<code class="sig-name descname">_reduce_terrain_duration</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/effect.html#AlterTerrainEffect._reduce_terrain_duration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.AlterTerrainEffect._reduce_terrain_duration" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</dd></dl>
-
-<dl class="py class">
-<dt id="scripts.engine.effect.TriggerSkillEffect">
-<em class="property">class </em><code class="sig-name descname">TriggerSkillEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#TriggerSkillEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.TriggerSkillEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></a></p>
-<dl class="py method">
-<dt id="scripts.engine.effect.TriggerSkillEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#TriggerSkillEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.TriggerSkillEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>TBC - not implemented</p>
-</dd></dl>
-
 <dl class="py attribute">
-<dt id="scripts.engine.effect.TriggerSkillEffect._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.effect.TriggerSkillEffect._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="scripts.engine.effect.KillEffect">
-<em class="property">class </em><code class="sig-name descname">KillEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/effect.html#KillEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.KillEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.effect.Effect</span></code></a></p>
-<dl class="py method">
-<dt id="scripts.engine.effect.KillEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">Effect</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/effect.html#KillEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.effect.KillEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>TBC - not implemented</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.effect.KillEffect._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.effect.KillEffect._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.effect.AlterTerrainEffect._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.effect.AlterTerrainEffect._abc_impl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1778,7 +1725,7 @@ print( performance_test(method_descs, old_methods, new_methods) )</p>
 <span id="scripts-engine-utility-module"></span><h2>scripts.engine.utility module<a class="headerlink" href="#module-scripts.engine.utility" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="scripts.engine.utility.get_image">
-<code class="sig-name descname">get_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">32, 32</span></em>, <em class="sig-param"><span class="n">copy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.0.dev25)">pygame.Surface</a><a class="reference internal" href="_modules/scripts/engine/utility.html#get_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.get_image" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(32, 32)</span></em>, <em class="sig-param"><span class="n">copy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a><a class="reference internal" href="_modules/scripts/engine/utility.html#get_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.get_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the specified image and resize if dimensions provided. Dimensions are in (width, height) format. If img
 path is “none” then a blank surface is created to the size of the desired dimensions, or TILE_SIZE if no
 dimensions provided.</p>
@@ -1786,13 +1733,13 @@ dimensions provided.</p>
 
 <dl class="py function">
 <dt id="scripts.engine.utility.get_images">
-<code class="sig-name descname">get_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">32, 32</span></em>, <em class="sig-param"><span class="n">copy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.0.dev25)">pygame.Surface</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/utility.html#get_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.get_images" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(32, 32)</span></em>, <em class="sig-param"><span class="n">copy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/utility.html#get_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.get_images" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a collection of images.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="scripts.engine.utility.flatten_images">
-<code class="sig-name descname">flatten_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">images</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.0.dev25)">pygame.Surface</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.0.dev25)">pygame.Surface</a><a class="reference internal" href="_modules/scripts/engine/utility.html#flatten_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.flatten_images" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">flatten_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">images</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a><a class="reference internal" href="_modules/scripts/engine/utility.html#flatten_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.flatten_images" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flatten a list of images into a single image. All images must be the same size. Images are blitted in order.</p>
 </dd></dl>
 
@@ -1847,7 +1794,7 @@ as 1 to handle float imprecision.</p>
 
 <dl class="py function">
 <dt id="scripts.engine.utility.build_sprites_from_paths">
-<code class="sig-name descname">build_sprites_from_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData" title="scripts.engine.core.definitions.TraitSpritePathsData">scripts.engine.core.definitions.TraitSpritePathsData</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_size</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">32, 32</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData" title="scripts.engine.core.definitions.TraitSpritesData">scripts.engine.core.definitions.TraitSpritesData</a><a class="reference internal" href="_modules/scripts/engine/utility.html#build_sprites_from_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.build_sprites_from_paths" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build_sprites_from_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span>TraitSpritePathsData<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_size</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(32, 32)</span></em><span class="sig-paren">)</span> &#x2192; TraitSpritesData<a class="reference internal" href="_modules/scripts/engine/utility.html#build_sprites_from_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.utility.build_sprites_from_paths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
 combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.</p>
 </dd></dl>
@@ -1871,6 +1818,12 @@ combines the sprites from each TraitSpritePathsData in the  list and flattens to
 <dt id="scripts.engine.world.create_actor">
 <code class="sig-name descname">create_actor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">actor_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.ActorData" title="scripts.engine.core.definitions.ActorData">scripts.engine.core.definitions.ActorData</a></span></em>, <em class="sig-param"><span class="n">spawn_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">is_player</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#create_actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_actor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an entity with all of the components to be an actor. Returns entity ID.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.create_terrain">
+<code class="sig-name descname">create_terrain</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">terrain_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.TerrainData" title="scripts.engine.core.definitions.TerrainData">scripts.engine.core.definitions.TerrainData</a></span></em>, <em class="sig-param"><span class="n">spawn_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">lifespan</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">999</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#create_terrain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_terrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create terrain</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1904,6 +1857,42 @@ Returns the light_id of the Light.</p>
 <code class="sig-name descname">create_pathfinder</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; tcod.path.Pathfinder<a class="reference internal" href="_modules/scripts/engine/world.html#create_pathfinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_pathfinder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an empty pathfinder using the current game map</p>
 </dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.create_effect">
+<code class="sig-name descname">create_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.EffectData" title="scripts.engine.core.definitions.EffectData">scripts.engine.core.definitions.EffectData</a></span></em><span class="sig-paren">)</span> &#x2192; scripts.engine.effect.Effect<a class="reference internal" href="_modules/scripts/engine/world.html#create_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_effect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an effect from effect data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_apply_affliction_effect">
+<code class="sig-name descname">_create_apply_affliction_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.ApplyAfflictionEffectData" title="scripts.engine.core.definitions.ApplyAfflictionEffectData">scripts.engine.core.definitions.ApplyAfflictionEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#scripts.engine.effect.ApplyAfflictionEffect" title="scripts.engine.effect.ApplyAfflictionEffect">scripts.engine.effect.ApplyAfflictionEffect</a><a class="reference internal" href="_modules/scripts/engine/world.html#_create_apply_affliction_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_apply_affliction_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_damage_effect">
+<code class="sig-name descname">_create_damage_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData" title="scripts.engine.core.definitions.DamageEffectData">scripts.engine.core.definitions.DamageEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#scripts.engine.effect.DamageEffect" title="scripts.engine.effect.DamageEffect">scripts.engine.effect.DamageEffect</a><a class="reference internal" href="_modules/scripts/engine/world.html#_create_damage_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_damage_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_move_actor_effect">
+<code class="sig-name descname">_create_move_actor_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.MoveActorEffectData" title="scripts.engine.core.definitions.MoveActorEffectData">scripts.engine.core.definitions.MoveActorEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#scripts.engine.effect.MoveActorEffect" title="scripts.engine.effect.MoveActorEffect">scripts.engine.effect.MoveActorEffect</a><a class="reference internal" href="_modules/scripts/engine/world.html#_create_move_actor_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_move_actor_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_affect_stat_effect">
+<code class="sig-name descname">_create_affect_stat_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.AffectStatEffectData" title="scripts.engine.core.definitions.AffectStatEffectData">scripts.engine.core.definitions.AffectStatEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#scripts.engine.effect.AffectStatEffect" title="scripts.engine.effect.AffectStatEffect">scripts.engine.effect.AffectStatEffect</a><a class="reference internal" href="_modules/scripts/engine/world.html#_create_affect_stat_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_affect_stat_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_affect_cooldown_effect">
+<code class="sig-name descname">_create_affect_cooldown_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.AffectCooldownEffectData" title="scripts.engine.core.definitions.AffectCooldownEffectData">scripts.engine.core.definitions.AffectCooldownEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#scripts.engine.effect.AffectCooldownEffect" title="scripts.engine.effect.AffectCooldownEffect">scripts.engine.effect.AffectCooldownEffect</a><a class="reference internal" href="_modules/scripts/engine/world.html#_create_affect_cooldown_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_affect_cooldown_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._create_alter_terrain_effect">
+<code class="sig-name descname">_create_alter_terrain_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.AlterTerrainEffectData" title="scripts.engine.core.definitions.AlterTerrainEffectData">scripts.engine.core.definitions.AlterTerrainEffectData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#scripts.engine.effect.AlterTerrainEffect" title="scripts.engine.effect.AlterTerrainEffect">scripts.engine.effect.AlterTerrainEffect</a><a class="reference internal" href="_modules/scripts/engine/world.html#_create_alter_terrain_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._create_alter_terrain_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt id="scripts.engine.world.get_game_map">
@@ -2129,21 +2118,27 @@ criteria to use skill was met, False if not.</p>
 
 <dl class="py function">
 <dt id="scripts.engine.world.apply_skill">
-<code class="sig-name descname">apply_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill_instance</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#apply_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_skill" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#apply_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_skill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resolve the skill’s effects. Returns True is successful if criteria to apply skill was met, False if not.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="scripts.engine.world.set_skill_on_cooldown">
-<code class="sig-name descname">set_skill_on_cooldown</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill_instance</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#set_skill_on_cooldown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.set_skill_on_cooldown" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_skill_on_cooldown</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#set_skill_on_cooldown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.set_skill_on_cooldown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets a skill on cooldown</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="scripts.engine.world.apply_affliction">
-<code class="sig-name descname">apply_affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction_instance</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#apply_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_affliction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply_affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#apply_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_affliction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the affliction’s effects. Returns True is successful if criteria to trigger the affliction was met,
 False if not.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.trigger_affliction">
+<code class="sig-name descname">trigger_affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#trigger_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.trigger_affliction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the affliction on the affected entity.</p>
 </dd></dl>
 
 <dl class="py function">

@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -222,6 +218,15 @@ called in one way then no intent is generated and the event will directly go to 
 <dt id="scripts.nqp.processors.intent.process_intent">
 <code class="sig-name descname">process_intent</code><span class="sig-paren">(</span><em class="sig-param">intent: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">game_state: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/intent.html#process_intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent.process_intent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the intent in the context of the game state. Intents are game state sensitive.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.nqp.processors.interactions">
+<span id="scripts-nqp-processors-interactions-module"></span><h2>scripts.nqp.processors.interactions module<a class="headerlink" href="#module-scripts.nqp.processors.interactions" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="scripts.nqp.processors.interactions.process_event">
+<code class="sig-name descname">process_event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">pygame.event</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/interactions.html#process_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.interactions.process_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Passes an interaction event to the right function.</p>
 </dd></dl>
 
 </div>

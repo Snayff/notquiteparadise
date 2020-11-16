@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">General API</span></p>
 <ul>
@@ -103,13 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/key.html">Key</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/library.html">Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/thought.html">Thought</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/utility.html">Utility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Systems API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/systems.html">Systems</a></li>
 </ul>
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul>
@@ -191,13 +187,15 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">RegisteredComponent</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">EffectType</span><span class="p">,</span> <span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">RenderLayerType</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">EffectType</span><span class="p">,</span> <span class="n">InteractionTriggerType</span><span class="p">,</span> <span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">RenderLayerType</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
+
     <span class="kn">import</span> <span class="nn">pygame</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Tuple</span>
+
     <span class="kn">from</span> <span class="nn">scripts.engine.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">,</span> <span class="n">Skill</span>
-    <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">TraitSpritePathsData</span><span class="p">,</span> <span class="n">TraitSpritesData</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">TraitSpritePathsData</span><span class="p">,</span> <span class="n">TraitSpritesData</span>
 
 
 <span class="c1">##########################################################</span>
@@ -595,9 +593,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_add_to_order</span> <span class="o">=</span> <span class="kc">True</span>
 
+        <span class="c1"># TODO - make vars private if we should use methods</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_order</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">skill_order</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">cooldowns</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">cooldowns</span>  <span class="c1"># TODO - can this be folded into skills?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># TODO - do we even need this anymore?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># dont set skills here, use learn skill</span>
 
         <span class="k">for</span> <span class="n">skill_class</span> <span class="ow">in</span> <span class="n">skills</span><span class="p">:</span>
@@ -652,7 +651,7 @@
         <span class="n">active</span> <span class="o">=</span> <span class="n">active</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">stat_modifiers</span> <span class="o">=</span> <span class="n">stat_modifiers</span> <span class="ow">or</span> <span class="p">{}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Affliction</span><span class="p">]</span> <span class="o">=</span> <span class="n">active</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Affliction</span><span class="p">]</span> <span class="o">=</span> <span class="n">active</span>  <span class="c1"># TODO - should this be a dict for easier querying?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">stat_modifiers</span>
 
 <div class="viewcode-block" id="Afflictions.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Afflictions.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -693,23 +692,6 @@
 
             <span class="c1"># remove from active list</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="Aspect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Aspect">[docs]</a><span class="k">class</span> <span class="nc">Aspect</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    An entity&#39;s aspects. A static tile modifier. Held in a dict as {aspect_name: duration}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspects</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">aspects</span> <span class="o">=</span> <span class="n">aspects</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspects</span>
-
-<div class="viewcode-block" id="Aspect.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Aspect.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span></div>
-
-<div class="viewcode-block" id="Aspect.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Aspect.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Aspect</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="Opinion"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Opinion">[docs]</a><span class="k">class</span> <span class="nc">Opinion</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
@@ -776,6 +758,45 @@
 
         <span class="n">light_box</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span><span class="o">.</span><span class="n">light_box</span>
         <span class="n">light_box</span><span class="o">.</span><span class="n">delete_light</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_id</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Reaction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Reaction">[docs]</a><span class="k">class</span> <span class="nc">Reaction</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Holds info about what triggers are in place and what happens as a result</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reactions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">InteractionTriggerType</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">InteractionTriggerType</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">]</span> <span class="o">=</span> <span class="n">reactions</span>
+
+<div class="viewcode-block" id="Reaction.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Reaction.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">serialised</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">effect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reactions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">serialised</span><span class="p">[</span><span class="n">trigger</span><span class="p">]</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">serialised</span></div>
+
+<div class="viewcode-block" id="Reaction.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Reaction.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Reaction</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Lifespan"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Lifespan">[docs]</a><span class="k">class</span> <span class="nc">Lifespan</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Holds info relating to the limited lifespan of an entity. E.g. temporary summons.</span>
+
+<span class="sd">    Can be set to INFINITE, which prevents it being reduced each turn.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
+
+<div class="viewcode-block" id="Lifespan.serialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Lifespan.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span></div>
+
+<div class="viewcode-block" id="Lifespan.deserialize"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.component.Lifespan.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Lifespan</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
