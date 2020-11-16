@@ -8,7 +8,9 @@ import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, Afflictions, Blocking, HasCombatStats, Knowledge, Position, Resources
+from scripts.engine.component import Aesthetic, Afflictions, Blocking, HasCombatStats, Identity, Knowledge, Lifespan, \
+    Position, \
+    Resources
 from scripts.engine.core import queries
 from scripts.engine.core.constants import (
     InteractionEvent, InteractionTrigger,
@@ -23,6 +25,15 @@ from scripts.engine.core.constants import (
 if TYPE_CHECKING:
     from typing import Optional, List
 
+
+__all__ = [
+    "DamageEffect",
+    "MoveActorEffect",
+    "AffectStatEffect",
+    "ApplyAfflictionEffect",
+    "AffectCooldownEffect",
+    "AlterTerrainEffect"
+]
 
 class Effect(ABC):
     """
@@ -212,16 +223,18 @@ class MoveActorEffect(Effect):
             if is_tile_blocking_movement:
                 from scripts.engine.core import queries
 
-                for blocking_entity, (position, blocking) in queries.position_and_blocking:
-                    assert isinstance(position, Position)
+                for blocking_entity, (pos, blocking) in queries.position_and_blocking:
+                    assert isinstance(pos, Position)
                     assert isinstance(blocking, Blocking)
-                    if blocking_entity != entity and blocking.blocks_movement and (target_x, target_y) in position:
+                    if blocking_entity != entity and blocking.blocks_movement and\
+                            (target_x, target_y) in pos.coordinates:
                         # blocked by entity
                         blockers_name = world.get_name(blocking_entity)
                         logging.debug(
                             f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
                             f" by '{blockers_name}'. "
                         )
+                        break
                 collides = True
 
         return collides
@@ -394,6 +407,9 @@ class AlterTerrainEffect(Effect):
 
         # check target location doesnt already have the given terrain
         for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+            assert isinstance(position, Position)
+            assert isinstance(identity, Identity)
+            assert isinstance(lifespan, Lifespan)
             if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
                 duplicate = True
                 break
@@ -416,6 +432,9 @@ class AlterTerrainEffect(Effect):
 
         # check there is a terrain at target to reduce duration of
         for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+            assert isinstance(position, Position)
+            assert isinstance(identity, Identity)
+            assert isinstance(lifespan, Lifespan)
             if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
                 lifespan.duration -= self.affect_amount
                 result = True

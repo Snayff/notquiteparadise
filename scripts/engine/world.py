@@ -74,6 +74,7 @@ if TYPE_CHECKING:
 ########################### LOCAL DEFINITIONS ##########################
 
 _C = TypeVar("_C", bound=Component)  # to represent components where we don't know which is being used
+
 get_entitys_components = snecs.all_components
 get_components = Query
 entity_has_component = snecs.has_component
@@ -352,17 +353,31 @@ def create_effect(origin: EntityID, target: EntityID, data: EffectData) -> Effec
     effect_type = data.effect_type
 
     if effect_type == EffectType.APPLY_AFFLICTION:
+        assert isinstance(data, ApplyAfflictionEffectData)
         return _create_apply_affliction_effect(origin, target, data)
+
     elif effect_type == EffectType.DAMAGE:
+        assert isinstance(data, DamageEffectData)
         return _create_damage_effect(origin, target, data)
+
     elif effect_type == EffectType.MOVE:
+        assert isinstance(data, MoveActorEffectData)
         return _create_move_actor_effect(origin, target, data)
+
     elif effect_type == EffectType.AFFECT_STAT:
+        assert isinstance(data, AffectStatEffectData)
         return _create_affect_stat_effect(origin, target, data)
+
     elif effect_type == EffectType.AFFECT_COOLDOWN:
+        assert isinstance(data, AffectCooldownEffectData)
         return _create_affect_cooldown_effect(origin, target, data)
+
     elif effect_type == EffectType.ALTER_TERRAIN:
+        assert isinstance(data, AlterTerrainEffectData)
         return _create_alter_terrain_effect(origin, target, data)
+
+    else:
+        raise KeyError(f"Create effect: Effect provided ({effect_type}) was not handled.")
 
 
 def _create_apply_affliction_effect(origin: EntityID, target: EntityID,

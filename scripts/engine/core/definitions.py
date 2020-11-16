@@ -57,7 +57,7 @@ class LightData:
     Also used to hold and map data from json.
     """
     radius: int = 0
-    colour: Tuple[int, int, int] = field(default_factory=tuple)
+    colour: Tuple[int, int, int] = field(default=(0, 0, 0))
     alpha: int = 0
 
 
@@ -190,8 +190,9 @@ class ProjectileData:
     Data class for a projectile
     """
 
-    # what created it?
-    creator: EntityID = 0  # this will be overwritten or will break, but need defaults to allow passing
+    # this will be overwritten or will break, but need defaults to allow passing
+    creator: EntityID = 0  # type: ignore
+
     skill_name: str = "none"
     skill_instance: Optional[Skill] = None
     name: str = "none"
@@ -426,7 +427,7 @@ class DamageEffectData(EffectData):
     """
     effect_type: EffectTypeType = EffectType.DAMAGE
 
-    stat_to_target: Optional[PrimaryStatType] = None
+    stat_to_target: PrimaryStatType = PrimaryStat.EXACTITUDE
     accuracy: int = 0
     potency: float = 1.0
     damage: int = 0
@@ -444,8 +445,8 @@ class MoveActorEffectData(EffectData):
     """
     effect_type: EffectTypeType = EffectType.MOVE
 
-    direction: DirectionType = Direction.CENTRE,
-    move_amount: int = 0,
+    direction: DirectionType = Direction.CENTRE
+    move_amount: int = 0
 
 
 @register_dataclass_with_json
@@ -470,9 +471,9 @@ class AffectStatEffectData(EffectData):
     """
     effect_type: EffectTypeType = EffectType.AFFECT_STAT
 
-    cause_name: str = "",
-    stat_to_target: PrimaryStatType = PrimaryStat.EXACTITUDE,
-    affect_amount: int = 0,
+    cause_name: str = ""
+    stat_to_target: PrimaryStatType = PrimaryStat.EXACTITUDE
+    affect_amount: int = 0
 
 
 @register_dataclass_with_json
@@ -484,8 +485,8 @@ class AffectCooldownEffectData(EffectData):
     """
     effect_type: EffectTypeType = EffectType.AFFECT_COOLDOWN
 
-    skill_name: str = "",
-    affect_amount: int = 0,
+    skill_name: str = ""
+    affect_amount: int = 0
 
 
 @register_dataclass_with_json
@@ -497,8 +498,8 @@ class AlterTerrainEffectData(EffectData):
     """
     effect_type: EffectTypeType = EffectType.ALTER_TERRAIN
 
-    terrain_name: str = "",
-    affect_amount: int = 0,
+    terrain_name: str = ""
+    affect_amount: int = 0
 
 ################### CONFIG ###################################################
 

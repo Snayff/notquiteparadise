@@ -312,6 +312,7 @@ class InteractionTrigger(SimpleNamespace):
     """
 
     MOVE = InteractionTriggerType("movement")
+    PROXIMITY = InteractionTriggerType("proximity")
     TAKE_DAMAGE = InteractionTriggerType("take_damage")
     DEAL_DAMAGE = InteractionTriggerType("deal_damage")
     KILL = InteractionTriggerType("kill")
