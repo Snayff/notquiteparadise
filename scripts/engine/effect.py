@@ -35,6 +35,7 @@ __all__ = [
     "AlterTerrainEffect"
 ]
 
+
 class Effect(ABC):
     """
     A collection of parameters and instructions to apply a change to an entity's or tile's state.

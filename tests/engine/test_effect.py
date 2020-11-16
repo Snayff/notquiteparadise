@@ -14,6 +14,12 @@ import pytest
 from scripts.nqp.actions import afflictions, behaviours, skills  # must import to register in engine
 
 
+##############################################################
+#
+# !IMPORTANT! Using pytest-benchmark causes the damage effect test to hang indefinitely and the others to fail
+#
+###############################################################
+
 def _create_scenario() -> EntityID:
     # new world
     empty_world = snecs.World()
@@ -79,7 +85,6 @@ test_damage_effect_parameters = [
 @pytest.mark.parametrize(["stat_to_target", "accuracy", "damage", "damage_type", "mod_stat", "mod_amount",
                              "potency"], test_damage_effect_parameters)
 def test_damage_effect(
-        benchmark,
         stat_to_target,
         accuracy,
         damage,
@@ -105,7 +110,7 @@ def test_damage_effect(
     )
 
     start_hp = world.get_entitys_component(entity, Resources).health
-    benchmark(effect.evaluate)
+    effect.evaluate()
     end_hp = world.get_entitys_component(entity, Resources).health
 
     # assess results
@@ -129,12 +134,11 @@ test_move_actor_effect_parameters = [
 
 @pytest.mark.parametrize(["x", "y"], test_move_actor_effect_parameters)
 def test_move_actor_effect(
-        benchmark,
         x,
         y
 ):
     entity = _create_scenario()
-    direction = (x, y)
+    direction = (x, y)  # type:ignore
 
     effect = MoveActorEffect(
         origin=entity,
@@ -147,7 +151,7 @@ def test_move_actor_effect(
 
     position = world.get_entitys_component(entity, Position)
     start_pos = (position.x, position.y)
-    success = benchmark(effect.evaluate)[0]
+    success = effect.evaluate()[0]
     end_pos = (position.x, position.y)
 
     # assess results
@@ -174,7 +178,6 @@ test_affect_stat_parameters = [
 
 @pytest.mark.parametrize(["cause_name", "stat_to_target", "affect_amount"], test_affect_stat_parameters)
 def test_affect_stat_effect(
-        benchmark,
         cause_name,
         stat_to_target,
         affect_amount,
@@ -193,7 +196,7 @@ def test_affect_stat_effect(
 
     stats = world.create_combat_stats(entity)
     start_stat = getattr(stats, stat_to_target)
-    success = benchmark(effect.evaluate)[0]
+    success = effect.evaluate()[0]
     stats = world.create_combat_stats(entity)
     end_stat = getattr(stats, stat_to_target)
 
@@ -214,7 +217,6 @@ def affliction_name(request):
 
 
 def test_apply_affliction_effect(
-        benchmark,
         affliction_name,
 ):
     entity = _create_scenario()
@@ -228,8 +230,7 @@ def test_apply_affliction_effect(
         duration=1,
     )
 
-    # start_afflictions = world.get_entitys_component(entity, Afflictions)
-    success = benchmark(effect.evaluate)[0]
+    success = effect.evaluate()[0]
     end_afflictions = world.get_entitys_component(entity, Afflictions)
 
     names = []
@@ -257,8 +258,7 @@ def affect_cooldown_amount(request):
     return request.param
 
 
-def test_apply_affliction_effect(
-        benchmark,
+def test_affect_cooldown_effect(
         skill_name,
         affect_cooldown_amount
 ):
@@ -279,7 +279,7 @@ def test_apply_affliction_effect(
     cooldown = 99
     knowledge = world.get_entitys_component(entity, Knowledge)
     knowledge.set_skill_cooldown(skill_name, cooldown)
-    success = benchmark(effect.evaluate)[0]
+    success = effect.evaluate()[0]
     end_cooldown = knowledge.cooldowns[skill_name]
 
     if success:
@@ -304,7 +304,6 @@ def affect_terrain_amount(request):
 
 
 def test_alter_terrain_effect_create(
-        benchmark,
         terrain_name,
         affect_terrain_amount
 ):
@@ -319,7 +318,7 @@ def test_alter_terrain_effect_create(
         affect_amount=affect_terrain_amount,
     )
 
-    success = benchmark(effect.evaluate)[0]
+    success = effect.evaluate()[0]
     target_pos = world.get_entitys_component(entity, Position)
 
     if success:
@@ -342,7 +341,6 @@ def affect_terrain_negative_amount(request):
 
 
 def test_alter_terrain_effect_reduce_duration(
-        benchmark,
         terrain_name,
         affect_terrain_negative_amount
 ):
@@ -369,7 +367,7 @@ def test_alter_terrain_effect_reduce_duration(
         affect_amount=affect_terrain_negative_amount,
     )
 
-    success = benchmark(effect.evaluate)[0]
+    success = effect.evaluate()[0]
     target_pos = world.get_entitys_component(entity, Position)
 
     if success and (base_duration > affect_terrain_negative_amount):
