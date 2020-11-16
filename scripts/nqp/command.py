@@ -11,7 +11,7 @@ from snecs import Component
 from scripts.engine import chronicle, library, state, utility, world
 from scripts.engine.component import Aesthetic, Position, WinCondition
 from scripts.engine.core import systems
-from scripts.engine.core.constants import ASSET_PATH, DEBUG_START, SAVE_PATH, GameState, RenderLayer, UIElement
+from scripts.engine.core.constants import ASSET_PATH, DEBUG_START, GameState, RenderLayer, SAVE_PATH, UIElement
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData, TraitSpritePathsData
 from scripts.engine.ui.manager import ui

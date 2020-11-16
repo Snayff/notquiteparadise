@@ -2,16 +2,16 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Dict, Iterator, Optional, Type
+from typing import Dict, Iterator, Optional, Type, TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (
     AfflictionCategoryType,
-    InteractionTriggerType,
     DirectionType,
     EffectTypeType,
+    InteractionTriggerType,
     ResourceType,
     ShapeType,
     TargetingMethodType,
@@ -22,7 +22,7 @@ from scripts.engine.effect import Effect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Tuple, List
+    from typing import List, Tuple
 
 __all__ = ["Skill", "Affliction", "Behaviour", "init_action", "skill_registry", "affliction_registry"]
 

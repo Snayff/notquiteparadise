@@ -29,9 +29,10 @@ from scripts.engine.core.definitions import EffectData, SkillData, TraitData
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 
 if TYPE_CHECKING:
-    from typing import Any, Tuple, List, Dict, Optional
-    from pygame_gui import UIManager
     from dataclasses import dataclass
+    from typing import Any, Dict, List, Optional, Tuple
+
+    from pygame_gui import UIManager
 
 
 class DataEditor(UIWindow):

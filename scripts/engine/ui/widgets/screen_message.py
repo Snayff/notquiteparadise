@@ -16,7 +16,10 @@ class ScreenMessage(UITextBox):
     """
 
     def __init__(
-        self, rect: Rect, text: str, manager: UIManager,
+        self,
+        rect: Rect,
+        text: str,
+        manager: UIManager,
     ):
 
         super().__init__(

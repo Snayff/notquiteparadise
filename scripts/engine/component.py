@@ -9,8 +9,10 @@ from snecs import RegisteredComponent
 from scripts.engine.core.constants import EffectType, InteractionTriggerType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
+    from typing import Dict, List, Optional, Tuple, Type
+
     import pygame
-    from typing import List, Dict, Optional, Type, Tuple
+
     from scripts.engine.action import Affliction, Behaviour, Skill
     from scripts.engine.core.definitions import EffectData, TraitSpritePathsData, TraitSpritesData
 
@@ -604,6 +606,7 @@ class Lifespan(NQPComponent):
 
     Can be set to INFINITE, which prevents it being reduced each turn.
     """
+
     def __init__(self, duration: int):
         self.duration = duration
 
@@ -613,4 +616,3 @@ class Lifespan(NQPComponent):
     @classmethod
     def deserialize(cls, serialised):
         return Lifespan(*serialised)
-

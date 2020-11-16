@@ -2,21 +2,21 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Type, TypeVar, cast
+from typing import cast, Dict, List, Optional, Tuple, Type, TYPE_CHECKING, TypeVar
 
 import numpy as np
 import snecs
 import tcod
-from snecs import Component, Query, new_entity
+from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
 from scripts.engine import action, chronicle, library, utility
 from scripts.engine.component import (
-    FOV,
     Aesthetic,
     Afflictions,
     Blocking,
     Exists,
+    FOV,
     HasCombatStats,
     Identity,
     IsActive,
@@ -24,21 +24,23 @@ from scripts.engine.component import (
     IsGod,
     IsPlayer,
     Knowledge,
-    Lifespan, LightSource,
+    Lifespan,
+    LightSource,
     Opinion,
     Position,
-    Reaction, Resources,
+    Reaction,
+    Resources,
     Thought,
     Tracked,
     Traits,
 )
 from scripts.engine.core.constants import (
-    EffectType, INFINITE,
-    TILE_SIZE,
     Direction,
     DirectionType,
+    EffectType,
     HitType,
     HitTypeType,
+    INFINITE,
     PrimaryStat,
     PrimaryStatType,
     RenderLayer,
@@ -47,19 +49,33 @@ from scripts.engine.core.constants import (
     ShapeType,
     TargetTag,
     TargetTagType,
+    TILE_SIZE,
     TraitGroup,
     TravelMethod,
     TravelMethodType,
 )
 from scripts.engine.core.data import store
-from scripts.engine.core.definitions import ActorData, AffectCooldownEffectData, AffectStatEffectData, \
-    AlterTerrainEffectData, ApplyAfflictionEffectData, \
-    DamageEffectData, EffectData, \
-    MoveActorEffectData, ProjectileData, \
-    TerrainData
-from scripts.engine.effect import AffectCooldownEffect, AffectStatEffect, AlterTerrainEffect, ApplyAfflictionEffect, \
-    DamageEffect, Effect, \
-    MoveActorEffect
+from scripts.engine.core.definitions import (
+    ActorData,
+    AffectCooldownEffectData,
+    AffectStatEffectData,
+    AlterTerrainEffectData,
+    ApplyAfflictionEffectData,
+    DamageEffectData,
+    EffectData,
+    MoveActorEffectData,
+    ProjectileData,
+    TerrainData,
+)
+from scripts.engine.effect import (
+    AffectCooldownEffect,
+    AffectStatEffect,
+    AlterTerrainEffect,
+    ApplyAfflictionEffect,
+    DamageEffect,
+    Effect,
+    MoveActorEffect,
+)
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects import lighting
@@ -68,7 +84,8 @@ from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Optional, Tuple, List
+    from typing import List, Optional, Tuple
+
     from scripts.engine.action import Affliction, Behaviour, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
@@ -380,8 +397,9 @@ def create_effect(origin: EntityID, target: EntityID, data: EffectData) -> Effec
         raise KeyError(f"Create effect: Effect provided ({effect_type}) was not handled.")
 
 
-def _create_apply_affliction_effect(origin: EntityID, target: EntityID,
-        data: ApplyAfflictionEffectData) -> ApplyAfflictionEffect:
+def _create_apply_affliction_effect(
+    origin: EntityID, target: EntityID, data: ApplyAfflictionEffectData
+) -> ApplyAfflictionEffect:
     effect = ApplyAfflictionEffect(
         origin=origin,
         target=target,
@@ -405,7 +423,7 @@ def _create_damage_effect(origin: EntityID, target: EntityID, data: DamageEffect
         damage_type=data.damage_type,
         mod_stat=data.mod_stat,
         mod_amount=data.mod_amount,
-        potency=data.potency
+        potency=data.potency,
     )
 
     return effect
@@ -418,7 +436,7 @@ def _create_move_actor_effect(origin: EntityID, target: EntityID, data: MoveActo
         direction=data.direction,
         success_effects=data.success_effects,
         failure_effects=data.failure_effects,
-        move_amount=data.move_amount
+        move_amount=data.move_amount,
     )
 
     return effect
@@ -438,8 +456,9 @@ def _create_affect_stat_effect(origin: EntityID, target: EntityID, data: AffectS
     return effect
 
 
-def _create_affect_cooldown_effect(origin: EntityID, target: EntityID,
-        data: AffectCooldownEffectData) -> AffectCooldownEffect:
+def _create_affect_cooldown_effect(
+    origin: EntityID, target: EntityID, data: AffectCooldownEffectData
+) -> AffectCooldownEffect:
     effect = AffectCooldownEffect(
         origin=origin,
         target=target,
@@ -452,8 +471,9 @@ def _create_affect_cooldown_effect(origin: EntityID, target: EntityID,
     return effect
 
 
-def _create_alter_terrain_effect(origin: EntityID, target: EntityID,
-        data: AlterTerrainEffectData) -> AlterTerrainEffect:
+def _create_alter_terrain_effect(
+    origin: EntityID, target: EntityID, data: AlterTerrainEffectData
+) -> AlterTerrainEffect:
     effect = AlterTerrainEffect(
         origin=origin,
         target=target,
@@ -591,7 +611,7 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
 
 
 def get_reflected_direction(
-        active_entity: EntityID, current_pos: Tuple[int, int], target_direction: Tuple[int, int]
+    active_entity: EntityID, current_pos: Tuple[int, int], target_direction: Tuple[int, int]
 ) -> DirectionType:
     """
     Use surrounding walls to understand how the object should be reflected.
@@ -659,11 +679,11 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
 
 
 def _get_furthest_free_position(
-        active_entity: EntityID,
-        start_pos: Tuple[int, int],
-        target_direction: Tuple[int, int],
-        max_distance: int,
-        travel_type: TravelMethodType,
+    active_entity: EntityID,
+    start_pos: Tuple[int, int],
+    target_direction: Tuple[int, int],
+    max_distance: int,
+    travel_type: TravelMethodType,
 ) -> Tuple[int, int]:
     """
     Checks each position in a line and returns the last position that doesnt block movement. If no position in
@@ -841,8 +861,7 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
 
 
 def get_affected_entities(
-        target_pos: Tuple[int, int], shape: ShapeType, shape_size: int,
-        shape_direction: Optional[Tuple[int, int]] = None
+    target_pos: Tuple[int, int], shape: ShapeType, shape_size: int, shape_direction: Optional[Tuple[int, int]] = None
 ):
     """
     Return a list of entities that are within the shape given, using target position as a centre point. Entity must
@@ -885,7 +904,7 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
 
 
 def get_cast_positions(
-        entity: EntityID, target_pos: Position, skills: List[Type[Skill]]
+    entity: EntityID, target_pos: Position, skills: List[Type[Skill]]
 ) -> Dict[Type[Skill], List[Tuple[int, int]]]:
     """
     Check through list of skills to find unblocked cast positions to target
@@ -1038,7 +1057,7 @@ def _tile_has_other_entities(tile: Tile, active_entity: EntityID) -> bool:
     entities_on_tile = get_entities_on_tile(tile)
     active_entity_is_on_tile = active_entity in entities_on_tile
     return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or (
-            len(entities_on_tile) > 1 and active_entity_is_on_tile
+        len(entities_on_tile) > 1 and active_entity_is_on_tile
     )
 
 
@@ -1190,7 +1209,7 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
 
 def apply_skill(skill: Skill) -> bool:
     """
-     Resolve the skill's effects. Returns True is successful if criteria to apply skill was met, False if not.
+    Resolve the skill's effects. Returns True is successful if criteria to apply skill was met, False if not.
     """
     # ensure they are the right target type
     if tile_has_tags(skill.user, skill.target_tile, skill.target_tags):

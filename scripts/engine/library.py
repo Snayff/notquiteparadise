@@ -12,7 +12,6 @@ from scripts.engine.core.constants import DATA_PATH, InputIntent
 from scripts.engine.core.definitions import (
     ActorData,
     AfflictionData,
-    TerrainData,
     BasePrimaryStatData,
     BaseSecondaryStatData,
     BaseValueData,
@@ -25,6 +24,7 @@ from scripts.engine.core.definitions import (
     MapData,
     RoomConceptData,
     SkillData,
+    TerrainData,
     TraitData,
     VideoConfigData,
 )
@@ -126,7 +126,7 @@ def _load_affliction_data():
 def _load_terrain_data():
     global TERRAIN
     TERRAIN = {}
-    with open('data/game/terrain.json') as file:
+    with open("data/game/terrain.json") as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     TERRAIN = data
 

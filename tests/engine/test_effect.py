@@ -1,18 +1,23 @@
+import pytest
 import snecs
 from snecs.typedefs import EntityID
 
 from scripts.engine import library, utility, world
 from scripts.engine.component import Afflictions, Knowledge, Position, Resources
 from scripts.engine.core import queries
-from scripts.engine.core.constants import Direction, PrimaryStat, DamageType
+from scripts.engine.core.constants import DamageType, Direction, PrimaryStat
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData
-from scripts.engine.effect import AffectCooldownEffect, AffectStatEffect, AlterTerrainEffect, ApplyAfflictionEffect, \
-    DamageEffect, MoveActorEffect
+from scripts.engine.effect import (
+    AffectCooldownEffect,
+    AffectStatEffect,
+    AlterTerrainEffect,
+    ApplyAfflictionEffect,
+    DamageEffect,
+    MoveActorEffect,
+)
 from scripts.engine.world_objects.game_map import GameMap
-import pytest
 from scripts.nqp.actions import afflictions, behaviours, skills  # must import to register in engine
-
 
 ##############################################################
 #

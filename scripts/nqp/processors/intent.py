@@ -11,13 +11,13 @@ from scripts.engine import chronicle, debug, library, state, utility, world
 from scripts.engine.action import Skill
 from scripts.engine.component import Knowledge, Position
 from scripts.engine.core.constants import (
-    SAVE_PATH,
     Direction,
     DirectionType,
     GameState,
     GameStateType,
     InputIntent,
     InputIntentType,
+    SAVE_PATH,
     TargetingMethod,
     UIElement,
 )
@@ -218,7 +218,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
     """
     Process the use of specified skill. Wrapper for actions needed to handle a full skill use. Assumed
     'can_use_skill' already completed.
-     """
+    """
     # get players starting position for camera updates
     pos = world.get_entitys_component(player, Position)
     start_pos = pos.x, pos.y

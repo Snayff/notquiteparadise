@@ -1,23 +1,25 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Type
+from typing import Type, TYPE_CHECKING
 
 from snecs import Query
 
 from scripts.engine.component import (
-    FOV,
     Aesthetic,
     Afflictions,
     Blocking,
     Exists,
+    FOV,
     HasCombatStats,
     Identity,
     IsActive,
     IsActor,
     Knowledge,
-    Lifespan, LightSource,
+    Lifespan,
+    LightSource,
     Position,
-    Reaction, Tracked,
+    Reaction,
+    Tracked,
     WinCondition,
 )
 
@@ -44,7 +46,7 @@ __all__ = [
     "position_and_win_condition",
     "active_and_tracked",
     "light_source_and_aesthetic",
-    "position_and_identity_and_lifespan"
+    "position_and_identity_and_lifespan",
 ]
 
 

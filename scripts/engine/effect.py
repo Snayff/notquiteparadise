@@ -2,28 +2,37 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Tuple, cast
+from typing import cast, Tuple, TYPE_CHECKING
 
 import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, Afflictions, Blocking, HasCombatStats, Identity, Knowledge, Lifespan, \
-    Position, \
-    Resources
+from scripts.engine.component import (
+    Aesthetic,
+    Afflictions,
+    Blocking,
+    HasCombatStats,
+    Identity,
+    Knowledge,
+    Lifespan,
+    Position,
+    Resources,
+)
 from scripts.engine.core import queries
 from scripts.engine.core.constants import (
-    InteractionEvent, InteractionTrigger,
-    InteractionTriggerType,
     DamageTypeType,
     Direction,
     DirectionType,
+    InteractionEvent,
+    InteractionTrigger,
+    InteractionTriggerType,
     PrimaryStatType,
     TargetTag,
 )
 
 if TYPE_CHECKING:
-    from typing import Optional, List
+    from typing import List, Optional
 
 
 __all__ = [
@@ -32,7 +41,7 @@ __all__ = [
     "AffectStatEffect",
     "ApplyAfflictionEffect",
     "AffectCooldownEffect",
-    "AlterTerrainEffect"
+    "AlterTerrainEffect",
 ]
 
 
@@ -47,7 +56,7 @@ class Effect(ABC):
         target: EntityID,
         success_effects: List[Effect],
         failure_effects: List[Effect],
-        potency: float = 1.0
+        potency: float = 1.0,
     ):
         self.origin = origin
         self.target = target
@@ -79,7 +88,7 @@ class DamageEffect(Effect):
         potency: float = 1.0,
     ):
 
-        super().__init__(origin, target,  success_effects, failure_effects, potency)
+        super().__init__(origin, target, success_effects, failure_effects, potency)
 
         self.accuracy = accuracy
         self.stat_to_target = stat_to_target
@@ -121,9 +130,14 @@ class DamageEffect(Effect):
             defenders_resources = world.get_entitys_component(self.target, Resources)
 
             # post interaction event
-            event = pygame.event.Event(InteractionEvent.DAMAGE, origin=self.origin, target=self.target,
-                                       amount=damage, damage_type=self.damage_type,
-                                       remaining_hp=defenders_resources.health)
+            event = pygame.event.Event(
+                InteractionEvent.DAMAGE,
+                origin=self.origin,
+                target=self.target,
+                amount=damage,
+                damage_type=self.damage_type,
+                remaining_hp=defenders_resources.health,
+            )
             pygame.event.post(event)
 
             # check if target is dead
@@ -181,8 +195,13 @@ class MoveActorEffect(Effect):
                     _position.set(new_x, new_y)
 
                     # post interaction event
-                    event = pygame.event.Event(InteractionEvent.MOVE, origin=self.origin, target=self.target,
-                                               direction=self.direction, new_pos=(new_x, new_y))
+                    event = pygame.event.Event(
+                        InteractionEvent.MOVE,
+                        origin=self.origin,
+                        target=self.target,
+                        direction=self.direction,
+                        new_pos=(new_x, new_y),
+                    )
                     pygame.event.post(event)
 
                     success = True
@@ -227,8 +246,11 @@ class MoveActorEffect(Effect):
                 for blocking_entity, (pos, blocking) in queries.position_and_blocking:
                     assert isinstance(pos, Position)
                     assert isinstance(blocking, Blocking)
-                    if blocking_entity != entity and blocking.blocks_movement and\
-                            (target_x, target_y) in pos.coordinates:
+                    if (
+                        blocking_entity != entity
+                        and blocking.blocks_movement
+                        and (target_x, target_y) in pos.coordinates
+                    ):
                         # blocked by entity
                         blockers_name = world.get_name(blocking_entity)
                         logging.debug(
@@ -273,8 +295,13 @@ class AffectStatEffect(Effect):
                 afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
 
                 # post interaction event
-                event = pygame.event.Event(InteractionEvent.AFFECT_STAT, origin=self.origin, target=self.target,
-                                           stat=self.stat_to_target, amount=self.affect_amount)
+                event = pygame.event.Event(
+                    InteractionEvent.AFFECT_STAT,
+                    origin=self.origin,
+                    target=self.target,
+                    stat=self.stat_to_target,
+                    amount=self.affect_amount,
+                )
                 pygame.event.post(event)
 
                 success = True
@@ -315,8 +342,9 @@ class ApplyAfflictionEffect(Effect):
             world.apply_affliction(affliction_instance)
 
             # post interaction event
-            event = pygame.event.Event(InteractionEvent.AFFLICTION, origin=self.origin, target=self.target,
-                                       name=self.affliction_name)
+            event = pygame.event.Event(
+                InteractionEvent.AFFLICTION, origin=self.origin, target=self.target, name=self.affliction_name
+            )
             pygame.event.post(event)
 
             return True, self.success_effects
@@ -353,8 +381,9 @@ class AffectCooldownEffect(Effect):
             knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.affect_amount)
 
             # post interaction event
-            event = pygame.event.Event(InteractionEvent.AFFECT_COOLDOWN, origin=self.origin, target=self.target,
-                                       amount=self.affect_amount)
+            event = pygame.event.Event(
+                InteractionEvent.AFFECT_COOLDOWN, origin=self.origin, target=self.target, amount=self.affect_amount
+            )
             pygame.event.post(event)
 
             logging.debug(
@@ -368,13 +397,13 @@ class AffectCooldownEffect(Effect):
 
 class AlterTerrainEffect(Effect):
     def __init__(
-            self,
-            origin: EntityID,
-            target: EntityID,
-            success_effects: List[Effect],
-            failure_effects: List[Effect],
-            terrain_name: str,
-            affect_amount: int,
+        self,
+        origin: EntityID,
+        target: EntityID,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+        terrain_name: str,
+        affect_amount: int,
     ):
         super().__init__(origin, target, success_effects, failure_effects)
 
@@ -399,7 +428,6 @@ class AlterTerrainEffect(Effect):
         else:
             return False, self.failure_effects
 
-
     def _create_terrain(self) -> bool:
         result = False
         duplicate = False
@@ -419,12 +447,12 @@ class AlterTerrainEffect(Effect):
         if not duplicate:
             # create target
             from scripts.engine import library
+
             terrain_data = library.TERRAIN[terrain_name]
             world.create_terrain(terrain_data, (target_pos.x, target_pos.y), self.affect_amount)
             result = True
 
         return result
-
 
     def _reduce_terrain_duration(self) -> bool:
         result = False

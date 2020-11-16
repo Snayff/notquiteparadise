@@ -9,8 +9,15 @@ from scripts.engine.component import Afflictions, FOV, IsActive, Knowledge, Life
 from scripts.engine.core import queries
 from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, INFINITE, MAX_ACTIVATION_DISTANCE
 
-__all__ = ["process_activations", "process_light_map", "process_fov", "process_tile_visibility",
-    "reduce_skill_cooldowns", "reduce_affliction_durations", "reduce_lifespan_durations"]
+__all__ = [
+    "process_activations",
+    "process_light_map",
+    "process_fov",
+    "process_tile_visibility",
+    "reduce_skill_cooldowns",
+    "reduce_affliction_durations",
+    "reduce_lifespan_durations",
+]
 
 
 def process_activations():
@@ -61,7 +68,11 @@ def process_light_map():
     # reset light map
     light_map[:] = False
 
-    for entity, (is_active, light_source, pos,) in queries.active_and_light_source_and_position:
+    for entity, (
+        is_active,
+        light_source,
+        pos,
+    ) in queries.active_and_light_source_and_position:
         radius = light_source.radius
 
         # create fov for light source and add to light map
@@ -80,7 +91,12 @@ def process_fov():
     game_map = world.get_game_map()
     block_sight_map = game_map.block_sight_map
 
-    for entity, (is_active, pos, fov, stats,) in queries.active_and_position_and_fov_and_combat_stats:
+    for entity, (
+        is_active,
+        pos,
+        fov,
+        stats,
+    ) in queries.active_and_position_and_fov_and_combat_stats:
 
         stats = world.create_combat_stats(entity)
         sight_range = stats.sight_range
@@ -161,4 +177,3 @@ def reduce_lifespan_durations():
         if lifespan.duration <= 0:
             logging.debug(f"{world.get_name(entity)}`s lifespan has expired. ")
             world.kill_entity(entity)
-

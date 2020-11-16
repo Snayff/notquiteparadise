@@ -7,7 +7,7 @@ authors = ["Snayff"]
 [tool.poetry.dependencies]
 python = "^3.8"
 snecs = "^1.2.1"
-pygame = "^2.0.0"
+pygame = "2.0.0.dev10"
 pygame-gui = "^0.5.6"
 pytweening = "^1.0.3"
 tcod = "^11.18.0"
@@ -30,18 +30,17 @@ codecov = "^2.1.10"
 pytest-benchmark = {extras = ["histogram"], version = "^3.2.3"}
 
 [tool.black]
-target-version = ['py37']
+target-version = ['py38']
 line-length = 120
 
 [tool.isort]
-multi_line_output = 3
+force_alphabetical_sort_within_sections = true
 include_trailing_comma = true
+sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
+multi_line_output = 3
 force_grid_wrap = 0
 use_parentheses = true
 line_length = 120
-known_third_party = [""]
-known_future_library = ["annotations"]
-force_to_top = ["typing, __future__"]
 indent = 4
 lines_between_types = 0
 

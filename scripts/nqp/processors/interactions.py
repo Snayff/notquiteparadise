@@ -51,6 +51,7 @@ def process_event(event: pygame.event):
 
 ############################ MOVEMENT ########################
 
+
 def _handle_proximity(event: pygame.event):
     """
     Check for any entities with a reaction to proximity and trigger that reaction.
@@ -90,6 +91,7 @@ def _process_win_condition(event: pygame.event):
 
 
 ############################ GENERIC ########################
+
 
 def _handle_affliction(entity: EntityID, interaction_trigger: InteractionTriggerType):
     """

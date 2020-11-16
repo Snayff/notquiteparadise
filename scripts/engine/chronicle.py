@@ -12,7 +12,7 @@ from scripts.engine.core.constants import INFINITE
 from scripts.engine.core.data import store
 
 if TYPE_CHECKING:
-    from typing import Dict, Tuple, List, Optional
+    from typing import Dict, List, Optional, Tuple
 
 
 ############ ACTIONS ##################
@@ -29,7 +29,10 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     new_queue = {}
     from scripts.engine.core import queries
 
-    for entity, (is_active, tracked,) in queries.active_and_tracked:
+    for entity, (
+        is_active,
+        tracked,
+    ) in queries.active_and_tracked:
         if entity != entity_to_exclude:
             assert isinstance(tracked, Tracked)
             new_queue[entity] = tracked.time_spent
@@ -181,7 +184,7 @@ def _get_pretty_queue() -> List[Tuple[str, int]]:
 
 def _get_next_entity_in_queue() -> EntityID:
     queue = get_turn_queue()
-    next_entity = min(queue, key=queue.get)
+    next_entity = min(queue, key=queue.get)  # type: ignore
     return next_entity
 
 

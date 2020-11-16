@@ -2,17 +2,20 @@ from __future__ import annotations
 
 from abc import ABC
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, cast
+from typing import cast, Dict, List, Optional, Tuple, TYPE_CHECKING
 
 from scripts.engine.core.constants import (
     AfflictionCategory,
     AfflictionCategoryType,
-    DamageType, DamageTypeType, InteractionTriggerType,
+    DamageType,
+    DamageTypeType,
     Direction,
     DirectionType,
     EffectType,
     EffectTypeType,
-    PrimaryStat, PrimaryStatType,
+    InteractionTriggerType,
+    PrimaryStat,
+    PrimaryStatType,
     ProjectileExpiry,
     ProjectileExpiryType,
     ProjectileSpeed,
@@ -37,10 +40,11 @@ from scripts.engine.core.constants import (
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
-    from scripts.engine.action import Skill
-    from scripts.engine.effect import Effect
     import pygame
     from snecs.typedefs import EntityID
+
+    from scripts.engine.action import Skill
+    from scripts.engine.effect import Effect
 
 #################################################################
 # This module is for specifying all defined data sets.
@@ -49,6 +53,7 @@ if TYPE_CHECKING:
 
 ######################### Aesthetics ##################################
 
+
 @register_dataclass_with_json
 @dataclass
 class LightData:
@@ -56,6 +61,7 @@ class LightData:
     Data for a light source.
     Also used to hold and map data from json.
     """
+
     radius: int = 0
     colour: Tuple[int, int, int] = field(default=(0, 0, 0))
     alpha: int = 0
@@ -227,6 +233,7 @@ class TerrainData:
     Data class for terrain.
     Also used to hold and map data from json.
     """
+
     name: str = "none"
     description: str = "none"
     blocks_sight: bool = False
@@ -238,6 +245,7 @@ class TerrainData:
 
 
 ################### GODS ###################################################
+
 
 @register_dataclass_with_json
 @dataclass
@@ -406,11 +414,13 @@ class AfflictionData:
 
 ################### EFFECTS ###################################################
 
+
 @dataclass
 class EffectData(ABC):
     """
     Base data class for an effect.
     """
+
     effect_type: EffectTypeType
 
     # not sure but these might come in as effect data which will crash
@@ -425,6 +435,7 @@ class DamageEffectData(EffectData):
     The data for a damage effect.
     Also used to hold and map data from json.
     """
+
     effect_type: EffectTypeType = EffectType.DAMAGE
 
     stat_to_target: PrimaryStatType = PrimaryStat.EXACTITUDE
@@ -443,6 +454,7 @@ class MoveActorEffectData(EffectData):
     The data for a apply affliction effect.
     Also used to hold and map data from json.
     """
+
     effect_type: EffectTypeType = EffectType.MOVE
 
     direction: DirectionType = Direction.CENTRE
@@ -456,6 +468,7 @@ class ApplyAfflictionEffectData(EffectData):
     The data for a apply affliction effect.
     Also used to hold and map data from json.
     """
+
     effect_type: EffectTypeType = EffectType.APPLY_AFFLICTION
 
     affliction_name: str = ""
@@ -469,6 +482,7 @@ class AffectStatEffectData(EffectData):
     The data for an affect stat effect.
     Also used to hold and map data from json.
     """
+
     effect_type: EffectTypeType = EffectType.AFFECT_STAT
 
     cause_name: str = ""
@@ -483,6 +497,7 @@ class AffectCooldownEffectData(EffectData):
     The data for a apply affliction effect.
     Also used to hold and map data from json.
     """
+
     effect_type: EffectTypeType = EffectType.AFFECT_COOLDOWN
 
     skill_name: str = ""
@@ -496,10 +511,12 @@ class AlterTerrainEffectData(EffectData):
     The data for an  alter terrain effect.
     Also used to hold and map data from json.
     """
+
     effect_type: EffectTypeType = EffectType.ALTER_TERRAIN
 
     terrain_name: str = ""
     affect_amount: int = 0
+
 
 ################### CONFIG ###################################################
 
