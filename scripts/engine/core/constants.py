@@ -63,7 +63,7 @@ UIElementType = NewType("UIElementType", str)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
 TraitGroupType = NewType("TraitGroupType", str)
-AfflictionTriggerType = NewType("AfflictionTriggerType", str)
+InteractionTriggerType = NewType("InteractionTriggerType", str)
 RenderLayerType = NewType("RenderLayerType", int)
 TileCategoryType = NewType("TileCategoryType", str)
 
@@ -95,6 +95,18 @@ class GameEvent(SimpleNamespace):
     START_GAME = pygame.USEREVENT + 105
 
 
+class InteractionEvent(SimpleNamespace):
+    """
+    Custom pygame events to trigger interactions.
+    """
+
+    MOVE = pygame.USEREVENT + 200
+    DAMAGE = pygame.USEREVENT + 201
+    AFFECT_STAT = pygame.USEREVENT + 202
+    AFFECT_COOLDOWN = pygame.USEREVENT + 203
+    AFFLICTION = pygame.USEREVENT + 204
+
+
 class RenderLayer(SimpleNamespace):
     """
     The possible render layers. Lower number is further down the stack.
@@ -102,7 +114,7 @@ class RenderLayer(SimpleNamespace):
 
     BOTTOM = RenderLayerType(10)
     TILE = RenderLayerType(20)
-    ASPECT = RenderLayerType(30)
+    TERRAIN = RenderLayerType(30)
     ACTOR = RenderLayerType(40)
     UI_BASE = RenderLayerType(50)
     UI_WINDOW = RenderLayerType(60)
@@ -262,10 +274,8 @@ class EffectType(SimpleNamespace):
     DAMAGE = EffectTypeType("damage")
     MOVE = EffectTypeType("move")
     AFFECT_STAT = EffectTypeType("affect_stat")
-    ADD_ASPECT = EffectTypeType("add_aspect")
-    REMOVE_ASPECT = EffectTypeType("remove_aspect")
-    TRIGGER_SKILL = EffectTypeType("trigger_skill")
-    KILL = EffectTypeType("kill")
+    AFFECT_COOLDOWN = EffectTypeType("affect_cooldown")
+    ALTER_TERRAIN = EffectTypeType("alter_terrain")
 
 
 class TargetTag(SimpleNamespace):
@@ -296,13 +306,24 @@ class DamageType(SimpleNamespace):
     MUNDANE = DamageTypeType("mundane")
 
 
-class AfflictionTrigger(SimpleNamespace):
+class InteractionTrigger(SimpleNamespace):
     """
     Type of trigger for the affliction
     """
 
-    MOVEMENT = AfflictionTriggerType("movement")
-    TAKE_DAMAGE = AfflictionTriggerType("take_damage")
+    MOVE = InteractionTriggerType("movement")
+    PROXIMITY = InteractionTriggerType("proximity")
+    TAKE_DAMAGE = InteractionTriggerType("take_damage")
+    DEAL_DAMAGE = InteractionTriggerType("deal_damage")
+    KILL = InteractionTriggerType("kill")
+    DIE = InteractionTriggerType("die")
+    COLLISION = InteractionTriggerType("collision")
+    AFFECTED_STAT = InteractionTriggerType("affected_stat")
+    CAUSED_AFFECT_STAT = InteractionTriggerType("caused_affect_stat")
+    AFFECTED_COOLDOWN = InteractionTriggerType("affected_cooldown")
+    CAUSED_AFFECT_COOLDOWN = InteractionTriggerType("caused_affect_cooldown")
+    CAUSED_AFFLICTION = InteractionTriggerType("caused_affliction")
+    AFFLICTED = InteractionTriggerType("afflicted")
 
 
 class AfflictionCategory(SimpleNamespace):

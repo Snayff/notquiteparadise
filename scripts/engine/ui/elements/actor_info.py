@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import List, Optional, Tuple, Union, cast
+from typing import cast, List, Optional, Tuple, Union
 
 import pygame
 from pygame_gui import UI_BUTTON_PRESSED, UIManager
@@ -13,10 +13,10 @@ from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Afflictions, Identity, Resources, Traits
 from scripts.engine.core.constants import (
     ASSET_PATH,
+    GameEvent,
     GAP_SIZE,
     ICON_SIZE,
     INFINITE,
-    GameEvent,
     InputEvent,
     PrimaryStat,
     SecondaryStat,

@@ -41,18 +41,6 @@ jobs:
         poetry config virtualenvs.create false
         poetry install --no-root
 
-    - name: Lint with Black
-      if: always()
-      run: |
-        poetry run python -m black scripts/
-
-    - name: Format with isort
-      if: always()
-      run: |
-        cd scripts
-        poetry run python -m isort -y
-        cd ..
-
     - name: mypy Type Check
       if: always()
       run: |
@@ -68,6 +56,18 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage.xml
+
+    - name: Format with isort
+      if: always()
+      run: |
+        cd scripts
+        poetry run python -m isort .
+        cd ..
+
+    - name: Lint with Black
+      if: always()
+      run: |
+        poetry run python -m black scripts/
 
     - name: Update Git
       if: github.repository == 'Snayff/notquiteparadise'

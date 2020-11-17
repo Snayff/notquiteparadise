@@ -15,7 +15,7 @@ from scripts.engine import state
 from scripts.engine.core.constants import INFINITE, VERSION
 
 if TYPE_CHECKING:
-    from typing import Callable, TYPE_CHECKING, List, Optional, Tuple, Union
+    from typing import Callable, List, Optional, Tuple, TYPE_CHECKING, Union
 
 __all__ = [
     "update",

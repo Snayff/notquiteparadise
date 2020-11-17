@@ -31,7 +31,7 @@ from scripts.engine.ui.widgets.screen_message import ScreenMessage
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import TYPE_CHECKING, Dict, Tuple
+    from typing import Dict, Tuple, TYPE_CHECKING
 
 _ui_element_union = Union[
     MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo, DungenViewer, TitleScreen, CharacterSelector

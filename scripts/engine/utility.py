@@ -2,23 +2,24 @@ from __future__ import annotations
 
 import dataclasses
 import logging
-from typing import TYPE_CHECKING, Dict, List, Tuple, TypeVar
+from typing import List, Tuple, TYPE_CHECKING, TypeVar
 
 import pygame
 
 from scripts.engine.core.constants import (
     ASSET_PATH,
+    DirectionType,
     ICON_SIZE,
     IMAGE_NOT_FOUND_PATH,
-    TILE_SIZE,
-    DirectionType,
     Shape,
     ShapeType,
+    TILE_SIZE,
 )
-from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 if TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple, Type, Union
+
+    from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 __all__ = [
     "get_image",
@@ -164,6 +165,8 @@ def build_sprites_from_paths(
         flattened_sprites[name] = flatten_images(surface_list)
 
     # convert to dataclass
+    from scripts.engine.core.definitions import TraitSpritesData
+
     converted = TraitSpritesData(**flattened_sprites)
     return converted
 

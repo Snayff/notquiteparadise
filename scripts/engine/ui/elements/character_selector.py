@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Callable, Optional, Union
+from typing import Callable, Optional, TYPE_CHECKING, Union
 
 import pygame
 import pygame_gui
@@ -10,7 +10,7 @@ from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UIPanel, UITextBox
 
 from scripts.engine import library
-from scripts.engine.core.constants import GAP_SIZE, TILE_SIZE, GameEvent, RenderLayer, TraitGroup
+from scripts.engine.core.constants import GameEvent, GAP_SIZE, RenderLayer, TILE_SIZE, TraitGroup
 from scripts.engine.core.definitions import ActorData
 from scripts.engine.utility import build_sprites_from_paths
 

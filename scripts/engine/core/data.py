@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import TYPE_CHECKING, Any, Optional
+from typing import Any, Optional, TYPE_CHECKING
 
 import pygame
 from snecs.typedefs import EntityID
@@ -11,7 +11,7 @@ from scripts.engine.core.constants import GameState, GameStateType
 from scripts.engine.world_objects.game_map import GameMap
 
 if TYPE_CHECKING:
-    from typing import TYPE_CHECKING, Dict
+    from typing import Dict, TYPE_CHECKING
 
 __all__ = ["store"]
 

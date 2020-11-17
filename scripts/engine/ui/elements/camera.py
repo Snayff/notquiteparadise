@@ -13,7 +13,7 @@ from pygame_gui.elements import UIButton, UIImage, UIPanel
 
 from scripts.engine import library, utility, world
 from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import TILE_SIZE, DirectionType, InputEvent, RenderLayer, UIElement
+from scripts.engine.core.constants import DirectionType, InputEvent, RenderLayer, TILE_SIZE, UIElement
 from scripts.engine.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.world_objects.tile import Tile
 
@@ -155,8 +155,8 @@ class Camera(UIPanel):
             # hovering a tile
             elif event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
                 updated_tile_info = False
-                from scripts.engine.ui.manager import ui
                 from scripts.engine.core import queries
+                from scripts.engine.ui.manager import ui
 
                 for entity, (position,) in queries.position:
                     position: Position

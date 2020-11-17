@@ -7,7 +7,7 @@ import pytweening
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, LightSource
 from scripts.engine.core import queries
-from scripts.engine.core.constants import TILE_SIZE, GameState, GameStateType
+from scripts.engine.core.constants import GameState, GameStateType, TILE_SIZE
 from scripts.engine.utility import is_close
 
 __all__ = ["process_display_updates"]

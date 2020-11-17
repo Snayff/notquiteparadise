@@ -1,0 +1,24 @@
+{
+    "bog": {
+        "__dataclass__": "TerrainData",
+        "blocks_movement": false,
+        "blocks_sight": false,
+        "description": "This is a bog. It slows entities down.",
+        "name": "bog",
+        "sprite_paths": {
+            "__dataclass__": "TraitSpritePathsData",
+            "idle": "terrain/bog.png"
+        },
+        "position_offsets": [
+            [0, 0]
+        ],
+        "light": null,
+        "reactions": {
+            "proximity":  {
+                "__dataclass__": "ApplyAfflictionEffectData",
+                "affliction_name": "BoggedDown",
+                "duration": 3
+            }
+        }
+    }
+}
