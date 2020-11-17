@@ -5,15 +5,18 @@ on:
     types: [opened, edited, synchronize]
 
 jobs:
+  if: github.event.pusher.name == "Snayff"
   build:
     name: PR Review
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2.3.4
+      if: github.actor == "my_username"
       with:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}  # this doesnt work for forks
+
     - uses: actions/setup-python@v2
       with:
         python-version: 3.8
