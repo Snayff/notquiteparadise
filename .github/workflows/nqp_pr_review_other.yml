@@ -1,4 +1,4 @@
-name: NQP - PR Review Snayff
+name: NQP - PR Review Other
 
 on:
   pull_request:
@@ -6,17 +6,16 @@ on:
 
 jobs:
   job1:
-    if: github.event.pusher.name == "Snayff"
+    if: github.event.pusher.name != "Snayff"
     name: PR Review - Snayff
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2.3.4
-      with:
-        fetch-depth: 0
-        ref: ${{ github.event.pull_request.head.ref }}  # this doesnt work for forks
+    - name: Checkout
+      uses: actions/checkout@v2.3.4
 
-    - uses: actions/setup-python@v2
+    - name: Setup Python
+      uses: actions/setup-python@v2
       with:
         python-version: 3.8
 
@@ -53,33 +52,3 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage.xml
-
-    - name: Format with isort
-      if: always()
-      run: |
-        cd scripts
-        poetry run python -m isort .
-        cd ..
-
-    - name: Lint with Black
-      if: always()
-      run: |
-        poetry run python -m black scripts/
-
-    - name: Update Git
-      if: github.repository == 'Snayff/notquiteparadise'
-      run: |
-        git config --global user.name 'nqp'
-        git config --global user.email 'snayff@users.noreply.github.com'
-        git add coverage.xml
-        git commit -am "ci lint and test"
-
-    - name: Git Status Check
-      if: github.repository == 'Snayff/notquiteparadise'
-      run: |
-        git status
-
-    - name: Push changes
-      if: github.repository == 'Snayff/notquiteparadise'
-      run: |
-        git push
