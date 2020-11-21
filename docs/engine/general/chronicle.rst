@@ -1,11 +1,6 @@
-
-Systems
+Chronicle
 ============================================
 
-.. automodule:: scripts.engine.core.systems
+.. automodule:: scripts.engine.chronicle
     :show-inheritance:
     :members:
-
-
-
-

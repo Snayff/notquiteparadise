@@ -11,15 +11,19 @@ Provide a way for people to contribute updates, fix bugs, try out ideas, etc.
 
 ## Coding Style Guide
 ### Tools
-The following tools are used as standard.
+The following tools are used as standard to ensure a consistent and reliable codebase.
+ 
+* [pytest] - python testing library. 
+* [mypy] - python's static type checker.
+* [black] - opinionated python linter.
+* [isort] - manage the order of imports. 
 
-* [mypy] - python's static type checker
-* [black] - opinionated python linter 
-
+[pytest]: https://docs.pytest.org/en/stable/
 [mypy]: http://mypy-lang.org/
-[black]: https://github.com/psf/black
+[black]: https://black.readthedocs.io/en/stable/
+[isort]: https://pycqa.github.io/isort/
 
-When you submit a pull request the CI, Github Actions, will run these tools automatically. 
+When you submit a pull request the CI, Github Actions, will run  pytext and mypy automatically. Out of courtesy, black and isort, which change your code, are ready for you to use but are not applied directly.  
 
 ### Naming conventions
 Below are the naming conventions followed in this project:

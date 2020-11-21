@@ -1,12 +1,8 @@
-
-World
+Intent
 ============================================
-.. automodule:: scripts.engine.world
+
+.. automodule:: scripts.nqp.processors.intent
     :show-inheritance:
     :members:
-
-
-
-
-
+    :private-members:
 

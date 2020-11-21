@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from abc import ABC, abstractmethod
 from typing import Dict, Iterator, Optional, Type, TYPE_CHECKING
 
@@ -290,6 +291,8 @@ def init_action(cls):
     Class decorator used for initialising class to add to the registry for use by the engine. Also initialises class
     properties set by external data, if appropriate.
     """
+    if "GENERATING_SPHINX_DOCS" in os.environ:  # when building in CI these fail
+        return
 
     if issubclass(cls, Skill):
         skill_registry[cls.__name__] = cls

@@ -65,8 +65,7 @@ The design pillars that the NQP engine are as follows:
 In progress:
 * [ ] Configurable - control remapping is in place ready for controller support, as are the foundations for
  accessibility and player configuration of their game. 
-* [ ] Interaction-focused - initial tag systems are in place but are yet to be embedded across the different systems
-. Basic interactions between actions and entities are in place.   
+* [ ] Interaction-focused - the interaction system is in place and is easily extensible. As new content is added the interactions  
  
 
 ## Documentation

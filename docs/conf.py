@@ -26,7 +26,7 @@ copyright = '2019-2020, Josh Snaith'
 author = 'Josh Snaith (Snayff)'
 
 # The short X.Y version
-version = "0.134.0"
+version = "0.135.3"
 
 
 # -- General configuration ---------------------------------------------------
@@ -93,13 +93,46 @@ add_module_names = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_material'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-# https://sphinx-rtd-theme.readthedocs.io/en/latest/configuring.html
-# html_theme_options = {}
 
+# https://bashtage.github.io/sphinx-material/
+# Material theme options (see theme.conf for more information)
+html_theme_options = {
+
+    # Set the name of the project to appear in the navigation.
+    'nav_title': 'Not Quite Paradise',
+
+    # Specify a base_url used to generate sitemap.xml. If not
+    # specified, then no sitemap will be built.
+    'base_url': 'https://snayff.github.io/notquiteparadise/',
+
+    # Set the color and the accent color
+    'color_primary': 'deep-purple',
+    'color_accent': 'deep-orange',
+
+    # Set the repo location to get a badge with stats
+    'repo_url': 'https://github.com/Snayff/notquiteparadise',
+    'repo_name': 'Not Quite Paradise',
+
+    # Visible levels of the global TOC; -1 means unlimited
+    'globaltoc_depth': 3,
+    # If False, expand all TOC entries
+    'globaltoc_collapse': True,
+
+    'html_minify': False,
+    'css_minify': True,
+    'logo_icon': '&#xe869',
+    'master_doc': True,
+
+}
+
+html_show_sourcelink = True
+html_sidebars = {
+    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+}
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
@@ -198,9 +231,9 @@ htmlhelp_basename = 'NotQuiteParadisedoc'
 intersphinx_mapping = {
     'https://docs.python.org/3/': None,
     'https://numpy.org/doc/stable/': None,
-    'https://snecs.slavfox.space/' : None,
+    'https://snecs.slavfox.space/': None,
     'https://pygame-gui.readthedocs.io/en/latest/': None,
-    'https://www.pygame.org/docs/' : None,
+    'https://www.pygame.org/docs/': None,
 }
 
 # -- sphinx.ext.todo ----------------------------------------------
@@ -213,17 +246,19 @@ todo_include_todos = True
 # Auiodoc settings
 autodoc_default_options = {
     'members': True,
-    'member-order': 'bysource',
-    'undoc-members': True,
+    'ignore-module-all': True,
+    'special-members': '__init__',
     'show-inheritance': True,
-    'private-members': True,  # Dont set to False. There is a bug that causes the build to break.
+#     'member-order': 'bysource',
+#     'undoc-members': True,
+#     'private-members': True,  # Dont set to False. There is a bug that causes the build to break.
 }
 autoclass_content = "both"
 
 # -- sphinx-autodoc-typehints ---------------------------------------------------
 always_document_param_types = True
 set_type_checking_flag = True
-typehints_document_rtype  = True
+typehints_document_rtype = True
 
 # -- sphinx.ext.autosectionlabel ---------------------------------------------------
 # True to prefix each section label with the name of the document it is in, followed by a colon. For example, index:Introduction for a section called Introduction that appears in document index.rst. Useful for avoiding ambiguity when the same section heading appears in different documents.

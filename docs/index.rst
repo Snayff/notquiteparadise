@@ -1,46 +1,23 @@
-Welcome to Not Quite Paradise's Engine documentation!
+Welcome to Not Quite Paradise's documentation!
 ===============================================================
+
 Last updated on |today| for version |version|.
 
-..  toctree::
-    :maxdepth: 2
-    :caption: Core API
-
-    nqp/core.constants
-    nqp/core.definitions
-    nqp/core.extend_json
-    nqp/core.store
-    nqp/core.queries
-    nqp/core.systems
-
-..  toctree::
-    :maxdepth: 2
-    :caption: General API
-
-    nqp/action
-    nqp/chronicle
-    nqp/component
-    nqp/debug
-    nqp/dungen
-    nqp/effect
-    nqp/key
-    nqp/library
-    nqp/state
-    nqp/utility
-    nqp/world
+If this is your first time reading the docs you might want to go to :ref:`getting-started`.
 
 
 ..  toctree::
-    :maxdepth: 2
-    :caption: World Objects API
+    :caption: Information
 
-    nqp/world_objects
-
+    info/_info
 
 
 ..  toctree::
-    :maxdepth: 2
-    :caption: UI API
+    :caption: Engine API
 
-    nqp/ui.elements
-    nqp/ui.widgets
+    engine/_engine
+
+..  toctree::
+    :caption: NQP (Game) Documentation
+
+    nqp/_nqp

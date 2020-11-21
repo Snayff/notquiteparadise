@@ -1,6 +1,7 @@
-Queries
+Display
 ============================================
 
-.. automodule:: scripts.engine.core.queries
+.. automodule:: scripts.nqp.processors.display
     :show-inheritance:
     :members:
+    :private-members:
