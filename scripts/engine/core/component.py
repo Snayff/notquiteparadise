@@ -380,7 +380,7 @@ class Thought(NQPComponent):
     def deserialize(cls, serialised):
         from scripts.engine.core import action
 
-        behaviour = action.behaviour_registry[serialised["behaviour_name"]]
+        behaviour = store.behaviour_registry[serialised["behaviour_name"]]
 
         return Thought(behaviour(serialised["entity"]))
 
@@ -452,7 +452,7 @@ class Knowledge(NQPComponent):
         from scripts.engine.core import action
 
         for name in skill_names:
-            skills.append(action.skill_registry[name])
+            skills.append(store.skill_registry[name])
 
         return Knowledge(skills, skill_order, cooldowns)
 
@@ -494,7 +494,7 @@ class Afflictions(NQPComponent):
         from scripts.engine.core import action
 
         for name, value_tuple in active_dict.items():
-            _affliction = action.affliction_registry[name]
+            _affliction = store.affliction_registry[name]
             affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])
             active_instances.append(affliction)
 

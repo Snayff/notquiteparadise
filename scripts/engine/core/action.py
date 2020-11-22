@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import os
 from abc import ABC, abstractmethod
-from typing import Dict, Iterator, Optional, Type, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
@@ -23,13 +23,10 @@ from scripts.engine.core.effect import Effect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import List, Tuple
+    from typing import Dict, Iterator, Optional, Type, TYPE_CHECKING, Union, List, Tuple
 
-__all__ = ["Skill", "Affliction", "Behaviour", "skill_registry", "affliction_registry"]
+__all__ = ["Skill", "Affliction", "Behaviour", "register_action"]
 
-skill_registry: Dict[str, Type[Skill]] = {}
-affliction_registry: Dict[str, Type[Affliction]] = {}
-behaviour_registry: Dict[str, Type[Behaviour]] = {}
 
 
 class Action(ABC):
@@ -294,11 +291,13 @@ def register_action(cls: Type[Union[Action, Behaviour]]):
     if "GENERATING_SPHINX_DOCS" in os.environ:  # when building in CI these fail
         return
 
+    from scripts.engine.internal.data import store
+
     if issubclass(cls, Skill):
         cls._init_properties()
-        skill_registry[cls.__name__] = cls
+        store.skill_registry[cls.__name__] = cls
     elif issubclass(cls, Affliction):
         cls._init_properties()
-        affliction_registry[cls.__name__] = cls
+        store.affliction_registry[cls.__name__] = cls
     elif issubclass(cls, Behaviour):
-        behaviour_registry[cls.__name__] = cls
+        store.behaviour_registry[cls.__name__] = cls

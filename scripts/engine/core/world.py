@@ -177,8 +177,8 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     # get info from traits
     traits_paths = []  # for aesthetic
 
-    move = action.skill_registry["Move"]
-    basic_attack = action.skill_registry["BasicAttack"]
+    move = store.skill_registry["Move"]
+    basic_attack = store.skill_registry["BasicAttack"]
     known_skills = [move, basic_attack]  # for knowledge
     skill_order = ["BasicAttack"]  # for knowledge
     perm_afflictions_names = []  # for affliction
@@ -191,7 +191,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         if data.known_skills != ["none"]:
 
             for skill_name in data.known_skills:
-                skill_class = action.skill_registry[skill_name]
+                skill_class = store.skill_registry[skill_name]
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
 
@@ -200,7 +200,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
                 perm_afflictions_names.append(_name)
 
         if data.group == TraitGroup.NPC:
-            behaviour = action.behaviour_registry[actor_data.behaviour_name]
+            behaviour = store.behaviour_registry[actor_data.behaviour_name]
 
     # add aesthetic
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
@@ -304,10 +304,10 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     entity = create_entity(projectile)
 
-    behaviour = action.behaviour_registry["Projectile"]
+    behaviour = store.behaviour_registry["Projectile"]
     add_component(entity, Thought(behaviour(entity, data)))  # type: ignore  # this works for projectile special case
 
-    move = action.skill_registry["Move"]
+    move = store.skill_registry["Move"]
     known_skills = [move]
     add_component(entity, Knowledge(known_skills))
 
@@ -320,7 +320,7 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
     """
     Creates an instance of an Affliction provided the name
     """
-    affliction = action.affliction_registry[name](creator, target, duration)
+    affliction = store.affliction_registry[name](creator, target, duration)
     return affliction
 
 
@@ -1437,7 +1437,7 @@ def learn_skill(entity: EntityID, skill_name: str):
         add_component(entity, Knowledge([]))
     knowledge = get_entitys_component(entity, Knowledge)
     if knowledge:
-        skill_class = action.skill_registry[skill_name]
+        skill_class = store.skill_registry[skill_name]
         knowledge.learn_skill(skill_class)
 
 

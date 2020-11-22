@@ -2,16 +2,17 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 import pygame
 from snecs.typedefs import EntityID
 
+from scripts.engine.core.action import Affliction, Behaviour, Skill
 from scripts.engine.internal.constants import GameState, GameStateType
 from scripts.engine.world_objects.game_map import GameMap
 
 if TYPE_CHECKING:
-    from typing import Dict, TYPE_CHECKING
+    from typing import Dict, Type, Optional, Any
 
 __all__ = ["store"]
 
@@ -43,6 +44,12 @@ class Store:
 
         # used to hold images called during runtime so only one copy ever exists. Not serialised.
         self.images: Dict[str, pygame.Surface] = {}
+
+        # used to hold actions registered with the engine. Not serialised.
+        self.skill_registry: Dict[str, Type[Skill]] = {}
+        self.affliction_registry: Dict[str, Type[Affliction]] = {}
+        self.behaviour_registry: Dict[str, Type[Behaviour]] = {}
+
 
     def serialise(self) -> Dict[str, Any]:
         """
