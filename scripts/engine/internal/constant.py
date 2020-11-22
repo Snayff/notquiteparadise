@@ -144,7 +144,6 @@ class UIElement(SimpleNamespace):
     SKILL_BAR = UIElementType("skill_bar")
     ENTITY_QUEUE = UIElementType("entity_queue")
     CAMERA = UIElementType("camera")
-    DATA_EDITOR = UIElementType("data_editor")
     TILE_INFO = UIElementType("tile_info")
     DUNGEN_VIEWER = UIElementType("dungen_viewer")
     TITLE_SCREEN = UIElementType("title_screen")

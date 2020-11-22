@@ -25,6 +25,10 @@ from scripts.nqp import command
 
 __all__ = ["process_intent"]
 
+from scripts.nqp.ui_elements.actor_info import ActorInfo
+
+from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
+
 
 def process_intent(intent: InputIntentType, game_state: GameStateType):
     """
@@ -65,18 +69,20 @@ def _process_stateless_intents(intent: InputIntentType):
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, False)
             state.set_new(state.get_previous())
         else:
-            ui.get_element(UIElement.DUNGEN_VIEWER).refresh_viewer()
+            if ui.has_element(UIElement.DUNGEN_VIEWER):
+                dungen_viewer = ui.get_element(UIElement.DUNGEN_VIEWER)
+
+            else:
+                dungen_viewer = DungenViewer(command.get_element_rect(UIElement.DUNGEN_VIEWER),
+                                                     ui.get_gui_manager())
+                ui.register_element(dungen_viewer)
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, True)
+            dungen_viewer.refresh_viewer()
             state.set_new(GameState.MENU)
 
     elif intent == InputIntent.DEV_TOGGLE:
         # F2
-        if ui.get_element(UIElement.DATA_EDITOR):
-            ui.set_element_visibility(UIElement.DATA_EDITOR, False)
-            state.set_new(state.get_previous())
-        else:
-            ui.set_element_visibility(UIElement.DATA_EDITOR, True)
-            state.set_new(GameState.DEVELOPER)
+        pass
 
     elif intent == InputIntent.BURST_PROFILE:
         # F3
@@ -84,12 +90,21 @@ def _process_stateless_intents(intent: InputIntentType):
 
     elif intent == InputIntent.TOGGLE_UI:
         # F6
-        if ui.element_is_visible(UIElement.MESSAGE_LOG):
-            ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
-            ui.set_element_visibility(UIElement.SKILL_BAR, False)
-        else:
-            ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
-            ui.set_element_visibility(UIElement.SKILL_BAR, True)
+
+        # toggle message log
+        if ui.has_element(UIElement.MESSAGE_LOG):
+            if ui.element_is_visible(UIElement.MESSAGE_LOG):
+                ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
+            else:
+                ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+
+        # toggle skill bar
+        if ui.has_element(UIElement.SKILL_BAR):
+            if ui.element_is_visible(UIElement.SKILL_BAR):
+                ui.set_element_visibility(UIElement.SKILL_BAR, False)
+            else:
+                ui.set_element_visibility(UIElement.SKILL_BAR, True)
+
 
     elif intent == InputIntent.TEST:
         # F12
@@ -146,6 +161,8 @@ def _process_game_map_intents(intent: InputIntentType):
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:
         # show
         state.set_new(GameState.MENU)
+        actor_info = ActorInfo(command.get_element_rect(UIElement.ACTOR_INFO), ui.get_gui_manager())
+        ui.register_element(actor_info)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
 
     elif intent == InputIntent.EXIT:
@@ -206,7 +223,8 @@ def _process_menu_intents(intent):
     ## Exit current menu
     if intent == InputIntent.ACTOR_INFO_TOGGLE:
         state.set_new(state.get_previous())
-        ui.set_element_visibility(UIElement.ACTOR_INFO, False)
+        if ui.has_element(UIElement.ACTOR_INFO):
+            ui.set_element_visibility(UIElement.ACTOR_INFO, False)
 
 
 ################## HELPER FUNCTIONS ############################
