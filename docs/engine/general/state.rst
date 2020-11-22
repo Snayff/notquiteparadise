@@ -1,7 +1,7 @@
-
-Effect
+State
 ============================================
 
-.. automodule:: scripts.engine.effect
+.. automodule:: scripts.engine.state
     :show-inheritance:
     :members:
+

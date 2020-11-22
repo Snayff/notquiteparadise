@@ -1,7 +1,7 @@
-
-Chronicle
+Tile
 ============================================
 
-.. automodule:: scripts.engine.chronicle
+.. automodule:: scripts.engine.world_objects.tile
     :show-inheritance:
     :members:
+

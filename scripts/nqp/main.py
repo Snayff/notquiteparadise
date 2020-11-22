@@ -15,9 +15,9 @@ from scripts.engine.core.constants import GameState
 from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.engine.ui.manager import ui
 from scripts.nqp import processors
-from scripts.nqp.actions import afflictions, behaviours, skills  # must import to register in engine
+from scripts.nqp.actions import affliction, behaviour, skill  # must import to register in engine
 from scripts.nqp.command import initialise_game
-from scripts.nqp.processors import display, game, interactions
+from scripts.nqp.processors import display, game, interaction
 
 
 def main():
@@ -99,7 +99,7 @@ def game_loop():
         for event in pygame.event.get():
             processors.input.process_event(event, current_state)
             processors.game.process_event(event, current_state)
-            processors.interactions.process_event(event)  # only happens in gamemap so doesnt need state
+            processors.interaction.process_event(event)  # only happens in gamemap so doesnt need state
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state

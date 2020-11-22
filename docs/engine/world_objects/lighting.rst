@@ -1,7 +1,6 @@
-
-Key
+Lighting
 ============================================
 
-.. automodule:: scripts.engine.key
+.. automodule:: scripts.engine.world_objects.lighting
     :show-inheritance:
     :members:

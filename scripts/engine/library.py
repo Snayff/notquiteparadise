@@ -90,22 +90,24 @@ def refresh_library():
     """
     Load all json data into the library.
     """
+    if "GENERATING_SPHINX_DOCS" in os.environ:  # when building in CI these fail
+        return
+
     start_time = time.time()
 
-    if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
-        _load_traits_data()
-        _load_affliction_data()
-        _load_terrain_data()
-        _load_base_stat_primary_data()
-        _load_base_stat_secondary_data()
-        _load_gods_data()
-        _load_skills_data()
-        _load_map_data()
-        _load_room_data()
-        _load_npc_data()
-        _load_input_config()
-        _load_video_config()
-        _load_game_config()
+    _load_traits_data()
+    _load_affliction_data()
+    _load_terrain_data()
+    _load_base_stat_primary_data()
+    _load_base_stat_secondary_data()
+    _load_gods_data()
+    _load_skills_data()
+    _load_map_data()
+    _load_room_data()
+    _load_npc_data()
+    _load_input_config()
+    _load_video_config()
+    _load_game_config()
 
     logging.info(f"Library data refreshed...")
 
