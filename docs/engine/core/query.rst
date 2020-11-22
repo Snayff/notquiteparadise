@@ -1,7 +1,7 @@
-Queries
+Query
 ============================================
 
-.. automodule:: scripts.engine.core.queries
+.. automodule:: scripts.engine.core.query
     :show-inheritance:
     :members:
     :private-members:

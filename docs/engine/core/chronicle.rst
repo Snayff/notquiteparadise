@@ -1,6 +1,6 @@
-Action
+Chronicle
 ============================================
 
-.. automodule:: scripts.engine.action
+.. automodule:: scripts.engine.core.chronicle
     :show-inheritance:
     :members:

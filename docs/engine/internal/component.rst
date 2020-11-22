@@ -1,7 +1,6 @@
-State
+Component
 ============================================
 
-.. automodule:: scripts.engine.state
+.. automodule:: scripts.engine.internal.component
     :show-inheritance:
     :members:
-

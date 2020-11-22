@@ -1,7 +1,12 @@
-
-Debug
+World
 ============================================
 
-.. automodule:: scripts.engine.debug
+.. automodule:: scripts.engine.core.world
     :show-inheritance:
     :members:
+
+
+
+
+
+

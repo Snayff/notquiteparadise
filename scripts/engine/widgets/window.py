@@ -50,6 +50,7 @@ class Window(ABC, UIWindow):
     def process_close_button(self):
         """
         Process closure of a window. Must be overriden in subclass. Usual use is creation of an event.
+
         Example:
             def process_close_button(self):
                 event = pygame.event.Event(GameEvent.EXIT_MENU, menu=UIElement.ACTOR_INFO)

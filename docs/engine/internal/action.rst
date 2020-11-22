@@ -1,6 +1,6 @@
-Dungen
+Action
 ============================================
 
-.. automodule:: scripts.engine.dungen
+.. automodule:: scripts.engine.internal.action
     :show-inheritance:
     :members:

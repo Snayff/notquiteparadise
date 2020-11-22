@@ -1,6 +1,7 @@
-Chronicle
+State
 ============================================
 
-.. automodule:: scripts.engine.chronicle
+.. automodule:: scripts.engine.core.state
     :show-inheritance:
     :members:
+

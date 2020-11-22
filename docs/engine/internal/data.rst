@@ -1,5 +1,5 @@
-Store
+Data Store
 ==============================
-.. automodule:: scripts.engine.core.data
+.. automodule:: scripts.engine.internal.data
     :show-inheritance:
     :members:

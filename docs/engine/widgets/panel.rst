@@ -1,10 +1,6 @@
-Systems
+Panel
 ============================================
 
-.. automodule:: scripts.engine.core.systems
+.. automodule:: scripts.engine.widgets.panel
     :show-inheritance:
     :members:
-
-
-
-

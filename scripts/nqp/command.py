@@ -22,7 +22,6 @@ from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
 from scripts.engine.core.ui import ui
 from scripts.engine.world_objects.game_map import GameMap
 
-__all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game", "register_actions"]
 
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
 from scripts.nqp.actions.behaviour import FollowPlayer, Projectile, SearchAndAttack, SkipTurn
@@ -33,6 +32,7 @@ from scripts.nqp.ui_elements.message_log import MessageLog
 from scripts.nqp.ui_elements.skill_bar import SkillBar
 from scripts.nqp.ui_elements.title_screen import TitleScreen
 
+__all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game", "register_actions"]
 
 def initialise_game():
     """

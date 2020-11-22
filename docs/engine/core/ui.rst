@@ -1,6 +1,12 @@
-Library
+UI Manager
 ============================================
 
-.. automodule:: scripts.engine.library
+.. automodule:: scripts.engine.core.ui
     :show-inheritance:
     :members:
+
+
+
+
+
+

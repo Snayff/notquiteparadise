@@ -1,6 +1,10 @@
-Component
+System
 ============================================
 
-.. automodule:: scripts.engine.component
+.. automodule:: scripts.engine.core.system
     :show-inheritance:
     :members:
+
+
+
+

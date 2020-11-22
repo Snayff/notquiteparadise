@@ -4,9 +4,12 @@ Core
 ..  toctree::
     :caption: Core
 
-    constants
-    definitions
-    extend_json
-    store
-    queries
-    systems
+    chronicle
+    dungen
+    key
+    query
+    state
+    system
+    ui
+    utility
+    world

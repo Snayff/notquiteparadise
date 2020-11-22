@@ -1,6 +1,6 @@
-Effect
+Constant
 ============================================
 
-.. automodule:: scripts.engine.effect
+.. automodule:: scripts.engine.internal.constant
     :show-inheritance:
     :members:

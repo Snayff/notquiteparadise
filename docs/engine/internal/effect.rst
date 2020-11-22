@@ -1,6 +1,6 @@
-Key
+Effect
 ============================================
 
-.. automodule:: scripts.engine.key
+.. automodule:: scripts.engine.internal.effect
     :show-inheritance:
     :members:

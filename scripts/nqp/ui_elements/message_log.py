@@ -14,7 +14,7 @@ from scripts.engine.widgets.panel import Panel
 if TYPE_CHECKING:
     import pygame_gui
 
-__all__ = ["Panel"]
+__all__ = ["MessageLog"]
 
 
 class MessageLog(Panel):

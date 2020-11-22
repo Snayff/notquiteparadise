@@ -1,6 +1,6 @@
-Definitions
+Definition
 ===============================
 
-.. automodule:: scripts.engine.core.definitions
+.. automodule:: scripts.engine.internal.definition
     :show-inheritance:
     :members:

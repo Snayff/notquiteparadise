@@ -1,10 +1,6 @@
-Utility
+Screen Message
 ============================================
 
-.. automodule:: scripts.engine.utility
+.. automodule:: scripts.engine.widgets.screen_message
     :show-inheritance:
     :members:
-
-
-
-

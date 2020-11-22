@@ -1,19 +1,15 @@
-.. _engine-general:
-
-General
+Internal
 ============================================
 
 ..  toctree::
-    :caption: General
+    :caption: Internal
 
     action
-    chronicle
     component
+    constant
+    data
     debug
-    dungen
+    definition
     effect
-    key
+    extend_json
     library
-    state
-    utility
-    world

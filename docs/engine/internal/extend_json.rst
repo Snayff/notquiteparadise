@@ -1,8 +1,7 @@
-
 Extend Json
 =================
 
-.. automodule:: scripts.engine.core.extend_json
+.. automodule:: scripts.engine.internal.extend_json
     :show-inheritance:
     :members:
 
