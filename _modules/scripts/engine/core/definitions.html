@@ -1,184 +1,258 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>scripts.engine.core.definitions &mdash; NotQuiteParadise  documentation</title>
-  
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
 
   
-  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
 
-  
-  
-  
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
   
 
+  <link rel="stylesheet" href="../../../../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../../../../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../../../../_static/stylesheets/application-fixes.css"/>
   
-  <!--[if lt IE 9]>
-    <script src="../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <link rel="stylesheet" href="../../../../_static/fonts/material-icons.css"/>
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-        <script src="../../../../_static/jquery.js"></script>
-        <script src="../../../../_static/underscore.js"></script>
-        <script src="../../../../_static/doctools.js"></script>
-        <script src="../../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
-
-    
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../../../../_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>scripts.engine.core.definitions &#8212; NotQuiteParadise  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/material.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
    
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
 
+  </head>
+  <body dir=ltr
+        data-md-color-primary=deep-purple data-md-color-accent=deep-orange>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#_modules/scripts/engine/core/definitions" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../../../index.html" title="NotQuiteParadise  documentation"
+           class="md-header-nav__button md-logo">
           
-            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+            <i class="md-icon">&#xe869</i>
           
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.134.0
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">Not Quite Paradise</span>
+          <span class="md-header-nav__topic"> scripts.engine.core.definitions </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../../../../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Core API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.definitions.html">Definitions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.extend_json.html">Extend Json</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.store.html">Store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.queries.html">Queries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.systems.html">Systems</a></li>
-</ul>
-<p class="caption"><span class="caption-text">General API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/action.html">Action</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/chronicle.html">Chronicle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/component.html">Component</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/debug.html">Debug</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/dungen.html">Dungen</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/effect.html">Effect</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/key.html">Key</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/library.html">Library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/utility.html">Utility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">World Objects API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world_objects.html">World Objects</a></li>
-</ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.widgets.html">UI Widgets</a></li>
-</ul>
-
-            
-          
-        </div>
-        
       </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NotQuiteParadise</a>
-        
-      </nav>
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/Snayff/notquiteparadise" title="Go to repository" class="md-source" data-md-source="github">
 
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Not Quite Paradise
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../../../../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../../../../"versions.json"",
+        target_loc = "../../../../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
 
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../../index.html">Module code</a> &raquo;</li>
-        
-      <li>scripts.engine.core.definitions</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-      </li>
-    
-  </ul>
+    </div>
+  </nav>
+</header>
 
   
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">NotQuiteParadise  documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">Module code</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../../../index.html" title="NotQuiteParadise documentation" class="md-nav__button md-logo">
+      
+        <i class="md-icon">&#xe869</i>
+      
+    </a>
+    <a href="../../../../index.html"
+       title="NotQuiteParadise documentation">Not Quite Paradise</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/Snayff/notquiteparadise" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Not Quite Paradise
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="../../../../info/_info.html" class="md-nav__link">Info</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../../../../engine/_engine.html" class="md-nav__link">Engine API</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../../../../nqp/_nqp.html" class="md-nav__link">NQP Documentation</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
             
-  <h1>Source code for scripts.engine.core.definitions</h1><div class="highlight"><pre>
+  <h1 id="modules-scripts-engine-core-definitions--page-root">Source code for scripts.engine.core.definitions</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
@@ -238,10 +312,10 @@
 <div class="viewcode-block" id="LightData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.LightData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">LightData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data for a light source.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">radius</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
@@ -251,9 +325,9 @@
 <div class="viewcode-block" id="TraitSpritesData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">TraitSpritesData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Possible sprites.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">icon</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">idle</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -266,18 +340,18 @@
 <div class="viewcode-block" id="TraitSpritePathsData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">TraitSpritePathsData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Possible sprites paths for a trait.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">render_order</span><span class="p">:</span> <span class="n">RenderLayerType</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">RenderLayer</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">)</span>
-    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">idle</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">attack</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">hit</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">dead</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">move</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span></div>
+    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
+    <span class="n">idle</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
+    <span class="n">attack</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
+    <span class="n">hit</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
+    <span class="n">dead</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
+    <span class="n">move</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span></div>
 
 
 <span class="c1">##################### ACTORS #################################</span>
@@ -286,30 +360,30 @@
 <div class="viewcode-block" id="ActorData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.ActorData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">ActorData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for an actor.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
     <span class="n">possible_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
     <span class="n">position_offsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">trait_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">behaviour_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span></div>
+    <span class="n">behaviour_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span></div>
 
 
 <div class="viewcode-block" id="TraitData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.TraitData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">TraitData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for a trait.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
     <span class="n">group</span><span class="p">:</span> <span class="n">TraitGroupType</span> <span class="o">=</span> <span class="n">TraitGroup</span><span class="o">.</span><span class="n">NPC</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
     <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">TraitSpritePathsData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">TraitSpritePathsData</span><span class="p">)</span>
     <span class="n">sight_range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">vigour</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -323,16 +397,16 @@
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># update sprite path render order</span>
         <span class="c1"># FIXME - this should be handled prior to coming to the dataclass</span>
-        <span class="n">trait_render_order</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;npc&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;people&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;homeland&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;savvy&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+        <span class="n">trait_render_order</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"npc"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"people"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"homeland"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"savvy"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sprite_paths</span><span class="o">.</span><span class="n">render_order</span> <span class="o">=</span> <span class="n">trait_render_order</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BaseStatData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.BaseStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">BaseStatData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class to contain primary and secondary stats</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">primary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BasePrimaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">secondary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BaseSecondaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
@@ -341,11 +415,11 @@
 <div class="viewcode-block" id="BasePrimaryStatData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.BasePrimaryStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">BasePrimaryStatData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for primary  stats</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
     <span class="n">primary_stat_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">base_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
@@ -353,11 +427,11 @@
 <div class="viewcode-block" id="BaseSecondaryStatData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.BaseSecondaryStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">BaseSecondaryStatData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for secondary stats</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
     <span class="n">secondary_stat_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SecondaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">base_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">vigour_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -373,17 +447,17 @@
 <div class="viewcode-block" id="ProjectileData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">ProjectileData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for a projectile</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># this will be overwritten or will break, but need defaults to allow passing</span>
     <span class="n">creator</span><span class="p">:</span> <span class="n">EntityID</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># type: ignore</span>
 
-    <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
     <span class="n">skill_instance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Skill</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
 
     <span class="c1"># who are we targeting?</span>
     <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
@@ -410,13 +484,13 @@
 <div class="viewcode-block" id="TerrainData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.TerrainData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">TerrainData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for terrain.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
     <span class="n">blocks_sight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">position_offsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
@@ -431,34 +505,34 @@
 <div class="viewcode-block" id="AttitudeData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AttitudeData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">AttitudeData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for  a god&#39;s attitude</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
+<span class="sd">    Data class for  a god's attitude</span>
+<span class="sd">    """</span>
 
-    <span class="n">action</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">action</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
     <span class="n">opinion_change</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="InterventionData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.InterventionData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">InterventionData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for a god&#39;s intervention</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
+<span class="sd">    Data class for a god's intervention</span>
+<span class="sd">    """</span>
 
-    <span class="n">skill_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">skill_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
     <span class="n">required_opinion</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="GodData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.GodData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">GodData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for a god</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
     <span class="n">attitudes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AttitudeData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">interventions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">InterventionData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
 
@@ -469,14 +543,14 @@
 <div class="viewcode-block" id="MapData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.MapData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">MapData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for a Map, specifically for generation. A map is a collection of rooms. Defines the rooms on</span>
 <span class="sd">    the map, how they are placed and joined up ( with tunnels).</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
 
     <span class="c1"># map size</span>
     <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -500,12 +574,12 @@
 <div class="viewcode-block" id="RoomConceptData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.RoomConceptData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">RoomConceptData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for a RoomConcept. Only used in generation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
 
     <span class="c1"># sizes</span>
     <span class="n">min_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -514,7 +588,7 @@
     <span class="n">max_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="c1"># room parameters</span>
-    <span class="n">design</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">design</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">max_neighbouring_walls_in_room</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">chance_of_spawning_wall</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
 
@@ -533,15 +607,15 @@
 <div class="viewcode-block" id="SkillData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.SkillData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">SkillData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for a skill.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># how do we know it?</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-    <span class="n">icon_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">icon_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
 
     <span class="c1"># when do we use it?</span>
     <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
@@ -578,13 +652,13 @@
 <div class="viewcode-block" id="AfflictionData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AfflictionData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">AfflictionData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Data class for an Affliction</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-    <span class="n">icon_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">icon_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
     <span class="n">category</span><span class="p">:</span> <span class="n">AfflictionCategoryType</span> <span class="o">=</span> <span class="n">AfflictionCategory</span><span class="o">.</span><span class="n">BANE</span>
     <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
     <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
@@ -598,9 +672,9 @@
 
 <div class="viewcode-block" id="EffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.EffectData">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">EffectData</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Base data class for an effect.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span>
 
@@ -612,10 +686,10 @@
 <div class="viewcode-block" id="DamageEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.DamageEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">DamageEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    The data for a damage effect.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">DAMAGE</span>
 
@@ -631,10 +705,10 @@
 <div class="viewcode-block" id="MoveActorEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.MoveActorEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">MoveActorEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    The data for a apply affliction effect.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">MOVE</span>
 
@@ -645,28 +719,28 @@
 <div class="viewcode-block" id="ApplyAfflictionEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.ApplyAfflictionEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">ApplyAfflictionEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    The data for a apply affliction effect.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">APPLY_AFFLICTION</span>
 
-    <span class="n">affliction_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">affliction_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="AffectStatEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AffectStatEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">AffectStatEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    The data for an affect stat effect.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">AFFECT_STAT</span>
 
-    <span class="n">cause_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">cause_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span> <span class="o">=</span> <span class="n">PrimaryStat</span><span class="o">.</span><span class="n">EXACTITUDE</span>
     <span class="n">affect_amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
@@ -674,28 +748,28 @@
 <div class="viewcode-block" id="AffectCooldownEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AffectCooldownEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">AffectCooldownEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    The data for a apply affliction effect.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">AFFECT_COOLDOWN</span>
 
-    <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">affect_amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="AlterTerrainEffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AlterTerrainEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">AlterTerrainEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    The data for an  alter terrain effect.</span>
 <span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">effect_type</span><span class="p">:</span> <span class="n">EffectTypeType</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">ALTER_TERRAIN</span>
 
-    <span class="n">terrain_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">terrain_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">affect_amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
@@ -756,50 +830,37 @@
     <span class="n">default_values</span><span class="p">:</span> <span class="n">DefaultValueData</span></div>
 </pre></div>
 
-           </div>
-           
-          </div>
-          <footer>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2019-2020, Josh Snaith
-
-    </p>
-  </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
+          </article>
         </div>
       </div>
-
-    </section>
-
+    </main>
   </div>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
-</body>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2019-2020, Josh Snaith.
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../../../../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
 </html>

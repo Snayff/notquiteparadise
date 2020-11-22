@@ -1,184 +1,258 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>scripts.engine.world &mdash; NotQuiteParadise  documentation</title>
-  
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
 
   
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
 
-  
-  
-  
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
   
 
+  <link rel="stylesheet" href="../../../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../../../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../../../_static/stylesheets/application-fixes.css"/>
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <link rel="stylesheet" href="../../../_static/fonts/material-icons.css"/>
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../../../_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>scripts.engine.world &#8212; NotQuiteParadise  documentation</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/material.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
+    <link rel="search" title="Search" href="../../../search.html" />
+  
    
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
 
+  </head>
+  <body dir=ltr
+        data-md-color-primary=deep-purple data-md-color-accent=deep-orange>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#_modules/scripts/engine/world" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../../index.html" title="NotQuiteParadise  documentation"
+           class="md-header-nav__button md-logo">
           
-            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+            <i class="md-icon">&#xe869</i>
           
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.134.0
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">Not Quite Paradise</span>
+          <span class="md-header-nav__topic"> scripts.engine.world </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../../../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Core API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.definitions.html">Definitions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.queries.html">Queries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.systems.html">Systems</a></li>
-</ul>
-<p class="caption"><span class="caption-text">General API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/action.html">Action</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/chronicle.html">Chronicle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/component.html">Component</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/debug.html">Debug</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/dungen.html">Dungen</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/effect.html">Effect</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/key.html">Key</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/library.html">Library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/utility.html">Utility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">World Objects API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/world_objects.html">World Objects</a></li>
-</ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.widgets.html">UI Widgets</a></li>
-</ul>
-
-            
-          
-        </div>
-        
       </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">NotQuiteParadise</a>
-        
-      </nav>
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/Snayff/notquiteparadise" title="Go to repository" class="md-source" data-md-source="github">
 
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Not Quite Paradise
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../../../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../../../"versions.json"",
+        target_loc = "../../../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
 
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
-      <li>scripts.engine.world</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-      </li>
-    
-  </ul>
+    </div>
+  </nav>
+</header>
 
   
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">NotQuiteParadise  documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">Module code</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../../index.html" title="NotQuiteParadise documentation" class="md-nav__button md-logo">
+      
+        <i class="md-icon">&#xe869</i>
+      
+    </a>
+    <a href="../../../index.html"
+       title="NotQuiteParadise documentation">Not Quite Paradise</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/Snayff/notquiteparadise" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Not Quite Paradise
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="../../../info/_info.html" class="md-nav__link">Info</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../../../engine/_engine.html" class="md-nav__link">Engine API</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../../../nqp/_nqp.html" class="md-nav__link">NQP Documentation</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
             
-  <h1>Source code for scripts.engine.world</h1><div class="highlight"><pre>
+  <h1 id="modules-scripts-engine-world--page-root">Source code for scripts.engine.world</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -271,7 +345,7 @@
 
 <span class="c1">########################### LOCAL DEFINITIONS ##########################</span>
 
-<span class="n">_C</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;_C&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Component</span><span class="p">)</span>  <span class="c1"># to represent components where we don&#39;t know which is being used</span>
+<span class="n">_C</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"_C"</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Component</span><span class="p">)</span>  <span class="c1"># to represent components where we don't know which is being used</span>
 
 <span class="n">get_entitys_components</span> <span class="o">=</span> <span class="n">snecs</span><span class="o">.</span><span class="n">all_components</span>
 <span class="n">get_components</span> <span class="o">=</span> <span class="n">Query</span>
@@ -285,9 +359,9 @@
 
 
 <div class="viewcode-block" id="create_entity"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_entity">[docs]</a><span class="k">def</span> <span class="nf">create_entity</span><span class="p">(</span><span class="n">components</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Use each component in a list of components to create an entity</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">components</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_components</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">else</span><span class="p">:</span>
@@ -303,9 +377,9 @@
 
 
 <div class="viewcode-block" id="create_god"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_god">[docs]</a><span class="k">def</span> <span class="nf">create_god</span><span class="p">(</span><span class="n">god_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Create an entity with all of the components to be a god. god_name must be in the gods json file.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="n">god_name</span><span class="p">]</span>
     <span class="n">god</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -315,15 +389,15 @@
     <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Resources</span><span class="p">(</span><span class="n">INFINITE</span><span class="p">,</span> <span class="n">INFINITE</span><span class="p">)))</span>
     <span class="n">entity</span> <span class="o">=</span> <span class="n">create_entity</span><span class="p">(</span><span class="n">god</span><span class="p">)</span>
 
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;God, &#39;</span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;, created.&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"God, '</span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">', created."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">entity</span></div>
 
 
 <div class="viewcode-block" id="create_actor"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_actor">[docs]</a><span class="k">def</span> <span class="nf">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">:</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">spawn_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">is_player</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Create an entity with all of the components to be an actor. Returns entity ID.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">components</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spawn_pos</span>
 
@@ -357,10 +431,10 @@
     <span class="c1"># get info from traits</span>
     <span class="n">traits_paths</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># for aesthetic</span>
 
-    <span class="n">move</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">&quot;Move&quot;</span><span class="p">]</span>
-    <span class="n">basic_attack</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">&quot;BasicAttack&quot;</span><span class="p">]</span>
+    <span class="n">move</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">"Move"</span><span class="p">]</span>
+    <span class="n">basic_attack</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">"BasicAttack"</span><span class="p">]</span>
     <span class="n">known_skills</span> <span class="o">=</span> <span class="p">[</span><span class="n">move</span><span class="p">,</span> <span class="n">basic_attack</span><span class="p">]</span>  <span class="c1"># for knowledge</span>
-    <span class="n">skill_order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BasicAttack&quot;</span><span class="p">]</span>  <span class="c1"># for knowledge</span>
+    <span class="n">skill_order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"BasicAttack"</span><span class="p">]</span>  <span class="c1"># for knowledge</span>
     <span class="n">perm_afflictions_names</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># for affliction</span>
     <span class="n">behaviour</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -368,14 +442,14 @@
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">actor_data</span><span class="o">.</span><span class="n">trait_names</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">TRAITS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="n">traits_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">known_skills</span> <span class="o">!=</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">known_skills</span> <span class="o">!=</span> <span class="p">[</span><span class="s2">"none"</span><span class="p">]:</span>
 
             <span class="k">for</span> <span class="n">skill_name</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">known_skills</span><span class="p">:</span>
                 <span class="n">skill_class</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span>
                 <span class="n">known_skills</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill_class</span><span class="p">)</span>
                 <span class="n">skill_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill_name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">permanent_afflictions</span> <span class="o">!=</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">permanent_afflictions</span> <span class="o">!=</span> <span class="p">[</span><span class="s2">"none"</span><span class="p">]:</span>
             <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">permanent_afflictions</span><span class="p">:</span>
                 <span class="n">perm_afflictions_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
 
@@ -410,15 +484,15 @@
     <span class="n">stats</span> <span class="o">=</span> <span class="n">create_combat_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
     <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">max_health</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">max_stamina</span><span class="p">))</span>
 
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entity, &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;, created.&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Entity, '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">', created."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">entity</span></div>
 
 
 <div class="viewcode-block" id="create_terrain"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_terrain">[docs]</a><span class="k">def</span> <span class="nf">create_terrain</span><span class="p">(</span><span class="n">terrain_data</span><span class="p">:</span> <span class="n">TerrainData</span><span class="p">,</span> <span class="n">spawn_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">lifespan</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">INFINITE</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Create terrain</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">components</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spawn_pos</span>
 
@@ -453,16 +527,16 @@
 
 
 <div class="viewcode-block" id="create_projectile"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_projectile">[docs]</a><span class="k">def</span> <span class="nf">create_projectile</span><span class="p">(</span><span class="n">creating_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">tile_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="n">ProjectileData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Create an entity with all of the components to be a projectile. Returns entity ID.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">skill_name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">skill_name</span>
     <span class="n">projectile</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">tile_pos</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">creating_entity</span><span class="p">)</span>
-    <span class="n">projectile_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">s </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">`s projectile&quot;</span>
-    <span class="n">desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2"> on its way.&quot;</span>
+    <span class="n">projectile_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">s </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">`s projectile"</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2"> on its way."</span>
     <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">projectile_name</span><span class="p">,</span> <span class="n">desc</span><span class="p">))</span>
 
     <span class="n">sprites</span> <span class="o">=</span> <span class="n">build_sprites_from_paths</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">],</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
@@ -484,41 +558,41 @@
 
     <span class="n">entity</span> <span class="o">=</span> <span class="n">create_entity</span><span class="p">(</span><span class="n">projectile</span><span class="p">)</span>
 
-    <span class="n">behaviour</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">behaviour_registry</span><span class="p">[</span><span class="s2">&quot;Projectile&quot;</span><span class="p">]</span>
+    <span class="n">behaviour</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">behaviour_registry</span><span class="p">[</span><span class="s2">"Projectile"</span><span class="p">]</span>
     <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Thought</span><span class="p">(</span><span class="n">behaviour</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">data</span><span class="p">)))</span>  <span class="c1"># type: ignore  # this works for projectile special case</span>
 
-    <span class="n">move</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">&quot;Move&quot;</span><span class="p">]</span>
+    <span class="n">move</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">"Move"</span><span class="p">]</span>
     <span class="n">known_skills</span> <span class="o">=</span> <span class="p">[</span><span class="n">move</span><span class="p">]</span>
     <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">(</span><span class="n">known_skills</span><span class="p">))</span>
 
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">`s projectile created at (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">) heading </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">direction</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">`s projectile created at (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">) heading </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">direction</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">entity</span></div>
 
 
 <div class="viewcode-block" id="create_affliction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_affliction">[docs]</a><span class="k">def</span> <span class="nf">create_affliction</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">creator</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Affliction</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Creates an instance of an Affliction provided the name</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">affliction</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">affliction_registry</span><span class="p">[</span><span class="n">name</span><span class="p">](</span><span class="n">creator</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">affliction</span></div>
 
 
 <div class="viewcode-block" id="create_combat_stats"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_combat_stats">[docs]</a><span class="k">def</span> <span class="nf">create_combat_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CombatStats</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Create and return a stat object  for an entity.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">stats</span> <span class="o">=</span> <span class="n">CombatStats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">stats</span></div>
 
 
 <div class="viewcode-block" id="create_light"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_light">[docs]</a><span class="k">def</span> <span class="nf">create_light</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">colour</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a Light and add it to the current GameMap&#39;s Lightbox. Pos is the world position - the light will handle</span>
+    <span class="sd">"""</span>
+<span class="sd">    Create a Light and add it to the current GameMap's Lightbox. Pos is the world position - the light will handle</span>
 <span class="sd">    scaling to screen.</span>
 <span class="sd">    Returns the light_id of the Light.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">light_img</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="s2">&quot;world/light_mask.png&quot;</span><span class="p">,</span> <span class="p">((</span><span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+<span class="sd">    """</span>
+    <span class="n">light_img</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="s2">"world/light_mask.png"</span><span class="p">,</span> <span class="p">((</span><span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
     <span class="n">light_box</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span><span class="o">.</span><span class="n">light_box</span>
     <span class="n">light</span> <span class="o">=</span> <span class="n">lighting</span><span class="o">.</span><span class="n">Light</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">],</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">light_img</span><span class="p">)</span>
     <span class="n">light</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
@@ -529,9 +603,9 @@
 
 
 <div class="viewcode-block" id="create_pathfinder"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_pathfinder">[docs]</a><span class="k">def</span> <span class="nf">create_pathfinder</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Pathfinder</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Create an empty pathfinder using the current game map</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
 
     <span class="c1"># combine entity blocking and map blocking maps</span>
@@ -545,9 +619,9 @@
 
 
 <div class="viewcode-block" id="create_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.create_effect">[docs]</a><span class="k">def</span> <span class="nf">create_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">EffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Effect</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Create an effect from effect data.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">effect_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">effect_type</span>
 
     <span class="k">if</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">APPLY_AFFLICTION</span><span class="p">:</span>
@@ -575,10 +649,10 @@
         <span class="k">return</span> <span class="n">_create_alter_terrain_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Create effect: Effect provided (</span><span class="si">{</span><span class="n">effect_type</span><span class="si">}</span><span class="s2">) was not handled.&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Create effect: Effect provided (</span><span class="si">{</span><span class="n">effect_type</span><span class="si">}</span><span class="s2">) was not handled."</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="_create_apply_affliction_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_apply_affliction_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_apply_affliction_effect</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">_create_apply_affliction_effect</span><span class="p">(</span>
     <span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ApplyAfflictionEffectData</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ApplyAfflictionEffect</span><span class="p">:</span>
     <span class="n">effect</span> <span class="o">=</span> <span class="n">ApplyAfflictionEffect</span><span class="p">(</span>
@@ -589,10 +663,10 @@
         <span class="n">affliction_name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">affliction_name</span><span class="p">,</span>
         <span class="n">duration</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">effect</span></div>
+    <span class="k">return</span> <span class="n">effect</span>
 
 
-<div class="viewcode-block" id="_create_damage_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_damage_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_damage_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DamageEffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DamageEffect</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_create_damage_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DamageEffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DamageEffect</span><span class="p">:</span>
     <span class="n">effect</span> <span class="o">=</span> <span class="n">DamageEffect</span><span class="p">(</span>
         <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
         <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
@@ -607,10 +681,10 @@
         <span class="n">potency</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">potency</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">effect</span></div>
+    <span class="k">return</span> <span class="n">effect</span>
 
 
-<div class="viewcode-block" id="_create_move_actor_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_move_actor_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_move_actor_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">MoveActorEffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MoveActorEffect</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_create_move_actor_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">MoveActorEffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MoveActorEffect</span><span class="p">:</span>
     <span class="n">effect</span> <span class="o">=</span> <span class="n">MoveActorEffect</span><span class="p">(</span>
         <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
         <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
@@ -620,10 +694,10 @@
         <span class="n">move_amount</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">move_amount</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">effect</span></div>
+    <span class="k">return</span> <span class="n">effect</span>
 
 
-<div class="viewcode-block" id="_create_affect_stat_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_affect_stat_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_affect_stat_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">AffectStatEffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AffectStatEffect</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_create_affect_stat_effect</span><span class="p">(</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">AffectStatEffectData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AffectStatEffect</span><span class="p">:</span>
     <span class="n">effect</span> <span class="o">=</span> <span class="n">AffectStatEffect</span><span class="p">(</span>
         <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
         <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
@@ -634,10 +708,10 @@
         <span class="n">affect_amount</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">effect</span></div>
+    <span class="k">return</span> <span class="n">effect</span>
 
 
-<div class="viewcode-block" id="_create_affect_cooldown_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_affect_cooldown_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_affect_cooldown_effect</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">_create_affect_cooldown_effect</span><span class="p">(</span>
     <span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">AffectCooldownEffectData</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AffectCooldownEffect</span><span class="p">:</span>
     <span class="n">effect</span> <span class="o">=</span> <span class="n">AffectCooldownEffect</span><span class="p">(</span>
@@ -649,10 +723,10 @@
         <span class="n">affect_amount</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">effect</span></div>
+    <span class="k">return</span> <span class="n">effect</span>
 
 
-<div class="viewcode-block" id="_create_alter_terrain_effect"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._create_alter_terrain_effect">[docs]</a><span class="k">def</span> <span class="nf">_create_alter_terrain_effect</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">_create_alter_terrain_effect</span><span class="p">(</span>
     <span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">AlterTerrainEffectData</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AlterTerrainEffect</span><span class="p">:</span>
     <span class="n">effect</span> <span class="o">=</span> <span class="n">AlterTerrainEffect</span><span class="p">(</span>
@@ -664,27 +738,27 @@
         <span class="n">affect_amount</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">effect</span></div>
+    <span class="k">return</span> <span class="n">effect</span>
 
 
 <span class="c1">############################# GET - RETURN AN EXISTING SOMETHING ###########################</span>
 
 
 <div class="viewcode-block" id="get_game_map"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_game_map">[docs]</a><span class="k">def</span> <span class="nf">get_game_map</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GameMap</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Get current game_map</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span><span class="p">:</span>
         <span class="n">game_map</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;get_game_map: Tried to get the game_map but there isnt one.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"get_game_map: Tried to get the game_map but there isnt one."</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">game_map</span></div>
 
 
 <div class="viewcode-block" id="get_tile"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_tile">[docs]</a><span class="k">def</span> <span class="nf">get_tile</span><span class="p">(</span><span class="n">tile_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tile</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Get the tile at the specified location. Raises exception if out of bounds or doesnt exist.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">tile_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">tile_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -693,19 +767,19 @@
         <span class="n">_tile</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tile_map</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span>
 
     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to get tile(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), which doesnt exist.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to get tile(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), which doesnt exist."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">_tile</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">_tile</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to get tile(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), which is out of bounds.&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to get tile(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), which is out of bounds."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_tiles"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_tiles">[docs]</a><span class="k">def</span> <span class="nf">get_tiles</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">coords</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tile</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Get multiple tiles based on starting position and coordinates given. Coords are relative  to start</span>
 <span class="sd">    position given.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">start_x</span><span class="p">,</span> <span class="n">start_y</span> <span class="o">=</span> <span class="n">start_pos</span>
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
     <span class="n">tiles</span> <span class="o">=</span> <span class="p">[]</span>
@@ -724,9 +798,9 @@
 
 
 <div class="viewcode-block" id="get_direction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_direction">[docs]</a><span class="k">def</span> <span class="nf">get_direction</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DirectionType</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Get the direction between two locations.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">start_tile</span> <span class="o">=</span> <span class="n">get_tile</span><span class="p">(</span><span class="n">start_pos</span><span class="p">)</span>
     <span class="n">target_tile</span> <span class="o">=</span> <span class="n">get_tile</span><span class="p">(</span><span class="n">target_pos</span><span class="p">)</span>
 
@@ -745,13 +819,13 @@
 
 
 <div class="viewcode-block" id="get_entity_blocking_movement_map"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_entity_blocking_movement_map">[docs]</a><span class="k">def</span> <span class="nf">get_entity_blocking_movement_map</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Return a Numpy array of bools, True for blocking and False for open</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
 
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
-    <span class="n">blocking_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+    <span class="n">blocking_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_blocking</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocking</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
@@ -762,9 +836,9 @@
 
 
 <div class="viewcode-block" id="get_a_star_path"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_a_star_path">[docs]</a><span class="k">def</span> <span class="nf">get_a_star_path</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Get a list of coords that dictates the path between 2 entities.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">pathfinder</span> <span class="o">=</span> <span class="n">create_pathfinder</span><span class="p">()</span>
 
     <span class="c1"># add points</span>
@@ -776,9 +850,9 @@
 
 
 <div class="viewcode-block" id="get_a_star_direction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_a_star_direction">[docs]</a><span class="k">def</span> <span class="nf">get_a_star_direction</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Use a* pathfinding to get a direction from one entity to another. Does not allow diagonals.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">get_a_star_path</span><span class="p">(</span><span class="n">start_pos</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">)</span>
 
     <span class="c1"># if there is a path then return direction</span>
@@ -794,9 +868,9 @@
 <div class="viewcode-block" id="get_reflected_direction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_reflected_direction">[docs]</a><span class="k">def</span> <span class="nf">get_reflected_direction</span><span class="p">(</span>
     <span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DirectionType</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Use surrounding walls to understand how the object should be reflected.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span> <span class="o">=</span> <span class="n">current_pos</span>
     <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span> <span class="o">=</span> <span class="n">target_direction</span>
 
@@ -837,10 +911,10 @@
 
 
 <div class="viewcode-block" id="get_euclidean_distance"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_euclidean_distance">[docs]</a><span class="k">def</span> <span class="nf">get_euclidean_distance</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).</span>
 <span class="sd">    This returns a float indicating the straight line distance between the two points.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">dx</span> <span class="o">=</span> <span class="n">target_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">dy</span> <span class="o">=</span> <span class="n">target_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="kn">import</span> <span class="nn">math</span>  <span class="c1"># only used in this method</span>
@@ -849,28 +923,28 @@
 
 
 <div class="viewcode-block" id="get_chebyshev_distance"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_chebyshev_distance">[docs]</a><span class="k">def</span> <span class="nf">get_chebyshev_distance</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).</span>
 <span class="sd">    This returns an int indicating the number of tile moves between the two points.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">spatial</span>  <span class="c1"># only used in this method</span>
 
     <span class="n">distance</span> <span class="o">=</span> <span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">chebyshev</span><span class="p">(</span><span class="n">start_pos</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">distance</span></div>
 
 
-<div class="viewcode-block" id="_get_furthest_free_position"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._get_furthest_free_position">[docs]</a><span class="k">def</span> <span class="nf">_get_furthest_free_position</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">_get_furthest_free_position</span><span class="p">(</span>
     <span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span>
     <span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
     <span class="n">target_direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
     <span class="n">max_distance</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">travel_type</span><span class="p">:</span> <span class="n">TravelMethodType</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Checks each position in a line and returns the last position that doesnt block movement. If no position in</span>
 <span class="sd">    range blocks movement then the last position checked is returned. If all positions in range block movement</span>
 <span class="sd">    then starting position is returned.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">start_x</span> <span class="o">=</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">start_y</span> <span class="o">=</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">dir_x</span> <span class="o">=</span> <span class="n">target_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -905,7 +979,7 @@
         <span class="k">if</span> <span class="n">tile</span><span class="p">:</span>
             <span class="c1"># did we hit something causing standard to stop</span>
             <span class="k">if</span> <span class="n">tile_has_tag</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">):</span>
-                <span class="c1"># if we&#39;re ready to check for a target, do so</span>
+                <span class="c1"># if we're ready to check for a target, do so</span>
                 <span class="k">if</span> <span class="n">check_for_target</span><span class="p">:</span>
                     <span class="c1"># we hit something, go back to last free tile</span>
                     <span class="n">current_x</span> <span class="o">=</span> <span class="n">free_x</span>
@@ -915,13 +989,13 @@
                 <span class="n">free_x</span> <span class="o">=</span> <span class="n">current_x</span>
                 <span class="n">free_y</span> <span class="o">=</span> <span class="n">current_y</span>
 
-    <span class="k">return</span> <span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span></div>
+    <span class="k">return</span> <span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span>
 
 
 <div class="viewcode-block" id="get_hit_type"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_hit_type">[docs]</a><span class="k">def</span> <span class="nf">get_hit_type</span><span class="p">(</span><span class="n">to_hit_score</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HitTypeType</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Get the hit type from the to hit score</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">hit_types_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">hit_types</span>
 
     <span class="k">if</span> <span class="n">to_hit_score</span> <span class="o">&gt;=</span> <span class="n">hit_types_data</span><span class="o">.</span><span class="n">crit</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
@@ -933,43 +1007,43 @@
 
 
 <div class="viewcode-block" id="get_player"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_player">[docs]</a><span class="k">def</span> <span class="nf">get_player</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Get the player.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">flag</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">get_components</span><span class="p">([</span><span class="n">IsPlayer</span><span class="p">]):</span>
         <span class="k">return</span> <span class="n">entity</span>
     <span class="k">raise</span> <span class="ne">ValueError</span></div>
 
 
 <div class="viewcode-block" id="get_entitys_component"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_entitys_component">[docs]</a><span class="k">def</span> <span class="nf">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">component</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">_C</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">_C</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get an entity&#39;s component. Will raise exception if entity does not have the component.  Use entity_has_component</span>
+    <span class="sd">"""</span>
+<span class="sd">    Get an entity's component. Will raise exception if entity does not have the component.  Use entity_has_component</span>
 <span class="sd">    to check.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">snecs</span><span class="o">.</span><span class="n">entity_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;(</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">) tried to get </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">, but it was not found.&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">'(</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">) tried to get </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">, but it was not found."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_name"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_name">[docs]</a><span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get an entity&#39;s Identity component&#39;s name.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
+<span class="sd">    Get an entity's Identity component's name.</span>
+<span class="sd">    """</span>
     <span class="n">identity</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">identity</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">identity</span><span class="o">.</span><span class="n">name</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;not found&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">"not found"</span>
 
     <span class="k">return</span> <span class="n">name</span></div>
 
 
 <div class="viewcode-block" id="get_primary_stat"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_primary_stat">[docs]</a><span class="k">def</span> <span class="nf">get_primary_stat</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">primary_stat</span><span class="p">:</span> <span class="n">PrimaryStatType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get an entity&#39;s primary stat.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
+<span class="sd">    Get an entity's primary stat.</span>
+<span class="sd">    """</span>
     <span class="n">stat</span> <span class="o">=</span> <span class="n">primary_stat</span>
     <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -995,9 +1069,9 @@
 
 
 <div class="viewcode-block" id="get_secondary_stat"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_secondary_stat">[docs]</a><span class="k">def</span> <span class="nf">get_secondary_stat</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">secondary_stat</span><span class="p">:</span> <span class="n">SecondaryStatType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get an entity&#39;s secondary stat.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
+<span class="sd">    Get an entity's secondary stat.</span>
+<span class="sd">    """</span>
     <span class="c1"># FIXME - this doesnt work for sight range</span>
     <span class="n">stat</span> <span class="o">=</span> <span class="n">secondary_stat</span>
     <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1027,9 +1101,9 @@
 
 
 <div class="viewcode-block" id="get_known_skill"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_known_skill">[docs]</a><span class="k">def</span> <span class="nf">get_known_skill</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get an entity&#39;s known skill from their Knowledge component.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
+<span class="sd">    Get an entity's known skill from their Knowledge component.</span>
+<span class="sd">    """</span>
     <span class="n">knowledge</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">knowledge</span><span class="p">:</span>
@@ -1037,17 +1111,17 @@
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">pass</span>
 
-    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; tried to use a skill, &#39;</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">&#39;, they dont know.&quot;</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Skill not found&quot;</span><span class="p">)</span></div>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' tried to use a skill, '</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">', they dont know."</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Skill not found"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_affected_entities"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_affected_entities">[docs]</a><span class="k">def</span> <span class="nf">get_affected_entities</span><span class="p">(</span>
     <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span><span class="p">,</span> <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">shape_direction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Return a list of entities that are within the shape given, using target position as a centre point. Entity must</span>
 <span class="sd">    have Position, Resources to be eligible.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">affected_entities</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">affected_positions</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">target_x</span> <span class="o">=</span> <span class="n">target_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1069,9 +1143,9 @@
 
 
 <div class="viewcode-block" id="get_entities_on_tile"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_entities_on_tile">[docs]</a><span class="k">def</span> <span class="nf">get_entities_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Return a list of all the entities in that tile</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span>
     <span class="n">entities</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1087,9 +1161,9 @@
 <div class="viewcode-block" id="get_cast_positions"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.get_cast_positions">[docs]</a><span class="k">def</span> <span class="nf">get_cast_positions</span><span class="p">(</span>
     <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Position</span><span class="p">,</span> <span class="n">skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">]]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check through list of skills to find unblocked cast positions to target</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">skill_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># loop all skills and all directions</span>
@@ -1119,9 +1193,9 @@
 
 
 <div class="viewcode-block" id="tile_has_tag"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.tile_has_tag">[docs]</a><span class="k">def</span> <span class="nf">tile_has_tag</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="n">TargetTagType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check if a given tag applies to the tile.  True if tag applies.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># before we even check tags, lets confirm it is in bounds</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">False</span>
@@ -1140,7 +1214,7 @@
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">EntityID</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">_tile_has_specific_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Tried to get TargetTag.SELF but gave no active_entity.&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Tried to get TargetTag.SELF but gave no active_entity."</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">:</span>
         <span class="c1"># if entity on tile is not active entity</span>
         <span class="k">if</span> <span class="n">active_entity</span><span class="p">:</span>
@@ -1148,7 +1222,7 @@
             <span class="c1"># check both possibilities. either the tile containing the active entity or not</span>
             <span class="k">return</span> <span class="n">_tile_has_other_entities</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Tried to get TargetTag.OTHER_ENTITY but gave no active_entity."</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">NO_ENTITY</span><span class="p">:</span>
         <span class="c1"># if the tile has no entity</span>
         <span class="k">return</span> <span class="ow">not</span> <span class="n">_tile_has_any_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
@@ -1163,14 +1237,14 @@
         <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
             <span class="k">return</span> <span class="ow">not</span> <span class="n">_is_tile_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
 
-    <span class="c1"># If we&#39;ve hit here it must be false!</span>
+    <span class="c1"># If we've hit here it must be false!</span>
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="tile_has_tags"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.tile_has_tags">[docs]</a><span class="k">def</span> <span class="nf">tile_has_tags</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check a tile has all required tags</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">tags_checked</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># assess all tags</span>
@@ -1184,17 +1258,17 @@
         <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="_is_tile_blocking_sight"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._is_tile_blocking_sight">[docs]</a><span class="k">def</span> <span class="nf">_is_tile_blocking_sight</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_is_tile_blocking_sight</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check if a tile is blocking sight</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span></div>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span>
 
 
-<div class="viewcode-block" id="_is_tile_visible_to_entity"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._is_tile_visible_to_entity">[docs]</a><span class="k">def</span> <span class="nf">_is_tile_visible_to_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_is_tile_visible_to_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check if the specified tile is visible to the entity</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">fov_map</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">FOV</span><span class="p">)</span><span class="o">.</span><span class="n">map</span>
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
     <span class="n">light_map</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">light_map</span>
@@ -1202,54 +1276,54 @@
     <span class="c1"># combine maps</span>
     <span class="n">visible_map</span> <span class="o">=</span> <span class="n">fov_map</span> <span class="o">&amp;</span> <span class="n">light_map</span>
 
-    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">visible_map</span><span class="p">[</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">])</span></div>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">visible_map</span><span class="p">[</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
 
 
-<div class="viewcode-block" id="_is_tile_in_bounds"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._is_tile_in_bounds">[docs]</a><span class="k">def</span> <span class="nf">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check if specified tile is in the map.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="k">return</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="_is_tile_blocking_movement"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._is_tile_blocking_movement">[docs]</a><span class="k">def</span> <span class="nf">_is_tile_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_is_tile_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check if the specified tile is blocking movement</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span></div>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span>
 
 
-<div class="viewcode-block" id="_tile_has_any_entity"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._tile_has_any_entity">[docs]</a><span class="k">def</span> <span class="nf">_tile_has_any_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_tile_has_any_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check if the specified tile  has an entity on it</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">get_entities_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">get_entities_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span>
 
 
-<div class="viewcode-block" id="_tile_has_other_entities"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._tile_has_other_entities">[docs]</a><span class="k">def</span> <span class="nf">_tile_has_other_entities</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_tile_has_other_entities</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check if the specified tile has other entities apart from the provided active entity</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">entities_on_tile</span> <span class="o">=</span> <span class="n">get_entities_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
     <span class="n">active_entity_is_on_tile</span> <span class="o">=</span> <span class="n">active_entity</span> <span class="ow">in</span> <span class="n">entities_on_tile</span>
     <span class="k">return</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">entities_on_tile</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">active_entity_is_on_tile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
         <span class="nb">len</span><span class="p">(</span><span class="n">entities_on_tile</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">active_entity_is_on_tile</span>
-    <span class="p">)</span></div>
+    <span class="p">)</span>
 
 
-<div class="viewcode-block" id="_tile_has_specific_entity"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._tile_has_specific_entity">[docs]</a><span class="k">def</span> <span class="nf">_tile_has_specific_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_tile_has_specific_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check if the specified tile  has the specified entity on it</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">active_entity</span> <span class="ow">in</span> <span class="n">get_entities_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span></div>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">active_entity</span> <span class="ow">in</span> <span class="n">get_entities_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="_tile_has_entity_blocking_movement"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._tile_has_entity_blocking_movement">[docs]</a><span class="k">def</span> <span class="nf">_tile_has_entity_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_tile_has_entity_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span>
     <span class="c1"># Any entities that block movement?</span>
@@ -1259,10 +1333,10 @@
 
         <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">position</span> <span class="ow">and</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">return</span> <span class="kc">False</span></div>
+    <span class="k">return</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="_tile_has_entity_blocking_sight"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._tile_has_entity_blocking_sight">[docs]</a><span class="k">def</span> <span class="nf">_tile_has_entity_blocking_sight</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_tile_has_entity_blocking_sight</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span>
     <span class="c1"># Any entities that block sight?</span>
@@ -1272,13 +1346,13 @@
 
         <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">position</span> <span class="ow">and</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">return</span> <span class="kc">False</span></div>
+    <span class="k">return</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="_can_afford_cost"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world._can_afford_cost">[docs]</a><span class="k">def</span> <span class="nf">_can_afford_cost</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="n">ResourceType</span><span class="p">,</span> <span class="n">cost</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_can_afford_cost</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="n">ResourceType</span><span class="p">,</span> <span class="n">cost</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check if entity can afford the resource cost</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">resources</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
 
@@ -1287,13 +1361,13 @@
     <span class="k">if</span> <span class="n">value</span> <span class="o">-</span> <span class="n">cost</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="k">return</span> <span class="kc">False</span>
 
 
 <div class="viewcode-block" id="can_use_skill"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.can_use_skill">[docs]</a><span class="k">def</span> <span class="nf">can_use_skill</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Check if entity can use skill. Checks cooldown and resource affordability.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">player</span> <span class="o">=</span> <span class="n">get_player</span><span class="p">()</span>
     <span class="n">skill</span> <span class="o">=</span> <span class="n">get_known_skill</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">)</span>
 
@@ -1319,27 +1393,27 @@
 
     <span class="c1"># log/inform lack of affordability</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">can_afford</span><span class="p">:</span>
-        <span class="c1"># is it the player that can&#39;t afford it?</span>
+        <span class="c1"># is it the player that can't afford it?</span>
         <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">player</span><span class="p">:</span>
-            <span class="n">ui</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">&quot;I cannot afford to do that.&quot;</span><span class="p">)</span>
+            <span class="n">ui</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">"I cannot afford to do that."</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; tried to use </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">, which they can`t afford.&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' tried to use </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">, which they can`t afford."</span><span class="p">)</span>
 
     <span class="c1"># log/inform on cooldown</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">not_on_cooldown</span><span class="p">:</span>
-        <span class="c1"># is it the player that&#39;s can&#39;t afford it?</span>
+        <span class="c1"># is it the player that's can't afford it?</span>
         <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">player</span><span class="p">:</span>
-            <span class="n">ui</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">&quot;I&#39;m not ready to do that, yet.&quot;</span><span class="p">)</span>
+            <span class="n">ui</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">"I'm not ready to do that, yet."</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">cooldown</span> <span class="o">==</span> <span class="n">INFINITE</span><span class="p">:</span>
-                <span class="n">cooldown_msg</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+                <span class="n">cooldown_msg</span> <span class="o">=</span> <span class="s2">"unknown"</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">cooldown_msg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cooldown</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; tried to use </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">, but needs to wait &quot;</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cooldown_msg</span><span class="si">}</span><span class="s2"> more rounds.&quot;</span>
+                <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' tried to use </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">, but needs to wait "</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cooldown_msg</span><span class="si">}</span><span class="s2"> more rounds."</span>
             <span class="p">)</span>
 
-    <span class="c1"># we&#39;ve reached the end; no good.</span>
+    <span class="c1"># we've reached the end; no good.</span>
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
@@ -1347,9 +1421,9 @@
 
 
 <div class="viewcode-block" id="pay_resource_cost"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.pay_resource_cost">[docs]</a><span class="k">def</span> <span class="nf">pay_resource_cost</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="n">ResourceType</span><span class="p">,</span> <span class="n">cost</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Remove the resource cost from the using entity</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">resources</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
 
@@ -1360,21 +1434,21 @@
             <span class="n">resource_left</span> <span class="o">=</span> <span class="n">resource_value</span> <span class="o">-</span> <span class="n">cost</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">resource</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">resource_left</span><span class="p">)</span>
 
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; paid </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">resource</span><span class="si">}</span><span class="s2"> and has </span><span class="si">{</span><span class="n">resource_left</span><span class="si">}</span><span class="s2"> left.&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' paid </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">resource</span><span class="si">}</span><span class="s2"> and has </span><span class="si">{</span><span class="n">resource_left</span><span class="si">}</span><span class="s2"> left."</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; paid nothing as they have infinite </span><span class="si">{</span><span class="n">resource</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' paid nothing as they have infinite </span><span class="si">{</span><span class="n">resource</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; tried to pay </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">resource</span><span class="si">}</span><span class="s2"> but Resources component not found.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' tried to pay </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">resource</span><span class="si">}</span><span class="s2"> but Resources component not found."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="use_skill"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.use_skill">[docs]</a><span class="k">def</span> <span class="nf">use_skill</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Use the specified skill on the target tile, usually creating a projectile. Returns True is successful if</span>
 <span class="sd">    criteria to use skill was met, False if not.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># N.B. we init so that any overrides of the Skill.init are applied</span>
     <span class="n">skill_cast</span> <span class="o">=</span> <span class="n">skill</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 
@@ -1383,15 +1457,15 @@
         <span class="n">skill_cast</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not use skill, target tile does not have required tags (</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">target_tags</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not use skill, target tile does not have required tags (</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">target_tags</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="apply_skill"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.apply_skill">[docs]</a><span class="k">def</span> <span class="nf">apply_skill</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Resolve the skill&#39;s effects. Returns True is successful if criteria to apply skill was met, False if not.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
+<span class="sd">    Resolve the skill's effects. Returns True is successful if criteria to apply skill was met, False if not.</span>
+<span class="sd">    """</span>
     <span class="c1"># ensure they are the right target type</span>
     <span class="k">if</span> <span class="n">tile_has_tags</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">target_tile</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">target_tags</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">effects</span> <span class="ow">in</span> <span class="n">skill</span><span class="o">.</span><span class="n">apply</span><span class="p">():</span>
@@ -1403,17 +1477,17 @@
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;Could not apply skill &quot;</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">&quot;, target tile does not have required &#39;</span>
-            <span class="sa">f</span><span class="s2">&quot;tags (</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">target_tags</span><span class="si">}</span><span class="s2">).&quot;</span>
+            <span class="sa">f</span><span class="s1">'Could not apply skill "</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">", target tile does not have required '</span>
+            <span class="sa">f</span><span class="s2">"tags (</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">target_tags</span><span class="si">}</span><span class="s2">)."</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="set_skill_on_cooldown"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.set_skill_on_cooldown">[docs]</a><span class="k">def</span> <span class="nf">set_skill_on_cooldown</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Sets a skill on cooldown</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">user</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
     <span class="n">knowledge</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
@@ -1424,10 +1498,10 @@
 
 
 <div class="viewcode-block" id="apply_affliction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.apply_affliction">[docs]</a><span class="k">def</span> <span class="nf">apply_affliction</span><span class="p">(</span><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Apply the affliction&#39;s effects. Returns True is successful if criteria to trigger the affliction was met,</span>
+    <span class="sd">"""</span>
+<span class="sd">    Apply the affliction's effects. Returns True is successful if criteria to trigger the affliction was met,</span>
 <span class="sd">    False if not.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">target</span> <span class="o">=</span> <span class="n">affliction</span><span class="o">.</span><span class="n">affected_entity</span>
     <span class="n">position</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">position</span><span class="p">:</span>
@@ -1443,17 +1517,17 @@
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s1">&#39;Could not apply affliction &quot;</span><span class="si">{</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;, target tile does not have required &#39;</span>
-                <span class="sa">f</span><span class="s2">&quot;tags (</span><span class="si">{</span><span class="n">affliction</span><span class="o">.</span><span class="n">target_tags</span><span class="si">}</span><span class="s2">).&quot;</span>
+                <span class="sa">f</span><span class="s1">'Could not apply affliction "</span><span class="si">{</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">", target tile does not have required '</span>
+                <span class="sa">f</span><span class="s2">"tags (</span><span class="si">{</span><span class="n">affliction</span><span class="o">.</span><span class="n">target_tags</span><span class="si">}</span><span class="s2">)."</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="trigger_affliction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.trigger_affliction">[docs]</a><span class="k">def</span> <span class="nf">trigger_affliction</span><span class="p">(</span><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Trigger the affliction on the affected entity.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">effects</span> <span class="ow">in</span> <span class="n">affliction</span><span class="o">.</span><span class="n">trigger</span><span class="p">():</span>
         <span class="n">effect_queue</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">effects</span><span class="p">)</span>
         <span class="k">while</span> <span class="n">effect_queue</span><span class="p">:</span>
@@ -1462,58 +1536,58 @@
 
 
 <div class="viewcode-block" id="take_turn"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.take_turn">[docs]</a><span class="k">def</span> <span class="nf">take_turn</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Process the entity&#39;s Thought component. If no component found then EndTurn event is fired.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; is beginning their turn.&quot;</span><span class="p">)</span>
+    <span class="sd">"""</span>
+<span class="sd">    Process the entity's Thought component. If no component found then EndTurn event is fired.</span>
+<span class="sd">    """</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' is beginning their turn."</span><span class="p">)</span>
     <span class="n">behaviour</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Thought</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">behaviour</span><span class="p">:</span>
         <span class="n">behaviour</span><span class="o">.</span><span class="n">behaviour</span><span class="o">.</span><span class="n">act</span><span class="p">()</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; has no behaviour to use.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' has no behaviour to use."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="apply_damage"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.apply_damage">[docs]</a><span class="k">def</span> <span class="nf">apply_damage</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">damage</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Remove damage from entity&#39;s health. Return remaining health.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
+<span class="sd">    Remove damage from entity's health. Return remaining health.</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">damage</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Damage was </span><span class="si">{</span><span class="n">damage</span><span class="si">}</span><span class="s2"> and therefore nothing was done.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Damage was </span><span class="si">{</span><span class="n">damage</span><span class="si">}</span><span class="s2"> and therefore nothing was done."</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="n">resource</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">resource</span><span class="p">:</span>
         <span class="n">resource</span><span class="o">.</span><span class="n">health</span> <span class="o">-=</span> <span class="n">damage</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; takes </span><span class="si">{</span><span class="n">damage</span><span class="si">}</span><span class="s2"> and has </span><span class="si">{</span><span class="n">resource</span><span class="o">.</span><span class="n">health</span><span class="si">}</span><span class="s2"> health remaining.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' takes </span><span class="si">{</span><span class="n">damage</span><span class="si">}</span><span class="s2"> and has </span><span class="si">{</span><span class="n">resource</span><span class="o">.</span><span class="n">health</span><span class="si">}</span><span class="s2"> health remaining."</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; has no resource so couldnt apply damage.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' has no resource so couldnt apply damage."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="spend_time"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.spend_time">[docs]</a><span class="k">def</span> <span class="nf">spend_time</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add time_spent to the entity&#39;s total time spent.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
+<span class="sd">    Add time_spent to the entity's total time spent.</span>
+<span class="sd">    """</span>
     <span class="n">tracked</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Tracked</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">tracked</span><span class="p">:</span>
         <span class="n">tracked</span><span class="o">.</span><span class="n">time_spent</span> <span class="o">+=</span> <span class="n">time_spent</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; has no tracked to spend time.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' has no tracked to spend time."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="choose_target"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.choose_target">[docs]</a><span class="k">def</span> <span class="nf">choose_target</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Choose an appropriate target for the entity.</span>
 <span class="sd">    FIXME - CURRENTLY JUST RETURNS PLAYER</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">get_player</span><span class="p">()</span></div>
 
 
@@ -1521,9 +1595,9 @@
 
 
 <div class="viewcode-block" id="kill_entity"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.kill_entity">[docs]</a><span class="k">def</span> <span class="nf">kill_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Add entity to the deletion stack and removes them from the turn queue.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># if not player</span>
     <span class="k">if</span> <span class="n">entity</span> <span class="o">!=</span> <span class="n">get_player</span><span class="p">():</span>
         <span class="c1"># delete from world</span>
@@ -1543,43 +1617,43 @@
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># placeholder for player death</span>
-        <span class="n">ui</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">&quot;I should have died just then.&quot;</span><span class="p">)</span></div>
+        <span class="n">ui</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">"I should have died just then."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="delete_entity"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.delete_entity">[docs]</a><span class="k">def</span> <span class="nf">delete_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Queues entity for removal from the world_objects. Happens at the next run of process.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">snecs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">snecs</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">default_world</span><span class="p">):</span>
             <span class="n">snecs</span><span class="o">.</span><span class="n">schedule_for_deletion</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">) added to stack to be deleted on next frame.&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' (</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">) added to stack to be deleted on next frame."</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to delete entity </span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2"> but they don&#39;t exist!&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to delete entity </span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2"> but they don't exist!"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Tried to delete an entity but entity was None.&quot;</span><span class="p">)</span></div>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Tried to delete an entity but entity was None."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="add_component"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.add_component">[docs]</a><span class="k">def</span> <span class="nf">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">component</span><span class="p">:</span> <span class="n">Component</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Add a component to the entity</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">snecs</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="remove_component"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.remove_component">[docs]</a><span class="k">def</span> <span class="nf">remove_component</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">component</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Component</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Remove a component from the entity</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">snecs</span><span class="o">.</span><span class="n">remove_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="judge_action"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.judge_action">[docs]</a><span class="k">def</span> <span class="nf">judge_action</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">action_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards</span>
 <span class="sd">    the tags in that skill.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">for</span> <span class="n">god</span><span class="p">,</span> <span class="p">(</span><span class="n">is_god</span><span class="p">,</span> <span class="n">opinion</span><span class="p">,</span> <span class="n">identity</span><span class="p">)</span> <span class="ow">in</span> <span class="n">get_components</span><span class="p">([</span><span class="n">IsGod</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">,</span> <span class="n">Identity</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opinion</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">)</span>
@@ -1596,24 +1670,24 @@
 
             <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; reacted to &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; using </span><span class="si">{</span><span class="n">action_name</span><span class="si">}</span><span class="s2">.  New &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;opinion = </span><span class="si">{</span><span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">' reacted to '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' using </span><span class="si">{</span><span class="n">action_name</span><span class="si">}</span><span class="s2">.  New "</span>
+                <span class="sa">f</span><span class="s2">"opinion = </span><span class="si">{</span><span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="remove_affliction"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.remove_affliction">[docs]</a><span class="k">def</span> <span class="nf">remove_affliction</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Remove affliction from active list and undo any stat modification.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">afflictions</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">afflictions</span><span class="p">:</span>
         <span class="n">afflictions</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="learn_skill"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.learn_skill">[docs]</a><span class="k">def</span> <span class="nf">learn_skill</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add the skill name to the entity&#39;s knowledge component.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
+<span class="sd">    Add the skill name to the entity's knowledge component.</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">):</span>
         <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">([]))</span>
     <span class="n">knowledge</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
@@ -1626,10 +1700,10 @@
 
 
 <div class="viewcode-block" id="calculate_damage"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.calculate_damage">[docs]</a><span class="k">def</span> <span class="nf">calculate_damage</span><span class="p">(</span><span class="n">base_damage</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">damage_mod_amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">resist_value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hit_type</span><span class="p">:</span> <span class="n">HitTypeType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Work out the damage to be dealt.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Calculate damage...&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Calculate damage..."</span><span class="p">)</span>
 
     <span class="c1"># mitigate damage with defence</span>
     <span class="n">mitigated_damage</span> <span class="o">=</span> <span class="p">(</span><span class="n">base_damage</span> <span class="o">+</span> <span class="n">damage_mod_amount</span><span class="p">)</span> <span class="o">-</span> <span class="n">resist_value</span>
@@ -1650,23 +1724,23 @@
 
     <span class="c1"># never less than 1</span>
     <span class="k">if</span> <span class="n">int_modified_damage</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; Damage ended at </span><span class="si">{</span><span class="n">int_modified_damage</span><span class="si">}</span><span class="s2"> so replaced with minimum damage value of 1.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"-&gt; Damage ended at </span><span class="si">{</span><span class="n">int_modified_damage</span><span class="si">}</span><span class="s2"> so replaced with minimum damage value of 1."</span><span class="p">)</span>
         <span class="n">int_modified_damage</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="c1"># log the info</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;-&gt; Initial:</span><span class="si">{</span><span class="n">base_damage</span><span class="si">}</span><span class="s2">, Mitigated: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">mitigated_damage</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">,  Modified&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;:</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">modified_damage</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, Final: </span><span class="si">{</span><span class="n">int_modified_damage</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"-&gt; Initial:</span><span class="si">{</span><span class="n">base_damage</span><span class="si">}</span><span class="s2">, Mitigated: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">mitigated_damage</span><span class="p">,</span> <span class="s1">'.2f'</span><span class="p">)</span><span class="si">}</span><span class="s2">,  Modified"</span>
+        <span class="sa">f</span><span class="s2">":</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">modified_damage</span><span class="p">,</span> <span class="s1">'.2f'</span><span class="p">)</span><span class="si">}</span><span class="s2">, Final: </span><span class="si">{</span><span class="n">int_modified_damage</span><span class="si">}</span><span class="s2">"</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">int_modified_damage</span></div>
 
 
 <div class="viewcode-block" id="calculate_to_hit_score"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.calculate_to_hit_score">[docs]</a><span class="k">def</span> <span class="nf">calculate_to_hit_score</span><span class="p">(</span><span class="n">attacker_accuracy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">skill_accuracy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stat_to_target_value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Get the to hit score based on the stats of both entities and a random roll.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Get to hit scores...&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Get to hit scores..."</span><span class="p">)</span>
 
     <span class="c1"># roll for the random value to add to the to_hit score.</span>
     <span class="n">roll</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
@@ -1676,17 +1750,17 @@
     <span class="n">mitigated_to_hit_score</span> <span class="o">=</span> <span class="n">modified_to_hit_score</span> <span class="o">-</span> <span class="n">stat_to_target_value</span>
 
     <span class="c1"># log the info</span>
-    <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-&gt; Roll:</span><span class="si">{</span><span class="n">roll</span><span class="si">}</span><span class="s2">, Modified:</span><span class="si">{</span><span class="n">modified_to_hit_score</span><span class="si">}</span><span class="s2">, Mitigated:</span><span class="si">{</span><span class="n">mitigated_to_hit_score</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"-&gt; Roll:</span><span class="si">{</span><span class="n">roll</span><span class="si">}</span><span class="s2">, Modified:</span><span class="si">{</span><span class="n">modified_to_hit_score</span><span class="si">}</span><span class="s2">, Mitigated:</span><span class="si">{</span><span class="n">mitigated_to_hit_score</span><span class="si">}</span><span class="s2">."</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">mitigated_to_hit_score</span></div>
 
 
 <div class="viewcode-block" id="choose_interventions"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.world.choose_interventions">[docs]</a><span class="k">def</span> <span class="nf">choose_interventions</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">action_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">"""</span>
 <span class="sd">    Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,</span>
 <span class="sd">    or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">chosen_interventions</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">desire_to_intervene</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">desire_to_do_nothing</span> <span class="o">=</span> <span class="mi">75</span>  <span class="c1"># weighting for doing nothing</span>
@@ -1728,7 +1802,7 @@
                 <span class="n">intervention_weightings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">amount_exceeding_requirement</span><span class="p">)</span>
 
         <span class="c1"># add chance to do nothing</span>
-        <span class="n">eligible_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Nothing&quot;</span><span class="p">)</span>
+        <span class="n">eligible_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Nothing"</span><span class="p">)</span>
         <span class="n">intervention_weightings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">desire_to_do_nothing</span> <span class="o">-</span> <span class="n">desire_to_intervene</span><span class="p">)</span>
 
         <span class="c1"># which intervention, if any, shall the god consider using?</span>
@@ -1736,56 +1810,43 @@
         <span class="c1"># N.B. use , to unpack the result</span>
 
         <span class="c1"># if god has chosen to take an action then add to list</span>
-        <span class="k">if</span> <span class="n">chosen_intervention</span> <span class="o">!=</span> <span class="s2">&quot;Nothing&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">chosen_intervention</span> <span class="o">!=</span> <span class="s2">"Nothing"</span><span class="p">:</span>
             <span class="n">chosen_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">chosen_intervention</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">chosen_interventions</span></div>
 </pre></div>
 
-           </div>
-           
-          </div>
-          <footer>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2019-2020, Josh Snaith
-
-    </p>
-  </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
+          </article>
         </div>
       </div>
-
-    </section>
-
+    </main>
   </div>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
-</body>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2019-2020, Josh Snaith.
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../../../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
 </html>

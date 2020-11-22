@@ -4,26 +4,26 @@ scripts.nqp.actions package
 Submodules
 ----------
 
-scripts.nqp.actions.afflictions module
---------------------------------------
-
-.. automodule:: scripts.nqp.actions.afflictions
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-scripts.nqp.actions.behaviours module
+scripts.nqp.actions.affliction module
 -------------------------------------
 
-.. automodule:: scripts.nqp.actions.behaviours
+.. automodule:: scripts.nqp.actions.affliction
    :members:
    :undoc-members:
    :show-inheritance:
 
-scripts.nqp.actions.skills module
----------------------------------
+scripts.nqp.actions.behaviour module
+------------------------------------
 
-.. automodule:: scripts.nqp.actions.skills
+.. automodule:: scripts.nqp.actions.behaviour
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.nqp.actions.skill module
+--------------------------------
+
+.. automodule:: scripts.nqp.actions.skill
    :members:
    :undoc-members:
    :show-inheritance:

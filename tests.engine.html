@@ -1,233 +1,368 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>tests.engine package &mdash; NotQuiteParadise  documentation</title>
-  
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
 
-  
-  
-  
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
   
 
+  <link rel="stylesheet" href="_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="_static/stylesheets/application-fixes.css"/>
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <link rel="stylesheet" href="_static/fonts/material-icons.css"/>
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+  <meta name="theme-color" content="#3f51b5">
+  <script src="_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>tests.engine package &#8212; NotQuiteParadise  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/material.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
+    <link rel="search" title="Search" href="search.html" />
+  
    
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
 
+  </head>
+  <body dir=ltr
+        data-md-color-primary=deep-purple data-md-color-accent=deep-orange>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#tests.engine" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="index.html" title="NotQuiteParadise  documentation"
+           class="md-header-nav__button md-logo">
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+            <i class="md-icon">&#xe869</i>
           
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.134.0
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">Not Quite Paradise</span>
+          <span class="md-header-nav__topic"> tests.engine package </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Core API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="nqp/core.constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/core.definitions.html">Definitions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/core.extend_json.html">Extend Json</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/core.store.html">Store</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/core.queries.html">Queries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/core.systems.html">Systems</a></li>
-</ul>
-<p class="caption"><span class="caption-text">General API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="nqp/action.html">Action</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/chronicle.html">Chronicle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/component.html">Component</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/debug.html">Debug</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/dungen.html">Dungen</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/effect.html">Effect</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/key.html">Key</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/library.html">Library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/state.html">State</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/utility.html">Utility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/world.html">World</a></li>
-</ul>
-<p class="caption"><span class="caption-text">World Objects API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="nqp/world_objects.html">World Objects</a></li>
-</ul>
-<p class="caption"><span class="caption-text">UI API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="nqp/ui.elements.html">UI Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nqp/ui.widgets.html">UI Widgets</a></li>
-</ul>
-
-            
-          
-        </div>
-        
       </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">NotQuiteParadise</a>
-        
-      </nav>
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/Snayff/notquiteparadise" title="Go to repository" class="md-source" data-md-source="github">
 
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Not Quite Paradise
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = ""versions.json"",
+        target_loc = "../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
 
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>tests.engine package</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-            
-            <a href="_sources/tests.engine.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
+    </div>
+  </nav>
+</header>
 
   
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">NotQuiteParadise  documentation</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="index.html" title="NotQuiteParadise documentation" class="md-nav__button md-logo">
+      
+        <i class="md-icon">&#xe869</i>
+      
+    </a>
+    <a href="index.html"
+       title="NotQuiteParadise documentation">Not Quite Paradise</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/Snayff/notquiteparadise" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Not Quite Paradise
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="info/_info.html" class="md-nav__link">Info</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="engine/_engine.html" class="md-nav__link">Engine API</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="nqp/_nqp.html" class="md-nav__link">NQP Documentation</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#tests-engine--page-root" class="md-nav__link">tests.engine package</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#submodules" class="md-nav__link">Submodules</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-tests.engine.test_component" class="md-nav__link">tests.engine.test_component module</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-tests.engine.test_effect" class="md-nav__link">tests.engine.test_effect module</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-tests.engine.test_state" class="md-nav__link">tests.engine.test_state module</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-tests.engine.test_utility" class="md-nav__link">tests.engine.test_utility module</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-tests.engine" class="md-nav__link">Module contents</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="_sources/tests.engine.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
             
-  <div class="section" id="tests-engine-package">
-<h1>tests.engine package<a class="headerlink" href="#tests-engine-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-tests.engine.test_component">
-<span id="tests-engine-test-component-module"></span><h2>tests.engine.test_component module<a class="headerlink" href="#module-tests.engine.test_component" title="Permalink to this headline">¶</a></h2>
+  
+<h1 id="tests-engine--page-root">tests.engine package<a class="headerlink" href="#tests-engine--page-root" title="Permalink to this headline">¶</a></h1>
+
+<h2 id="submodules">Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+
+
+<span id="tests-engine-test-component-module"></span><h2 id="module-tests.engine.test_component">tests.engine.test_component module<a class="headerlink" href="#module-tests.engine.test_component" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="tests.engine.test_component.TestPosition">
 <em class="property">class </em><code class="sig-name descname">TestPosition</code><a class="reference internal" href="_modules/tests/engine/test_component.html#TestPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_component.TestPosition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="py attribute">
-<dt id="tests.engine.test_component.TestPosition.test_position_outmost_parameters">
-<code class="sig-name descname">test_position_outmost_parameters</code><em class="property"> = [[[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (1, 0), (1, 0)], [[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (-1, 0), (-1, 0)], [[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (0, -1), (0, -1)], [[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (0, 1), (0, 1)]]</em><a class="headerlink" href="#tests.engine.test_component.TestPosition.test_position_outmost_parameters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="tests.engine.test_component.TestPosition.test_position_detect_top_left">
-<code class="sig-name descname">test_position_detect_top_left</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_component.html#TestPosition.test_position_detect_top_left"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_component.TestPosition.test_position_detect_top_left" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test the Position component</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="tests.engine.test_component.TestPosition.test_position_coordinates">
-<code class="sig-name descname">test_position_coordinates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_component.html#TestPosition.test_position_coordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_component.TestPosition.test_position_coordinates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test the Position coordinates</p>
-</dd></dl>
-
 <dl class="py method">
 <dt id="tests.engine.test_component.TestPosition.test_position_centers">
 <code class="sig-name descname">test_position_centers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_component.html#TestPosition.test_position_centers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_component.TestPosition.test_position_centers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test the Position centers correctly</p>
 </dd></dl>
-
+<dl class="py method">
+<dt id="tests.engine.test_component.TestPosition.test_position_coordinates">
+<code class="sig-name descname">test_position_coordinates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_component.html#TestPosition.test_position_coordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_component.TestPosition.test_position_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the Position coordinates</p>
+</dd></dl>
+<dl class="py method">
+<dt id="tests.engine.test_component.TestPosition.test_position_detect_top_left">
+<code class="sig-name descname">test_position_detect_top_left</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_component.html#TestPosition.test_position_detect_top_left"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_component.TestPosition.test_position_detect_top_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the Position component</p>
+</dd></dl>
 <dl class="py method">
 <dt id="tests.engine.test_component.TestPosition.test_position_outmost">
 <code class="sig-name descname">test_position_outmost</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">coordinates</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">expected</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_component.html#TestPosition.test_position_outmost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_component.TestPosition.test_position_outmost" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test the Position outmost function</p>
 </dd></dl>
-
+<dl class="py attribute">
+<dt id="tests.engine.test_component.TestPosition.test_position_outmost_parameters">
+<code class="sig-name descname">test_position_outmost_parameters</code><em class="property"> = [[[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (1, 0), (1, 0)], [[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (-1, 0), (-1, 0)], [[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (0, -1), (0, -1)], [[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (0, 1), (0, 1)]]</em><a class="headerlink" href="#tests.engine.test_component.TestPosition.test_position_outmost_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 </dd></dl>
 
-</div>
-<div class="section" id="tests-engine-test-effect-module">
-<h2>tests.engine.test_effect module<a class="headerlink" href="#tests-engine-test-effect-module" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-tests.engine.test_state">
-<span id="tests-engine-test-state-module"></span><h2>tests.engine.test_state module<a class="headerlink" href="#module-tests.engine.test_state" title="Permalink to this headline">¶</a></h2>
+
+<span id="tests-engine-test-effect-module"></span><h2 id="module-tests.engine.test_effect">tests.engine.test_effect module<a class="headerlink" href="#module-tests.engine.test_effect" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tests.engine.test_effect.affect_cooldown_amount">
+<code class="sig-name descname">affect_cooldown_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#affect_cooldown_amount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.affect_cooldown_amount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.affect_terrain_amount">
+<code class="sig-name descname">affect_terrain_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#affect_terrain_amount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.affect_terrain_amount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.affect_terrain_negative_amount">
+<code class="sig-name descname">affect_terrain_negative_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#affect_terrain_negative_amount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.affect_terrain_negative_amount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.affliction_name">
+<code class="sig-name descname">affliction_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#affliction_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.affliction_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.skill_name">
+<code class="sig-name descname">skill_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#skill_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.skill_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.terrain_name">
+<code class="sig-name descname">terrain_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">request</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#terrain_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.terrain_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.test_affect_cooldown_effect">
+<code class="sig-name descname">test_affect_cooldown_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill_name</span></em>, <em class="sig-param"><span class="n">affect_cooldown_amount</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#test_affect_cooldown_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.test_affect_cooldown_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.test_affect_stat_effect">
+<code class="sig-name descname">test_affect_stat_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cause_name</span></em>, <em class="sig-param"><span class="n">stat_to_target</span></em>, <em class="sig-param"><span class="n">affect_amount</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#test_affect_stat_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.test_affect_stat_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.test_alter_terrain_effect_create">
+<code class="sig-name descname">test_alter_terrain_effect_create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">terrain_name</span></em>, <em class="sig-param"><span class="n">affect_terrain_amount</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#test_alter_terrain_effect_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.test_alter_terrain_effect_create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.test_alter_terrain_effect_reduce_duration">
+<code class="sig-name descname">test_alter_terrain_effect_reduce_duration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">terrain_name</span></em>, <em class="sig-param"><span class="n">affect_terrain_negative_amount</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#test_alter_terrain_effect_reduce_duration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.test_alter_terrain_effect_reduce_duration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.test_apply_affliction_effect">
+<code class="sig-name descname">test_apply_affliction_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#test_apply_affliction_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.test_apply_affliction_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.test_damage_effect">
+<code class="sig-name descname">test_damage_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stat_to_target</span></em>, <em class="sig-param"><span class="n">accuracy</span></em>, <em class="sig-param"><span class="n">damage</span></em>, <em class="sig-param"><span class="n">damage_type</span></em>, <em class="sig-param"><span class="n">mod_stat</span></em>, <em class="sig-param"><span class="n">mod_amount</span></em>, <em class="sig-param"><span class="n">potency</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#test_damage_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.test_damage_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_effect.test_move_actor_effect">
+<code class="sig-name descname">test_move_actor_effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_effect.html#test_move_actor_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_effect.test_move_actor_effect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+
+<span id="tests-engine-test-state-module"></span><h2 id="module-tests.engine.test_state">tests.engine.test_state module<a class="headerlink" href="#module-tests.engine.test_state" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="tests.engine.test_state.TestState">
 <em class="property">class </em><code class="sig-name descname">TestState</code><a class="reference internal" href="_modules/tests/engine/test_state.html#TestState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_state.TestState" title="Permalink to this definition">¶</a></dt>
@@ -237,108 +372,84 @@
 <code class="sig-name descname">test_set_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_state.html#TestState.test_set_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_state.TestState.test_set_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test changing the state</p>
 </dd></dl>
-
 </dd></dl>
 
-</div>
-<div class="section" id="module-tests.engine.test_utility">
-<span id="tests-engine-test-utility-module"></span><h2>tests.engine.test_utility module<a class="headerlink" href="#module-tests.engine.test_utility" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt id="tests.engine.test_utility.test_get_image_returns_image">
-<code class="sig-name descname">test_get_image_returns_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">benchmark</span></em>, <em class="sig-param"><span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_get_image_returns_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_get_image_returns_image" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
-<dl class="py function">
-<dt id="tests.engine.test_utility.test_get_image_returns_copy">
-<code class="sig-name descname">test_get_image_returns_copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_get_image_returns_copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_get_image_returns_copy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="tests.engine.test_utility.test_get_images_returns_images">
-<code class="sig-name descname">test_get_images_returns_images</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_get_images_returns_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_get_images_returns_images" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="tests.engine.test_utility.test_flatten_images">
-<code class="sig-name descname">test_flatten_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">benchmark</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_flatten_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_flatten_images" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<span id="tests-engine-test-utility-module"></span><h2 id="module-tests.engine.test_utility">tests.engine.test_utility module<a class="headerlink" href="#module-tests.engine.test_utility" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="tests.engine.test_utility.test_build_sprites_from_paths">
 <code class="sig-name descname">test_build_sprites_from_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">benchmark</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_build_sprites_from_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_build_sprites_from_paths" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
 <dl class="py function">
 <dt id="tests.engine.test_utility.test_clamp">
 <code class="sig-name descname">test_clamp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">min_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">max_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_clamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_clamp" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
+<dl class="py function">
+<dt id="tests.engine.test_utility.test_flatten_images">
+<code class="sig-name descname">test_flatten_images</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">benchmark</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_flatten_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_flatten_images" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_utility.test_get_coordinates_from_shape">
+<code class="sig-name descname">test_get_coordinates_from_shape</code><span class="sig-paren">(</span><em class="sig-param">benchmark, shape: NewType.&lt;locals&gt;.new_type, size: int, direction: Tuple[int, int], expected: List[Tuple[int, int]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_get_coordinates_from_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_get_coordinates_from_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_utility.test_get_image_returns_copy">
+<code class="sig-name descname">test_get_image_returns_copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_get_image_returns_copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_get_image_returns_copy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_utility.test_get_image_returns_image">
+<code class="sig-name descname">test_get_image_returns_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">benchmark</span></em>, <em class="sig-param"><span class="n">desired_dimensions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_get_image_returns_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_get_image_returns_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt id="tests.engine.test_utility.test_get_images_returns_images">
+<code class="sig-name descname">test_get_images_returns_images</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_get_images_returns_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_get_images_returns_images" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 <dl class="py function">
 <dt id="tests.engine.test_utility.test_is_close">
 <code class="sig-name descname">test_is_close</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">delta</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_is_close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_is_close" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
 <dl class="py function">
 <dt id="tests.engine.test_utility.test_is_not_close">
 <code class="sig-name descname">test_is_not_close</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">delta</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_is_not_close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_is_not_close" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
-<dt id="tests.engine.test_utility.test_get_coordinates_from_shape">
-<code class="sig-name descname">test_get_coordinates_from_shape</code><span class="sig-paren">(</span><em class="sig-param">benchmark, shape: NewType.&lt;locals&gt;.new_type, size: int, direction: Tuple[int, int], expected: List[Tuple[int, int]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/test_utility.html#test_get_coordinates_from_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.test_utility.test_get_coordinates_from_shape" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
-</div>
-<div class="section" id="module-tests.engine">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tests.engine" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+<span id="module-contents"></span><h2 id="module-tests.engine">Module contents<a class="headerlink" href="#module-tests.engine" title="Permalink to this headline">¶</a></h2>
 
 
-           </div>
-           
-          </div>
-          <footer>
-  
 
-  <hr/>
 
-  <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2019-2020, Josh Snaith
-
-    </p>
-  </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
+          </article>
         </div>
       </div>
-
-    </section>
-
+    </main>
   </div>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
-</body>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2019-2020, Josh Snaith.
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
 </html>
