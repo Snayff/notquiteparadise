@@ -14,14 +14,16 @@ from scripts.engine.internal.constant import GameEvent, GAP_SIZE, RenderLayer, T
 from scripts.engine.internal.definition import ActorData
 from scripts.engine.core.utility import build_sprites_from_paths
 
-__all__ = ["CharacterSelector"]
 
+from scripts.engine.widgets.panel import Panel
 
 if TYPE_CHECKING:
     from typing import Dict, List
 
+__all__ = ["CharacterSelector"]
 
-class CharacterSelector(UIPanel):
+
+class CharacterSelector(Panel):
     """
     A menu widget. Used to hold a collection of text, images, buttons etc. Expects to have buttons and provides
     functionality to handle the clicks
@@ -55,7 +57,13 @@ class CharacterSelector(UIPanel):
         """
         super().update(time_delta)
 
-    def handle_events(self, event):
+    def process_event(self, event):
+        super().process_event(event)
+
+        # only progress for user events
+        if event.type != pygame.USEREVENT:
+            return
+
         # handle button presses
         if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
 
@@ -99,7 +107,7 @@ class CharacterSelector(UIPanel):
             relative_rect=Rect((x, y), (width, height)),
             anchors={"left": "right", "right": "right", "top": "top", "bottom": "bottom"},
             manager=manager,
-            container=self.get_container(),
+            container=self,
             text="Embark",
             tool_tip_text="Confirm your selection and embark on your adventure.",
             object_id="confirm",
@@ -148,7 +156,7 @@ class CharacterSelector(UIPanel):
                 starting_option=traits[0],
                 relative_rect=rect,
                 manager=manager,
-                container=self.get_container(),
+                container=self,
                 object_id=trait_group,
                 expansion_height_limit=max_expansion,
             )
@@ -218,7 +226,7 @@ class CharacterSelector(UIPanel):
             relative_rect=image_rect,
             image_surface=sprites.idle,
             manager=self.ui_manager,
-            container=self.get_container(),
+            container=self,
         )
         self.ui_image = ui_image
 
@@ -230,7 +238,7 @@ class CharacterSelector(UIPanel):
                 relative_rect=info_rects[count],
                 manager=self.ui_manager,
                 object_id="name",
-                container=self.get_container(),
+                container=self,
             )
             count += 1
             self.text_boxes.append(text_box)

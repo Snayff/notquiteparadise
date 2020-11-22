@@ -7,15 +7,18 @@ import pygame
 import pygame_gui
 from pygame.rect import Rect
 from pygame_gui import UIManager
-from pygame_gui.elements import UIButton, UIPanel
+from pygame_gui.elements import UIButton
 
 from scripts.engine.internal.constant import GAP_SIZE, InputEvent, InputIntent, RenderLayer, SKILL_BUTTON_SIZE
+from scripts.engine.widgets.panel import Panel
 
 if TYPE_CHECKING:
     from typing import List
 
+__all__ = ["SkillBar"]
 
-class SkillBar(UIPanel):
+
+class SkillBar(Panel):
     """
     Display and hold the info for the skills in the skill bar.
     """
@@ -52,16 +55,13 @@ class SkillBar(UIPanel):
         # confirm init complete
         logging.debug(f"SkillBar initialised.")
 
-    def update(self, time_delta: float):
-        """
-        Update based on current state and data. Run every frame.
-        """
-        super().update(time_delta)
+    def process_event(self, event: pygame.event.Event):
+        super().process_event(event)
 
-    def handle_events(self, event):
-        """
-        Handle events created by this UI widget
-        """
+        # only progress for user events
+        if event.type != pygame.USEREVENT:
+            return
+
         if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
 
             # Find out which button we are clicking

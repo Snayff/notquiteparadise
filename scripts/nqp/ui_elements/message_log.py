@@ -6,15 +6,18 @@ from typing import TYPE_CHECKING
 import pygame
 from pygame.math import Vector2
 from pygame.rect import Rect
-from pygame_gui.elements import UIPanel, UITextBox
+from pygame_gui.elements import UITextBox
 
 from scripts.engine.internal.constant import RenderLayer
+from scripts.engine.widgets.panel import Panel
 
 if TYPE_CHECKING:
     import pygame_gui
 
+__all__ = ["Panel"]
 
-class MessageLog(UIPanel):
+
+class MessageLog(Panel):
     """
     Hold text relating to the game's events, to display to the player. This should be a log of all notable things
     that have happened. It is recommended that all messages are in the past tense.
@@ -42,20 +45,6 @@ class MessageLog(UIPanel):
         # confirm init complete
         logging.debug(f"MessageLog initialised.")
 
-    def update(self, time_delta: float):
-        """
-        Update based on current state and data. Run every frame.
-        """
-        super().update(time_delta)
-
-    def handle_events(self, event):
-        """
-        Handle events created by this UI widget
-        """
-        pass
-
-    ########### CREATE ################
-
     def _create_text_box(self) -> UITextBox:
         """
         Create the text box to show the messages
@@ -67,12 +56,10 @@ class MessageLog(UIPanel):
             manager=self.ui_manager,
             wrap_to_height=False,
             layer_starting_height=1,
-            container=self.get_container(),
+            container=self,
         )
 
         return textbox
-
-    ########## ACTIONS ##############
 
     # noinspection PyArgumentList,PyArgumentList
     def add_message(self, message: str):

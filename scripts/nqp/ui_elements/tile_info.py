@@ -11,9 +11,11 @@ from pygame_gui.elements import UIImage, UIPanel, UITextBox
 from scripts.engine.core import query, world
 from scripts.engine.internal.component import Resources, Traits
 from scripts.engine.internal.constant import GAP_SIZE, ICON_IN_TEXT_SIZE, RenderLayer
+from scripts.engine.widgets.panel import Panel
 
+__all__ = ["TileInfo"]
 
-class TileInfo(UIPanel):
+class TileInfo(Panel):
     """
     Hold text relating to the game's events, to display to the player.
     """
@@ -38,27 +40,11 @@ class TileInfo(UIPanel):
         # confirm init complete
         logging.debug(f"Tile Info initialised.")
 
-    def update(self, time_delta: float):
-        """
-        Update based on current state and data. Run every frame.
-        """
-        super().update(time_delta)
-
-    def handle_events(self, event):
-        """
-        Handle events created by this UI element. Method must exist, even if stubbed.
-        """
-        pass
-
-    ############## GET / SET ########################
-
     def set_selected_tile_pos(self, tile_pos: Tuple[int, int]):
         """
         Set the selected tile position to show the info for that tile.
         """
         self.selected_tile_pos = tile_pos
-
-    ############### ACTIONS #########################
 
     def show(self):
         """
@@ -116,8 +102,6 @@ class TileInfo(UIPanel):
         for element in self.sections:
             element.kill()
         self.sections = []
-
-    ############## CREATE ########################
 
     def _create_sections(self, images: List[pygame.surface], info: List[List[str]]):
         """

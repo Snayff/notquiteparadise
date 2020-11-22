@@ -15,17 +15,15 @@ from scripts.engine.internal.constant import (
     UIElement,
     UIElementType,
 )
-
 from scripts.engine.widgets.screen_message import ScreenMessage
 
 
 if TYPE_CHECKING:
     from typing import Dict, Tuple, TYPE_CHECKING, Union, Optional
-    from pygame_gui.elements import UIPanel, UIWindow
+    from scripts.engine.widgets.window import Window
+    from scripts.engine.widgets.panel import Panel
 
 __all__ = ["ui"]
-
-ui_element_types = Union[UIPanel, UIWindow]
 
 
 class UI:
@@ -65,7 +63,7 @@ class UI:
         self._gui = UIManager((desired_width, desired_height), DATA_PATH / "ui/themes.json")
 
         # elements info
-        self._elements: Dict[UIElementType, UIPanel] = {}  # dict of all init'd ui_manager elements
+        self._elements: Dict[UIElementType, Union[Panel, Window]] = {}  # dict of all init'd ui_manager elements
 
         # process config
         self._load_display_config()
@@ -83,16 +81,9 @@ class UI:
 
     def process_ui_events(self, event):
         """
-        Pass event to the gui manager and, if event type is USEREVENT, to all ui elements.
+        Pass event to the gui manager.
         """
         self._gui.process_events(event)
-
-        # make sure it is a pgui event
-        if event.type == pygame.USEREVENT:
-            elements = self._elements
-
-            for element in elements.values():
-                element.handle_events(event)
 
     def draw(self):
         """
@@ -126,7 +117,7 @@ class UI:
 
     ##################### GET ############################
 
-    def get_element(self, element_type: UIElementType) -> Optional[ui_element_types]:
+    def get_element(self, element_type: UIElementType) -> Optional[Union[Panel, Window]]:
         """
         Get UI element.
         """
@@ -163,7 +154,7 @@ class UI:
 
         self._gui.preload_fonts(fonts)
 
-    def register_element(self, element_type: UIElementType, element: ui_element_types):
+    def register_element(self, element_type: UIElementType, element: Union[Panel, Window]):
         """
         Register the specified UI element. Can be returned with get_element at a later date. If it already exists
         current instance will be overwritten.

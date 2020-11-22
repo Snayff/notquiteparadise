@@ -9,17 +9,18 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 from pygame_gui import UIManager
 from pygame_gui.core import UIContainer
-from pygame_gui.elements import UIButton, UIImage, UIPanel
+from pygame_gui.elements import UIButton, UIImage
 
 from scripts.engine.core import query, utility, world
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Aesthetic, Position
 from scripts.engine.internal.constant import DirectionType, InputEvent, RenderLayer, TILE_SIZE, UIElement
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
+from scripts.engine.widgets.panel import Panel
 from scripts.engine.world_objects.tile import Tile
 
 
-class Camera(UIPanel):
+class Camera(Panel):
     """
     UI element to display the GameMap.
     """
@@ -132,10 +133,13 @@ class Camera(UIPanel):
 
     ############### EVENTS ###########################
 
-    def handle_events(self, event):
-        """
-        Handle events created by this UI widget
-        """
+    def process_event(self, event: pygame.event.Event):
+        super().process_event(event)
+
+        # only progress for user events
+        if event.type != pygame.USEREVENT:
+            return
+
         ui_object_id = event.ui_object_id
 
         # For tiles

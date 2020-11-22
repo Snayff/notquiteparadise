@@ -13,10 +13,10 @@ class Window(ABC, UIWindow):
 
     def process_event(self, event: pygame.event.Event):
         """
-        Handles resizing & closing windows. Gives UI Windows access to pygame events. Derived
-        windows should super() call this class if they implement their own process_event method.
+        Gives UI Windows access to pygame events. Derived windows should super() call this class if they implement
+        their own process_event method.
 
-        NOTE: Copied from pygame_gui UIWindow to allow overwriting use of close button.
+        NOTE: Copied check for button close from pygame_gui UIWindow to allow overwriting use of close button.
 
         """
         super().process_event(event)
@@ -57,3 +57,8 @@ class Window(ABC, UIWindow):
         """
         pass
 
+    def update(self, time_delta: float):
+        """
+        Update based on current state and data. Run every frame.
+        """
+        super().update(time_delta)

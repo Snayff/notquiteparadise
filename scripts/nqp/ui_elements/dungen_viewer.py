@@ -7,13 +7,16 @@ import pygame_gui
 from pygame.constants import SRCALPHA
 from pygame.rect import Rect
 from pygame.surface import Surface
-from pygame_gui.elements import UIImage, UIPanel
+from pygame_gui.elements import UIImage
 
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import RenderLayer, TileCategory
+from scripts.engine.widgets.panel import Panel
+
+__all__ = ["DungenViewer"]
 
 
-class DungenViewer(UIPanel):
+class DungenViewer(Panel):
     """
     UI component that renders the construction of a dungeon as a separate window, step by step.
     """
@@ -39,7 +42,7 @@ class DungenViewer(UIPanel):
             relative_rect=Rect((0, 0), rect.size),
             image_surface=blank_surf,
             manager=manager,
-            container=self.get_container(),
+            container=self,
             object_id="#roomview",
         )
 
@@ -59,12 +62,6 @@ class DungenViewer(UIPanel):
                 if self.map:
                     self._update_view()
                 self.timer = 0
-
-    def handle_events(self, event):
-        """
-        Handle events created by this UI widget
-        """
-        pass
 
     def _update_view(self):
         """

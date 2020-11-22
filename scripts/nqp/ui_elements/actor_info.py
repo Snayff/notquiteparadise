@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import List, Optional, Tuple, Union
+from typing import TYPE_CHECKING
 
 import pygame
-from pygame_gui import UI_BUTTON_PRESSED, UIManager
 from pygame_gui.core import UIElement as PygameUiElement
-from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar, UIWindow
+from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import utility, world
@@ -22,9 +21,14 @@ from scripts.engine.internal.constant import (
     UIElement,
 )
 from scripts.engine.core.utility import get_class_members
+from scripts.engine.widgets.window import Window
+
+if TYPE_CHECKING:
+    from typing import List, Optional, Tuple, Union
+    from pygame_gui import UIManager
 
 
-class ActorInfo(UIWindow):
+class ActorInfo(Window):
     """
     Full detail about an npc entity.
     """
@@ -44,7 +48,7 @@ class ActorInfo(UIWindow):
             pygame.Rect((rect.width - self.scrollbar_width, 0), (self.scrollbar_width, rect.height)),
             0.5,
             manager,
-            self.get_container(),
+            self,
             self,
             "#scrollbar",
         )
@@ -57,51 +61,6 @@ class ActorInfo(UIWindow):
 
         # confirm init complete
         logging.debug(f"Actor Info initialised.")
-
-    def update(self, time_delta: float):
-        """
-        Update based on current state and data. Run every frame.
-        """
-        super().update(time_delta)
-
-    def handle_events(self, event):
-        """
-        Handle events created by this UI element. Method must exist, even if stubbed.
-        """
-        pass
-
-    def process_event(self, event: pygame.event.Event):
-        """
-        Handles resizing & closing windows. Gives UI Windows access to pygame events. Derived
-        windows should super() call this class if they implement their own process_event method.
-
-        NOTE: Copied from pygame_gui UIWindow to allow overwriting use of close button.
-
-        """
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button in [
-            pygame.BUTTON_LEFT,
-            pygame.BUTTON_MIDDLE,
-            pygame.BUTTON_RIGHT,
-        ]:
-            scaled_mouse_pos = self.ui_manager.calculate_scaled_mouse_position(event.pos)
-
-            edge_hovered = (
-                self.edge_hovering[0] or self.edge_hovering[1] or self.edge_hovering[2] or self.edge_hovering[3]
-            )
-            if self.is_enabled and event.button == pygame.BUTTON_LEFT and edge_hovered:
-                self.resizing_mode_active = True
-                self.start_resize_point = scaled_mouse_pos
-                self.start_resize_rect = self.rect.copy()
-
-        if event.type == pygame.MOUSEBUTTONUP and event.button == pygame.BUTTON_LEFT and self.resizing_mode_active:
-            self.resizing_mode_active = False
-
-        if (
-            event.type == pygame.USEREVENT
-            and event.user_type == UI_BUTTON_PRESSED
-            and event.ui_element == self.close_window_button
-        ):
-            self.process_close_button()
 
     ############## GET / SET ########################
 
@@ -224,9 +183,6 @@ class ActorInfo(UIWindow):
         self.sections = []
 
     def process_close_button(self):
-        """
-        Override close button to post an Exit Menu event.
-        """
         event = pygame.event.Event(GameEvent.EXIT_MENU, menu=UIElement.ACTOR_INFO)
         pygame.event.post(event)
 

@@ -75,7 +75,7 @@ def _process_stateless_intents(intent: InputIntentType):
             else:
                 dungen_viewer = DungenViewer(command.get_element_rect(UIElement.DUNGEN_VIEWER),
                                                      ui.get_gui_manager())
-                ui.register_element(dungen_viewer)
+                ui.register_element(UIElement. dungen_viewer)
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, True)
             dungen_viewer.refresh_viewer()
             state.set_new(GameState.MENU)
@@ -162,7 +162,7 @@ def _process_game_map_intents(intent: InputIntentType):
         # show
         state.set_new(GameState.MENU)
         actor_info = ActorInfo(command.get_element_rect(UIElement.ACTOR_INFO), ui.get_gui_manager())
-        ui.register_element(actor_info)
+        ui.register_element(UIElement.ACTOR_INFO , actor_info)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
 
     elif intent == InputIntent.EXIT:

@@ -9,14 +9,16 @@ from pygame import Rect
 from pygame_gui.elements import UIButton, UIPanel
 
 from scripts.engine.internal.constant import GameEvent, InputEvent, RenderLayer
+from scripts.engine.widgets.panel import Panel
 
 if TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple, Union
-
     from pygame_gui import UIManager
 
+__all__ = ["TitleScreen"]
 
-class TitleScreen(UIPanel):
+
+class TitleScreen(Panel):
     """
     Initial screen menu
     """
@@ -39,13 +41,13 @@ class TitleScreen(UIPanel):
         # confirm init complete
         logging.debug(f"TitleScreen initialised.")
 
-    def update(self, time_delta: float):
-        """
-        Update based on current state and data. Run every frame.
-        """
-        super().update(time_delta)
+    def process_event(self, event):
+        super().process_event(event)
 
-    def handle_events(self, event):
+        # only progress for user events
+        if event.type != pygame.USEREVENT:
+            return
+
         if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
 
             # Find out which button we are clicking

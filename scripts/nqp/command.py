@@ -80,7 +80,7 @@ def _start_debug_game():
 
     # show the in game screens
     camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
-    ui.register_element(camera)
+    ui.register_element(UIElement.CAMERA , camera)
     ui.set_element_visibility(UIElement.CAMERA, True)
 
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
@@ -148,15 +148,15 @@ def start_game(player_data: ActorData):
 
     # show the in game screens
     camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
-    ui.register_element(camera)
+    ui.register_element(UIElement.CAMERA , camera)
     ui.set_element_visibility(UIElement.CAMERA, True)
 
     message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
-    ui.register_element(message_log)
+    ui.register_element(UIElement.MESSAGE_LOG , message_log)
     ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
 
     skill_bar = SkillBar(get_element_rect(UIElement.SKILL_BAR), ui.get_gui_manager())
-    ui.register_element(skill_bar)
+    ui.register_element(UIElement.SKILL_BAR , skill_bar)
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
     # welcome message
@@ -199,15 +199,15 @@ def load_game():
 
     # show the in game screens
     camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
-    ui.register_element(camera)
+    ui.register_element(UIElement.CAMERA , camera)
     ui.set_element_visibility(UIElement.CAMERA, True)
 
     message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
-    ui.register_element(message_log)
+    ui.register_element(UIElement.MESSAGE_LOG , message_log)
     ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
 
     skill_bar = SkillBar(get_element_rect(UIElement.SKILL_BAR), ui.get_gui_manager())
-    ui.register_element(skill_bar)
+    ui.register_element(UIElement.SKILL_BAR , skill_bar)
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
     # welcome message
@@ -244,7 +244,7 @@ def goto_character_select():
     Create a new game
     """
     character_select = CharacterSelector(get_element_rect(UIElement.CHARACTER_SELECTOR), ui.get_gui_manager())
-    ui.register_element(character_select)
+    ui.register_element(UIElement.CHARACTER_SELECTOR, character_select)
     ui.set_element_visibility(UIElement.CHARACTER_SELECTOR, True)
 
 
@@ -262,7 +262,7 @@ def goto_to_title():
 
     # show the title screen
     title_screen = TitleScreen(get_element_rect(UIElement.TITLE_SCREEN), ui.get_gui_manager())
-    ui.register_element(title_screen)
+    ui.register_element(UIElement.TITLE_SCREEN, title_screen)
     ui.set_element_visibility(UIElement.TITLE_SCREEN, True)
 
 
