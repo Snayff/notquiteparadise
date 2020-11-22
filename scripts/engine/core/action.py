@@ -25,7 +25,7 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import List, Tuple
 
-__all__ = ["Skill", "Affliction", "Behaviour", "init_action", "skill_registry", "affliction_registry"]
+__all__ = ["Skill", "Affliction", "Behaviour", "skill_registry", "affliction_registry"]
 
 skill_registry: Dict[str, Type[Skill]] = {}
 affliction_registry: Dict[str, Type[Affliction]] = {}
@@ -284,26 +284,6 @@ class Behaviour(ABC):
         Perform the behaviour
         """
         pass
-
-
-def init_action(cls):
-    """
-    Class decorator used for initialising class to add to the registry for use by the engine. Also initialises class
-    properties set by external data, if appropriate.
-    """
-    if "GENERATING_SPHINX_DOCS" in os.environ:  # when building in CI these fail
-        return
-
-    if issubclass(cls, Skill):
-        skill_registry[cls.__name__] = cls
-        cls._init_properties()
-    elif issubclass(cls, Affliction):
-        affliction_registry[cls.__name__] = cls
-        cls._init_properties()
-    elif issubclass(cls, Behaviour):
-        behaviour_registry[cls.__name__] = cls
-
-    return cls
 
 
 def register_action(cls: Type[Union[Action, Behaviour]]):
