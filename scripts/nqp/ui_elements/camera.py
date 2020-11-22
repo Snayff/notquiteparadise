@@ -156,7 +156,7 @@ class Camera(UIPanel):
             # hovering a tile
             elif event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
                 updated_tile_info = False
-                from scripts.engine.ui.manager import ui
+                from scripts.engine.core.ui import ui
 
                 for entity, (position,) in query.position:
                     position: Position

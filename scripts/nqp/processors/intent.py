@@ -19,7 +19,7 @@ from scripts.engine.internal.constant import (
     TargetingMethod,
     UIElement,
 )
-from scripts.engine.ui.manager import ui
+from scripts.engine.core.ui import ui
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import command
 

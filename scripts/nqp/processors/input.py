@@ -5,8 +5,8 @@ import pygame
 from scripts.engine.core import key, query, world
 from scripts.engine.internal.component import Position
 from scripts.engine.internal.constant import GameState, GameStateType, InputEvent, InputIntent, UIElement
-from scripts.engine.ui.elements.actor_info import ActorInfo
-from scripts.engine.ui.manager import ui
+from scripts.nqp.ui_elements import ActorInfo
+from scripts.engine.core.ui import ui
 from scripts.nqp.processors.intent import process_intent
 
 __all__ = ["process_event"]

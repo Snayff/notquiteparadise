@@ -19,16 +19,8 @@ from scripts.engine.internal.constant import (
     UIElement,
     UIElementType,
 )
-from scripts.engine.ui.elements.actor_info import ActorInfo
-from scripts.engine.ui.elements.camera import Camera
-from scripts.engine.ui.elements.character_selector import CharacterSelector
-from scripts.engine.ui.elements.data_editor import DataEditor
-from scripts.engine.ui.elements.dungen_viewer import DungenViewer
-from scripts.engine.ui.elements.message_log import MessageLog
-from scripts.engine.ui.elements.skill_bar import SkillBar
-from scripts.engine.ui.elements.tile_info import TileInfo
-from scripts.engine.ui.elements.title_screen import TitleScreen
-from scripts.engine.ui.widgets.screen_message import ScreenMessage
+
+from scripts.engine.widgets.screen_message import ScreenMessage
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:

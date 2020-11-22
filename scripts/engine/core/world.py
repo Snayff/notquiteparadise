@@ -77,7 +77,7 @@ from scripts.engine.internal.effect import (
     Effect,
     MoveActorEffect,
 )
-from scripts.engine.ui.manager import ui
+from scripts.engine.core.ui import ui
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.combat_stats import CombatStats

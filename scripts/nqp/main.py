@@ -14,7 +14,7 @@ from scripts.engine.internal import debug
 from scripts.engine.internal.component import NQPComponent
 from scripts.engine.internal.constant import GameState
 from scripts.engine.internal.debug import enable_profiling, initialise_logging, kill_logging
-from scripts.engine.ui.manager import ui
+from scripts.engine.core.ui import ui
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
 from scripts.nqp.processors import display, game, interaction

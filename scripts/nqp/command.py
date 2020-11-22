@@ -15,7 +15,7 @@ from scripts.engine.internal.component import Aesthetic, Position, WinCondition
 from scripts.engine.internal.constant import ASSET_PATH, DEBUG_START, GameState, RenderLayer, SAVE_PATH, UIElement
 from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
-from scripts.engine.ui.manager import ui
+from scripts.engine.core.ui import ui
 from scripts.engine.world_objects.game_map import GameMap
 
 __all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game", "register_actions"]
