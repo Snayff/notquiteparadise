@@ -430,7 +430,9 @@
         <span class="sd">"""</span>
 <span class="sd">        Close and kill the game's UI elements. Helper function to run kill_element on all elements.</span>
 <span class="sd">        """</span>
-        <span class="k">for</span> <span class="n">element_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">element_type</span> <span class="ow">in</span> <span class="n">elements</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kill_element</span><span class="p">(</span><span class="n">element_type</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="UI.kill_element"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.kill_element">[docs]</a>    <span class="k">def</span> <span class="nf">kill_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementType</span><span class="p">):</span>
