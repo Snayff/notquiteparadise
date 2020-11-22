@@ -11,6 +11,8 @@ from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, utility
+from scripts.engine.core.ui import ui
+from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
 from scripts.engine.internal.component import (
     Aesthetic,
@@ -77,8 +79,6 @@ from scripts.engine.internal.effect import (
     Effect,
     MoveActorEffect,
 )
-from scripts.engine.core.ui import ui
-from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap

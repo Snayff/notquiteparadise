@@ -6,6 +6,7 @@ from typing import Optional, Type
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, state, utility, world
+from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug, library
 from scripts.engine.internal.action import Skill
 from scripts.engine.internal.component import Knowledge, Position
@@ -19,14 +20,12 @@ from scripts.engine.internal.constant import (
     TargetingMethod,
     UIElement,
 )
-from scripts.engine.core.ui import ui
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import command
 
 __all__ = ["process_intent"]
 
 from scripts.nqp.ui_elements.actor_info import ActorInfo
-
 from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
 
 
@@ -105,7 +104,6 @@ def _process_stateless_intents(intent: InputIntentType):
             else:
                 ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
-
     elif intent == InputIntent.TEST:
         # F12
         breakpoint()
@@ -164,7 +162,7 @@ def _process_game_map_intents(intent: InputIntentType):
         # show
         state.set_new(GameState.MENU)
         actor_info = ActorInfo(command.get_element_rect(UIElement.ACTOR_INFO), ui.get_gui_manager())
-        ui.register_element(UIElement.ACTOR_INFO , actor_info)
+        ui.register_element(UIElement.ACTOR_INFO, actor_info)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
 
     elif intent == InputIntent.EXIT:

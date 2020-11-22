@@ -13,6 +13,7 @@ from scripts.engine.widgets.panel import Panel
 
 if TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple, Union
+
     from pygame_gui import UIManager
 
 __all__ = ["TitleScreen"]

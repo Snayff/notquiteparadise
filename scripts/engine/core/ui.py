@@ -9,19 +9,14 @@ from pygame_gui import UIManager
 
 from scripts.engine.core import utility
 from scripts.engine.internal import debug, library
-from scripts.engine.internal.constant import (
-    ASSET_PATH,
-    DATA_PATH,
-    UIElement,
-    UIElementType,
-)
+from scripts.engine.internal.constant import ASSET_PATH, DATA_PATH, UIElement, UIElementType
 from scripts.engine.widgets.screen_message import ScreenMessage
 
-
 if TYPE_CHECKING:
-    from typing import Dict, Tuple, TYPE_CHECKING, Union, Optional
-    from scripts.engine.widgets.window import Window
+    from typing import Dict, Optional, Tuple, TYPE_CHECKING, Union
+
     from scripts.engine.widgets.panel import Panel
+    from scripts.engine.widgets.window import Window
 
 __all__ = ["ui"]
 
@@ -126,7 +121,6 @@ class UI:
 
         element_name = utility.value_to_member(element_type, UIElement)
         raise KeyError(f"Tried to get {element_name} ui element but key not found.")
-
 
     def get_gui_manager(self) -> UIManager:
         """

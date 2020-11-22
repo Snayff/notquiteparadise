@@ -3,9 +3,9 @@ from __future__ import annotations
 import pytweening
 
 from scripts.engine.core import query, utility, world
+from scripts.engine.core.utility import is_close
 from scripts.engine.internal.component import Aesthetic, LightSource
 from scripts.engine.internal.constant import GameState, GameStateType, TILE_SIZE
-from scripts.engine.core.utility import is_close
 
 __all__ = ["process_display_updates"]
 

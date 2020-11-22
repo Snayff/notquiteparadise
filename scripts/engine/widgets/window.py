@@ -10,7 +10,6 @@ __all__ = ["Window"]
 
 
 class Window(ABC, UIWindow):
-
     def process_event(self, event: pygame.event.Event):
         """
         Gives UI Windows access to pygame events. Derived windows should super() call this class if they implement

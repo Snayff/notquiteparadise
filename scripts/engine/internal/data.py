@@ -11,7 +11,7 @@ from scripts.engine.internal.action import Affliction, Behaviour, Skill
 from scripts.engine.internal.constant import GameState, GameStateType
 
 if TYPE_CHECKING:
-    from typing import Dict, Type, Optional, Any
+    from typing import Any, Dict, Optional, Type
 
 __all__ = ["store"]
 
@@ -32,6 +32,7 @@ class Store:
 
         # used in world
         from scripts.engine.world_objects.game_map import GameMap
+
         self.current_game_map: Optional[GameMap] = None
 
         # used in chronicle
@@ -85,6 +86,7 @@ class Store:
             self.previous_game_state = serialised["previous_game_state"]
             if serialised["current_game_map"]:
                 from scripts.engine.world_objects.game_map import GameMap
+
                 game_map = GameMap.deserialise(serialised["current_game_map"])
             else:
                 game_map = None

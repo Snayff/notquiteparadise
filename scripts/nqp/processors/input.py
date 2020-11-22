@@ -3,9 +3,9 @@ from __future__ import annotations
 import pygame
 
 from scripts.engine.core import key, query, world
+from scripts.engine.core.ui import ui
 from scripts.engine.internal.component import Position
 from scripts.engine.internal.constant import GameState, GameStateType, InputEvent, InputIntent, UIElement
-from scripts.engine.core.ui import ui
 from scripts.nqp.processors.intent import process_intent
 
 __all__ = ["process_event"]

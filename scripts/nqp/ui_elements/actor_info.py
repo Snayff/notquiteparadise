@@ -9,6 +9,7 @@ from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import utility, world
+from scripts.engine.core.utility import get_class_members
 from scripts.engine.internal.component import Aesthetic, Afflictions, Identity, Resources, Traits
 from scripts.engine.internal.constant import (
     ASSET_PATH,
@@ -20,11 +21,11 @@ from scripts.engine.internal.constant import (
     SecondaryStat,
     UIElement,
 )
-from scripts.engine.core.utility import get_class_members
 from scripts.engine.widgets.window import Window
 
 if TYPE_CHECKING:
     from typing import List, Optional, Tuple, Union
+
     from pygame_gui import UIManager
 
 

@@ -9,7 +9,6 @@ __all__ = ["Panel"]
 
 
 class Panel(ABC, UIPanel):
-
     def process_event(self, event: pygame.event.Event):
         """
         Gives UI Windows access to pygame events. Derived windows should super() call this class if they implement

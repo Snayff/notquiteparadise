@@ -9,12 +9,10 @@ from pygame import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UIPanel, UITextBox
 
+from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import GameEvent, GAP_SIZE, RenderLayer, TILE_SIZE, TraitGroup
 from scripts.engine.internal.definition import ActorData
-from scripts.engine.core.utility import build_sprites_from_paths
-
-
 from scripts.engine.widgets.panel import Panel
 
 if TYPE_CHECKING:

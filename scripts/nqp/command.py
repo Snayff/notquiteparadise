@@ -10,19 +10,25 @@ import snecs
 from snecs import Component
 
 from scripts.engine.core import chronicle, state, system, utility, world
-from scripts.engine.internal.action import register_action
+from scripts.engine.core.ui import ui
 from scripts.engine.internal import library
+from scripts.engine.internal.action import register_action
 from scripts.engine.internal.component import Aesthetic, Position, WinCondition
-from scripts.engine.internal.constant import ASSET_PATH, DEBUG_START, GAP_SIZE, GameState, MAX_SKILLS, RenderLayer, \
-    SAVE_PATH, \
-    SKILL_BUTTON_SIZE, UIElement, \
-    UIElementType
+from scripts.engine.internal.constant import (
+    ASSET_PATH,
+    DEBUG_START,
+    GameState,
+    GAP_SIZE,
+    MAX_SKILLS,
+    RenderLayer,
+    SAVE_PATH,
+    SKILL_BUTTON_SIZE,
+    UIElement,
+    UIElementType,
+)
 from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
-from scripts.engine.core.ui import ui
 from scripts.engine.world_objects.game_map import GameMap
-
-
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
 from scripts.nqp.actions.behaviour import FollowPlayer, Projectile, SearchAndAttack, SkipTurn
 from scripts.nqp.actions.skill import BasicAttack, Lunge, Move, Splash, TarAndFeather
@@ -47,7 +53,6 @@ def initialise_game():
         state.set_new(GameState.MENU)
 
         goto_to_title()
-
 
 
 def _start_debug_game():
@@ -81,7 +86,7 @@ def _start_debug_game():
 
     # show the in game screens
     camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
-    ui.register_element(UIElement.CAMERA , camera)
+    ui.register_element(UIElement.CAMERA, camera)
     ui.set_element_visibility(UIElement.CAMERA, True)
 
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
@@ -149,15 +154,15 @@ def start_game(player_data: ActorData):
 
     # show the in game screens
     camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
-    ui.register_element(UIElement.CAMERA , camera)
+    ui.register_element(UIElement.CAMERA, camera)
     ui.set_element_visibility(UIElement.CAMERA, True)
 
     message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
-    ui.register_element(UIElement.MESSAGE_LOG , message_log)
+    ui.register_element(UIElement.MESSAGE_LOG, message_log)
     ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
 
     skill_bar = SkillBar(get_element_rect(UIElement.SKILL_BAR), ui.get_gui_manager())
-    ui.register_element(UIElement.SKILL_BAR , skill_bar)
+    ui.register_element(UIElement.SKILL_BAR, skill_bar)
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
     # welcome message
@@ -200,15 +205,15 @@ def load_game():
 
     # show the in game screens
     camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
-    ui.register_element(UIElement.CAMERA , camera)
+    ui.register_element(UIElement.CAMERA, camera)
     ui.set_element_visibility(UIElement.CAMERA, True)
 
     message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
-    ui.register_element(UIElement.MESSAGE_LOG , message_log)
+    ui.register_element(UIElement.MESSAGE_LOG, message_log)
     ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
 
     skill_bar = SkillBar(get_element_rect(UIElement.SKILL_BAR), ui.get_gui_manager())
-    ui.register_element(UIElement.SKILL_BAR , skill_bar)
+    ui.register_element(UIElement.SKILL_BAR, skill_bar)
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
     # welcome message
@@ -269,6 +274,7 @@ def goto_to_title():
 
 ################## INIT ##########################
 
+
 def register_actions():
     """
     Register all Actions with the engine
@@ -292,6 +298,7 @@ def register_actions():
 
 
 ##################### UI ######################
+
 
 def get_element_rect(element_type: UIElementType) -> pygame.Rect:
     """
@@ -349,18 +356,20 @@ def get_element_rect(element_type: UIElementType) -> pygame.Rect:
     char_selector_y = 0
 
     layout = {
-        UIElement.MESSAGE_LOG:  pygame.Rect((message_x, message_y), (message_width, message_height)),
+        UIElement.MESSAGE_LOG: pygame.Rect((message_x, message_y), (message_width, message_height)),
         UIElement.TILE_INFO: pygame.Rect((tile_info_x, tile_info_y), (tile_info_width, tile_info_height)),
         UIElement.SKILL_BAR: pygame.Rect((skill_x, skill_y), (skill_width, skill_height)),
         UIElement.CAMERA: pygame.Rect((camera_x, camera_y), (camera_width, camera_height)),
-        UIElement.DUNGEN_VIEWER: pygame.Rect((dungen_viewer_x, dungen_viewer_y), (dungen_viewer_width,
-            dungen_viewer_height)),
+        UIElement.DUNGEN_VIEWER: pygame.Rect(
+            (dungen_viewer_x, dungen_viewer_y), (dungen_viewer_width, dungen_viewer_height)
+        ),
         UIElement.ACTOR_INFO: pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height)),
-        UIElement.TITLE_SCREEN: pygame.Rect((title_screen_x, title_screen_y), (title_screen_width,
-            title_screen_height)),
-        UIElement.CHARACTER_SELECTOR: pygame.Rect((char_selector_x, char_selector_y), (char_selector_width,
-            char_selector_height)),
+        UIElement.TITLE_SCREEN: pygame.Rect(
+            (title_screen_x, title_screen_y), (title_screen_width, title_screen_height)
+        ),
+        UIElement.CHARACTER_SELECTOR: pygame.Rect(
+            (char_selector_x, char_selector_y), (char_selector_width, char_selector_height)
+        ),
     }
 
     return layout[element_type]
-

@@ -23,10 +23,9 @@ from scripts.engine.internal.effect import Effect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Iterator, Optional, Type, TYPE_CHECKING, Union, List, Tuple
+    from typing import Iterator, List, Optional, Tuple, Type, TYPE_CHECKING, Union
 
 __all__ = ["Skill", "Affliction", "Behaviour", "register_action"]
-
 
 
 class Action(ABC):
