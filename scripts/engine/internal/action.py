@@ -135,7 +135,7 @@ class Skill(Action):
 
         logging.debug(f"'{world.get_name(self.user)}' applied '{self.__class__.__name__}' to {entity_names}.")
 
-    def use(self):
+    def use(self) -> bool:
         """
         If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
         """
@@ -149,11 +149,15 @@ class Skill(Action):
         # create the projectile
         if self.uses_projectile:
             self._create_projectile()
+            success = True
         else:
-            world.apply_skill(self)
+            success = world.apply_skill(self)
 
-        # set the skill on cooldown
-        world.set_skill_on_cooldown(self)
+        if success:
+            # set the skill on cooldown
+            world.set_skill_on_cooldown(self)
+
+        return success
 
     def _create_projectile(self):
         """

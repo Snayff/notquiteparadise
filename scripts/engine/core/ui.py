@@ -175,7 +175,9 @@ class UI:
         """
         Close and kill the game's UI elements. Helper function to run kill_element on all elements.
         """
-        for element_type in self._elements.keys():
+        elements = self._elements.copy()
+
+        for element_type in elements.keys():
             self.kill_element(element_type)
 
     def kill_element(self, element_type: UIElementType):

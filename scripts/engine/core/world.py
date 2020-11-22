@@ -1199,8 +1199,8 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
 
     # ensure they are the right target type
     if tile_has_tags(user, skill_cast.target_tile, skill_cast.target_tags):
-        skill_cast.use()
-        return True
+        result = skill_cast.use()
+        return result
     else:
         logging.info(f"Could not use skill, target tile does not have required tags ({skill.target_tags}).")
 
@@ -1211,6 +1211,8 @@ def apply_skill(skill: Skill) -> bool:
     """
     Resolve the skill's effects. Returns True is successful if criteria to apply skill was met, False if not.
     """
+    success = None
+
     # ensure they are the right target type
     if tile_has_tags(skill.user, skill.target_tile, skill.target_tags):
         for entity, effects in skill.apply():
@@ -1218,8 +1220,16 @@ def apply_skill(skill: Skill) -> bool:
                 effect_queue = list(effects)
                 while effect_queue:
                     effect = effect_queue.pop()
-                    effect_queue.extend(effect.evaluate()[1])
-        return True
+                    result, new_effects = effect.evaluate()
+                    effect_queue.extend(new_effects)
+
+                    # only take result of initial effect
+                    if not success:
+                        success = result
+        if success:
+            return True
+        else:
+            return False
     else:
         logging.info(
             f'Could not apply skill "{skill.__class__.__name__}", target tile does not have required '
