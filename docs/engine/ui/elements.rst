@@ -15,6 +15,13 @@ Camera
     :show-inheritance:
     :members:
 
+Character Selector
+------------------
+
+.. automodule:: scripts.engine.ui.elements.character_selector
+    :show-inheritance:
+    :members:
+
 Data Editor
 ------------------
 
@@ -26,13 +33,6 @@ Dungen Viewer
 ------------------
 
 .. automodule:: scripts.engine.ui.elements.dungen_viewer
-    :show-inheritance:
-    :members:
-
-Manager
-------------------
-
-.. automodule:: scripts.engine.ui.manager
     :show-inheritance:
     :members:
 
@@ -54,5 +54,12 @@ Tile Info
 ------------------
 
 .. automodule:: scripts.engine.ui.elements.tile_info
+    :show-inheritance:
+    :members:
+
+Title Screen
+------------------
+
+.. automodule:: scripts.engine.ui.elements.title_screen
     :show-inheritance:
     :members:

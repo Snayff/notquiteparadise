@@ -23,15 +23,12 @@ Below are the naming conventions followed in Not Quite Paradise:
 * Where the object is taken as an argument the function name should default to "create_[object_type]".
 * If checking a bool use IsA or HasA.
 * If setting a variable from statically held data prefix with "load_[data]"
-* Where a variable name contains "name" the variable may include spaces and other special characters. Where it
- includes "key" it may contain
- alphanumeric values only.
+* Where a variable name contains "name" the variable may include spaces and other special characters. Where it includes "key" it may contain alphanumeric values only.
 * Arguments should be in a consistent order:
-  1. Identifiers (entity, skill)
-  2. Affected items (position, tiles)
-  3. Qualifiers
+1. Identifiers (entity, skill)
+2. Affected items (position, tiles)
+3. Qualifiers
 * Externally held data should be defined in a dataclass in definitions.py.
-
 
 
 Contributing
@@ -40,56 +37,43 @@ Contributing
 Forking
 ^^^^^^^^^^^^^^^
 
-To get started, `fork the repository <https://docs.github
-.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo>`_ and open it up in your favorite editor
-. Next, open your terminal and point it to where you just saved the Not Quite Paradise repository. If you want to use poetry you would then run::
+To get started, `fork the repository <https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo>`_ and open it up in your favorite editor. Next, open your terminal and point it to where you just saved the Not Quite Paradise repository. If you want to use `poetry <https://python-poetry.org/>`_ you would then run::
 
     pip install poetry
     poetry install
 
-However, if you would rather use plain and simple pip::
-
-    pip ins
-
-
-This will install all of the dependencies needed, using `poetry <https://python-poetry.org/>`_.
+This will install all of the dependencies needed, using poetry.
 
 To run the program use::
+
     python -m scripts
 
 
-If you're not sure where to start helping out you can look at the existing feature requests and issues, `here
-<https://github.com/Snayff/notquiteparadise/issues>`_. Pick one you think you'd like to tackle and make the relevant changes to your fork.
+If you're not sure where to start helping out you can look at the existing feature requests and issues, `here <https://github.com/Snayff/notquiteparadise/issues>`_. Pick one you think you'd like to tackle and make the relevant changes to your fork.
 
 Tests and Testing
 ^^^^^^^^^^^^^^^^^^^^^
 
-Updates to the code should ideally include updates to the test suite. Please add new tests to support your changes, if
- you can. At the very least, as you'd imagine all tests must pass before code can be merged.
+Updates to the code should ideally include updates to the test suite. Please add new tests to support your changes, if you can. At the very least, as you'd imagine all tests must pass before code can be merged.
 
 To run the current suite of tests and confirm they're all passing, use::
 
     pytest --cov=nqp
 
 And to check that all the types are what they should be is as simple as typing::
+
     mypy
 
 
 .. tip::
-    If you create a Pull Request and push your changes the Continuous Integration will run these checks for you and
-let you know the result.
+    If you create a Pull Request and push your changes the Continuous Integration will run these checks for you and let you know the result.
 
 Merging
 ^^^^^^^^^^^^^^^^^^^
-When you're ready, submit a `pull request <https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
->`_ to have your changes added to the main repository. Any pull request must
- the checks in the Github Actions, currently mypy type checking and pytest's testing. The code must remain compatible
-with the building of the `Sphinx <https://www.sphinx-doc.org/en/master/>`_ documentation, so that the docs are always up to date.
+When you're ready, submit a `pull request <https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request>`_ to have your changes added to the main repository. Any pull request must the checks in the Github Actions, currently mypy type checking and pytest's testing. The code must remain compatible with the building of the `Sphinx <https://www.sphinx-doc.org/en/master/>`_ documentation, so that the docs are always up to date.
 
 Bug, Issues and Defects
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If you find any problems in the existing code you can raise a `new issue <https://github
-.com/Snayff/notquiteparadise/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D>`_ on Not
-Quite Paradise's GitHub page.
+If you find any problems in the existing code you can raise a `new issue <https://github.com/Snayff/notquiteparadise/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D>`_ on Not Quite Paradise's GitHub page.
 
 

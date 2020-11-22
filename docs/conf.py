@@ -42,11 +42,10 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
-    'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.githubpages',
+    #'sphinx.ext.napoleon',
     #'sphinx_autodoc_typehints',  # causes circular error with snecs
     'sphinx_autodoc_annotation',
     #'sphinx_git',  # causes CI to fail with git error code 128
@@ -58,7 +57,7 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 # source_suffix = ['.rst', '.md']
-source_suffix = ['.rst'] # , '.txt'
+source_suffix = ['.rst']  # , '.txt'
 
 # The master toctree document.
 master_doc = 'index'
@@ -124,6 +123,7 @@ html_theme_options = {
 
     'html_minify': False,
     'css_minify': True,
+    # Set the logo icon. Should be a pre-escaped html string that indicates a unicode point
     'logo_icon': '&#xe869',
     'master_doc': True,
 
@@ -133,21 +133,6 @@ html_show_sourcelink = True
 html_sidebars = {
     "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
 }
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['_static']
-
-# Custom sidebar templates, must be a dictionary that maps document names
-# to template names.
-#
-# The default sidebars (for documents that don't match any pattern) are
-# defined by theme itself.  Builtin themes are using these templates by
-# default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
-# 'searchbox.html']``.
-#
-# html_sidebars = {}
-
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
@@ -239,6 +224,7 @@ intersphinx_mapping = {
 # -- sphinx.ext.todo ----------------------------------------------
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
+# looks for ".. todo::` for individual todo comments
 todo_include_todos = True
 
 
