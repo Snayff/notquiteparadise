@@ -6,15 +6,15 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
-from scripts.engine.internal.constants import EffectType, InteractionTriggerType, PrimaryStatType, RenderLayerType
+from scripts.engine.internal.constant import EffectType, InteractionTriggerType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple, Type
 
     import pygame
 
-    from scripts.engine.core.action import Affliction, Behaviour, Skill
-    from scripts.engine.internal.definitions import EffectData, TraitSpritePathsData, TraitSpritesData
+    from scripts.engine.internal.action import Affliction, Behaviour, Skill
+    from scripts.engine.internal.definition import EffectData, TraitSpritePathsData, TraitSpritesData
 
 
 ##########################################################
@@ -267,7 +267,7 @@ class Aesthetic(NQPComponent):
 
         # unpack sprite paths
         sprite_paths = []
-        from scripts.engine.internal.definitions import TraitSpritePathsData
+        from scripts.engine.internal.definition import TraitSpritePathsData
 
         for sprite_path in _sprite_paths:
             sprite_paths.append(TraitSpritePathsData(**sprite_path))
@@ -378,8 +378,6 @@ class Thought(NQPComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        from scripts.engine.core import action
-
         behaviour = store.behaviour_registry[serialised["behaviour_name"]]
 
         return Thought(behaviour(serialised["entity"]))
@@ -449,7 +447,6 @@ class Knowledge(NQPComponent):
         skill_order = serialised["skill_order"]
 
         skills = []
-        from scripts.engine.core import action
 
         for name in skill_names:
             skills.append(store.skill_registry[name])
@@ -491,7 +488,6 @@ class Afflictions(NQPComponent):
         active_dict = serialised["active"]
 
         active_instances = []
-        from scripts.engine.core import action
 
         for name, value_tuple in active_dict.items():
             _affliction = store.affliction_registry[name]

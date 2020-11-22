@@ -10,8 +10,8 @@ from pygame.constants import BLEND_RGBA_MULT
 
 from scripts.engine.core import dungen
 from scripts.engine.internal import library
-from scripts.engine.internal.constants import MAP_BORDER_SIZE, TILE_SIZE, TileCategory
-from scripts.engine.internal.definitions import ActorData
+from scripts.engine.internal.constant import MAP_BORDER_SIZE, TILE_SIZE, TileCategory
+from scripts.engine.internal.definition import ActorData
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.lighting import LightBox
 from scripts.engine.world_objects.tile import Tile

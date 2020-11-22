@@ -10,8 +10,8 @@ from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar, UIWindo
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import utility, world
-from scripts.engine.core.component import Aesthetic, Afflictions, Identity, Resources, Traits
-from scripts.engine.internal.constants import (
+from scripts.engine.internal.component import Aesthetic, Afflictions, Identity, Resources, Traits
+from scripts.engine.internal.constant import (
     ASSET_PATH,
     GameEvent,
     GAP_SIZE,

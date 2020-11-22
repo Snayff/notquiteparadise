@@ -5,11 +5,11 @@ from typing import Optional, Type
 
 from snecs.typedefs import EntityID
 
-from scripts.engine.core import chronicle, debug, state, utility, world
-from scripts.engine.internal import library
-from scripts.engine.core.action import Skill
-from scripts.engine.core.component import Knowledge, Position
-from scripts.engine.internal.constants import (
+from scripts.engine.core import chronicle, state, utility, world
+from scripts.engine.internal import debug, library
+from scripts.engine.internal.action import Skill
+from scripts.engine.internal.component import Knowledge, Position
+from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
     GameState,

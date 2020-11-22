@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytweening
 
-from scripts.engine.core import queries, utility, world
-from scripts.engine.core.component import Aesthetic, LightSource
-from scripts.engine.internal.constants import GameState, GameStateType, TILE_SIZE
+from scripts.engine.core import query, utility, world
+from scripts.engine.internal.component import Aesthetic, LightSource
+from scripts.engine.internal.constant import GameState, GameStateType, TILE_SIZE
 from scripts.engine.core.utility import is_close
 
 __all__ = ["process_display_updates"]
@@ -24,7 +24,7 @@ def _process_aesthetic_update(time_delta: float):
     Update aesthetics, such as entity animations and draw positions.
     """
     # move entities screen position towards target
-    for entity, (aesthetic,) in queries.aesthetic:
+    for entity, (aesthetic,) in query.aesthetic:
         assert isinstance(aesthetic, Aesthetic)
 
         max_duration = 0.5
@@ -72,7 +72,7 @@ def _process_lighting():
     light_box = game_map.light_box
 
     # process all light sources
-    for entity, (light_source, aesthetic) in queries.light_source_and_aesthetic:
+    for entity, (light_source, aesthetic) in query.light_source_and_aesthetic:
         light_source: LightSource
         aesthetic: Aesthetic
 

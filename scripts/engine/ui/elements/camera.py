@@ -11,10 +11,10 @@ from pygame_gui import UIManager
 from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIButton, UIImage, UIPanel
 
-from scripts.engine.core import queries, utility, world
+from scripts.engine.core import query, utility, world
 from scripts.engine.internal import library
-from scripts.engine.core.component import Aesthetic, Position
-from scripts.engine.internal.constants import DirectionType, InputEvent, RenderLayer, TILE_SIZE, UIElement
+from scripts.engine.internal.component import Aesthetic, Position
+from scripts.engine.internal.constant import DirectionType, InputEvent, RenderLayer, TILE_SIZE, UIElement
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.world_objects.tile import Tile
 
@@ -158,7 +158,7 @@ class Camera(UIPanel):
                 updated_tile_info = False
                 from scripts.engine.ui.manager import ui
 
-                for entity, (position,) in queries.position:
+                for entity, (position,) in query.position:
                     position: Position
                     if (x, y) in position:
                         ui.set_selected_tile_pos((x, y))
@@ -315,9 +315,9 @@ class Camera(UIPanel):
                 self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
 
     def _draw_entities(self, map_surf: pygame.Surface):
-        from scripts.engine.core import queries
+        from scripts.engine.core import query
 
-        for entity, (pos, aesthetic) in queries.position_and_aesthetic:
+        for entity, (pos, aesthetic) in query.position_and_aesthetic:
             assert isinstance(pos, Position)
             assert isinstance(aesthetic, Aesthetic)
 

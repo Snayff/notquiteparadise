@@ -7,9 +7,9 @@ from typing import Tuple, TYPE_CHECKING
 import pygame
 from snecs.typedefs import EntityID
 
-from scripts.engine.core import queries, utility, world
+from scripts.engine.core import query, utility, world
 from scripts.engine.internal import library
-from scripts.engine.core.component import (
+from scripts.engine.internal.component import (
     Aesthetic,
     Afflictions,
     Blocking,
@@ -20,7 +20,7 @@ from scripts.engine.core.component import (
     Position,
     Resources,
 )
-from scripts.engine.internal.constants import (
+from scripts.engine.internal.constant import (
     DamageTypeType,
     Direction,
     DirectionType,
@@ -239,9 +239,9 @@ class MoveActorEffect(Effect):
 
             # check if tile is blocked
             if is_tile_blocking_movement:
-                from scripts.engine.core import queries
+                from scripts.engine.core import query
 
-                for blocking_entity, (pos, blocking) in queries.position_and_blocking:
+                for blocking_entity, (pos, blocking) in query.position_and_blocking:
                     assert isinstance(pos, Position)
                     assert isinstance(blocking, Blocking)
                     if (
@@ -433,7 +433,7 @@ class AlterTerrainEffect(Effect):
         target_pos = world.get_entitys_component(self.target, Position)
 
         # check target location doesnt already have the given terrain
-        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+        for entity, (position, identity, lifespan) in query.position_and_identity_and_lifespan:
             assert isinstance(position, Position)
             assert isinstance(identity, Identity)
             assert isinstance(lifespan, Lifespan)
@@ -457,7 +457,7 @@ class AlterTerrainEffect(Effect):
         target_pos = world.get_entitys_component(self.target, Position)
 
         # check there is a terrain at target to reduce duration of
-        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+        for entity, (position, identity, lifespan) in query.position_and_identity_and_lifespan:
             assert isinstance(position, Position)
             assert isinstance(identity, Identity)
             assert isinstance(lifespan, Lifespan)

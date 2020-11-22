@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pygame
 
-from scripts.engine.core import key, queries, world
-from scripts.engine.core.component import Position
-from scripts.engine.internal.constants import GameState, GameStateType, InputEvent, InputIntent, UIElement
+from scripts.engine.core import key, query, world
+from scripts.engine.internal.component import Position
+from scripts.engine.internal.constant import GameState, GameStateType, InputEvent, InputIntent, UIElement
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.nqp.processors.intent import process_intent
@@ -35,7 +35,7 @@ def process_event(event: pygame.event, game_state: GameStateType):
             ## Activate Actor Info Menu
             x, y = event.tile_pos
             # get entity on tile
-            for entity, (position, _) in queries.position_and_actor:  # type: ignore
+            for entity, (position, _) in query.position_and_actor:  # type: ignore
                 if (x, y) in position:
                     # found entity, set to selected
                     actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)

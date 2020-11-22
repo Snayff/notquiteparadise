@@ -4,7 +4,7 @@ from abc import ABC
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, TYPE_CHECKING
 
-from scripts.engine.internal.constants import (
+from scripts.engine.internal.constant import (
     AfflictionCategory,
     AfflictionCategoryType,
     DamageType,
@@ -41,8 +41,8 @@ if TYPE_CHECKING:
     import pygame
     from snecs.typedefs import EntityID
 
-    from scripts.engine.core.action import Skill
-    from scripts.engine.core.effect import Effect
+    from scripts.engine.internal.action import Skill
+    from scripts.engine.internal.effect import Effect
 
 #################################################################
 # This module is for specifying all defined data sets.

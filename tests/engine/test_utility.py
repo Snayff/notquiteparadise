@@ -4,7 +4,7 @@ import pygame
 import pytest  # type: ignore
 
 from scripts.engine.core import utility
-from scripts.engine.internal.constants import IMAGE_NOT_FOUND_PATH, Shape, ShapeType, TILE_SIZE
+from scripts.engine.internal.constant import IMAGE_NOT_FOUND_PATH, Shape, ShapeType, TILE_SIZE
 
 test_get_image_returns_image_parameters = [
     (TILE_SIZE, TILE_SIZE),  # normal
@@ -45,7 +45,7 @@ def test_flatten_images(benchmark):
 
 
 def test_build_sprites_from_paths(benchmark):
-    from scripts.engine.internal.definitions import TraitSpritePathsData
+    from scripts.engine.internal.definition import TraitSpritePathsData
     trait_paths = TraitSpritePathsData(
         icon=str(IMAGE_NOT_FOUND_PATH),
         idle=str(IMAGE_NOT_FOUND_PATH),
@@ -68,7 +68,7 @@ def test_build_sprites_from_paths(benchmark):
     # this func uses get_images which has already tested diff sizes
     trait_sprites = benchmark(utility.build_sprites_from_paths, _trait_paths, (TILE_SIZE, TILE_SIZE))
 
-    from scripts.engine.internal.definitions import TraitSpritesData
+    from scripts.engine.internal.definition import TraitSpritesData
     assert isinstance(trait_sprites, TraitSpritesData)
 
 

@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-from scripts.engine.core.component import Aesthetic, Position
-from scripts.engine.internal.constants import (
+from scripts.engine.internal.component import Aesthetic, Position
+from scripts.engine.internal.constant import (
     AfflictionCategoryType,
     DirectionType,
     EffectTypeType,
@@ -18,12 +18,12 @@ from scripts.engine.internal.constants import (
     TargetingMethodType,
     TargetTagType,
 )
-from scripts.engine.internal.definitions import ProjectileData
-from scripts.engine.core.effect import Effect
+from scripts.engine.internal.definition import ProjectileData
+from scripts.engine.internal.effect import Effect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Dict, Iterator, Optional, Type, TYPE_CHECKING, Union, List, Tuple
+    from typing import Iterator, Optional, Type, TYPE_CHECKING, Union, List, Tuple
 
 __all__ = ["Skill", "Affliction", "Behaviour", "register_action"]
 

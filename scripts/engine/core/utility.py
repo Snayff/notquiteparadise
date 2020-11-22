@@ -6,7 +6,7 @@ from typing import List, Tuple, TYPE_CHECKING, TypeVar
 
 import pygame
 
-from scripts.engine.internal.constants import (
+from scripts.engine.internal.constant import (
     ASSET_PATH,
     DirectionType,
     ICON_SIZE,
@@ -19,7 +19,7 @@ from scripts.engine.internal.constants import (
 if TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
-    from scripts.engine.internal.definitions import TraitSpritePathsData, TraitSpritesData
+    from scripts.engine.internal.definition import TraitSpritePathsData, TraitSpritesData
 
 __all__ = [
     "get_image",
@@ -165,7 +165,7 @@ def build_sprites_from_paths(
         flattened_sprites[name] = flatten_images(surface_list)
 
     # convert to dataclass
-    from scripts.engine.internal.definitions import TraitSpritesData
+    from scripts.engine.internal.definition import TraitSpritesData
 
     converted = TraitSpritesData(**flattened_sprites)
     return converted

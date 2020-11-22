@@ -8,10 +8,10 @@ from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, world
 from scripts.engine.internal import library
-from scripts.engine.core.action import Behaviour, Skill
-from scripts.engine.core.component import Knowledge, Position
-from scripts.engine.internal.constants import Direction, ProjectileExpiry, TargetTag, TerrainCollision
-from scripts.engine.internal.definitions import ProjectileData
+from scripts.engine.internal.action import Behaviour, Skill
+from scripts.engine.internal.component import Knowledge, Position
+from scripts.engine.internal.constant import Direction, ProjectileExpiry, TargetTag, TerrainCollision
+from scripts.engine.internal.definition import ProjectileData
 from scripts.engine.world_objects.tile import Tile
 
 

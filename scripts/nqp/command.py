@@ -8,13 +8,13 @@ from typing import List
 import snecs
 from snecs import Component
 
-from scripts.engine.core import chronicle, state, systems, utility, world
-from scripts.engine.core.action import register_action
+from scripts.engine.core import chronicle, state, system, utility, world
+from scripts.engine.internal.action import register_action
 from scripts.engine.internal import library
-from scripts.engine.core.component import Aesthetic, Position, WinCondition
-from scripts.engine.internal.constants import ASSET_PATH, DEBUG_START, GameState, RenderLayer, SAVE_PATH, UIElement
+from scripts.engine.internal.component import Aesthetic, Position, WinCondition
+from scripts.engine.internal.constant import ASSET_PATH, DEBUG_START, GameState, RenderLayer, SAVE_PATH, UIElement
 from scripts.engine.internal.data import store
-from scripts.engine.internal.definitions import ActorData, TraitSpritePathsData
+from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.game_map import GameMap
 
@@ -78,9 +78,9 @@ def _start_debug_game():
         aesthetic.target_draw_y = aesthetic.draw_y
 
     # entities load with a blank fov, update them now
-    systems.process_light_map()
-    systems.process_fov()
-    systems.process_tile_visibility()
+    system.process_light_map()
+    system.process_fov()
+    system.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
     pos = world.get_entitys_component(player, Position)
@@ -152,9 +152,9 @@ def start_game(player_data: ActorData):
         aesthetic.target_draw_y = aesthetic.draw_y
 
     # entities load with a blank fov, update them now
-    systems.process_light_map()
-    systems.process_fov()
-    systems.process_tile_visibility()
+    system.process_light_map()
+    system.process_fov()
+    system.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
     pos = world.get_entitys_component(player, Position)

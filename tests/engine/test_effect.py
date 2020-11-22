@@ -2,13 +2,13 @@ import pytest
 import snecs
 from snecs.typedefs import EntityID
 
-from scripts.engine.core import queries, world
+from scripts.engine.core import query, world
 from scripts.engine.internal import library
-from scripts.engine.core.component import Afflictions, Knowledge, Position, Resources
-from scripts.engine.internal.constants import DamageType, Direction, PrimaryStat
+from scripts.engine.internal.component import Afflictions, Knowledge, Position, Resources
+from scripts.engine.internal.constant import DamageType, Direction, PrimaryStat
 from scripts.engine.internal.data import store
-from scripts.engine.internal.definitions import ActorData
-from scripts.engine.core.effect import (
+from scripts.engine.internal.definition import ActorData
+from scripts.engine.internal.effect import (
     AffectCooldownEffect,
     AffectStatEffect,
     AlterTerrainEffect,
@@ -328,13 +328,13 @@ def test_alter_terrain_effect_create(
 
     if success:
         confirmed = False
-        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+        for entity, (position, identity, lifespan) in query.position_and_identity_and_lifespan:
             if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
                 confirmed = True
         assert confirmed
     else:
         confirmed = False
-        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+        for entity, (position, identity, lifespan) in query.position_and_identity_and_lifespan:
             if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
                 confirmed = True
         assert not confirmed
@@ -379,7 +379,7 @@ def test_alter_terrain_effect_reduce_duration(
         # test case: reduced duration but still exists
         still_exists = False
         duration_remaining = None
-        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+        for entity, (position, identity, lifespan) in query.position_and_identity_and_lifespan:
             if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
                 still_exists = True
                 duration_remaining = lifespan.duration
@@ -389,7 +389,7 @@ def test_alter_terrain_effect_reduce_duration(
     elif success and (base_duration < affect_terrain_negative_amount):
         # test case: duration sufficient to remove
         still_exists = False
-        for entity, (position, identity, lifespan) in queries.position_and_identity_and_lifespan:
+        for entity, (position, identity, lifespan) in query.position_and_identity_and_lifespan:
             if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
                 still_exists = True
         assert not still_exists

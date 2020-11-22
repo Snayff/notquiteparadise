@@ -1,5 +1,5 @@
 from scripts.engine.core import state
-from scripts.engine.internal.constants import GameState
+from scripts.engine.internal.constant import GameState
 
 
 class TestState:

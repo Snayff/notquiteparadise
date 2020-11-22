@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING
 import pygame
 from snecs.typedefs import EntityID
 
-from scripts.engine.core.action import Affliction, Behaviour, Skill
-from scripts.engine.internal.constants import GameState, GameStateType
+from scripts.engine.internal.action import Affliction, Behaviour, Skill
+from scripts.engine.internal.constant import GameState, GameStateType
 from scripts.engine.world_objects.game_map import GameMap
 
 if TYPE_CHECKING:

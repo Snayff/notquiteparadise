@@ -5,9 +5,9 @@ from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-from scripts.engine.core import queries, systems, world
+from scripts.engine.core import query, system, world
 from scripts.engine.internal import library
-from scripts.engine.core.component import Tracked
+from scripts.engine.internal.component import Tracked
 from scripts.engine.internal.data import store
 
 if TYPE_CHECKING:
@@ -30,7 +30,7 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     for entity, (
         is_active,
         tracked,
-    ) in queries.active_and_tracked:
+    ) in query.active_and_tracked:
         if entity != entity_to_exclude:
             assert isinstance(tracked, Tracked)
             new_queue[entity] = tracked.time_spent
@@ -83,10 +83,10 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
 
     # update visibility
     # TODO - implement scheduling so this doesnt need to be called here
-    systems.process_activations()  # must be first otherwise wrong entities active
-    systems.process_light_map()
-    systems.process_fov()
-    systems.process_tile_visibility()
+    system.process_activations()  # must be first otherwise wrong entities active
+    system.process_light_map()
+    system.process_fov()
+    system.process_tile_visibility()
 
     # log new turn holder
     name = world.get_name(turn_holder)
@@ -99,9 +99,9 @@ def next_round(time_progressed: int):
     Move to the next round and trigger end of round events, like cooldown and affliction reduction.
     """
     # TODO - create end of round event and handle there.
-    systems.reduce_skill_cooldowns()
-    systems.reduce_affliction_durations()
-    systems.reduce_lifespan_durations()
+    system.reduce_skill_cooldowns()
+    system.reduce_affliction_durations()
+    system.reduce_lifespan_durations()
 
     # add progressed time and minus time_in_round to keep the remaining time
     set_time_in_round((get_time_in_round() + time_progressed) - library.GAME_CONFIG.default_values.time_per_round)

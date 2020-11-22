@@ -10,9 +10,9 @@ import tcod
 from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
-from scripts.engine.core import action, chronicle, queries, utility
+from scripts.engine.core import chronicle, query, utility
 from scripts.engine.internal import library
-from scripts.engine.core.component import (
+from scripts.engine.internal.component import (
     Aesthetic,
     Afflictions,
     Blocking,
@@ -35,7 +35,7 @@ from scripts.engine.core.component import (
     Tracked,
     Traits,
 )
-from scripts.engine.internal.constants import (
+from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
     EffectType,
@@ -56,7 +56,7 @@ from scripts.engine.internal.constants import (
     TravelMethodType,
 )
 from scripts.engine.internal.data import store
-from scripts.engine.internal.definitions import (
+from scripts.engine.internal.definition import (
     ActorData,
     AffectCooldownEffectData,
     AffectStatEffectData,
@@ -68,7 +68,7 @@ from scripts.engine.internal.definitions import (
     ProjectileData,
     TerrainData,
 )
-from scripts.engine.core.effect import (
+from scripts.engine.internal.effect import (
     AffectCooldownEffect,
     AffectStatEffect,
     AlterTerrainEffect,
@@ -87,7 +87,7 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import List, Optional, Tuple
 
-    from scripts.engine.core.action import Affliction, Skill
+    from scripts.engine.internal.action import Affliction, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
 
@@ -571,7 +571,7 @@ def get_entity_blocking_movement_map() -> np.array:
 
     game_map = get_game_map()
     blocking_map = np.zeros((game_map.width, game_map.height), dtype=bool, order="F")
-    for entity, (pos, blocking) in queries.position_and_blocking:
+    for entity, (pos, blocking) in query.position_and_blocking:
         assert isinstance(blocking, Blocking)
         assert isinstance(pos, Position)
         if blocking.blocks_movement:
@@ -894,9 +894,9 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
     x = tile.x
     y = tile.y
     entities = []
-    from scripts.engine.core import queries
+    from scripts.engine.core import query
 
-    for entity, (position,) in queries.position:
+    for entity, (position,) in query.position:
         assert isinstance(position, Position)
         if (x, y) in position:
             entities.append(entity)

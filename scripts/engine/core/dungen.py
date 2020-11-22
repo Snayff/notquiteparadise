@@ -8,8 +8,8 @@ import tcod
 
 from scripts.engine.core import utility, world
 from scripts.engine.internal import library
-from scripts.engine.internal.constants import Direction, MAP_BORDER_SIZE, TileCategory, TileCategoryType
-from scripts.engine.internal.definitions import ActorData, MapData, RoomConceptData
+from scripts.engine.internal.constant import Direction, MAP_BORDER_SIZE, TileCategory, TileCategoryType
+from scripts.engine.internal.definition import ActorData, MapData, RoomConceptData
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:

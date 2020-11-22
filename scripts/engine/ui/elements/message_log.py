@@ -8,7 +8,7 @@ from pygame.math import Vector2
 from pygame.rect import Rect
 from pygame_gui.elements import UIPanel, UITextBox
 
-from scripts.engine.internal.constants import RenderLayer
+from scripts.engine.internal.constant import RenderLayer
 
 if TYPE_CHECKING:
     import pygame_gui

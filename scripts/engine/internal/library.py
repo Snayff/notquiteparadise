@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from scripts.engine.internal.constants import DATA_PATH, InputIntent
-from scripts.engine.internal.definitions import (
+from scripts.engine.internal.constant import DATA_PATH, InputIntent
+from scripts.engine.internal.definition import (
     ActorData,
     AfflictionData,
     BasePrimaryStatData,

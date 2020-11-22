@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from scripts.engine.internal.constants import InputIntent, InputIntentType
+from scripts.engine.internal.constant import InputIntent, InputIntentType
 from scripts.engine.internal.library import INPUT_CONFIG
 
 if TYPE_CHECKING:

@@ -10,7 +10,7 @@ from pygame.surface import Surface
 from pygame_gui.elements import UIImage, UIPanel
 
 from scripts.engine.internal import library
-from scripts.engine.internal.constants import RenderLayer, TileCategory
+from scripts.engine.internal.constant import RenderLayer, TileCategory
 
 
 class DungenViewer(UIPanel):

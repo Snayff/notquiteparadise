@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 import pytest  # type: ignore
 
-from scripts.engine.core.component import Position
+from scripts.engine.internal.component import Position
 
 
 class TestPosition:

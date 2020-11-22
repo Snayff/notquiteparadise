@@ -4,9 +4,9 @@ import logging
 
 import tcod
 
-from scripts.engine.core import chronicle, queries, world
-from scripts.engine.core.component import Afflictions, FOV, IsActive, Knowledge, Lifespan, Position, Tracked
-from scripts.engine.internal.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, INFINITE, MAX_ACTIVATION_DISTANCE
+from scripts.engine.core import chronicle, query, world
+from scripts.engine.internal.component import Afflictions, FOV, IsActive, Knowledge, Lifespan, Position, Tracked
+from scripts.engine.internal.constant import FOV_ALGORITHM, FOV_LIGHT_WALLS, INFINITE, MAX_ACTIVATION_DISTANCE
 
 __all__ = [
     "process_activations",
@@ -24,14 +24,14 @@ def process_activations():
     Allocate active component to  appropriate NPCs. Entity with no position or with position and close to player.
     """
     # all entities with no position must be active
-    for entity, (_,) in queries.not_position:
+    for entity, (_,) in query.not_position:
         if not world.entity_has_component(entity, IsActive):
             world.add_component(entity, IsActive())
 
     # check entities in range of player
     player = world.get_player()
     player_pos: Position = world.get_entitys_component(player, Position)
-    for entity, (pos,) in queries.position:
+    for entity, (pos,) in query.position:
         # check if they're close enough that we care
         distance_x = abs(player_pos.x - pos.x)
         distance_y = abs(player_pos.y - pos.y)
@@ -70,7 +70,7 @@ def process_light_map():
         is_active,
         light_source,
         pos,
-    ) in queries.active_and_light_source_and_position:
+    ) in query.active_and_light_source_and_position:
         radius = light_source.radius
 
         # create fov for light source and add to light map
@@ -94,7 +94,7 @@ def process_fov():
         pos,
         fov,
         stats,
-    ) in queries.active_and_position_and_fov_and_combat_stats:
+    ) in query.active_and_position_and_fov_and_combat_stats:
 
         stats = world.create_combat_stats(entity)
         sight_range = stats.sight_range
@@ -135,7 +135,7 @@ def reduce_skill_cooldowns():
     """
     Reduce skill cool down for all entities.
     """
-    for entity, (knowledge,) in queries.knowledge:
+    for entity, (knowledge,) in query.knowledge:
         assert isinstance(knowledge, Knowledge)
         for skill_name in knowledge.skill_names:
             skill_cooldown = knowledge.cooldowns[skill_name]
@@ -147,7 +147,7 @@ def reduce_affliction_durations():
     """
     Reduce all affliction durations
     """
-    for entity, (afflictions,) in queries.afflictions:
+    for entity, (afflictions,) in query.afflictions:
         assert isinstance(afflictions, Afflictions)
         for affliction in afflictions.active:
 
@@ -164,7 +164,7 @@ def reduce_lifespan_durations():
     """
     Reduce all lifespan durations
     """
-    for entity, (lifespan,) in queries.lifespan:
+    for entity, (lifespan,) in query.lifespan:
         assert isinstance(lifespan, Lifespan)
 
         if lifespan.duration != INFINITE:
