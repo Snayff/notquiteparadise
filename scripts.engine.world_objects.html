@@ -403,7 +403,7 @@ init.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="scripts.engine.world_objects.game_map.GameMap.generate_new_map">
-<code class="sig-name descname">generate_new_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">player_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.ActorData" title="scripts.engine.core.definitions.ActorData">scripts.engine.core.definitions.ActorData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world_objects/game_map.html#GameMap.generate_new_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.game_map.GameMap.generate_new_map" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">generate_new_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">player_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.definition.ActorData" title="scripts.engine.internal.definition.ActorData">scripts.engine.internal.definition.ActorData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world_objects/game_map.html#GameMap.generate_new_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.game_map.GameMap.generate_new_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate the map for the current game map. Creates tiles. Saves the values directly to the GameMap.</p>
 </dd></dl>
 <dl class="py method">
@@ -513,9 +513,9 @@ main display surface should be used.</p>
 <dl class="py method">
 <dt id="scripts.engine.world_objects.lighting.LightBox.update_dynamic_walls">
 <code class="sig-name descname">update_dynamic_walls</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">group_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">walls</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.world_objects.lighting.Wall" title="scripts.engine.world_objects.lighting.Wall">scripts.engine.world_objects.lighting.Wall</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world_objects/lighting.html#LightBox.update_dynamic_walls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.lighting.LightBox.update_dynamic_walls" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set a group_id to contain a set of walls.
-This is useful for overwriting the walls and takes walls in the same format as <a href="#id1"><span class="problematic" id="id2">`</span></a>add_walls.
-Existing walls can be modified directly for better performance since objects use pointers.</p>
+<dd><p>Set a group_id to contain a set of walls. Existing walls can be modified directly for better performance
+since  objects use pointers.</p>
+<p>This is useful for overwriting the walls and takes walls in the same format as add_walls.</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">

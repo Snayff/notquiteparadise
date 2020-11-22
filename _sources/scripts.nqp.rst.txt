@@ -9,6 +9,7 @@ Subpackages
 
    scripts.nqp.actions
    scripts.nqp.processors
+   scripts.nqp.ui_elements
 
 Submodules
 ----------

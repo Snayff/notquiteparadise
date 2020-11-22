@@ -255,15 +255,12 @@
   <h1 id="modules-scripts-nqp-processors-display--page-root">Source code for scripts.nqp.processors.display</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span>
-
 <span class="kn">import</span> <span class="nn">pytweening</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">LightSource</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">GameStateType</span><span class="p">,</span> <span class="n">TILE_SIZE</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.utility</span> <span class="kn">import</span> <span class="n">is_close</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">is_close</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">LightSource</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">GameStateType</span><span class="p">,</span> <span class="n">TILE_SIZE</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"process_display_updates"</span><span class="p">]</span>
 
@@ -282,7 +279,7 @@
 <span class="sd">    Update aesthetics, such as entity animations and draw positions.</span>
 <span class="sd">    """</span>
     <span class="c1"># move entities screen position towards target</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">aesthetic</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">aesthetic</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
 
         <span class="n">max_duration</span> <span class="o">=</span> <span class="mf">0.5</span>
@@ -330,7 +327,7 @@
     <span class="n">light_box</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">light_box</span>
 
     <span class="c1"># process all light sources</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">light_source</span><span class="p">,</span> <span class="n">aesthetic</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">light_source_and_aesthetic</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">light_source</span><span class="p">,</span> <span class="n">aesthetic</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">light_source_and_aesthetic</span><span class="p">:</span>
         <span class="n">light_source</span><span class="p">:</span> <span class="n">LightSource</span>
         <span class="n">aesthetic</span><span class="p">:</span> <span class="n">Aesthetic</span>
 

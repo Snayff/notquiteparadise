@@ -264,13 +264,13 @@
 <span class="kn">from</span> <span class="nn">snecs.world</span> <span class="kn">import</span> <span class="n">default_world</span>
 
 <span class="kn">import</span> <span class="nn">scripts.nqp.processors.input</span>
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">NQPComponent</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">GameState</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.debug</span> <span class="kn">import</span> <span class="n">enable_profiling</span><span class="p">,</span> <span class="n">initialise_logging</span><span class="p">,</span> <span class="n">kill_logging</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.ui.manager</span> <span class="kn">import</span> <span class="n">ui</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">debug</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">NQPComponent</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.debug</span> <span class="kn">import</span> <span class="n">enable_profiling</span><span class="p">,</span> <span class="n">initialise_logging</span><span class="p">,</span> <span class="n">kill_logging</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">processors</span>
-<span class="kn">from</span> <span class="nn">scripts.nqp.actions</span> <span class="kn">import</span> <span class="n">affliction</span><span class="p">,</span> <span class="n">behaviour</span><span class="p">,</span> <span class="n">skill</span>  <span class="c1"># must import to register in engine</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.command</span> <span class="kn">import</span> <span class="n">initialise_game</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">interaction</span>
 

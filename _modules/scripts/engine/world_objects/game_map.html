@@ -263,9 +263,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pygame.constants</span> <span class="kn">import</span> <span class="n">BLEND_RGBA_MULT</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">dungen</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">MAP_BORDER_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TileCategory</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ActorData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">dungen</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">MAP_BORDER_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TileCategory</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects</span> <span class="kn">import</span> <span class="n">lighting</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.lighting</span> <span class="kn">import</span> <span class="n">LightBox</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
@@ -286,8 +287,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-
-        <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span>
 
         <span class="n">_map_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">MAPS</span><span class="p">[</span><span class="n">map_name</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">_map_data</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="p">(</span><span class="n">MAP_BORDER_SIZE</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
@@ -315,12 +314,12 @@
         <span class="sd">"""</span>
 <span class="sd">        Only called during init to populate tile map with walls</span>
 <span class="sd">        """</span>
-        <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 
         <span class="n">_map_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">MAPS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
 
         <span class="c1"># get details for a wall tile</span>
-        <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span>
 
         <span class="n">wall_sprite_path</span> <span class="o">=</span> <span class="n">_map_data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">[</span><span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">]</span>
         <span class="n">wall_sprite</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="n">wall_sprite_path</span><span class="p">)</span>

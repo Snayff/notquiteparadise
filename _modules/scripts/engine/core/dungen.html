@@ -1,0 +1,1372 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../../../../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../../../../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../../../../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../../../../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../../../../_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>scripts.engine.core.dungen &#8212; NotQuiteParadise  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/material.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=deep-purple data-md-color-accent=deep-orange>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#_modules/scripts/engine/core/dungen" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../../../index.html" title="NotQuiteParadise  documentation"
+           class="md-header-nav__button md-logo">
+          
+            <i class="md-icon">&#xe869</i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">Not Quite Paradise</span>
+          <span class="md-header-nav__topic"> scripts.engine.core.dungen </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../../../../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/Snayff/notquiteparadise" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Not Quite Paradise
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../../../../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../../../../"versions.json"",
+        target_loc = "../../../../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">NotQuiteParadise  documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">Module code</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../../../index.html" title="NotQuiteParadise documentation" class="md-nav__button md-logo">
+      
+        <i class="md-icon">&#xe869</i>
+      
+    </a>
+    <a href="../../../../index.html"
+       title="NotQuiteParadise documentation">Not Quite Paradise</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/Snayff/notquiteparadise" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Not Quite Paradise
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="../../../../info/_info.html" class="md-nav__link">Info</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../../../../engine/_engine.html" class="md-nav__link">Engine API</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../../../../nqp/_nqp.html" class="md-nav__link">NQP Documentation</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <h1 id="modules-scripts-engine-core-dungen--page-root">Source code for scripts.engine.core.dungen</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">import</span> <span class="nn">tcod</span>
+
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">MAP_BORDER_SIZE</span><span class="p">,</span> <span class="n">TileCategory</span><span class="p">,</span> <span class="n">TileCategoryType</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">MapData</span><span class="p">,</span> <span class="n">RoomConceptData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"generate"</span><span class="p">,</span> <span class="s2">"generate_steps"</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="DungeonGenerator"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">DungeonGenerator</span><span class="p">:</span>
+    <span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span>
+
+    <span class="c1"># containers</span>
+    <span class="n">map_data</span><span class="p">:</span> <span class="n">MapData</span>
+    <span class="n">rooms_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RoomConceptData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">actors_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ActorData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">placed_rooms</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RoomConcept</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">map_of_categories</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">TileCategoryType</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">positions_in_rooms</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="c1"># parameters/config</span>
+    <span class="n">max_generate_room_attempts</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># lower number means likely less rooms</span>
+    <span class="n">max_place_room_attempts</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># lower number means likely less rooms</span>
+    <span class="n">max_place_entrance_attempts</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># lower number means likely less entrances (and poss more ignorant tunnels)</span>
+    <span class="n">max_make_room_accessible_attempts</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># lower number means likely more ignorant tunnels</span>
+    <span class="n">max_place_entity_attempts</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># lower number means likely less entities</span>
+    <span class="n">border_size</span> <span class="o">=</span> <span class="n">MAP_BORDER_SIZE</span>  <span class="c1"># tiles to place around the outside of the map</span>
+
+    <span class="c1"># info accessed via property but only created once requested</span>
+    <span class="n">_passable_map</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">_bools_map</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">_tiles_map</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tile</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="c1"># flags</span>
+    <span class="n">is_dirty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="DungeonGenerator.is_in_bounds"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.is_in_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">is_in_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Check if a position is in the bounds of the map</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DungeonGenerator.is_in_room"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.is_in_room">[docs]</a>    <span class="k">def</span> <span class="nf">is_in_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Check if a position is in a placed room.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions_in_rooms</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DungeonGenerator.is_only_accessible_diagonally"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.is_only_accessible_diagonally">[docs]</a>    <span class="k">def</span> <span class="nf">is_only_accessible_diagonally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Checks if a tile is only accessible via a diagonal move.</span>
+<span class="sd">        """</span>
+        <span class="c1"># can be reached by cardinal</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count_adjacent_walls</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># can be reached by diagonal</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count_neighbouring_walls</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># not accessible at all</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DungeonGenerator.is_in_border"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.is_in_border">[docs]</a>    <span class="k">def</span> <span class="nf">is_in_border</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Check if a position is in the border of the map</span>
+<span class="sd">        """</span>
+        <span class="n">border_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">border_size</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">height</span>
+
+        <span class="c1"># top and bottom</span>
+        <span class="k">for</span> <span class="n">_x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">_y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">border_size</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">_y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># left and right</span>
+        <span class="k">for</span> <span class="n">_x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">border_size</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">_y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="n">_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">_y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DungeonGenerator.count_neighbouring_walls"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.count_neighbouring_walls">[docs]</a>    <span class="k">def</span> <span class="nf">count_neighbouring_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Get the number of walls in 8 directions.</span>
+<span class="sd">        """</span>
+        <span class="n">wall_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">height</span>
+
+        <span class="k">for</span> <span class="n">neighbor_x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">neighbor_y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="c1"># Edges are considered alive. Makes map more likely to appear naturally closed.</span>
+                <span class="k">if</span> <span class="n">neighbor_x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">neighbor_y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">neighbor_y</span> <span class="o">&gt;=</span> <span class="n">height</span> <span class="ow">or</span> <span class="n">neighbor_x</span> <span class="o">&gt;=</span> <span class="n">width</span><span class="p">:</span>
+                    <span class="n">wall_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">neighbor_x</span><span class="p">][</span><span class="n">neighbor_y</span><span class="p">]</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span>
+                    <span class="c1"># exclude (x,y) from adjacency check</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">neighbor_x</span> <span class="o">!=</span> <span class="n">x</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">neighbor_y</span> <span class="o">!=</span> <span class="n">y</span><span class="p">):</span>
+                        <span class="n">wall_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">wall_counter</span></div>
+
+<div class="viewcode-block" id="DungeonGenerator.count_adjacent_walls"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.count_adjacent_walls">[docs]</a>    <span class="k">def</span> <span class="nf">count_adjacent_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Get the number of walls in 4 directions.</span>
+<span class="sd">        """</span>
+        <span class="n">wall_counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">left</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">bot</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">_x</span><span class="p">,</span> <span class="n">_y</span> <span class="ow">in</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">bot</span><span class="p">):</span>
+            <span class="c1"># count out of bounds as a wall</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_in_bounds</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">_x</span><span class="p">][</span><span class="n">_y</span><span class="p">]</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span>
+                    <span class="n">wall_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">wall_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">wall_counter</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tiles_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tile</span><span class="p">]]:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Returns an array of Tiles by converting values from map_of_categories to tiles.</span>
+<span class="sd">        """</span>
+        <span class="n">generated_level</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tile</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">)</span>  <span class="c1"># use map of categories as this accounts for border</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiles_map</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiles_map</span>
+
+        <span class="c1"># build the full size map and fill with tunnel sprites</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+            <span class="n">generated_level</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+                <span class="n">tile</span> <span class="o">=</span> <span class="n">_create_tile_from_category</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">)</span>
+                <span class="n">generated_level</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+
+        <span class="c1"># overwrite tunnel sprites with room sprites</span>
+        <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">placed_rooms</span><span class="p">:</span>
+            <span class="n">sprite_paths</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">ROOMS</span><span class="p">[</span><span class="n">room</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">sprite_paths</span>
+            <span class="n">start_x</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">start_x</span>
+            <span class="n">start_y</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">start_y</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+                    <span class="n">target_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_x</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">target_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_y</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">tile</span> <span class="o">=</span> <span class="n">_create_tile_from_category</span><span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">tile_categories</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">],</span> <span class="n">sprite_paths</span><span class="p">)</span>
+                    <span class="n">generated_level</span><span class="p">[</span><span class="n">target_x</span><span class="p">][</span><span class="n">target_y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span>
+
+        <span class="c1"># update self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tiles_map</span> <span class="o">=</span> <span class="n">generated_level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiles_map</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bools_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Returns an array of bools by converting values from map_of_categories to bool.</span>
+<span class="sd">        Floor == True, Wall == False.</span>
+<span class="sd">        """</span>
+
+        <span class="n">bools_map</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">)</span>  <span class="c1"># use map of categories as this accounts for border</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bools_map</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bools_map</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+            <span class="n">bools_map</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">:</span>
+                    <span class="n">bools_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">bools_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># update self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bools_map</span> <span class="o">=</span> <span class="n">bools_map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bools_map</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">passable_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]]]:</span>
+        <span class="sd">"""</span>
+<span class="sd">        2d array of True, matching map size</span>
+<span class="sd">        """</span>
+        <span class="n">passable_map</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">)</span>  <span class="c1"># use map of categories as this accounts for border</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># if we have the passable map already created</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_passable_map</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_passable_map</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+            <span class="n">passable_map</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+                <span class="n">passable_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># update self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_passable_map</span> <span class="o">=</span> <span class="n">passable_map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_passable_map</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">generation_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># add map info</span>
+        <span class="n">gen_info</span> <span class="o">=</span> <span class="s2">"==== DUNGEN ==== </span><span class="se">\n</span><span class="s2">"</span>
+        <span class="n">gen_info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"==== Map Details ==== </span><span class="se">\n</span><span class="s2">"</span>
+        <span class="n">gen_info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> | w:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">, h:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> | "</span>
+        <span class="n">gen_info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"border:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">border_size</span><span class="si">}</span><span class="s2"> | rooms: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">placed_rooms</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">"</span>
+
+        <span class="c1"># add info from each room</span>
+        <span class="n">gen_info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"==== Room Details ==== </span><span class="se">\n</span><span class="s2">"</span>
+        <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">placed_rooms</span><span class="p">:</span>
+            <span class="n">gen_info</span> <span class="o">+=</span> <span class="n">room</span><span class="o">.</span><span class="n">generation_info</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+
+        <span class="c1"># add tile info</span>
+        <span class="n">gen_info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"==== Tile Details ==== </span><span class="se">\n</span><span class="s2">"</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">:</span>
+            <span class="n">gen_info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">"</span>
+
+        <span class="k">return</span> <span class="n">gen_info</span>
+
+<div class="viewcode-block" id="DungeonGenerator.get_room"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.get_room">[docs]</a>    <span class="k">def</span> <span class="nf">get_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RoomConcept</span><span class="p">]:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Returns the room at xy.</span>
+<span class="sd">        """</span>
+        <span class="n">_room</span> <span class="o">=</span> <span class="n">RoomConcept</span><span class="p">([],</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">placed_rooms</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">room</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">_room</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">room</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="DungeonGenerator.get_room_data"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.get_room_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_room_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RoomConceptData</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Get the data for a room based on key.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rooms_data</span><span class="p">:</span>
+            <span class="n">room_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rooms_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">room_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">ROOMS</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rooms_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">room_data</span>
+
+        <span class="k">return</span> <span class="n">room_data</span></div>
+
+<div class="viewcode-block" id="DungeonGenerator.get_actor_data"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.get_actor_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_actor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActorData</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Get the data for an actor based on key.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">actors_data</span><span class="p">:</span>
+            <span class="n">actor_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actors_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">actor_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">ACTORS</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">actors_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">actor_data</span>
+
+        <span class="k">return</span> <span class="n">actor_data</span></div>
+
+<div class="viewcode-block" id="DungeonGenerator.create_entities"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.create_entities">[docs]</a>    <span class="k">def</span> <span class="nf">create_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Create all entities listed in rooms</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">placed_rooms</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">actor_key</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">room</span><span class="o">.</span><span class="n">actors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">actor_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_actor_data</span><span class="p">(</span><span class="n">actor_key</span><span class="p">)</span>
+
+                <span class="c1"># create actor</span>
+                <span class="k">if</span> <span class="n">actor_key</span> <span class="o">!=</span> <span class="s2">"player"</span><span class="p">:</span>
+                    <span class="n">actor</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">actor</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DungeonGenerator.set_tile_category"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.set_tile_category">[docs]</a>    <span class="k">def</span> <span class="nf">set_tile_category</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">category</span><span class="p">:</span> <span class="n">TileCategoryType</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Set the tile category at xy in map_of_categories. Marks map as dirty</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">category</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="RoomConcept"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.RoomConcept">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">RoomConcept</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Details of a room. Used for world generation.</span>
+<span class="sd">    """</span>
+
+    <span class="c1"># what to place in a tile. Needed to hold values when returning room</span>
+    <span class="n">tile_categories</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">TileCategoryType</span><span class="p">]]</span>
+    <span class="n">design</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># algorithm used to generate</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># the type of room placed</span>
+    <span class="n">start_x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">start_y</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">actors</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># key, position</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return the id. Uses xy.</span>
+<span class="sd">        """</span>
+        <span class="n">_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">start_x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">start_y</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">return</span> <span class="n">_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">available_area</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Number of unblocked tiles.</span>
+<span class="sd">        """</span>
+        <span class="n">unblocked_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile_categories</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">tile_cat</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">tile_cat</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">:</span>
+                    <span class="n">unblocked_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">unblocked_count</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">total_area</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Number of tiles in room.</span>
+<span class="sd">        """</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile_categories</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">tile_cat</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">count</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Widest width.</span>
+<span class="sd">        """</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tile_categories</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Something referenced room width before the room had any tile categories."</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">width</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Tallest height</span>
+<span class="sd">        """</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tile_categories</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Something referenced room height before the room had any tile categories."</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">height</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">generation_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return the generation information about the room</span>
+<span class="sd">        """</span>
+        <span class="n">gen_info</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> | w:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">, h:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> | "</span>
+            <span class="sa">f</span><span class="s2">"available:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">available_area</span><span class="si">}</span><span class="s2">/ total:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">total_area</span><span class="si">}</span><span class="s2"> | actors:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">actors</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gen_info</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">centre_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">centre_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span>
+
+<div class="viewcode-block" id="RoomConcept.intersects"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.RoomConcept.intersects">[docs]</a>    <span class="k">def</span> <span class="nf">intersects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="n">RoomConcept</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Check if this room intersects with another.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_x</span> <span class="o">&lt;=</span> <span class="n">room</span><span class="o">.</span><span class="n">end_x</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_x</span> <span class="o">&gt;=</span> <span class="n">room</span><span class="o">.</span><span class="n">start_x</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">&lt;=</span> <span class="n">room</span><span class="o">.</span><span class="n">end_y</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_y</span> <span class="o">&gt;=</span> <span class="n">room</span><span class="o">.</span><span class="n">start_y</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
+
+<span class="c1">############################ GENERATE MAP ############################</span>
+
+
+<div class="viewcode-block" id="generate"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.generate">[docs]</a><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">map_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rng</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">,</span> <span class="n">player_data</span><span class="p">:</span> <span class="n">ActorData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tile</span><span class="p">]],</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Generate the map using the specified details.</span>
+<span class="sd">    """</span>
+    <span class="c1"># create generator</span>
+    <span class="n">dungen</span> <span class="o">=</span> <span class="n">DungeonGenerator</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">library</span><span class="o">.</span><span class="n">MAPS</span><span class="p">[</span><span class="n">map_name</span><span class="p">])</span>
+
+    <span class="c1"># generate the level</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_generate_map_in_steps</span><span class="p">(</span><span class="n">dungen</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># generate entities</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_generate_entities_in_steps</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">player_data</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># create the generated entities</span>
+    <span class="n">dungen</span><span class="o">.</span><span class="n">create_entities</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">dungen</span><span class="o">.</span><span class="n">tiles_map</span><span class="p">,</span> <span class="n">dungen</span><span class="o">.</span><span class="n">generation_string</span></div>
+
+
+<div class="viewcode-block" id="generate_steps"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.generate_steps">[docs]</a><span class="k">def</span> <span class="nf">generate_steps</span><span class="p">(</span><span class="n">map_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Generates a map, returning each step of the generation. Used for dev view.</span>
+<span class="sd">    """</span>
+
+    <span class="c1"># create generator</span>
+    <span class="n">dungen</span> <span class="o">=</span> <span class="n">DungeonGenerator</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">(),</span> <span class="n">library</span><span class="o">.</span><span class="n">MAPS</span><span class="p">[</span><span class="n">map_name</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">_generate_map_in_steps</span><span class="p">(</span><span class="n">dungen</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">step</span>
+
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">_generate_entities_in_steps</span><span class="p">(</span><span class="n">dungen</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">step</span></div>
+
+
+<span class="k">def</span> <span class="nf">_generate_map_in_steps</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Generate the next step of the map generation.</span>
+<span class="sd">    """</span>
+    <span class="n">rooms_placed</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">placement_attempts</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">rooms_generated</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># set everything to walls</span>
+    <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">map_width</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">width</span>
+    <span class="n">map_height</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">height</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">map_width</span> <span class="o">+</span> <span class="p">(</span><span class="n">dungen</span><span class="o">.</span><span class="n">border_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)):</span>
+        <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>  <span class="c1"># create new list for every col</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">map_height</span> <span class="o">+</span> <span class="p">(</span><span class="n">dungen</span><span class="o">.</span><span class="n">border_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)):</span>
+            <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">)</span>
+
+    <span class="k">yield</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span>
+
+    <span class="c1"># get room options for this map</span>
+    <span class="n">rooms</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">rooms</span>
+    <span class="n">room_names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">room_weights</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># break out names and weights</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">rooms</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">room_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">room_weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
+
+    <span class="c1"># generate and place rooms</span>
+    <span class="n">max_rooms</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">min_rooms</span><span class="p">,</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">max_rooms</span><span class="p">)</span>
+    <span class="n">max_generate_room_attempts</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">max_generate_room_attempts</span>
+    <span class="k">while</span> <span class="n">rooms_placed</span> <span class="o">&lt;=</span> <span class="n">max_rooms</span> <span class="ow">and</span> <span class="n">rooms_generated</span> <span class="o">&lt;=</span> <span class="n">max_generate_room_attempts</span><span class="p">:</span>
+        <span class="n">found_place</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">room</span> <span class="o">=</span> <span class="n">_generate_room</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">room_names</span><span class="p">,</span> <span class="n">room_weights</span><span class="p">)</span>
+        <span class="n">rooms_generated</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># find place for the room</span>
+        <span class="k">while</span> <span class="n">placement_attempts</span> <span class="o">&lt;</span> <span class="n">dungen</span><span class="o">.</span><span class="n">max_place_room_attempts</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">found_place</span><span class="p">:</span>
+            <span class="n">placement_attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">found_place</span> <span class="o">=</span> <span class="n">_place_room</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">room</span><span class="p">)</span>
+
+        <span class="c1"># if no place found for the room try again</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found_place</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># doesnt intersect so paint room on map and add room to list</span>
+        <span class="k">for</span> <span class="n">room_x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">room_y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+                <span class="n">map_x</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">start_x</span> <span class="o">+</span> <span class="n">room_x</span>
+                <span class="n">map_y</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">start_y</span> <span class="o">+</span> <span class="n">room_y</span>
+                <span class="n">in_bounds</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_bounds</span><span class="p">(</span><span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span><span class="p">)</span>
+                <span class="n">in_border</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_border</span><span class="p">(</span><span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">in_bounds</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">in_border</span><span class="p">:</span>
+                    <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">map_x</span><span class="p">][</span><span class="n">map_y</span><span class="p">]</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">tile_categories</span><span class="p">[</span><span class="n">room_x</span><span class="p">][</span><span class="n">room_y</span><span class="p">]</span>
+                    <span class="n">dungen</span><span class="o">.</span><span class="n">positions_in_rooms</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span><span class="p">))</span>
+
+        <span class="c1"># place room</span>
+        <span class="n">dungen</span><span class="o">.</span><span class="n">placed_rooms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">room</span><span class="p">)</span>
+        <span class="n">rooms_placed</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># yield map after each room is painted</span>
+        <span class="k">yield</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span>
+
+    <span class="c1"># handle anything dodgy</span>
+    <span class="k">if</span> <span class="n">rooms_placed</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"No rooms placed on the map."</span><span class="p">)</span>
+
+    <span class="c1"># room placement complete, fill tunnels, without connecting to rooms</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">map_width</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">map_height</span><span class="p">):</span>
+
+            <span class="c1"># check is not part of a room</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_room</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+                <span class="c1"># if its a wall, start a tunnel</span>
+                <span class="k">if</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">_add_tunnel</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+                        <span class="k">yield</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span>
+
+    <span class="c1"># join rooms to tunnels</span>
+    <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">dungen</span><span class="o">.</span><span class="n">placed_rooms</span><span class="p">:</span>
+        <span class="n">_add_entrances</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">room</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span>
+
+    <span class="n">_make_rooms_accessible</span><span class="p">(</span><span class="n">dungen</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span>
+
+    <span class="c1"># N.B. do this last to keep more of the random tunnels</span>
+    <span class="n">_remove_deadends</span><span class="p">(</span><span class="n">dungen</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_entities_in_steps</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">,</span> <span class="n">player_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActorData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Add entities to all rooms using the room data. Also places player.</span>
+<span class="sd">    """</span>
+    <span class="c1"># randomise order of rooms</span>
+    <span class="n">rooms</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">placed_rooms</span>
+    <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">rooms</span><span class="p">)</span>
+
+    <span class="c1"># we might not have player data if we are viewing generations</span>
+    <span class="k">if</span> <span class="n">player_data</span><span class="p">:</span>
+        <span class="c1"># put player in first room</span>
+        <span class="n">player_room</span> <span class="o">=</span> <span class="n">rooms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">placed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">placement_attempts</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">placement_attempts</span> <span class="o">&lt;=</span> <span class="mi">1000</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">placed</span><span class="p">:</span>
+            <span class="n">xy</span> <span class="o">=</span> <span class="n">_find_place_for_actor</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">player_room</span><span class="p">,</span> <span class="n">player_data</span><span class="p">)</span>
+            <span class="n">placement_attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">xy</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">xy</span>
+
+                <span class="c1"># add player data to list so we can use it when creating the entities</span>
+                <span class="n">dungen</span><span class="o">.</span><span class="n">actors_data</span><span class="p">[</span><span class="s2">"player"</span><span class="p">]</span> <span class="o">=</span> <span class="n">player_data</span>
+
+                <span class="c1"># log actor in room</span>
+                <span class="n">player_room</span><span class="o">.</span><span class="n">actors</span><span class="p">[</span><span class="s2">"player"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                <span class="n">dungen</span><span class="o">.</span><span class="n">set_tile_category</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">PLAYER</span><span class="p">)</span>
+
+                <span class="n">placed</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># just in case player hasnt been placed</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">placed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Dungen: Unable to place player."</span><span class="p">)</span>
+
+    <span class="k">yield</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span>
+
+    <span class="c1"># work through all rooms and populate</span>
+    <span class="n">skipped_player_room</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">rooms</span><span class="p">:</span>
+
+        <span class="c1"># make sure to skip player room as that is handled differently</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">skipped_player_room</span><span class="p">:</span>
+            <span class="n">skipped_player_room</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">continue</span>
+
+        <span class="n">room_key</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">key</span>
+        <span class="n">room_data</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">get_room_data</span><span class="p">(</span><span class="n">room_key</span><span class="p">)</span>
+
+        <span class="c1"># generate the actor</span>
+        <span class="n">actors_placed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">placement_attempts</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">max_attempts</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">max_place_entity_attempts</span>
+        <span class="n">max_actors</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">room_data</span><span class="o">.</span><span class="n">min_actors</span><span class="p">,</span> <span class="n">room_data</span><span class="o">.</span><span class="n">max_actors</span><span class="p">)</span>
+
+        <span class="c1"># if this room is empty of actors go to next room</span>
+        <span class="k">if</span> <span class="n">max_actors</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># try and place the actor</span>
+        <span class="k">while</span> <span class="n">actors_placed</span> <span class="o">&lt;=</span> <span class="n">max_actors</span> <span class="ow">and</span> <span class="n">placement_attempts</span> <span class="o">&lt;=</span> <span class="n">max_attempts</span><span class="p">:</span>
+            <span class="n">actor_data</span> <span class="o">=</span> <span class="n">_generate_actor</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">room_data</span><span class="p">)</span>
+
+            <span class="c1"># try to place the actor</span>
+            <span class="n">xy</span> <span class="o">=</span> <span class="n">_find_place_for_actor</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">room</span><span class="p">,</span> <span class="n">actor_data</span><span class="p">)</span>
+            <span class="n">placement_attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">xy</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">xy</span>
+
+                <span class="c1"># log actor in room (for generation string)</span>
+                <span class="n">room</span><span class="o">.</span><span class="n">actors</span><span class="p">[</span><span class="n">actor_data</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+                <span class="c1"># mark actors on map, handle multi tile.</span>
+                <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">actor_data</span><span class="o">.</span><span class="n">position_offsets</span><span class="p">:</span>
+                    <span class="n">dungen</span><span class="o">.</span><span class="n">set_tile_category</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span> <span class="o">+</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">)</span>
+
+                <span class="n">actors_placed</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">yield</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span>
+
+
+<span class="c1">############################ ROOMS ############################</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_room</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">,</span> <span class="n">room_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">room_weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RoomConcept</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Select a room type to generate and return that room. If a generation method isnt provided then one is picked at</span>
+<span class="sd">    random, using weightings in the data.</span>
+<span class="sd">    """</span>
+    <span class="c1"># N.B. add more generation methods here</span>
+    <span class="n">design_methods</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"square"</span><span class="p">:</span> <span class="n">_generate_room_square</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># pick a room based on weights</span>
+    <span class="n">room_name</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">room_names</span><span class="p">,</span> <span class="n">room_weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">room_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">ROOMS</span><span class="p">[</span><span class="n">room_name</span><span class="p">]</span>
+    <span class="n">room</span> <span class="o">=</span> <span class="n">design_methods</span><span class="p">[</span><span class="n">room_data</span><span class="o">.</span><span class="n">design</span><span class="p">](</span><span class="n">dungen</span><span class="p">,</span> <span class="n">room_data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">room</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_room_square</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">,</span> <span class="n">room_data</span><span class="p">:</span> <span class="n">RoomConceptData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RoomConcept</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Generate a square-shaped room.</span>
+<span class="sd">    """</span>
+    <span class="n">map_width</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">width</span>
+    <span class="n">map_height</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">height</span>
+
+    <span class="c1"># ensure not bigger than the map</span>
+    <span class="n">room_width</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">room_data</span><span class="o">.</span><span class="n">min_width</span><span class="p">,</span> <span class="n">room_data</span><span class="o">.</span><span class="n">max_width</span><span class="p">),</span> <span class="n">map_width</span><span class="p">)</span>
+    <span class="n">room_height</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">room_data</span><span class="o">.</span><span class="n">min_height</span><span class="p">,</span> <span class="n">room_data</span><span class="o">.</span><span class="n">max_height</span><span class="p">),</span> <span class="n">map_height</span><span class="p">)</span>
+
+    <span class="c1"># populate area with floor categories</span>
+    <span class="n">tile_categories</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">TileCategoryType</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">room_width</span><span class="p">):</span>
+        <span class="n">tile_categories</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">room_height</span><span class="p">):</span>
+            <span class="n">tile_categories</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">)</span>
+
+    <span class="c1"># convert to room</span>
+    <span class="n">room</span> <span class="o">=</span> <span class="n">RoomConcept</span><span class="p">(</span><span class="n">tile_categories</span><span class="o">=</span><span class="n">tile_categories</span><span class="p">,</span> <span class="n">design</span><span class="o">=</span><span class="s2">"square"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">room_data</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">room</span>
+
+
+<span class="k">def</span> <span class="nf">_place_room</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="n">RoomConcept</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Place room in random location. Updates room start_x and start_y. Returns True if valid placement found.</span>
+<span class="sd">    """</span>
+    <span class="n">intersects</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">map_width</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">width</span>
+    <span class="n">map_height</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">height</span>
+    <span class="n">border_size</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">border_size</span>
+
+    <span class="c1"># pick random location to place room, not including borders</span>
+    <span class="n">room</span><span class="o">.</span><span class="n">start_x</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">border_size</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">border_size</span><span class="p">,</span> <span class="n">map_width</span> <span class="o">-</span> <span class="n">room</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">room</span><span class="o">.</span><span class="n">start_y</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">border_size</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">border_size</span><span class="p">,</span> <span class="n">map_height</span> <span class="o">-</span> <span class="n">room</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># if placed there does room overlap any existing rooms?</span>
+    <span class="k">for</span> <span class="n">_room</span> <span class="ow">in</span> <span class="n">dungen</span><span class="o">.</span><span class="n">placed_rooms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">room</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">_room</span><span class="p">):</span>
+            <span class="n">intersects</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">intersects</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="c1">####################### MAP AMENDMENTS ##############################</span>
+
+
+<span class="k">def</span> <span class="nf">_add_tunnel</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Follow a path from origin (xy) setting relevant position in map_of_categories to TileCategory.FLOOR. Uses flood</span>
+<span class="sd">    fill. Returns True if tunnel added.</span>
+<span class="sd">    """</span>
+    <span class="n">added_tunnel</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">to_fill_positions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">last_direction</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># check position we've been given is OK before entering loop</span>
+    <span class="n">in_bounds</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">in_border</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_border</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">in_room</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_room</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">num_walls</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">count_neighbouring_walls</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># only start where no other floors are</span>
+    <span class="k">if</span> <span class="n">in_bounds</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">in_room</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">in_border</span> <span class="ow">and</span> <span class="n">num_walls</span> <span class="o">&gt;=</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="c1"># first position is good, add to list</span>
+        <span class="n">to_fill_positions</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+
+    <span class="k">while</span> <span class="n">to_fill_positions</span><span class="p">:</span>
+        <span class="n">possible_directions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># get next pos in set</span>
+        <span class="n">_x</span><span class="p">,</span> <span class="n">_y</span> <span class="o">=</span> <span class="n">to_fill_positions</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="c1"># convert to floor</span>
+        <span class="n">dungen</span><span class="o">.</span><span class="n">set_tile_category</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">)</span>
+        <span class="n">dungen</span><span class="o">.</span><span class="n">positions_in_rooms</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">))</span>
+        <span class="n">added_tunnel</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># check for appropriate, adjacent wall tiles</span>
+        <span class="k">for</span> <span class="n">x_dir</span><span class="p">,</span> <span class="n">y_dir</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">):</span>
+            <span class="n">x_check</span> <span class="o">=</span> <span class="n">_x</span> <span class="o">+</span> <span class="n">x_dir</span>
+            <span class="n">y_check</span> <span class="o">=</span> <span class="n">_y</span> <span class="o">+</span> <span class="n">y_dir</span>
+
+            <span class="n">in_bounds</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_bounds</span><span class="p">(</span><span class="n">x_check</span><span class="p">,</span> <span class="n">y_check</span><span class="p">)</span>
+            <span class="n">in_room</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_room</span><span class="p">(</span><span class="n">x_check</span><span class="p">,</span> <span class="n">y_check</span><span class="p">)</span>
+            <span class="n">in_border</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_border</span><span class="p">(</span><span class="n">x_check</span><span class="p">,</span> <span class="n">y_check</span><span class="p">)</span>
+            <span class="n">num_walls</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">count_adjacent_walls</span><span class="p">(</span><span class="n">x_check</span><span class="p">,</span> <span class="n">y_check</span><span class="p">)</span>  <span class="c1"># can only move cardinal so check that</span>
+
+            <span class="c1"># direction must be in bounds, not in a room and be surrounded by walls on all but X sides</span>
+            <span class="c1"># must also not be adjacent to a room - i.e. can connect to a tunnel but not a room.</span>
+            <span class="c1"># N.B. the lower the num walls the more overlapping and joined up the tunnels are</span>
+            <span class="k">if</span> <span class="n">in_bounds</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">in_room</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">in_border</span> <span class="ow">and</span> <span class="n">num_walls</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">x_check</span><span class="p">][</span><span class="n">y_check</span><span class="p">]</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_room</span><span class="p">(</span>
+                    <span class="n">_x</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_dir</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span> <span class="n">_y</span> <span class="o">+</span> <span class="p">(</span><span class="n">y_dir</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="n">possible_directions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x_dir</span><span class="p">,</span> <span class="n">y_dir</span><span class="p">))</span>
+
+        <span class="c1"># choose next direction to go in</span>
+        <span class="k">if</span> <span class="n">possible_directions</span><span class="p">:</span>
+            <span class="c1"># pick a possible position, preferring previous direction, unless tunnel winds</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">last_direction</span> <span class="ow">in</span> <span class="n">possible_directions</span>
+                <span class="ow">and</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">chance_of_tunnel_winding</span>
+            <span class="p">):</span>
+                <span class="n">new_direction</span> <span class="o">=</span> <span class="n">last_direction</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_direction</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">possible_directions</span><span class="p">)</span>
+
+            <span class="c1"># add next position to be checked</span>
+            <span class="n">to_fill_positions</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">_x</span> <span class="o">+</span> <span class="n">new_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_y</span> <span class="o">+</span> <span class="n">new_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c1"># update last direction</span>
+            <span class="n">last_direction</span> <span class="o">=</span> <span class="n">new_direction</span>
+
+    <span class="k">return</span> <span class="n">added_tunnel</span>
+
+
+<span class="k">def</span> <span class="nf">_add_ignorant_tunnel</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">,</span> <span class="n">start_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">start_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Create a tunnel between two points, ignoring all terrain on the way</span>
+<span class="sd">    """</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_x</span><span class="p">,</span> <span class="n">end_x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_y</span><span class="p">,</span> <span class="n">end_y</span><span class="p">)</span>
+    <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">start_x</span><span class="p">,</span> <span class="n">end_x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">start_y</span><span class="p">,</span> <span class="n">end_y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">while</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">max_x</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+            <span class="n">dungen</span><span class="o">.</span><span class="n">set_tile_category</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">max_y</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+            <span class="n">dungen</span><span class="o">.</span><span class="n">set_tile_category</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">+=</span> <span class="mi">1</span>
+
+
+<span class="k">def</span> <span class="nf">_add_entrances</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="n">RoomConcept</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Loop the outer edge of the room for two adjoining floors and break through to link the locations.</span>
+<span class="sd">    """</span>
+    <span class="c1"># FIXME - not actually joining to floor spaces so just creating random floors</span>
+
+    <span class="n">entrances</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">placed_entrances</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="c1"># print(f"Add entrance to room: x:{room.start_x} | end_x:{room.end_x} | y:{room.start_y} | end_y:{room.end_y}")</span>
+
+    <span class="c1"># roll for an extra entrance</span>
+    <span class="n">base_num_entrances</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">max_room_entrances</span>
+    <span class="k">if</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">extra_entrance_chance</span><span class="p">:</span>
+        <span class="n">_max_entrances</span> <span class="o">=</span> <span class="n">base_num_entrances</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_max_entrances</span> <span class="o">=</span> <span class="n">base_num_entrances</span>
+
+    <span class="c1"># roll for max entrances, ensure minimum 1</span>
+    <span class="n">max_entrances</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">_max_entrances</span><span class="p">))</span>
+
+    <span class="c1"># find somewhere to place the entrance</span>
+    <span class="k">while</span> <span class="n">attempts</span> <span class="o">&lt;=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">max_place_entrance_attempts</span> <span class="ow">and</span> <span class="n">entrances</span> <span class="o">&lt;=</span> <span class="n">max_entrances</span><span class="p">:</span>
+        <span class="n">attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">poss_positions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># pick random positions</span>
+        <span class="n">top_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">start_x</span> <span class="o">+</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">room</span><span class="o">.</span><span class="n">start_y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">top_pos2</span> <span class="o">=</span> <span class="n">top_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">top_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">bot_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">start_x</span> <span class="o">+</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">room</span><span class="o">.</span><span class="n">start_y</span> <span class="o">+</span> <span class="n">room</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">bot_pos2</span> <span class="o">=</span> <span class="n">bot_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bot_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">left_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">start_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">start_y</span> <span class="o">+</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">left_pos2</span> <span class="o">=</span> <span class="n">left_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">left_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">right_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">start_x</span> <span class="o">+</span> <span class="n">room</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">start_y</span> <span class="o">+</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">right_pos2</span> <span class="o">=</span> <span class="n">right_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># print(f"-&gt; Random pos: top:{top_pos}:{top_pos2} | bot:{bot_pos}:{bot_pos2} | left:{left_pos}"</span>
+        <span class="c1">#       f":{left_pos2} | right:{right_pos}:{right_pos2}")</span>
+
+        <span class="c1"># note which ones are applicable</span>
+        <span class="k">for</span> <span class="n">_pos</span><span class="p">,</span> <span class="n">_pos2</span> <span class="ow">in</span> <span class="p">((</span><span class="n">top_pos</span><span class="p">,</span> <span class="n">top_pos2</span><span class="p">),</span> <span class="p">(</span><span class="n">bot_pos</span><span class="p">,</span> <span class="n">bot_pos2</span><span class="p">),</span> <span class="p">(</span><span class="n">left_pos</span><span class="p">,</span> <span class="n">left_pos2</span><span class="p">),</span> <span class="p">(</span><span class="n">right_pos</span><span class="p">,</span> <span class="n">right_pos2</span><span class="p">)):</span>
+            <span class="n">pos2_is_floor</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">_pos2</span>
+
+            <span class="c1"># if second pos in bounds then first and target must be</span>
+            <span class="n">in_bounds</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">in_border</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_border</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">in_bounds</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">in_border</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">:</span>
+                    <span class="n">pos2_is_floor</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># if target is wall and one after is floor and not already a placed entrance</span>
+            <span class="k">if</span> <span class="n">pos2_is_floor</span> <span class="ow">and</span> <span class="n">_pos</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">placed_entrances</span><span class="p">:</span>
+                <span class="n">poss_positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_pos</span><span class="p">)</span>
+
+        <span class="c1"># pick one of the possible options and update the map</span>
+        <span class="k">if</span> <span class="n">poss_positions</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">poss_positions</span><span class="p">)</span>
+            <span class="n">dungen</span><span class="o">.</span><span class="n">set_tile_category</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">)</span>
+            <span class="n">placed_entrances</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+
+            <span class="n">entrances</span> <span class="o">+=</span> <span class="mi">1</span>
+
+
+<span class="k">def</span> <span class="nf">_remove_deadends</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Find all instances where a tunnel has a deadend and uncarve it, converting it back to a wall.</span>
+<span class="sd">    """</span>
+    <span class="n">deadends</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="c1"># find initial deadends</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_data</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span> <span class="ow">and</span> <span class="n">dungen</span><span class="o">.</span><span class="n">count_adjacent_walls</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">deadends</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+
+    <span class="k">while</span> <span class="n">deadends</span><span class="p">:</span>
+        <span class="n">_x</span><span class="p">,</span> <span class="n">_y</span> <span class="o">=</span> <span class="n">deadends</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="c1"># mark as wall</span>
+        <span class="n">dungen</span><span class="o">.</span><span class="n">set_tile_category</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">)</span>
+
+        <span class="c1"># check around where we just amended for new deadends</span>
+        <span class="k">for</span> <span class="n">x_dir</span><span class="p">,</span> <span class="n">y_dir</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+            <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+            <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+            <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+            <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
+            <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
+            <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
+            <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="n">x_check</span> <span class="o">=</span> <span class="n">_x</span> <span class="o">+</span> <span class="n">x_dir</span>
+            <span class="n">y_check</span> <span class="o">=</span> <span class="n">_y</span> <span class="o">+</span> <span class="n">y_dir</span>
+
+            <span class="n">in_bounds</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">is_in_bounds</span><span class="p">(</span><span class="n">x_check</span><span class="p">,</span> <span class="n">y_check</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">in_bounds</span><span class="p">:</span>
+                <span class="n">tile_cat</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">x_check</span><span class="p">][</span><span class="n">y_check</span><span class="p">]</span>
+                <span class="n">num_walls</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">count_adjacent_walls</span><span class="p">(</span><span class="n">x_check</span><span class="p">,</span> <span class="n">y_check</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">num_walls</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">tile_cat</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">:</span>
+                    <span class="n">deadends</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">x_check</span><span class="p">,</span> <span class="n">y_check</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_make_rooms_accessible</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Pick a room as the anchor and make sure all other floor tiles can connect to it via pathfinding.</span>
+<span class="sd">    """</span>
+    <span class="n">connections</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># room, connected rooms</span>
+    <span class="n">inaccessible_rooms</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">placed_rooms</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># start by picking one room that all other rooms should connect to</span>
+    <span class="n">anchor_room</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">dungen</span><span class="o">.</span><span class="n">placed_rooms</span><span class="p">)</span>
+
+    <span class="c1"># pick spot in room as anchor and make sure it is open</span>
+    <span class="n">anchor_x</span> <span class="o">=</span> <span class="n">anchor_room</span><span class="o">.</span><span class="n">centre_x</span>
+    <span class="n">anchor_y</span> <span class="o">=</span> <span class="n">anchor_room</span><span class="o">.</span><span class="n">centre_y</span>
+    <span class="n">dungen</span><span class="o">.</span><span class="n">set_tile_category</span><span class="p">(</span><span class="n">anchor_x</span><span class="p">,</span> <span class="n">anchor_y</span><span class="p">,</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">)</span>
+
+    <span class="c1"># loop all rooms until they can all get to the anchor room</span>
+    <span class="k">while</span> <span class="n">inaccessible_rooms</span><span class="p">:</span>
+        <span class="n">room</span> <span class="o">=</span> <span class="n">inaccessible_rooms</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="c1"># dont check anchor room</span>
+        <span class="k">if</span> <span class="n">room</span> <span class="o">==</span> <span class="n">anchor_room</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">room_x</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">centre_x</span>
+        <span class="n">room_y</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">centre_y</span>
+
+        <span class="c1"># ensure the centre of the room is open</span>
+        <span class="n">dungen</span><span class="o">.</span><span class="n">set_tile_category</span><span class="p">(</span><span class="n">room_x</span><span class="p">,</span> <span class="n">room_y</span><span class="p">,</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">)</span>
+
+        <span class="c1"># check if route is possible between anchor and target</span>
+        <span class="n">pathfinder</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Dijkstra</span><span class="p">(</span><span class="n">dungen</span><span class="o">.</span><span class="n">bools_map</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">pathfinder</span><span class="o">.</span><span class="n">set_goal</span><span class="p">(</span><span class="n">room_x</span><span class="p">,</span> <span class="n">room_y</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">pathfinder</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">anchor_x</span><span class="p">,</span> <span class="n">anchor_y</span><span class="p">)</span>
+
+        <span class="c1"># if no possible route, make one</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+            <span class="c1"># get ignore list i.e. connected rooms</span>
+            <span class="n">ignore_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_room_id</span><span class="p">,</span> <span class="n">connected_rooms_ids</span> <span class="ow">in</span> <span class="n">connections</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">_room_id</span> <span class="o">==</span> <span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                    <span class="c1"># if the key matches then add all of the values in the list</span>
+                    <span class="n">ignore_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">connected_rooms_ids</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">room</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">connected_rooms_ids</span><span class="p">:</span>
+                    <span class="c1"># if id in the value list then add the key</span>
+                    <span class="n">ignore_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_room_id</span><span class="p">)</span>
+
+            <span class="c1"># get nearest room and tunnel to that or the anchor</span>
+            <span class="n">nearest_room</span> <span class="o">=</span> <span class="n">_get_nearest_room</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">room</span><span class="p">,</span> <span class="n">ignore_list</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">nearest_room</span><span class="p">:</span>
+                <span class="n">_add_ignorant_tunnel</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">room_x</span><span class="p">,</span> <span class="n">room_y</span><span class="p">,</span> <span class="n">nearest_room</span><span class="o">.</span><span class="n">centre_x</span><span class="p">,</span> <span class="n">nearest_room</span><span class="o">.</span><span class="n">centre_y</span><span class="p">)</span>
+
+                <span class="c1"># log the connection</span>
+                <span class="k">if</span> <span class="n">room</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">connections</span><span class="p">:</span>
+                    <span class="n">connections</span><span class="p">[</span><span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nearest_room</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">connections</span><span class="p">[</span><span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">nearest_room</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+
+                <span class="c1"># add back to list to check can now reach anchor</span>
+                <span class="n">inaccessible_rooms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">room</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_add_ignorant_tunnel</span><span class="p">(</span><span class="n">dungen</span><span class="p">,</span> <span class="n">room_x</span><span class="p">,</span> <span class="n">room_y</span><span class="p">,</span> <span class="n">anchor_room</span><span class="o">.</span><span class="n">centre_x</span><span class="p">,</span> <span class="n">anchor_room</span><span class="o">.</span><span class="n">centre_y</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># we have a path so log the connection to the anchor room</span>
+            <span class="k">if</span> <span class="n">anchor_room</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">connections</span><span class="p">:</span>
+                <span class="n">connections</span><span class="p">[</span><span class="n">anchor_room</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">connections</span><span class="p">[</span><span class="n">anchor_room</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_get_nearest_room</span><span class="p">(</span>
+    <span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">,</span> <span class="n">base_room</span><span class="p">:</span> <span class="n">RoomConcept</span><span class="p">,</span> <span class="n">id_ignore_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RoomConcept</span><span class="p">]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Starting from xy find the directly nearest room. Treats all tiles as floors.</span>
+<span class="sd">    """</span>
+    <span class="n">nearest_room</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">shortest_path_length</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">base_x</span> <span class="o">=</span> <span class="n">base_room</span><span class="o">.</span><span class="n">centre_x</span>
+    <span class="n">base_y</span> <span class="o">=</span> <span class="n">base_room</span><span class="o">.</span><span class="n">centre_y</span>
+
+    <span class="c1"># create pathfinder</span>
+    <span class="n">pathfinder</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Dijkstra</span><span class="p">(</span><span class="n">dungen</span><span class="o">.</span><span class="n">passable_map</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">pathfinder</span><span class="o">.</span><span class="n">set_goal</span><span class="p">(</span><span class="n">base_x</span><span class="p">,</span> <span class="n">base_y</span><span class="p">)</span>
+
+    <span class="c1"># check each room to see which is closest</span>
+    <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="n">dungen</span><span class="o">.</span><span class="n">placed_rooms</span><span class="p">:</span>
+        <span class="c1"># check ignore list</span>
+        <span class="k">if</span> <span class="n">room</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">id_ignore_list</span> <span class="ow">or</span> <span class="n">room</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">base_room</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># create new path</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">pathfinder</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">centre_x</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">centre_y</span><span class="p">)</span>
+        <span class="n">path_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># if we havent got any room yet set values</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">nearest_room</span><span class="p">:</span>
+            <span class="n">nearest_room</span> <span class="o">=</span> <span class="n">room</span>
+            <span class="n">shortest_path_length</span> <span class="o">=</span> <span class="n">path_length</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># check length</span>
+        <span class="k">if</span> <span class="n">path_length</span> <span class="o">&lt;</span> <span class="n">shortest_path_length</span><span class="p">:</span>
+            <span class="n">shortest_path_length</span> <span class="o">=</span> <span class="n">path_length</span>
+            <span class="n">nearest_room</span> <span class="o">=</span> <span class="n">room</span>
+
+    <span class="k">return</span> <span class="n">nearest_room</span>
+
+
+<span class="c1">####################### ENTITIES ##############################</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_actor</span><span class="p">(</span><span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">,</span> <span class="n">room_data</span><span class="p">:</span> <span class="n">RoomConceptData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActorData</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Pick an actor using the possible options in the room and their weighting and return the actor's data.</span>
+<span class="sd">    """</span>
+    <span class="c1"># pick an actor</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">room_data</span><span class="o">.</span><span class="n">actors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
+    <span class="n">actor_key</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># get the actor data</span>
+    <span class="n">actor_data</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">get_actor_data</span><span class="p">(</span><span class="n">actor_key</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">actor_data</span>
+
+
+<span class="k">def</span> <span class="nf">_find_place_for_actor</span><span class="p">(</span>
+    <span class="n">dungen</span><span class="p">:</span> <span class="n">DungeonGenerator</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="n">RoomConcept</span><span class="p">,</span> <span class="n">actor_data</span><span class="p">:</span> <span class="n">ActorData</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Keep picking random locations in a room to place the actor. Returns xy if successful.</span>
+<span class="sd">    """</span>
+    <span class="c1"># pick random location to place actor</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">start_x</span> <span class="o">+</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">start_y</span> <span class="o">+</span> <span class="n">dungen</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># check if actor is blocked</span>
+    <span class="n">blocked</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">actor_data</span><span class="o">.</span><span class="n">position_offsets</span><span class="p">:</span>
+        <span class="n">offset_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">offset_y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># only need to check tile category as that captures entity placement too</span>
+        <span class="k">if</span> <span class="n">dungen</span><span class="o">.</span><span class="n">map_of_categories</span><span class="p">[</span><span class="n">offset_x</span><span class="p">][</span><span class="n">offset_y</span><span class="p">]</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">:</span>
+            <span class="n">blocked</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">blocked</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># if blocked try again</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">blocked</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="c1">####################### HELPER FUNCTIONS ##############################</span>
+
+
+<span class="k">def</span> <span class="nf">_create_tile_from_category</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tile_category</span><span class="p">:</span> <span class="n">TileCategoryType</span><span class="p">,</span> <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tile</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Convert a tile category into the relevant tile. If it isnt a wall it is floor by default.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">tile_category</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span>
+        <span class="n">sprite_path</span> <span class="o">=</span> <span class="n">sprite_paths</span><span class="p">[</span><span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">]</span>
+        <span class="n">sprite</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="n">sprite_path</span><span class="p">)</span>
+        <span class="n">blocks_sight</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">blocks_movement</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># everything else is considered a floor:</span>
+        <span class="n">sprite_path</span> <span class="o">=</span> <span class="n">sprite_paths</span><span class="p">[</span><span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">]</span>
+        <span class="n">sprite</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="n">sprite_path</span><span class="p">)</span>
+        <span class="n">blocks_sight</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">blocks_movement</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">tile</span> <span class="o">=</span> <span class="n">Tile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sprite</span><span class="p">,</span> <span class="n">sprite_path</span><span class="p">,</span> <span class="n">blocks_sight</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tile</span>
+</pre></div>
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2019-2020, Josh Snaith.
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../../../../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

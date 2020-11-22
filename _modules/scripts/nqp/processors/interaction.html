@@ -255,15 +255,12 @@
   <h1 id="modules-scripts-nqp-processors-interaction--page-root">Source code for scripts.nqp.processors.interaction</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
-
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Reaction</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">GameEvent</span><span class="p">,</span> <span class="n">InteractionEvent</span><span class="p">,</span> <span class="n">InteractionTrigger</span><span class="p">,</span> <span class="n">InteractionTriggerType</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Reaction</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameEvent</span><span class="p">,</span> <span class="n">InteractionEvent</span><span class="p">,</span> <span class="n">InteractionTrigger</span><span class="p">,</span> <span class="n">InteractionTriggerType</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"process_event"</span><span class="p">]</span>
 
@@ -315,7 +312,7 @@
     <span class="n">new_y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">new_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># loop all entities sharing same position that have a reaction</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">reaction</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_reaction</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">reaction</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_reaction</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reaction</span><span class="p">,</span> <span class="n">Reaction</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">new_x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">new_y</span><span class="p">:</span>
@@ -337,7 +334,7 @@
 
     <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_win_condition</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_win_condition</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
             <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">WIN_CONDITION_MET</span><span class="p">)</span>

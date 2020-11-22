@@ -1,0 +1,37 @@
+scripts.engine.widgets package
+==============================
+
+Submodules
+----------
+
+scripts.engine.widgets.panel module
+-----------------------------------
+
+.. automodule:: scripts.engine.widgets.panel
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.widgets.screen\_message module
+---------------------------------------------
+
+.. automodule:: scripts.engine.widgets.screen_message
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.widgets.window module
+------------------------------------
+
+.. automodule:: scripts.engine.widgets.window
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: scripts.engine.widgets
+   :members:
+   :undoc-members:
+   :show-inheritance:

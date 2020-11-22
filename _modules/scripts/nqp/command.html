@@ -260,30 +260,54 @@
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Timer</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
+<span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">snecs</span>
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">Component</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">library</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">WinCondition</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">systems</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">ASSET_PATH</span><span class="p">,</span> <span class="n">DEBUG_START</span><span class="p">,</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">SAVE_PATH</span><span class="p">,</span> <span class="n">UIElement</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.data</span> <span class="kn">import</span> <span class="n">store</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">TraitSpritePathsData</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.ui.manager</span> <span class="kn">import</span> <span class="n">ui</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">register_action</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">WinCondition</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ASSET_PATH</span><span class="p">,</span>
+    <span class="n">DEBUG_START</span><span class="p">,</span>
+    <span class="n">GameState</span><span class="p">,</span>
+    <span class="n">GAP_SIZE</span><span class="p">,</span>
+    <span class="n">MAX_SKILLS</span><span class="p">,</span>
+    <span class="n">RenderLayer</span><span class="p">,</span>
+    <span class="n">SAVE_PATH</span><span class="p">,</span>
+    <span class="n">SKILL_BUTTON_SIZE</span><span class="p">,</span>
+    <span class="n">UIElement</span><span class="p">,</span>
+    <span class="n">UIElementType</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">TraitSpritePathsData</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.actions.affliction</span> <span class="kn">import</span> <span class="n">BoggedDown</span><span class="p">,</span> <span class="n">Flaming</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.actions.behaviour</span> <span class="kn">import</span> <span class="n">FollowPlayer</span><span class="p">,</span> <span class="n">Projectile</span><span class="p">,</span> <span class="n">SearchAndAttack</span><span class="p">,</span> <span class="n">SkipTurn</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.actions.skill</span> <span class="kn">import</span> <span class="n">BasicAttack</span><span class="p">,</span> <span class="n">Lunge</span><span class="p">,</span> <span class="n">Move</span><span class="p">,</span> <span class="n">Splash</span><span class="p">,</span> <span class="n">TarAndFeather</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">Camera</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.character_selector</span> <span class="kn">import</span> <span class="n">CharacterSelector</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.message_log</span> <span class="kn">import</span> <span class="n">MessageLog</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.skill_bar</span> <span class="kn">import</span> <span class="n">SkillBar</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.title_screen</span> <span class="kn">import</span> <span class="n">TitleScreen</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"initialise_game"</span><span class="p">,</span> <span class="s2">"goto_character_select"</span><span class="p">,</span> <span class="s2">"load_game"</span><span class="p">,</span> <span class="s2">"exit_game"</span><span class="p">,</span> <span class="s2">"win_game"</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"initialise_game"</span><span class="p">,</span> <span class="s2">"goto_character_select"</span><span class="p">,</span> <span class="s2">"load_game"</span><span class="p">,</span> <span class="s2">"exit_game"</span><span class="p">,</span> <span class="s2">"win_game"</span><span class="p">,</span> <span class="s2">"register_actions"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="initialise_game"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.initialise_game">[docs]</a><span class="k">def</span> <span class="nf">initialise_game</span><span class="p">():</span>
     <span class="sd">"""</span>
 <span class="sd">    Init the game`s required info</span>
 <span class="sd">    """</span>
+    <span class="n">register_actions</span><span class="p">()</span>
+
     <span class="k">if</span> <span class="n">DEBUG_START</span><span class="p">:</span>
         <span class="n">_start_debug_game</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">MENU</span><span class="p">)</span>
-        <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+        <span class="n">goto_to_title</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="_start_debug_game"><a class="viewcode-back" href="../../../nqp/general/command.html#scripts.nqp.command._start_debug_game">[docs]</a><span class="k">def</span> <span class="nf">_start_debug_game</span><span class="p">():</span>
@@ -316,6 +340,8 @@
     <span class="n">chronicle</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
 
     <span class="c1"># show the in game screens</span>
+    <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">]):</span>
@@ -326,13 +352,12 @@
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span>
 
     <span class="c1"># entities load with a blank fov, update them now</span>
-    <span class="n">systems</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
-    <span class="n">systems</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
-    <span class="n">systems</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
 
     <span class="c1"># point the camera at the player, now that FOV is updated</span>
     <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-    <span class="n">camera</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">)</span>
     <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># create terrain next to the player</span>
@@ -383,8 +408,16 @@
     <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="s2">"the_small_gods"</span><span class="p">)</span>
 
     <span class="c1"># show the in game screens</span>
+    <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">message_log</span> <span class="o">=</span> <span class="n">MessageLog</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="n">message_log</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">skill_bar</span> <span class="o">=</span> <span class="n">SkillBar</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="n">skill_bar</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># welcome message</span>
@@ -400,13 +433,12 @@
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span>
 
     <span class="c1"># entities load with a blank fov, update them now</span>
-    <span class="n">systems</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
-    <span class="n">systems</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
-    <span class="n">systems</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
 
     <span class="c1"># point the camera at the player, now that FOV is updated</span>
     <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-    <span class="n">camera</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">)</span>
     <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># loading finished, give player control</span>
@@ -427,8 +459,16 @@
         <span class="k">break</span>
 
     <span class="c1"># show the in game screens</span>
+    <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">message_log</span> <span class="o">=</span> <span class="n">MessageLog</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="n">message_log</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">skill_bar</span> <span class="o">=</span> <span class="n">SkillBar</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="n">skill_bar</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># welcome message</span>
@@ -464,6 +504,8 @@
     <span class="sd">"""</span>
 <span class="sd">    Create a new game</span>
 <span class="sd">    """</span>
+    <span class="n">character_select</span> <span class="o">=</span> <span class="n">CharacterSelector</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CHARACTER_SELECTOR</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CHARACTER_SELECTOR</span><span class="p">,</span> <span class="n">character_select</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CHARACTER_SELECTOR</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
 
 
@@ -473,16 +515,119 @@
 <span class="sd">    """</span>
     <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">MENU</span><span class="p">)</span>
 
-    <span class="c1"># hide the in game screens</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># remove any existing ui</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">kill_all_elements</span><span class="p">()</span>
 
     <span class="c1"># clear existing resource</span>
     <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># TODO - add better clearing method.</span>
 
     <span class="c1"># show the title screen</span>
+    <span class="n">title_screen</span> <span class="o">=</span> <span class="n">TitleScreen</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="n">title_screen</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+
+<span class="c1">################## INIT ##########################</span>
+
+
+<div class="viewcode-block" id="register_actions"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.register_actions">[docs]</a><span class="k">def</span> <span class="nf">register_actions</span><span class="p">():</span>
+    <span class="sd">"""</span>
+<span class="sd">    Register all Actions with the engine</span>
+<span class="sd">    """</span>
+    <span class="c1"># afflictions</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">BoggedDown</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">Flaming</span><span class="p">)</span>
+
+    <span class="c1"># behaviour</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">Projectile</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">SkipTurn</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">FollowPlayer</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">SearchAndAttack</span><span class="p">)</span>
+
+    <span class="c1"># skills</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">Move</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">BasicAttack</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">Lunge</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">TarAndFeather</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">Splash</span><span class="p">)</span></div>
+
+
+<span class="c1">##################### UI ######################</span>
+
+
+<div class="viewcode-block" id="get_element_rect"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.get_element_rect">[docs]</a><span class="k">def</span> <span class="nf">get_element_rect</span><span class="p">(</span><span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Get the predefined rect for the specified element.</span>
+<span class="sd">    """</span>
+    <span class="n">desired_width</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">desired_width</span>
+    <span class="n">desired_height</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">desired_height</span>
+
+    <span class="c1"># Message Log</span>
+    <span class="n">message_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">desired_width</span> <span class="o">*</span> <span class="mf">0.31</span><span class="p">)</span>
+    <span class="n">message_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">desired_height</span> <span class="o">*</span> <span class="mf">0.28</span><span class="p">)</span>
+    <span class="n">message_x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">message_y</span> <span class="o">=</span> <span class="o">-</span><span class="n">message_height</span>
+
+    <span class="c1"># Skill Bar</span>
+    <span class="n">skill_width</span> <span class="o">=</span> <span class="p">(</span><span class="n">MAX_SKILLS</span> <span class="o">*</span> <span class="p">(</span><span class="n">SKILL_BUTTON_SIZE</span> <span class="o">+</span> <span class="n">GAP_SIZE</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">GAP_SIZE</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># gap * 2 for borders</span>
+    <span class="n">skill_height</span> <span class="o">=</span> <span class="n">SKILL_BUTTON_SIZE</span> <span class="o">+</span> <span class="p">(</span><span class="n">GAP_SIZE</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">skill_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">desired_width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">skill_width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">skill_y</span> <span class="o">=</span> <span class="o">-</span><span class="n">SKILL_BUTTON_SIZE</span>
+
+    <span class="c1"># Camera</span>
+    <span class="n">camera_width</span> <span class="o">=</span> <span class="n">desired_width</span>
+    <span class="n">camera_height</span> <span class="o">=</span> <span class="n">desired_height</span>
+    <span class="n">camera_x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">camera_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Title Screen</span>
+    <span class="n">title_screen_width</span> <span class="o">=</span> <span class="n">desired_width</span>
+    <span class="n">title_screen_height</span> <span class="o">=</span> <span class="n">desired_height</span>
+    <span class="n">title_screen_x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">title_screen_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Dungeon dev view</span>
+    <span class="n">dungen_viewer_width</span> <span class="o">=</span> <span class="n">desired_width</span>
+    <span class="n">dungen_viewer_height</span> <span class="o">=</span> <span class="n">desired_height</span>
+    <span class="n">dungen_viewer_x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">dungen_viewer_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Tile Info</span>
+    <span class="n">tile_info_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">desired_width</span> <span class="o">*</span> <span class="mf">0.19</span><span class="p">)</span>
+    <span class="n">tile_info_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">desired_height</span> <span class="o">*</span> <span class="mf">0.22</span><span class="p">)</span>
+    <span class="n">tile_info_x</span> <span class="o">=</span> <span class="o">-</span><span class="n">tile_info_width</span>
+    <span class="n">tile_info_y</span> <span class="o">=</span> <span class="o">-</span><span class="n">tile_info_height</span>
+
+    <span class="c1"># Npc info</span>
+    <span class="n">npc_info_width</span> <span class="o">=</span> <span class="n">desired_width</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">npc_info_height</span> <span class="o">=</span> <span class="n">desired_height</span> <span class="o">-</span> <span class="p">(</span><span class="n">desired_height</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">npc_info_x</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">npc_info_y</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="c1"># character selector</span>
+    <span class="n">char_selector_width</span> <span class="o">=</span> <span class="n">desired_width</span>
+    <span class="n">char_selector_height</span> <span class="o">=</span> <span class="n">desired_height</span>
+    <span class="n">char_selector_x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">char_selector_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">layout</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">message_x</span><span class="p">,</span> <span class="n">message_y</span><span class="p">),</span> <span class="p">(</span><span class="n">message_width</span><span class="p">,</span> <span class="n">message_height</span><span class="p">)),</span>
+        <span class="n">UIElement</span><span class="o">.</span><span class="n">TILE_INFO</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">tile_info_x</span><span class="p">,</span> <span class="n">tile_info_y</span><span class="p">),</span> <span class="p">(</span><span class="n">tile_info_width</span><span class="p">,</span> <span class="n">tile_info_height</span><span class="p">)),</span>
+        <span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">skill_x</span><span class="p">,</span> <span class="n">skill_y</span><span class="p">),</span> <span class="p">(</span><span class="n">skill_width</span><span class="p">,</span> <span class="n">skill_height</span><span class="p">)),</span>
+        <span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">camera_x</span><span class="p">,</span> <span class="n">camera_y</span><span class="p">),</span> <span class="p">(</span><span class="n">camera_width</span><span class="p">,</span> <span class="n">camera_height</span><span class="p">)),</span>
+        <span class="n">UIElement</span><span class="o">.</span><span class="n">DUNGEN_VIEWER</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">dungen_viewer_x</span><span class="p">,</span> <span class="n">dungen_viewer_y</span><span class="p">),</span> <span class="p">(</span><span class="n">dungen_viewer_width</span><span class="p">,</span> <span class="n">dungen_viewer_height</span><span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">npc_info_x</span><span class="p">,</span> <span class="n">npc_info_y</span><span class="p">),</span> <span class="p">(</span><span class="n">npc_info_width</span><span class="p">,</span> <span class="n">npc_info_height</span><span class="p">)),</span>
+        <span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">title_screen_x</span><span class="p">,</span> <span class="n">title_screen_y</span><span class="p">),</span> <span class="p">(</span><span class="n">title_screen_width</span><span class="p">,</span> <span class="n">title_screen_height</span><span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">UIElement</span><span class="o">.</span><span class="n">CHARACTER_SELECTOR</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">char_selector_x</span><span class="p">,</span> <span class="n">char_selector_y</span><span class="p">),</span> <span class="p">(</span><span class="n">char_selector_width</span><span class="p">,</span> <span class="n">char_selector_height</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">layout</span><span class="p">[</span><span class="n">element_type</span><span class="p">]</span></div>
 </pre></div>
 
           </article>

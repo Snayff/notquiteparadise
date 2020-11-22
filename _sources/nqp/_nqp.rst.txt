@@ -2,8 +2,9 @@ NQP Documentation
 ============================================
 
 ..  toctree::
-    :caption: Core
+    :caption: NQP
 
     actions/_actions
+    elements/_elements
     general/_general
     processors/_processors

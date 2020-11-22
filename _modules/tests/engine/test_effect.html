@@ -257,13 +257,13 @@
 <span class="kn">import</span> <span class="nn">snecs</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Resources</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">queries</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">DamageType</span><span class="p">,</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">PrimaryStat</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.data</span> <span class="kn">import</span> <span class="n">store</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">ActorData</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.effect</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Resources</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">DamageType</span><span class="p">,</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">PrimaryStat</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.effect</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">AffectCooldownEffect</span><span class="p">,</span>
     <span class="n">AffectStatEffect</span><span class="p">,</span>
     <span class="n">AlterTerrainEffect</span><span class="p">,</span>
@@ -272,15 +272,19 @@
     <span class="n">MoveActorEffect</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
-<span class="kn">from</span> <span class="nn">scripts.nqp.actions</span> <span class="kn">import</span> <span class="n">affliction</span><span class="p">,</span> <span class="n">behaviour</span><span class="p">,</span> <span class="n">skill</span>  <span class="c1"># must import to register in engine</span>
+
 
 <span class="c1">##############################################################</span>
 <span class="c1">#</span>
 <span class="c1"># !IMPORTANT! Using pytest-benchmark causes the damage effect test to hang indefinitely and the others to fail</span>
 <span class="c1">#</span>
 <span class="c1">###############################################################</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.command</span> <span class="kn">import</span> <span class="n">register_actions</span>
+
+<span class="n">register_actions</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">_create_scenario</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
+
     <span class="c1"># new world</span>
     <span class="n">empty_world</span> <span class="o">=</span> <span class="n">snecs</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
     <span class="n">world</span><span class="o">.</span><span class="n">move_world</span><span class="p">(</span><span class="n">empty_world</span><span class="p">)</span>
@@ -583,13 +587,13 @@
 
     <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
         <span class="n">confirmed</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">lifespan</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_identity_and_lifespan</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">lifespan</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_identity_and_lifespan</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">identity</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">terrain_name</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
                 <span class="n">confirmed</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">assert</span> <span class="n">confirmed</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">confirmed</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">lifespan</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_identity_and_lifespan</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">lifespan</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_identity_and_lifespan</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">identity</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">terrain_name</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
                 <span class="n">confirmed</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">confirmed</span></div>
@@ -634,7 +638,7 @@
         <span class="c1"># test case: reduced duration but still exists</span>
         <span class="n">still_exists</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">duration_remaining</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">lifespan</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_identity_and_lifespan</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">lifespan</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_identity_and_lifespan</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">identity</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">terrain_name</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
                 <span class="n">still_exists</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">duration_remaining</span> <span class="o">=</span> <span class="n">lifespan</span><span class="o">.</span><span class="n">duration</span>
@@ -644,7 +648,7 @@
     <span class="k">elif</span> <span class="n">success</span> <span class="ow">and</span> <span class="p">(</span><span class="n">base_duration</span> <span class="o">&lt;</span> <span class="n">affect_terrain_negative_amount</span><span class="p">):</span>
         <span class="c1"># test case: duration sufficient to remove</span>
         <span class="n">still_exists</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">lifespan</span><span class="p">)</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">position_and_identity_and_lifespan</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">lifespan</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_identity_and_lifespan</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">identity</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">terrain_name</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
                 <span class="n">still_exists</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">still_exists</span>

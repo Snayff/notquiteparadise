@@ -443,9 +443,10 @@
 
 <div class="viewcode-block" id="LightBox.update_dynamic_walls"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.update_dynamic_walls">[docs]</a>    <span class="k">def</span> <span class="nf">update_dynamic_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">walls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Wall</span><span class="p">]):</span>
         <span class="sd">"""</span>
-<span class="sd">        Set a group_id to contain a set of walls.</span>
-<span class="sd">        This is useful for overwriting the walls and takes walls in the same format as `add_walls.</span>
-<span class="sd">        Existing walls can be modified directly for better performance since objects use pointers.</span>
+<span class="sd">        Set a group_id to contain a set of walls. Existing walls can be modified directly for better performance</span>
+<span class="sd">        since  objects use pointers.</span>
+
+<span class="sd">        This is useful for overwriting the walls and takes walls in the same format as add_walls.</span>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_walls</span><span class="p">[</span><span class="n">group_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">walls</span></div>
 
