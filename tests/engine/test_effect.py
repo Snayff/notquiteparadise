@@ -17,7 +17,7 @@ from scripts.engine.effect import (
     MoveActorEffect,
 )
 from scripts.engine.world_objects.game_map import GameMap
-from scripts.nqp.actions import afflictions, behaviours, skills  # must import to register in engine
+from scripts.nqp.actions import affliction, behaviour, skill  # must import to register in engine
 
 ##############################################################
 #

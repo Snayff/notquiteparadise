@@ -1,5 +1,8 @@
-Constants
+Input
 ============================================
-.. automodule:: scripts.engine.core.constants
+
+.. automodule:: scripts.nqp.processors.input
     :show-inheritance:
     :members:
+    :private-members:
+

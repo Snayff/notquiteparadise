@@ -91,4 +91,4 @@ class Store:
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
     store = Store()
 else:
-    store = ""  # type: ignore
+    store = None  # type: ignore

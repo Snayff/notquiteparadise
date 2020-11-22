@@ -1,10 +1,6 @@
-
-Utility
+Component
 ============================================
-.. automodule:: scripts.engine.utility
+
+.. automodule:: scripts.engine.component
     :show-inheritance:
     :members:
-
-
-
-

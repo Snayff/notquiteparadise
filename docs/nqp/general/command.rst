@@ -1,6 +1,7 @@
-
-Component
+Command
 ============================================
-.. automodule:: scripts.engine.component
+
+.. automodule:: scripts.nqp.command
     :show-inheritance:
     :members:
+    :private-members:
