@@ -5,18 +5,24 @@ from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-from scripts.engine import library, world
-from scripts.engine.action import init_action, Skill
-from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import DamageType, DirectionType, PrimaryStat, Shape
-from scripts.engine.effect import AffectCooldownEffect, ApplyAfflictionEffect, DamageEffect, Effect, MoveActorEffect
+from scripts.engine.core import world
+from scripts.engine.internal import library
+from scripts.engine.internal.action import Skill
+from scripts.engine.internal.component import Aesthetic, Position
+from scripts.engine.internal.constant import DamageType, DirectionType, PrimaryStat, Shape
+from scripts.engine.internal.effect import (
+    AffectCooldownEffect,
+    ApplyAfflictionEffect,
+    DamageEffect,
+    Effect,
+    MoveActorEffect,
+)
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import List, Optional
 
 
-@init_action
 class Move(Skill):
     """
     Basic move for an entity.
@@ -26,7 +32,6 @@ class Move(Skill):
         """
         Only Move needs an init as it overrides the target tile
         """
-        from scripts.engine import world
 
         # override target
         position = world.get_entitys_component(user, Position)
@@ -54,7 +59,6 @@ class Move(Skill):
         return None
 
 
-@init_action
 class BasicAttack(Skill):
     """
     Basic attack for an entity
@@ -80,7 +84,6 @@ class BasicAttack(Skill):
         return [damage_effect]
 
 
-@init_action
 class Lunge(Skill):
     """
     Lunge skill for an entity
@@ -175,7 +178,6 @@ class Lunge(Skill):
         return cooldown_effect
 
 
-@init_action
 class TarAndFeather(Skill):
     """
     TarAndFeather skill for an entity
@@ -245,7 +247,6 @@ class TarAndFeather(Skill):
         return damage_effect
 
 
-@init_action
 class Splash(Skill):
     """
     Simple projectile attack

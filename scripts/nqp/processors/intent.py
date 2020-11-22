@@ -3,29 +3,30 @@ from __future__ import annotations
 import logging
 from typing import Optional, Type
 
-import numpy as np
-import tcod
 from snecs.typedefs import EntityID
 
-from scripts.engine import chronicle, debug, library, state, utility, world
-from scripts.engine.action import Skill
-from scripts.engine.component import Knowledge, Position
-from scripts.engine.core.constants import (
+from scripts.engine.core import chronicle, state, utility, world
+from scripts.engine.core.ui import ui
+from scripts.engine.internal import debug, library
+from scripts.engine.internal.action import Skill
+from scripts.engine.internal.component import Knowledge, Position
+from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
     GameState,
     GameStateType,
     InputIntent,
     InputIntentType,
-    SAVE_PATH,
     TargetingMethod,
     UIElement,
 )
-from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import command
 
 __all__ = ["process_intent"]
+
+from scripts.nqp.ui_elements.actor_info import ActorInfo
+from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
 
 
 def process_intent(intent: InputIntentType, game_state: GameStateType):
@@ -67,18 +68,20 @@ def _process_stateless_intents(intent: InputIntentType):
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, False)
             state.set_new(state.get_previous())
         else:
-            ui.get_element(UIElement.DUNGEN_VIEWER).refresh_viewer()
+            if ui.has_element(UIElement.DUNGEN_VIEWER):
+                dungen_viewer = ui.get_element(UIElement.DUNGEN_VIEWER)
+
+            else:
+                dungen_viewer = DungenViewer(command.get_element_rect(UIElement.DUNGEN_VIEWER), ui.get_gui_manager())
+                ui.register_element(UIElement.DUNGEN_VIEWER, dungen_viewer)
+
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, True)
+            dungen_viewer.refresh_viewer()
             state.set_new(GameState.MENU)
 
     elif intent == InputIntent.DEV_TOGGLE:
         # F2
-        if ui.get_element(UIElement.DATA_EDITOR):
-            ui.set_element_visibility(UIElement.DATA_EDITOR, False)
-            state.set_new(state.get_previous())
-        else:
-            ui.set_element_visibility(UIElement.DATA_EDITOR, True)
-            state.set_new(GameState.DEVELOPER)
+        pass
 
     elif intent == InputIntent.BURST_PROFILE:
         # F3
@@ -86,12 +89,20 @@ def _process_stateless_intents(intent: InputIntentType):
 
     elif intent == InputIntent.TOGGLE_UI:
         # F6
-        if ui.element_is_visible(UIElement.MESSAGE_LOG):
-            ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
-            ui.set_element_visibility(UIElement.SKILL_BAR, False)
-        else:
-            ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
-            ui.set_element_visibility(UIElement.SKILL_BAR, True)
+
+        # toggle message log
+        if ui.has_element(UIElement.MESSAGE_LOG):
+            if ui.element_is_visible(UIElement.MESSAGE_LOG):
+                ui.set_element_visibility(UIElement.MESSAGE_LOG, False)
+            else:
+                ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+
+        # toggle skill bar
+        if ui.has_element(UIElement.SKILL_BAR):
+            if ui.element_is_visible(UIElement.SKILL_BAR):
+                ui.set_element_visibility(UIElement.SKILL_BAR, False)
+            else:
+                ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
     elif intent == InputIntent.TEST:
         # F12
@@ -142,12 +153,16 @@ def _process_game_map_intents(intent: InputIntentType):
                         # trigger targeting overlay
                         state.set_new(GameState.TARGETING)
                         state.set_active_skill(skill_name)
-                        ui.update_targeting_overlay(True, skill_name)
+                        if ui.has_element(UIElement.CAMERA):
+                            camera = ui.get_element(UIElement.CAMERA)
+                            camera.update_targeting_overlay(True, skill_name)
 
     ## Show actor info - we're in GAMEMAP so it cant be visible
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:
         # show
         state.set_new(GameState.MENU)
+        actor_info = ActorInfo(command.get_element_rect(UIElement.ACTOR_INFO), ui.get_gui_manager())
+        ui.register_element(UIElement.ACTOR_INFO, actor_info)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
 
     elif intent == InputIntent.EXIT:
@@ -208,7 +223,8 @@ def _process_menu_intents(intent):
     ## Exit current menu
     if intent == InputIntent.ACTOR_INFO_TOGGLE:
         state.set_new(state.get_previous())
-        ui.set_element_visibility(UIElement.ACTOR_INFO, False)
+        if ui.has_element(UIElement.ACTOR_INFO):
+            ui.set_element_visibility(UIElement.ACTOR_INFO, False)
 
 
 ################## HELPER FUNCTIONS ############################

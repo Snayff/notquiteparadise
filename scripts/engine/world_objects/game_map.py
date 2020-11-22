@@ -8,9 +8,10 @@ from typing import Any, Dict, List
 import numpy as np
 from pygame.constants import BLEND_RGBA_MULT
 
-from scripts.engine import dungen
-from scripts.engine.core.constants import MAP_BORDER_SIZE, TILE_SIZE, TileCategory
-from scripts.engine.core.definitions import ActorData
+from scripts.engine.core import dungen
+from scripts.engine.internal import library
+from scripts.engine.internal.constant import MAP_BORDER_SIZE, TILE_SIZE, TileCategory
+from scripts.engine.internal.definition import ActorData
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.lighting import LightBox
 from scripts.engine.world_objects.tile import Tile
@@ -31,8 +32,6 @@ class GameMap:
         self.seed = seed
         self.rng = random.Random()
         self.rng.seed(seed)
-
-        from scripts.engine import library
 
         _map_data = library.MAPS[map_name]
         self.width = _map_data.width + (MAP_BORDER_SIZE * 2)
@@ -60,12 +59,12 @@ class GameMap:
         """
         Only called during init to populate tile map with walls
         """
-        from scripts.engine import library
+        from scripts.engine.internal import library
 
         _map_data = library.MAPS[self.name]
 
         # get details for a wall tile
-        from scripts.engine import utility
+        from scripts.engine.core import utility
 
         wall_sprite_path = _map_data.sprite_paths[TileCategory.WALL]
         wall_sprite = utility.get_image(wall_sprite_path)

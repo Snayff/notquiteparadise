@@ -7,15 +7,15 @@ Engine API
     core/_core
 
 ..  toctree::
-    :caption: General
+    :caption: Internal
 
-    general/_general
+    internal/_internal
 
 ..  toctree::
     :maxdepth: 2
-    :caption: UI
+    :caption: UI Widgets
 
-    ui/_ui
+    widgets/_widgets
 
 ..  toctree::
     :maxdepth: 2

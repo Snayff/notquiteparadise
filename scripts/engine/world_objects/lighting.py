@@ -188,9 +188,10 @@ class LightBox:
 
     def update_dynamic_walls(self, group_id: str, walls: List[Wall]):
         """
-        Set a group_id to contain a set of walls.
-        This is useful for overwriting the walls and takes walls in the same format as `add_walls.
-        Existing walls can be modified directly for better performance since objects use pointers.
+        Set a group_id to contain a set of walls. Existing walls can be modified directly for better performance
+        since  objects use pointers.
+
+        This is useful for overwriting the walls and takes walls in the same format as add_walls.
         """
         self.dynamic_walls[group_id] = walls
 

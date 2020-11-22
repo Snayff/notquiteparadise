@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pygame
 
-from scripts.engine.core.constants import GameEvent, GameStateType, InputIntent, UIElement
-from scripts.engine.ui.manager import ui
+from scripts.engine.core.ui import ui
+from scripts.engine.internal.constant import GameEvent, GameStateType, InputIntent, UIElement
 from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent
 

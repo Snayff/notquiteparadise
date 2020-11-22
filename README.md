@@ -1,6 +1,7 @@
 
 # Not Quite Paradise
 Possibly, one day, a roguelike.
+
 ![intro-image](https://i.imgur.com/yXU9v4U.gif)
 
 

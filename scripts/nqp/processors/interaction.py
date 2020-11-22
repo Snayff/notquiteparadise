@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-from typing import Type
-
 import pygame
 from snecs.typedefs import EntityID
 
-from scripts.engine import world
-from scripts.engine.component import Afflictions, Position, Reaction
-from scripts.engine.core import queries
-from scripts.engine.core.constants import GameEvent, InteractionEvent, InteractionTrigger, InteractionTriggerType
+from scripts.engine.core import query, world
+from scripts.engine.internal.component import Afflictions, Position, Reaction
+from scripts.engine.internal.constant import GameEvent, InteractionEvent, InteractionTrigger, InteractionTriggerType
 
 __all__ = ["process_event"]
 
@@ -60,7 +57,7 @@ def _handle_proximity(event: pygame.event):
     new_y = event.new_pos[1]
 
     # loop all entities sharing same position that have a reaction
-    for entity, (position, reaction) in queries.position_and_reaction:
+    for entity, (position, reaction) in query.position_and_reaction:
         assert isinstance(position, Position)
         assert isinstance(reaction, Reaction)
         if position.x == new_x and position.y == new_y:
@@ -82,7 +79,7 @@ def _process_win_condition(event: pygame.event):
 
     player_pos = world.get_entitys_component(player, Position)
 
-    for entity, (position, _) in queries.position_and_win_condition:
+    for entity, (position, _) in query.position_and_win_condition:
         assert isinstance(position, Position)
         if player_pos.x == position.x and player_pos.y == position.y:
             event = pygame.event.Event(GameEvent.WIN_CONDITION_MET)

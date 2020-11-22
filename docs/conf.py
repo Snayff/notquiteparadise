@@ -16,7 +16,7 @@ import os
 import sys
 
 os.environ["GENERATING_SPHINX_DOCS"] = ""
-sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), os.pardir))) # go up a folder to access scripts
+sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), os.pardir)))  # go up a folder to access scripts
 
 
 # -- Project information -----------------------------------------------------
@@ -26,7 +26,7 @@ copyright = '2019-2020, Josh Snaith'
 author = 'Josh Snaith (Snayff)'
 
 # The short X.Y version
-version = "0.135.3"
+version = "0.136.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -45,7 +45,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.githubpages',
-    #'sphinx.ext.napoleon',
+    'sphinx.ext.napoleon',
     #'sphinx_autodoc_typehints',  # causes circular error with snecs
     'sphinx_autodoc_annotation',
     #'sphinx_git',  # causes CI to fail with git error code 128
@@ -219,6 +219,7 @@ intersphinx_mapping = {
     'https://snecs.slavfox.space/': None,
     'https://pygame-gui.readthedocs.io/en/latest/': None,
     'https://www.pygame.org/docs/': None,
+    'https://snayff.github.io/notquiteparadise/': None,
 }
 
 # -- sphinx.ext.todo ----------------------------------------------
