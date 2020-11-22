@@ -18,6 +18,8 @@ from scripts.engine.internal.constant import DirectionType, InputEvent, RenderLa
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.widgets.panel import Panel
 from scripts.engine.world_objects.tile import Tile
+from scripts.nqp import command
+from scripts.nqp.ui_elements.tile_info import TileInfo
 
 
 class Camera(Panel):
@@ -163,10 +165,19 @@ class Camera(Panel):
                 from scripts.engine.core.ui import ui
 
                 for entity, (position,) in query.position:
-                    position: Position
-                    if (x, y) in position:
-                        ui.set_selected_tile_pos((x, y))
+                    assert isinstance(position, Position)
+                    if (x, y) in position.coordinates:
+                        if ui.has_element(UIElement.TILE_INFO):
+                            tile_info = ui.get_element(UIElement.TILE_INFO)
+                        else:
+                            tile_info = TileInfo(command.get_element_rect(UIElement.TILE_INFO), ui.get_gui_manager())
+                            ui.register_element(UIElement.ACTOR_INFO, tile_info)
+
+                        assert isinstance(tile_info, TileInfo)
+                        tile_info.set_selected_tile_pos((x, y))
+
                         ui.set_element_visibility(UIElement.TILE_INFO, True)
+
                         updated_tile_info = True
                 # entity not found at location so hide
                 if not updated_tile_info:

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import TYPE_CHECKING
+from typing import List, TYPE_CHECKING
 
 import pygame
 from snecs.typedefs import EntityID
@@ -42,10 +42,14 @@ class Store:
         self.round_time: int = 0  # tracker of time progressed in current round
         self.turn_holder: EntityID = -1  # current acting entity
 
-        # used to hold images called during runtime so only one copy ever exists. Not serialised.
+        self.message_log: List[str] = []
+
+        ################### NOT SERIALISED #######################################
+
+        # used to hold images called during runtime so only one copy ever exists.
         self.images: Dict[str, pygame.Surface] = {}
 
-        # used to hold actions registered with the engine. Not serialised.
+        # used to hold actions registered with the engine.
         self.skill_registry: Dict[str, Type[Skill]] = {}
         self.affliction_registry: Dict[str, Type[Affliction]] = {}
         self.behaviour_registry: Dict[str, Type[Behaviour]] = {}
@@ -93,6 +97,12 @@ class Store:
             self.turn_holder = serialised["turn_holder"]
         except KeyError as e:
             logging.warning(f"Store.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
+
+    def log_message(self, message: str):
+        """
+        Add a message to the log.
+        """
+        self.message_log.append(message)
 
 
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail

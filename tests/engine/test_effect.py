@@ -24,8 +24,12 @@ from scripts.engine.world_objects.game_map import GameMap
 # !IMPORTANT! Using pytest-benchmark causes the damage effect test to hang indefinitely and the others to fail
 #
 ###############################################################
+from scripts.nqp.command import register_actions
+
+register_actions()
 
 def _create_scenario() -> EntityID:
+
     # new world
     empty_world = snecs.World()
     world.move_world(empty_world)

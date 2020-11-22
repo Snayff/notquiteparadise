@@ -34,6 +34,7 @@ from scripts.nqp.ui_elements.title_screen import TitleScreen
 
 __all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game", "register_actions"]
 
+
 def initialise_game():
     """
     Init the game`s required info

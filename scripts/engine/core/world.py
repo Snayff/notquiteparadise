@@ -1140,7 +1140,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not can_afford:
         # is it the player that can't afford it?
         if entity == player:
-            ui.log_message("I cannot afford to do that.")
+            store.log_message("I cannot afford to do that.")
         else:
             logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, which they can`t afford.")
 
@@ -1148,7 +1148,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not not_on_cooldown:
         # is it the player that's can't afford it?
         if entity == player:
-            ui.log_message("I'm not ready to do that, yet.")
+            store.log_message("I'm not ready to do that, yet.")
         else:
             if cooldown == INFINITE:
                 cooldown_msg = "unknown"
@@ -1362,7 +1362,7 @@ def kill_entity(entity: EntityID):
 
     else:
         # placeholder for player death
-        ui.log_message("I should have died just then.")
+        store.log_message("I should have died just then.")
 
 
 def delete_entity(entity: EntityID):

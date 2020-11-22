@@ -45,7 +45,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.githubpages',
-    #'sphinx.ext.napoleon',
+    'sphinx.ext.napoleon',
     #'sphinx_autodoc_typehints',  # causes circular error with snecs
     'sphinx_autodoc_annotation',
     #'sphinx_git',  # causes CI to fail with git error code 128
@@ -219,6 +219,7 @@ intersphinx_mapping = {
     'https://snecs.slavfox.space/': None,
     'https://pygame-gui.readthedocs.io/en/latest/': None,
     'https://www.pygame.org/docs/': None,
+    'https://snayff.github.io/notquiteparadise/': None,
 }
 
 # -- sphinx.ext.todo ----------------------------------------------

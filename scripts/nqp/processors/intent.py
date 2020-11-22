@@ -73,9 +73,9 @@ def _process_stateless_intents(intent: InputIntentType):
                 dungen_viewer = ui.get_element(UIElement.DUNGEN_VIEWER)
 
             else:
-                dungen_viewer = DungenViewer(command.get_element_rect(UIElement.DUNGEN_VIEWER),
-                                                     ui.get_gui_manager())
-                ui.register_element(UIElement. dungen_viewer)
+                dungen_viewer = DungenViewer(command.get_element_rect(UIElement.DUNGEN_VIEWER), ui.get_gui_manager())
+                ui.register_element(UIElement.DUNGEN_VIEWER, dungen_viewer)
+
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, True)
             dungen_viewer.refresh_viewer()
             state.set_new(GameState.MENU)
@@ -155,7 +155,9 @@ def _process_game_map_intents(intent: InputIntentType):
                         # trigger targeting overlay
                         state.set_new(GameState.TARGETING)
                         state.set_active_skill(skill_name)
-                        ui.update_targeting_overlay(True, skill_name)
+                        if ui.has_element(UIElement.CAMERA):
+                            camera = ui.get_element(UIElement.CAMERA)
+                            camera.update_targeting_overlay(True, skill_name)
 
     ## Show actor info - we're in GAMEMAP so it cant be visible
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:

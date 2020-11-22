@@ -117,16 +117,16 @@ class UI:
 
     ##################### GET ############################
 
-    def get_element(self, element_type: UIElementType) -> Optional[Union[Panel, Window]]:
+    def get_element(self, element_type: UIElementType) -> Union[Panel, Window]:
         """
         Get UI element.
         """
         if element_type in self._elements:
             return self._elements[element_type]
-        else:
-            element_name = utility.value_to_member(element_type, UIElement)
-            logging.info(f"Tried to get {element_name} ui element but key not found.")
-            return None
+
+        element_name = utility.value_to_member(element_type, UIElement)
+        raise KeyError(f"Tried to get {element_name} ui element but key not found.")
+
 
     def get_gui_manager(self) -> UIManager:
         """
@@ -198,8 +198,11 @@ class UI:
         """
         Check if an element is visible.
         """
-        element = self.get_element(element_type)
-        return element.visible
+        if self.has_element(element_type):
+            element = self.get_element(element_type)
+            return element.visible
+        else:
+            return False
 
     def element_is_active(self, element_type: UIElementType) -> bool:
         """

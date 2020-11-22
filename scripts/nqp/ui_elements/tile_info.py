@@ -15,6 +15,7 @@ from scripts.engine.widgets.panel import Panel
 
 __all__ = ["TileInfo"]
 
+
 class TileInfo(Panel):
     """
     Hold text relating to the game's events, to display to the player.
