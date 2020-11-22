@@ -6,15 +6,15 @@ from typing import Tuple
 
 from snecs.typedefs import EntityID
 
-from scripts.engine import chronicle, library, world
-from scripts.engine.action import Behaviour, init_action, Skill
-from scripts.engine.component import Knowledge, Position
-from scripts.engine.core.constants import Direction, ProjectileExpiry, TargetTag, TerrainCollision
-from scripts.engine.core.definitions import ProjectileData
+from scripts.engine.core import chronicle, world
+from scripts.engine.internal import library
+from scripts.engine.core.action import Behaviour, Skill
+from scripts.engine.core.component import Knowledge, Position
+from scripts.engine.internal.constants import Direction, ProjectileExpiry, TargetTag, TerrainCollision
+from scripts.engine.internal.definitions import ProjectileData
 from scripts.engine.world_objects.tile import Tile
 
 
-@init_action
 class Projectile(Behaviour):
     """
     Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
@@ -127,7 +127,6 @@ class Projectile(Behaviour):
         return should_activate, should_move
 
 
-@init_action
 class SkipTurn(Behaviour):
     """
     Just skips turn
@@ -139,7 +138,6 @@ class SkipTurn(Behaviour):
         chronicle.end_turn(self.entity, library.GAME_CONFIG.base_values.move_cost)
 
 
-@init_action
 class FollowPlayer(Behaviour):
     """
     Basic AI to follow the player
@@ -171,8 +169,7 @@ class FollowPlayer(Behaviour):
         chronicle.end_turn(entity, library.GAME_CONFIG.base_values.move_cost)
 
 
-@init_action
-class Basic(Behaviour):
+class SearchAndAttack(Behaviour):
     """
     Search and attack the player
     """

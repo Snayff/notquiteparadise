@@ -9,7 +9,7 @@ from pygame.rect import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIPanel
 
-from scripts.engine.core.constants import GAP_SIZE, InputEvent, InputIntent, RenderLayer, SKILL_BUTTON_SIZE
+from scripts.engine.internal.constants import GAP_SIZE, InputEvent, InputIntent, RenderLayer, SKILL_BUTTON_SIZE
 
 if TYPE_CHECKING:
     from typing import List

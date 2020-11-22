@@ -16,7 +16,7 @@ import os
 import sys
 
 os.environ["GENERATING_SPHINX_DOCS"] = ""
-sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), os.pardir))) # go up a folder to access scripts
+sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), os.pardir)))  # go up a folder to access scripts
 
 
 # -- Project information -----------------------------------------------------
@@ -26,7 +26,7 @@ copyright = '2019-2020, Josh Snaith'
 author = 'Josh Snaith (Snayff)'
 
 # The short X.Y version
-version = "0.135.3"
+version = "0.136.0"
 
 
 # -- General configuration ---------------------------------------------------

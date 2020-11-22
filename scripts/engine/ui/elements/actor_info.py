@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import cast, List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 import pygame
 from pygame_gui import UI_BUTTON_PRESSED, UIManager
@@ -9,20 +9,19 @@ from pygame_gui.core import UIElement as PygameUiElement
 from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar, UIWindow
 from snecs.typedefs import EntityID
 
-from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, Afflictions, Identity, Resources, Traits
-from scripts.engine.core.constants import (
+from scripts.engine.core import utility, world
+from scripts.engine.core.component import Aesthetic, Afflictions, Identity, Resources, Traits
+from scripts.engine.internal.constants import (
     ASSET_PATH,
     GameEvent,
     GAP_SIZE,
     ICON_SIZE,
     INFINITE,
-    InputEvent,
     PrimaryStat,
     SecondaryStat,
     UIElement,
 )
-from scripts.engine.utility import get_class_members
+from scripts.engine.core.utility import get_class_members
 
 
 class ActorInfo(UIWindow):

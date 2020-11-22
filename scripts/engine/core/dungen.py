@@ -6,9 +6,10 @@ from typing import Dict, Iterator, List, Literal, TYPE_CHECKING
 
 import tcod
 
-from scripts.engine import library, utility, world
-from scripts.engine.core.constants import Direction, MAP_BORDER_SIZE, TILE_SIZE, TileCategory, TileCategoryType
-from scripts.engine.core.definitions import ActorData, MapData, RoomConceptData
+from scripts.engine.core import utility, world
+from scripts.engine.internal import library
+from scripts.engine.internal.constants import Direction, MAP_BORDER_SIZE, TileCategory, TileCategoryType
+from scripts.engine.internal.definitions import ActorData, MapData, RoomConceptData
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:

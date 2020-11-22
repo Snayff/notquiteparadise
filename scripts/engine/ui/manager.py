@@ -8,8 +8,9 @@ import pygame
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement as PygameGuiElement
 
-from scripts.engine import debug, library, utility
-from scripts.engine.core.constants import (
+from scripts.engine.core import debug, utility
+from scripts.engine.internal import library
+from scripts.engine.internal.constants import (
     ASSET_PATH,
     DATA_PATH,
     GAP_SIZE,

@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-from typing import Type
-
 import pygame
 from snecs.typedefs import EntityID
 
-from scripts.engine import world
-from scripts.engine.component import Afflictions, Position, Reaction
-from scripts.engine.core import queries
-from scripts.engine.core.constants import GameEvent, InteractionEvent, InteractionTrigger, InteractionTriggerType
+from scripts.engine.core import queries, world
+from scripts.engine.core.component import Afflictions, Position, Reaction
+from scripts.engine.internal.constants import GameEvent, InteractionEvent, InteractionTrigger, InteractionTriggerType
 
 __all__ = ["process_event"]
 

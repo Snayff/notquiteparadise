@@ -3,12 +3,12 @@ from __future__ import annotations
 import logging
 import os
 from abc import ABC, abstractmethod
-from typing import Dict, Iterator, Optional, Type, TYPE_CHECKING
+from typing import Dict, Iterator, Optional, Type, TYPE_CHECKING, Union
 
 from snecs.typedefs import EntityID
 
-from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import (
+from scripts.engine.core.component import Aesthetic, Position
+from scripts.engine.internal.constants import (
     AfflictionCategoryType,
     DirectionType,
     EffectTypeType,
@@ -18,8 +18,8 @@ from scripts.engine.core.constants import (
     TargetingMethodType,
     TargetTagType,
 )
-from scripts.engine.core.definitions import ProjectileData
-from scripts.engine.effect import Effect
+from scripts.engine.internal.definitions import ProjectileData
+from scripts.engine.core.effect import Effect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -103,7 +103,7 @@ class Skill(Action):
         """
         Sets the class properties of the skill from the class key
         """
-        from scripts.engine import library
+        from scripts.engine.internal import library
 
         cls.data = library.SKILLS[cls.__name__]
         cls.name = cls.__name__
@@ -129,7 +129,7 @@ class Skill(Action):
         times.
         """
         entity_names = []
-        from scripts.engine import world
+        from scripts.engine.core import world
 
         for entity in world.get_affected_entities(
             (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
@@ -143,7 +143,7 @@ class Skill(Action):
         """
         If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
         """
-        from scripts.engine import world
+        from scripts.engine.core import world
 
         logging.debug(f"'{world.get_name(self.user)}' used '{self.__class__.__name__}'.")
 
@@ -172,7 +172,7 @@ class Skill(Action):
         projectile_data.direction = self.direction
 
         # create the projectile
-        from scripts.engine import world
+        from scripts.engine.core import world
 
         projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
 
@@ -186,7 +186,7 @@ class Skill(Action):
         """
         Play the provided animation on the entity's aesthetic component
         """
-        from scripts.engine import world
+        from scripts.engine.core import world
 
         aesthetic = world.get_entitys_component(self.user, Aesthetic)
         animation = self.get_animation(aesthetic)
@@ -227,7 +227,7 @@ class Affliction(Action):
         """
         Sets the class properties of the affliction from the class key
         """
-        from scripts.engine import library
+        from scripts.engine.internal import library
 
         cls.data = library.AFFLICTIONS[cls.__name__]
         cls.name = cls.__name__
@@ -247,7 +247,7 @@ class Affliction(Action):
         An iterator over pairs of (affected entity, [effects]). Use affected entity position.  Applies to each
         entity only once.
         """
-        from scripts.engine import world
+        from scripts.engine.core import world
 
         entity_names = []
         entities = set()
@@ -304,3 +304,21 @@ def init_action(cls):
         behaviour_registry[cls.__name__] = cls
 
     return cls
+
+
+def register_action(cls: Type[Union[Action, Behaviour]]):
+    """
+    Initialises the class properties set by external data, if appropriate, and adds to the action registry for use
+    by the engine.
+    """
+    if "GENERATING_SPHINX_DOCS" in os.environ:  # when building in CI these fail
+        return
+
+    if issubclass(cls, Skill):
+        cls._init_properties()
+        skill_registry[cls.__name__] = cls
+    elif issubclass(cls, Affliction):
+        cls._init_properties()
+        affliction_registry[cls.__name__] = cls
+    elif issubclass(cls, Behaviour):
+        behaviour_registry[cls.__name__] = cls

@@ -9,13 +9,12 @@ import snecs
 from snecs.world import default_world
 
 import scripts.nqp.processors.input
-from scripts.engine import chronicle, debug, state, world
-from scripts.engine.component import NQPComponent
-from scripts.engine.core.constants import GameState
-from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
+from scripts.engine.core import chronicle, debug, state, world
+from scripts.engine.core.component import NQPComponent
+from scripts.engine.internal.constants import GameState
+from scripts.engine.core.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.engine.ui.manager import ui
 from scripts.nqp import processors
-from scripts.nqp.actions import affliction, behaviour, skill  # must import to register in engine
 from scripts.nqp.command import initialise_game
 from scripts.nqp.processors import display, game, interaction
 

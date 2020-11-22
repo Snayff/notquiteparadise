@@ -5,11 +5,10 @@ from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-from scripts.engine import library, world
-from scripts.engine.component import Afflictions, Knowledge, Tracked
-from scripts.engine.core import systems
-from scripts.engine.core.constants import INFINITE
-from scripts.engine.core.data import store
+from scripts.engine.core import queries, systems, world
+from scripts.engine.internal import library
+from scripts.engine.core.component import Tracked
+from scripts.engine.internal.data import store
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple
@@ -27,7 +26,6 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
 
     # create a turn queue from the entities list
     new_queue = {}
-    from scripts.engine.core import queries
 
     for entity, (
         is_active,

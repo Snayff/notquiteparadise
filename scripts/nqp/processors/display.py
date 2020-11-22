@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-from typing import cast
-
 import pytweening
 
-from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, LightSource
-from scripts.engine.core import queries
-from scripts.engine.core.constants import GameState, GameStateType, TILE_SIZE
-from scripts.engine.utility import is_close
+from scripts.engine.core import queries, utility, world
+from scripts.engine.core.component import Aesthetic, LightSource
+from scripts.engine.internal.constants import GameState, GameStateType, TILE_SIZE
+from scripts.engine.core.utility import is_close
 
 __all__ = ["process_display_updates"]
 

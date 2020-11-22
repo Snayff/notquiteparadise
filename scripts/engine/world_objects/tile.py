@@ -52,7 +52,7 @@ class Tile:
             x = serialised["x"]
             y = serialised["y"]
             sprite_path = serialised["sprite_path"]
-            from scripts.engine import utility
+            from scripts.engine.core import utility
 
             sprite = utility.get_image(sprite_path)
             is_visible = serialised["is_visible"]

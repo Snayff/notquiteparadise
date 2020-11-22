@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import cast, Dict, List, Optional, Tuple, Type, TYPE_CHECKING, TypeVar
+from typing import Dict, List, Optional, Tuple, Type, TYPE_CHECKING, TypeVar
 
 import numpy as np
 import snecs
@@ -10,8 +10,9 @@ import tcod
 from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
-from scripts.engine import action, chronicle, library, utility
-from scripts.engine.component import (
+from scripts.engine.core import action, chronicle, queries, utility
+from scripts.engine.internal import library
+from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
     Blocking,
@@ -34,7 +35,7 @@ from scripts.engine.component import (
     Tracked,
     Traits,
 )
-from scripts.engine.core.constants import (
+from scripts.engine.internal.constants import (
     Direction,
     DirectionType,
     EffectType,
@@ -54,8 +55,8 @@ from scripts.engine.core.constants import (
     TravelMethod,
     TravelMethodType,
 )
-from scripts.engine.core.data import store
-from scripts.engine.core.definitions import (
+from scripts.engine.internal.data import store
+from scripts.engine.internal.definitions import (
     ActorData,
     AffectCooldownEffectData,
     AffectStatEffectData,
@@ -67,7 +68,7 @@ from scripts.engine.core.definitions import (
     ProjectileData,
     TerrainData,
 )
-from scripts.engine.effect import (
+from scripts.engine.core.effect import (
     AffectCooldownEffect,
     AffectStatEffect,
     AlterTerrainEffect,
@@ -77,7 +78,7 @@ from scripts.engine.effect import (
     MoveActorEffect,
 )
 from scripts.engine.ui.manager import ui
-from scripts.engine.utility import build_sprites_from_paths
+from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
@@ -86,7 +87,7 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import List, Optional, Tuple
 
-    from scripts.engine.action import Affliction, Behaviour, Skill
+    from scripts.engine.core.action import Affliction, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
 
@@ -567,7 +568,6 @@ def get_entity_blocking_movement_map() -> np.array:
     """
     Return a Numpy array of bools, True for blocking and False for open
     """
-    from scripts.engine.core import queries
 
     game_map = get_game_map()
     blocking_map = np.zeros((game_map.width, game_map.height), dtype=bool, order="F")

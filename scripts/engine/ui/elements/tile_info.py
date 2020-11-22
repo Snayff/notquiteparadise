@@ -8,9 +8,9 @@ from pygame_gui import UIManager
 from pygame_gui.core import UIElement
 from pygame_gui.elements import UIImage, UIPanel, UITextBox
 
-from scripts.engine import world
-from scripts.engine.component import Resources, Traits
-from scripts.engine.core.constants import GAP_SIZE, ICON_IN_TEXT_SIZE, RenderLayer
+from scripts.engine.core import queries, world
+from scripts.engine.core.component import Resources, Traits
+from scripts.engine.internal.constants import GAP_SIZE, ICON_IN_TEXT_SIZE, RenderLayer
 
 
 class TileInfo(UIPanel):
@@ -76,7 +76,6 @@ class TileInfo(UIPanel):
             info = []
 
             # get entities at selected position
-            from scripts.engine.core import queries
 
             for entity, (position, identity, aesthetic) in queries.position_and_identity_and_aesthetic:
                 if self.selected_tile_pos in position:

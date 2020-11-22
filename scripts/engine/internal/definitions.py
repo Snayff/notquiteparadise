@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from abc import ABC
 from dataclasses import dataclass, field
-from typing import cast, Dict, List, Optional, Tuple, TYPE_CHECKING
+from typing import Dict, List, Optional, Tuple, TYPE_CHECKING
 
-from scripts.engine.core.constants import (
+from scripts.engine.internal.constants import (
     AfflictionCategory,
     AfflictionCategoryType,
     DamageType,
@@ -16,7 +16,6 @@ from scripts.engine.core.constants import (
     InteractionTriggerType,
     PrimaryStat,
     PrimaryStatType,
-    ProjectileExpiry,
     ProjectileExpiryType,
     ProjectileSpeed,
     ProjectileSpeedType,
@@ -30,21 +29,20 @@ from scripts.engine.core.constants import (
     TargetingMethod,
     TargetingMethodType,
     TargetTagType,
-    TerrainCollision,
     TerrainCollisionType,
     TraitGroup,
     TraitGroupType,
     TravelMethod,
     TravelMethodType,
 )
-from scripts.engine.core.extend_json import register_dataclass_with_json
+from scripts.engine.internal.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
     import pygame
     from snecs.typedefs import EntityID
 
-    from scripts.engine.action import Skill
-    from scripts.engine.effect import Effect
+    from scripts.engine.core.action import Skill
+    from scripts.engine.core.effect import Effect
 
 #################################################################
 # This module is for specifying all defined data sets.

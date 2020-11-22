@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Type, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from snecs import Query
 
-from scripts.engine.component import (
+from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
     Blocking,

@@ -8,22 +8,29 @@ from typing import List
 import snecs
 from snecs import Component
 
-from scripts.engine import chronicle, library, state, utility, world
-from scripts.engine.component import Aesthetic, Position, WinCondition
-from scripts.engine.core import systems
-from scripts.engine.core.constants import ASSET_PATH, DEBUG_START, GameState, RenderLayer, SAVE_PATH, UIElement
-from scripts.engine.core.data import store
-from scripts.engine.core.definitions import ActorData, TraitSpritePathsData
+from scripts.engine.core import chronicle, state, systems, utility, world
+from scripts.engine.core.action import register_action
+from scripts.engine.internal import library
+from scripts.engine.core.component import Aesthetic, Position, WinCondition
+from scripts.engine.internal.constants import ASSET_PATH, DEBUG_START, GameState, RenderLayer, SAVE_PATH, UIElement
+from scripts.engine.internal.data import store
+from scripts.engine.internal.definitions import ActorData, TraitSpritePathsData
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.game_map import GameMap
 
-__all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game"]
+__all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game", "register_actions"]
+
+from scripts.nqp.actions.affliction import BoggedDown, Flaming
+from scripts.nqp.actions.behaviour import FollowPlayer, Projectile, SearchAndAttack, SkipTurn
+from scripts.nqp.actions.skill import BasicAttack, Lunge, Move, Splash, TarAndFeather
 
 
 def initialise_game():
     """
     Init the game`s required info
     """
+    register_actions()
+
     if DEBUG_START:
         _start_debug_game()
     else:
@@ -228,3 +235,28 @@ def goto_to_title():
 
     # show the title screen
     ui.set_element_visibility(UIElement.TITLE_SCREEN, True)
+
+
+################## INIT ##########################
+
+def register_actions():
+    """
+    Register all Actions with the engine
+    """
+    # afflictions
+    register_action(BoggedDown)
+    register_action(Flaming)
+
+    # behaviour
+    register_action(Projectile)
+    register_action(SkipTurn)
+    register_action(FollowPlayer)
+    register_action(SearchAndAttack)
+
+    # skills
+    register_action(Move)
+    register_action(BasicAttack)
+    register_action(Lunge)
+    register_action(TarAndFeather)
+    register_action(Splash)
+

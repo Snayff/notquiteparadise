@@ -11,8 +11,8 @@ import time
 import timeit
 from typing import TYPE_CHECKING
 
-from scripts.engine import state
-from scripts.engine.core.constants import INFINITE, VERSION
+from scripts.engine.core import state
+from scripts.engine.internal.constants import INFINITE, VERSION
 
 if TYPE_CHECKING:
     from typing import Callable, List, Optional, Tuple, TYPE_CHECKING, Union

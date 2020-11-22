@@ -2,10 +2,9 @@ from __future__ import annotations
 
 import pygame
 
-from scripts.engine import key, world
-from scripts.engine.component import Position
-from scripts.engine.core import queries
-from scripts.engine.core.constants import GameState, GameStateType, InputEvent, InputIntent, UIElement
+from scripts.engine.core import key, queries, world
+from scripts.engine.core.component import Position
+from scripts.engine.internal.constants import GameState, GameStateType, InputEvent, InputIntent, UIElement
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.nqp.processors.intent import process_intent

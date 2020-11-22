@@ -1,38 +1,11 @@
 from __future__ import annotations
 
-import dataclasses
-import json
-import logging
 from typing import TYPE_CHECKING
 
-import pygame
-import pygame_gui
-from pygame_gui.core import UIContainer
-from pygame_gui.elements import UIButton, UIDropDownMenu, UILabel, UITextEntryLine, UIWindow
-
-from scripts.engine import utility
-from scripts.engine.core.constants import (
-    AfflictionCategory,
-    DamageType,
-    Direction,
-    EffectType,
-    PrimaryStat,
-    ProjectileExpiry,
-    Resource,
-    SecondaryStat,
-    Shape,
-    TargetTag,
-    TerrainCollision,
-    TravelMethod,
-)
-from scripts.engine.core.definitions import EffectData, SkillData, TraitData
-from scripts.engine.core.extend_json import ExtendedJsonEncoder
+from pygame_gui.elements import UIWindow
 
 if TYPE_CHECKING:
-    from dataclasses import dataclass
-    from typing import Any, Dict, List, Optional, Tuple
-
-    from pygame_gui import UIManager
+    pass
 
 
 class DataEditor(UIWindow):

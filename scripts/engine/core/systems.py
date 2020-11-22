@@ -4,10 +4,9 @@ import logging
 
 import tcod
 
-from scripts.engine import world
-from scripts.engine.component import Afflictions, FOV, IsActive, Knowledge, Lifespan, Position, Tracked
-from scripts.engine.core import queries
-from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, INFINITE, MAX_ACTIVATION_DISTANCE
+from scripts.engine.core import chronicle, queries, world
+from scripts.engine.core.component import Afflictions, FOV, IsActive, Knowledge, Lifespan, Position, Tracked
+from scripts.engine.internal.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, INFINITE, MAX_ACTIVATION_DISTANCE
 
 __all__ = [
     "process_activations",
@@ -44,7 +43,6 @@ def process_activations():
                 # update tracked to current time (otherwise they will be behind and act repeatedly)
                 if world.entity_has_component(entity, Tracked):
                     tracked = world.get_entitys_component(entity, Tracked)
-                    from scripts.engine import chronicle
 
                     tracked.time_spent = chronicle.get_time() + 1
 

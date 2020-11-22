@@ -6,7 +6,7 @@ from typing import List, Tuple, TYPE_CHECKING, TypeVar
 
 import pygame
 
-from scripts.engine.core.constants import (
+from scripts.engine.internal.constants import (
     ASSET_PATH,
     DirectionType,
     ICON_SIZE,
@@ -19,7 +19,7 @@ from scripts.engine.core.constants import (
 if TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
-    from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
+    from scripts.engine.internal.definitions import TraitSpritePathsData, TraitSpritesData
 
 __all__ = [
     "get_image",
@@ -49,7 +49,7 @@ def get_image(
     path is "none" then a blank surface is created to the size of the desired dimensions, or TILE_SIZE if no
     dimensions provided.
     """
-    from scripts.engine.core.data import store  # circular import in testing.
+    from scripts.engine.internal.data import store  # circular import in testing.
 
     # ensure numbers arent negative
     if desired_dimensions[0] <= 0 or desired_dimensions[1] <= 0:
@@ -165,7 +165,7 @@ def build_sprites_from_paths(
         flattened_sprites[name] = flatten_images(surface_list)
 
     # convert to dataclass
-    from scripts.engine.core.definitions import TraitSpritesData
+    from scripts.engine.internal.definitions import TraitSpritesData
 
     converted = TraitSpritesData(**flattened_sprites)
     return converted

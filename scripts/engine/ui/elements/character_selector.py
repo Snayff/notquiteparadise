@@ -9,10 +9,10 @@ from pygame import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UIPanel, UITextBox
 
-from scripts.engine import library
-from scripts.engine.core.constants import GameEvent, GAP_SIZE, RenderLayer, TILE_SIZE, TraitGroup
-from scripts.engine.core.definitions import ActorData
-from scripts.engine.utility import build_sprites_from_paths
+from scripts.engine.internal import library
+from scripts.engine.internal.constants import GameEvent, GAP_SIZE, RenderLayer, TILE_SIZE, TraitGroup
+from scripts.engine.internal.definitions import ActorData
+from scripts.engine.core.utility import build_sprites_from_paths
 
 __all__ = ["CharacterSelector"]
 

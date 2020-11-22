@@ -9,8 +9,8 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 from pygame_gui.elements import UIImage, UIPanel
 
-from scripts.engine import library
-from scripts.engine.core.constants import RenderLayer, TileCategory
+from scripts.engine.internal import library
+from scripts.engine.internal.constants import RenderLayer, TileCategory
 
 
 class DungenViewer(UIPanel):
@@ -96,7 +96,7 @@ class DungenViewer(UIPanel):
         y_scale = self.rect.height // map_data.height
         self.scale_factor = min(x_scale, y_scale)
 
-        from scripts.engine import dungen
+        from scripts.engine.core import dungen
 
         self.iterator = dungen.generate_steps(map_name)
         self._reset()

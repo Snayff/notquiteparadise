@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from scripts.engine.core.constants import InputIntent, InputIntentType
-from scripts.engine.library import INPUT_CONFIG
+from scripts.engine.internal.constants import InputIntent, InputIntentType
+from scripts.engine.internal.library import INPUT_CONFIG
 
 if TYPE_CHECKING:
     from typing import Optional, Tuple

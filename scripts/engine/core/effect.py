@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import cast, Tuple, TYPE_CHECKING
+from typing import Tuple, TYPE_CHECKING
 
 import pygame
 from snecs.typedefs import EntityID
 
-from scripts.engine import utility, world
-from scripts.engine.component import (
+from scripts.engine.core import queries, utility, world
+from scripts.engine.internal import library
+from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
     Blocking,
@@ -19,23 +20,20 @@ from scripts.engine.component import (
     Position,
     Resources,
 )
-from scripts.engine.core import queries
-from scripts.engine.core.constants import (
+from scripts.engine.internal.constants import (
     DamageTypeType,
     Direction,
     DirectionType,
     InteractionEvent,
-    InteractionTrigger,
-    InteractionTriggerType,
     PrimaryStatType,
     TargetTag,
 )
 
 if TYPE_CHECKING:
-    from typing import List, Optional
-
+    from typing import List
 
 __all__ = [
+    "Effect",
     "DamageEffect",
     "MoveActorEffect",
     "AffectStatEffect",
@@ -446,7 +444,6 @@ class AlterTerrainEffect(Effect):
         # can we create the terrain?
         if not duplicate:
             # create target
-            from scripts.engine import library
 
             terrain_data = library.TERRAIN[terrain_name]
             world.create_terrain(terrain_data, (target_pos.x, target_pos.y), self.affect_amount)

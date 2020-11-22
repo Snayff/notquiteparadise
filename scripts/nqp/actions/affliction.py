@@ -4,16 +4,15 @@ from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-from scripts.engine import library
-from scripts.engine.action import Affliction, init_action
-from scripts.engine.core.constants import DamageType, PrimaryStat
-from scripts.engine.effect import AffectStatEffect, DamageEffect
+from scripts.engine.internal import library
+from scripts.engine.core.action import Affliction
+from scripts.engine.internal.constants import DamageType, PrimaryStat
+from scripts.engine.core.effect import AffectStatEffect, DamageEffect
 
 if TYPE_CHECKING:
     from typing import List
 
 
-@init_action
 class BoggedDown(Affliction):
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[AffectStatEffect]:  # type: ignore
 
@@ -30,7 +29,6 @@ class BoggedDown(Affliction):
         return [affect_stat_effect]
 
 
-@init_action
 class Flaming(Affliction):
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type: ignore
         """

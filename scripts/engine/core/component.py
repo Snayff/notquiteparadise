@@ -6,15 +6,15 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
-from scripts.engine.core.constants import EffectType, InteractionTriggerType, PrimaryStatType, RenderLayerType
+from scripts.engine.internal.constants import EffectType, InteractionTriggerType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple, Type
 
     import pygame
 
-    from scripts.engine.action import Affliction, Behaviour, Skill
-    from scripts.engine.core.definitions import EffectData, TraitSpritePathsData, TraitSpritesData
+    from scripts.engine.core.action import Affliction, Behaviour, Skill
+    from scripts.engine.internal.definitions import EffectData, TraitSpritePathsData, TraitSpritesData
 
 
 ##########################################################
@@ -267,13 +267,13 @@ class Aesthetic(NQPComponent):
 
         # unpack sprite paths
         sprite_paths = []
-        from scripts.engine.core.definitions import TraitSpritePathsData
+        from scripts.engine.internal.definitions import TraitSpritePathsData
 
         for sprite_path in _sprite_paths:
             sprite_paths.append(TraitSpritePathsData(**sprite_path))
 
         # convert sprite paths to sprites
-        from scripts.engine import utility
+        from scripts.engine.core import utility
 
         sprites = utility.build_sprites_from_paths(sprite_paths)
 
@@ -378,7 +378,7 @@ class Thought(NQPComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        from scripts.engine import action
+        from scripts.engine.core import action
 
         behaviour = action.behaviour_registry[serialised["behaviour_name"]]
 
@@ -449,7 +449,7 @@ class Knowledge(NQPComponent):
         skill_order = serialised["skill_order"]
 
         skills = []
-        from scripts.engine import action
+        from scripts.engine.core import action
 
         for name in skill_names:
             skills.append(action.skill_registry[name])
@@ -491,7 +491,7 @@ class Afflictions(NQPComponent):
         active_dict = serialised["active"]
 
         active_instances = []
-        from scripts.engine import action
+        from scripts.engine.core import action
 
         for name, value_tuple in active_dict.items():
             _affliction = action.affliction_registry[name]
@@ -536,7 +536,7 @@ class FOV(NQPComponent):
     """
 
     def __init__(self):
-        from scripts.engine import world
+        from scripts.engine.core import world
 
         game_map = world.get_game_map()
         self.map: np.array = game_map.block_sight_map
@@ -573,7 +573,7 @@ class LightSource(NQPComponent):
         """
         Delete the associated light from the Gamemap's Lightbox
         """
-        from scripts.engine import world
+        from scripts.engine.core import world
 
         light_box = world.get_game_map().light_box
         light_box.delete_light(self.light_id)

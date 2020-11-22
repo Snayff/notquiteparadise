@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from scripts.engine.core.constants import DATA_PATH, InputIntent
-from scripts.engine.core.definitions import (
+from scripts.engine.internal.constants import DATA_PATH, InputIntent
+from scripts.engine.internal.definitions import (
     ActorData,
     AfflictionData,
     BasePrimaryStatData,
@@ -28,7 +28,7 @@ from scripts.engine.core.definitions import (
     TraitData,
     VideoConfigData,
 )
-from scripts.engine.core.extend_json import deserialise_dataclasses
+from scripts.engine.internal.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:
     from typing import Dict, List

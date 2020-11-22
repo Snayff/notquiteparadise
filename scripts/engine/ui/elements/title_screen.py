@@ -8,7 +8,7 @@ import pygame_gui
 from pygame import Rect
 from pygame_gui.elements import UIButton, UIPanel
 
-from scripts.engine.core.constants import GameEvent, InputEvent, RenderLayer
+from scripts.engine.internal.constants import GameEvent, InputEvent, RenderLayer
 
 if TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple, Union
