@@ -318,12 +318,12 @@ class Physicality(NQPComponent):
     An entity's physical existence within the world.
     """
 
-    def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
+    def __init__(self, blocks_movement: bool = False, height: bool = False):
         self.blocks_movement: bool = blocks_movement
-        self.blocks_sight: bool = blocks_sight
+        self.height: bool = height
 
     def serialize(self):
-        return self.blocks_movement, self.blocks_sight
+        return self.blocks_movement, self.height
 
     @classmethod
     def deserialize(cls, serialised):

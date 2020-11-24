@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import logging
 
+import numpy as np
 import tcod
 
 from scripts.engine.core import chronicle, query, world
-from scripts.engine.internal.component import Afflictions, FOV, IsActive, Knowledge, Lifespan, Position, Tracked
+from scripts.engine.internal.component import Afflictions, FOV, IsActive, Knowledge, Lifespan, Physicality, Position, \
+    Tracked
 from scripts.engine.internal.constant import FOV_ALGORITHM, FOV_LIGHT_WALLS, INFINITE, MAX_ACTIVATION_DISTANCE
 
 __all__ = [
@@ -85,8 +87,10 @@ def process_fov():
     """
     Update FOV for all active entities
     """
-    # create transparency layer
+    # get game map details
     game_map = world.get_game_map()
+
+    # create transparency layer
     block_sight_map = game_map.block_sight_map
 
     for entity, (
@@ -94,11 +98,31 @@ def process_fov():
         pos,
         fov,
         stats,
-    ) in query.active_and_position_and_fov_and_combat_stats:
+        physicality
+    ) in query.active_and_position_and_fov_and_combat_stats_and_physicality:
 
+        # get all entities blocking sight
+        updated_block_sight_map = block_sight_map.copy()
+        for other_entity, (_, other_pos, other_physicality) in query.active_and_position_and_physicality:
+            assert isinstance(other_pos, Position)
+            assert isinstance(other_physicality, Physicality)
+
+            # dont check against self
+            if entity == other_entity:
+                break
+
+            # is viewing_entity taller and therefore their sight isnt blocked?
+            if physicality.height > other_physicality.height:
+                break
+
+            # set all positions to blocking
+            for x, y in pos.coordinates:
+                updated_block_sight_map[x, y] = 0
+
+        # update entities fov map
         stats = world.create_combat_stats(entity)
-        sight_range = stats.sight_range
-        fov.map = tcod.map.compute_fov(block_sight_map, (pos.x, pos.y), sight_range, FOV_LIGHT_WALLS, FOV_ALGORITHM)
+        fov.map = tcod.map.compute_fov(updated_block_sight_map, (pos.x, pos.y), stats.sight_range, FOV_LIGHT_WALLS,
+                                       FOV_ALGORITHM)
 
 
 def process_tile_visibility():

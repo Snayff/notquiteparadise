@@ -74,6 +74,7 @@ def _start_debug_game():
         description="Player desc",
         position_offsets=[(0, 0)],
         trait_names=["shoom", "soft_tops", "dandy"],
+        height="middling"  # type: ignore
     )
     game_map.generate_new_map(player_data)
     logging.info(game_map.generation_info)

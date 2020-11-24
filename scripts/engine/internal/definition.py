@@ -118,7 +118,7 @@ class ActorData:
 
     def __post_init__(self):
         # map external str to internal int
-        self.speed = getattr(ProjectileSpeed, self.speed.upper())
+        self.height = getattr(Height, self.height.upper())
 
 
 @register_dataclass_with_json
@@ -240,12 +240,16 @@ class TerrainData:
 
     name: str = "none"
     description: str = "none"
-    blocks_sight: bool = False
+    height: HeightType = Height.MIN
     blocks_movement: bool = False
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
     reactions: Dict[InteractionTriggerType, EffectData] = field(default_factory=dict)
     light: Optional[LightData] = None
+
+    def __post_init__(self):
+        # map external str to internal int
+        self.height = getattr(Height, self.height.upper())
 
 
 ################### GODS ###################################################
@@ -567,7 +571,6 @@ class BaseValueData:
 @dataclass
 class DefaultValueData:
     time_per_round: int
-    entity_blocks_sight: bool
     reduced_effectiveness_multi_tile_modifier: float
 
 

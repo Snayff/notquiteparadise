@@ -2,7 +2,7 @@
     "bog": {
         "__dataclass__": "TerrainData",
         "blocks_movement": false,
-        "blocks_sight": false,
+        "height": "min",
         "description": "This is a bog. It slows entities down.",
         "name": "bog",
         "sprite_paths": {

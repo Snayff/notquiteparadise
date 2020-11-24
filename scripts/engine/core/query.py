@@ -37,8 +37,7 @@ __all__ = [
     "position_and_light_source",
     "position_and_reaction",
     "not_position",
-    "active_and_light_source_and_position",
-    "active_and_position_and_fov_and_combat_stats",
+    "active_and_position_and_fov_and_combat_stats_and_physicality",
     "position_and_physicality",
     "position_and_aesthetic",
     "position_and_identity_and_aesthetic",
@@ -47,6 +46,7 @@ __all__ = [
     "active_and_tracked",
     "light_source_and_aesthetic",
     "position_and_identity_and_lifespan",
+    "active_and_position_and_physicality"
 ]
 
 
@@ -83,18 +83,21 @@ position_and_win_condition = get_components([Position, WinCondition]).compile()
 
 position_and_reaction = get_components([Position, Reaction]).compile()
 
+active_and_tracked = get_components([IsActive, Tracked]).compile()
+
 position_and_identity_and_lifespan = get_components([Position, Identity, Lifespan]).compile()
 
 position_and_identity_and_aesthetic = get_components([Position, Identity, Aesthetic]).compile()
 
-active_and_position_and_fov_and_combat_stats = get_components([IsActive, Position, FOV, HasCombatStats]).compile()
-
 active_and_light_source_and_position = get_components([IsActive, LightSource, Position]).compile()
-
-active_and_tracked = get_components([IsActive, Tracked]).compile()
 
 light_source_and_aesthetic = get_components([LightSource, Aesthetic]).compile()
 
+active_and_position_and_physicality = get_components([IsActive, Position, Physicality]).compile()
+
+active_and_position_and_fov_and_combat_stats_and_physicality = get_components([IsActive, Position, FOV,
+                                                                                  HasCombatStats,
+                                                                                  Physicality]).compile()
 ##################### FILTERS ###############################
 # .filter((DOT & StatusEffect) | (~DOT & Poison & ~Antidote))
 # would be "return HPComponents where (if entity has DamageOverTimeComponent it also must have
