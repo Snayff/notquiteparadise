@@ -7,7 +7,7 @@ from snecs import Query
 from scripts.engine.internal.component import (
     Aesthetic,
     Afflictions,
-    Blocking,
+    Physicality,
     Exists,
     FOV,
     HasCombatStats,
@@ -39,7 +39,7 @@ __all__ = [
     "not_position",
     "active_and_light_source_and_position",
     "active_and_position_and_fov_and_combat_stats",
-    "position_and_blocking",
+    "position_and_physicality",
     "position_and_aesthetic",
     "position_and_identity_and_aesthetic",
     "position_and_actor",
@@ -73,7 +73,7 @@ lifespan = get_components([Lifespan]).compile()
 
 position_and_light_source = get_components([Position, LightSource]).compile()
 
-position_and_blocking = get_components([Position, Blocking]).compile()
+position_and_physicality = get_components([Position, Physicality]).compile()
 
 position_and_aesthetic = get_components([Position, Aesthetic]).compile()
 

@@ -1,17 +1,17 @@
 ---
-name: Feature request
+name: Feature Request
 about: Suggest an idea for this project
 title: ''
-labels: enhancement
+labels: 
 assignees: ''
 
 ---
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+## Suggested Feature 
+Describe the solution you'd like to see with a clear description of what you want and how you want it to happen.
 
-**Specify the Feature's requirements**
-Add a list of statements that can only be true or false that detail the functionality required for the feature.
+## Requirements 
+Specify the feature's requirements with a list of statements that can only be true or false and that detail the functionality required for the feature.
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+## Additional Context
+Add any other context or screenshots about the idea you're suggesting.

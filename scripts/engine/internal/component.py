@@ -313,9 +313,9 @@ class Resources(NQPComponent):
         return Resources(*serialised)
 
 
-class Blocking(NQPComponent):
+class Physicality(NQPComponent):
     """
-    An entity's blocking of other objects.
+    An entity's physical existence within the world.
     """
 
     def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
@@ -327,7 +327,7 @@ class Blocking(NQPComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        return Blocking(*serialised)
+        return Physicality(*serialised)
 
 
 class Identity(NQPComponent):

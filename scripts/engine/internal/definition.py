@@ -13,7 +13,7 @@ from scripts.engine.internal.constant import (
     DirectionType,
     EffectType,
     EffectTypeType,
-    InteractionTriggerType,
+    Height, HeightType, InteractionTriggerType,
     PrimaryStat,
     PrimaryStatType,
     ProjectileExpiryType,
@@ -114,6 +114,11 @@ class ActorData:
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     trait_names: List[str] = field(default_factory=list)
     behaviour_name: str = "none"
+    height: HeightType = Height.MIN
+
+    def __post_init__(self):
+        # map external str to internal int
+        self.speed = getattr(ProjectileSpeed, self.speed.upper())
 
 
 @register_dataclass_with_json
@@ -212,7 +217,7 @@ class ProjectileData:
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
 
     # how does it travel?
-    speed: ProjectileSpeedType = ProjectileSpeed.SLOW
+    speed: ProjectileSpeedType = ProjectileSpeed.SLOW  # takes str from json and is converted in post_init
     travel_method: TravelMethodType = TravelMethod.STANDARD
     range: int = 1
 
@@ -221,6 +226,7 @@ class ProjectileData:
     expiry_type: Optional[ProjectileExpiryType] = None
 
     def __post_init__(self):
+        # map external str to internal int
         self.speed = getattr(ProjectileSpeed, self.speed.upper())
 
 
