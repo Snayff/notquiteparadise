@@ -7,7 +7,6 @@ from snecs import Query
 from scripts.engine.internal.component import (
     Aesthetic,
     Afflictions,
-    Physicality,
     Exists,
     FOV,
     HasCombatStats,
@@ -17,6 +16,7 @@ from scripts.engine.internal.component import (
     Knowledge,
     Lifespan,
     LightSource,
+    Physicality,
     Position,
     Reaction,
     Tracked,
@@ -46,7 +46,7 @@ __all__ = [
     "active_and_tracked",
     "light_source_and_aesthetic",
     "position_and_identity_and_lifespan",
-    "active_and_position_and_physicality"
+    "active_and_position_and_physicality",
 ]
 
 
@@ -95,9 +95,9 @@ light_source_and_aesthetic = get_components([LightSource, Aesthetic]).compile()
 
 active_and_position_and_physicality = get_components([IsActive, Position, Physicality]).compile()
 
-active_and_position_and_fov_and_combat_stats_and_physicality = get_components([IsActive, Position, FOV,
-                                                                                  HasCombatStats,
-                                                                                  Physicality]).compile()
+active_and_position_and_fov_and_combat_stats_and_physicality = get_components(
+    [IsActive, Position, FOV, HasCombatStats, Physicality]
+).compile()
 ##################### FILTERS ###############################
 # .filter((DOT & StatusEffect) | (~DOT & Poison & ~Antidote))
 # would be "return HPComponents where (if entity has DamageOverTimeComponent it also must have

@@ -412,9 +412,9 @@ class Height(SimpleNamespace):
     """
     How tall an entity is.
     """
+
     MIN = HeightType(1)
     DIMINUTIVE = HeightType(2)
     MIDDLING = HeightType(3)
     LOFTY = HeightType(4)
     MAX = HeightType(5)
-

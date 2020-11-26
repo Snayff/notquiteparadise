@@ -6,8 +6,13 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
-from scripts.engine.internal.constant import EffectType, HeightType, InteractionTriggerType, PrimaryStatType, \
-    RenderLayerType
+from scripts.engine.internal.constant import (
+    EffectType,
+    HeightType,
+    InteractionTriggerType,
+    PrimaryStatType,
+    RenderLayerType,
+)
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple, Type

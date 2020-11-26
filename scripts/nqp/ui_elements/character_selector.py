@@ -257,7 +257,7 @@ class CharacterSelector(Panel):
             description="Player desc",
             position_offsets=[(0, 0)],
             trait_names=traits,
-            height="middling"  # type: ignore  # need to pass as str to be converted during post-init
+            height="middling",  # type: ignore  # need to pass as str to be converted during post-init
         )
 
         # fire event

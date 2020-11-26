@@ -6,8 +6,16 @@ import numpy as np
 import tcod
 
 from scripts.engine.core import chronicle, query, world
-from scripts.engine.internal.component import Afflictions, FOV, IsActive, Knowledge, Lifespan, Physicality, Position, \
-    Tracked
+from scripts.engine.internal.component import (
+    Afflictions,
+    FOV,
+    IsActive,
+    Knowledge,
+    Lifespan,
+    Physicality,
+    Position,
+    Tracked,
+)
 from scripts.engine.internal.constant import FOV_ALGORITHM, FOV_LIGHT_WALLS, INFINITE, MAX_ACTIVATION_DISTANCE
 
 __all__ = [
@@ -98,7 +106,7 @@ def process_fov():
         pos,
         fov,
         stats,
-        physicality
+        physicality,
     ) in query.active_and_position_and_fov_and_combat_stats_and_physicality:
 
         # get all entities blocking sight
@@ -121,8 +129,9 @@ def process_fov():
 
         # update entities fov map
         stats = world.create_combat_stats(entity)
-        fov.map = tcod.map.compute_fov(updated_block_sight_map, (pos.x, pos.y), stats.sight_range, FOV_LIGHT_WALLS,
-                                       FOV_ALGORITHM)
+        fov.map = tcod.map.compute_fov(
+            updated_block_sight_map, (pos.x, pos.y), stats.sight_range, FOV_LIGHT_WALLS, FOV_ALGORITHM
+        )
 
 
 def process_tile_visibility():

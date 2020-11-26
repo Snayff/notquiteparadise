@@ -12,11 +12,11 @@ from scripts.engine.internal import library
 from scripts.engine.internal.component import (
     Aesthetic,
     Afflictions,
-    Physicality,
     HasCombatStats,
     Identity,
     Knowledge,
     Lifespan,
+    Physicality,
     Position,
     Resources,
 )
