@@ -118,7 +118,8 @@ class ActorData:
 
     def __post_init__(self):
         # map external str to internal int
-        self.height = getattr(Height, self.height.upper())
+        if isinstance(self.height, str):
+            self.height = getattr(Height, self.height.upper())
 
 
 @register_dataclass_with_json

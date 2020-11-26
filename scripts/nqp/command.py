@@ -19,7 +19,7 @@ from scripts.engine.internal.constant import (
     DEBUG_START,
     GameState,
     GAP_SIZE,
-    MAX_SKILLS,
+    Height, MAX_SKILLS,
     RenderLayer,
     SAVE_PATH,
     SKILL_BUTTON_SIZE,
@@ -74,7 +74,7 @@ def _start_debug_game():
         description="Player desc",
         position_offsets=[(0, 0)],
         trait_names=["shoom", "soft_tops", "dandy"],
-        height="middling"  # type: ignore
+        height=Height.MIDDLING
     )
     game_map.generate_new_map(player_data)
     logging.info(game_map.generation_info)
@@ -93,7 +93,7 @@ def _start_debug_game():
         description="Krock desc",
         position_offsets=[(0, 0)],
         trait_names=["crocturion"],
-        height="lofty",  # type: ignore
+        height=Height.LOFTY,
         behaviour_name="SearchAndAttack",
     )
     world.create_actor(actor_data, (player_pos.x, player_pos.y - 2))
