@@ -13,9 +13,10 @@
         "trait_names": [
             "dummy"
         ],
-        "behaviour_name": "SkipTurn"
+        "behaviour_name": "SkipTurn",
+        "height": "diminutive"
     },
-        "crocturion": {
+    "crocturion": {
         "__dataclass__": "ActorData",
         "key": "crocturion",
         "possible_names": [
@@ -29,6 +30,7 @@
         "trait_names": [
             "crocturion"
         ],
-        "behaviour_name": "SearchAndAttack"
+        "behaviour_name": "SearchAndAttack",
+        "height": "lofty"
     }
 }

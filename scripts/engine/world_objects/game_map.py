@@ -10,7 +10,7 @@ from pygame.constants import BLEND_RGBA_MULT
 
 from scripts.engine.core import dungen
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import MAP_BORDER_SIZE, TILE_SIZE, TileCategory
+from scripts.engine.internal.constant import Height, MAP_BORDER_SIZE, TILE_SIZE, TileCategory
 from scripts.engine.internal.definition import ActorData
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.lighting import LightBox
@@ -68,14 +68,14 @@ class GameMap:
 
         wall_sprite_path = _map_data.sprite_paths[TileCategory.WALL]
         wall_sprite = utility.get_image(wall_sprite_path)
-        blocks_sight = True
+        height = Height.MIN
         blocks_movement = True
 
         # populate tile_map with wall tiles
         for x in range(self.width):
             self.tile_map.append([])  # create new list for every col
             for y in range(self.height):
-                self.tile_map[x].append(Tile(x, y, wall_sprite, wall_sprite_path, blocks_sight, blocks_movement))
+                self.tile_map[x].append(Tile(x, y, wall_sprite, wall_sprite_path, blocks_movement, height))
 
     ################## MAP GEN #############################################
 
@@ -102,7 +102,8 @@ class GameMap:
         block_movement_map = [[not tile.blocks_movement for tile in columns] for columns in self.tile_map]
         self._block_movement_map = np.asarray(block_movement_map, dtype=np.int8)
 
-        block_sight_map = [[not tile.blocks_sight for tile in columns] for columns in self.tile_map]
+        # assumes tiles only have min or max height
+        block_sight_map = [[not tile.height == Height.MAX for tile in columns] for columns in self.tile_map]
         self._block_sight_map = np.asarray(block_sight_map, dtype=np.int8)
 
         # get all the non-blocking, or "air", tiles.

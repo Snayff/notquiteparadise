@@ -17,7 +17,6 @@ from scripts.engine.internal import library
 from scripts.engine.internal.component import (
     Aesthetic,
     Afflictions,
-    Blocking,
     Exists,
     FOV,
     HasCombatStats,
@@ -30,6 +29,7 @@ from scripts.engine.internal.component import (
     Lifespan,
     LightSource,
     Opinion,
+    Physicality,
     Position,
     Reaction,
     Resources,
@@ -41,6 +41,7 @@ from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
     EffectType,
+    Height,
     HitType,
     HitTypeType,
     INFINITE,
@@ -162,7 +163,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(Position(*occupied_tiles))
     components.append(Identity(name, actor_data.description))
     components.append(HasCombatStats())
-    components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
+    components.append(Physicality(True, actor_data.height))
     components.append(Traits(actor_data.trait_names))
     components.append(FOV())
     components.append(Tracked(chronicle.get_time()))
@@ -251,7 +252,7 @@ def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int], lifesp
     components.append(Lifespan(lifespan))
     components.append(Position(*occupied_tiles))
     components.append(Identity(terrain_data.name, terrain_data.description))
-    components.append(Blocking(terrain_data.blocks_movement, terrain_data.blocks_sight))
+    components.append(Physicality(terrain_data.blocks_movement, terrain_data.height))
 
     # add aesthetic N.B. translation to screen coordinates is handled by the camera
     sprites = build_sprites_from_paths([terrain_data.sprite_paths], (TILE_SIZE, TILE_SIZE))
@@ -354,7 +355,7 @@ def create_pathfinder() -> tcod.path.Pathfinder:
     """
     game_map = get_game_map()
 
-    # combine entity blocking and map blocking maps
+    # combine entity blocking and tile blocking maps
     cost_map = game_map.block_movement_map | get_entity_blocking_movement_map()
 
     # create graph to represent the map and a pathfinder to navigate
@@ -571,10 +572,10 @@ def get_entity_blocking_movement_map() -> np.array:
 
     game_map = get_game_map()
     blocking_map = np.zeros((game_map.width, game_map.height), dtype=bool, order="F")
-    for entity, (pos, blocking) in query.position_and_blocking:
-        assert isinstance(blocking, Blocking)
+    for entity, (pos, physicality) in query.position_and_physicality:
+        assert isinstance(physicality, Physicality)
         assert isinstance(pos, Position)
-        if blocking.blocks_movement:
+        if physicality.blocks_movement:
             blocking_map[pos.x, pos.y] = True
 
     return blocking_map
@@ -1007,7 +1008,10 @@ def _is_tile_blocking_sight(tile: Tile) -> bool:
     """
     Check if a tile is blocking sight
     """
-    return tile.blocks_sight
+    # assumes tile are min or max height only.
+    if tile.height == Height.MAX:
+        return True
+    return False
 
 
 def _is_tile_visible_to_entity(tile: Tile, entity: EntityID) -> bool:
@@ -1072,24 +1076,31 @@ def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
     x = tile.x
     y = tile.y
     # Any entities that block movement?
-    for entity, (position, blocking) in get_components([Position, Blocking]):
+    for entity, (position, physicality) in get_components([Position, Physicality]):
         assert isinstance(position, Position)
-        assert isinstance(blocking, Blocking)
+        assert isinstance(physicality, Physicality)
 
-        if (x, y) in position and blocking.blocks_movement:
+        if (x, y) in position and physicality.blocks_movement:
             return True
     return False
 
 
-def _tile_has_entity_blocking_sight(tile: Tile) -> bool:
+def _tile_has_entity_blocking_sight(tile: Tile, active_entity: EntityID) -> bool:
     x = tile.x
     y = tile.y
-    # Any entities that block sight?
-    for entity, (position, blocking) in get_components([Position, Blocking]):
-        assert isinstance(position, Position)
-        assert isinstance(blocking, Blocking)
 
-        if (x, y) in position and blocking.blocks_sight:
+    if entity_has_component(active_entity, Physicality):
+        viewer_height = get_entitys_component(active_entity, Physicality).height
+    else:
+        # viewer has no height, assume everything blocks
+        return True
+
+    # Any entities that block sight?
+    for entity, (position, physicality) in get_components([Position, Physicality]):
+        assert isinstance(position, Position)
+        assert isinstance(physicality, Physicality)
+
+        if (x, y) in position and physicality.height > viewer_height:
             return True
     return False
 

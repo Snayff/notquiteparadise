@@ -13,6 +13,8 @@ from scripts.engine.internal.constant import (
     DirectionType,
     EffectType,
     EffectTypeType,
+    Height,
+    HeightType,
     InteractionTriggerType,
     PrimaryStat,
     PrimaryStatType,
@@ -114,6 +116,12 @@ class ActorData:
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     trait_names: List[str] = field(default_factory=list)
     behaviour_name: str = "none"
+    height: HeightType = Height.MIN
+
+    def __post_init__(self):
+        # map external str to internal int
+        if isinstance(self.height, str):
+            self.height = getattr(Height, self.height.upper())
 
 
 @register_dataclass_with_json
@@ -212,7 +220,7 @@ class ProjectileData:
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
 
     # how does it travel?
-    speed: ProjectileSpeedType = ProjectileSpeed.SLOW
+    speed: ProjectileSpeedType = ProjectileSpeed.SLOW  # takes str from json and is converted in post_init
     travel_method: TravelMethodType = TravelMethod.STANDARD
     range: int = 1
 
@@ -221,6 +229,7 @@ class ProjectileData:
     expiry_type: Optional[ProjectileExpiryType] = None
 
     def __post_init__(self):
+        # map external str to internal int
         self.speed = getattr(ProjectileSpeed, self.speed.upper())
 
 
@@ -234,12 +243,16 @@ class TerrainData:
 
     name: str = "none"
     description: str = "none"
-    blocks_sight: bool = False
+    height: HeightType = Height.MIN
     blocks_movement: bool = False
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
     reactions: Dict[InteractionTriggerType, EffectData] = field(default_factory=dict)
     light: Optional[LightData] = None
+
+    def __post_init__(self):
+        # map external str to internal int
+        self.height = getattr(Height, self.height.upper())
 
 
 ################### GODS ###################################################
@@ -561,7 +574,6 @@ class BaseValueData:
 @dataclass
 class DefaultValueData:
     time_per_round: int
-    entity_blocks_sight: bool
     reduced_effectiveness_multi_tile_modifier: float
 
 

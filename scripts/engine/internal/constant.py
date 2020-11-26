@@ -10,9 +10,8 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.136.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.137.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 DEBUG_START = False  # Whether to start directly in debug map
-
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -66,6 +65,7 @@ TraitGroupType = NewType("TraitGroupType", str)
 InteractionTriggerType = NewType("InteractionTriggerType", str)
 RenderLayerType = NewType("RenderLayerType", int)
 TileCategoryType = NewType("TileCategoryType", str)
+HeightType = NewType("HeightType", int)
 
 TagType = Union[TargetTagType, DamageTypeType, AfflictionCategoryType]
 
@@ -398,7 +398,7 @@ class ProjectileSpeed(SimpleNamespace):
 
 class TileCategory(SimpleNamespace):
     """
-    The type of tile to be placed. Used in Dungen
+    The type of tile to be placed. Used in Dungen only.
     """
 
     FLOOR = TileCategoryType("floor")
@@ -406,3 +406,15 @@ class TileCategory(SimpleNamespace):
     ACTOR = TileCategoryType("actor")
     DEBUG = TileCategoryType("debug")
     PLAYER = TileCategoryType("player")
+
+
+class Height(SimpleNamespace):
+    """
+    How tall an entity is.
+    """
+
+    MIN = HeightType(1)
+    DIMINUTIVE = HeightType(2)
+    MIDDLING = HeightType(3)
+    LOFTY = HeightType(4)
+    MAX = HeightType(5)

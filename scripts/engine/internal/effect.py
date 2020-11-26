@@ -12,11 +12,11 @@ from scripts.engine.internal import library
 from scripts.engine.internal.component import (
     Aesthetic,
     Afflictions,
-    Blocking,
     HasCombatStats,
     Identity,
     Knowledge,
     Lifespan,
+    Physicality,
     Position,
     Resources,
 )
@@ -241,16 +241,16 @@ class MoveActorEffect(Effect):
             if is_tile_blocking_movement:
                 from scripts.engine.core import query
 
-                for blocking_entity, (pos, blocking) in query.position_and_blocking:
+                for other_entity, (pos, physicality) in query.position_and_physicality:
                     assert isinstance(pos, Position)
-                    assert isinstance(blocking, Blocking)
+                    assert isinstance(physicality, Physicality)
                     if (
-                        blocking_entity != entity
-                        and blocking.blocks_movement
+                        other_entity != entity
+                        and physicality.blocks_movement
                         and (target_x, target_y) in pos.coordinates
                     ):
                         # blocked by entity
-                        blockers_name = world.get_name(blocking_entity)
+                        blockers_name = world.get_name(other_entity)
                         logging.debug(
                             f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
                             f" by '{blockers_name}'. "

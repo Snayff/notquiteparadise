@@ -6,7 +6,13 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
-from scripts.engine.internal.constant import EffectType, InteractionTriggerType, PrimaryStatType, RenderLayerType
+from scripts.engine.internal.constant import (
+    EffectType,
+    HeightType,
+    InteractionTriggerType,
+    PrimaryStatType,
+    RenderLayerType,
+)
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple, Type
@@ -313,21 +319,21 @@ class Resources(NQPComponent):
         return Resources(*serialised)
 
 
-class Blocking(NQPComponent):
+class Physicality(NQPComponent):
     """
-    An entity's blocking of other objects.
+    An entity's physical existence within the world.
     """
 
-    def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
+    def __init__(self, blocks_movement: bool, height: HeightType):
         self.blocks_movement: bool = blocks_movement
-        self.blocks_sight: bool = blocks_sight
+        self.height: HeightType = height
 
     def serialize(self):
-        return self.blocks_movement, self.blocks_sight
+        return self.blocks_movement, self.height
 
     @classmethod
     def deserialize(cls, serialised):
-        return Blocking(*serialised)
+        return Physicality(*serialised)
 
 
 class Identity(NQPComponent):
@@ -535,7 +541,7 @@ class FOV(NQPComponent):
         from scripts.engine.core import world
 
         game_map = world.get_game_map()
-        self.map: np.array = game_map.block_sight_map
+        self.map: np.array = game_map.block_sight_map.astype(bool)  # return of compute_fov is bool
 
     def serialize(self):
         fov_map = self.map.tolist()
