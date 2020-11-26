@@ -85,6 +85,19 @@ def _start_debug_game():
     # tell places about the player
     chronicle.set_turn_holder(player)
 
+    # create actor near to player
+    player_pos = world.get_entitys_component(player, Position)
+    actor_data = ActorData(
+        key="crocturion",
+        possible_names=["Krock"],
+        description="Krock desc",
+        position_offsets=[(0, 0)],
+        trait_names=["crocturion"],
+        height="lofty",  # type: ignore
+        behaviour_name="SearchAndAttack",
+    )
+    world.create_actor(actor_data, (player_pos.x, player_pos.y - 2))
+
     # show the in game screens
     camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
     ui.register_element(UIElement.CAMERA, camera)

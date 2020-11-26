@@ -16,7 +16,7 @@
         "behaviour_name": "SkipTurn",
         "height": "diminutive"
     },
-        "crocturion": {
+    "crocturion": {
         "__dataclass__": "ActorData",
         "key": "crocturion",
         "possible_names": [

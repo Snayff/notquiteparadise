@@ -109,14 +109,14 @@ def process_fov():
 
             # dont check against self
             if entity == other_entity:
-                break
+                continue
 
             # is viewing_entity taller and therefore their sight isnt blocked?
             if physicality.height > other_physicality.height:
-                break
+                continue
 
             # set all positions to blocking
-            for x, y in pos.coordinates:
+            for x, y in other_pos.coordinates:
                 updated_block_sight_map[x, y] = 0
 
         # update entities fov map
@@ -128,7 +128,6 @@ def process_fov():
 def process_tile_visibility():
     """
     Update tile visibility based on player fov
-    FIXME - every entity has its own fov so gamemap doesnt need visibility anymore
     """
     # get player info
     player = world.get_player()
