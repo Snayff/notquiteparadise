@@ -272,7 +272,6 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Aesthetic</span><span class="p">,</span>
     <span class="n">Afflictions</span><span class="p">,</span>
-    <span class="n">Blocking</span><span class="p">,</span>
     <span class="n">Exists</span><span class="p">,</span>
     <span class="n">FOV</span><span class="p">,</span>
     <span class="n">HasCombatStats</span><span class="p">,</span>
@@ -285,6 +284,7 @@
     <span class="n">Lifespan</span><span class="p">,</span>
     <span class="n">LightSource</span><span class="p">,</span>
     <span class="n">Opinion</span><span class="p">,</span>
+    <span class="n">Physicality</span><span class="p">,</span>
     <span class="n">Position</span><span class="p">,</span>
     <span class="n">Reaction</span><span class="p">,</span>
     <span class="n">Resources</span><span class="p">,</span>
@@ -296,6 +296,7 @@
     <span class="n">Direction</span><span class="p">,</span>
     <span class="n">DirectionType</span><span class="p">,</span>
     <span class="n">EffectType</span><span class="p">,</span>
+    <span class="n">Height</span><span class="p">,</span>
     <span class="n">HitType</span><span class="p">,</span>
     <span class="n">HitTypeType</span><span class="p">,</span>
     <span class="n">INFINITE</span><span class="p">,</span>
@@ -417,7 +418,7 @@
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">(</span><span class="o">*</span><span class="n">occupied_tiles</span><span class="p">))</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">actor_data</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HasCombatStats</span><span class="p">())</span>
-    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Blocking</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">entity_blocks_sight</span><span class="p">))</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Physicality</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">actor_data</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Traits</span><span class="p">(</span><span class="n">actor_data</span><span class="o">.</span><span class="n">trait_names</span><span class="p">))</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FOV</span><span class="p">())</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tracked</span><span class="p">(</span><span class="n">chronicle</span><span class="o">.</span><span class="n">get_time</span><span class="p">()))</span>
@@ -506,7 +507,7 @@
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lifespan</span><span class="p">(</span><span class="n">lifespan</span><span class="p">))</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">(</span><span class="o">*</span><span class="n">occupied_tiles</span><span class="p">))</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">terrain_data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">terrain_data</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
-    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Blocking</span><span class="p">(</span><span class="n">terrain_data</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">,</span> <span class="n">terrain_data</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">))</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Physicality</span><span class="p">(</span><span class="n">terrain_data</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">,</span> <span class="n">terrain_data</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
 
     <span class="c1"># add aesthetic N.B. translation to screen coordinates is handled by the camera</span>
     <span class="n">sprites</span> <span class="o">=</span> <span class="n">build_sprites_from_paths</span><span class="p">([</span><span class="n">terrain_data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">],</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
@@ -609,7 +610,7 @@
 <span class="sd">    """</span>
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
 
-    <span class="c1"># combine entity blocking and map blocking maps</span>
+    <span class="c1"># combine entity blocking and tile blocking maps</span>
     <span class="n">cost_map</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">block_movement_map</span> <span class="o">|</span> <span class="n">get_entity_blocking_movement_map</span><span class="p">()</span>
 
     <span class="c1"># create graph to represent the map and a pathfinder to navigate</span>
@@ -826,10 +827,10 @@
 
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
     <span class="n">blocking_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_blocking</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocking</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">physicality</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_physicality</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">physicality</span><span class="p">,</span> <span class="n">Physicality</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">physicality</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
             <span class="n">blocking_map</span><span class="p">[</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">return</span> <span class="n">blocking_map</span></div>
@@ -1262,7 +1263,10 @@
     <span class="sd">"""</span>
 <span class="sd">    Check if a tile is blocking sight</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span>
+    <span class="c1"># assumes tile are min or max height only.</span>
+    <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">height</span> <span class="o">==</span> <span class="n">Height</span><span class="o">.</span><span class="n">MAX</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
 
 
 <span class="k">def</span> <span class="nf">_is_tile_visible_to_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -1327,24 +1331,31 @@
     <span class="n">x</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span>
     <span class="c1"># Any entities that block movement?</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="n">get_components</span><span class="p">([</span><span class="n">Position</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">physicality</span><span class="p">)</span> <span class="ow">in</span> <span class="n">get_components</span><span class="p">([</span><span class="n">Position</span><span class="p">,</span> <span class="n">Physicality</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocking</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">physicality</span><span class="p">,</span> <span class="n">Physicality</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">position</span> <span class="ow">and</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">position</span> <span class="ow">and</span> <span class="n">physicality</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">_tile_has_entity_blocking_sight</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_tile_has_entity_blocking_sight</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span>
-    <span class="c1"># Any entities that block sight?</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="n">get_components</span><span class="p">([</span><span class="n">Position</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">]):</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocking</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">position</span> <span class="ow">and</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">entity_has_component</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">Physicality</span><span class="p">):</span>
+        <span class="n">viewer_height</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">Physicality</span><span class="p">)</span><span class="o">.</span><span class="n">height</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># viewer has no height, assume everything blocks</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Any entities that block sight?</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">physicality</span><span class="p">)</span> <span class="ow">in</span> <span class="n">get_components</span><span class="p">([</span><span class="n">Position</span><span class="p">,</span> <span class="n">Physicality</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">physicality</span><span class="p">,</span> <span class="n">Physicality</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">position</span> <span class="ow">and</span> <span class="n">physicality</span><span class="o">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="n">viewer_height</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span>
 

@@ -533,32 +533,6 @@ full-World serialization feature.</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="scripts.engine.internal.component.Blocking">
-<em class="property">class </em><code class="sig-name descname">Blocking</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">blocks_movement</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">blocks_sight</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Blocking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Blocking" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An entity’s blocking of other objects.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Blocking.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">blocks_movement</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">blocks_sight</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Blocking.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Blocking.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Blocking.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Blocking.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Blocking.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Blocking.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Blocking.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Blocking.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
 <dt id="scripts.engine.internal.component.Exists">
 <em class="property">class </em><code class="sig-name descname">Exists</code><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
@@ -862,6 +836,32 @@ full-World serialization feature.</p>
 <dl class="py method">
 <dt id="scripts.engine.internal.component.Opinion.serialize">
 <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Opinion.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Opinion.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize an instance of this component into a simpler type.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.component.Physicality">
+<em class="property">class </em><code class="sig-name descname">Physicality</code><span class="sig-paren">(</span><em class="sig-param">blocks_movement: bool</em>, <em class="sig-param">height: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Physicality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Physicality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
+<p>An entity’s physical existence within the world.</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.component.Physicality.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">blocks_movement: bool</em>, <em class="sig-param">height: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Physicality.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Physicality.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.component.Physicality.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Physicality.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Physicality.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize a serialized instance of this component.</p>
+<p>Will get the output of <cite>serialize</cite> as an argument.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.component.Physicality.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Physicality.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Physicality.serialize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serialize an instance of this component into a simpler type.</p>
 <p>Override this in all your Component classes to make use of snecs’
 full-World serialization feature.</p>
@@ -1265,6 +1265,32 @@ full-World serialization feature.</p>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.constant.GameState.TARGETING">
 <code class="sig-name descname">TARGETING</code><em class="property"> = 4</em><a class="headerlink" href="#scripts.engine.internal.constant.GameState.TARGETING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.constant.Height">
+<em class="property">class </em><code class="sig-name descname">Height</code><a class="reference internal" href="_modules/scripts/engine/internal/constant.html#Height"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.constant.Height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
+<p>How tall an entity is.</p>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.Height.DIMINUTIVE">
+<code class="sig-name descname">DIMINUTIVE</code><em class="property"> = 2</em><a class="headerlink" href="#scripts.engine.internal.constant.Height.DIMINUTIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.Height.LOFTY">
+<code class="sig-name descname">LOFTY</code><em class="property"> = 4</em><a class="headerlink" href="#scripts.engine.internal.constant.Height.LOFTY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.Height.MAX">
+<code class="sig-name descname">MAX</code><em class="property"> = 5</em><a class="headerlink" href="#scripts.engine.internal.constant.Height.MAX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.Height.MIDDLING">
+<code class="sig-name descname">MIDDLING</code><em class="property"> = 3</em><a class="headerlink" href="#scripts.engine.internal.constant.Height.MIDDLING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.Height.MIN">
+<code class="sig-name descname">MIN</code><em class="property"> = 1</em><a class="headerlink" href="#scripts.engine.internal.constant.Height.MIN" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">
@@ -1754,7 +1780,7 @@ N.B. does not use base move_cost</p>
 <dt id="scripts.engine.internal.constant.TileCategory">
 <em class="property">class </em><code class="sig-name descname">TileCategory</code><a class="reference internal" href="_modules/scripts/engine/internal/constant.html#TileCategory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.constant.TileCategory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
-<p>The type of tile to be placed. Used in Dungen</p>
+<p>The type of tile to be placed. Used in Dungen only.</p>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.constant.TileCategory.ACTOR">
 <code class="sig-name descname">ACTOR</code><em class="property"> = 'actor'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileCategory.ACTOR" title="Permalink to this definition">¶</a></dt>
@@ -1984,13 +2010,13 @@ print( performance_test(method_descs, old_methods, new_methods) )</p>
 <span id="scripts-engine-internal-definition-module"></span><h2 id="module-scripts.engine.internal.definition">scripts.engine.internal.definition module<a class="headerlink" href="#module-scripts.engine.internal.definition" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="scripts.engine.internal.definition.ActorData">
-<em class="property">class </em><code class="sig-name descname">ActorData</code><span class="sig-paren">(</span><em class="sig-param">key: str = 'none'</em>, <em class="sig-param">possible_names: List[str] = &lt;factory&gt;</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">position_offsets: List[Tuple[int</em>, <em class="sig-param">int]] = &lt;factory&gt;</em>, <em class="sig-param">trait_names: List[str] = &lt;factory&gt;</em>, <em class="sig-param">behaviour_name: str = 'none'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#ActorData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.ActorData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ActorData</code><span class="sig-paren">(</span><em class="sig-param">key: str = 'none'</em>, <em class="sig-param">possible_names: List[str] = &lt;factory&gt;</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">position_offsets: List[Tuple[int</em>, <em class="sig-param">int]] = &lt;factory&gt;</em>, <em class="sig-param">trait_names: List[str] = &lt;factory&gt;</em>, <em class="sig-param">behaviour_name: str = 'none'</em>, <em class="sig-param">height: NewType.&lt;locals&gt;.new_type = 1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#ActorData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.ActorData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Data class for an actor.
 Also used to hold and map data from json.</p>
 <dl class="py method">
 <dt id="scripts.engine.internal.definition.ActorData.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">key: str = 'none'</em>, <em class="sig-param">possible_names: List[str] = &lt;factory&gt;</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">position_offsets: List[Tuple[int</em>, <em class="sig-param">int]] = &lt;factory&gt;</em>, <em class="sig-param">trait_names: List[str] = &lt;factory&gt;</em>, <em class="sig-param">behaviour_name: str = 'none'</em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.ActorData.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">key: str = 'none'</em>, <em class="sig-param">possible_names: List[str] = &lt;factory&gt;</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">position_offsets: List[Tuple[int</em>, <em class="sig-param">int]] = &lt;factory&gt;</em>, <em class="sig-param">trait_names: List[str] = &lt;factory&gt;</em>, <em class="sig-param">behaviour_name: str = 'none'</em>, <em class="sig-param">height: NewType.&lt;locals&gt;.new_type = 1</em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.ActorData.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 <dl class="py attribute">
@@ -2000,6 +2026,10 @@ Also used to hold and map data from json.</p>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.ActorData.description">
 <code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><em class="property"> = 'none'</em><a class="headerlink" href="#scripts.engine.internal.definition.ActorData.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.definition.ActorData.height">
+<code class="sig-name descname">height</code><em class="property">: NewType.&lt;locals&gt;.new_type</em><em class="property"> = 1</em><a class="headerlink" href="#scripts.engine.internal.definition.ActorData.height" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.ActorData.key">
@@ -2337,17 +2367,13 @@ Also used to hold and map data from json.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="scripts.engine.internal.definition.DefaultValueData">
-<em class="property">class </em><code class="sig-name descname">DefaultValueData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_per_round</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">entity_blocks_sight</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span></em>, <em class="sig-param"><span class="n">reduced_effectiveness_multi_tile_modifier</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#DefaultValueData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.DefaultValueData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">DefaultValueData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_per_round</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">reduced_effectiveness_multi_tile_modifier</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#DefaultValueData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.DefaultValueData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
 <dt id="scripts.engine.internal.definition.DefaultValueData.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_per_round</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">entity_blocks_sight</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span></em>, <em class="sig-param"><span class="n">reduced_effectiveness_multi_tile_modifier</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.DefaultValueData.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_per_round</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">reduced_effectiveness_multi_tile_modifier</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.DefaultValueData.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.definition.DefaultValueData.entity_blocks_sight">
-<code class="sig-name descname">entity_blocks_sight</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#scripts.engine.internal.definition.DefaultValueData.entity_blocks_sight" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.DefaultValueData.reduced_effectiveness_multi_tile_modifier">
 <code class="sig-name descname">reduced_effectiveness_multi_tile_modifier</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></em><a class="headerlink" href="#scripts.engine.internal.definition.DefaultValueData.reduced_effectiveness_multi_tile_modifier" title="Permalink to this definition">¶</a></dt>
@@ -2819,13 +2845,13 @@ Also used to hold and map data from json.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="scripts.engine.internal.definition.TerrainData">
-<em class="property">class </em><code class="sig-name descname">TerrainData</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">blocks_sight: bool = False</em>, <em class="sig-param">blocks_movement: bool = False</em>, <em class="sig-param">position_offsets: List[Tuple[int</em>, <em class="sig-param">int]] = &lt;factory&gt;</em>, <em class="sig-param">sprite_paths: scripts.engine.internal.definition.TraitSpritePathsData = &lt;factory&gt;</em>, <em class="sig-param">reactions: Dict[NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">scripts.engine.internal.definition.EffectData] = &lt;factory&gt;</em>, <em class="sig-param">light: Optional[scripts.engine.internal.definition.LightData] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#TerrainData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.TerrainData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">TerrainData</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">height: NewType.&lt;locals&gt;.new_type = 1</em>, <em class="sig-param">blocks_movement: bool = False</em>, <em class="sig-param">position_offsets: List[Tuple[int</em>, <em class="sig-param">int]] = &lt;factory&gt;</em>, <em class="sig-param">sprite_paths: scripts.engine.internal.definition.TraitSpritePathsData = &lt;factory&gt;</em>, <em class="sig-param">reactions: Dict[NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">scripts.engine.internal.definition.EffectData] = &lt;factory&gt;</em>, <em class="sig-param">light: Optional[scripts.engine.internal.definition.LightData] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#TerrainData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.TerrainData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Data class for terrain.
 Also used to hold and map data from json.</p>
 <dl class="py method">
 <dt id="scripts.engine.internal.definition.TerrainData.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">blocks_sight: bool = False</em>, <em class="sig-param">blocks_movement: bool = False</em>, <em class="sig-param">position_offsets: List[Tuple[int</em>, <em class="sig-param">int]] = &lt;factory&gt;</em>, <em class="sig-param">sprite_paths: scripts.engine.internal.definition.TraitSpritePathsData = &lt;factory&gt;</em>, <em class="sig-param">reactions: Dict[NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">scripts.engine.internal.definition.EffectData] = &lt;factory&gt;</em>, <em class="sig-param">light: Optional[scripts.engine.internal.definition.LightData] = None</em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.TerrainData.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">height: NewType.&lt;locals&gt;.new_type = 1</em>, <em class="sig-param">blocks_movement: bool = False</em>, <em class="sig-param">position_offsets: List[Tuple[int</em>, <em class="sig-param">int]] = &lt;factory&gt;</em>, <em class="sig-param">sprite_paths: scripts.engine.internal.definition.TraitSpritePathsData = &lt;factory&gt;</em>, <em class="sig-param">reactions: Dict[NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">scripts.engine.internal.definition.EffectData] = &lt;factory&gt;</em>, <em class="sig-param">light: Optional[scripts.engine.internal.definition.LightData] = None</em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.TerrainData.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 <dl class="py attribute">
@@ -2833,12 +2859,12 @@ Also used to hold and map data from json.</p>
 <code class="sig-name descname">blocks_movement</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><em class="property"> = False</em><a class="headerlink" href="#scripts.engine.internal.definition.TerrainData.blocks_movement" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="scripts.engine.internal.definition.TerrainData.blocks_sight">
-<code class="sig-name descname">blocks_sight</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><em class="property"> = False</em><a class="headerlink" href="#scripts.engine.internal.definition.TerrainData.blocks_sight" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
 <dt id="scripts.engine.internal.definition.TerrainData.description">
 <code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><em class="property"> = 'none'</em><a class="headerlink" href="#scripts.engine.internal.definition.TerrainData.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.definition.TerrainData.height">
+<code class="sig-name descname">height</code><em class="property">: NewType.&lt;locals&gt;.new_type</em><em class="property"> = 1</em><a class="headerlink" href="#scripts.engine.internal.definition.TerrainData.height" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.TerrainData.light">

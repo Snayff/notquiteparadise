@@ -274,6 +274,7 @@
     <span class="n">DEBUG_START</span><span class="p">,</span>
     <span class="n">GameState</span><span class="p">,</span>
     <span class="n">GAP_SIZE</span><span class="p">,</span>
+    <span class="n">Height</span><span class="p">,</span>
     <span class="n">MAX_SKILLS</span><span class="p">,</span>
     <span class="n">RenderLayer</span><span class="p">,</span>
     <span class="n">SAVE_PATH</span><span class="p">,</span>
@@ -329,6 +330,7 @@
         <span class="n">description</span><span class="o">=</span><span class="s2">"Player desc"</span><span class="p">,</span>
         <span class="n">position_offsets</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
         <span class="n">trait_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"shoom"</span><span class="p">,</span> <span class="s2">"soft_tops"</span><span class="p">,</span> <span class="s2">"dandy"</span><span class="p">],</span>
+        <span class="n">height</span><span class="o">=</span><span class="n">Height</span><span class="o">.</span><span class="n">MIDDLING</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">game_map</span><span class="o">.</span><span class="n">generate_new_map</span><span class="p">(</span><span class="n">player_data</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">generation_info</span><span class="p">)</span>
@@ -338,6 +340,19 @@
 
     <span class="c1"># tell places about the player</span>
     <span class="n">chronicle</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+
+    <span class="c1"># create actor near to player</span>
+    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">actor_data</span> <span class="o">=</span> <span class="n">ActorData</span><span class="p">(</span>
+        <span class="n">key</span><span class="o">=</span><span class="s2">"crocturion"</span><span class="p">,</span>
+        <span class="n">possible_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"Krock"</span><span class="p">],</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Krock desc"</span><span class="p">,</span>
+        <span class="n">position_offsets</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
+        <span class="n">trait_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"crocturion"</span><span class="p">],</span>
+        <span class="n">height</span><span class="o">=</span><span class="n">Height</span><span class="o">.</span><span class="n">LOFTY</span><span class="p">,</span>
+        <span class="n">behaviour_name</span><span class="o">=</span><span class="s2">"SearchAndAttack"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
 
     <span class="c1"># show the in game screens</span>
     <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>

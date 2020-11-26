@@ -258,6 +258,8 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
 
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">Height</span><span class="p">,</span> <span class="n">HeightType</span>
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pygame</span>
 
@@ -273,15 +275,15 @@
         <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span>
         <span class="n">sprite_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">blocks_sight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">height</span><span class="p">:</span> <span class="n">HeightType</span> <span class="o">=</span> <span class="n">Height</span><span class="o">.</span><span class="n">MIN</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sprite</span> <span class="o">=</span> <span class="n">sprite</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sprite_path</span> <span class="o">=</span> <span class="n">sprite_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_visible</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">blocks_sight</span> <span class="o">=</span> <span class="n">blocks_sight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="o">=</span> <span class="n">blocks_movement</span></div>
 
 <div class="viewcode-block" id="Tile.serialise"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile.serialise">[docs]</a>    <span class="k">def</span> <span class="nf">serialise</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -293,7 +295,7 @@
             <span class="s2">"y"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
             <span class="s2">"sprite_path"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprite_path</span><span class="p">,</span>
             <span class="s2">"is_visible"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_visible</span><span class="p">,</span>
-            <span class="s2">"blocks_sight"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">,</span>
+            <span class="s2">"height"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
             <span class="s2">"blocks_movement"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">_dict</span></div>
@@ -311,10 +313,10 @@
 
             <span class="n">sprite</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="n">sprite_path</span><span class="p">)</span>
             <span class="n">is_visible</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"is_visible"</span><span class="p">]</span>
-            <span class="n">blocks_sight</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"blocks_sight"</span><span class="p">]</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"height"</span><span class="p">]</span>
             <span class="n">blocks_movement</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"blocks_movement"</span><span class="p">]</span>
 
-            <span class="n">tile</span> <span class="o">=</span> <span class="n">Tile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sprite</span><span class="p">,</span> <span class="n">sprite_path</span><span class="p">,</span> <span class="n">blocks_sight</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="p">)</span>
+            <span class="n">tile</span> <span class="o">=</span> <span class="n">Tile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sprite</span><span class="p">,</span> <span class="n">sprite_path</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
             <span class="n">tile</span><span class="o">.</span><span class="n">is_visible</span> <span class="o">=</span> <span class="n">is_visible</span>
             <span class="k">return</span> <span class="n">tile</span>
 

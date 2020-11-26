@@ -261,7 +261,13 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">RegisteredComponent</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">EffectType</span><span class="p">,</span> <span class="n">InteractionTriggerType</span><span class="p">,</span> <span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">RenderLayerType</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EffectType</span><span class="p">,</span>
+    <span class="n">HeightType</span><span class="p">,</span>
+    <span class="n">InteractionTriggerType</span><span class="p">,</span>
+    <span class="n">PrimaryStatType</span><span class="p">,</span>
+    <span class="n">RenderLayerType</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
@@ -568,21 +574,21 @@
         <span class="k">return</span> <span class="n">Resources</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Blocking"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Blocking">[docs]</a><span class="k">class</span> <span class="nc">Blocking</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
+<div class="viewcode-block" id="Physicality"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Physicality">[docs]</a><span class="k">class</span> <span class="nc">Physicality</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    An entity's blocking of other objects.</span>
+<span class="sd">    An entity's physical existence within the world.</span>
 <span class="sd">    """</span>
 
-<div class="viewcode-block" id="Blocking.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Blocking.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">blocks_sight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Physicality.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Physicality.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="n">HeightType</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">blocks_movement</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">blocks_sight</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">:</span> <span class="n">HeightType</span> <span class="o">=</span> <span class="n">height</span></div>
 
-<div class="viewcode-block" id="Blocking.serialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Blocking.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks_sight</span></div>
+<div class="viewcode-block" id="Physicality.serialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Physicality.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span></div>
 
-<div class="viewcode-block" id="Blocking.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Blocking.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Physicality.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Physicality.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Blocking</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">Physicality</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
@@ -790,7 +796,7 @@
         <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
 
         <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">block_sight_map</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">block_sight_map</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>  <span class="c1"># return of compute_fov is bool</span></div>
 
 <div class="viewcode-block" id="FOV.serialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.FOV.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fov_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>

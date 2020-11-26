@@ -257,10 +257,20 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">tcod</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">FOV</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Lifespan</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Tracked</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Afflictions</span><span class="p">,</span>
+    <span class="n">FOV</span><span class="p">,</span>
+    <span class="n">IsActive</span><span class="p">,</span>
+    <span class="n">Knowledge</span><span class="p">,</span>
+    <span class="n">Lifespan</span><span class="p">,</span>
+    <span class="n">Physicality</span><span class="p">,</span>
+    <span class="n">Position</span><span class="p">,</span>
+    <span class="n">Tracked</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">FOV_ALGORITHM</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">INFINITE</span><span class="p">,</span> <span class="n">MAX_ACTIVATION_DISTANCE</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -340,8 +350,10 @@
     <span class="sd">"""</span>
 <span class="sd">    Update FOV for all active entities</span>
 <span class="sd">    """</span>
-    <span class="c1"># create transparency layer</span>
+    <span class="c1"># get game map details</span>
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
+
+    <span class="c1"># create transparency layer</span>
     <span class="n">block_sight_map</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">block_sight_map</span>
 
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span>
@@ -349,17 +361,37 @@
         <span class="n">pos</span><span class="p">,</span>
         <span class="n">fov</span><span class="p">,</span>
         <span class="n">stats</span><span class="p">,</span>
-    <span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">active_and_position_and_fov_and_combat_stats</span><span class="p">:</span>
+        <span class="n">physicality</span><span class="p">,</span>
+    <span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">active_and_position_and_fov_and_combat_stats_and_physicality</span><span class="p">:</span>
 
+        <span class="c1"># get all entities blocking sight</span>
+        <span class="n">updated_block_sight_map</span> <span class="o">=</span> <span class="n">block_sight_map</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">other_entity</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">other_pos</span><span class="p">,</span> <span class="n">other_physicality</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">active_and_position_and_physicality</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other_pos</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other_physicality</span><span class="p">,</span> <span class="n">Physicality</span><span class="p">)</span>
+
+            <span class="c1"># dont check against self</span>
+            <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">other_entity</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># is viewing_entity taller and therefore their sight isnt blocked?</span>
+            <span class="k">if</span> <span class="n">physicality</span><span class="o">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="n">other_physicality</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># set all positions to blocking</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">other_pos</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
+                <span class="n">updated_block_sight_map</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># update entities fov map</span>
         <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_combat_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">sight_range</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">sight_range</span>
-        <span class="n">fov</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">compute_fov</span><span class="p">(</span><span class="n">block_sight_map</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">sight_range</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">FOV_ALGORITHM</span><span class="p">)</span></div>
+        <span class="n">fov</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">compute_fov</span><span class="p">(</span>
+            <span class="n">updated_block_sight_map</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">sight_range</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">FOV_ALGORITHM</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="process_tile_visibility"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.system.process_tile_visibility">[docs]</a><span class="k">def</span> <span class="nf">process_tile_visibility</span><span class="p">():</span>
     <span class="sd">"""</span>
 <span class="sd">    Update tile visibility based on player fov</span>
-<span class="sd">    FIXME - every entity has its own fov so gamemap doesnt need visibility anymore</span>
 <span class="sd">    """</span>
     <span class="c1"># get player info</span>
     <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>

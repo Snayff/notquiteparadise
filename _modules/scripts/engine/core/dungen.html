@@ -263,7 +263,7 @@
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">MAP_BORDER_SIZE</span><span class="p">,</span> <span class="n">TileCategory</span><span class="p">,</span> <span class="n">TileCategoryType</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Height</span><span class="p">,</span> <span class="n">MAP_BORDER_SIZE</span><span class="p">,</span> <span class="n">TileCategory</span><span class="p">,</span> <span class="n">TileCategoryType</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">MapData</span><span class="p">,</span> <span class="n">RoomConceptData</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
@@ -1322,16 +1322,16 @@
     <span class="k">if</span> <span class="n">tile_category</span> <span class="o">==</span> <span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span>
         <span class="n">sprite_path</span> <span class="o">=</span> <span class="n">sprite_paths</span><span class="p">[</span><span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">]</span>
         <span class="n">sprite</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="n">sprite_path</span><span class="p">)</span>
-        <span class="n">blocks_sight</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">Height</span><span class="o">.</span><span class="n">MAX</span>
         <span class="n">blocks_movement</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># everything else is considered a floor:</span>
         <span class="n">sprite_path</span> <span class="o">=</span> <span class="n">sprite_paths</span><span class="p">[</span><span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">]</span>
         <span class="n">sprite</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="n">sprite_path</span><span class="p">)</span>
-        <span class="n">blocks_sight</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">Height</span><span class="o">.</span><span class="n">MIN</span>
         <span class="n">blocks_movement</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="n">tile</span> <span class="o">=</span> <span class="n">Tile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sprite</span><span class="p">,</span> <span class="n">sprite_path</span><span class="p">,</span> <span class="n">blocks_sight</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="p">)</span>
+    <span class="n">tile</span> <span class="o">=</span> <span class="n">Tile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sprite</span><span class="p">,</span> <span class="n">sprite_path</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">tile</span>
 </pre></div>

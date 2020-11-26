@@ -270,7 +270,7 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">clamp</span><span class="p">,</span> <span class="n">convert_tile_string_to_xy</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">DirectionType</span><span class="p">,</span> <span class="n">InputEvent</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">UIElement</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">DirectionType</span><span class="p">,</span> <span class="n">Height</span><span class="p">,</span> <span class="n">InputEvent</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">UIElement</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.widgets.panel</span> <span class="kn">import</span> <span class="n">Panel</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">command</span>
@@ -581,7 +581,7 @@
 
     <span class="k">def</span> <span class="nf">_draw_floors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_tiles</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">height</span> <span class="o">==</span> <span class="n">Height</span><span class="o">.</span><span class="n">MIN</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_draw_surface</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">,</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_draw_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
@@ -607,7 +607,7 @@
 
     <span class="k">def</span> <span class="nf">_draw_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_tiles</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">height</span> <span class="o">==</span> <span class="n">Height</span><span class="o">.</span><span class="n">MAX</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_draw_surface</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">,</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_draw_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_positions</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">):</span>
