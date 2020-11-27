@@ -4,15 +4,11 @@ import datetime
 import json
 import logging
 import os
-from typing import TYPE_CHECKING
 
 from scripts.engine.core import utility, world
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import GameState, GameStateType, MAX_SAVES, SAVE_PATH, VERSION
 from scripts.engine.internal.data import store
-
-if TYPE_CHECKING:
-    pass
 
 _SAVE = {}
 

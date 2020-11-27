@@ -196,12 +196,15 @@ def _dump_profiling_data():
     _ = _debugger.profiler.create_stats()
 
     #  create folders and prevent FileNotFoundError
-    if not os.path.isdir("tests/"):
-        os.mkdir("tests")
-    if not os.path.isdir("tests/.metrics/"):
-        os.mkdir("tests/.metrics/")
-    if not os.path.isdir("tests/.metrics/profiling/"):
-        os.mkdir("tests/.metrics/profiling/")
+    path = "tests"
+    if not os.path.isdir(path + "/"):
+        os.mkdir(path)
+    path += "/.metrics"
+    if not os.path.isdir(path + "/"):
+        os.mkdir(path)
+    path += "/profiling"
+    if not os.path.isdir(path):
+        os.mkdir(path + "/")
 
     # dump the profiler stats
     s = io.StringIO()
@@ -282,7 +285,7 @@ def print_values_to_console():
     """
     Print the debuggers stats.
     """
-    print(f"Avg FPS: {format(_debugger.average_fps, '.2f')}, " f"R_Avg: {format(_debugger.recent_average_fps, '.2f')}")
+    print(f"Avg FPS: {format(_debugger.average_fps, '.2f')}, R_Avg: {format(_debugger.recent_average_fps, '.2f')}")
 
 
 def set_fps_visibility(is_visible: bool = True):

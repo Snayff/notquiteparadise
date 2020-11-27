@@ -287,22 +287,21 @@ class AffectStatEffect(Effect):
         success = False
         afflictions = world.get_entitys_component(self.target, Afflictions)
 
-        if afflictions:
-            # if not already applied
-            if self.cause_name not in afflictions.stat_modifiers:
-                afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
+        # if not already applied
+        if self.cause_name not in afflictions.stat_modifiers:
+            afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
 
-                # post interaction event
-                event = pygame.event.Event(
-                    InteractionEvent.AFFECT_STAT,
-                    origin=self.origin,
-                    target=self.target,
-                    stat=self.stat_to_target,
-                    amount=self.affect_amount,
-                )
-                pygame.event.post(event)
+            # post interaction event
+            event = pygame.event.Event(
+                InteractionEvent.AFFECT_STAT,
+                origin=self.origin,
+                target=self.target,
+                stat=self.stat_to_target,
+                amount=self.affect_amount,
+            )
+            pygame.event.post(event)
 
-                success = True
+            success = True
 
         if success:
             return True, self.success_effects

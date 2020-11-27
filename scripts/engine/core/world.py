@@ -291,7 +291,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
-    projectile.append(Position((x, y)))  # FIXME - check position not blocked before spawning
+    projectile.append(Position((x, y)))  # TODO - check position not blocked before spawning
     projectile.append(Resources(999, 999))
     projectile.append(Afflictions())
     projectile.append(IsActive())
@@ -498,7 +498,7 @@ def get_game_map() -> GameMap:
     if store.current_game_map:
         game_map = store.current_game_map
     else:
-        raise Exception("get_game_map: Tried to get the game_map but there isnt one.")
+        raise AttributeError("get_game_map: Tried to get the game_map but there isnt one.")
     return game_map
 
 
@@ -514,12 +514,12 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
         _tile = game_map.tile_map[x][y]
 
     except IndexError:
-        raise Exception(f"Tried to get tile({x},{y}), which doesnt exist.")
+        raise IndexError(f"Tried to get tile({x},{y}), which doesnt exist.")
 
     if _is_tile_in_bounds(_tile):
         return _tile
     else:
-        raise Exception(f"Tried to get tile({x},{y}), which is out of bounds.")
+        raise IndexError(f"Tried to get tile({x},{y}), which is out of bounds.")
 
 
 def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List[Tile]:
@@ -537,9 +537,8 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
 
         # make sure it is in bounds
         tile = get_tile((x, y))
-        if tile:
-            if _is_tile_in_bounds(tile):
-                tiles.append(game_map.tile_map[x][y])
+        if _is_tile_in_bounds(tile):
+            tiles.append(game_map.tile_map[x][y])
 
     return tiles
 
@@ -713,9 +712,8 @@ def _get_furthest_free_position(
     for distance in range(1, max_distance + 1):
 
         # allow throw to hit target
-        if travel_type == TravelMethod.ARC:
-            if distance == max_distance + 1:
-                check_for_target = True
+        if travel_type == TravelMethod.ARC and distance == max_distance + 1:
+            check_for_target = True
 
         # get current position
         current_x = start_x + (dir_x * distance)
@@ -770,7 +768,8 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
         return snecs.entity_component(entity, component)
     else:
         name = get_name(entity)
-        raise Exception(f"'{name}'({entity}) tried to get {component.__name__}, but it was not found.")
+        raise AttributeError(f"get_entitys_component:'{name}'({entity}) tried to get {component.__name__}, "
+                             f"but it was not found.")
 
 
 def get_name(entity: EntityID) -> str:
@@ -855,10 +854,8 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
         if knowledge:
             return knowledge.skills[skill_name]
     except KeyError:
-        pass
-
-    logging.warning(f"'{get_name(entity)}' tried to use a skill, '{skill_name}', they dont know.")
-    raise Exception("Skill not found")
+        raise KeyError(f"get_known_skill: '{get_name(entity)}' tried to use a skill, '{skill_name}', they dont  "
+                       f"know.")
 
 
 def get_affected_entities(
@@ -1110,7 +1107,6 @@ def _can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> boo
     Check if entity can afford the resource cost
     """
     resources = get_entitys_component(entity, Resources)
-    name = get_name(entity)
 
     # Check if cost can be paid
     value = getattr(resources, resource.lower())
@@ -1153,7 +1149,8 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
         if entity == player:
             store.log_message("I cannot afford to do that.")
         else:
-            logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, which they can`t afford.")
+            logging.warning(f"can_use_skill: '{get_name(entity)}' tried to use {skill_name}, which they can`t"
+                            f"afford.")
 
     # log/inform on cooldown
     if not not_on_cooldown:
@@ -1165,9 +1162,8 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
                 cooldown_msg = "unknown"
             else:
                 cooldown_msg = str(cooldown)
-            logging.warning(
-                f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait " f"{cooldown_msg} more rounds."
-            )
+            logging.warning(f"can_use_skill: '{get_name(entity)}' tried to use {skill_name}, but needs to wait "
+                            f" {cooldown_msg} more rounds.")
 
     # we've reached the end; no good.
     return False

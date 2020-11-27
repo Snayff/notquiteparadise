@@ -167,7 +167,7 @@ class UI:
         """
         text = f"<font face=barlow color={colour} size={size}>{message}</font>"
         rect = pygame.Rect((self.base_width / 4, self.base_height / 4), (self.base_width / 2, -1))
-        screen_message = ScreenMessage(rect, text, self.get_gui_manager())
+        ScreenMessage(rect, text, self.get_gui_manager())
 
     ######################## KILL ###############################################
 

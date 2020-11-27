@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import dataclasses
 import json
-from typing import Dict, Type, TYPE_CHECKING
+from typing import Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    pass
+    from typing import Dict
 
 
 ####################### UTILITY ############################

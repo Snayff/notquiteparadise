@@ -299,7 +299,7 @@ def _calculate_cone_shape(size: int, direction: Tuple[int, int]) -> List[Tuple[i
     coord_list = []
     last_row = [(0, 0)]
     # each size means 1 expansion of the cone
-    for iteration in range(size):
+    for _ in range(size):
         # use a set so we don't add the same coord multiple times
         new_row = set()
         for coord in last_row:
