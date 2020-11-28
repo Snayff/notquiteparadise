@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from snecs import Query
 
 from scripts.engine.internal.component import (
@@ -22,9 +20,6 @@ from scripts.engine.internal.component import (
     Tracked,
     WinCondition,
 )
-
-if TYPE_CHECKING:
-    pass
 
 __all__ = [
     "tracked",

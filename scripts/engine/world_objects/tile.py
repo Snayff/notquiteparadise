@@ -67,4 +67,4 @@ class Tile:
 
         except KeyError as e:
             logging.warning(f"Tile.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
-            raise Exception  # throw exception to hit outer error handler and exit
+            raise KeyError  # throw exception to hit outer error handler and exit

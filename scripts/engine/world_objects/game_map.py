@@ -138,7 +138,6 @@ class GameMap:
         """
         Loads the details from the serialised data back into the GameMap.
         """
-        # FIXME - fix deserialisation
         try:
             seed = serialised["seed"]
             algo_name = serialised["algorithm_name"]
@@ -156,7 +155,7 @@ class GameMap:
             return game_map
         except KeyError as e:
             logging.warning(f"GameMap.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
-            raise Exception  # throw exception to hit outer error handler and exit
+            raise KeyError  # throw exception to hit outer error handler and exit
 
     ################### PROPERTIES ########################################
 
