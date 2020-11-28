@@ -851,8 +851,7 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     """
     knowledge = get_entitys_component(entity, Knowledge)
     try:
-        if knowledge:
-            return knowledge.skills[skill_name]
+        return knowledge.skills[skill_name]
     except KeyError:
         raise KeyError(f"get_known_skill: '{get_name(entity)}' tried to use a skill, '{skill_name}', they dont  "
                        f"know.")
