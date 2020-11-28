@@ -322,7 +322,7 @@
 
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tile.Deserialise: Incorrect key (</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">) given. Data not loaded correctly."</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">Exception</span>  <span class="c1"># throw exception to hit outer error handler and exit</span></div></div>
+            <span class="k">raise</span> <span class="ne">KeyError</span>  <span class="c1"># throw exception to hit outer error handler and exit</span></div></div>
 </pre></div>
 
           </article>

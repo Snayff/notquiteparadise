@@ -451,12 +451,15 @@
     <span class="n">_</span> <span class="o">=</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="o">.</span><span class="n">create_stats</span><span class="p">()</span>
 
     <span class="c1">#  create folders and prevent FileNotFoundError</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="s2">"tests/"</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s2">"tests"</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="s2">"tests/.metrics/"</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s2">"tests/.metrics/"</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="s2">"tests/.metrics/profiling/"</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s2">"tests/.metrics/profiling/"</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="s2">"tests"</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">"/"</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">+=</span> <span class="s2">"/.metrics"</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">"/"</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">+=</span> <span class="s2">"/profiling"</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">"/"</span><span class="p">)</span>
 
     <span class="c1"># dump the profiler stats</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
@@ -537,7 +540,7 @@
     <span class="sd">"""</span>
 <span class="sd">    Print the debuggers stats.</span>
 <span class="sd">    """</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Avg FPS: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">average_fps</span><span class="p">,</span> <span class="s1">'.2f'</span><span class="p">)</span><span class="si">}</span><span class="s2">, "</span> <span class="sa">f</span><span class="s2">"R_Avg: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">,</span> <span class="s1">'.2f'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Avg FPS: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">average_fps</span><span class="p">,</span> <span class="s1">'.2f'</span><span class="p">)</span><span class="si">}</span><span class="s2">, R_Avg: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">,</span> <span class="s1">'.2f'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="set_fps_visibility"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.debug.set_fps_visibility">[docs]</a><span class="k">def</span> <span class="nf">set_fps_visibility</span><span class="p">(</span><span class="n">is_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>

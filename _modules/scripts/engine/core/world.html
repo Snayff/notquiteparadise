@@ -546,7 +546,7 @@
     <span class="c1"># translation to screen coordinates is handled by the camera</span>
     <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="o">.</span><span class="n">move</span><span class="p">,</span> <span class="n">sprites</span><span class="p">,</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">],</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))</span>
     <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tracked</span><span class="p">(</span><span class="n">chronicle</span><span class="o">.</span><span class="n">get_time_of_last_turn</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># allocate time to ensure they act next</span>
-    <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))</span>  <span class="c1"># FIXME - check position not blocked before spawning</span>
+    <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))</span>  <span class="c1"># TODO - check position not blocked before spawning</span>
     <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Resources</span><span class="p">(</span><span class="mi">999</span><span class="p">,</span> <span class="mi">999</span><span class="p">))</span>
     <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Afflictions</span><span class="p">())</span>
     <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">IsActive</span><span class="p">())</span>
@@ -753,7 +753,7 @@
     <span class="k">if</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span><span class="p">:</span>
         <span class="n">game_map</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"get_game_map: Tried to get the game_map but there isnt one."</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">"get_game_map: Tried to get the game_map but there isnt one."</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">game_map</span></div>
 
 
@@ -769,12 +769,12 @@
         <span class="n">_tile</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tile_map</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span>
 
     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to get tile(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), which doesnt exist."</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to get tile(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), which doesnt exist."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">_tile</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">_tile</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to get tile(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), which is out of bounds."</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to get tile(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), which is out of bounds."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_tiles"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.get_tiles">[docs]</a><span class="k">def</span> <span class="nf">get_tiles</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">coords</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tile</span><span class="p">]:</span>
@@ -792,9 +792,8 @@
 
         <span class="c1"># make sure it is in bounds</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="n">get_tile</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">tile</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
-                <span class="n">tiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">tile_map</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+            <span class="n">tiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">tile_map</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">tiles</span></div>
 
@@ -968,9 +967,8 @@
     <span class="k">for</span> <span class="n">distance</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_distance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
 
         <span class="c1"># allow throw to hit target</span>
-        <span class="k">if</span> <span class="n">travel_type</span> <span class="o">==</span> <span class="n">TravelMethod</span><span class="o">.</span><span class="n">ARC</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">distance</span> <span class="o">==</span> <span class="n">max_distance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">check_for_target</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">travel_type</span> <span class="o">==</span> <span class="n">TravelMethod</span><span class="o">.</span><span class="n">ARC</span> <span class="ow">and</span> <span class="n">distance</span> <span class="o">==</span> <span class="n">max_distance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">check_for_target</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># get current position</span>
         <span class="n">current_x</span> <span class="o">=</span> <span class="n">start_x</span> <span class="o">+</span> <span class="p">(</span><span class="n">dir_x</span> <span class="o">*</span> <span class="n">distance</span><span class="p">)</span>
@@ -1025,7 +1023,9 @@
         <span class="k">return</span> <span class="n">snecs</span><span class="o">.</span><span class="n">entity_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">'(</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">) tried to get </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">, but it was not found."</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"get_entitys_component:'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">'(</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">) tried to get </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">, "</span> <span class="sa">f</span><span class="s2">"but it was not found."</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_name"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.get_name">[docs]</a><span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -1107,13 +1107,11 @@
 <span class="sd">    """</span>
     <span class="n">knowledge</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">knowledge</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' tried to use a skill, '</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">', they dont know."</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Skill not found"</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"get_known_skill: '</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' tried to use a skill, '</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">', they dont  "</span> <span class="sa">f</span><span class="s2">"know."</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_affected_entities"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.get_affected_entities">[docs]</a><span class="k">def</span> <span class="nf">get_affected_entities</span><span class="p">(</span>
@@ -1365,7 +1363,6 @@
 <span class="sd">    Check if entity can afford the resource cost</span>
 <span class="sd">    """</span>
     <span class="n">resources</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
 
     <span class="c1"># Check if cost can be paid</span>
     <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">resource</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
@@ -1408,7 +1405,9 @@
         <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">player</span><span class="p">:</span>
             <span class="n">store</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">"I cannot afford to do that."</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' tried to use </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">, which they can`t afford."</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"can_use_skill: '</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' tried to use </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">, which they can`t"</span> <span class="sa">f</span><span class="s2">"afford."</span>
+            <span class="p">)</span>
 
     <span class="c1"># log/inform on cooldown</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">not_on_cooldown</span><span class="p">:</span>
@@ -1421,7 +1420,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">cooldown_msg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cooldown</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' tried to use </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">, but needs to wait "</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cooldown_msg</span><span class="si">}</span><span class="s2"> more rounds."</span>
+                <span class="sa">f</span><span class="s2">"can_use_skill: '</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' tried to use </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">, but needs to wait "</span>
+                <span class="sa">f</span><span class="s2">" </span><span class="si">{</span><span class="n">cooldown_msg</span><span class="si">}</span><span class="s2"> more rounds."</span>
             <span class="p">)</span>
 
     <span class="c1"># we've reached the end; no good.</span>

@@ -542,22 +542,21 @@
         <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">afflictions</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">afflictions</span><span class="p">:</span>
-            <span class="c1"># if not already applied</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cause_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="p">:</span>
-                <span class="n">afflictions</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cause_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stat_to_target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">)</span>
+        <span class="c1"># if not already applied</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cause_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="p">:</span>
+            <span class="n">afflictions</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cause_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stat_to_target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">)</span>
 
-                <span class="c1"># post interaction event</span>
-                <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span>
-                    <span class="n">InteractionEvent</span><span class="o">.</span><span class="n">AFFECT_STAT</span><span class="p">,</span>
-                    <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
-                    <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
-                    <span class="n">stat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stat_to_target</span><span class="p">,</span>
-                    <span class="n">amount</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="c1"># post interaction event</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span>
+                <span class="n">InteractionEvent</span><span class="o">.</span><span class="n">AFFECT_STAT</span><span class="p">,</span>
+                <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
+                <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
+                <span class="n">stat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stat_to_target</span><span class="p">,</span>
+                <span class="n">amount</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
-                <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_effects</span>
