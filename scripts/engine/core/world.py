@@ -768,8 +768,9 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
         return snecs.entity_component(entity, component)
     else:
         name = get_name(entity)
-        raise AttributeError(f"get_entitys_component:'{name}'({entity}) tried to get {component.__name__}, "
-                             f"but it was not found.")
+        raise AttributeError(
+            f"get_entitys_component:'{name}'({entity}) tried to get {component.__name__}, " f"but it was not found."
+        )
 
 
 def get_name(entity: EntityID) -> str:
@@ -853,8 +854,9 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     try:
         return knowledge.skills[skill_name]
     except KeyError:
-        raise KeyError(f"get_known_skill: '{get_name(entity)}' tried to use a skill, '{skill_name}', they dont  "
-                       f"know.")
+        raise KeyError(
+            f"get_known_skill: '{get_name(entity)}' tried to use a skill, '{skill_name}', they dont  " f"know."
+        )
 
 
 def get_affected_entities(
@@ -1148,8 +1150,9 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
         if entity == player:
             store.log_message("I cannot afford to do that.")
         else:
-            logging.warning(f"can_use_skill: '{get_name(entity)}' tried to use {skill_name}, which they can`t"
-                            f"afford.")
+            logging.warning(
+                f"can_use_skill: '{get_name(entity)}' tried to use {skill_name}, which they can`t" f"afford."
+            )
 
     # log/inform on cooldown
     if not not_on_cooldown:
@@ -1161,8 +1164,10 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
                 cooldown_msg = "unknown"
             else:
                 cooldown_msg = str(cooldown)
-            logging.warning(f"can_use_skill: '{get_name(entity)}' tried to use {skill_name}, but needs to wait "
-                            f" {cooldown_msg} more rounds.")
+            logging.warning(
+                f"can_use_skill: '{get_name(entity)}' tried to use {skill_name}, but needs to wait "
+                f" {cooldown_msg} more rounds."
+            )
 
     # we've reached the end; no good.
     return False
