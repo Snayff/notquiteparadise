@@ -13,7 +13,7 @@ from scripts.engine.core import chronicle, state, system, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug
 from scripts.engine.internal.component import NQPComponent
-from scripts.engine.internal.constant import GameState
+from scripts.engine.internal.constant import GameEvent, GameState
 from scripts.engine.internal.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
@@ -97,6 +97,7 @@ def game_loop():
 
         # update based on input events
         for event in pygame.event.get():
+            # TODO - check type of event and pass to correct processor
             processors.input.process_event(event, current_state)
             processors.game.process_event(event, current_state)
             system.process_interaction_event(event)  # only happens in gamemap so doesnt need state

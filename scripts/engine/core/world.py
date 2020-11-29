@@ -128,7 +128,7 @@ def create_god(god_name: str) -> EntityID:
     god: List[Component] = []
 
     god.append(Identity(data.name, data.description))
-    god.append(Opinion())
+    god.append(Opinion(data.attitudes))
     god.append((Resources(INFINITE, INFINITE)))
     entity = create_entity(god)
 

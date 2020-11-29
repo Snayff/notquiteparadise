@@ -494,9 +494,10 @@ class Opinion(NQPComponent):
     An entity's views on other entities. {entity, opinion}
     """
 
-    def __init__(self, opinions: Optional[Dict[EntityID, int]] = None):
+    def __init__(self, attitudes: Dict[ReactionTriggerType, int], opinions: Optional[Dict[EntityID, int]] = None):
         opinions = opinions or {}
         self.opinions: Dict[EntityID, int] = opinions
+        self.attitudes: Dict[ReactionTriggerType, int] = attitudes
 
     def serialize(self):
         return self.opinions

@@ -13,7 +13,7 @@ from scripts.engine.internal.component import (
     Knowledge,
     Lifespan,
     LightSource,
-    Physicality,
+    Opinion, Physicality,
     Position,
     Reaction,
     Tracked,
@@ -28,6 +28,8 @@ __all__ = [
     "position",
     "active",
     "lifespan",
+    "opinion",
+    "reaction",
     "position_and_light_source",
     "position_and_reaction",
     "not_position",
@@ -60,6 +62,10 @@ position = get_components([Position]).compile()
 active = get_components([IsActive]).compile()
 
 lifespan = get_components([Lifespan]).compile()
+
+opinion = get_components([Opinion]).compile()
+
+reaction = get_components([Reaction]).compile()
 
 
 ################## MULTI QUERIES ##########################

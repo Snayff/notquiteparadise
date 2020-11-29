@@ -35,6 +35,7 @@ __all__ = [
     "convert_tile_string_to_xy",
     "convert_direction_to_name",
     "build_sprites_from_paths",
+    "roll"
 ]
 
 _V = TypeVar("_V", int, float)  # to represent components where we don't know which is being used
@@ -374,4 +375,5 @@ def roll(min_value: int = 0, max_value: int = 100) -> int:
     """
     Roll for a number between min and max
     """
+    # TODO - utilise seed
     return random.randint(min_value, max_value)
