@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from snecs import RegisteredComponent
+from snecs.typedefs import EntityID
 
 from scripts.engine.internal.constant import (
     EffectType,
@@ -493,9 +494,9 @@ class Opinion(NQPComponent):
     An entity's views on other entities. {entity, opinion}
     """
 
-    def __init__(self, opinions: Optional[Dict[int, int]] = None):
+    def __init__(self, opinions: Optional[Dict[EntityID, int]] = None):
         opinions = opinions or {}
-        self.opinions: Dict[int, int] = opinions
+        self.opinions: Dict[EntityID, int] = opinions
 
     def serialize(self):
         return self.opinions

@@ -230,7 +230,8 @@ class ProjectileData:
 
     def __post_init__(self):
         # map external str to internal int
-        self.speed = getattr(ProjectileSpeed, self.speed.upper())
+        if isinstance(self.speed, str):
+            self.speed = getattr(ProjectileSpeed, self.speed.upper())
 
 
 @register_dataclass_with_json
@@ -252,7 +253,8 @@ class TerrainData:
 
     def __post_init__(self):
         # map external str to internal int
-        self.height = getattr(Height, self.height.upper())
+        if isinstance(self.height, str):
+            self.height = getattr(Height, self.height.upper())
 
 
 ################### GODS ###################################################

@@ -1168,6 +1168,28 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     return False
 
 
+def has_enough_opinion(opinion_holder: EntityID, judged_entity: EntityID, required_opinion: int) -> bool:
+    """
+    Confirm if opinion_holder has an opinion of judged_entity that exceeds required_opinion. If required_opinion is
+    negative then the current opinion must be lower.
+
+    If opinion holder has no Opinion component then returns False. If required opinion is 0 then any opinion will be
+    enough.
+    """
+    try:
+        opinion = get_entitys_component(opinion_holder, Opinion)
+
+        # check if we met required opinion
+        if 0 >= required_opinion > opinion.opinions[judged_entity] or 0 <= required_opinion < opinion.opinions[
+            judged_entity]:
+            return True
+        else:
+            # insufficient opinion
+            return False
+
+    except (AttributeError, KeyError):
+        return False
+
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
 
 

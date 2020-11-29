@@ -14,7 +14,7 @@ from scripts.engine.internal.component import (
     IsActive,
     Knowledge,
     Lifespan,
-    Physicality,
+    Opinion, Physicality,
     Position,
     Reaction, Tracked,
 )
@@ -29,9 +29,10 @@ __all__ = [
     "reduce_skill_cooldowns",
     "reduce_affliction_durations",
     "reduce_lifespan_durations",
+    "process_interaction_event"
 ]
 
-from scripts.engine.internal.definition import EffectData
+from scripts.engine.internal.definition import EffectData, ReactionData
 
 
 def process_activations():
@@ -263,17 +264,13 @@ def _handle_proximity(event: pygame.event):
             if ReactionTrigger.PROXIMITY in reaction.reactions:
                 data = reaction.reactions[ReactionTrigger.PROXIMITY]
 
-                # check opinion
-                if data.required_opinion:
-                    #TODO
-                    pass
-
-                if isinstance(data.reaction, EffectData):
-                    effect = world.create_effect(event.origin, event.target, data.reaction)
-                    effect.evaluate()
-                else:  # skill data
-                    skill = world.get_known_skill(event.origin, data.name)
-                    world.use_skill(event.origin, skill, world.get_tile(event.new_pos), event.direction)
+                # if we dont have a required opinion then just apply reaction
+                if not data.required_opinion:
+                    _create_skill_or_effect(event, data)
+                else:
+                    # check we meet opinion requirement
+                    if world.has_enough_opinion(entity, event.origin, data.required_opinion):
+                        _create_skill_or_effect(event, data)
 
 
 def _process_win_condition(event: pygame.event):
@@ -305,4 +302,13 @@ def _handle_affliction(entity: EntityID, reaction_trigger: ReactionTriggerType):
         for affliction in afflictions.active:
             if reaction_trigger in affliction.triggers:
                 world.trigger_affliction(affliction)
+
+
+def _create_skill_or_effect(event: pygame.event, data: ReactionData):
+    if isinstance(data.reaction, EffectData):
+        effect = world.create_effect(event.origin, event.target, data.reaction)
+        effect.evaluate()
+    else:  # skill data
+        skill = world.get_known_skill(event.origin, data.name)
+        world.use_skill(event.origin, skill, world.get_tile(event.new_pos), event.direction)
 
