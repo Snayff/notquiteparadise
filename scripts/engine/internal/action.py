@@ -12,7 +12,7 @@ from scripts.engine.internal.constant import (
     AfflictionCategoryType,
     DirectionType,
     EffectTypeType,
-    InteractionTriggerType,
+    ReactionTriggerType,
     ResourceType,
     ShapeType,
     TargetingMethodType,
@@ -207,7 +207,7 @@ class Affliction(Action):
 
     # to be overwritten in subclass, including being set by external data
     identity_tags: List[EffectTypeType]
-    triggers: List[InteractionTriggerType]
+    triggers: List[ReactionTriggerType]
     category: AfflictionCategoryType
 
     def __init__(self, origin: EntityID, affected_entity: EntityID, duration: int):

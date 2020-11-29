@@ -1415,7 +1415,7 @@ def judge_action(entity: EntityID, action_name: str):
     Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards
     the tags in that skill.
     """
-    for opinionated_entity, ( opinion, identity) in get_components([Opinion, Identity]):
+    for opinionated_entity, (opinion, identity) in get_components([Opinion, Identity]):
         assert isinstance(opinion, Opinion)
         assert isinstance(identity, Identity)
 

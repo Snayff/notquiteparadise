@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, TYPE_CHECKING
+from typing import Dict, List, Optional, Tuple, TYPE_CHECKING, Union
 
 from scripts.engine.internal.constant import (
     AfflictionCategory,
@@ -15,7 +15,7 @@ from scripts.engine.internal.constant import (
     EffectTypeType,
     Height,
     HeightType,
-    InteractionTriggerType,
+    ReactionTriggerType,
     PrimaryStat,
     PrimaryStatType,
     ProjectileExpiryType,
@@ -247,7 +247,7 @@ class TerrainData:
     blocks_movement: bool = False
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
-    reactions: Dict[InteractionTriggerType, EffectData] = field(default_factory=dict)
+    reactions: Dict[ReactionTriggerType, ReactionData] = field(default_factory=list)
     light: Optional[LightData] = None
 
     def __post_init__(self):
@@ -420,11 +420,21 @@ class AfflictionData:
     shape_size: int = 1
     target_tags: List[TargetTagType] = field(default_factory=list)
     identity_tags: List[EffectTypeType] = field(default_factory=list)
-    triggers: List[InteractionTriggerType] = field(default_factory=list)
+    triggers: List[ReactionTriggerType] = field(default_factory=list)
+
+
+@register_dataclass_with_json
+@dataclass()
+class ReactionData:
+    """
+    Data class for a reaction.
+    """
+
+    required_opinion: Optional[int] = None
+    reaction: Union[EffectData, SkillData] = SkillData()
 
 
 ################### EFFECTS ###################################################
-
 
 @dataclass
 class EffectData(ABC):

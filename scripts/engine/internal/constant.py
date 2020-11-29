@@ -10,8 +10,8 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.137.0"  # DONT FORGET TO UPDATE SPHINX VERSION
-DEBUG_START = False  # Whether to start directly in debug map
+VERSION = "0.138.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+DEBUG_START = True  # Whether to start directly in debug map
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -62,7 +62,7 @@ UIElementType = NewType("UIElementType", str)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
 TraitGroupType = NewType("TraitGroupType", str)
-InteractionTriggerType = NewType("InteractionTriggerType", str)
+ReactionTriggerType = NewType("ReactionTriggerType", str)
 RenderLayerType = NewType("RenderLayerType", int)
 TileCategoryType = NewType("TileCategoryType", str)
 HeightType = NewType("HeightType", int)
@@ -305,24 +305,24 @@ class DamageType(SimpleNamespace):
     MUNDANE = DamageTypeType("mundane")
 
 
-class InteractionTrigger(SimpleNamespace):
+class ReactionTrigger(SimpleNamespace):
     """
     Type of trigger for the affliction
     """
 
-    MOVE = InteractionTriggerType("movement")
-    PROXIMITY = InteractionTriggerType("proximity")
-    TAKE_DAMAGE = InteractionTriggerType("take_damage")
-    DEAL_DAMAGE = InteractionTriggerType("deal_damage")
-    KILL = InteractionTriggerType("kill")
-    DIE = InteractionTriggerType("die")
-    COLLISION = InteractionTriggerType("collision")
-    AFFECTED_STAT = InteractionTriggerType("affected_stat")
-    CAUSED_AFFECT_STAT = InteractionTriggerType("caused_affect_stat")
-    AFFECTED_COOLDOWN = InteractionTriggerType("affected_cooldown")
-    CAUSED_AFFECT_COOLDOWN = InteractionTriggerType("caused_affect_cooldown")
-    CAUSED_AFFLICTION = InteractionTriggerType("caused_affliction")
-    AFFLICTED = InteractionTriggerType("afflicted")
+    MOVE = ReactionTriggerType("movement")
+    PROXIMITY = ReactionTriggerType("proximity")
+    TAKE_DAMAGE = ReactionTriggerType("take_damage")
+    DEAL_DAMAGE = ReactionTriggerType("deal_damage")
+    KILL = ReactionTriggerType("kill")
+    DIE = ReactionTriggerType("die")
+    COLLISION = ReactionTriggerType("collision")
+    AFFECTED_STAT = ReactionTriggerType("affected_stat")
+    CAUSED_AFFECT_STAT = ReactionTriggerType("caused_affect_stat")
+    AFFECTED_COOLDOWN = ReactionTriggerType("affected_cooldown")
+    CAUSED_AFFECT_COOLDOWN = ReactionTriggerType("caused_affect_cooldown")
+    CAUSED_AFFLICTION = ReactionTriggerType("caused_affliction")
+    AFFLICTED = ReactionTriggerType("afflicted")
 
 
 class AfflictionCategory(SimpleNamespace):

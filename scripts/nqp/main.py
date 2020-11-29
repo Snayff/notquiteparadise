@@ -9,7 +9,7 @@ import snecs
 from snecs.world import default_world
 
 import scripts.nqp.processors.input
-from scripts.engine.core import chronicle, state, world
+from scripts.engine.core import chronicle, state, system, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug
 from scripts.engine.internal.component import NQPComponent
@@ -17,7 +17,7 @@ from scripts.engine.internal.constant import GameState
 from scripts.engine.internal.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
-from scripts.nqp.processors import display, game, interaction
+from scripts.nqp.processors import display, game
 
 
 def main():
@@ -99,11 +99,11 @@ def game_loop():
         for event in pygame.event.get():
             processors.input.process_event(event, current_state)
             processors.game.process_event(event, current_state)
-            processors.interaction.process_event(event)  # only happens in gamemap so doesnt need state
+            system.process_interaction_event(event)  # only happens in gamemap so doesnt need state
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state
-        display.process_display_updates(time_delta, current_state)
+        display.process_updates(time_delta, current_state)
         debug.update()
         ui.update(time_delta)
 
