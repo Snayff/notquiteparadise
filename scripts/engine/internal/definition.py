@@ -408,6 +408,12 @@ class ReactionData:
 
     required_opinion: Optional[int] = None
     reaction: Union[EffectData, str] = ""  # str is skill name
+    chance: int = 100
+
+    def __post_init__(self):
+        from scripts.engine.core import utility
+        # ensure clamped between 0-100
+        self.chance = utility.clamp(self.chance, 0, 100)
 
 
 ################### EFFECTS ###################################################

@@ -264,13 +264,23 @@ def _handle_proximity(event: pygame.event):
             if ReactionTrigger.PROXIMITY in reaction.reactions:
                 data = reaction.reactions[ReactionTrigger.PROXIMITY]
 
-                # if we dont have a required opinion then just apply reaction
+                # if we dont have a required opinion or have enough opinion carry on
                 if not data.required_opinion:
-                    _create_skill_or_effect(event, data)
+                    opinion_diff = 0
+
+                elif world.has_enough_opinion(entity, event.origin, data.required_opinion):
+                    opinion = world.get_entitys_component(entity, Opinion)
+                    opinion_diff = abs(opinion.opinions[event.origin]) - abs(data.required_opinion)
+
                 else:
-                    # check we meet opinion requirement
-                    if world.has_enough_opinion(entity, event.origin, data.required_opinion):
-                        _create_skill_or_effect(event, data)
+                    # has opinion and doesnt meet requirement
+                    continue
+
+                # roll for chance to react
+                from scripts.engine.core import utility
+                if (utility.roll() + int(opinion_diff / 2)) > (100 - data.chance):
+                    _create_skill_or_effect(event, data)
+
 
 
 def _process_win_condition(event: pygame.event):

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import logging
+import random
 from typing import List, Tuple, TYPE_CHECKING, TypeVar
 
 import pygame
@@ -365,3 +366,12 @@ def convert_direction_to_name(direction: DirectionType) -> str:
         direction_name = "centre"
 
     return direction_name
+
+
+################################### CHANCE ########################################
+
+def roll(min_value: int = 0, max_value: int = 100) -> int:
+    """
+    Roll for a number between min and max
+    """
+    return random.randint(min_value, max_value)

@@ -4,18 +4,14 @@
         "name": "the_small_gods",
         "description": "Hordes of small gods banded together to ensure they were finally taken seriously.",
         "attitudes": {
-            "burn":  -10,
-            "damage":  -5
+            "deal_damage":  -5
         },
         "reactions": {
-            "proximity": {
+            "deal_damage": {
                 "__dataclass__": "ReactionData",
-                "required_opinion": -10,
+                "required_opinion": -1,
                 "reaction": "BasicAttack"
             }
-        },
-        "known_skills": [
-            "BasicAttack"
-        ]
+        }
     }
 }
