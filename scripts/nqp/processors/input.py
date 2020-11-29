@@ -36,7 +36,7 @@ def process_event(event: pygame.event, game_state: GameStateType):
             ## Activate Actor Info Menu
             x, y = event.tile_pos
             # get entity on tile
-            for entity, (position, _) in query.position_and_actor:  # type: ignore
+            for entity, (position, ) in query.position:
                 if (x, y) in position:
                     # found entity, set to selected
                     actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)

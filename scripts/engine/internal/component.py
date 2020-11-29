@@ -70,36 +70,6 @@ class IsPlayer(NQPComponent):
         return IsPlayer()
 
 
-class IsActor(NQPComponent):
-    """
-    Whether the entity is an actor.
-    """
-
-    __slots__ = ()
-
-    def serialize(self):
-        return True
-
-    @classmethod
-    def deserialize(cls, serialised):
-        return IsActor()
-
-
-class IsGod(NQPComponent):
-    """
-    Whether the entity is a god.
-    """
-
-    __slots__ = ()
-
-    def serialize(self):
-        return True
-
-    @classmethod
-    def deserialize(cls, serialised):
-        return IsGod()
-
-
 class IsActive(NQPComponent):
     """
     Whether the entity is active or not. Used to limit entity processing.

@@ -11,7 +11,6 @@ from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, utility
-from scripts.engine.core.ui import ui
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
 from scripts.engine.internal.component import (
@@ -22,8 +21,6 @@ from scripts.engine.internal.component import (
     HasCombatStats,
     Identity,
     IsActive,
-    IsActor,
-    IsGod,
     IsPlayer,
     Knowledge,
     Lifespan,
@@ -131,7 +128,6 @@ def create_god(god_name: str) -> EntityID:
     god: List[Component] = []
 
     god.append(Identity(data.name, data.description))
-    god.append(IsGod())
     god.append(Opinion())
     god.append((Resources(INFINITE, INFINITE)))
     entity = create_entity(god)
@@ -159,7 +155,6 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     # actor components
     if is_player:
         components.append(IsPlayer())
-    components.append(IsActor())
     components.append(Position(*occupied_tiles))
     components.append(Identity(name, actor_data.description))
     components.append(HasCombatStats())
@@ -1420,7 +1415,7 @@ def judge_action(entity: EntityID, action_name: str):
     Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards
     the tags in that skill.
     """
-    for god, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
+    for opinionated_entity, ( opinion, identity) in get_components([Opinion, Identity]):
         assert isinstance(opinion, Opinion)
         assert isinstance(identity, Identity)
 
@@ -1531,7 +1526,7 @@ def choose_interventions(active_entity: EntityID, action_name: str) -> List[Tupl
     desire_to_intervene = 10
     desire_to_do_nothing = 75  # weighting for doing nothing
 
-    for entity, (is_god, opinion, identity, knowledge) in get_components([IsGod, Opinion, Identity, Knowledge]):
+    for entity, (opinion, identity, knowledge) in get_components([Opinion, Identity, Knowledge]):
         assert isinstance(opinion, Opinion)
         assert isinstance(identity, Identity)
         assert isinstance(knowledge, Knowledge)
