@@ -32,7 +32,7 @@ def process_event(event: pygame.event, game_state: GameStateType):
                 direction = (max(-1, min(1, event_x - position.x)), max(-1, min(1, position.y - event_y)))
                 intent = key.convert_vector_to_intent(direction)
 
-        elif game_state == GameState.GAMEMAP:
+        elif game_state == GameState.GAME_MAP:
             ## Activate Actor Info Menu
             x, y = event.tile_pos
             # get entity on tile

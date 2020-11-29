@@ -88,7 +88,7 @@ def game_loop():
             snecs.delete_entity_immediately(entity, default_world)
 
         # have enemy take turn
-        if current_state == GameState.GAMEMAP and turn_holder != world.get_player():
+        if current_state == GameState.GAME_MAP and turn_holder != world.get_player():
             # just in case the turn holder has died but not been replaced as expected
             try:
                 world.take_turn(turn_holder)

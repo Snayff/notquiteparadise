@@ -124,7 +124,7 @@ def _start_debug_game():
     world.create_terrain(library.TERRAIN["bog"], (pos.x + 1, pos.y))
 
     # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
+    state.set_new(GameState.GAME_MAP)
 
     # prompt turn actions
     chronicle.end_turn(player, 0)
@@ -202,7 +202,7 @@ def start_game(player_data: ActorData):
     camera.set_target((pos.x, pos.y), True)
 
     # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
+    state.set_new(GameState.GAME_MAP)
 
     # prompt turn actions
     chronicle.end_turn(player, 0)
@@ -235,7 +235,7 @@ def load_game():
     ui.create_screen_message("Welcome back to Not Quite Paradise")
 
     # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
+    state.set_new(GameState.GAME_MAP)
 
 
 def exit_game():

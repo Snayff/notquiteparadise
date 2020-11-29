@@ -97,7 +97,7 @@ class GameEvent(SimpleNamespace):
 
 class InteractionEvent(SimpleNamespace):
     """
-    Custom pygame events to trigger interactions.
+    Custom pygame events to trigger interactions. Think of these as categories for Reaction Triggers.
     """
 
     MOVE = pygame.USEREVENT + 200
@@ -126,7 +126,7 @@ class GameState(SimpleNamespace):
     """
 
     LOADING = GameStateType(1)  # while loading, to prevent key press.
-    GAMEMAP = GameStateType(2)  # while player moving around the game_map
+    GAME_MAP = GameStateType(2)  # while player moving around the game_map
     PLAYER_DEAD = GameStateType(3)  # while player is dead
     TARGETING = GameStateType(4)  # while player is targeting
     EXITING = GameStateType(5)  # while exiting

@@ -14,7 +14,7 @@ def process_updates(time_delta: float, game_state: GameStateType):
     """
     Fire realtime processors.
     """
-    if game_state == GameState.GAMEMAP:
+    if game_state == GameState.GAME_MAP:
         _process_aesthetic_update(time_delta)
         _process_lighting()
 

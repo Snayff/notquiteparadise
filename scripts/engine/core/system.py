@@ -309,6 +309,6 @@ def _create_skill_or_effect(event: pygame.event, data: ReactionData):
         effect = world.create_effect(event.origin, event.target, data.reaction)
         effect.evaluate()
     else:  # skill data
-        skill = world.get_known_skill(event.origin, data.name)
+        skill = world.get_known_skill(event.origin, data.reaction)
         world.use_skill(event.origin, skill, world.get_tile(event.new_pos), event.direction)
 

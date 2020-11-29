@@ -35,7 +35,7 @@ def process_intent(intent: InputIntentType, game_state: GameStateType):
     """
     _process_stateless_intents(intent)
 
-    if game_state == GameState.GAMEMAP:
+    if game_state == GameState.GAME_MAP:
         _process_game_map_intents(intent)
     elif game_state == GameState.TARGETING:
         _process_targeting_mode_intents(intent)
@@ -157,7 +157,7 @@ def _process_game_map_intents(intent: InputIntentType):
                             camera = ui.get_element(UIElement.CAMERA)
                             camera.update_targeting_overlay(True, skill_name)
 
-    ## Show actor info - we're in GAMEMAP so it cant be visible
+    ## Show actor info - we're in GAME_MAP so it cant be visible
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:
         # show
         state.set_new(GameState.MENU)

@@ -46,12 +46,13 @@ if TYPE_CHECKING:
     from scripts.engine.internal.action import Skill
     from scripts.engine.internal.effect import Effect
 
+
 #################################################################
 # This module is for specifying all defined data sets.
 #################################################################
 
 
-######################### Aesthetics ##################################
+##################### COMPONENT INFO #################################
 
 
 @register_dataclass_with_json
@@ -97,31 +98,6 @@ class TraitSpritePathsData:
     hit: str = field(default="none")
     dead: str = field(default="none")
     move: str = field(default="none")
-
-
-##################### ACTORS #################################
-
-
-@register_dataclass_with_json
-@dataclass
-class ActorData:
-    """
-    Data class for an actor.
-    Also used to hold and map data from json.
-    """
-
-    key: str = "none"
-    possible_names: List[str] = field(default_factory=list)
-    description: str = "none"
-    position_offsets: List[Tuple[int, int]] = field(default_factory=list)
-    trait_names: List[str] = field(default_factory=list)
-    behaviour_name: str = "none"
-    height: HeightType = Height.MIN
-
-    def __post_init__(self):
-        # map external str to internal int
-        if isinstance(self.height, str):
-            self.height = getattr(Height, self.height.upper())
 
 
 @register_dataclass_with_json
@@ -192,7 +168,28 @@ class BaseSecondaryStatData:
     exactitude_mod: int = 0
 
 
-####################### NON-ACTOR ENTITIES ######################
+####################### ENTITY TYPES ######################
+
+@register_dataclass_with_json
+@dataclass
+class ActorData:
+    """
+    Data class for an actor.
+    Also used to hold and map data from json.
+    """
+
+    key: str = "none"
+    possible_names: List[str] = field(default_factory=list)
+    description: str = "none"
+    position_offsets: List[Tuple[int, int]] = field(default_factory=list)
+    trait_names: List[str] = field(default_factory=list)
+    behaviour_name: str = "none"
+    height: HeightType = Height.MIN
+
+    def __post_init__(self):
+        # map external str to internal int
+        if isinstance(self.height, str):
+            self.height = getattr(Height, self.height.upper())
 
 
 @register_dataclass_with_json
@@ -248,7 +245,7 @@ class TerrainData:
     blocks_movement: bool = False
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
-    reactions: Dict[ReactionTriggerType, ReactionData] = field(default_factory=list)
+    reactions: Dict[ReactionTriggerType, ReactionData] = field(default_factory=dict)
     light: Optional[LightData] = None
 
     def __post_init__(self):
@@ -257,46 +254,23 @@ class TerrainData:
             self.height = getattr(Height, self.height.upper())
 
 
-################### GODS ###################################################
-
-
-@register_dataclass_with_json
-@dataclass
-class AttitudeData:
-    """
-    Data class for  a god's attitude
-    """
-
-    action: str = field(default="none")
-    opinion_change: int = 0
-
-
-@register_dataclass_with_json
-@dataclass
-class InterventionData:
-    """
-    Data class for a god's intervention
-    """
-
-    skill_key: str = field(default="none")
-    required_opinion: int = 0
-
-
 @register_dataclass_with_json
 @dataclass
 class GodData:
     """
-    Data class for a god
+    Data class for a god. If a reaction.reactions is a skill name (a str) then the skill name must also be in
+    known_skills.
     """
 
-    name: str = field(default="none")
-    description: str = field(default="none")
-    attitudes: Dict[str, AttitudeData] = field(default_factory=dict)
-    interventions: Dict[str, InterventionData] = field(default_factory=dict)
+    name: str = "none"
+    description: str = "none"
+    attitudes: Dict[str, int] = field(default_factory=dict)  # the str is ReactionTrigger
+    reactions: Dict[ReactionTriggerType, ReactionData] = field(default_factory=dict)
+    known_skills: List[str] = field(default_factory=list)  # list of skill names.
+    # TODO - remove need for known skills; reactions shouldnt need it. How to cast without using it?
 
 
-####################### WORLD ######################
-
+####################### WORLD GENERATION ######################
 
 @register_dataclass_with_json
 @dataclass
@@ -433,7 +407,7 @@ class ReactionData:
     """
 
     required_opinion: Optional[int] = None
-    reaction: Union[EffectData, SkillData] = SkillData()
+    reaction: Union[EffectData, str] = ""  # str is skill name
 
 
 ################### EFFECTS ###################################################
