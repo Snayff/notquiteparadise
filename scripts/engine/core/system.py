@@ -3,20 +3,36 @@ from __future__ import annotations
 import logging
 
 import numpy as np
+import pygame
 import tcod
+from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, world
+from scripts.engine.internal import library
 from scripts.engine.internal.component import (
     Afflictions,
     FOV,
     IsActive,
     Knowledge,
     Lifespan,
+    Opinion,
     Physicality,
     Position,
+    Reaction,
     Tracked,
 )
-from scripts.engine.internal.constant import FOV_ALGORITHM, FOV_LIGHT_WALLS, INFINITE, MAX_ACTIVATION_DISTANCE
+from scripts.engine.internal.constant import (
+    Direction,
+    EventType,
+    FOV_ALGORITHM,
+    FOV_LIGHT_WALLS,
+    GameEvent,
+    INFINITE,
+    InteractionEvent,
+    MAX_ACTIVATION_DISTANCE,
+    ReactionTrigger,
+    ReactionTriggerType,
+)
 
 __all__ = [
     "process_activations",
@@ -26,7 +42,13 @@ __all__ = [
     "reduce_skill_cooldowns",
     "reduce_affliction_durations",
     "reduce_lifespan_durations",
+    "process_interaction_event",
 ]
+
+from scripts.engine.internal.definition import EffectData, ReactionData
+from scripts.engine.world_objects.tile import Tile
+
+########################### GENERAL ################################
 
 
 def process_activations():
@@ -60,6 +82,9 @@ def process_activations():
             # not close enough, remove active
             if world.entity_has_component(entity, IsActive):
                 world.remove_component(entity, IsActive)
+
+
+########################## VISION ##################################
 
 
 def process_light_map():
@@ -163,6 +188,9 @@ def process_tile_visibility():
             tile_map[x][y].is_visible = bool(visible_map[x, y])  # cast to bool as it is numpy _bool
 
 
+########################## TIME ####################################
+
+
 def reduce_skill_cooldowns():
     """
     Reduce skill cool down for all entities.
@@ -207,3 +235,197 @@ def reduce_lifespan_durations():
         if lifespan.duration <= 0:
             logging.debug(f"{world.get_name(entity)}`s lifespan has expired. ")
             world.kill_entity(entity)
+
+
+########################### GENERIC REACTION HANDLING ##############################
+
+
+def process_interaction_event(event: pygame.event):
+    """
+    Passes an interaction event to the relevant functions.
+    """
+    if event.subtype == InteractionEvent.MOVE:
+        # print(f"Caught MOVE: {event.origin}, {event.target}, {event.direction}, {event.new_pos}")
+        _handle_proximity_reaction_trigger(event)
+        _process_win_condition(event)
+
+        _handle_reaction_trigger(event.origin, ReactionTrigger.MOVE)
+        _handle_reaction_trigger(event.target, ReactionTrigger.MOVED)
+
+    elif event.subtype == InteractionEvent.DAMAGE:
+        # print(f"Caught DAMAGE: {event.origin}, {event.target}, {event.amount}, {event.damage_type},
+        # {event.remaining_hp}")
+        _handle_reaction_trigger(event.origin, ReactionTrigger.DEAL_DAMAGE)
+        _handle_reaction_trigger(event.target, ReactionTrigger.TAKE_DAMAGE)
+
+        if event.remaining_hp <= 0:
+            _handle_reaction_trigger(event.origin, ReactionTrigger.KILL)
+            _handle_reaction_trigger(event.target, ReactionTrigger.DIE)
+
+    elif event.subtype == InteractionEvent.AFFECT_STAT:
+        # print(f"Caught AFFECT_STAT: {event.origin}, {event.target}, {event.stat}, {event.amount}")
+        _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_STAT)
+        _handle_reaction_trigger(event.target, ReactionTrigger.STAT_AFFECTED)
+
+    elif event.subtype == InteractionEvent.AFFECT_COOLDOWN:
+        # print(f"Caught AFFECT_COOLDOWN: {event.origin}, {event.target}, {event.amount}")
+        _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_COOLDOWN)
+        _handle_reaction_trigger(event.target, ReactionTrigger.COOLDOWN_AFFECTED)
+
+    elif event.subtype == InteractionEvent.AFFLICTION:
+        # print(f"Caught AFFLICTION: {event.origin}, {event.target}, {event.name}")
+        _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFLICTION)
+        _handle_reaction_trigger(event.target, ReactionTrigger.AFFLICTED)
+
+
+def _process_opinions(causing_entity: EntityID, reaction_trigger: ReactionTriggerType):
+    """
+    Adjust opinion of entity for any other entities that have an attitude towards the reaction trigger.
+    """
+    for entity, (opinion,) in query.opinion:
+        assert isinstance(opinion, Opinion)
+        if reaction_trigger in opinion.attitudes:
+            if causing_entity in opinion.opinions:
+                opinion.opinions[causing_entity] += opinion.attitudes[reaction_trigger]
+            else:
+                opinion.opinions[causing_entity] = opinion.attitudes[reaction_trigger]
+
+            logging.debug(
+                f"{world.get_name(entity)}`s opinion of {world.get_name(causing_entity)} is now "
+                f" {opinion.opinions[causing_entity]}."
+            )
+
+
+def _handle_affliction(entity: EntityID, reaction_trigger: ReactionTriggerType):
+    """
+    Check for any afflictions triggered by the interaction and trigger that interaction.
+    """
+    if world.entity_has_component(entity, Afflictions):
+        afflictions = world.get_entitys_component(entity, Afflictions)
+        for affliction in afflictions.active:
+            if reaction_trigger in affliction.triggers:
+                world.trigger_affliction(affliction)
+
+
+def _handle_reaction_trigger(entity: EntityID, reaction_trigger: ReactionTriggerType):
+    """
+    Check for any entities with a reaction to the trigger and handle that reaction.
+    """
+    # loop all entities sharing same position that have a reaction
+    for reacting_entity, (reaction,) in query.reaction:
+        assert isinstance(reaction, Reaction)
+
+        if reaction_trigger in reaction.reactions:
+            data = reaction.reactions[reaction_trigger]
+            _process_opinions(entity, reaction_trigger)
+            _handle_affliction(entity, reaction_trigger)
+            _handle_reaction(reacting_entity, entity, data)
+
+
+def _handle_reaction(observer: EntityID, triggering_entity: EntityID, data: ReactionData):
+    """
+    Process a reaction, checking opinion is sufficient and rolling for chance to trigger.
+    """
+    diff_mod = 0.5  # the amount of the opinion difference to consider
+    required_opinion = data.required_opinion
+
+    # if we dont have a required opinion or have enough opinion carry on
+    if required_opinion is None or not world.entity_has_component(observer, Opinion):
+        opinion_diff = 0
+
+    else:
+        opinion = world.get_entitys_component(observer, Opinion)
+        current_opinion = opinion.opinions[triggering_entity]
+
+        # reverse if negative to make it simpler
+        if required_opinion < 0:
+            required_opinion = -required_opinion
+            current_opinion = -current_opinion
+
+        if required_opinion < current_opinion:
+            opinion_diff = current_opinion - required_opinion
+
+        else:
+            # has opinion and doesnt meet requirement
+            return
+
+    # roll for chance to react
+    from scripts.engine.core import utility
+
+    roll = utility.roll()
+    modified_chance = int(data.chance + (opinion_diff * diff_mod))  # the greater the opinion diff the more chance
+
+    # if roll was unsuccessful return now
+    if roll > modified_chance:
+        return
+
+    # we need position to react to so check we have one (this also prevents triggering on gods)
+    if world.entity_has_component(triggering_entity, Position):
+        # get tile of the acting entity
+        position = world.get_entitys_component(triggering_entity, Position)
+        target_tile = world.get_tile((position.x, position.y))
+
+        _apply_reaction(observer, triggering_entity, target_tile, data)
+
+        # reacted so reduce opinion towards 0
+        if required_opinion is None or not world.entity_has_component(observer, Opinion):
+            return
+
+        # check if negative value
+        if 0 >= opinion.opinions[triggering_entity]:
+            opinion.opinions[triggering_entity] = min(0, opinion.opinions[triggering_entity] + required_opinion)
+        else:
+            opinion.opinions[triggering_entity] = max(0, opinion.opinions[triggering_entity] - required_opinion)
+
+
+def _apply_reaction(observer: EntityID, triggering_entity: EntityID, target_tile: Tile, data: ReactionData):
+    """
+    Create the skill or effect from the reaction and apply it.
+    """
+    if isinstance(data.reaction, EffectData):
+        effect = world.create_effect(observer, triggering_entity, data.reaction)
+        effect.evaluate()
+    else:  # skill data
+        from scripts.engine.internal.data import store
+
+        skill = store.skill_registry[data.reaction]
+        world.use_skill(observer, skill, target_tile, Direction.CENTRE)
+
+
+############### NON-GENERIC REACTION HANDLING ##########################
+
+
+def _handle_proximity_reaction_trigger(event: pygame.event):
+    """
+    Special case of _handle_reaction_trigger. Checks for overlapping positions. Check for any entities with a
+    reaction to proximity and handle that reaction.
+    """
+    # loop all entities sharing same position that have a reaction
+    for entity, (position, reaction) in query.position_and_reaction:
+        assert isinstance(position, Position)
+        assert isinstance(reaction, Reaction)
+        for coord in position.coordinates:
+            if coord == event.new_pos:
+                if ReactionTrigger.PROXIMITY in reaction.reactions:
+                    data = reaction.reactions[ReactionTrigger.PROXIMITY]
+                    _handle_reaction(entity, event.origin, data)
+
+
+def _process_win_condition(event: pygame.event):
+    """
+    Checking if the win condition has been met. Post event if it is.
+    """
+    player = world.get_player()
+
+    # only progress if its the player as only the player can win
+    if not player == event.target:
+        return
+
+    player_pos = world.get_entitys_component(player, Position)
+
+    for entity, (position, _) in query.position_and_win_condition:
+        assert isinstance(position, Position)
+        if player_pos.x == position.x and player_pos.y == position.y:
+            event = pygame.event.Event(EventType.GAME, subtype=GameEvent.WIN_CONDITION_MET)
+            pygame.event.post(event)
+            break

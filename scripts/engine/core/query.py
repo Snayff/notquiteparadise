@@ -10,10 +10,10 @@ from scripts.engine.internal.component import (
     HasCombatStats,
     Identity,
     IsActive,
-    IsActor,
     Knowledge,
     Lifespan,
     LightSource,
+    Opinion,
     Physicality,
     Position,
     Reaction,
@@ -29,6 +29,8 @@ __all__ = [
     "position",
     "active",
     "lifespan",
+    "opinion",
+    "reaction",
     "position_and_light_source",
     "position_and_reaction",
     "not_position",
@@ -36,7 +38,6 @@ __all__ = [
     "position_and_physicality",
     "position_and_aesthetic",
     "position_and_identity_and_aesthetic",
-    "position_and_actor",
     "position_and_win_condition",
     "active_and_tracked",
     "light_source_and_aesthetic",
@@ -63,6 +64,10 @@ active = get_components([IsActive]).compile()
 
 lifespan = get_components([Lifespan]).compile()
 
+opinion = get_components([Opinion]).compile()
+
+reaction = get_components([Reaction]).compile()
+
 
 ################## MULTI QUERIES ##########################
 
@@ -71,8 +76,6 @@ position_and_light_source = get_components([Position, LightSource]).compile()
 position_and_physicality = get_components([Position, Physicality]).compile()
 
 position_and_aesthetic = get_components([Position, Aesthetic]).compile()
-
-position_and_actor = get_components([Position, IsActor]).compile()
 
 position_and_win_condition = get_components([Position, WinCondition]).compile()
 
@@ -93,6 +96,7 @@ active_and_position_and_physicality = get_components([IsActive, Position, Physic
 active_and_position_and_fov_and_combat_stats_and_physicality = get_components(
     [IsActive, Position, FOV, HasCombatStats, Physicality]
 ).compile()
+
 ##################### FILTERS ###############################
 # .filter((DOT & StatusEffect) | (~DOT & Poison & ~Antidote))
 # would be "return HPComponents where (if entity has DamageOverTimeComponent it also must have

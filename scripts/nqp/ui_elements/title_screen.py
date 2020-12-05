@@ -8,7 +8,7 @@ import pygame_gui
 from pygame import Rect
 from pygame_gui.elements import UIButton, UIPanel
 
-from scripts.engine.internal.constant import GameEvent, InputEvent, RenderLayer
+from scripts.engine.internal.constant import EventType, GameEvent, InputEvent, RenderLayer
 from scripts.engine.widgets.panel import Panel
 
 if TYPE_CHECKING:
@@ -27,9 +27,9 @@ class TitleScreen(Panel):
     def __init__(self, rect: Rect, manager: UIManager):
 
         self.button_events = {
-            "new_game": pygame.event.Event(GameEvent.NEW_GAME),
-            "load_game": pygame.event.Event(GameEvent.LOAD_GAME),
-            "exit_game": pygame.event.Event(GameEvent.EXIT_GAME),
+            "new_game": pygame.event.Event(EventType.GAME, subtype=GameEvent.NEW_GAME),
+            "load_game": pygame.event.Event(EventType.GAME, subtype=GameEvent.LOAD_GAME),
+            "exit_game": pygame.event.Event(EventType.GAME, subtype=GameEvent.EXIT_GAME),
         }
 
         self.buttons: List[UIButton] = []

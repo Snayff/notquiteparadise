@@ -5,16 +5,16 @@ import pytweening
 from scripts.engine.core import query, utility, world
 from scripts.engine.core.utility import is_close
 from scripts.engine.internal.component import Aesthetic, LightSource
-from scripts.engine.internal.constant import GameState, GameStateType, TILE_SIZE
+from scripts.engine.internal.constant import GameState, TILE_SIZE
 
-__all__ = ["process_display_updates"]
+__all__ = ["process_updates"]
 
 
-def process_display_updates(time_delta: float, game_state: GameStateType):
+def process_updates(time_delta: float, game_state: GameState):
     """
     Fire realtime processors.
     """
-    if game_state == GameState.GAMEMAP:
+    if game_state == GameState.GAME_MAP:
         _process_aesthetic_update(time_delta)
         _process_lighting()
 

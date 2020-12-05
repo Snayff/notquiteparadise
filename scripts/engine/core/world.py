@@ -11,7 +11,6 @@ from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, utility
-from scripts.engine.core.ui import ui
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
 from scripts.engine.internal.component import (
@@ -22,8 +21,6 @@ from scripts.engine.internal.component import (
     HasCombatStats,
     Identity,
     IsActive,
-    IsActor,
-    IsGod,
     IsPlayer,
     Knowledge,
     Lifespan,
@@ -67,6 +64,7 @@ from scripts.engine.internal.definition import (
     ApplyAfflictionEffectData,
     DamageEffectData,
     EffectData,
+    GodData,
     MoveActorEffectData,
     ProjectileData,
     TerrainData,
@@ -123,20 +121,19 @@ def create_entity(components: List[Component] = None) -> EntityID:
     return entity
 
 
-def create_god(god_name: str) -> EntityID:
+def create_god(god_data: GodData) -> EntityID:
     """
     Create an entity with all of the components to be a god. god_name must be in the gods json file.
     """
-    data = library.GODS[god_name]
     god: List[Component] = []
 
-    god.append(Identity(data.name, data.description))
-    god.append(IsGod())
-    god.append(Opinion())
+    god.append(Identity(god_data.name, god_data.description))
+    god.append(Opinion(god_data.attitudes))
+    god.append(Reaction(god_data.reactions))
     god.append((Resources(INFINITE, INFINITE)))
     entity = create_entity(god)
 
-    logging.debug(f"God, '{data.name}', created.")
+    logging.debug(f"God, '{god_data.name}', created.")
 
     return entity
 
@@ -159,7 +156,6 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     # actor components
     if is_player:
         components.append(IsPlayer())
-    components.append(IsActor())
     components.append(Position(*occupied_tiles))
     components.append(Identity(name, actor_data.description))
     components.append(HasCombatStats())
@@ -796,14 +792,14 @@ def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
     stat_data = library.BASE_STATS_PRIMARY[stat]
     value += stat_data.base_value
 
-    trait = get_entitys_component(entity, Traits)
-    if trait:
+    if entity_has_component(entity, Traits):
+        trait = get_entitys_component(entity, Traits)
         for name in trait.names:
             data = library.TRAITS[name]
             value += getattr(data, stat)
 
-    afflictions = get_entitys_component(entity, Afflictions)
-    if afflictions:
+    if entity_has_component(entity, Afflictions):
+        afflictions = get_entitys_component(entity, Afflictions)
         for modifier in afflictions.stat_modifiers.values():
             if modifier[0] == stat:
                 value += modifier[1]
@@ -834,8 +830,8 @@ def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> i
     value += get_primary_stat(entity, PrimaryStat.EXACTITUDE) * stat_data.exactitude_mod
 
     # afflictions
-    afflictions = get_entitys_component(entity, Afflictions)
-    if afflictions:
+    if entity_has_component(entity, Afflictions):
+        afflictions = get_entitys_component(entity, Afflictions)
         for modifier in afflictions.stat_modifiers.values():
             if modifier[0] == stat:
                 value += modifier[1]
@@ -1250,17 +1246,12 @@ def apply_skill(skill: Skill) -> bool:
     return False
 
 
-def set_skill_on_cooldown(skill: Skill) -> bool:
+def set_skill_on_cooldown(entity: EntityID, skill_name: str, cooldown_duration: int):
     """
-    Sets a skill on cooldown
+    Sets an entity's skill on cooldown.
     """
-    user = skill.user
-    name = skill.__class__.__name__
-    knowledge = get_entitys_component(user, Knowledge)
-    if knowledge:
-        knowledge.set_skill_cooldown(name, skill.base_cooldown)
-        return True
-    return False
+    knowledge = get_entitys_component(entity, Knowledge)
+    knowledge.set_skill_cooldown(skill_name, cooldown_duration)
 
 
 def apply_affliction(affliction: Affliction) -> bool:
@@ -1415,32 +1406,6 @@ def remove_component(entity: EntityID, component: Type[Component]):
     snecs.remove_component(entity, component)
 
 
-def judge_action(entity: EntityID, action_name: str):
-    """
-    Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards
-    the tags in that skill.
-    """
-    for god, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
-        assert isinstance(opinion, Opinion)
-        assert isinstance(identity, Identity)
-
-        attitudes = library.GODS[identity.name].attitudes
-
-        # check if the god has an attitude towards the action and apply the opinion change,
-        # adding the entity to the dict if necessary
-        if action_name in attitudes.keys():
-            if entity in opinion.opinions:
-                opinion.opinions[entity] = opinion.opinions[entity] + attitudes[action_name].opinion_change
-            else:
-                opinion.opinions[entity] = attitudes[action_name].opinion_change
-
-            name = get_name(entity)
-            logging.info(
-                f"'{identity.name}' reacted to '{name}' using {action_name}.  New "
-                f"opinion = {opinion.opinions[entity]}"
-            )
-
-
 def remove_affliction(entity: EntityID, affliction: Affliction):
     """
     Remove affliction from active list and undo any stat modification.
@@ -1520,63 +1485,3 @@ def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_
     logging.debug(log_string)
 
     return mitigated_to_hit_score
-
-
-def choose_interventions(active_entity: EntityID, action_name: str) -> List[Tuple[EntityID, str]]:
-    """
-    Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
-    or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).
-    """
-    chosen_interventions = []
-    desire_to_intervene = 10
-    desire_to_do_nothing = 75  # weighting for doing nothing
-
-    for entity, (is_god, opinion, identity, knowledge) in get_components([IsGod, Opinion, Identity, Knowledge]):
-        assert isinstance(opinion, Opinion)
-        assert isinstance(identity, Identity)
-        assert isinstance(knowledge, Knowledge)
-
-        attitudes = library.GODS[identity.name].attitudes
-
-        # check if the god has an attitude towards the action and increase likelihood of intervening
-        if action_name in attitudes:
-            desire_to_intervene = 30
-
-        # get eligible interventions and their weightings. Need separate lists for random.choices
-        eligible_interventions = []
-        intervention_weightings = []
-        for intervention_name in knowledge.skill_names:
-            intervention_data = library.GODS[identity.name].interventions[intervention_name]
-
-            # is the god willing to intervene i.e. does the opinion score meet the required opinion
-            try:
-                opinion_score = opinion.opinions[active_entity]
-            except KeyError:
-                opinion_score = 0
-
-            required_opinion = intervention_data.required_opinion
-            # check if greater or lower, depending on whether required opinion is positive or negative
-            if 0 <= required_opinion < opinion_score:
-                amount_exceeding_requirement = opinion_score - required_opinion
-
-                eligible_interventions.append(intervention_name)
-                intervention_weightings.append(amount_exceeding_requirement)
-
-            elif 0 > required_opinion > opinion_score:
-                amount_exceeding_requirement = required_opinion - opinion_score  # N.B. opposite to above
-                eligible_interventions.append(intervention_name)
-                intervention_weightings.append(amount_exceeding_requirement)
-
-        # add chance to do nothing
-        eligible_interventions.append("Nothing")
-        intervention_weightings.append(desire_to_do_nothing - desire_to_intervene)
-
-        # which intervention, if any, shall the god consider using?
-        (chosen_intervention,) = random.choices(eligible_interventions, intervention_weightings)
-        # N.B. use , to unpack the result
-
-        # if god has chosen to take an action then add to list
-        if chosen_intervention != "Nothing":
-            chosen_interventions.append((active_entity, chosen_intervention))
-
-    return chosen_interventions

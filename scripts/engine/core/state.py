@@ -7,7 +7,7 @@ import os
 
 from scripts.engine.core import utility, world
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import GameState, GameStateType, MAX_SAVES, SAVE_PATH, VERSION
+from scripts.engine.internal.constant import GameState, MAX_SAVES, SAVE_PATH, VERSION
 from scripts.engine.internal.data import store
 
 _SAVE = {}
@@ -15,7 +15,7 @@ _SAVE = {}
 ################### GET ##############################
 
 
-def get_previous() -> GameStateType:
+def get_previous() -> GameState:
     """
     Get the previous game state
     """
@@ -36,7 +36,7 @@ def get_active_skill() -> str:
     return store.active_skill
 
 
-def get_current() -> GameStateType:
+def get_current() -> GameState:
     """
     Get the current game state
     """
@@ -63,7 +63,7 @@ def update_clock() -> float:
     return store.internal_clock.tick(library.VIDEO_CONFIG.fps_limit) / 1000.0
 
 
-def set_new(new_game_state: GameStateType):
+def set_new(new_game_state: GameState):
     """
     Set the current game state
     """

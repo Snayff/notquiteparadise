@@ -3,11 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import query, system, world
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Tracked
+from scripts.engine.internal.constant import EventType, GameEvent
 from scripts.engine.internal.data import store
 
 if TYPE_CHECKING:
@@ -43,6 +45,7 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     set_turn_queue(new_queue)
 
     # get the next entity in the queue and set as new turn holder
+    set_previous_turn_holder(get_turn_holder())
     set_turn_holder(_get_next_entity_in_queue())
 
     # log result
@@ -52,7 +55,7 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
 def next_turn(entity_to_exclude: Optional[EntityID] = None):
     """
     Proceed to the next turn, setting the next entity to act as the turn holder and updating the passage of time.
-    Update game state to reflect turn holder.
+    Posts NEW_TURN event.
     """
     logging.info(f"Moving to the next turn...")
 
@@ -77,16 +80,16 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
 
     # check if we need to set new round
     if get_time_in_round() + time_progressed >= library.GAME_CONFIG.default_values.time_per_round:
-        next_round(time_progressed)
+        end_round()
+
+        # add progressed time and minus time_in_round to keep the remaining time
+        set_time_in_round((get_time_in_round() + time_progressed) - library.GAME_CONFIG.default_values.time_per_round)
+
     else:
         set_time_in_round(get_time_in_round() + time_progressed)
 
-    # update visibility
-    # TODO - implement scheduling so this doesnt need to be called here
-    system.process_activations()  # must be first otherwise wrong entities active
-    system.process_light_map()
-    system.process_fov()
-    system.process_tile_visibility()
+    event = pygame.event.Event(EventType.GAME, subtype=GameEvent.NEW_TURN)
+    pygame.event.post(event)
 
     # log new turn holder
     name = world.get_name(turn_holder)
@@ -94,22 +97,41 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
     logging.debug(f"-> '{name}' is now the turn holder.")
 
 
-def next_round(time_progressed: int):
+def end_turn(entity: EntityID, time_spent: int):
     """
-    Move to the next round and trigger end of round events, like cooldown and affliction reduction.
-    """
-    # TODO - create end of round event and handle there.
-    system.reduce_skill_cooldowns()
-    system.reduce_affliction_durations()
-    system.reduce_lifespan_durations()
+    Spend an entities time, progress time, move to next acting entity in queue. Posts END_TURN event.
 
-    # add progressed time and minus time_in_round to keep the remaining time
-    set_time_in_round((get_time_in_round() + time_progressed) - library.GAME_CONFIG.default_values.time_per_round)
+    N.B. If entity given is NOT the turn holder then nothing happens.
+    """
+    if entity == get_turn_holder():
+        event = pygame.event.Event(EventType.GAME, subtype=GameEvent.END_TURN)
+        pygame.event.post(event)
+
+        world.spend_time(entity, time_spent)
+
+    else:
+        logging.warning(f"Tried to end {world.get_name(entity)}'s turn but they're not turn holder.")
+
+
+def next_round():
+    """
+    Move to the next round. Posts NEW_ROUND event.
+    """
+    event = pygame.event.Event(EventType.GAME, subtype=GameEvent.NEW_ROUND)
+    pygame.event.post(event)
 
     # increment rounds
     _increment_round_number()
 
     logging.info(f"It is now round {get_round()}.")
+
+
+def end_round():
+    """
+    Posts END_ROUND event.
+    """
+    event = pygame.event.Event(EventType.GAME, subtype=GameEvent.END_ROUND)
+    pygame.event.post(event)
 
 
 def _increment_round_number():
@@ -134,6 +156,13 @@ def get_turn_holder() -> EntityID:
     Get the entity who has the current turn
     """
     return store.turn_holder
+
+
+def get_previous_turn_holder() -> EntityID:
+    """
+    Get the entity who had the last turn
+    """
+    return store.previous_turn_holder
 
 
 def get_turn_queue() -> Dict[EntityID, int]:
@@ -191,9 +220,16 @@ def _get_next_entity_in_queue() -> EntityID:
 
 def set_turn_holder(active_entity: EntityID):
     """
-    Get the entity who has the current turn
+    Set the entity who has the current turn
     """
     store.turn_holder = active_entity
+
+
+def set_previous_turn_holder(entity: EntityID):
+    """
+    Set the entity who had the last turn
+    """
+    store.previous_turn_holder = entity
 
 
 def set_time_in_round(time: int):
@@ -215,14 +251,3 @@ def set_time_of_last_turn(time: int):
     Set the time of the last turn
     """
     store.time_of_last_turn = time
-
-
-def end_turn(entity: EntityID, time_spent: int):
-    """
-    Spend an entities time, progress time, move to next acting entity in queue.
-    """
-    if entity == get_turn_holder():
-        world.spend_time(entity, time_spent)
-        next_turn()
-    else:
-        logging.warning(f"Tried to end {world.get_name(entity)}'s turn but they're not turn holder.")

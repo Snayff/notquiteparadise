@@ -8,7 +8,7 @@ import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine.internal.action import Affliction, Behaviour, Skill
-from scripts.engine.internal.constant import GameState, GameStateType
+from scripts.engine.internal.constant import GameState
 
 if TYPE_CHECKING:
     from typing import Any, Dict, Optional, Type
@@ -26,8 +26,8 @@ class Store:
         self.internal_clock = pygame.time.Clock()
 
         # used in state
-        self.current_game_state: GameStateType = GameState.LOADING
-        self.previous_game_state: GameStateType = GameState.LOADING
+        self.current_game_state: GameState = GameState.LOADING
+        self.previous_game_state: GameState = GameState.LOADING
         self.active_skill = None
 
         # used in world
@@ -42,6 +42,7 @@ class Store:
         self.time_of_last_turn: int = 1
         self.round_time: int = 0  # tracker of time progressed in current round
         self.turn_holder: EntityID = -1  # current acting entity
+        self.previous_turn_holder: EntityID = -1  # current acting entity
 
         self.message_log: List[str] = []
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from enum import auto, IntEnum
 from pathlib import Path
 from types import SimpleNamespace
 from typing import NewType, Tuple, Union
@@ -10,8 +11,8 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.137.0"  # DONT FORGET TO UPDATE SPHINX VERSION
-DEBUG_START = False  # Whether to start directly in debug map
+VERSION = "0.138.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+DEBUG_START = True  # Whether to start directly in debug map
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -47,7 +48,6 @@ InputIntentType = NewType("InputIntentType", str)
 PrimaryStatType = NewType("PrimaryStatType", str)
 SecondaryStatType = NewType("SecondaryStatType", str)
 ResourceType = NewType("ResourceType", str)
-GameStateType = NewType("GameStateType", int)
 TargetTagType = NewType("TargetTagType", str)
 DamageTypeType = NewType("DamageTypeType", str)
 HitTypeType = NewType("HitTypeType", str)
@@ -58,22 +58,26 @@ TerrainCollisionType = NewType("TerrainCollisionType", str)
 TravelMethodType = NewType("TravelMethodType", str)
 ProjectileExpiryType = NewType("ProjectileExpiryType", str)
 ProjectileSpeedType = NewType("ProjectileSpeedType", int)
-UIElementType = NewType("UIElementType", str)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
 TraitGroupType = NewType("TraitGroupType", str)
-InteractionTriggerType = NewType("InteractionTriggerType", str)
-RenderLayerType = NewType("RenderLayerType", int)
+ReactionTriggerType = NewType("ReactionTriggerType", str)
 TileCategoryType = NewType("TileCategoryType", str)
 HeightType = NewType("HeightType", int)
-
-TagType = Union[TargetTagType, DamageTypeType, AfflictionCategoryType]
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
 
 
-class InputEvent(SimpleNamespace):
+class EventType(IntEnum):
+    """ The types of possible customer pygame events. """
+
+    INPUT = auto()
+    GAME = auto()
+    INTERACTION = auto()
+
+
+class InputEvent(IntEnum):
     """
     Custom pygame event names triggered by input. These need to be interpreted into intents.
     """
@@ -82,7 +86,7 @@ class InputEvent(SimpleNamespace):
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
 
 
-class GameEvent(SimpleNamespace):
+class GameEvent(IntEnum):
     """
     Custom pygame event names triggered by the game
     """
@@ -93,11 +97,15 @@ class GameEvent(SimpleNamespace):
     EXIT_GAME = pygame.USEREVENT + 103
     WIN_CONDITION_MET = pygame.USEREVENT + 104
     START_GAME = pygame.USEREVENT + 105
+    NEW_TURN = pygame.USEREVENT + 106
+    END_TURN = pygame.USEREVENT + 107
+    NEW_ROUND = pygame.USEREVENT + 108
+    END_ROUND = pygame.USEREVENT + 109
 
 
-class InteractionEvent(SimpleNamespace):
+class InteractionEvent(IntEnum):
     """
-    Custom pygame events to trigger interactions.
+    Custom pygame events to trigger interactions. Think of these as categories for Reaction Triggers.
     """
 
     MOVE = pygame.USEREVENT + 200
@@ -107,47 +115,51 @@ class InteractionEvent(SimpleNamespace):
     AFFLICTION = pygame.USEREVENT + 204
 
 
-class RenderLayer(SimpleNamespace):
+class RenderLayer(IntEnum):
     """
     The possible render layers. Lower number is further down the stack.
     """
 
-    BOTTOM = RenderLayerType(10)
-    TILE = RenderLayerType(20)
-    TERRAIN = RenderLayerType(30)
-    ACTOR = RenderLayerType(40)
-    UI_BASE = RenderLayerType(50)
-    UI_WINDOW = RenderLayerType(60)
+    BOTTOM = 10
+    TILE = 20
+    TERRAIN = 30
+    ACTOR = 40
+    UI_BASE = 50
+    UI_WINDOW = 60
 
 
-class GameState(SimpleNamespace):
+class GameState(IntEnum):
     """
     States the game can be in.
     """
 
-    LOADING = GameStateType(1)  # while loading, to prevent key press.
-    GAMEMAP = GameStateType(2)  # while player moving around the game_map
-    PLAYER_DEAD = GameStateType(3)  # while player is dead
-    TARGETING = GameStateType(4)  # while player is targeting
-    EXITING = GameStateType(5)  # while exiting
-    DEVELOPER = GameStateType(6)  # while using dev mode
-    MENU = GameStateType(7)  # while using a menu
+    LOADING = 1  # while loading, to prevent key press.
+    GAME_MAP = 2  # while player moving around the game_map
+    PLAYER_DEAD = 3  # while player is dead
+    TARGETING = 4  # while player is targeting
+    EXITING = 5  # while exiting
+    DEVELOPER = 6  # while using dev mode
+    MENU = 7  # while using a menu
 
 
-class UIElement(SimpleNamespace):
+class UIElement(IntEnum):
     """
     The different, single instance UI elements
     """
 
-    MESSAGE_LOG = UIElementType("message_log")
-    ACTOR_INFO = UIElementType("actor_info")
-    SKILL_BAR = UIElementType("skill_bar")
-    ENTITY_QUEUE = UIElementType("entity_queue")
-    CAMERA = UIElementType("camera")
-    TILE_INFO = UIElementType("tile_info")
-    DUNGEN_VIEWER = UIElementType("dungen_viewer")
-    TITLE_SCREEN = UIElementType("title_screen")
-    CHARACTER_SELECTOR = UIElementType("character_selector")
+    MESSAGE_LOG = auto()
+    ACTOR_INFO = auto()
+    SKILL_BAR = auto()
+    ENTITY_QUEUE = auto()
+    CAMERA = auto()
+    TILE_INFO = auto()
+    DUNGEN_VIEWER = auto()
+    TITLE_SCREEN = auto()
+    CHARACTER_SELECTOR = auto()
+
+
+#################### EXTERNAL ###########################################
+# i.e used in the data files
 
 
 class InputIntent(SimpleNamespace):
@@ -180,10 +192,6 @@ class InputIntent(SimpleNamespace):
     TEST = InputIntentType("test")
     DUNGEON_DEV_VIEW = InputIntentType("dungeon_dev_toggle")
     TOGGLE_UI = InputIntentType("toggle_ui")
-
-
-#################### EXTERNAL, SERIALISED  ###########################################
-# i.e used in the data files
 
 
 class Direction(SimpleNamespace):
@@ -305,24 +313,25 @@ class DamageType(SimpleNamespace):
     MUNDANE = DamageTypeType("mundane")
 
 
-class InteractionTrigger(SimpleNamespace):
+class ReactionTrigger(SimpleNamespace):
     """
     Type of trigger for the affliction
     """
 
-    MOVE = InteractionTriggerType("movement")
-    PROXIMITY = InteractionTriggerType("proximity")
-    TAKE_DAMAGE = InteractionTriggerType("take_damage")
-    DEAL_DAMAGE = InteractionTriggerType("deal_damage")
-    KILL = InteractionTriggerType("kill")
-    DIE = InteractionTriggerType("die")
-    COLLISION = InteractionTriggerType("collision")
-    AFFECTED_STAT = InteractionTriggerType("affected_stat")
-    CAUSED_AFFECT_STAT = InteractionTriggerType("caused_affect_stat")
-    AFFECTED_COOLDOWN = InteractionTriggerType("affected_cooldown")
-    CAUSED_AFFECT_COOLDOWN = InteractionTriggerType("caused_affect_cooldown")
-    CAUSED_AFFLICTION = InteractionTriggerType("caused_affliction")
-    AFFLICTED = InteractionTriggerType("afflicted")
+    MOVE = ReactionTriggerType("move")
+    MOVED = ReactionTriggerType("moved")
+    PROXIMITY = ReactionTriggerType("proximity")
+    TAKE_DAMAGE = ReactionTriggerType("take_damage")
+    DEAL_DAMAGE = ReactionTriggerType("deal_damage")
+    KILL = ReactionTriggerType("kill")
+    DIE = ReactionTriggerType("die")
+    COLLISION = ReactionTriggerType("collision")
+    STAT_AFFECTED = ReactionTriggerType("stat_affected")
+    CAUSED_AFFECT_STAT = ReactionTriggerType("caused_affect_stat")
+    COOLDOWN_AFFECTED = ReactionTriggerType("cooldown_affected")
+    CAUSED_AFFECT_COOLDOWN = ReactionTriggerType("caused_affect_cooldown")
+    AFFLICTED = ReactionTriggerType("afflicted")
+    CAUSED_AFFLICTION = ReactionTriggerType("caused_affliction")
 
 
 class AfflictionCategory(SimpleNamespace):

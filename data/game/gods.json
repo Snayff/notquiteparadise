@@ -1,26 +1,18 @@
 {
     "the_small_gods": {
         "__dataclass__": "GodData",
-        "attitudes": {
-            "burn": {
-                "__dataclass__": "AttitudeData",
-                "action": "burn",
-                "opinion_change": -10
-            },
-            "damage": {
-                "__dataclass__": "AttitudeData",
-                "action": "damage",
-                "opinion_change": -5
-            }
-        },
+        "name": "the_small_gods",
         "description": "Hordes of small gods banded together to ensure they were finally taken seriously.",
-        "interventions": {
-            "BasicAttack": {
-                "__dataclass__": "InterventionData",
-                "required_opinion": -20,
-                "skill_key": "BasicAttack"
-            }
+        "attitudes": {
+            "deal_damage":  -5
         },
-        "name": "the_small_gods"
+        "reactions": {
+            "deal_damage": {
+                "__dataclass__": "ReactionData",
+                "required_opinion": -80,
+                "reaction": "BasicAttack",
+                "chance": 10
+            }
+        }
     }
 }

@@ -25,7 +25,6 @@ from scripts.engine.internal.constant import (
     SAVE_PATH,
     SKILL_BUTTON_SIZE,
     UIElement,
-    UIElementType,
 )
 from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
@@ -88,16 +87,12 @@ def _start_debug_game():
 
     # create actor near to player
     player_pos = world.get_entitys_component(player, Position)
-    actor_data = ActorData(
-        key="crocturion",
-        possible_names=["Krock"],
-        description="Krock desc",
-        position_offsets=[(0, 0)],
-        trait_names=["crocturion"],
-        height=Height.LOFTY,
-        behaviour_name="SearchAndAttack",
-    )
+    actor_data = library.ACTORS["crocturion"]
     world.create_actor(actor_data, (player_pos.x, player_pos.y - 2))
+
+    # create god
+    god_data = library.GODS["the_small_gods"]
+    world.create_god(god_data)
 
     # show the in game screens
     camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
@@ -124,7 +119,7 @@ def _start_debug_game():
     world.create_terrain(library.TERRAIN["bog"], (pos.x + 1, pos.y))
 
     # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
+    state.set_new(GameState.GAME_MAP)
 
     # prompt turn actions
     chronicle.end_turn(player, 0)
@@ -165,7 +160,8 @@ def start_game(player_data: ActorData):
     chronicle.set_turn_holder(player)
 
     # create a god
-    world.create_god("the_small_gods")
+    god_data = library.GODS["the_small_gods"]
+    world.create_god(god_data)
 
     # show the in game screens
     camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
@@ -202,7 +198,7 @@ def start_game(player_data: ActorData):
     camera.set_target((pos.x, pos.y), True)
 
     # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
+    state.set_new(GameState.GAME_MAP)
 
     # prompt turn actions
     chronicle.end_turn(player, 0)
@@ -235,7 +231,7 @@ def load_game():
     ui.create_screen_message("Welcome back to Not Quite Paradise")
 
     # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
+    state.set_new(GameState.GAME_MAP)
 
 
 def exit_game():
@@ -315,7 +311,7 @@ def register_actions():
 ##################### UI ######################
 
 
-def get_element_rect(element_type: UIElementType) -> pygame.Rect:
+def get_element_rect(element_type: UIElement) -> pygame.Rect:
     """
     Get the predefined rect for the specified element.
     """

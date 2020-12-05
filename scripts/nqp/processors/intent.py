@@ -14,7 +14,6 @@ from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
     GameState,
-    GameStateType,
     InputIntent,
     InputIntentType,
     TargetingMethod,
@@ -29,13 +28,13 @@ from scripts.nqp.ui_elements.actor_info import ActorInfo
 from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
 
 
-def process_intent(intent: InputIntentType, game_state: GameStateType):
+def process_intent(intent: InputIntentType, game_state: GameState):
     """
     Process the intent in the context of the game state. Intents are game state sensitive.
     """
     _process_stateless_intents(intent)
 
-    if game_state == GameState.GAMEMAP:
+    if game_state == GameState.GAME_MAP:
         _process_game_map_intents(intent)
     elif game_state == GameState.TARGETING:
         _process_targeting_mode_intents(intent)
@@ -150,14 +149,15 @@ def _process_game_map_intents(intent: InputIntentType):
                         # pass centre as it doesnt matter, the skill will pick the right direction
                         _process_skill_use(player, skill, current_tile, Direction.CENTRE)
                     else:
-                        # trigger targeting overlay
-                        state.set_new(GameState.TARGETING)
-                        state.set_active_skill(skill_name)
-                        if ui.has_element(UIElement.CAMERA):
-                            camera = ui.get_element(UIElement.CAMERA)
-                            camera.update_targeting_overlay(True, skill_name)
+                        # # trigger targeting overlay
+                        pass
+                        # state.set_new(GameState.TARGETING)
+                        # state.set_active_skill(skill_name)
+                        # if ui.has_element(UIElement.CAMERA):
+                        #     camera = ui.get_element(UIElement.CAMERA)
+                        #     camera.update_targeting_overlay(True, skill_name)
 
-    ## Show actor info - we're in GAMEMAP so it cant be visible
+    ## Show actor info - we're in GAME_MAP so it cant be visible
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:
         # show
         state.set_new(GameState.MENU)
@@ -241,10 +241,8 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
 
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
-        world.judge_action(player, skill.__class__.__name__)
+        world.set_skill_on_cooldown(player, skill.__class__.__name__, skill.base_cooldown)
         chronicle.end_turn(player, skill.time_cost)
-
-        state.save_game()
 
         # update camera if position changes
         try:

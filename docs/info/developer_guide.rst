@@ -24,9 +24,11 @@ Below are the naming conventions followed in Not Quite Paradise:
 * If checking a bool use IsA or HasA.
 * If setting a variable from statically held data prefix with "load_[data]"
 * Where a variable name contains "name" the variable may include spaces and other special characters. Where it includes "key" it may contain alphanumeric values only.
+* "Handle" is for a conditional execution, i.e. the function will check criteria is met before executing.
+* "Process" is for a mass application of a function. e.g. "process_lighting" applies lighting to all applicable entities.
 * Arguments should be in a consistent order:
-1. Identifiers (entity, skill)
-2. Affected items (position, tiles)
+1. Identifiers (entity, skill, etc.)
+2. Affected items (position, tiles, etc.)
 3. Qualifiers
 * Externally held data should be defined in a dataclass in definitions.py.
 
