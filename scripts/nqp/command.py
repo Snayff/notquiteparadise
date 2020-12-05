@@ -161,7 +161,8 @@ def start_game(player_data: ActorData):
     chronicle.set_turn_holder(player)
 
     # create a god
-    world.create_god("the_small_gods")
+    god_data = library.GODS["the_small_gods"]
+    world.create_god(god_data)
 
     # show the in game screens
     camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())

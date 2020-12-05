@@ -371,7 +371,7 @@ def convert_direction_to_name(direction: DirectionType) -> str:
 
 ################################### CHANCE ########################################
 
-def roll(min_value: int = 0, max_value: int = 100) -> int:
+def roll(min_value: int = 0, max_value: int = 99) -> int:
     """
     Roll for a number between min and max
     """

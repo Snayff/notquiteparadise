@@ -30,17 +30,17 @@ def process_input_event(event: pygame.event, game_state: GameState):
                 # Activate skill on mouse click while in targeting mode
                 player = world.get_player()
                 position = world.get_entitys_component(player, Position)
-                if position:
-                    event_x, event_y = event.tile_pos
-                    direction = (max(-1, min(1, event_x - position.x)), max(-1, min(1, position.y - event_y)))
-                    intent = key.convert_vector_to_intent(direction)
+                event_x, event_y = event.tile_pos
+                direction = (max(-1, min(1, event_x - position.x)), max(-1, min(1, position.y - event_y)))
+                intent = key.convert_vector_to_intent(direction)
 
             elif game_state == GameState.GAME_MAP:
-                ## Activate Actor Info Menu
+                # Activate Actor Info Menu
                 x, y = event.tile_pos
                 # get entity on tile
-                for entity, (position, ) in query.position:
-                    if (x, y) in position:
+                for entity, (position, ) in query.position:  # type: ignore
+                    assert isinstance(position, Position)
+                    if (x, y) in position.coordinates:
                         # found entity, set to selected
                         actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
                         actor_info.set_entity(entity)

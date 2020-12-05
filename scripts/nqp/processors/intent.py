@@ -150,12 +150,13 @@ def _process_game_map_intents(intent: InputIntentType):
                         # pass centre as it doesnt matter, the skill will pick the right direction
                         _process_skill_use(player, skill, current_tile, Direction.CENTRE)
                     else:
-                        # trigger targeting overlay
-                        state.set_new(GameState.TARGETING)
-                        state.set_active_skill(skill_name)
-                        if ui.has_element(UIElement.CAMERA):
-                            camera = ui.get_element(UIElement.CAMERA)
-                            camera.update_targeting_overlay(True, skill_name)
+                        # # trigger targeting overlay
+                        pass
+                        # state.set_new(GameState.TARGETING)
+                        # state.set_active_skill(skill_name)
+                        # if ui.has_element(UIElement.CAMERA):
+                        #     camera = ui.get_element(UIElement.CAMERA)
+                        #     camera.update_targeting_overlay(True, skill_name)
 
     ## Show actor info - we're in GAME_MAP so it cant be visible
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:

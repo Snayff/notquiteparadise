@@ -269,11 +269,15 @@ def _process_opinions(causing_entity: EntityID, reaction_trigger: ReactionTrigge
     Adjust opinion of entity for any other entities that have an attitude towards the reaction trigger.
     """
     for entity, (opinion, ) in query.opinion:
+        assert isinstance(opinion, Opinion)
         if reaction_trigger in opinion.attitudes:
             if causing_entity in opinion.opinions:
                 opinion.opinions[causing_entity] += opinion.attitudes[reaction_trigger]
             else:
                 opinion.opinions[causing_entity] = opinion.attitudes[reaction_trigger]
+
+            logging.debug(f"{world.get_name(entity)}`s opinion of {world.get_name(causing_entity)} is now "
+                          f" {opinion.opinions[causing_entity]}.")
 
 
 def _handle_affliction(entity: EntityID, reaction_trigger: ReactionTriggerType):
@@ -306,27 +310,55 @@ def _handle_reaction(observer: EntityID, triggering_entity: EntityID, data: Reac
     """
     Process a reaction, checking opinion is sufficient and rolling for chance to trigger.
     """
+    diff_mod = 0.5  # the amount of the opinion difference to consider
+    required_opinion = data.required_opinion
+
     # if we dont have a required opinion or have enough opinion carry on
-    if not data.required_opinion:
+    if required_opinion is None or not world.entity_has_component(observer, Opinion):
         opinion_diff = 0
 
-    elif world.has_enough_opinion(observer, triggering_entity, data.required_opinion):
-        opinion = world.get_entitys_component(observer, Opinion)
-        opinion_diff = abs(opinion.opinions[triggering_entity]) - abs(data.required_opinion)
-
     else:
-        # has opinion and doesnt meet requirement
-        return
+        opinion = world.get_entitys_component(observer, Opinion)
+        current_opinion = opinion.opinions[triggering_entity]
+
+        # reverse if negative to make it simpler
+        if required_opinion < 0:
+            required_opinion = -required_opinion
+            current_opinion = -current_opinion
+
+        if required_opinion < current_opinion:
+            opinion_diff = current_opinion - required_opinion
+
+        else:
+            # has opinion and doesnt meet requirement
+            return
 
     # roll for chance to react
     from scripts.engine.core import utility
-    if (utility.roll() + int(opinion_diff / 2)) > (100 - data.chance):
-        if world.entity_has_component(triggering_entity, Position):
-            # get tile of the acting entity
-            position = world.get_entitys_component(triggering_entity, Position)
-            target_tile = world.get_tile((position.x, position.y))
+    roll = utility.roll()
+    modified_chance = int(data.chance + (opinion_diff * diff_mod))  # the greater the opinion diff the more chance
 
-            _apply_reaction(observer, triggering_entity, target_tile, data)
+    # if roll was unsuccessful return now
+    if roll > modified_chance:
+        return
+
+    # we need position to react to so check we have one (this also prevents triggering on gods)
+    if world.entity_has_component(triggering_entity, Position):
+        # get tile of the acting entity
+        position = world.get_entitys_component(triggering_entity, Position)
+        target_tile = world.get_tile((position.x, position.y))
+
+        _apply_reaction(observer, triggering_entity, target_tile, data)
+
+        # reacted so reduce opinion towards 0
+        if required_opinion is None or not world.entity_has_component(observer, Opinion):
+            return
+
+        # check if negative value
+        if 0 >= opinion.opinions[triggering_entity]:
+            opinion.opinions[triggering_entity] = min(0, opinion.opinions[triggering_entity] + required_opinion)
+        else:
+            opinion.opinions[triggering_entity] = max(0, opinion.opinions[triggering_entity] - required_opinion)
 
 
 def _apply_reaction(observer: EntityID, triggering_entity: EntityID, target_tile: Tile, data: ReactionData):

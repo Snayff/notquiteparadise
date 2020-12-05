@@ -1167,28 +1167,6 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     return False
 
 
-def has_enough_opinion(opinion_holder: EntityID, judged_entity: EntityID, required_opinion: int) -> bool:
-    """
-    Confirm if opinion_holder has an opinion of judged_entity that exceeds required_opinion. If required_opinion is
-    negative then the current opinion must be lower.
-
-    If opinion holder has no Opinion component then returns False. If required opinion is 0 then any opinion will be
-    enough.
-    """
-    try:
-        opinion = get_entitys_component(opinion_holder, Opinion)
-
-        # check if we met required opinion
-        if 0 >= required_opinion > opinion.opinions[judged_entity] or 0 <= required_opinion < opinion.opinions[
-            judged_entity]:
-            return True
-        else:
-            # insufficient opinion
-            return False
-
-    except (AttributeError, KeyError):
-        return False
-
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
 
 
@@ -1505,63 +1483,3 @@ def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_
     logging.debug(log_string)
 
     return mitigated_to_hit_score
-
-
-def choose_interventions(active_entity: EntityID, action_name: str) -> List[Tuple[EntityID, str]]:
-    """
-    Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
-    or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).
-    """
-    chosen_interventions = []
-    desire_to_intervene = 10
-    desire_to_do_nothing = 75  # weighting for doing nothing
-
-    for entity, (opinion, identity, knowledge) in get_components([Opinion, Identity, Knowledge]):
-        assert isinstance(opinion, Opinion)
-        assert isinstance(identity, Identity)
-        assert isinstance(knowledge, Knowledge)
-
-        attitudes = library.GODS[identity.name].attitudes
-
-        # check if the god has an attitude towards the action and increase likelihood of intervening
-        if action_name in attitudes:
-            desire_to_intervene = 30
-
-        # get eligible interventions and their weightings. Need separate lists for random.choices
-        eligible_interventions = []
-        intervention_weightings = []
-        for intervention_name in knowledge.skill_names:
-            intervention_data = library.GODS[identity.name].interventions[intervention_name]
-
-            # is the god willing to intervene i.e. does the opinion score meet the required opinion
-            try:
-                opinion_score = opinion.opinions[active_entity]
-            except KeyError:
-                opinion_score = 0
-
-            required_opinion = intervention_data.required_opinion
-            # check if greater or lower, depending on whether required opinion is positive or negative
-            if 0 <= required_opinion < opinion_score:
-                amount_exceeding_requirement = opinion_score - required_opinion
-
-                eligible_interventions.append(intervention_name)
-                intervention_weightings.append(amount_exceeding_requirement)
-
-            elif 0 > required_opinion > opinion_score:
-                amount_exceeding_requirement = required_opinion - opinion_score  # N.B. opposite to above
-                eligible_interventions.append(intervention_name)
-                intervention_weightings.append(amount_exceeding_requirement)
-
-        # add chance to do nothing
-        eligible_interventions.append("Nothing")
-        intervention_weightings.append(desire_to_do_nothing - desire_to_intervene)
-
-        # which intervention, if any, shall the god consider using?
-        (chosen_intervention,) = random.choices(eligible_interventions, intervention_weightings)
-        # N.B. use , to unpack the result
-
-        # if god has chosen to take an action then add to list
-        if chosen_intervention != "Nothing":
-            chosen_interventions.append((active_entity, chosen_intervention))
-
-    return chosen_interventions

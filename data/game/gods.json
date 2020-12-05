@@ -9,8 +9,9 @@
         "reactions": {
             "deal_damage": {
                 "__dataclass__": "ReactionData",
-                "required_opinion": -1,
-                "reaction": "BasicAttack"
+                "required_opinion": -80,
+                "reaction": "BasicAttack",
+                "chance": 10
             }
         }
     }
