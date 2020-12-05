@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from enum import IntEnum
 from pathlib import Path
 from types import SimpleNamespace
 from typing import NewType, Tuple, Union
@@ -71,7 +72,7 @@ HeightType = NewType("HeightType", int)
 #################### INTERNAL, NON-SERIALISED ###########################################
 
 
-class InputEvent(SimpleNamespace):
+class InputEvent(IntEnum):
     """
     Custom pygame event names triggered by input. These need to be interpreted into intents.
     """
@@ -80,7 +81,7 @@ class InputEvent(SimpleNamespace):
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
 
 
-class GameEvent(SimpleNamespace):
+class GameEvent(IntEnum):
     """
     Custom pygame event names triggered by the game
     """
@@ -93,7 +94,7 @@ class GameEvent(SimpleNamespace):
     START_GAME = pygame.USEREVENT + 105
 
 
-class InteractionEvent(SimpleNamespace):
+class InteractionEvent(IntEnum):
     """
     Custom pygame events to trigger interactions. Think of these as categories for Reaction Triggers.
     """

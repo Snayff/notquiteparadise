@@ -289,7 +289,7 @@ def _handle_reaction_trigger(entity: EntityID, reaction_trigger: ReactionTrigger
     Check for any entities with a reaction to the trigger and handle that reaction.
     """
     # loop all entities sharing same position that have a reaction
-    for reacting_entity, (reaction) in query.reaction:
+    for reacting_entity, (reaction, ) in query.reaction:
         assert isinstance(reaction, Reaction)
 
         if reaction_trigger in reaction.reactions:
