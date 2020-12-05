@@ -224,7 +224,7 @@ def reduce_lifespan_durations():
             world.kill_entity(entity)
 
 
-########################### REACTIONS ##############################
+########################### GENERIC REACTION HANDLING ##############################
 
 def process_interaction_event(event: pygame.event):
     """
@@ -232,48 +232,36 @@ def process_interaction_event(event: pygame.event):
     """
     if event.type == InteractionEvent.MOVE:
         # print(f"Caught MOVE: {event.origin}, {event.target}, {event.direction}, {event.new_pos}")
-        _process_opinions(event.origin, ReactionTrigger.MOVE)
         _handle_proximity_reaction_trigger(event)
-        _handle_affliction(event.target, ReactionTrigger.MOVE)
         _process_win_condition(event)
 
         _handle_reaction_trigger(event.origin, ReactionTrigger.MOVE)
-        # TODO - Can we move some of the others under this?
+        _handle_reaction_trigger(event.target, ReactionTrigger.MOVED)
 
     elif event.type == InteractionEvent.DAMAGE:
         # print(f"Caught DAMAGE: {event.origin}, {event.target}, {event.amount}, {event.damage_type},
         # {event.remaining_hp}")
-        _process_opinions(event.origin, ReactionTrigger.DEAL_DAMAGE)
-        _process_opinions(event.target, ReactionTrigger.TAKE_DAMAGE)
-        _handle_affliction(event.origin, ReactionTrigger.DEAL_DAMAGE)
-        _handle_affliction(event.target, ReactionTrigger.TAKE_DAMAGE)
+        _handle_reaction_trigger(event.origin, ReactionTrigger.DEAL_DAMAGE)
+        _handle_reaction_trigger(event.target, ReactionTrigger.TAKE_DAMAGE)
 
         if event.remaining_hp <= 0:
-            _process_opinions(event.origin, ReactionTrigger.KILL)
-            _process_opinions(event.target, ReactionTrigger.DIE)
-            _handle_affliction(event.origin, ReactionTrigger.KILL)
-            _handle_affliction(event.target, ReactionTrigger.DIE)
+            _handle_reaction_trigger(event.origin, ReactionTrigger.KILL)
+            _handle_reaction_trigger(event.target, ReactionTrigger.DIE)
 
     elif event.type == InteractionEvent.AFFECT_STAT:
         # print(f"Caught AFFECT_STAT: {event.origin}, {event.target}, {event.stat}, {event.amount}")
-        _process_opinions(event.origin, ReactionTrigger.CAUSED_AFFECT_STAT)
-        _process_opinions(event.target, ReactionTrigger.AFFECTED_STAT)
-        _handle_affliction(event.origin, ReactionTrigger.CAUSED_AFFECT_STAT)
-        _handle_affliction(event.target, ReactionTrigger.AFFECTED_STAT)
+        _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_STAT)
+        _handle_reaction_trigger(event.target, ReactionTrigger.STAT_AFFECTED)
 
     elif event.type == InteractionEvent.AFFECT_COOLDOWN:
         # print(f"Caught AFFECT_COOLDOWN: {event.origin}, {event.target}, {event.amount}")
-        _process_opinions(event.origin, ReactionTrigger.CAUSED_AFFECT_COOLDOWN)
-        _process_opinions(event.target, ReactionTrigger.AFFECTED_COOLDOWN)
-        _handle_affliction(event.origin, ReactionTrigger.CAUSED_AFFECT_COOLDOWN)
-        _handle_affliction(event.target, ReactionTrigger.AFFECTED_COOLDOWN)
+        _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_COOLDOWN)
+        _handle_reaction_trigger(event.target, ReactionTrigger.COOLDOWN_AFFECTED)
 
     elif event.type == InteractionEvent.AFFLICTION:
         # print(f"Caught AFFLICTION: {event.origin}, {event.target}, {event.name}")
-        _process_opinions(event.origin, ReactionTrigger.CAUSED_AFFLICTION)
-        _process_opinions(event.target, ReactionTrigger.AFFLICTED)
-        _handle_affliction(event.origin, ReactionTrigger.CAUSED_AFFLICTION)
-        _handle_affliction(event.target, ReactionTrigger.AFFLICTED)
+        _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFLICTION)
+        _handle_reaction_trigger(event.target, ReactionTrigger.AFFLICTED)
 
 
 def _process_opinions(causing_entity: EntityID, reaction_trigger: ReactionTriggerType):
@@ -283,26 +271,6 @@ def _process_opinions(causing_entity: EntityID, reaction_trigger: ReactionTrigge
     for entity, (opinion, ) in query.opinion:
         if reaction_trigger in opinion.attitudes:
             opinion.opinions[causing_entity] += opinion.attitudes[reaction_trigger]
-
-
-def _process_win_condition(event: pygame.event):
-    """
-    Checking if the win condition has been met. Post event if it is.
-    """
-    player = world.get_player()
-
-    # only progress if its the player as only the player can win
-    if not player == event.target:
-        return
-
-    player_pos = world.get_entitys_component(player, Position)
-
-    for entity, (position, _) in query.position_and_win_condition:
-        assert isinstance(position, Position)
-        if player_pos.x == position.x and player_pos.y == position.y:
-            event = pygame.event.Event(GameEvent.WIN_CONDITION_MET)
-            pygame.event.post(event)
-            break
 
 
 def _handle_affliction(entity: EntityID, reaction_trigger: ReactionTriggerType):
@@ -316,33 +284,19 @@ def _handle_affliction(entity: EntityID, reaction_trigger: ReactionTriggerType):
                 world.trigger_affliction(affliction)
 
 
-def _handle_proximity_reaction_trigger(event: pygame.event):
-    """
-    Special case of _handle_reaction_trigger. Checks for overlapping positions. Check for any entities with a
-    reaction to proximity and handle that reaction.
-    """
-    # loop all entities sharing same position that have a reaction
-    for entity, (position, reaction) in query.position_and_reaction:
-        assert isinstance(position, Position)
-        assert isinstance(reaction, Reaction)
-        for coord in position.coordinates:
-            if coord == event.new_pos:
-                if ReactionTrigger.PROXIMITY in reaction.reactions:
-                    data = reaction.reactions[ReactionTrigger.PROXIMITY]
-                    _handle_reaction(entity, event.origin, data)
-
-
-def _handle_reaction_trigger(triggering_entity: EntityID, reaction_trigger: ReactionTriggerType):
+def _handle_reaction_trigger(entity: EntityID, reaction_trigger: ReactionTriggerType):
     """
     Check for any entities with a reaction to the trigger and handle that reaction.
     """
     # loop all entities sharing same position that have a reaction
-    for entity, (reaction) in query.reaction:
+    for reacting_entity, (reaction) in query.reaction:
         assert isinstance(reaction, Reaction)
 
         if reaction_trigger in reaction.reactions:
-            data = reaction.reactions[ReactionTrigger.PROXIMITY]
-            _handle_reaction(entity, triggering_entity, data)
+            data = reaction.reactions[reaction_trigger]
+            _process_opinions(entity, reaction_trigger)
+            _handle_affliction(entity, reaction_trigger)
+            _handle_reaction(reacting_entity, entity, data)
 
 
 def _handle_reaction(observer: EntityID, triggering_entity: EntityID, data: ReactionData):
@@ -384,4 +338,42 @@ def _apply_reaction(observer: EntityID, triggering_entity: EntityID, target_tile
         skill = store.skill_registry[data.reaction]
         world.use_skill(observer, skill, target_tile, Direction.CENTRE)
 
+
+############### NON-GENERIC REACTION HANDLING ##########################
+
+
+def _handle_proximity_reaction_trigger(event: pygame.event):
+    """
+    Special case of _handle_reaction_trigger. Checks for overlapping positions. Check for any entities with a
+    reaction to proximity and handle that reaction.
+    """
+    # loop all entities sharing same position that have a reaction
+    for entity, (position, reaction) in query.position_and_reaction:
+        assert isinstance(position, Position)
+        assert isinstance(reaction, Reaction)
+        for coord in position.coordinates:
+            if coord == event.new_pos:
+                if ReactionTrigger.PROXIMITY in reaction.reactions:
+                    data = reaction.reactions[ReactionTrigger.PROXIMITY]
+                    _handle_reaction(entity, event.origin, data)
+
+
+def _process_win_condition(event: pygame.event):
+    """
+    Checking if the win condition has been met. Post event if it is.
+    """
+    player = world.get_player()
+
+    # only progress if its the player as only the player can win
+    if not player == event.target:
+        return
+
+    player_pos = world.get_entitys_component(player, Position)
+
+    for entity, (position, _) in query.position_and_win_condition:
+        assert isinstance(position, Position)
+        if player_pos.x == position.x and player_pos.y == position.y:
+            event = pygame.event.Event(GameEvent.WIN_CONDITION_MET)
+            pygame.event.post(event)
+            break
 

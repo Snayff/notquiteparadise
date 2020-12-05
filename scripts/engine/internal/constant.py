@@ -67,8 +67,6 @@ RenderLayerType = NewType("RenderLayerType", int)
 TileCategoryType = NewType("TileCategoryType", str)
 HeightType = NewType("HeightType", int)
 
-TagType = Union[TargetTagType, DamageTypeType, AfflictionCategoryType]
-
 
 #################### INTERNAL, NON-SERIALISED ###########################################
 
@@ -150,6 +148,9 @@ class UIElement(SimpleNamespace):
     CHARACTER_SELECTOR = UIElementType("character_selector")
 
 
+#################### EXTERNAL ###########################################
+# i.e used in the data files
+
 class InputIntent(SimpleNamespace):
     """
     Values of the conversion from input to intent. Strings.
@@ -180,10 +181,6 @@ class InputIntent(SimpleNamespace):
     TEST = InputIntentType("test")
     DUNGEON_DEV_VIEW = InputIntentType("dungeon_dev_toggle")
     TOGGLE_UI = InputIntentType("toggle_ui")
-
-
-#################### EXTERNAL, SERIALISED  ###########################################
-# i.e used in the data files
 
 
 class Direction(SimpleNamespace):
@@ -310,19 +307,20 @@ class ReactionTrigger(SimpleNamespace):
     Type of trigger for the affliction
     """
 
-    MOVE = ReactionTriggerType("movement")
+    MOVE = ReactionTriggerType("move")
+    MOVED = ReactionTriggerType("moved")
     PROXIMITY = ReactionTriggerType("proximity")
     TAKE_DAMAGE = ReactionTriggerType("take_damage")
     DEAL_DAMAGE = ReactionTriggerType("deal_damage")
     KILL = ReactionTriggerType("kill")
     DIE = ReactionTriggerType("die")
     COLLISION = ReactionTriggerType("collision")
-    AFFECTED_STAT = ReactionTriggerType("affected_stat")
+    STAT_AFFECTED = ReactionTriggerType("stat_affected")
     CAUSED_AFFECT_STAT = ReactionTriggerType("caused_affect_stat")
-    AFFECTED_COOLDOWN = ReactionTriggerType("affected_cooldown")
+    COOLDOWN_AFFECTED = ReactionTriggerType("cooldown_affected")
     CAUSED_AFFECT_COOLDOWN = ReactionTriggerType("caused_affect_cooldown")
-    CAUSED_AFFLICTION = ReactionTriggerType("caused_affliction")
     AFFLICTED = ReactionTriggerType("afflicted")
+    CAUSED_AFFLICTION = ReactionTriggerType("caused_affliction")
 
 
 class AfflictionCategory(SimpleNamespace):
