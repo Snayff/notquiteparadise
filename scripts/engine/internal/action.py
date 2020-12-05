@@ -133,8 +133,6 @@ class Skill(Action):
             yield entity, self.build_effects(entity)
             entity_names.append(world.get_name(entity))
 
-        logging.debug(f"'{world.get_name(self.user)}' applied '{self.__class__.__name__}' to {entity_names}.")
-
     def use(self) -> bool:
         """
         If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
@@ -149,15 +147,12 @@ class Skill(Action):
         # create the projectile
         if self.uses_projectile:
             self._create_projectile()
-            success = True
+            is_successful = True
         else:
-            success = world.apply_skill(self)
+            is_successful = world.apply_skill(self)
 
-        if success:
-            # set the skill on cooldown
-            world.set_skill_on_cooldown(self)
 
-        return success
+        return is_successful
 
     def _create_projectile(self):
         """
@@ -188,11 +183,12 @@ class Skill(Action):
         """
         from scripts.engine.core import world
 
-        aesthetic = world.get_entitys_component(self.user, Aesthetic)
-        animation = self.get_animation(aesthetic)
-        if aesthetic and animation:
-            aesthetic.current_sprite = animation
-            aesthetic.current_sprite_duration = 0
+        if world.entity_has_component(self.user, Aesthetic):
+            aesthetic = world.get_entitys_component(self.user, Aesthetic)
+            animation = self.get_animation(aesthetic)
+            if animation:
+                aesthetic.current_sprite = animation
+                aesthetic.current_sprite_duration = 0
 
 
 class Affliction(Action):
@@ -259,8 +255,6 @@ class Affliction(Action):
                         entities.add(entity)
                         yield entity, self.build_effects(entity)
                         entity_names.append(world.get_name(entity))
-
-        logging.debug(f"'{world.get_name(self.origin)}' applied '{self.__class__.__name__}' to {entity_names}.")
 
     def trigger(self):
         """

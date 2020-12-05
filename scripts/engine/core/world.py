@@ -64,7 +64,7 @@ from scripts.engine.internal.definition import (
     ApplyAfflictionEffectData,
     DamageEffectData,
     EffectData,
-    MoveActorEffectData,
+    GodData, MoveActorEffectData,
     ProjectileData,
     TerrainData,
 )
@@ -84,7 +84,6 @@ from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import List, Optional, Tuple
-
     from scripts.engine.internal.action import Affliction, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
@@ -120,19 +119,19 @@ def create_entity(components: List[Component] = None) -> EntityID:
     return entity
 
 
-def create_god(god_name: str) -> EntityID:
+def create_god(god_data: GodData) -> EntityID:
     """
     Create an entity with all of the components to be a god. god_name must be in the gods json file.
     """
-    data = library.GODS[god_name]
     god: List[Component] = []
 
-    god.append(Identity(data.name, data.description))
-    god.append(Opinion(data.attitudes))
+    god.append(Identity(god_data.name, god_data.description))
+    god.append(Opinion(god_data.attitudes))
+    god.append(Reaction(god_data.reactions))
     god.append((Resources(INFINITE, INFINITE)))
     entity = create_entity(god)
 
-    logging.debug(f"God, '{data.name}', created.")
+    logging.debug(f"God, '{god_data.name}', created.")
 
     return entity
 
@@ -791,14 +790,14 @@ def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
     stat_data = library.BASE_STATS_PRIMARY[stat]
     value += stat_data.base_value
 
-    trait = get_entitys_component(entity, Traits)
-    if trait:
+    if entity_has_component(entity, Traits):
+        trait = get_entitys_component(entity, Traits)
         for name in trait.names:
             data = library.TRAITS[name]
             value += getattr(data, stat)
 
-    afflictions = get_entitys_component(entity, Afflictions)
-    if afflictions:
+    if entity_has_component(entity, Afflictions):
+        afflictions = get_entitys_component(entity, Afflictions)
         for modifier in afflictions.stat_modifiers.values():
             if modifier[0] == stat:
                 value += modifier[1]
@@ -829,8 +828,8 @@ def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> i
     value += get_primary_stat(entity, PrimaryStat.EXACTITUDE) * stat_data.exactitude_mod
 
     # afflictions
-    afflictions = get_entitys_component(entity, Afflictions)
-    if afflictions:
+    if entity_has_component(entity, Afflictions):
+        afflictions = get_entitys_component(entity, Afflictions)
         for modifier in afflictions.stat_modifiers.values():
             if modifier[0] == stat:
                 value += modifier[1]
@@ -1267,17 +1266,12 @@ def apply_skill(skill: Skill) -> bool:
     return False
 
 
-def set_skill_on_cooldown(skill: Skill) -> bool:
+def set_skill_on_cooldown(entity: EntityID, skill_name: str, cooldown_duration: int):
     """
-    Sets a skill on cooldown
+    Sets an entity's skill on cooldown.
     """
-    user = skill.user
-    name = skill.__class__.__name__
-    knowledge = get_entitys_component(user, Knowledge)
-    if knowledge:
-        knowledge.set_skill_cooldown(name, skill.base_cooldown)
-        return True
-    return False
+    knowledge = get_entitys_component(entity, Knowledge)
+    knowledge.set_skill_cooldown(skill_name, cooldown_duration)
 
 
 def apply_affliction(affliction: Affliction) -> bool:
@@ -1430,32 +1424,6 @@ def remove_component(entity: EntityID, component: Type[Component]):
     Remove a component from the entity
     """
     snecs.remove_component(entity, component)
-
-
-def judge_action(entity: EntityID, action_name: str):
-    """
-    Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards
-    the tags in that skill.
-    """
-    for opinionated_entity, (opinion, identity) in get_components([Opinion, Identity]):
-        assert isinstance(opinion, Opinion)
-        assert isinstance(identity, Identity)
-
-        attitudes = library.GODS[identity.name].attitudes
-
-        # check if the god has an attitude towards the action and apply the opinion change,
-        # adding the entity to the dict if necessary
-        if action_name in attitudes.keys():
-            if entity in opinion.opinions:
-                opinion.opinions[entity] = opinion.opinions[entity] + attitudes[action_name].opinion_change
-            else:
-                opinion.opinions[entity] = attitudes[action_name].opinion_change
-
-            name = get_name(entity)
-            logging.info(
-                f"'{identity.name}' reacted to '{name}' using {action_name}.  New "
-                f"opinion = {opinion.opinions[entity]}"
-            )
 
 
 def remove_affliction(entity: EntityID, affliction: Affliction):

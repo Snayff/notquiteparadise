@@ -241,10 +241,8 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
 
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
-        world.judge_action(player, skill.__class__.__name__)
+        world.set_skill_on_cooldown(player, skill.__class__.__name__, skill.base_cooldown)
         chronicle.end_turn(player, skill.time_cost)
-
-        state.save_game()
 
         # update camera if position changes
         try:

@@ -42,6 +42,7 @@ class Store:
         self.time_of_last_turn: int = 1
         self.round_time: int = 0  # tracker of time progressed in current round
         self.turn_holder: EntityID = -1  # current acting entity
+        self.previous_turn_holder: EntityID = -1  # current acting entity
 
         self.message_log: List[str] = []
 

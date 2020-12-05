@@ -68,6 +68,12 @@ HeightType = NewType("HeightType", int)
 
 #################### INTERNAL, NON-SERIALISED ###########################################
 
+class EventType(IntEnum):
+    """ The types of possible customer pygame events. """
+    INPUT = auto()
+    GAME = auto()
+    INTERACTION = auto()
+
 
 class InputEvent(IntEnum):
     """
@@ -89,6 +95,11 @@ class GameEvent(IntEnum):
     EXIT_GAME = pygame.USEREVENT + 103
     WIN_CONDITION_MET = pygame.USEREVENT + 104
     START_GAME = pygame.USEREVENT + 105
+    NEW_TURN = pygame.USEREVENT + 106
+    END_TURN = pygame.USEREVENT + 107
+    NEW_ROUND = pygame.USEREVENT + 108
+    END_ROUND = pygame.USEREVENT + 109
+
 
 
 class InteractionEvent(IntEnum):

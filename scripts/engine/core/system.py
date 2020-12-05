@@ -19,7 +19,7 @@ from scripts.engine.internal.component import (
     Position,
     Reaction, Tracked,
 )
-from scripts.engine.internal.constant import Direction, FOV_ALGORITHM, FOV_LIGHT_WALLS, GameEvent, INFINITE, \
+from scripts.engine.internal.constant import Direction, EventType, FOV_ALGORITHM, FOV_LIGHT_WALLS, GameEvent, INFINITE, \
     InteractionEvent, \
     MAX_ACTIVATION_DISTANCE, ReactionTrigger, ReactionTriggerType
 
@@ -230,7 +230,7 @@ def process_interaction_event(event: pygame.event):
     """
     Passes an interaction event to the relevant functions.
     """
-    if event.type == InteractionEvent.MOVE:
+    if event.subtype == InteractionEvent.MOVE:
         # print(f"Caught MOVE: {event.origin}, {event.target}, {event.direction}, {event.new_pos}")
         _handle_proximity_reaction_trigger(event)
         _process_win_condition(event)
@@ -238,7 +238,7 @@ def process_interaction_event(event: pygame.event):
         _handle_reaction_trigger(event.origin, ReactionTrigger.MOVE)
         _handle_reaction_trigger(event.target, ReactionTrigger.MOVED)
 
-    elif event.type == InteractionEvent.DAMAGE:
+    elif event.subtype == InteractionEvent.DAMAGE:
         # print(f"Caught DAMAGE: {event.origin}, {event.target}, {event.amount}, {event.damage_type},
         # {event.remaining_hp}")
         _handle_reaction_trigger(event.origin, ReactionTrigger.DEAL_DAMAGE)
@@ -248,17 +248,17 @@ def process_interaction_event(event: pygame.event):
             _handle_reaction_trigger(event.origin, ReactionTrigger.KILL)
             _handle_reaction_trigger(event.target, ReactionTrigger.DIE)
 
-    elif event.type == InteractionEvent.AFFECT_STAT:
+    elif event.subtype == InteractionEvent.AFFECT_STAT:
         # print(f"Caught AFFECT_STAT: {event.origin}, {event.target}, {event.stat}, {event.amount}")
         _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_STAT)
         _handle_reaction_trigger(event.target, ReactionTrigger.STAT_AFFECTED)
 
-    elif event.type == InteractionEvent.AFFECT_COOLDOWN:
+    elif event.subtype == InteractionEvent.AFFECT_COOLDOWN:
         # print(f"Caught AFFECT_COOLDOWN: {event.origin}, {event.target}, {event.amount}")
         _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_COOLDOWN)
         _handle_reaction_trigger(event.target, ReactionTrigger.COOLDOWN_AFFECTED)
 
-    elif event.type == InteractionEvent.AFFLICTION:
+    elif event.subtype == InteractionEvent.AFFLICTION:
         # print(f"Caught AFFLICTION: {event.origin}, {event.target}, {event.name}")
         _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFLICTION)
         _handle_reaction_trigger(event.target, ReactionTrigger.AFFLICTED)
@@ -270,7 +270,10 @@ def _process_opinions(causing_entity: EntityID, reaction_trigger: ReactionTrigge
     """
     for entity, (opinion, ) in query.opinion:
         if reaction_trigger in opinion.attitudes:
-            opinion.opinions[causing_entity] += opinion.attitudes[reaction_trigger]
+            if causing_entity in opinion.opinions:
+                opinion.opinions[causing_entity] += opinion.attitudes[reaction_trigger]
+            else:
+                opinion.opinions[causing_entity] = opinion.attitudes[reaction_trigger]
 
 
 def _handle_affliction(entity: EntityID, reaction_trigger: ReactionTriggerType):
@@ -373,7 +376,7 @@ def _process_win_condition(event: pygame.event):
     for entity, (position, _) in query.position_and_win_condition:
         assert isinstance(position, Position)
         if player_pos.x == position.x and player_pos.y == position.y:
-            event = pygame.event.Event(GameEvent.WIN_CONDITION_MET)
+            event = pygame.event.Event(EventType.GAME, subtype=GameEvent.WIN_CONDITION_MET)
             pygame.event.post(event)
             break
 

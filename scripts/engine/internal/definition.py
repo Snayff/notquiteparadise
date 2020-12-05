@@ -266,8 +266,6 @@ class GodData:
     description: str = "none"
     attitudes: Dict[ReactionTriggerType, int] = field(default_factory=dict)
     reactions: Dict[ReactionTriggerType, ReactionData] = field(default_factory=dict)
-    known_skills: List[str] = field(default_factory=list)  # list of skill names.
-    # TODO - remove need for known skills; reactions shouldnt need it. How to cast without using it?
 
 
 ####################### WORLD GENERATION ######################
