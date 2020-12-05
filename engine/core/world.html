@@ -398,12 +398,6 @@ False if not.</p>
 <dd><p>Check if entity can use skill. Checks cooldown and resource affordability.</p>
 </dd></dl>
 <dl class="py function">
-<dt id="scripts.engine.core.world.choose_interventions">
-<code class="sig-name descname">choose_interventions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">active_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">action_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> → List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#choose_interventions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.choose_interventions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
-or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).</p>
-</dd></dl>
-<dl class="py function">
 <dt id="scripts.engine.core.world.choose_target">
 <code class="sig-name descname">choose_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> → Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#choose_target"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.choose_target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Choose an appropriate target for the entity.
@@ -436,7 +430,7 @@ FIXME - CURRENTLY JUST RETURNS PLAYER</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.world.create_god">
-<code class="sig-name descname">create_god</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">god_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#create_god"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.create_god" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_god</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">god_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../../scripts.engine.internal.html#scripts.engine.internal.definition.GodData" title="scripts.engine.internal.definition.GodData">scripts.engine.internal.definition.GodData</a></span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#create_god"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.create_god" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an entity with all of the components to be a god. god_name must be in the gods json file.</p>
 </dd></dl>
 <dl class="py function">
@@ -572,12 +566,6 @@ This returns a float indicating the straight line distance between the two point
 position given.</p>
 </dd></dl>
 <dl class="py function">
-<dt id="scripts.engine.core.world.judge_action">
-<code class="sig-name descname">judge_action</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">action_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#judge_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.judge_action" title="Permalink to this definition">¶</a></dt>
-<dd><p>Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards
-the tags in that skill.</p>
-</dd></dl>
-<dl class="py function">
 <dt id="scripts.engine.core.world.kill_entity">
 <code class="sig-name descname">kill_entity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#kill_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.kill_entity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add entity to the deletion stack and removes them from the turn queue.</p>
@@ -604,8 +592,8 @@ the tags in that skill.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.world.set_skill_on_cooldown">
-<code class="sig-name descname">set_skill_on_cooldown</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#set_skill_on_cooldown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.set_skill_on_cooldown" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets a skill on cooldown</p>
+<code class="sig-name descname">set_skill_on_cooldown</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">cooldown_duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#set_skill_on_cooldown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.set_skill_on_cooldown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets an entity’s skill on cooldown.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.world.spend_time">

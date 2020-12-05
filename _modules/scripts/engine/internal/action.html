@@ -267,7 +267,7 @@
     <span class="n">AfflictionCategoryType</span><span class="p">,</span>
     <span class="n">DirectionType</span><span class="p">,</span>
     <span class="n">EffectTypeType</span><span class="p">,</span>
-    <span class="n">InteractionTriggerType</span><span class="p">,</span>
+    <span class="n">ReactionTriggerType</span><span class="p">,</span>
     <span class="n">ResourceType</span><span class="p">,</span>
     <span class="n">ShapeType</span><span class="p">,</span>
     <span class="n">TargetingMethodType</span><span class="p">,</span>
@@ -386,9 +386,7 @@
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
         <span class="p">):</span>
             <span class="k">yield</span> <span class="n">entity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_effects</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-            <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
-
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="si">}</span><span class="s2">' applied '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">' to </span><span class="si">{</span><span class="n">entity_names</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span></div>
+            <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Skill.use"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Skill.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">"""</span>
@@ -404,15 +402,11 @@
         <span class="c1"># create the projectile</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uses_projectile</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_create_projectile</span><span class="p">()</span>
-            <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">is_successful</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">success</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">is_successful</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
-            <span class="c1"># set the skill on cooldown</span>
-            <span class="n">world</span><span class="o">.</span><span class="n">set_skill_on_cooldown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">success</span></div>
+        <span class="k">return</span> <span class="n">is_successful</span></div>
 
     <span class="k">def</span> <span class="nf">_create_projectile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -443,11 +437,12 @@
 <span class="sd">        """</span>
         <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
 
-        <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
-        <span class="n">animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_animation</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">aesthetic</span> <span class="ow">and</span> <span class="n">animation</span><span class="p">:</span>
-            <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span> <span class="o">=</span> <span class="n">animation</span>
-            <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">):</span>
+            <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
+            <span class="n">animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_animation</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">animation</span><span class="p">:</span>
+                <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span> <span class="o">=</span> <span class="n">animation</span>
+                <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="Affliction"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Affliction">[docs]</a><span class="k">class</span> <span class="nc">Affliction</span><span class="p">(</span><span class="n">Action</span><span class="p">):</span>
@@ -462,7 +457,7 @@
 
     <span class="c1"># to be overwritten in subclass, including being set by external data</span>
     <span class="n">identity_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EffectTypeType</span><span class="p">]</span>
-    <span class="n">triggers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InteractionTriggerType</span><span class="p">]</span>
+    <span class="n">triggers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ReactionTriggerType</span><span class="p">]</span>
     <span class="n">category</span><span class="p">:</span> <span class="n">AfflictionCategoryType</span>
 
 <div class="viewcode-block" id="Affliction.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Affliction.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">affected_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
@@ -513,9 +508,7 @@
                     <span class="k">if</span> <span class="n">entity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
                         <span class="n">entities</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
                         <span class="k">yield</span> <span class="n">entity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_effects</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-                        <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
-
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">)</span><span class="si">}</span><span class="s2">' applied '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">' to </span><span class="si">{</span><span class="n">entity_names</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span></div>
+                        <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Affliction.trigger"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Affliction.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>

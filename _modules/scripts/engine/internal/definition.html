@@ -257,7 +257,7 @@
 
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">AfflictionCategory</span><span class="p">,</span>
@@ -270,14 +270,13 @@
     <span class="n">EffectTypeType</span><span class="p">,</span>
     <span class="n">Height</span><span class="p">,</span>
     <span class="n">HeightType</span><span class="p">,</span>
-    <span class="n">InteractionTriggerType</span><span class="p">,</span>
     <span class="n">PrimaryStat</span><span class="p">,</span>
     <span class="n">PrimaryStatType</span><span class="p">,</span>
     <span class="n">ProjectileExpiryType</span><span class="p">,</span>
     <span class="n">ProjectileSpeed</span><span class="p">,</span>
     <span class="n">ProjectileSpeedType</span><span class="p">,</span>
+    <span class="n">ReactionTriggerType</span><span class="p">,</span>
     <span class="n">RenderLayer</span><span class="p">,</span>
-    <span class="n">RenderLayerType</span><span class="p">,</span>
     <span class="n">Resource</span><span class="p">,</span>
     <span class="n">ResourceType</span><span class="p">,</span>
     <span class="n">SecondaryStatType</span><span class="p">,</span>
@@ -301,12 +300,13 @@
     <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Skill</span>
     <span class="kn">from</span> <span class="nn">scripts.engine.internal.effect</span> <span class="kn">import</span> <span class="n">Effect</span>
 
+
 <span class="c1">#################################################################</span>
 <span class="c1"># This module is for specifying all defined data sets.</span>
 <span class="c1">#################################################################</span>
 
 
-<span class="c1">######################### Aesthetics ##################################</span>
+<span class="c1">##################### COMPONENT INFO #################################</span>
 
 
 <div class="viewcode-block" id="LightData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.LightData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
@@ -345,38 +345,13 @@
 <span class="sd">    Also used to hold and map data from json.</span>
 <span class="sd">    """</span>
 
-    <span class="n">render_order</span><span class="p">:</span> <span class="n">RenderLayerType</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">RenderLayer</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">)</span>
+    <span class="n">render_order</span><span class="p">:</span> <span class="n">RenderLayer</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">RenderLayer</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">)</span>
     <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
     <span class="n">idle</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
     <span class="n">attack</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
     <span class="n">hit</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
     <span class="n">dead</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
     <span class="n">move</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span></div>
-
-
-<span class="c1">##################### ACTORS #################################</span>
-
-
-<div class="viewcode-block" id="ActorData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.ActorData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ActorData</span><span class="p">:</span>
-    <span class="sd">"""</span>
-<span class="sd">    Data class for an actor.</span>
-<span class="sd">    Also used to hold and map data from json.</span>
-<span class="sd">    """</span>
-
-    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
-    <span class="n">possible_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
-    <span class="n">position_offsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">trait_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">behaviour_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
-    <span class="n">height</span><span class="p">:</span> <span class="n">HeightType</span> <span class="o">=</span> <span class="n">Height</span><span class="o">.</span><span class="n">MIN</span>
-
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># map external str to internal int</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="TraitData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.TraitData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
@@ -447,7 +422,29 @@
     <span class="n">exactitude_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
-<span class="c1">####################### NON-ACTOR ENTITIES ######################</span>
+<span class="c1">####################### ENTITY TYPES ######################</span>
+
+
+<div class="viewcode-block" id="ActorData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.ActorData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ActorData</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Data class for an actor.</span>
+<span class="sd">    Also used to hold and map data from json.</span>
+<span class="sd">    """</span>
+
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">possible_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">position_offsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">trait_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">behaviour_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">height</span><span class="p">:</span> <span class="n">HeightType</span> <span class="o">=</span> <span class="n">Height</span><span class="o">.</span><span class="n">MIN</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># map external str to internal int</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="ProjectileData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
@@ -485,7 +482,8 @@
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># map external str to internal int</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ProjectileSpeed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ProjectileSpeed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="TerrainData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.TerrainData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
@@ -502,53 +500,30 @@
     <span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">position_offsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">TraitSpritePathsData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">TraitSpritePathsData</span><span class="p">)</span>
-    <span class="n">reactions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">InteractionTriggerType</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">reactions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ReactionTriggerType</span><span class="p">,</span> <span class="n">ReactionData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">light</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LightData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># map external str to internal int</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
-
-
-<span class="c1">################### GODS ###################################################</span>
-
-
-<div class="viewcode-block" id="AttitudeData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.AttitudeData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AttitudeData</span><span class="p">:</span>
-    <span class="sd">"""</span>
-<span class="sd">    Data class for  a god's attitude</span>
-<span class="sd">    """</span>
-
-    <span class="n">action</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
-    <span class="n">opinion_change</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
-
-
-<div class="viewcode-block" id="InterventionData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.InterventionData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">InterventionData</span><span class="p">:</span>
-    <span class="sd">"""</span>
-<span class="sd">    Data class for a god's intervention</span>
-<span class="sd">    """</span>
-
-    <span class="n">skill_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
-    <span class="n">required_opinion</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="GodData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.GodData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">GodData</span><span class="p">:</span>
     <span class="sd">"""</span>
-<span class="sd">    Data class for a god</span>
+<span class="sd">    Data class for a god. If a reaction.reactions is a skill name (a str) then the skill name must also be in</span>
+<span class="sd">    known_skills.</span>
 <span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
-    <span class="n">attitudes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AttitudeData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
-    <span class="n">interventions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">InterventionData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">attitudes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ReactionTriggerType</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">reactions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ReactionTriggerType</span><span class="p">,</span> <span class="n">ReactionData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
 
 
-<span class="c1">####################### WORLD ######################</span>
+<span class="c1">####################### WORLD GENERATION ######################</span>
 
 
 <div class="viewcode-block" id="MapData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.MapData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
@@ -675,7 +650,25 @@
     <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">identity_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EffectTypeType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">triggers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InteractionTriggerType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
+    <span class="n">triggers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ReactionTriggerType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ReactionData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.ReactionData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ReactionData</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Data class for a reaction.</span>
+<span class="sd">    """</span>
+
+    <span class="n">required_opinion</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">reaction</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">EffectData</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">""</span>  <span class="c1"># str is skill name</span>
+    <span class="n">chance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span>
+
+        <span class="c1"># ensure clamped between 0-100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chance</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chance</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span></div>
 
 
 <span class="c1">################### EFFECTS ###################################################</span>

@@ -257,6 +257,7 @@
 
 <span class="kn">import</span> <span class="nn">dataclasses</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 <span class="kn">import</span> <span class="nn">pygame</span>
@@ -289,6 +290,7 @@
     <span class="s2">"convert_tile_string_to_xy"</span><span class="p">,</span>
     <span class="s2">"convert_direction_to_name"</span><span class="p">,</span>
     <span class="s2">"build_sprites_from_paths"</span><span class="p">,</span>
+    <span class="s2">"roll"</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="n">_V</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"_V"</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>  <span class="c1"># to represent components where we don't know which is being used</span>
@@ -620,6 +622,17 @@
         <span class="n">direction_name</span> <span class="o">=</span> <span class="s2">"centre"</span>
 
     <span class="k">return</span> <span class="n">direction_name</span></div>
+
+
+<span class="c1">################################### CHANCE ########################################</span>
+
+
+<div class="viewcode-block" id="roll"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.utility.roll">[docs]</a><span class="k">def</span> <span class="nf">roll</span><span class="p">(</span><span class="n">min_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">max_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">99</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Roll for a number between min and max</span>
+<span class="sd">    """</span>
+    <span class="c1"># TODO - utilise seed</span>
+    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">)</span></div>
 </pre></div>
 
           </article>

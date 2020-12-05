@@ -269,7 +269,6 @@
     <span class="n">Direction</span><span class="p">,</span>
     <span class="n">DirectionType</span><span class="p">,</span>
     <span class="n">GameState</span><span class="p">,</span>
-    <span class="n">GameStateType</span><span class="p">,</span>
     <span class="n">InputIntent</span><span class="p">,</span>
     <span class="n">InputIntentType</span><span class="p">,</span>
     <span class="n">TargetingMethod</span><span class="p">,</span>
@@ -284,13 +283,13 @@
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.dungen_viewer</span> <span class="kn">import</span> <span class="n">DungenViewer</span>
 
 
-<div class="viewcode-block" id="process_intent"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.intent.process_intent">[docs]</a><span class="k">def</span> <span class="nf">process_intent</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
+<div class="viewcode-block" id="process_intent"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.intent.process_intent">[docs]</a><span class="k">def</span> <span class="nf">process_intent</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameState</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Process the intent in the context of the game state. Intents are game state sensitive.</span>
 <span class="sd">    """</span>
     <span class="n">_process_stateless_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">:</span>
         <span class="n">_process_game_map_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">TARGETING</span><span class="p">:</span>
         <span class="n">_process_targeting_mode_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span>
@@ -405,14 +404,15 @@
                         <span class="c1"># pass centre as it doesnt matter, the skill will pick the right direction</span>
                         <span class="n">_process_skill_use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">current_tile</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTRE</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="c1"># trigger targeting overlay</span>
-                        <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">TARGETING</span><span class="p">)</span>
-                        <span class="n">state</span><span class="o">.</span><span class="n">set_active_skill</span><span class="p">(</span><span class="n">skill_name</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="n">ui</span><span class="o">.</span><span class="n">has_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">):</span>
-                            <span class="n">camera</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">)</span>
-                            <span class="n">camera</span><span class="o">.</span><span class="n">update_targeting_overlay</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">)</span>
+                        <span class="c1"># # trigger targeting overlay</span>
+                        <span class="k">pass</span>
+                        <span class="c1"># state.set_new(GameState.TARGETING)</span>
+                        <span class="c1"># state.set_active_skill(skill_name)</span>
+                        <span class="c1"># if ui.has_element(UIElement.CAMERA):</span>
+                        <span class="c1">#     camera = ui.get_element(UIElement.CAMERA)</span>
+                        <span class="c1">#     camera.update_targeting_overlay(True, skill_name)</span>
 
-    <span class="c1">## Show actor info - we're in GAMEMAP so it cant be visible</span>
+    <span class="c1">## Show actor info - we're in GAME_MAP so it cant be visible</span>
     <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span><span class="p">:</span>
         <span class="c1"># show</span>
         <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">MENU</span><span class="p">)</span>
@@ -496,10 +496,8 @@
 
     <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">use_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">):</span>
         <span class="n">world</span><span class="o">.</span><span class="n">pay_resource_cost</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">resource_cost</span><span class="p">)</span>
-        <span class="n">world</span><span class="o">.</span><span class="n">judge_action</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">set_skill_on_cooldown</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">base_cooldown</span><span class="p">)</span>
         <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">time_cost</span><span class="p">)</span>
-
-        <span class="n">state</span><span class="o">.</span><span class="n">save_game</span><span class="p">()</span>
 
         <span class="c1"># update camera if position changes</span>
         <span class="k">try</span><span class="p">:</span>

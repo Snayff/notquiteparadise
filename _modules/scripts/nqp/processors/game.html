@@ -257,43 +257,87 @@
 
 <span class="kn">import</span> <span class="nn">pygame</span>
 
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">system</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameEvent</span><span class="p">,</span> <span class="n">GameStateType</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">UIElement</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameEvent</span><span class="p">,</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">UIElement</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">command</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors.intent</span> <span class="kn">import</span> <span class="n">process_intent</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"process_event"</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"process_game_event"</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="process_event"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.game.process_event">[docs]</a><span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
+<div class="viewcode-block" id="process_game_event"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.game.process_game_event">[docs]</a><span class="k">def</span> <span class="nf">process_game_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameState</span><span class="p">):</span>
     <span class="n">intent</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_MENU</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_MENU</span><span class="p">:</span>
         <span class="c1">## Exit Actor Info</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">menu</span> <span class="o">==</span> <span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">:</span>
             <span class="n">intent</span> <span class="o">=</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span>
 
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_GAME</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_GAME</span><span class="p">:</span>
         <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">command</span><span class="o">.</span><span class="n">goto_character_select</span><span class="p">()</span>
 
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">START_GAME</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">START_GAME</span><span class="p">:</span>
         <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CHARACTER_SELECTOR</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">command</span><span class="o">.</span><span class="n">start_game</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">player_data</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">LOAD_GAME</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">LOAD_GAME</span><span class="p">:</span>
         <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">command</span><span class="o">.</span><span class="n">load_game</span><span class="p">()</span>
 
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">:</span>
         <span class="n">command</span><span class="o">.</span><span class="n">exit_game</span><span class="p">()</span>
 
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">WIN_CONDITION_MET</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">WIN_CONDITION_MET</span><span class="p">:</span>
         <span class="n">command</span><span class="o">.</span><span class="n">win_game</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_TURN</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">END_TURN</span><span class="p">:</span>
+        <span class="n">_process_end_turn</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_ROUND</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">GameEvent</span><span class="o">.</span><span class="n">END_ROUND</span><span class="p">:</span>
+        <span class="k">pass</span>
 
     <span class="c1"># if we have an intent we need to process, do so</span>
     <span class="k">if</span> <span class="n">intent</span><span class="p">:</span>
         <span class="n">process_intent</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span> <span class="n">game_state</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="_process_end_turn"><a class="viewcode-back" href="../../../../nqp/processors/game.html#scripts.nqp.processors.game._process_end_turn">[docs]</a><span class="k">def</span> <span class="nf">_process_end_turn</span><span class="p">():</span>
+    <span class="sd">"""</span>
+<span class="sd">    Update which entities are active and entity and map vision. Move to next turn.</span>
+<span class="sd">    """</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">process_activations</span><span class="p">()</span>  <span class="c1"># must be first otherwise wrong entities active</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
+
+    <span class="c1"># if player is current turn holder then save the game</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
+
+    <span class="k">if</span> <span class="n">chronicle</span><span class="o">.</span><span class="n">get_turn_holder</span><span class="p">()</span> <span class="o">==</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">():</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">state</span>
+
+        <span class="n">state</span><span class="o">.</span><span class="n">save_game</span><span class="p">()</span>
+
+    <span class="n">chronicle</span><span class="o">.</span><span class="n">next_turn</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="_process_end_round"><a class="viewcode-back" href="../../../../nqp/processors/game.html#scripts.nqp.processors.game._process_end_round">[docs]</a><span class="k">def</span> <span class="nf">_process_end_round</span><span class="p">():</span>
+    <span class="sd">"""</span>
+<span class="sd">    Reduce durations and cooldowns. Move to next round.</span>
+<span class="sd">    """</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">reduce_skill_cooldowns</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">reduce_affliction_durations</span><span class="p">()</span>
+    <span class="n">system</span><span class="o">.</span><span class="n">reduce_lifespan_durations</span><span class="p">()</span>
+
+    <span class="n">chronicle</span><span class="o">.</span><span class="n">next_round</span><span class="p">()</span></div>
 </pre></div>
 
           </article>

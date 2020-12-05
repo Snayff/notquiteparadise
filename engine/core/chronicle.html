@@ -362,9 +362,20 @@
   
 <span id="chronicle"></span><h1 id="engine-core-chronicle--page-root">Chronicle<a class="headerlink" href="#engine-core-chronicle--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
+<dt id="scripts.engine.core.chronicle.end_round">
+<code class="sig-name descname">end_round</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/chronicle.html#end_round"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.chronicle.end_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Posts END_ROUND event.</p>
+</dd></dl>
+<dl class="py function">
 <dt id="scripts.engine.core.chronicle.end_turn">
 <code class="sig-name descname">end_turn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">time_spent</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/chronicle.html#end_turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.chronicle.end_turn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Spend an entities time, progress time, move to next acting entity in queue.</p>
+<dd><p>Spend an entities time, progress time, move to next acting entity in queue. Posts END_TURN event.</p>
+<p>N.B. If entity given is NOT the turn holder then nothing happens.</p>
+</dd></dl>
+<dl class="py function">
+<dt id="scripts.engine.core.chronicle.get_previous_turn_holder">
+<code class="sig-name descname">get_previous_turn_holder</code><span class="sig-paren">(</span><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="reference internal" href="../../_modules/scripts/engine/core/chronicle.html#get_previous_turn_holder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.chronicle.get_previous_turn_holder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the entity who had the last turn</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.chronicle.get_round">
@@ -398,20 +409,25 @@
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.chronicle.next_round">
-<code class="sig-name descname">next_round</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_progressed</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/chronicle.html#next_round"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.chronicle.next_round" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move to the next round and trigger end of round events, like cooldown and affliction reduction.</p>
+<code class="sig-name descname">next_round</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/chronicle.html#next_round"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.chronicle.next_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to the next round. Posts NEW_ROUND event.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.chronicle.next_turn">
 <code class="sig-name descname">next_turn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity_to_exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>EntityID<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/chronicle.html#next_turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.chronicle.next_turn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Proceed to the next turn, setting the next entity to act as the turn holder and updating the passage of time.
-Update game state to reflect turn holder.</p>
+Posts NEW_TURN event.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.chronicle.rebuild_turn_queue">
 <code class="sig-name descname">rebuild_turn_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity_to_exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>EntityID<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/chronicle.html#rebuild_turn_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.chronicle.rebuild_turn_queue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build a new turn queue that includes all timed entities. entity_to_exclude is one that should not be added
 to the queue. Usually used in relation to deletion.</p>
+</dd></dl>
+<dl class="py function">
+<dt id="scripts.engine.core.chronicle.set_previous_turn_holder">
+<code class="sig-name descname">set_previous_turn_holder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/chronicle.html#set_previous_turn_holder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.chronicle.set_previous_turn_holder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the entity who had the last turn</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.chronicle.set_time_in_round">
@@ -426,7 +442,7 @@ to the queue. Usually used in relation to deletion.</p>
 <dl class="py function">
 <dt id="scripts.engine.core.chronicle.set_turn_holder">
 <code class="sig-name descname">set_turn_holder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">active_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/chronicle.html#set_turn_holder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.chronicle.set_turn_holder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the entity who has the current turn</p>
+<dd><p>Set the entity who has the current turn</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.chronicle.set_turn_queue">

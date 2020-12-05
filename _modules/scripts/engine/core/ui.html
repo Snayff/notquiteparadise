@@ -264,7 +264,7 @@
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">debug</span><span class="p">,</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">ASSET_PATH</span><span class="p">,</span> <span class="n">DATA_PATH</span><span class="p">,</span> <span class="n">UIElement</span><span class="p">,</span> <span class="n">UIElementType</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">ASSET_PATH</span><span class="p">,</span> <span class="n">DATA_PATH</span><span class="p">,</span> <span class="n">UIElement</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.widgets.screen_message</span> <span class="kn">import</span> <span class="n">ScreenMessage</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -313,7 +313,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_gui</span> <span class="o">=</span> <span class="n">UIManager</span><span class="p">((</span><span class="n">desired_width</span><span class="p">,</span> <span class="n">desired_height</span><span class="p">),</span> <span class="n">DATA_PATH</span> <span class="o">/</span> <span class="s2">"ui/themes.json"</span><span class="p">)</span>
 
         <span class="c1"># elements info</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">UIElementType</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Panel</span><span class="p">,</span> <span class="n">Window</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># dict of all init'd ui_manager elements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">UIElement</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Panel</span><span class="p">,</span> <span class="n">Window</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># dict of all init'd ui_manager elements</span>
 
         <span class="c1"># process config</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_load_display_config</span><span class="p">()</span>
@@ -367,7 +367,7 @@
 
     <span class="c1">##################### GET ############################</span>
 
-<div class="viewcode-block" id="UI.get_element"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.get_element">[docs]</a>    <span class="k">def</span> <span class="nf">get_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Panel</span><span class="p">,</span> <span class="n">Window</span><span class="p">]:</span>
+<div class="viewcode-block" id="UI.get_element"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.get_element">[docs]</a>    <span class="k">def</span> <span class="nf">get_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Panel</span><span class="p">,</span> <span class="n">Window</span><span class="p">]:</span>
         <span class="sd">"""</span>
 <span class="sd">        Get UI element.</span>
 <span class="sd">        """</span>
@@ -403,7 +403,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_gui</span><span class="o">.</span><span class="n">preload_fonts</span><span class="p">(</span><span class="n">fonts</span><span class="p">)</span>
 
-<div class="viewcode-block" id="UI.register_element"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.register_element">[docs]</a>    <span class="k">def</span> <span class="nf">register_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementType</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Panel</span><span class="p">,</span> <span class="n">Window</span><span class="p">]):</span>
+<div class="viewcode-block" id="UI.register_element"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.register_element">[docs]</a>    <span class="k">def</span> <span class="nf">register_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElement</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Panel</span><span class="p">,</span> <span class="n">Window</span><span class="p">]):</span>
         <span class="sd">"""</span>
 <span class="sd">        Register the specified UI element. Can be returned with get_element at a later date. If it already exists</span>
 <span class="sd">        current instance will be overwritten.</span>
@@ -435,7 +435,7 @@
         <span class="k">for</span> <span class="n">element_type</span> <span class="ow">in</span> <span class="n">elements</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kill_element</span><span class="p">(</span><span class="n">element_type</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="UI.kill_element"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.kill_element">[docs]</a>    <span class="k">def</span> <span class="nf">kill_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementType</span><span class="p">):</span>
+<div class="viewcode-block" id="UI.kill_element"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.kill_element">[docs]</a>    <span class="k">def</span> <span class="nf">kill_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElement</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Remove any reference to the element.</span>
 <span class="sd">        """</span>
@@ -445,7 +445,7 @@
 
     <span class="c1">################################ QUERIES #################################################################</span>
 
-<div class="viewcode-block" id="UI.element_is_visible"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.element_is_visible">[docs]</a>    <span class="k">def</span> <span class="nf">element_is_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="UI.element_is_visible"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.element_is_visible">[docs]</a>    <span class="k">def</span> <span class="nf">element_is_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        Check if an element is visible.</span>
 <span class="sd">        """</span>
@@ -455,7 +455,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="UI.element_is_active"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.element_is_active">[docs]</a>    <span class="k">def</span> <span class="nf">element_is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="UI.element_is_active"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.element_is_active">[docs]</a>    <span class="k">def</span> <span class="nf">element_is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        Check if an element has been created and is visible</span>
 <span class="sd">        """</span>
@@ -464,7 +464,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="UI.has_element"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.has_element">[docs]</a>    <span class="k">def</span> <span class="nf">has_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="UI.has_element"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.has_element">[docs]</a>    <span class="k">def</span> <span class="nf">has_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        Check if an element exists</span>
 <span class="sd">        """</span>
@@ -475,7 +475,7 @@
 
     <span class="c1">################################ UNIVERSAL ACTIONS #############################################</span>
 
-<div class="viewcode-block" id="UI.set_element_visibility"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.set_element_visibility">[docs]</a>    <span class="k">def</span> <span class="nf">set_element_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementType</span><span class="p">,</span> <span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="UI.set_element_visibility"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.ui.UI.set_element_visibility">[docs]</a>    <span class="k">def</span> <span class="nf">set_element_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElement</span><span class="p">,</span> <span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        Set whether the element is visible or not. Returns true if successful, false if element not found.</span>
 <span class="sd">        """</span>

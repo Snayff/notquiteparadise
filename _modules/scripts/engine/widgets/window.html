@@ -307,7 +307,8 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">            def process_close_button(self):</span>
-<span class="sd">                event = pygame.event.Event(GameEvent.EXIT_MENU, menu=UIElement.ACTOR_INFO)</span>
+<span class="sd">                event = pygame.event.Event(EventType.GAME, subtype=GameEvent.EXIT_MENU,</span>
+<span class="sd">                    menu=UIElement.ACTOR_INFO)</span>
 <span class="sd">                pygame.event.post(event)</span>
 <span class="sd">        """</span>
         <span class="k">pass</span></div>

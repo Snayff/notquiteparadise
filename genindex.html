@@ -265,7 +265,6 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
- | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -313,8 +312,6 @@
         <li><a href="engine/internal/effect.html#scripts.engine.internal.effect.ApplyAfflictionEffect.__init__">(ApplyAfflictionEffect method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.effect.ApplyAfflictionEffect.__init__">[1]</a>
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ApplyAfflictionEffectData.__init__">(ApplyAfflictionEffectData method)</a>
-</li>
-        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.AttitudeData.__init__">(AttitudeData method)</a>
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.BasePrimaryStatData.__init__">(BasePrimaryStatData method)</a>
 </li>
@@ -364,8 +361,6 @@
 </li>
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.Identity.__init__">(Identity method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Identity.__init__">[1]</a>
 </li>
-        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.InterventionData.__init__">(InterventionData method)</a>
-</li>
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.Knowledge.__init__">(Knowledge method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Knowledge.__init__">[1]</a>
 </li>
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.Lifespan.__init__">(Lifespan method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Lifespan.__init__">[1]</a>
@@ -401,6 +396,8 @@
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.__init__">(ProjectileData method)</a>
 </li>
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.Reaction.__init__">(Reaction method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Reaction.__init__">[1]</a>
+</li>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ReactionData.__init__">(ReactionData method)</a>
 </li>
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.Resources.__init__">(Resources method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Resources.__init__">[1]</a>
 </li>
@@ -461,19 +458,17 @@
 </li>
       <li><a href="nqp/processors/intent.html#scripts.nqp.processors.intent._get_pressed_skills_name">_get_pressed_skills_name() (in module scripts.nqp.processors.intent)</a>
 </li>
-      <li><a href="nqp/processors/interaction.html#scripts.nqp.processors.interaction._handle_affliction">_handle_affliction() (in module scripts.nqp.processors.interaction)</a>
-</li>
       <li><a href="nqp/actions/behaviour.html#scripts.nqp.actions.behaviour.Projectile._handle_collision">_handle_collision() (Projectile method)</a>
-</li>
-      <li><a href="nqp/processors/interaction.html#scripts.nqp.processors.interaction._handle_proximity">_handle_proximity() (in module scripts.nqp.processors.interaction)</a>
 </li>
       <li><a href="nqp/actions/behaviour.html#scripts.nqp.actions.behaviour.SearchAndAttack._move_randomly">_move_randomly() (SearchAndAttack method)</a>
 </li>
       <li><a href="nqp/processors/display.html#scripts.nqp.processors.display._process_aesthetic_update">_process_aesthetic_update() (in module scripts.nqp.processors.display)</a>
 </li>
-      <li><a href="nqp/processors/intent.html#scripts.nqp.processors.intent._process_game_map_intents">_process_game_map_intents() (in module scripts.nqp.processors.intent)</a>
+      <li><a href="nqp/processors/game.html#scripts.nqp.processors.game._process_end_round">_process_end_round() (in module scripts.nqp.processors.game)</a>
 </li>
-      <li><a href="nqp/processors/interaction.html#scripts.nqp.processors.interaction._process_interventions">_process_interventions() (in module scripts.nqp.processors.interaction)</a>
+      <li><a href="nqp/processors/game.html#scripts.nqp.processors.game._process_end_turn">_process_end_turn() (in module scripts.nqp.processors.game)</a>
+</li>
+      <li><a href="nqp/processors/intent.html#scripts.nqp.processors.intent._process_game_map_intents">_process_game_map_intents() (in module scripts.nqp.processors.intent)</a>
 </li>
       <li><a href="nqp/processors/display.html#scripts.nqp.processors.display._process_lighting">_process_lighting() (in module scripts.nqp.processors.display)</a>
 </li>
@@ -482,8 +477,6 @@
       <li><a href="nqp/processors/intent.html#scripts.nqp.processors.intent._process_stateless_intents">_process_stateless_intents() (in module scripts.nqp.processors.intent)</a>
 </li>
       <li><a href="nqp/processors/intent.html#scripts.nqp.processors.intent._process_targeting_mode_intents">_process_targeting_mode_intents() (in module scripts.nqp.processors.intent)</a>
-</li>
-      <li><a href="nqp/processors/interaction.html#scripts.nqp.processors.interaction._process_win_condition">_process_win_condition() (in module scripts.nqp.processors.interaction)</a>
 </li>
       <li><a href="nqp/general/command.html#scripts.nqp.command._start_debug_game">_start_debug_game() (in module scripts.nqp.command)</a>
 </li>
@@ -515,8 +508,6 @@
         <li><a href="nqp/actions/behaviour.html#scripts.nqp.actions.behaviour.SkipTurn.act">(SkipTurn method)</a>, <a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviour.SkipTurn.act">[1]</a>
 </li>
       </ul></li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.AttitudeData.action">action (AttitudeData attribute)</a>
-</li>
       <li><a href="engine/internal/action.html#scripts.engine.internal.action.Action">Action (class in scripts.engine.internal.action)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.action.Action">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ProjectileExpiry.ACTIVATE">ACTIVATE (ProjectileExpiry attribute)</a>
@@ -595,15 +586,11 @@
 </li>
       <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.AffectCooldownEffectData">AffectCooldownEffectData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.AffectCooldownEffectData">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.AFFECTED_COOLDOWN">AFFECTED_COOLDOWN (InteractionTrigger attribute)</a>
-</li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.AFFECTED_STAT">AFFECTED_STAT (InteractionTrigger attribute)</a>
-</li>
       <li><a href="engine/internal/effect.html#scripts.engine.internal.effect.AffectStatEffect">AffectStatEffect (class in scripts.engine.internal.effect)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.effect.AffectStatEffect">[1]</a>
 </li>
       <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.AffectStatEffectData">AffectStatEffectData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.AffectStatEffectData">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.AFFLICTED">AFFLICTED (InteractionTrigger attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.AFFLICTED">AFFLICTED (ReactionTrigger attribute)</a>
 </li>
       <li><a href="engine/internal/action.html#scripts.engine.internal.action.Affliction">Affliction (class in scripts.engine.internal.action)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.action.Affliction">[1]</a>
 </li>
@@ -659,8 +646,6 @@
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TraitSpritesData.attack">(TraitSpritesData attribute)</a>
 </li>
       </ul></li>
-      <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.AttitudeData">AttitudeData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.AttitudeData">[1]</a>
-</li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.GodData.attitudes">attitudes (GodData attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetingMethod.AUTO">AUTO (TargetingMethod attribute)</a>
@@ -803,17 +788,19 @@
       </ul></li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.AffectStatEffectData.cause_name">cause_name (AffectStatEffectData attribute)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.CAUSED_AFFECT_COOLDOWN">CAUSED_AFFECT_COOLDOWN (InteractionTrigger attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.CAUSED_AFFECT_COOLDOWN">CAUSED_AFFECT_COOLDOWN (ReactionTrigger attribute)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.CAUSED_AFFECT_STAT">CAUSED_AFFECT_STAT (InteractionTrigger attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.CAUSED_AFFECT_STAT">CAUSED_AFFECT_STAT (ReactionTrigger attribute)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.CAUSED_AFFLICTION">CAUSED_AFFLICTION (InteractionTrigger attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.CAUSED_AFFLICTION">CAUSED_AFFLICTION (ReactionTrigger attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.Direction.CENTRE">CENTRE (Direction attribute)</a>
 </li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.dungen.RoomConcept.centre_x">centre_x() (RoomConcept property)</a>
 </li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.dungen.RoomConcept.centre_y">centre_y() (RoomConcept property)</a>
+</li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ReactionData.chance">chance (ReactionData attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.RoomConceptData.chance_of_spawning_wall">chance_of_spawning_wall (RoomConceptData attribute)</a>
 </li>
@@ -824,8 +811,6 @@
       <li><a href="nqp/elements/character_selector.html#scripts.nqp.ui_elements.character_selector.CharacterSelector">CharacterSelector (class in scripts.nqp.ui_elements.character_selector)</a>, <a href="scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.character_selector.CharacterSelector">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.DamageType.CHEMICAL">CHEMICAL (DamageType attribute)</a>
-</li>
-      <li><a href="engine/core/world.html#scripts.engine.core.world.choose_interventions">choose_interventions() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.choose_interventions">[1]</a>
 </li>
       <li><a href="engine/core/world.html#scripts.engine.core.world.choose_target">choose_target() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.choose_target">[1]</a>
 </li>
@@ -847,15 +832,15 @@
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TraitData.clout">clout (TraitData attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="engine/world_objects/combat_stats.html#scripts.engine.world_objects.combat_stats.CombatStats.clout">clout() (CombatStats property)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats.clout">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.BaseSecondaryStatData.clout_mod">clout_mod (BaseSecondaryStatData attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.DamageType.COLD">COLD (DamageType attribute)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.COLLISION">COLLISION (InteractionTrigger attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.COLLISION">COLLISION (ReactionTrigger attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.LightData.colour">colour (LightData attribute)</a>
 </li>
@@ -874,6 +859,8 @@
       <li><a href="scripts.engine.core.html#scripts.engine.core.key.convert_vector_to_intent">convert_vector_to_intent() (in module scripts.engine.core.key)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.SkillData.cooldown">cooldown (SkillData attribute)</a>
+</li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.COOLDOWN_AFFECTED">COOLDOWN_AFFECTED (ReactionTrigger attribute)</a>
 </li>
       <li><a href="engine/internal/component.html#scripts.engine.internal.component.Position.coordinates">coordinates() (Position property)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Position.coordinates">[1]</a>
 </li>
@@ -947,7 +934,7 @@
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TraitSpritesData.dead">(TraitSpritesData attribute)</a>
 </li>
       </ul></li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.DEAL_DAMAGE">DEAL_DAMAGE (InteractionTrigger attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.DEAL_DAMAGE">DEAL_DAMAGE (ReactionTrigger attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileCategory.DEBUG">DEBUG (TileCategory attribute)</a>
 </li>
@@ -1010,10 +997,6 @@
 </li>
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsActive.deserialize">(IsActive class method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsActive.deserialize">[1]</a>
 </li>
-        <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsActor.deserialize">(IsActor class method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsActor.deserialize">[1]</a>
-</li>
-        <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsGod.deserialize">(IsGod class method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsGod.deserialize">[1]</a>
-</li>
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsPlayer.deserialize">(IsPlayer class method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsPlayer.deserialize">[1]</a>
 </li>
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.Knowledge.deserialize">(Knowledge class method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Knowledge.deserialize">[1]</a>
@@ -1055,7 +1038,7 @@
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameState.DEVELOPER">DEVELOPER (GameState attribute)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.DIE">DIE (InteractionTrigger attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.DIE">DIE (ReactionTrigger attribute)</a>
 </li>
       <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.Dimensions">Dimensions (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.Dimensions">[1]</a>
 </li>
@@ -1145,6 +1128,12 @@
 </li>
       <li><a href="engine/internal/debug.html#scripts.engine.internal.debug.enable_profiling">enable_profiling() (in module scripts.engine.internal.debug)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.debug.enable_profiling">[1]</a>
 </li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameEvent.END_ROUND">END_ROUND (GameEvent attribute)</a>
+</li>
+      <li><a href="engine/core/chronicle.html#scripts.engine.core.chronicle.end_round">end_round() (in module scripts.engine.core.chronicle)</a>, <a href="scripts.engine.core.html#scripts.engine.core.chronicle.end_round">[1]</a>
+</li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameEvent.END_TURN">END_TURN (GameEvent attribute)</a>
+</li>
       <li><a href="engine/core/chronicle.html#scripts.engine.core.chronicle.end_turn">end_turn() (in module scripts.engine.core.chronicle)</a>, <a href="scripts.engine.core.html#scripts.engine.core.chronicle.end_turn">[1]</a>
 </li>
       <li><a href="scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.camera.Camera.end_x">end_x() (Camera property)</a>
@@ -1159,10 +1148,10 @@
         <li><a href="scripts.engine.core.html#scripts.engine.core.dungen.RoomConcept.end_y">(RoomConcept property)</a>
 </li>
       </ul></li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.UIElement.ENTITY_QUEUE">ENTITY_QUEUE (UIElement attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.UIElement.ENTITY_QUEUE">ENTITY_QUEUE (UIElement attribute)</a>
+</li>
       <li><a href="engine/internal/effect.html#scripts.engine.internal.effect.AffectCooldownEffect.evaluate">evaluate() (AffectCooldownEffect method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.effect.AffectCooldownEffect.evaluate">[1]</a>
 
       <ul>
@@ -1179,6 +1168,8 @@
         <li><a href="engine/internal/effect.html#scripts.engine.internal.effect.MoveActorEffect.evaluate">(MoveActorEffect method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.effect.MoveActorEffect.evaluate">[1]</a>
 </li>
       </ul></li>
+      <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.EventType">EventType (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType">[1]</a>
+</li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.PrimaryStat.EXACTITUDE">EXACTITUDE (PrimaryStat attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TraitData.exactitude">exactitude (TraitData attribute)</a>
@@ -1243,15 +1234,17 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType.GAME">GAME (EventType attribute)</a>
+</li>
       <li><a href="scripts.nqp.html#scripts.nqp.main.game_loop">game_loop() (in module scripts.nqp.main)</a>
+</li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameState.GAME_MAP">GAME_MAP (GameState attribute)</a>
 </li>
       <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.GameConfigData">GameConfigData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.GameConfigData">[1]</a>
 </li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.GameEvent">GameEvent (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameEvent">[1]</a>
 </li>
       <li><a href="engine/world_objects/game_map.html#scripts.engine.world_objects.game_map.GameMap">GameMap (class in scripts.engine.world_objects.game_map)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap">[1]</a>
-</li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameState.GAMEMAP">GAMEMAP (GameState attribute)</a>
 </li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.GameState">GameState (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameState">[1]</a>
 </li>
@@ -1336,6 +1329,8 @@
       <li><a href="engine/core/world.html#scripts.engine.core.world.get_player">get_player() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.get_player">[1]</a>
 </li>
       <li><a href="engine/core/state.html#scripts.engine.core.state.get_previous">get_previous() (in module scripts.engine.core.state)</a>, <a href="scripts.engine.core.html#scripts.engine.core.state.get_previous">[1]</a>
+</li>
+      <li><a href="engine/core/chronicle.html#scripts.engine.core.chronicle.get_previous_turn_holder">get_previous_turn_holder() (in module scripts.engine.core.chronicle)</a>, <a href="scripts.engine.core.html#scripts.engine.core.chronicle.get_previous_turn_holder">[1]</a>
 </li>
       <li><a href="engine/core/world.html#scripts.engine.core.world.get_primary_stat">get_primary_stat() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.get_primary_stat">[1]</a>
 </li>
@@ -1479,23 +1474,21 @@
 </li>
       <li><a href="engine/internal/debug.html#scripts.engine.internal.debug.initialise_logging">initialise_logging() (in module scripts.engine.internal.debug)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.debug.initialise_logging">[1]</a>
 </li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType.INPUT">INPUT (EventType attribute)</a>
+</li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.InputEvent">InputEvent (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.InputEvent">[1]</a>
 </li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.InputIntent">InputIntent (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.InputIntent">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ProjectileSpeed.INSTANT">INSTANT (ProjectileSpeed attribute)</a>
+</li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType.INTERACTION">INTERACTION (EventType attribute)</a>
 </li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.InteractionEvent">InteractionEvent (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionEvent">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.InteractionTrigger">InteractionTrigger (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger">[1]</a>
-</li>
       <li><a href="engine/core/dungen.html#scripts.engine.core.dungen.RoomConcept.intersects">intersects() (RoomConcept method)</a>, <a href="scripts.engine.core.html#scripts.engine.core.dungen.RoomConcept.intersects">[1]</a>
-</li>
-      <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.InterventionData">InterventionData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.InterventionData">[1]</a>
-</li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.GodData.interventions">interventions (GodData attribute)</a>
 </li>
       <li><a href="engine/core/utility.html#scripts.engine.core.utility.is_close">is_close() (in module scripts.engine.core.utility)</a>, <a href="scripts.engine.core.html#scripts.engine.core.utility.is_close">[1]</a>
 </li>
@@ -1523,19 +1516,7 @@
 </li>
       <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsActive">IsActive (class in scripts.engine.internal.component)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsActive">[1]</a>
 </li>
-      <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsActor">IsActor (class in scripts.engine.internal.component)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsActor">[1]</a>
-</li>
-      <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsGod">IsGod (class in scripts.engine.internal.component)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsGod">[1]</a>
-</li>
       <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsPlayer">IsPlayer (class in scripts.engine.internal.component)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsPlayer">[1]</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="J">J</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="engine/core/world.html#scripts.engine.core.world.judge_action">judge_action() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.judge_action">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1553,7 +1534,7 @@
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.RoomConceptData.key">(RoomConceptData attribute)</a>
 </li>
       </ul></li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.KILL">KILL (InteractionTrigger attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.KILL">KILL (ReactionTrigger attribute)</a>
 </li>
       <li><a href="engine/core/ui.html#scripts.engine.core.ui.UI.kill_all_elements">kill_all_elements() (UI method)</a>, <a href="scripts.engine.core.html#scripts.engine.core.ui.UI.kill_all_elements">[1]</a>
 </li>
@@ -1787,8 +1768,6 @@
 </li>
         <li><a href="nqp/processors/intent.html#module-scripts.nqp.processors.intent">scripts.nqp.processors.intent</a>, <a href="scripts.nqp.processors.html#module-scripts.nqp.processors.intent">[1]</a>
 </li>
-        <li><a href="nqp/processors/interaction.html#module-scripts.nqp.processors.interaction">scripts.nqp.processors.interaction</a>, <a href="scripts.nqp.processors.html#module-scripts.nqp.processors.interaction">[1]</a>
-</li>
         <li><a href="scripts.nqp.ui_elements.html#module-scripts.nqp.ui_elements">scripts.nqp.ui_elements</a>
 </li>
         <li><a href="nqp/elements/actor_info.html#module-scripts.nqp.ui_elements.actor_info">scripts.nqp.ui_elements.actor_info</a>, <a href="scripts.nqp.ui_elements.html#module-scripts.nqp.ui_elements.actor_info">[1]</a>
@@ -1829,7 +1808,7 @@
       <ul>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionEvent.MOVE">(InteractionEvent attribute)</a>
 </li>
-        <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.MOVE">(InteractionTrigger attribute)</a>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.MOVE">(ReactionTrigger attribute)</a>
 </li>
       </ul></li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TraitSpritePathsData.move">move (TraitSpritePathsData attribute)</a>
@@ -1845,6 +1824,8 @@
       <li><a href="engine/internal/effect.html#scripts.engine.internal.effect.MoveActorEffect">MoveActorEffect (class in scripts.engine.internal.effect)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.effect.MoveActorEffect">[1]</a>
 </li>
       <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.MoveActorEffectData">MoveActorEffectData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveActorEffectData">[1]</a>
+</li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.MOVED">MOVED (ReactionTrigger attribute)</a>
 </li>
       <li><a href="engine/world_objects/lighting.html#scripts.engine.world_objects.lighting.mult_colour">mult_colour() (in module scripts.engine.world_objects.lighting)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.mult_colour">[1]</a>
 </li>
@@ -1884,6 +1865,10 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameEvent.NEW_GAME">NEW_GAME (GameEvent attribute)</a>
 </li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameEvent.NEW_ROUND">NEW_ROUND (GameEvent attribute)</a>
+</li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameEvent.NEW_TURN">NEW_TURN (GameEvent attribute)</a>
+</li>
       <li><a href="engine/core/chronicle.html#scripts.engine.core.chronicle.next_round">next_round() (in module scripts.engine.core.chronicle)</a>, <a href="scripts.engine.core.html#scripts.engine.core.chronicle.next_round">[1]</a>
 </li>
       <li><a href="engine/core/chronicle.html#scripts.engine.core.chronicle.next_turn">next_turn() (in module scripts.engine.core.chronicle)</a>, <a href="scripts.engine.core.html#scripts.engine.core.chronicle.next_turn">[1]</a>
@@ -1908,13 +1893,11 @@
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.component.NQPComponent.on_delete">(NQPComponent method)</a>
 </li>
       </ul></li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.OPEN_SPACE">OPEN_SPACE (TargetTag attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="engine/internal/component.html#scripts.engine.internal.component.Opinion">Opinion (class in scripts.engine.internal.component)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Opinion">[1]</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.OPEN_SPACE">OPEN_SPACE (TargetTag attribute)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.AttitudeData.opinion_change">opinion_change (AttitudeData attribute)</a>
+      <li><a href="engine/internal/component.html#scripts.engine.internal.component.Opinion">Opinion (class in scripts.engine.internal.component)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Opinion">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.OTHER_ENTITY">OTHER_ENTITY (TargetTag attribute)</a>
 </li>
@@ -1976,20 +1959,10 @@
         <li><a href="engine/widgets/window.html#scripts.engine.widgets.window.Window.process_close_button">(Window method)</a>, <a href="scripts.engine.widgets.html#scripts.engine.widgets.window.Window.process_close_button">[1]</a>
 </li>
       </ul></li>
-      <li><a href="nqp/processors/display.html#scripts.nqp.processors.display.process_display_updates">process_display_updates() (in module scripts.nqp.processors.display)</a>, <a href="scripts.nqp.processors.html#scripts.nqp.processors.display.process_display_updates">[1]</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.camera.Camera.process_event">process_event() (Camera method)</a>
 
       <ul>
         <li><a href="nqp/elements/character_selector.html#scripts.nqp.ui_elements.character_selector.CharacterSelector.process_event">(CharacterSelector method)</a>, <a href="scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.character_selector.CharacterSelector.process_event">[1]</a>
-</li>
-        <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.game.process_event">(in module scripts.nqp.processors.game)</a>
-</li>
-        <li><a href="nqp/processors/input.html#scripts.nqp.processors.input.process_event">(in module scripts.nqp.processors.input)</a>, <a href="scripts.nqp.processors.html#scripts.nqp.processors.input.process_event">[1]</a>
-</li>
-        <li><a href="nqp/processors/interaction.html#scripts.nqp.processors.interaction.process_event">(in module scripts.nqp.processors.interaction)</a>, <a href="scripts.nqp.processors.html#scripts.nqp.processors.interaction.process_event">[1]</a>
 </li>
         <li><a href="engine/widgets/panel.html#scripts.engine.widgets.panel.Panel.process_event">(Panel method)</a>, <a href="scripts.engine.widgets.html#scripts.engine.widgets.panel.Panel.process_event">[1]</a>
 </li>
@@ -2000,15 +1973,25 @@
         <li><a href="engine/widgets/window.html#scripts.engine.widgets.window.Window.process_event">(Window method)</a>, <a href="scripts.engine.widgets.html#scripts.engine.widgets.window.Window.process_event">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="engine/core/system.html#scripts.engine.core.system.process_fov">process_fov() (in module scripts.engine.core.system)</a>, <a href="scripts.engine.core.html#scripts.engine.core.system.process_fov">[1]</a>
 </li>
+      <li><a href="scripts.nqp.processors.html#scripts.nqp.processors.game.process_game_event">process_game_event() (in module scripts.nqp.processors.game)</a>
+</li>
+      <li><a href="nqp/processors/input.html#scripts.nqp.processors.input.process_input_event">process_input_event() (in module scripts.nqp.processors.input)</a>, <a href="scripts.nqp.processors.html#scripts.nqp.processors.input.process_input_event">[1]</a>
+</li>
       <li><a href="nqp/processors/intent.html#scripts.nqp.processors.intent.process_intent">process_intent() (in module scripts.nqp.processors.intent)</a>, <a href="scripts.nqp.processors.html#scripts.nqp.processors.intent.process_intent">[1]</a>
+</li>
+      <li><a href="engine/core/system.html#scripts.engine.core.system.process_interaction_event">process_interaction_event() (in module scripts.engine.core.system)</a>, <a href="scripts.engine.core.html#scripts.engine.core.system.process_interaction_event">[1]</a>
 </li>
       <li><a href="engine/core/system.html#scripts.engine.core.system.process_light_map">process_light_map() (in module scripts.engine.core.system)</a>, <a href="scripts.engine.core.html#scripts.engine.core.system.process_light_map">[1]</a>
 </li>
       <li><a href="engine/core/system.html#scripts.engine.core.system.process_tile_visibility">process_tile_visibility() (in module scripts.engine.core.system)</a>, <a href="scripts.engine.core.html#scripts.engine.core.system.process_tile_visibility">[1]</a>
 </li>
       <li><a href="engine/core/ui.html#scripts.engine.core.ui.UI.process_ui_events">process_ui_events() (UI method)</a>, <a href="scripts.engine.core.html#scripts.engine.core.ui.UI.process_ui_events">[1]</a>
+</li>
+      <li><a href="nqp/processors/display.html#scripts.nqp.processors.display.process_updates">process_updates() (in module scripts.nqp.processors.display)</a>, <a href="scripts.nqp.processors.html#scripts.nqp.processors.display.process_updates">[1]</a>
 </li>
       <li><a href="nqp/actions/behaviour.html#scripts.nqp.actions.behaviour.Projectile">Projectile (class in scripts.nqp.actions.behaviour)</a>, <a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviour.Projectile">[1]</a>
 </li>
@@ -2034,7 +2017,7 @@
 </li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.ProjectileSpeed">ProjectileSpeed (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.ProjectileSpeed">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.PROXIMITY">PROXIMITY (InteractionTrigger attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.PROXIMITY">PROXIMITY (ReactionTrigger attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -2064,7 +2047,17 @@
       </ul></li>
       <li><a href="engine/internal/component.html#scripts.engine.internal.component.Reaction">Reaction (class in scripts.engine.internal.component)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Reaction">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TerrainData.reactions">reactions (TerrainData attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ReactionData.reaction">reaction (ReactionData attribute)</a>
+</li>
+      <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.ReactionData">ReactionData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.ReactionData">[1]</a>
+</li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.GodData.reactions">reactions (GodData attribute)</a>
+
+      <ul>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TerrainData.reactions">(TerrainData attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.ReactionTrigger">ReactionTrigger (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger">[1]</a>
 </li>
       <li><a href="engine/core/chronicle.html#scripts.engine.core.chronicle.rebuild_turn_queue">rebuild_turn_queue() (in module scripts.engine.core.chronicle)</a>, <a href="scripts.engine.core.html#scripts.engine.core.chronicle.rebuild_turn_queue">[1]</a>
 </li>
@@ -2108,12 +2101,12 @@
 </li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.RenderLayer">RenderLayer (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.RenderLayer">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.InterventionData.required_opinion">required_opinion (InterventionData attribute)</a>
-</li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.SecondaryStat.RESIST_ASTRAL">RESIST_ASTRAL (SecondaryStat attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ReactionData.required_opinion">required_opinion (ReactionData attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.SecondaryStat.RESIST_ASTRAL">RESIST_ASTRAL (SecondaryStat attribute)</a>
+</li>
       <li><a href="engine/world_objects/combat_stats.html#scripts.engine.world_objects.combat_stats.CombatStats.resist_astral">resist_astral() (CombatStats property)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats.resist_astral">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.SecondaryStat.RESIST_BURN">RESIST_BURN (SecondaryStat attribute)</a>
@@ -2175,6 +2168,8 @@
 </li>
       </ul></li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.rng">rng (DungeonGenerator attribute)</a>
+</li>
+      <li><a href="engine/core/utility.html#scripts.engine.core.utility.roll">roll() (in module scripts.engine.core.utility)</a>, <a href="scripts.engine.core.html#scripts.engine.core.utility.roll">[1]</a>
 </li>
       <li><a href="engine/core/dungen.html#scripts.engine.core.dungen.RoomConcept">RoomConcept (class in scripts.engine.core.dungen)</a>, <a href="scripts.engine.core.html#scripts.engine.core.dungen.RoomConcept">[1]</a>
 </li>
@@ -2502,13 +2497,6 @@
 </li>
       </ul></li>
       <li>
-    scripts.nqp.processors.interaction
-
-      <ul>
-        <li><a href="nqp/processors/interaction.html#module-scripts.nqp.processors.interaction">module</a>, <a href="scripts.nqp.processors.html#module-scripts.nqp.processors.interaction">[1]</a>
-</li>
-      </ul></li>
-      <li>
     scripts.nqp.ui_elements
 
       <ul>
@@ -2564,8 +2552,6 @@
         <li><a href="nqp/elements/tile_info.html#module-scripts.nqp.ui_elements.tile_info">module</a>, <a href="scripts.nqp.ui_elements.html#module-scripts.nqp.ui_elements.tile_info">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     scripts.nqp.ui_elements.title_screen
 
@@ -2573,6 +2559,8 @@
         <li><a href="nqp/elements/title_screen.html#module-scripts.nqp.ui_elements.title_screen">module</a>, <a href="scripts.nqp.ui_elements.html#module-scripts.nqp.ui_elements.title_screen">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/actions/behaviour.html#scripts.nqp.actions.behaviour.SearchAndAttack">SearchAndAttack (class in scripts.nqp.actions.behaviour)</a>, <a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviour.SearchAndAttack">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.BaseStatData.secondary">secondary (BaseStatData attribute)</a>
@@ -2605,10 +2593,6 @@
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.Identity.serialize">(Identity method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.Identity.serialize">[1]</a>
 </li>
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsActive.serialize">(IsActive method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsActive.serialize">[1]</a>
-</li>
-        <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsActor.serialize">(IsActor method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsActor.serialize">[1]</a>
-</li>
-        <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsGod.serialize">(IsGod method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsGod.serialize">[1]</a>
 </li>
         <li><a href="engine/internal/component.html#scripts.engine.internal.component.IsPlayer.serialize">(IsPlayer method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.component.IsPlayer.serialize">[1]</a>
 </li>
@@ -2658,6 +2642,8 @@
       <li><a href="scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.camera.Camera.set_overlay_directions">set_overlay_directions() (Camera method)</a>
 </li>
       <li><a href="scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.camera.Camera.set_overlay_visibility">set_overlay_visibility() (Camera method)</a>
+</li>
+      <li><a href="engine/core/chronicle.html#scripts.engine.core.chronicle.set_previous_turn_holder">set_previous_turn_holder() (in module scripts.engine.core.chronicle)</a>, <a href="scripts.engine.core.html#scripts.engine.core.chronicle.set_previous_turn_holder">[1]</a>
 </li>
       <li><a href="nqp/elements/tile_info.html#scripts.nqp.ui_elements.tile_info.TileInfo.set_selected_tile_pos">set_selected_tile_pos() (TileInfo method)</a>, <a href="scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.tile_info.TileInfo.set_selected_tile_pos">[1]</a>
 </li>
@@ -2729,8 +2715,6 @@
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.skill_instance">skill_instance (ProjectileData attribute)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.InterventionData.skill_key">skill_key (InterventionData attribute)</a>
-</li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.AffectCooldownEffectData.skill_name">skill_name (AffectCooldownEffectData attribute)</a>
 
       <ul>
@@ -2791,6 +2775,8 @@
 </li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.dungen.RoomConcept.start_y">start_y (RoomConcept attribute)</a>
 </li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.STAT_AFFECTED">STAT_AFFECTED (ReactionTrigger attribute)</a>
+</li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.AffectStatEffectData.stat_to_target">stat_to_target (AffectStatEffectData attribute)</a>
 
       <ul>
@@ -2809,7 +2795,7 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionTrigger.TAKE_DAMAGE">TAKE_DAMAGE (InteractionTrigger attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.TAKE_DAMAGE">TAKE_DAMAGE (ReactionTrigger attribute)</a>
 </li>
       <li><a href="engine/core/world.html#scripts.engine.core.world.take_turn">take_turn() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.take_turn">[1]</a>
 </li>

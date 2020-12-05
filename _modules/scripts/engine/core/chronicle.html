@@ -258,11 +258,13 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
+<span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Tracked</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">GameEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -298,6 +300,7 @@
     <span class="n">set_turn_queue</span><span class="p">(</span><span class="n">new_queue</span><span class="p">)</span>
 
     <span class="c1"># get the next entity in the queue and set as new turn holder</span>
+    <span class="n">set_previous_turn_holder</span><span class="p">(</span><span class="n">get_turn_holder</span><span class="p">())</span>
     <span class="n">set_turn_holder</span><span class="p">(</span><span class="n">_get_next_entity_in_queue</span><span class="p">())</span>
 
     <span class="c1"># log result</span>
@@ -307,7 +310,7 @@
 <div class="viewcode-block" id="next_turn"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.next_turn">[docs]</a><span class="k">def</span> <span class="nf">next_turn</span><span class="p">(</span><span class="n">entity_to_exclude</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Proceed to the next turn, setting the next entity to act as the turn holder and updating the passage of time.</span>
-<span class="sd">    Update game state to reflect turn holder.</span>
+<span class="sd">    Posts NEW_TURN event.</span>
 <span class="sd">    """</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Moving to the next turn..."</span><span class="p">)</span>
 
@@ -332,16 +335,16 @@
 
     <span class="c1"># check if we need to set new round</span>
     <span class="k">if</span> <span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span> <span class="o">&gt;=</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span><span class="p">:</span>
-        <span class="n">next_round</span><span class="p">(</span><span class="n">time_progressed</span><span class="p">)</span>
+        <span class="n">end_round</span><span class="p">()</span>
+
+        <span class="c1"># add progressed time and minus time_in_round to keep the remaining time</span>
+        <span class="n">set_time_in_round</span><span class="p">((</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span> <span class="o">-</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span><span class="p">)</span>
+
     <span class="k">else</span><span class="p">:</span>
         <span class="n">set_time_in_round</span><span class="p">(</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span>
 
-    <span class="c1"># update visibility</span>
-    <span class="c1"># TODO - implement scheduling so this doesnt need to be called here</span>
-    <span class="n">system</span><span class="o">.</span><span class="n">process_activations</span><span class="p">()</span>  <span class="c1"># must be first otherwise wrong entities active</span>
-    <span class="n">system</span><span class="o">.</span><span class="n">process_light_map</span><span class="p">()</span>
-    <span class="n">system</span><span class="o">.</span><span class="n">process_fov</span><span class="p">()</span>
-    <span class="n">system</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
+    <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_TURN</span><span class="p">)</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
     <span class="c1"># log new turn holder</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">turn_holder</span><span class="p">)</span>
@@ -349,22 +352,41 @@
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"-&gt; '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' is now the turn holder."</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="next_round"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.next_round">[docs]</a><span class="k">def</span> <span class="nf">next_round</span><span class="p">(</span><span class="n">time_progressed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<div class="viewcode-block" id="end_turn"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.end_turn">[docs]</a><span class="k">def</span> <span class="nf">end_turn</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Move to the next round and trigger end of round events, like cooldown and affliction reduction.</span>
-<span class="sd">    """</span>
-    <span class="c1"># TODO - create end of round event and handle there.</span>
-    <span class="n">system</span><span class="o">.</span><span class="n">reduce_skill_cooldowns</span><span class="p">()</span>
-    <span class="n">system</span><span class="o">.</span><span class="n">reduce_affliction_durations</span><span class="p">()</span>
-    <span class="n">system</span><span class="o">.</span><span class="n">reduce_lifespan_durations</span><span class="p">()</span>
+<span class="sd">    Spend an entities time, progress time, move to next acting entity in queue. Posts END_TURN event.</span>
 
-    <span class="c1"># add progressed time and minus time_in_round to keep the remaining time</span>
-    <span class="n">set_time_in_round</span><span class="p">((</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span> <span class="o">-</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span><span class="p">)</span>
+<span class="sd">    N.B. If entity given is NOT the turn holder then nothing happens.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">get_turn_holder</span><span class="p">():</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">END_TURN</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="n">world</span><span class="o">.</span><span class="n">spend_time</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to end </span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">'s turn but they're not turn holder."</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="next_round"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.next_round">[docs]</a><span class="k">def</span> <span class="nf">next_round</span><span class="p">():</span>
+    <span class="sd">"""</span>
+<span class="sd">    Move to the next round. Posts NEW_ROUND event.</span>
+<span class="sd">    """</span>
+    <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_ROUND</span><span class="p">)</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
     <span class="c1"># increment rounds</span>
     <span class="n">_increment_round_number</span><span class="p">()</span>
 
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"It is now round </span><span class="si">{</span><span class="n">get_round</span><span class="p">()</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="end_round"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.end_round">[docs]</a><span class="k">def</span> <span class="nf">end_round</span><span class="p">():</span>
+    <span class="sd">"""</span>
+<span class="sd">    Posts END_ROUND event.</span>
+<span class="sd">    """</span>
+    <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">END_ROUND</span><span class="p">)</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_increment_round_number</span><span class="p">():</span>
@@ -389,6 +411,13 @@
 <span class="sd">    Get the entity who has the current turn</span>
 <span class="sd">    """</span>
     <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">turn_holder</span></div>
+
+
+<div class="viewcode-block" id="get_previous_turn_holder"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.get_previous_turn_holder">[docs]</a><span class="k">def</span> <span class="nf">get_previous_turn_holder</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Get the entity who had the last turn</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">previous_turn_holder</span></div>
 
 
 <div class="viewcode-block" id="get_turn_queue"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.get_turn_queue">[docs]</a><span class="k">def</span> <span class="nf">get_turn_queue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
@@ -446,9 +475,16 @@
 
 <div class="viewcode-block" id="set_turn_holder"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.set_turn_holder">[docs]</a><span class="k">def</span> <span class="nf">set_turn_holder</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Get the entity who has the current turn</span>
+<span class="sd">    Set the entity who has the current turn</span>
 <span class="sd">    """</span>
     <span class="n">store</span><span class="o">.</span><span class="n">turn_holder</span> <span class="o">=</span> <span class="n">active_entity</span></div>
+
+
+<div class="viewcode-block" id="set_previous_turn_holder"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.set_previous_turn_holder">[docs]</a><span class="k">def</span> <span class="nf">set_previous_turn_holder</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Set the entity who had the last turn</span>
+<span class="sd">    """</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">previous_turn_holder</span> <span class="o">=</span> <span class="n">entity</span></div>
 
 
 <div class="viewcode-block" id="set_time_in_round"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.set_time_in_round">[docs]</a><span class="k">def</span> <span class="nf">set_time_in_round</span><span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
@@ -470,17 +506,6 @@
 <span class="sd">    Set the time of the last turn</span>
 <span class="sd">    """</span>
     <span class="n">store</span><span class="o">.</span><span class="n">time_of_last_turn</span> <span class="o">=</span> <span class="n">time</span></div>
-
-
-<div class="viewcode-block" id="end_turn"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.end_turn">[docs]</a><span class="k">def</span> <span class="nf">end_turn</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Spend an entities time, progress time, move to next acting entity in queue.</span>
-<span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">get_turn_holder</span><span class="p">():</span>
-        <span class="n">world</span><span class="o">.</span><span class="n">spend_time</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">)</span>
-        <span class="n">next_turn</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to end </span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">'s turn but they're not turn holder."</span><span class="p">)</span></div>
 </pre></div>
 
           </article>

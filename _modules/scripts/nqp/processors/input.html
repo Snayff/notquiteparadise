@@ -260,46 +260,49 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">key</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Position</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">GameStateType</span><span class="p">,</span> <span class="n">InputEvent</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">UIElement</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">InputEvent</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">UIElement</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors.intent</span> <span class="kn">import</span> <span class="n">process_intent</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"process_event"</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"process_input_event"</span><span class="p">]</span>
 
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.actor_info</span> <span class="kn">import</span> <span class="n">ActorInfo</span>
 
 
-<div class="viewcode-block" id="process_event"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input.process_event">[docs]</a><span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
+<div class="viewcode-block" id="process_input_event"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.input.process_input_event">[docs]</a><span class="k">def</span> <span class="nf">process_input_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameState</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Extract the intent from the event and process them in the context of the game state. If an event can only be</span>
 <span class="sd">    called in one way then no intent is generated and the event will directly go to the relevant action.</span>
+
+<span class="sd">    This covers the custom InputEvent and pygame pygame.KEYDOWN events.</span>
 <span class="sd">    """</span>
     <span class="n">intent</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># some events only apply to certain GameStates, we need to process them and separate them</span>
-    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">InputEvent</span><span class="o">.</span><span class="n">TILE_CLICK</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">EventType</span><span class="o">.</span><span class="n">INPUT</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">InputEvent</span><span class="o">.</span><span class="n">TILE_CLICK</span><span class="p">:</span>
 
-        <span class="k">if</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">TARGETING</span><span class="p">:</span>
-            <span class="c1">## Activate skill on mouse click while in targeting mode</span>
-            <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-            <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">position</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">TARGETING</span><span class="p">:</span>
+                <span class="c1"># Activate skill on mouse click while in targeting mode</span>
+                <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+                <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
                 <span class="n">event_x</span><span class="p">,</span> <span class="n">event_y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">tile_pos</span>
                 <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">event_x</span> <span class="o">-</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">)),</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">event_y</span><span class="p">)))</span>
                 <span class="n">intent</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">convert_vector_to_intent</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
 
-        <span class="k">elif</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">:</span>
-            <span class="c1">## Activate Actor Info Menu</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">tile_pos</span>
-            <span class="c1"># get entity on tile</span>
-            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_actor</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">position</span><span class="p">:</span>
-                    <span class="c1"># found entity, set to selected</span>
-                    <span class="n">actor_info</span><span class="p">:</span> <span class="n">ActorInfo</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">)</span>
-                    <span class="n">actor_info</span><span class="o">.</span><span class="n">set_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-                    <span class="n">intent</span> <span class="o">=</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span>
+            <span class="k">elif</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">:</span>
+                <span class="c1"># Activate Actor Info Menu</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">tile_pos</span>
+                <span class="c1"># get entity on tile</span>
+                <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+                    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">position</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
+                        <span class="c1"># found entity, set to selected</span>
+                        <span class="n">actor_info</span><span class="p">:</span> <span class="n">ActorInfo</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">)</span>
+                        <span class="n">actor_info</span><span class="o">.</span><span class="n">set_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                        <span class="n">intent</span> <span class="o">=</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span>
 
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">InputEvent</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">:</span>
-        <span class="n">intent</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">skill_intent</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">InputEvent</span><span class="o">.</span><span class="n">SKILL_BAR_CLICK</span><span class="p">:</span>
+            <span class="n">intent</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">skill_intent</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">intent</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">convert_to_intent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>

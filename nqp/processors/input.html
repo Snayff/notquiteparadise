@@ -292,13 +292,6 @@
       <a href="intent.html" class="md-nav__link">Intent</a>
       
     
-    </li>
-    <li class="md-nav__item">
-    
-    
-      <a href="interaction.html" class="md-nav__link">Interaction</a>
-      
-    
     </li></ul>
     
     </li></ul>
@@ -334,10 +327,11 @@
   
 <span id="input"></span><h1 id="nqp-processors-input--page-root">Input<a class="headerlink" href="#nqp-processors-input--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="scripts.nqp.processors.input.process_event">
-<code class="sig-name descname">process_event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">pygame.event</span></em>, <em class="sig-param"><span class="n">game_state</span><span class="p">:</span> <span class="n">GameStateType</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/input.html#process_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.input.process_event" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.nqp.processors.input.process_input_event">
+<code class="sig-name descname">process_input_event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">pygame.event</span></em>, <em class="sig-param"><span class="n">game_state</span><span class="p">:</span> <span class="n">GameState</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/input.html#process_input_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.input.process_input_event" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the intent from the event and process them in the context of the game state. If an event can only be
 called in one way then no intent is generated and the event will directly go to the relevant action.</p>
+<p>This covers the custom InputEvent and pygame pygame.KEYDOWN events.</p>
 </dd></dl>
 
 

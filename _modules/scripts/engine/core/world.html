@@ -266,7 +266,6 @@
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">utility</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">build_sprites_from_paths</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="p">(</span>
@@ -277,8 +276,6 @@
     <span class="n">HasCombatStats</span><span class="p">,</span>
     <span class="n">Identity</span><span class="p">,</span>
     <span class="n">IsActive</span><span class="p">,</span>
-    <span class="n">IsActor</span><span class="p">,</span>
-    <span class="n">IsGod</span><span class="p">,</span>
     <span class="n">IsPlayer</span><span class="p">,</span>
     <span class="n">Knowledge</span><span class="p">,</span>
     <span class="n">Lifespan</span><span class="p">,</span>
@@ -322,6 +319,7 @@
     <span class="n">ApplyAfflictionEffectData</span><span class="p">,</span>
     <span class="n">DamageEffectData</span><span class="p">,</span>
     <span class="n">EffectData</span><span class="p">,</span>
+    <span class="n">GodData</span><span class="p">,</span>
     <span class="n">MoveActorEffectData</span><span class="p">,</span>
     <span class="n">ProjectileData</span><span class="p">,</span>
     <span class="n">TerrainData</span><span class="p">,</span>
@@ -378,20 +376,19 @@
     <span class="k">return</span> <span class="n">entity</span></div>
 
 
-<div class="viewcode-block" id="create_god"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.create_god">[docs]</a><span class="k">def</span> <span class="nf">create_god</span><span class="p">(</span><span class="n">god_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
+<div class="viewcode-block" id="create_god"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.create_god">[docs]</a><span class="k">def</span> <span class="nf">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">:</span> <span class="n">GodData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Create an entity with all of the components to be a god. god_name must be in the gods json file.</span>
 <span class="sd">    """</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="n">god_name</span><span class="p">]</span>
     <span class="n">god</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
-    <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">IsGod</span><span class="p">())</span>
-    <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Opinion</span><span class="p">())</span>
+    <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">god_data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">god_data</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
+    <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Opinion</span><span class="p">(</span><span class="n">god_data</span><span class="o">.</span><span class="n">attitudes</span><span class="p">))</span>
+    <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Reaction</span><span class="p">(</span><span class="n">god_data</span><span class="o">.</span><span class="n">reactions</span><span class="p">))</span>
     <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Resources</span><span class="p">(</span><span class="n">INFINITE</span><span class="p">,</span> <span class="n">INFINITE</span><span class="p">)))</span>
     <span class="n">entity</span> <span class="o">=</span> <span class="n">create_entity</span><span class="p">(</span><span class="n">god</span><span class="p">)</span>
 
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"God, '</span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">', created."</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"God, '</span><span class="si">{</span><span class="n">god_data</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">', created."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">entity</span></div>
 
@@ -414,7 +411,6 @@
     <span class="c1"># actor components</span>
     <span class="k">if</span> <span class="n">is_player</span><span class="p">:</span>
         <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">IsPlayer</span><span class="p">())</span>
-    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">IsActor</span><span class="p">())</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">(</span><span class="o">*</span><span class="n">occupied_tiles</span><span class="p">))</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">actor_data</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HasCombatStats</span><span class="p">())</span>
@@ -1051,14 +1047,14 @@
     <span class="n">stat_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_PRIMARY</span><span class="p">[</span><span class="n">stat</span><span class="p">]</span>
     <span class="n">value</span> <span class="o">+=</span> <span class="n">stat_data</span><span class="o">.</span><span class="n">base_value</span>
 
-    <span class="n">trait</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Traits</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">trait</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Traits</span><span class="p">):</span>
+        <span class="n">trait</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Traits</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">trait</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">TRAITS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="n">value</span> <span class="o">+=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">stat</span><span class="p">)</span>
 
-    <span class="n">afflictions</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">afflictions</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">):</span>
+        <span class="n">afflictions</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">modifier</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">modifier</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">stat</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">+=</span> <span class="n">modifier</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1089,8 +1085,8 @@
     <span class="n">value</span> <span class="o">+=</span> <span class="n">get_primary_stat</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">PrimaryStat</span><span class="o">.</span><span class="n">EXACTITUDE</span><span class="p">)</span> <span class="o">*</span> <span class="n">stat_data</span><span class="o">.</span><span class="n">exactitude_mod</span>
 
     <span class="c1"># afflictions</span>
-    <span class="n">afflictions</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">afflictions</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">):</span>
+        <span class="n">afflictions</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">modifier</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">modifier</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">stat</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">+=</span> <span class="n">modifier</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1505,17 +1501,12 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="set_skill_on_cooldown"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.set_skill_on_cooldown">[docs]</a><span class="k">def</span> <span class="nf">set_skill_on_cooldown</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="set_skill_on_cooldown"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.set_skill_on_cooldown">[docs]</a><span class="k">def</span> <span class="nf">set_skill_on_cooldown</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cooldown_duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Sets a skill on cooldown</span>
+<span class="sd">    Sets an entity's skill on cooldown.</span>
 <span class="sd">    """</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">user</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
-    <span class="n">knowledge</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">knowledge</span><span class="p">:</span>
-        <span class="n">knowledge</span><span class="o">.</span><span class="n">set_skill_cooldown</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">base_cooldown</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">return</span> <span class="kc">False</span></div>
+    <span class="n">knowledge</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
+    <span class="n">knowledge</span><span class="o">.</span><span class="n">set_skill_cooldown</span><span class="p">(</span><span class="n">skill_name</span><span class="p">,</span> <span class="n">cooldown_duration</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="apply_affliction"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.apply_affliction">[docs]</a><span class="k">def</span> <span class="nf">apply_affliction</span><span class="p">(</span><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -1670,32 +1661,6 @@
     <span class="n">snecs</span><span class="o">.</span><span class="n">remove_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="judge_action"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.judge_action">[docs]</a><span class="k">def</span> <span class="nf">judge_action</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">action_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards</span>
-<span class="sd">    the tags in that skill.</span>
-<span class="sd">    """</span>
-    <span class="k">for</span> <span class="n">god</span><span class="p">,</span> <span class="p">(</span><span class="n">is_god</span><span class="p">,</span> <span class="n">opinion</span><span class="p">,</span> <span class="n">identity</span><span class="p">)</span> <span class="ow">in</span> <span class="n">get_components</span><span class="p">([</span><span class="n">IsGod</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">,</span> <span class="n">Identity</span><span class="p">]):</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opinion</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">)</span>
-
-        <span class="n">attitudes</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">attitudes</span>
-
-        <span class="c1"># check if the god has an attitude towards the action and apply the opinion change,</span>
-        <span class="c1"># adding the entity to the dict if necessary</span>
-        <span class="k">if</span> <span class="n">action_name</span> <span class="ow">in</span> <span class="n">attitudes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">:</span>
-                <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">+</span> <span class="n">attitudes</span><span class="p">[</span><span class="n">action_name</span><span class="p">]</span><span class="o">.</span><span class="n">opinion_change</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="n">attitudes</span><span class="p">[</span><span class="n">action_name</span><span class="p">]</span><span class="o">.</span><span class="n">opinion_change</span>
-
-            <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">' reacted to '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' using </span><span class="si">{</span><span class="n">action_name</span><span class="si">}</span><span class="s2">.  New "</span>
-                <span class="sa">f</span><span class="s2">"opinion = </span><span class="si">{</span><span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
-            <span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="remove_affliction"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.remove_affliction">[docs]</a><span class="k">def</span> <span class="nf">remove_affliction</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Remove affliction from active list and undo any stat modification.</span>
@@ -1775,66 +1740,6 @@
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">mitigated_to_hit_score</span></div>
-
-
-<div class="viewcode-block" id="choose_interventions"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.choose_interventions">[docs]</a><span class="k">def</span> <span class="nf">choose_interventions</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">action_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
-    <span class="sd">"""</span>
-<span class="sd">    Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,</span>
-<span class="sd">    or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).</span>
-<span class="sd">    """</span>
-    <span class="n">chosen_interventions</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">desire_to_intervene</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">desire_to_do_nothing</span> <span class="o">=</span> <span class="mi">75</span>  <span class="c1"># weighting for doing nothing</span>
-
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">is_god</span><span class="p">,</span> <span class="n">opinion</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">knowledge</span><span class="p">)</span> <span class="ow">in</span> <span class="n">get_components</span><span class="p">([</span><span class="n">IsGod</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">]):</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opinion</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">knowledge</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
-
-        <span class="n">attitudes</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">attitudes</span>
-
-        <span class="c1"># check if the god has an attitude towards the action and increase likelihood of intervening</span>
-        <span class="k">if</span> <span class="n">action_name</span> <span class="ow">in</span> <span class="n">attitudes</span><span class="p">:</span>
-            <span class="n">desire_to_intervene</span> <span class="o">=</span> <span class="mi">30</span>
-
-        <span class="c1"># get eligible interventions and their weightings. Need separate lists for random.choices</span>
-        <span class="n">eligible_interventions</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">intervention_weightings</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">intervention_name</span> <span class="ow">in</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">skill_names</span><span class="p">:</span>
-            <span class="n">intervention_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">interventions</span><span class="p">[</span><span class="n">intervention_name</span><span class="p">]</span>
-
-            <span class="c1"># is the god willing to intervene i.e. does the opinion score meet the required opinion</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">opinion_score</span> <span class="o">=</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">active_entity</span><span class="p">]</span>
-            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                <span class="n">opinion_score</span> <span class="o">=</span> <span class="mi">0</span>
-
-            <span class="n">required_opinion</span> <span class="o">=</span> <span class="n">intervention_data</span><span class="o">.</span><span class="n">required_opinion</span>
-            <span class="c1"># check if greater or lower, depending on whether required opinion is positive or negative</span>
-            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">required_opinion</span> <span class="o">&lt;</span> <span class="n">opinion_score</span><span class="p">:</span>
-                <span class="n">amount_exceeding_requirement</span> <span class="o">=</span> <span class="n">opinion_score</span> <span class="o">-</span> <span class="n">required_opinion</span>
-
-                <span class="n">eligible_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">intervention_name</span><span class="p">)</span>
-                <span class="n">intervention_weightings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">amount_exceeding_requirement</span><span class="p">)</span>
-
-            <span class="k">elif</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="n">required_opinion</span> <span class="o">&gt;</span> <span class="n">opinion_score</span><span class="p">:</span>
-                <span class="n">amount_exceeding_requirement</span> <span class="o">=</span> <span class="n">required_opinion</span> <span class="o">-</span> <span class="n">opinion_score</span>  <span class="c1"># N.B. opposite to above</span>
-                <span class="n">eligible_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">intervention_name</span><span class="p">)</span>
-                <span class="n">intervention_weightings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">amount_exceeding_requirement</span><span class="p">)</span>
-
-        <span class="c1"># add chance to do nothing</span>
-        <span class="n">eligible_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Nothing"</span><span class="p">)</span>
-        <span class="n">intervention_weightings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">desire_to_do_nothing</span> <span class="o">-</span> <span class="n">desire_to_intervene</span><span class="p">)</span>
-
-        <span class="c1"># which intervention, if any, shall the god consider using?</span>
-        <span class="p">(</span><span class="n">chosen_intervention</span><span class="p">,)</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">eligible_interventions</span><span class="p">,</span> <span class="n">intervention_weightings</span><span class="p">)</span>
-        <span class="c1"># N.B. use , to unpack the result</span>
-
-        <span class="c1"># if god has chosen to take an action then add to list</span>
-        <span class="k">if</span> <span class="n">chosen_intervention</span> <span class="o">!=</span> <span class="s2">"Nothing"</span><span class="p">:</span>
-            <span class="n">chosen_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">chosen_intervention</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">chosen_interventions</span></div>
 </pre></div>
 
           </article>

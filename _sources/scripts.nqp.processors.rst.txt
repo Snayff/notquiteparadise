@@ -36,14 +36,6 @@ scripts.nqp.processors.intent module
    :undoc-members:
    :show-inheritance:
 
-scripts.nqp.processors.interaction module
------------------------------------------
-
-.. automodule:: scripts.nqp.processors.interaction
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 

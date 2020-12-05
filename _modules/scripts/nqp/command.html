@@ -280,7 +280,6 @@
     <span class="n">SAVE_PATH</span><span class="p">,</span>
     <span class="n">SKILL_BUTTON_SIZE</span><span class="p">,</span>
     <span class="n">UIElement</span><span class="p">,</span>
-    <span class="n">UIElementType</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">TraitSpritePathsData</span>
@@ -343,16 +342,12 @@
 
     <span class="c1"># create actor near to player</span>
     <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-    <span class="n">actor_data</span> <span class="o">=</span> <span class="n">ActorData</span><span class="p">(</span>
-        <span class="n">key</span><span class="o">=</span><span class="s2">"crocturion"</span><span class="p">,</span>
-        <span class="n">possible_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"Krock"</span><span class="p">],</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">"Krock desc"</span><span class="p">,</span>
-        <span class="n">position_offsets</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
-        <span class="n">trait_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"crocturion"</span><span class="p">],</span>
-        <span class="n">height</span><span class="o">=</span><span class="n">Height</span><span class="o">.</span><span class="n">LOFTY</span><span class="p">,</span>
-        <span class="n">behaviour_name</span><span class="o">=</span><span class="s2">"SearchAndAttack"</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">actor_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">ACTORS</span><span class="p">[</span><span class="s2">"crocturion"</span><span class="p">]</span>
     <span class="n">world</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1"># create god</span>
+    <span class="n">god_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="s2">"the_small_gods"</span><span class="p">]</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
 
     <span class="c1"># show the in game screens</span>
     <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
@@ -379,7 +374,7 @@
     <span class="n">world</span><span class="o">.</span><span class="n">create_terrain</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">[</span><span class="s2">"bog"</span><span class="p">],</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 
     <span class="c1"># loading finished, give player control</span>
-    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">)</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">)</span>
 
     <span class="c1"># prompt turn actions</span>
     <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
@@ -420,7 +415,8 @@
     <span class="n">chronicle</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
 
     <span class="c1"># create a god</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="s2">"the_small_gods"</span><span class="p">)</span>
+    <span class="n">god_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="s2">"the_small_gods"</span><span class="p">]</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
 
     <span class="c1"># show the in game screens</span>
     <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
@@ -457,7 +453,7 @@
     <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># loading finished, give player control</span>
-    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">)</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">)</span>
 
     <span class="c1"># prompt turn actions</span>
     <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
@@ -490,7 +486,7 @@
     <span class="n">ui</span><span class="o">.</span><span class="n">create_screen_message</span><span class="p">(</span><span class="s2">"Welcome back to Not Quite Paradise"</span><span class="p">)</span>
 
     <span class="c1"># loading finished, give player control</span>
-    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">)</span></div>
+    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="exit_game"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.exit_game">[docs]</a><span class="k">def</span> <span class="nf">exit_game</span><span class="p">():</span>
@@ -570,7 +566,7 @@
 <span class="c1">##################### UI ######################</span>
 
 
-<div class="viewcode-block" id="get_element_rect"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.get_element_rect">[docs]</a><span class="k">def</span> <span class="nf">get_element_rect</span><span class="p">(</span><span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">:</span>
+<div class="viewcode-block" id="get_element_rect"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.get_element_rect">[docs]</a><span class="k">def</span> <span class="nf">get_element_rect</span><span class="p">(</span><span class="n">element_type</span><span class="p">:</span> <span class="n">UIElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Get the predefined rect for the specified element.</span>
 <span class="sd">    """</span>

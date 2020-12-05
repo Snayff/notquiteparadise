@@ -268,6 +268,7 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">,</span> <span class="n">Traits</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ASSET_PATH</span><span class="p">,</span>
+    <span class="n">EventType</span><span class="p">,</span>
     <span class="n">GameEvent</span><span class="p">,</span>
     <span class="n">GAP_SIZE</span><span class="p">,</span>
     <span class="n">ICON_SIZE</span><span class="p">,</span>
@@ -439,7 +440,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="ActorInfo.process_close_button"><a class="viewcode-back" href="../../../../scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.actor_info.ActorInfo.process_close_button">[docs]</a>    <span class="k">def</span> <span class="nf">process_close_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_MENU</span><span class="p">,</span> <span class="n">menu</span><span class="o">=</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">)</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">EXIT_MENU</span><span class="p">,</span> <span class="n">menu</span><span class="o">=</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">)</span>
         <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
     <span class="c1">############## CREATE ########################</span>

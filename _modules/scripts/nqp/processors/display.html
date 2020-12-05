@@ -260,16 +260,16 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">is_close</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">LightSource</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">GameStateType</span><span class="p">,</span> <span class="n">TILE_SIZE</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">TILE_SIZE</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"process_display_updates"</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"process_updates"</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="process_display_updates"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.display.process_display_updates">[docs]</a><span class="k">def</span> <span class="nf">process_display_updates</span><span class="p">(</span><span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
+<div class="viewcode-block" id="process_updates"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.display.process_updates">[docs]</a><span class="k">def</span> <span class="nf">process_updates</span><span class="p">(</span><span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameState</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Fire realtime processors.</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAMEMAP</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">:</span>
         <span class="n">_process_aesthetic_update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
         <span class="n">_process_lighting</span><span class="p">()</span></div>
 

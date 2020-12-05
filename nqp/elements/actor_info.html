@@ -374,9 +374,12 @@
 <code class="sig-name descname">process_close_button</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/ui_elements/actor_info.html#ActorInfo.process_close_button"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.ui_elements.actor_info.ActorInfo.process_close_button" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process closure of a window. Must be overriden in subclass. Usual use is creation of an event.</p>
 <p class="rubric">Example</p>
-<dl class="simple">
-<dt>def process_close_button(self):</dt><dd><p>event = pygame.event.Event(GameEvent.EXIT_MENU, menu=UIElement.ACTOR_INFO)
-pygame.event.post(event)</p>
+<dl>
+<dt>def process_close_button(self):</dt><dd><dl class="simple">
+<dt>event = pygame.event.Event(EventType.GAME, subtype=GameEvent.EXIT_MENU,</dt><dd><p>menu=UIElement.ACTOR_INFO)</p>
+</dd>
+</dl>
+<p>pygame.event.post(event)</p>
 </dd>
 </dl>
 </dd></dl>

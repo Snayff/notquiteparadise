@@ -262,7 +262,7 @@
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">GameStateType</span><span class="p">,</span> <span class="n">MAX_SAVES</span><span class="p">,</span> <span class="n">SAVE_PATH</span><span class="p">,</span> <span class="n">VERSION</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">MAX_SAVES</span><span class="p">,</span> <span class="n">SAVE_PATH</span><span class="p">,</span> <span class="n">VERSION</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
 
 <span class="n">_SAVE</span> <span class="o">=</span> <span class="p">{}</span>
@@ -270,7 +270,7 @@
 <span class="c1">################### GET ##############################</span>
 
 
-<div class="viewcode-block" id="get_previous"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.state.get_previous">[docs]</a><span class="k">def</span> <span class="nf">get_previous</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GameStateType</span><span class="p">:</span>
+<div class="viewcode-block" id="get_previous"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.state.get_previous">[docs]</a><span class="k">def</span> <span class="nf">get_previous</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GameState</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Get the previous game state</span>
 <span class="sd">    """</span>
@@ -291,7 +291,7 @@
     <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">active_skill</span></div>
 
 
-<div class="viewcode-block" id="get_current"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.state.get_current">[docs]</a><span class="k">def</span> <span class="nf">get_current</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GameStateType</span><span class="p">:</span>
+<div class="viewcode-block" id="get_current"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.state.get_current">[docs]</a><span class="k">def</span> <span class="nf">get_current</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GameState</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Get the current game state</span>
 <span class="sd">    """</span>
@@ -318,7 +318,7 @@
     <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">internal_clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">VIDEO_CONFIG</span><span class="o">.</span><span class="n">fps_limit</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.0</span></div>
 
 
-<div class="viewcode-block" id="set_new"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.state.set_new">[docs]</a><span class="k">def</span> <span class="nf">set_new</span><span class="p">(</span><span class="n">new_game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
+<div class="viewcode-block" id="set_new"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.state.set_new">[docs]</a><span class="k">def</span> <span class="nf">set_new</span><span class="p">(</span><span class="n">new_game_state</span><span class="p">:</span> <span class="n">GameState</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Set the current game state</span>
 <span class="sd">    """</span>
