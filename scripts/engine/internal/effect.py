@@ -24,7 +24,8 @@ from scripts.engine.internal.constant import (
     DamageTypeType,
     Direction,
     DirectionType,
-    EventType, InteractionEvent,
+    EventType,
+    InteractionEvent,
     PrimaryStatType,
     TargetTag,
 )
@@ -346,7 +347,7 @@ class ApplyAfflictionEffect(Effect):
                 subtype=InteractionEvent.AFFLICTION,
                 origin=self.origin,
                 target=self.target,
-                name=self.affliction_name
+                name=self.affliction_name,
             )
             pygame.event.post(event)
 
@@ -389,7 +390,7 @@ class AffectCooldownEffect(Effect):
                 subtype=InteractionEvent.AFFECT_COOLDOWN,
                 origin=self.origin,
                 target=self.target,
-                amount=self.affect_amount
+                amount=self.affect_amount,
             )
             pygame.event.post(event)
 

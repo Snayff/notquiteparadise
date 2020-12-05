@@ -9,7 +9,7 @@ from pygame_gui import UIManager
 
 from scripts.engine.core import utility
 from scripts.engine.internal import debug, library
-from scripts.engine.internal.constant import ASSET_PATH, DATA_PATH, UIElement, UIElement
+from scripts.engine.internal.constant import ASSET_PATH, DATA_PATH, UIElement
 from scripts.engine.widgets.screen_message import ScreenMessage
 
 if TYPE_CHECKING:

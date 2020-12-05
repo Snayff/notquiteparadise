@@ -65,8 +65,10 @@ def _process_end_turn():
 
     # if player is current turn holder then save the game
     from scripts.engine.core import world
+
     if chronicle.get_turn_holder() == world.get_player():
         from scripts.engine.core import state
+
         state.save_game()
 
     chronicle.next_turn()
@@ -81,4 +83,3 @@ def _process_end_round():
     system.reduce_lifespan_durations()
 
     chronicle.next_round()
-

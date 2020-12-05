@@ -7,13 +7,7 @@ import numpy as np
 from snecs import RegisteredComponent
 from snecs.typedefs import EntityID
 
-from scripts.engine.internal.constant import (
-    EffectType,
-    HeightType,
-    ReactionTriggerType,
-    PrimaryStatType,
-    RenderLayer,
-)
+from scripts.engine.internal.constant import EffectType, HeightType, PrimaryStatType, ReactionTriggerType, RenderLayer
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple, Type
@@ -356,6 +350,7 @@ class Thought(NQPComponent):
     @classmethod
     def deserialize(cls, serialised):
         from scripts.engine.internal.data import store
+
         behaviour = store.behaviour_registry[serialised["behaviour_name"]]
 
         return Thought(behaviour(serialised["entity"]))
@@ -427,6 +422,7 @@ class Knowledge(NQPComponent):
         skills = []
 
         from scripts.engine.internal.data import store
+
         for name in skill_names:
             skills.append(store.skill_registry[name])
 
@@ -469,6 +465,7 @@ class Afflictions(NQPComponent):
         active_instances = []
 
         from scripts.engine.internal.data import store
+
         for name, value_tuple in active_dict.items():
             _affliction = store.affliction_registry[name]
             affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])

@@ -8,7 +8,7 @@ import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine.internal.action import Affliction, Behaviour, Skill
-from scripts.engine.internal.constant import GameState, GameState
+from scripts.engine.internal.constant import GameState
 
 if TYPE_CHECKING:
     from typing import Any, Dict, Optional, Type

@@ -151,7 +151,6 @@ class Skill(Action):
         else:
             is_successful = world.apply_skill(self)
 
-
         return is_successful
 
     def _create_projectile(self):

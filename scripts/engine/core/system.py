@@ -15,13 +15,24 @@ from scripts.engine.internal.component import (
     IsActive,
     Knowledge,
     Lifespan,
-    Opinion, Physicality,
+    Opinion,
+    Physicality,
     Position,
-    Reaction, Tracked,
+    Reaction,
+    Tracked,
 )
-from scripts.engine.internal.constant import Direction, EventType, FOV_ALGORITHM, FOV_LIGHT_WALLS, GameEvent, INFINITE, \
-    InteractionEvent, \
-    MAX_ACTIVATION_DISTANCE, ReactionTrigger, ReactionTriggerType
+from scripts.engine.internal.constant import (
+    Direction,
+    EventType,
+    FOV_ALGORITHM,
+    FOV_LIGHT_WALLS,
+    GameEvent,
+    INFINITE,
+    InteractionEvent,
+    MAX_ACTIVATION_DISTANCE,
+    ReactionTrigger,
+    ReactionTriggerType,
+)
 
 __all__ = [
     "process_activations",
@@ -31,14 +42,14 @@ __all__ = [
     "reduce_skill_cooldowns",
     "reduce_affliction_durations",
     "reduce_lifespan_durations",
-    "process_interaction_event"
+    "process_interaction_event",
 ]
 
 from scripts.engine.internal.definition import EffectData, ReactionData
 from scripts.engine.world_objects.tile import Tile
 
-
 ########################### GENERAL ################################
+
 
 def process_activations():
     """
@@ -74,6 +85,7 @@ def process_activations():
 
 
 ########################## VISION ##################################
+
 
 def process_light_map():
     """
@@ -178,6 +190,7 @@ def process_tile_visibility():
 
 ########################## TIME ####################################
 
+
 def reduce_skill_cooldowns():
     """
     Reduce skill cool down for all entities.
@@ -226,6 +239,7 @@ def reduce_lifespan_durations():
 
 ########################### GENERIC REACTION HANDLING ##############################
 
+
 def process_interaction_event(event: pygame.event):
     """
     Passes an interaction event to the relevant functions.
@@ -268,7 +282,7 @@ def _process_opinions(causing_entity: EntityID, reaction_trigger: ReactionTrigge
     """
     Adjust opinion of entity for any other entities that have an attitude towards the reaction trigger.
     """
-    for entity, (opinion, ) in query.opinion:
+    for entity, (opinion,) in query.opinion:
         assert isinstance(opinion, Opinion)
         if reaction_trigger in opinion.attitudes:
             if causing_entity in opinion.opinions:
@@ -276,8 +290,10 @@ def _process_opinions(causing_entity: EntityID, reaction_trigger: ReactionTrigge
             else:
                 opinion.opinions[causing_entity] = opinion.attitudes[reaction_trigger]
 
-            logging.debug(f"{world.get_name(entity)}`s opinion of {world.get_name(causing_entity)} is now "
-                          f" {opinion.opinions[causing_entity]}.")
+            logging.debug(
+                f"{world.get_name(entity)}`s opinion of {world.get_name(causing_entity)} is now "
+                f" {opinion.opinions[causing_entity]}."
+            )
 
 
 def _handle_affliction(entity: EntityID, reaction_trigger: ReactionTriggerType):
@@ -296,7 +312,7 @@ def _handle_reaction_trigger(entity: EntityID, reaction_trigger: ReactionTrigger
     Check for any entities with a reaction to the trigger and handle that reaction.
     """
     # loop all entities sharing same position that have a reaction
-    for reacting_entity, (reaction, ) in query.reaction:
+    for reacting_entity, (reaction,) in query.reaction:
         assert isinstance(reaction, Reaction)
 
         if reaction_trigger in reaction.reactions:
@@ -335,6 +351,7 @@ def _handle_reaction(observer: EntityID, triggering_entity: EntityID, data: Reac
 
     # roll for chance to react
     from scripts.engine.core import utility
+
     roll = utility.roll()
     modified_chance = int(data.chance + (opinion_diff * diff_mod))  # the greater the opinion diff the more chance
 
@@ -370,6 +387,7 @@ def _apply_reaction(observer: EntityID, triggering_entity: EntityID, target_tile
         effect.evaluate()
     else:  # skill data
         from scripts.engine.internal.data import store
+
         skill = store.skill_registry[data.reaction]
         world.use_skill(observer, skill, target_tile, Direction.CENTRE)
 
@@ -411,4 +429,3 @@ def _process_win_condition(event: pygame.event):
             event = pygame.event.Event(EventType.GAME, subtype=GameEvent.WIN_CONDITION_MET)
             pygame.event.post(event)
             break
-

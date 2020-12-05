@@ -25,7 +25,6 @@ from scripts.engine.internal.constant import (
     SAVE_PATH,
     SKILL_BUTTON_SIZE,
     UIElement,
-    UIElement,
 )
 from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData, TraitSpritePathsData

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from enum import IntEnum, auto
+from enum import auto, IntEnum
 from pathlib import Path
 from types import SimpleNamespace
 from typing import NewType, Tuple, Union
@@ -68,8 +68,10 @@ HeightType = NewType("HeightType", int)
 
 #################### INTERNAL, NON-SERIALISED ###########################################
 
+
 class EventType(IntEnum):
     """ The types of possible customer pygame events. """
+
     INPUT = auto()
     GAME = auto()
     INTERACTION = auto()
@@ -99,7 +101,6 @@ class GameEvent(IntEnum):
     END_TURN = pygame.USEREVENT + 107
     NEW_ROUND = pygame.USEREVENT + 108
     END_ROUND = pygame.USEREVENT + 109
-
 
 
 class InteractionEvent(IntEnum):
@@ -159,6 +160,7 @@ class UIElement(IntEnum):
 
 #################### EXTERNAL ###########################################
 # i.e used in the data files
+
 
 class InputIntent(SimpleNamespace):
     """

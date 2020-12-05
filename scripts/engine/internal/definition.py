@@ -15,13 +15,12 @@ from scripts.engine.internal.constant import (
     EffectTypeType,
     Height,
     HeightType,
-    ReactionTriggerType,
     PrimaryStat,
     PrimaryStatType,
     ProjectileExpiryType,
     ProjectileSpeed,
     ProjectileSpeedType,
-    RenderLayer,
+    ReactionTriggerType,
     RenderLayer,
     Resource,
     ResourceType,
@@ -170,6 +169,7 @@ class BaseSecondaryStatData:
 
 ####################### ENTITY TYPES ######################
 
+
 @register_dataclass_with_json
 @dataclass
 class ActorData:
@@ -269,6 +269,7 @@ class GodData:
 
 
 ####################### WORLD GENERATION ######################
+
 
 @register_dataclass_with_json
 @dataclass
@@ -410,11 +411,13 @@ class ReactionData:
 
     def __post_init__(self):
         from scripts.engine.core import utility
+
         # ensure clamped between 0-100
         self.chance = utility.clamp(self.chance, 0, 100)
 
 
 ################### EFFECTS ###################################################
+
 
 @dataclass
 class EffectData(ABC):

@@ -14,7 +14,6 @@ from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
     GameState,
-    GameState,
     InputIntent,
     InputIntentType,
     TargetingMethod,

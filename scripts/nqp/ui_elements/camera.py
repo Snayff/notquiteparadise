@@ -15,8 +15,15 @@ from scripts.engine.core import query, utility, world
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Aesthetic, Position
-from scripts.engine.internal.constant import DirectionType, EventType, Height, InputEvent, RenderLayer, TILE_SIZE, \
-    UIElement
+from scripts.engine.internal.constant import (
+    DirectionType,
+    EventType,
+    Height,
+    InputEvent,
+    RenderLayer,
+    TILE_SIZE,
+    UIElement,
+)
 from scripts.engine.widgets.panel import Panel
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import command

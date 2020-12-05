@@ -64,7 +64,8 @@ from scripts.engine.internal.definition import (
     ApplyAfflictionEffectData,
     DamageEffectData,
     EffectData,
-    GodData, MoveActorEffectData,
+    GodData,
+    MoveActorEffectData,
     ProjectileData,
     TerrainData,
 )
@@ -84,6 +85,7 @@ from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import List, Optional, Tuple
+
     from scripts.engine.internal.action import Affliction, Skill
 
 ########################### LOCAL DEFINITIONS ##########################

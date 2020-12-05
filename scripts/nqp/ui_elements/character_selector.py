@@ -261,9 +261,5 @@ class CharacterSelector(Panel):
         )
 
         # fire event
-        new_event = pygame.event.Event(
-            EventType.GAME,
-            subtype=GameEvent.START_GAME,
-            player_data=player_data
-        )
+        new_event = pygame.event.Event(EventType.GAME, subtype=GameEvent.START_GAME, player_data=player_data)
         pygame.event.post(new_event)

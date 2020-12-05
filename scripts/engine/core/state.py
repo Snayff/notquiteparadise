@@ -7,7 +7,7 @@ import os
 
 from scripts.engine.core import utility, world
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import GameState, GameState, MAX_SAVES, SAVE_PATH, VERSION
+from scripts.engine.internal.constant import GameState, MAX_SAVES, SAVE_PATH, VERSION
 from scripts.engine.internal.data import store
 
 _SAVE = {}

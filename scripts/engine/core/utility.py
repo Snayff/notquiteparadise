@@ -35,7 +35,7 @@ __all__ = [
     "convert_tile_string_to_xy",
     "convert_direction_to_name",
     "build_sprites_from_paths",
-    "roll"
+    "roll",
 ]
 
 _V = TypeVar("_V", int, float)  # to represent components where we don't know which is being used
@@ -370,6 +370,7 @@ def convert_direction_to_name(direction: DirectionType) -> str:
 
 
 ################################### CHANCE ########################################
+
 
 def roll(min_value: int = 0, max_value: int = 99) -> int:
     """

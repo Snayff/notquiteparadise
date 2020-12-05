@@ -5,7 +5,7 @@ import pygame
 from scripts.engine.core import key, query, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal.component import Position
-from scripts.engine.internal.constant import EventType, GameState, GameState, InputEvent, InputIntent, UIElement
+from scripts.engine.internal.constant import EventType, GameState, InputEvent, InputIntent, UIElement
 from scripts.nqp.processors.intent import process_intent
 
 __all__ = ["process_input_event"]
@@ -38,7 +38,7 @@ def process_input_event(event: pygame.event, game_state: GameState):
                 # Activate Actor Info Menu
                 x, y = event.tile_pos
                 # get entity on tile
-                for entity, (position, ) in query.position:  # type: ignore
+                for entity, (position,) in query.position:  # type: ignore
                     assert isinstance(position, Position)
                     if (x, y) in position.coordinates:
                         # found entity, set to selected

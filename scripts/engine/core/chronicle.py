@@ -29,7 +29,10 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     # create a turn queue from the entities list
     new_queue = {}
 
-    for entity, (is_active, tracked, ) in query.active_and_tracked:
+    for entity, (
+        is_active,
+        tracked,
+    ) in query.active_and_tracked:
         if entity != entity_to_exclude:
             assert isinstance(tracked, Tracked)
             new_queue[entity] = tracked.time_spent
@@ -85,10 +88,7 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
     else:
         set_time_in_round(get_time_in_round() + time_progressed)
 
-    event = pygame.event.Event(
-        EventType.GAME,
-        subtype=GameEvent.NEW_TURN
-    )
+    event = pygame.event.Event(EventType.GAME, subtype=GameEvent.NEW_TURN)
     pygame.event.post(event)
 
     # log new turn holder
@@ -104,10 +104,7 @@ def end_turn(entity: EntityID, time_spent: int):
     N.B. If entity given is NOT the turn holder then nothing happens.
     """
     if entity == get_turn_holder():
-        event = pygame.event.Event(
-            EventType.GAME,
-            subtype=GameEvent.END_TURN
-        )
+        event = pygame.event.Event(EventType.GAME, subtype=GameEvent.END_TURN)
         pygame.event.post(event)
 
         world.spend_time(entity, time_spent)
@@ -120,10 +117,7 @@ def next_round():
     """
     Move to the next round. Posts NEW_ROUND event.
     """
-    event = pygame.event.Event(
-        EventType.GAME,
-        subtype=GameEvent.NEW_ROUND
-    )
+    event = pygame.event.Event(EventType.GAME, subtype=GameEvent.NEW_ROUND)
     pygame.event.post(event)
 
     # increment rounds
@@ -136,10 +130,7 @@ def end_round():
     """
     Posts END_ROUND event.
     """
-    event = pygame.event.Event(
-        EventType.GAME,
-        subtype=GameEvent.END_ROUND
-    )
+    event = pygame.event.Event(EventType.GAME, subtype=GameEvent.END_ROUND)
     pygame.event.post(event)
 
 
@@ -260,4 +251,3 @@ def set_time_of_last_turn(time: int):
     Set the time of the last turn
     """
     store.time_of_last_turn = time
-

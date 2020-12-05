@@ -13,7 +13,8 @@ from scripts.engine.core.utility import get_class_members
 from scripts.engine.internal.component import Aesthetic, Afflictions, Identity, Resources, Traits
 from scripts.engine.internal.constant import (
     ASSET_PATH,
-    EventType, GameEvent,
+    EventType,
+    GameEvent,
     GAP_SIZE,
     ICON_SIZE,
     INFINITE,
