@@ -14,7 +14,7 @@ from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
     GameState,
-    GameStateType,
+    GameState,
     InputIntent,
     InputIntentType,
     TargetingMethod,
@@ -29,7 +29,7 @@ from scripts.nqp.ui_elements.actor_info import ActorInfo
 from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
 
 
-def process_intent(intent: InputIntentType, game_state: GameStateType):
+def process_intent(intent: InputIntentType, game_state: GameState):
     """
     Process the intent in the context of the game state. Intents are game state sensitive.
     """

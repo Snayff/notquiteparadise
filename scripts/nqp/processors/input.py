@@ -5,7 +5,7 @@ import pygame
 from scripts.engine.core import key, query, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal.component import Position
-from scripts.engine.internal.constant import GameState, GameStateType, InputEvent, InputIntent, UIElement
+from scripts.engine.internal.constant import GameState, GameState, InputEvent, InputIntent, UIElement
 from scripts.nqp.processors.intent import process_intent
 
 __all__ = ["process_event"]
@@ -13,7 +13,7 @@ __all__ = ["process_event"]
 from scripts.nqp.ui_elements.actor_info import ActorInfo
 
 
-def process_event(event: pygame.event, game_state: GameStateType):
+def process_event(event: pygame.event, game_state: GameState):
     """
     Extract the intent from the event and process them in the context of the game state. If an event can only be
     called in one way then no intent is generated and the event will directly go to the relevant action.

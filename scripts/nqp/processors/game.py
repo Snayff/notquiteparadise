@@ -3,14 +3,14 @@ from __future__ import annotations
 import pygame
 
 from scripts.engine.core.ui import ui
-from scripts.engine.internal.constant import GameEvent, GameStateType, InputIntent, UIElement
+from scripts.engine.internal.constant import GameEvent, GameState, InputIntent, UIElement
 from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent
 
 __all__ = ["process_event"]
 
 
-def process_event(event: pygame.event, game_state: GameStateType):
+def process_event(event: pygame.event, game_state: GameState):
     intent = None
 
     if event.type == GameEvent.EXIT_MENU:

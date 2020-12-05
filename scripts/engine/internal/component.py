@@ -12,7 +12,7 @@ from scripts.engine.internal.constant import (
     HeightType,
     ReactionTriggerType,
     PrimaryStatType,
-    RenderLayerType,
+    RenderLayer,
 )
 
 if TYPE_CHECKING:
@@ -205,7 +205,7 @@ class Aesthetic(NQPComponent):
         current_sprite: pygame.Surface,
         sprites: TraitSpritesData,
         sprite_paths: List[TraitSpritePathsData],
-        render_layer: RenderLayerType,
+        render_layer: RenderLayer,
         draw_pos: Tuple[float, float],
     ):
         self._sprite_paths: List[TraitSpritePathsData] = sprite_paths

@@ -25,7 +25,7 @@ from scripts.engine.internal.constant import (
     SAVE_PATH,
     SKILL_BUTTON_SIZE,
     UIElement,
-    UIElementType,
+    UIElement,
 )
 from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
@@ -315,7 +315,7 @@ def register_actions():
 ##################### UI ######################
 
 
-def get_element_rect(element_type: UIElementType) -> pygame.Rect:
+def get_element_rect(element_type: UIElement) -> pygame.Rect:
     """
     Get the predefined rect for the specified element.
     """

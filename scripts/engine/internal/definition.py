@@ -22,7 +22,7 @@ from scripts.engine.internal.constant import (
     ProjectileSpeed,
     ProjectileSpeedType,
     RenderLayer,
-    RenderLayerType,
+    RenderLayer,
     Resource,
     ResourceType,
     SecondaryStatType,
@@ -91,7 +91,7 @@ class TraitSpritePathsData:
     Also used to hold and map data from json.
     """
 
-    render_order: RenderLayerType = field(default=RenderLayer.BOTTOM)
+    render_order: RenderLayer = field(default=RenderLayer.BOTTOM)
     icon: str = field(default="none")
     idle: str = field(default="none")
     attack: str = field(default="none")
