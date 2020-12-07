@@ -27,6 +27,7 @@ __all__ = ["process_intent"]
 
 from scripts.nqp.ui_elements.actor_info import ActorInfo
 from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
+from scripts.nqp.ui_elements.camera import camera
 
 
 def process_intent(intent: InputIntentType, game_state: GameStateType):
@@ -151,11 +152,7 @@ def _process_game_map_intents(intent: InputIntentType):
                         _process_skill_use(player, skill, current_tile, Direction.CENTRE)
                     else:
                         # trigger targeting overlay
-                        state.set_new(GameState.TARGETING)
-                        state.set_active_skill(skill_name)
-                        if ui.has_element(UIElement.CAMERA):
-                            camera = ui.get_element(UIElement.CAMERA)
-                            camera.update_targeting_overlay(True, skill_name)
+                        pass
 
     ## Show actor info - we're in GAMEMAP so it cant be visible
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:
@@ -249,7 +246,8 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
         # update camera if position changes
         try:
             if (pos.x, pos.y) != start_pos:
-                ui.get_element(UIElement.CAMERA).set_target((pos.x, pos.y))
+                #ui.get_element(UIElement.CAMERA).set_target((pos.x, pos.y))
+                camera.set_target((pos.x, pos.y))
         except KeyError:
             logging.warning("Process skill use: tried to call camera but not init`d.")
 

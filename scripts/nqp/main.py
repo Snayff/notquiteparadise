@@ -18,6 +18,7 @@ from scripts.engine.internal.debug import enable_profiling, initialise_logging, 
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
 from scripts.nqp.processors import display, game, interaction
+from scripts.nqp.ui_elements.camera import camera
 
 
 def main():
@@ -107,7 +108,10 @@ def game_loop():
         debug.update()
         ui.update(time_delta)
 
-        # show the new state
+        if current_state == GameState.GAMEMAP:
+            # show the new state
+            camera.update(0.01)
+            camera.render(ui._window)
         ui.draw()
 
 

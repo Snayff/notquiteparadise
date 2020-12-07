@@ -11,7 +11,7 @@ import tcod
 ######################## TOP LEVEL CONSTANTS ######################################
 
 VERSION = "0.136.0"  # DONT FORGET TO UPDATE SPHINX VERSION
-DEBUG_START = False  # Whether to start directly in debug map
+DEBUG_START = True  # Whether to start directly in debug map
 
 
 MAX_SKILLS = 6
@@ -143,7 +143,6 @@ class UIElement(SimpleNamespace):
     ACTOR_INFO = UIElementType("actor_info")
     SKILL_BAR = UIElementType("skill_bar")
     ENTITY_QUEUE = UIElementType("entity_queue")
-    CAMERA = UIElementType("camera")
     TILE_INFO = UIElementType("tile_info")
     DUNGEN_VIEWER = UIElementType("dungen_viewer")
     TITLE_SCREEN = UIElementType("title_screen")

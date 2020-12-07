@@ -1,333 +1,159 @@
 import logging
 from typing import Iterable, List, Optional, Tuple
+import os
 
 import pygame
 import pygame_gui
 import pytweening
-from pygame.constants import SRCALPHA
 from pygame.rect import Rect
 from pygame.surface import Surface
-from pygame_gui import UIManager
-from pygame_gui.core import UIContainer
-from pygame_gui.elements import UIButton, UIImage
 
 from scripts.engine.core import query, utility, world
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Aesthetic, Position
-from scripts.engine.internal.constant import DirectionType, InputEvent, RenderLayer, TILE_SIZE, UIElement
-from scripts.engine.widgets.panel import Panel
-from scripts.engine.world_objects.tile import Tile
+from scripts.engine.internal.constant import TILE_SIZE
 from scripts.nqp import command
-from scripts.nqp.ui_elements.tile_info import TileInfo
+
+__all__ = ["camera"]
 
 
-class Camera(Panel):
+class Camera:
     """
-    UI element to display the GameMap.
+    Management class for rendering the world onto the main display surface.
     """
 
-    def __init__(self, rect: Rect, manager: UIManager):
-        # FIXME - grid doesnt stay aligned to player movement/position
+    def __init__(self):
 
         base_window_data = library.VIDEO_CONFIG.base_window
-        base_width = base_window_data.width
-        base_height = base_window_data.height
+        desired_window_data = library.VIDEO_CONFIG.desired_window
 
-        # base values
-        self._base_width = base_width
-        self._base_height = base_height
+        self._base_width = base_window_data.width
+        self._base_height = base_window_data.height
 
-        # flags
-        self.ignore_fov = False
-        self.is_dirty = True
+        self._desired_width = desired_window_data.width
+        self._desired_height = desired_window_data.height
+
+        self.show_all = False
+
+        self.move_edge_size = 4
+
+        rect = pygame.Rect(0, 0, self._base_width, self._base_height)
 
         # store this now so we can refer to it later
-        game_map = world.get_game_map()
-        self.map_width = game_map.width
-        self.map_height = game_map.height
+        #game_map = world.get_game_map()
+        #self.map_width = game_map.width
+        #self.map_height = game_map.height
 
         # determine how many tiles to show; max rows and cols in game map or max we can show based on size
-        self.rows = min(rect.width // TILE_SIZE, game_map.height - 1)
-        self.columns = min(rect.height // TILE_SIZE, game_map.width - 1)
-
-        # to hold the last stored end values
-        self._end_x = 0
-        self._end_y = 0
+        #self.rows = min(rect.width // TILE_SIZE, game_map.height - 1)
+        #self.columns = min(rect.height // TILE_SIZE, game_map.width - 1)
 
         # duration of the animation - only used when animating the camera move
         self.move_duration = 0.0
         self.max_move_duration = 40  # in ms
 
-        # start col, row are floats - the decimal representing the proportion of offset
+        # confirm init complete
+        logging.debug(f"Camera initialised.")
+
         self.start_x = 0.0
         self.start_y = 0.0
         self.target_x = 0.0
         self.target_y = 0.0
 
-        # number of tiles around the edge that trigger camera movement
-        self.edge_size = 3
+        self.move_duration = 0
+        self.max_move_duration = 40
 
-        self._tiles_in_view: List[Tile] = []
+    ############### PROPERTIES ##################
 
-        # overlay info
-        self.is_overlay_visible = False
-        self.overlay_directions: List[DirectionType] = []  # list of tuples
-
-        # complete base class init
-        super().__init__(rect, RenderLayer.BOTTOM, manager, object_id="#camera")
-
-        # create game map
-        blank_surf = Surface((rect.width, rect.height), SRCALPHA)
-        self.map_image = UIImage(
-            relative_rect=Rect((0, 0), rect.size),
-            image_surface=blank_surf,
-            manager=manager,
-            container=self,
-            object_id="#game_map",
-        )
-
-        # create grid
-        self.grid = UIContainer(
-            relative_rect=Rect((0, 0), rect.size), manager=manager, container=self, object_id="#grid"
-        )
-
-        # update everything
-        self.update(0)
-
-        # confirm init complete
-        logging.debug(f"Camera initialised.")
+    @property
+    def on_target(self) -> bool:
+        return (self.start_x == self.target_x) and (self.start_y == self.target_y)
 
     @property
     def end_x(self) -> int:
-        if self.is_dirty:
-            self._end_x = min(round(self.start_x + self.columns), self.map_width)
-
-        return self._end_x
+        return self.start_x + self._base_width / TILE_SIZE + 1
 
     @property
     def end_y(self) -> int:
-        if self.is_dirty:
-            self._end_y = min(round(self.start_y + self.rows), self.map_height)
+        return self.start_y + self._base_height / TILE_SIZE + 1
 
-        return self._end_y
-
-    @property
-    def current_tiles(self):
-        """
-        Return current tiles. Updates if is dirty.
-        """
-        if self.is_dirty:
-            tiles = []
-            # ensure all values are ints and clamped. + 2 to end to have tiles to roll onto (no black borders)
-            start_x = int(clamp(self.start_x, 0, self.map_width - self.columns))
-            start_y = int(clamp(self.start_y, 0, self.map_height - self.rows))
-            end_x = int(clamp(self.end_x + 2, self.columns, self.map_width))
-            end_y = int(clamp(self.end_y + 2, self.rows, self.map_height))
-
-            for x in range(start_x, end_x):
-                for y in range(start_y, end_y):
-                    tile = world.get_tile((x, y))
-                    if tile.is_visible or self.ignore_fov:
-                        tiles.append(tile)
-            self._tiles_in_view = tiles
-        return self._tiles_in_view
-
-    ############### EVENTS ###########################
-
-    def process_event(self, event: pygame.event.Event):
-        super().process_event(event)
-
-        # only progress for user events
-        if event.type != pygame.USEREVENT:
-            return
-
-        ui_object_id = event.ui_object_id
-
-        # For tiles
-        if "#tile" in ui_object_id:
-
-            # get the row, col of the UI element
-            x, y = self.get_tile_col_row(ui_object_id)
-
-            # convert x,y to tile position
-            x = x + int(self.start_x)
-            y = y + int(self.start_y)
-
-            # clicking a tile
-            if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
-                event = pygame.event.Event(InputEvent.TILE_CLICK, tile_pos=(x, y))
-                pygame.event.post(event)
-
-            # hovering a tile
-            elif event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
-                updated_tile_info = False
-                from scripts.engine.core.ui import ui
-
-                for entity, (position,) in query.position:
-                    assert isinstance(position, Position)
-                    if (x, y) in position.coordinates:
-                        if ui.has_element(UIElement.TILE_INFO):
-                            tile_info = ui.get_element(UIElement.TILE_INFO)
-                        else:
-                            tile_info = TileInfo(command.get_element_rect(UIElement.TILE_INFO), ui.get_gui_manager())
-                            ui.register_element(UIElement.ACTOR_INFO, tile_info)
-
-                        assert isinstance(tile_info, TileInfo)
-                        tile_info.set_selected_tile_pos((x, y))
-
-                        ui.set_element_visibility(UIElement.TILE_INFO, True)
-
-                        updated_tile_info = True
-                # entity not found at location so hide
-                if not updated_tile_info:
-                    if ui.element_is_visible(UIElement.TILE_INFO):
-                        ui.set_element_visibility(UIElement.TILE_INFO, False)
-
-    ############### UPDATE ###########################
+    ############# UPDATE/RENDER #################
 
     def update(self, time_delta: float):
         """
-        Update based on current state and data. Run every frame.
+        Apply logical updates to camera.
         """
-        super().update(time_delta)
 
-        # move camera if not at target
-        if not self.has_reached_target() or self.is_dirty:
-            self._update_camera_position(time_delta)
-            self._update_grid()
+        self._update_camera_position(time_delta)
+        self.visible_tiles = self._get_visible_tiles()
 
-        # update entities in game map every frame
-        self._update_game_map()
-        self._update_ui_element_pos()
-
-        # all updates have been processed
-        self.is_dirty = False
-
-    def _update_camera_position(self, time_delta):
+    def _update_camera_position(self, time_delta: float):
         """
-        Update realtime camera timers, such as the camera scrolling to reveal new tiles.
+        Calculate and apply camera updates based on time based and the target position.
         """
-        # increment time
+
+        game_map = world.get_game_map()
         self.move_duration += time_delta
 
-        # if still moving
-        if not self.has_reached_target():
-            # time for animation exceeded
+        if not self.on_target:
             time_exceeded = self.move_duration > self.max_move_duration
-
-            # time for animation exceeded or animation very close to end
             if time_exceeded or utility.is_close((self.start_x, self.start_y), (self.target_x, self.target_y)):
-
-                # set start_tile to target
                 self.start_x = self.target_x
                 self.start_y = self.target_y
-
-            # keep moving
             else:
                 lerp_amount = pytweening.easeOutCubic(min(1.0, self.move_duration / self.max_move_duration))
                 self.start_x = utility.lerp(self.start_x, self.target_x, lerp_amount)
                 self.start_y = utility.lerp(self.start_y, self.target_y, lerp_amount)
-
-        # not moving
         else:
             self.move_duration = 0
             self.start_x = int(self.target_x)
             self.start_y = int(self.target_y)
+        self.start_x = clamp(self.start_x, 0, game_map.width - self._base_height / TILE_SIZE)
+        self.start_y = clamp(self.start_y, 0, game_map.height - self._base_height / TILE_SIZE)
 
-        self.is_dirty = True
+    def render(self, target_surf: pygame.Surface):
+        internal_surf = Surface((self._base_width, self._base_height))
+        self._draw_floors(internal_surf)
+        self._draw_entities(internal_surf)
+        if not self.show_all:
+            self._draw_lighting(internal_surf)
+        self._draw_walls(internal_surf)
+        target_surf.blit(pygame.transform.scale(internal_surf, target_surf.get_size()), (0, 0))
 
-    def _update_grid(self):
+    def _get_visible_tiles(self):
         """
-        Update the tile grid to only have options in line with the tiles set OR the overlay
+        Return visible tiles based on camera position and config.
         """
-        return
-        # FIXME - update to work with new position. COnsider moving out of camera.
-        # if self.is_overlay_visible:
-        #
-        #     # player column and row
-        #     p_col = self.player_tile.x
-        #     p_row = self.player_tile.y
-        #
-        #     # offset center column and center row
-        #     cx = p_col - int(self.start_tile_col)
-        #     cy = p_row - int(self.start_tile_row)
-        #
-        #     # set to contain all the tile positions in the overlay_directions
-        #     tile_positions = {(cx + dir_x, cy + dir_y) for dir_x, dir_y in self.overlay_directions}
-        #
-        # else:
-        #     tile_positions = []
-        #
-        #     # tile positions generator - contains 1 layer of padding to ensure smooth rollover
-        #     for x in range(-1, self.columns + 1):
-        #         for y in range(-1, self.rows + 1):
-        #             # FIXME - this falls out of line with FOV being drawn by
-        #             # check is in fov
-        #             tile = world.get_tile((x, y))
-        #             if tile.is_visible:
-        #                 tile_positions.append((x, y))
-        #
-        # self._draw_grid(tile_positions)
 
-    def _update_ui_element_pos(self):
+        tiles = []
+
+        for x in range(int(self.start_x), int(self.end_x)):
+            for y in range(int(self.start_y), int(self.end_y)):
+                tile = world.get_tile((x, y))
+                if tile.is_visible or self.show_all:
+                    tiles.append(tile)
+
+        return tiles
+
+    ################ UTILITY ####################
+
+    def is_in_camera_view(self, pos: Tuple[float, float]) -> bool:
+        # TODO: implement this
+        return 1
+
+    def get_render_pos(self, pos: Tuple[float, float]) -> Tuple[float, float]:
         """
-        Updates the ui element positions of the grid. Useful when moving the grid.
+        Converts world position to render position (in pixels) by applying the camera's position.
         """
-        if len(self.grid.elements) == 0:
-            return
+        return [pos[0] - self.start_x * TILE_SIZE, pos[1] - self.start_y * TILE_SIZE]
 
-        # get the decimal offsets of start tile
-        dx = int(self.start_x) - self.start_x
-        dy = int(self.start_y) - self.start_y
-
-        ## Checking whether an update is necessary
-        # get the first element
-        element0 = self.grid.elements[0]
-
-        assert isinstance(element0, UIButton)
-
-        # get the (x,y) position of the element
-        x, y, _, _ = element0.get_relative_rect()
-
-        # get the updated position of the tile
-        col, row = self.get_tile_col_row(element0.object_ids[-1])
-        updated_pos = self._grid_to_draw_position((col + dx, row + dy))
-
-        # update only if the current and updated position don't match
-        should_update = updated_pos != (x, y)
-
-        if should_update:
-            for element in self.grid.elements:
-                assert isinstance(element, UIButton)
-
-                # get the updated position
-                col, row = self.get_tile_col_row(element.object_ids[-1])
-                updated_pos = self._grid_to_draw_position((col + dx, row + dy))
-
-                # set updated position
-                element.set_relative_position(updated_pos)
-
-    def _update_game_map(self):
-        """
-        Update the game map to show the current tiles and entities
-        """
-        # create new surface for the game map
-        map_width = self.map_image.rect.width
-        map_height = self.map_image.rect.height
-        map_surf = Surface((map_width, map_height), SRCALPHA)
-
-        self._draw_floors(map_surf)
-        self._draw_entities(map_surf)
-        self._draw_lighting(map_surf)
-        self._draw_walls(map_surf)
-
-        self.map_image.set_image(map_surf)
+    ############### RENDER CORE #################
 
     def _draw_floors(self, map_surf: pygame.Surface):
-        for tile in self.current_tiles:
+        for tile in self.visible_tiles:
             if not tile.blocks_sight:
-                self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
+                map_surf.blit(tile.sprite, self.get_render_pos((tile.x * TILE_SIZE, tile.y * TILE_SIZE)))
 
     def _draw_entities(self, map_surf: pygame.Surface):
         from scripts.engine.core import query
@@ -343,195 +169,45 @@ class Camera(Panel):
                 draw_position = (aesthetic.draw_x + offset[0], aesthetic.draw_y + offset[1])
                 if self.is_in_camera_view(position):
                     tile = world.get_tile(position)
-                    if tile.is_visible or self.ignore_fov:
-                        self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
+                    if tile.is_visible or self.show_all:
+                        #self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
+                        map_surf.blit(aesthetic.current_sprite, self.get_render_pos((draw_position[0] * TILE_SIZE, draw_position[1] * TILE_SIZE)), src_area)
 
     def _draw_lighting(self, map_surf: pygame.Surface):
         light_box = world.get_game_map().light_box
         light_box.render(map_surf, [int(self.start_x * TILE_SIZE), int(self.start_y * TILE_SIZE)])
 
     def _draw_walls(self, map_surf: pygame.Surface):
-        for tile in self.current_tiles:
+        for tile in self.visible_tiles:
             if tile.blocks_sight:
-                self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
+                map_surf.blit(tile.sprite, self.get_render_pos((tile.x * TILE_SIZE, tile.y * TILE_SIZE)))
 
-    def _draw_grid(self, tile_positions: Iterable):
+    ################## SET ######################
+
+    def set_target(self, pos: Tuple[float, float], recentre: bool = False):
         """
-        Clears and redraws a grid of the tiles provided
+        Set a new target position for the camera. If recentre is False (the default),
+        the camera will only move if the target position goes past the loose area defined
+        by Camera.move_edge_size. It will also only move until the target position is within
+        the loose area in the center. If recentre is True, the camera will center perfectly
+        over the target position.
         """
-        manager = self.ui_manager
-        grid = self.grid
+        # TODO: find out why the -2s and the +1s are necessary
+        if not recentre:
+            if pos[0] < self.start_x + self.move_edge_size:
+                self.target_x = pos[0] - self.move_edge_size
+            if pos[0] > self.end_x - self.move_edge_size - 2:
+                self.target_x = pos[0] + self.move_edge_size - self._base_width / TILE_SIZE + 1
+            if pos[1] < self.start_y + self.move_edge_size:
+                self.target_y = pos[1] - self.move_edge_size
+            # this case is a bit scuffed because it's the only side of the view that doesn't perfectly align with the edge of a tile
+            if pos[1] > self.end_y - self.move_edge_size - 2:
+                self.target_y = int(pos[1] + self.move_edge_size - self._base_height / TILE_SIZE + 1)
+        else:
+            self.target_x = pos[0] - int((self._base_width / TILE_SIZE) / 2)
+            self.target_y = pos[1] - int((self._base_height / TILE_SIZE) / 2)
 
-        # clear the current grid
-        grid.clear()
-
-        # for all the tile positions provided
-        for col, row in tile_positions:
-            # find the screen position
-            start_x, start_y = self._grid_to_draw_position((col, row))
-
-            # create a rect
-            tile_rect = Rect(start_x, start_y, TILE_SIZE, TILE_SIZE)
-
-            # draw a button
-            UIButton(
-                relative_rect=tile_rect,
-                manager=manager,
-                text="",
-                container=grid,
-                parent_element=grid,
-                object_id=f"#tile{col},{row}",
-            )
-
-    def _draw_surface(
-        self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float], src_area: Optional[Rect] = None
-    ):
-        """
-        Draw a surface on the surface map. The function handles coordinates transformation to the screen
-        """
-        pos = self.world_to_draw_position(col_row)
-        map_surface.blit(sprite, pos, area=src_area)
-
-    ############## SET #########################
-
-    def set_target(self, position: Tuple[int, int], recentre: bool = False):
-        """
-        Set the target position.
-        """
-        x, y = position
-
-        if self.is_in_camera_edge(position) or recentre:
-            if recentre:
-                # find centre
-                half_width = int((self.rect.width / TILE_SIZE) / 2)
-                half_height = int((self.rect.height / TILE_SIZE) / 2)
-
-                # centre the target
-                self.start_x = x
-                self.start_y = y
-                self.target_x = x
-                self.target_y = y
-
-                # move to centre
-                offset_x = -half_width
-                offset_y = -half_height
-            else:
-                offset_x, offset_y = self.get_edge_offset(position)
-
-            new_x = self.target_x + offset_x
-            new_y = self.target_y + offset_y
-
-            self.target_x = int(clamp(new_x, 0, self.map_width))
-            self.target_y = int(clamp(new_y, 0, self.map_height))
-
-        self.is_dirty = True
-
-    def set_overlay_visibility(self, is_visible: bool):
-        """
-        Set whether the targeting overlay is visible or now.
-        """
-        self.is_overlay_visible = is_visible
-
-    def set_overlay_directions(self, directions: List[DirectionType]):
-        """
-        Set the overlay with possible targeting directions.
-        """
-        self.overlay_directions = directions
-
-    ################## GET ######################
-
-    @staticmethod
-    def get_tile_col_row(id_string: str):
-        """
-        Get the (col, row) from the object_id string
-        """
-        prefix = "#tile"
-        index = id_string.index(prefix)
-        tile_string = id_string[index + len(prefix) :]
-        return convert_tile_string_to_xy(tile_string)
-
-    ############# UTILITY #########################
-
-    def world_to_draw_position(self, pos: Tuple[float, float]) -> Tuple[int, int]:
-        """
-        Convert from the tile position to the screen position
-        """
-        start_x = int((pos[0] - self.start_x) * TILE_SIZE)
-        start_y = int((pos[1] - self.start_y) * TILE_SIZE)
-
-        return start_x, start_y
-
-    def draw_to_world_position(self, pos: Tuple[float, float]) -> Tuple[int, int]:
-        """
-        Convert from a draw position to a tile position, rounding down.
-        """
-        x = int(clamp(pos[0] // TILE_SIZE, 0, self.map_width))
-        y = int(clamp(pos[1] // TILE_SIZE, 0, self.map_height))
-
-        return x, y
-
-    def _grid_to_draw_position(self, pos: Tuple[float, float]) -> Tuple[int, int]:
-        """
-        Converts grid positions to screen positions
-        """
-        x, y = pos
-        draw_x = int(x * TILE_SIZE)
-        draw_y = int(y * TILE_SIZE)
-        return draw_x, draw_y
-
-    ############# QUERIES #########################
-
-    def has_reached_target(self) -> bool:
-        """
-        returns True if target equals start tile
-        """
-        return self.start_x == self.target_x and self.start_y == self.target_y
-
-    def is_in_camera_view(self, pos: Tuple[float, float]) -> bool:
-        """
-        is the position inside the current camera view
-        """
-        x, y = pos
-        in_view = self.start_x <= x < self.end_x and self.start_y <= y < self.end_y
-
-        return in_view
-
-    def is_in_camera_edge(self, target_pos: Tuple[int, int]) -> bool:
-        """
-        Determine if target position is within the edge of the camera. N.B. they are tile positions.
-        """
-        in_edge = False
-
-        if self.get_edge_offset(target_pos) != 0:
-            in_edge = True
-
-        return in_edge
-
-    def get_edge_offset(self, target_pos: Tuple[int, int]) -> Tuple[int, int]:
-        """
-        Determine how far the player is into the edge of the camera
-        """
-        x, y = target_pos
-        edge_size = self.edge_size
-        dir_x = 0
-        dir_y = 0
-        start_x = int(self.start_x)
-        start_y = int(self.start_y)
-        end_x = self.end_x
-        end_y = self.end_y
-
-        # check left and right edges
-        if x < start_x + edge_size:
-            dir_x = x - (start_x + edge_size)
-
-        elif x > end_x - edge_size:
-            dir_x = x - (end_x - edge_size)
-
-        # check top and bottom edges
-        if y < start_y + edge_size:
-            dir_y = y - (start_y + edge_size)
-
-        elif y > end_y - edge_size:
-            dir_y = y - (end_y - edge_size)
-
-        return dir_x, dir_y
+if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
+    camera = Camera()
+else:
+    camera = ""  # type: ignore

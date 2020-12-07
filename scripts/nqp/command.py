@@ -32,11 +32,11 @@ from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
 from scripts.nqp.actions.behaviour import FollowPlayer, Projectile, SearchAndAttack, SkipTurn
 from scripts.nqp.actions.skill import BasicAttack, Lunge, Move, Splash, TarAndFeather
-from scripts.nqp.ui_elements.camera import Camera
 from scripts.nqp.ui_elements.character_selector import CharacterSelector
 from scripts.nqp.ui_elements.message_log import MessageLog
 from scripts.nqp.ui_elements.skill_bar import SkillBar
 from scripts.nqp.ui_elements.title_screen import TitleScreen
+from scripts.nqp.ui_elements.camera import camera
 
 __all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game", "register_actions"]
 
@@ -85,9 +85,6 @@ def _start_debug_game():
     chronicle.set_turn_holder(player)
 
     # show the in game screens
-    camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
-    ui.register_element(UIElement.CAMERA, camera)
-    ui.set_element_visibility(UIElement.CAMERA, True)
 
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
         assert isinstance(aesthetic, Aesthetic)
@@ -153,10 +150,6 @@ def start_game(player_data: ActorData):
     world.create_god("the_small_gods")
 
     # show the in game screens
-    camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
-    ui.register_element(UIElement.CAMERA, camera)
-    ui.set_element_visibility(UIElement.CAMERA, True)
-
     message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
     ui.register_element(UIElement.MESSAGE_LOG, message_log)
     ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
@@ -202,11 +195,6 @@ def load_game():
         save = save_name.replace(".json", "")
         state.load_game(save)
         break
-
-    # show the in game screens
-    camera = Camera(get_element_rect(UIElement.CAMERA), ui.get_gui_manager())
-    ui.register_element(UIElement.CAMERA, camera)
-    ui.set_element_visibility(UIElement.CAMERA, True)
 
     message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
     ui.register_element(UIElement.MESSAGE_LOG, message_log)
@@ -319,12 +307,6 @@ def get_element_rect(element_type: UIElementType) -> pygame.Rect:
     skill_x = (desired_width // 2) - (skill_width // 2)
     skill_y = -SKILL_BUTTON_SIZE
 
-    # Camera
-    camera_width = desired_width
-    camera_height = desired_height
-    camera_x = 0
-    camera_y = 0
-
     # Title Screen
     title_screen_width = desired_width
     title_screen_height = desired_height
@@ -359,7 +341,6 @@ def get_element_rect(element_type: UIElementType) -> pygame.Rect:
         UIElement.MESSAGE_LOG: pygame.Rect((message_x, message_y), (message_width, message_height)),
         UIElement.TILE_INFO: pygame.Rect((tile_info_x, tile_info_y), (tile_info_width, tile_info_height)),
         UIElement.SKILL_BAR: pygame.Rect((skill_x, skill_y), (skill_width, skill_height)),
-        UIElement.CAMERA: pygame.Rect((camera_x, camera_y), (camera_width, camera_height)),
         UIElement.DUNGEN_VIEWER: pygame.Rect(
             (dungen_viewer_x, dungen_viewer_y), (dungen_viewer_width, dungen_viewer_height)
         ),
