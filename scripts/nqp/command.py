@@ -19,12 +19,12 @@ from scripts.engine.internal.constant import (
     DEBUG_START,
     GameState,
     GAP_SIZE,
+    Height,
     MAX_SKILLS,
     RenderLayer,
     SAVE_PATH,
     SKILL_BUTTON_SIZE,
     UIElement,
-    UIElementType,
 )
 from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
@@ -74,6 +74,7 @@ def _start_debug_game():
         description="Player desc",
         position_offsets=[(0, 0)],
         trait_names=["shoom", "soft_tops", "dandy"],
+        height=Height.MIDDLING,
     )
     game_map.generate_new_map(player_data)
     logging.info(game_map.generation_info)
@@ -83,6 +84,15 @@ def _start_debug_game():
 
     # tell places about the player
     chronicle.set_turn_holder(player)
+
+    # create actor near to player
+    player_pos = world.get_entitys_component(player, Position)
+    actor_data = library.ACTORS["crocturion"]
+    world.create_actor(actor_data, (player_pos.x, player_pos.y - 2))
+
+    # create god
+    god_data = library.GODS["the_small_gods"]
+    world.create_god(god_data)
 
     # show the in game screens
 
@@ -106,7 +116,7 @@ def _start_debug_game():
     world.create_terrain(library.TERRAIN["bog"], (pos.x + 1, pos.y))
 
     # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
+    state.set_new(GameState.GAME_MAP)
 
     # prompt turn actions
     chronicle.end_turn(player, 0)
@@ -147,7 +157,8 @@ def start_game(player_data: ActorData):
     chronicle.set_turn_holder(player)
 
     # create a god
-    world.create_god("the_small_gods")
+    god_data = library.GODS["the_small_gods"]
+    world.create_god(god_data)
 
     # show the in game screens
     message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
@@ -180,7 +191,7 @@ def start_game(player_data: ActorData):
     camera.set_target((pos.x, pos.y), True)
 
     # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
+    state.set_new(GameState.GAME_MAP)
 
     # prompt turn actions
     chronicle.end_turn(player, 0)
@@ -208,7 +219,7 @@ def load_game():
     ui.create_screen_message("Welcome back to Not Quite Paradise")
 
     # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
+    state.set_new(GameState.GAME_MAP)
 
 
 def exit_game():
@@ -288,7 +299,7 @@ def register_actions():
 ##################### UI ######################
 
 
-def get_element_rect(element_type: UIElementType) -> pygame.Rect:
+def get_element_rect(element_type: UIElement) -> pygame.Rect:
     """
     Get the predefined rect for the specified element.
     """

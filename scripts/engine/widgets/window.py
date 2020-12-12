@@ -52,7 +52,8 @@ class Window(ABC, UIWindow):
 
         Example:
             def process_close_button(self):
-                event = pygame.event.Event(GameEvent.EXIT_MENU, menu=UIElement.ACTOR_INFO)
+                event = pygame.event.Event(EventType.GAME, subtype=GameEvent.EXIT_MENU,
+                    menu=UIElement.ACTOR_INFO)
                 pygame.event.post(event)
         """
         pass

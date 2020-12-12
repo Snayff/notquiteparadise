@@ -12,8 +12,9 @@ from scripts.engine.core import query, utility, world
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Aesthetic, Position
-from scripts.engine.internal.constant import TILE_SIZE
+from scripts.engine.internal.constant import TILE_SIZE, Height
 from scripts.nqp import command
+
 
 __all__ = ["camera"]
 
@@ -152,7 +153,7 @@ class Camera:
 
     def _draw_floors(self, map_surf: pygame.Surface):
         for tile in self.visible_tiles:
-            if not tile.blocks_sight:
+            if tile.height == Height.MIN:
                 map_surf.blit(tile.sprite, self.get_render_pos((tile.x * TILE_SIZE, tile.y * TILE_SIZE)))
 
     def _draw_entities(self, map_surf: pygame.Surface):
@@ -179,7 +180,7 @@ class Camera:
 
     def _draw_walls(self, map_surf: pygame.Surface):
         for tile in self.visible_tiles:
-            if tile.blocks_sight:
+            if tile.height == Height.MAX:
                 map_surf.blit(tile.sprite, self.get_render_pos((tile.x * TILE_SIZE, tile.y * TILE_SIZE)))
 
     ################## SET ######################

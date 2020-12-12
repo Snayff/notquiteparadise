@@ -41,7 +41,7 @@ class Projectile(Behaviour):
         # if we havent moved check for collision in current tile (it might be cast on top of enemy)
         if self.distance_travelled == 0 and world.tile_has_tag(entity, current_tile, TargetTag.OTHER_ENTITY):
             should_activate = True
-            logging.debug(f"'{world.get_name(entity)}' collided with an entity on cast at" f"({pos.x},{pos.y}).")
+            logging.debug(f"`{world.get_name(entity)}` collided with an entity on cast at ({pos.x},{pos.y}).")
 
         # if we havent travelled max distance or determined we should activate then move
         # N.b. not an elif because we want the precheck above to happen in isolation

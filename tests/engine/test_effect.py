@@ -26,7 +26,9 @@ from scripts.engine.world_objects.game_map import GameMap
 ###############################################################
 from scripts.nqp.command import register_actions
 
+# register all actions with engine
 register_actions()
+
 
 def _create_scenario() -> EntityID:
 

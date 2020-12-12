@@ -6,18 +6,19 @@ import traceback
 
 import pygame
 import snecs
+from pygame.constants import USEREVENT
 from snecs.world import default_world
 
 import scripts.nqp.processors.input
-from scripts.engine.core import chronicle, state, world
+from scripts.engine.core import chronicle, state, system, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug
 from scripts.engine.internal.component import NQPComponent
-from scripts.engine.internal.constant import GameState
+from scripts.engine.internal.constant import EventType, GameEvent, GameState, InputEvent, InteractionEvent
 from scripts.engine.internal.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
-from scripts.nqp.processors import display, game, interaction
+from scripts.nqp.processors import display, game
 from scripts.nqp.ui_elements.camera import camera
 
 
@@ -78,6 +79,7 @@ def game_loop():
         # get info to support UI updates and handling events
         current_state = state.get_current()
         turn_holder = chronicle.get_turn_holder()
+        player = world.get_player()
 
         # process any deletions from last frame
         # this copies snecs.process_pending_deletions() but adds extra steps.
@@ -89,7 +91,7 @@ def game_loop():
             snecs.delete_entity_immediately(entity, default_world)
 
         # have enemy take turn
-        if current_state == GameState.GAMEMAP and turn_holder != world.get_player():
+        if current_state == GameState.GAME_MAP and turn_holder != player:
             # just in case the turn holder has died but not been replaced as expected
             try:
                 world.take_turn(turn_holder)
@@ -98,13 +100,21 @@ def game_loop():
 
         # update based on input events
         for event in pygame.event.get():
-            processors.input.process_event(event, current_state)
-            processors.game.process_event(event, current_state)
-            processors.interaction.process_event(event)  # only happens in gamemap so doesnt need state
-            ui.process_ui_events(event)
+            # InputEvent doesnt cover key presses so filter out what we dont want instead
+            if event.type in (EventType.INPUT, pygame.KEYDOWN):
+                processors.input.process_input_event(event, current_state)
+
+            if event.type == EventType.GAME:
+                processors.game.process_game_event(event, current_state)
+
+            if event.type == EventType.INTERACTION:
+                system.process_interaction_event(event)  # only happens in gamemap so doesnt need state
+
+            if event.type not in (EventType.INTERACTION, EventType.GAME):
+                ui.process_ui_events(event)
 
         # allow everything to update in response to new state
-        display.process_display_updates(time_delta, current_state)
+        display.process_updates(time_delta, current_state)
         debug.update()
         ui.update(time_delta)
 

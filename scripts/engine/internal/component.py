@@ -5,8 +5,9 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from snecs import RegisteredComponent
+from snecs.typedefs import EntityID
 
-from scripts.engine.internal.constant import EffectType, InteractionTriggerType, PrimaryStatType, RenderLayerType
+from scripts.engine.internal.constant import EffectType, HeightType, PrimaryStatType, ReactionTriggerType, RenderLayer
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple, Type
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
     import pygame
 
     from scripts.engine.internal.action import Affliction, Behaviour, Skill
-    from scripts.engine.internal.definition import EffectData, TraitSpritePathsData, TraitSpritesData
+    from scripts.engine.internal.definition import ReactionData, TraitSpritePathsData, TraitSpritesData
 
 
 ##########################################################
@@ -62,36 +63,6 @@ class IsPlayer(NQPComponent):
     @classmethod
     def deserialize(cls, serialised):
         return IsPlayer()
-
-
-class IsActor(NQPComponent):
-    """
-    Whether the entity is an actor.
-    """
-
-    __slots__ = ()
-
-    def serialize(self):
-        return True
-
-    @classmethod
-    def deserialize(cls, serialised):
-        return IsActor()
-
-
-class IsGod(NQPComponent):
-    """
-    Whether the entity is a god.
-    """
-
-    __slots__ = ()
-
-    def serialize(self):
-        return True
-
-    @classmethod
-    def deserialize(cls, serialised):
-        return IsGod()
 
 
 class IsActive(NQPComponent):
@@ -228,7 +199,7 @@ class Aesthetic(NQPComponent):
         current_sprite: pygame.Surface,
         sprites: TraitSpritesData,
         sprite_paths: List[TraitSpritePathsData],
-        render_layer: RenderLayerType,
+        render_layer: RenderLayer,
         draw_pos: Tuple[float, float],
     ):
         self._sprite_paths: List[TraitSpritePathsData] = sprite_paths
@@ -313,21 +284,21 @@ class Resources(NQPComponent):
         return Resources(*serialised)
 
 
-class Blocking(NQPComponent):
+class Physicality(NQPComponent):
     """
-    An entity's blocking of other objects.
+    An entity's physical existence within the world.
     """
 
-    def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
+    def __init__(self, blocks_movement: bool, height: HeightType):
         self.blocks_movement: bool = blocks_movement
-        self.blocks_sight: bool = blocks_sight
+        self.height: HeightType = height
 
     def serialize(self):
-        return self.blocks_movement, self.blocks_sight
+        return self.blocks_movement, self.height
 
     @classmethod
     def deserialize(cls, serialised):
-        return Blocking(*serialised)
+        return Physicality(*serialised)
 
 
 class Identity(NQPComponent):
@@ -378,6 +349,8 @@ class Thought(NQPComponent):
 
     @classmethod
     def deserialize(cls, serialised):
+        from scripts.engine.internal.data import store
+
         behaviour = store.behaviour_registry[serialised["behaviour_name"]]
 
         return Thought(behaviour(serialised["entity"]))
@@ -448,6 +421,8 @@ class Knowledge(NQPComponent):
 
         skills = []
 
+        from scripts.engine.internal.data import store
+
         for name in skill_names:
             skills.append(store.skill_registry[name])
 
@@ -489,6 +464,8 @@ class Afflictions(NQPComponent):
 
         active_instances = []
 
+        from scripts.engine.internal.data import store
+
         for name, value_tuple in active_dict.items():
             _affliction = store.affliction_registry[name]
             affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])
@@ -514,9 +491,10 @@ class Opinion(NQPComponent):
     An entity's views on other entities. {entity, opinion}
     """
 
-    def __init__(self, opinions: Optional[Dict[int, int]] = None):
+    def __init__(self, attitudes: Dict[ReactionTriggerType, int], opinions: Optional[Dict[EntityID, int]] = None):
         opinions = opinions or {}
-        self.opinions: Dict[int, int] = opinions
+        self.opinions: Dict[EntityID, int] = opinions
+        self.attitudes: Dict[ReactionTriggerType, int] = attitudes
 
     def serialize(self):
         return self.opinions
@@ -535,7 +513,7 @@ class FOV(NQPComponent):
         from scripts.engine.core import world
 
         game_map = world.get_game_map()
-        self.map: np.array = game_map.block_sight_map
+        self.map: np.array = game_map.block_sight_map.astype(bool)  # return of compute_fov is bool
 
     def serialize(self):
         fov_map = self.map.tolist()
@@ -580,14 +558,14 @@ class Reaction(NQPComponent):
     Holds info about what triggers are in place and what happens as a result
     """
 
-    def __init__(self, reactions: Dict[InteractionTriggerType, EffectData]):
-        self.reactions: Dict[InteractionTriggerType, EffectData] = reactions
+    def __init__(self, reactions: Dict[ReactionTriggerType, ReactionData]):
+        self.reactions: Dict[ReactionTriggerType, ReactionData] = reactions
 
     def serialize(self):
         serialised = {}
 
-        for trigger, effect in self.reactions.items():
-            serialised[trigger] = asdict(effect)
+        for trigger, reaction in self.reactions.items():
+            serialised[trigger] = asdict(reaction)
 
         return serialised
 

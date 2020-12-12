@@ -8,7 +8,7 @@ import tcod
 
 from scripts.engine.core import utility, world
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import Direction, MAP_BORDER_SIZE, TileCategory, TileCategoryType
+from scripts.engine.internal.constant import Direction, Height, MAP_BORDER_SIZE, TileCategory, TileCategoryType
 from scripts.engine.internal.definition import ActorData, MapData, RoomConceptData
 from scripts.engine.world_objects.tile import Tile
 
@@ -1067,15 +1067,15 @@ def _create_tile_from_category(x: int, y: int, tile_category: TileCategoryType, 
     if tile_category == TileCategory.WALL:
         sprite_path = sprite_paths[TileCategory.WALL]
         sprite = utility.get_image(sprite_path)
-        blocks_sight = True
+        height = Height.MAX
         blocks_movement = True
     else:
         # everything else is considered a floor:
         sprite_path = sprite_paths[TileCategory.FLOOR]
         sprite = utility.get_image(sprite_path)
-        blocks_sight = False
+        height = Height.MIN
         blocks_movement = False
 
-    tile = Tile(x, y, sprite, sprite_path, blocks_sight, blocks_movement)
+    tile = Tile(x, y, sprite, sprite_path, blocks_movement, height)
 
     return tile

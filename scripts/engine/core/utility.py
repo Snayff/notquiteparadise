@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import logging
+import random
 from typing import List, Tuple, TYPE_CHECKING, TypeVar
 
 import pygame
@@ -34,6 +35,7 @@ __all__ = [
     "convert_tile_string_to_xy",
     "convert_direction_to_name",
     "build_sprites_from_paths",
+    "roll",
 ]
 
 _V = TypeVar("_V", int, float)  # to represent components where we don't know which is being used
@@ -299,7 +301,7 @@ def _calculate_cone_shape(size: int, direction: Tuple[int, int]) -> List[Tuple[i
     coord_list = []
     last_row = [(0, 0)]
     # each size means 1 expansion of the cone
-    for iteration in range(size):
+    for _ in range(size):
         # use a set so we don't add the same coord multiple times
         new_row = set()
         for coord in last_row:
@@ -365,3 +367,14 @@ def convert_direction_to_name(direction: DirectionType) -> str:
         direction_name = "centre"
 
     return direction_name
+
+
+################################### CHANCE ########################################
+
+
+def roll(min_value: int = 0, max_value: int = 99) -> int:
+    """
+    Roll for a number between min and max
+    """
+    # TODO - utilise seed
+    return random.randint(min_value, max_value)

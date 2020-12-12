@@ -14,7 +14,6 @@ from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
     GameState,
-    GameStateType,
     InputIntent,
     InputIntentType,
     TargetingMethod,
@@ -30,13 +29,13 @@ from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
 from scripts.nqp.ui_elements.camera import camera
 
 
-def process_intent(intent: InputIntentType, game_state: GameStateType):
+def process_intent(intent: InputIntentType, game_state: GameState):
     """
     Process the intent in the context of the game state. Intents are game state sensitive.
     """
     _process_stateless_intents(intent)
 
-    if game_state == GameState.GAMEMAP:
+    if game_state == GameState.GAME_MAP:
         _process_game_map_intents(intent)
     elif game_state == GameState.TARGETING:
         _process_targeting_mode_intents(intent)
@@ -238,10 +237,8 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
 
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
-        world.judge_action(player, skill.__class__.__name__)
+        world.set_skill_on_cooldown(player, skill.__class__.__name__, skill.base_cooldown)
         chronicle.end_turn(player, skill.time_cost)
-
-        state.save_game()
 
         # update camera if position changes
         try:

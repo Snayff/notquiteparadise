@@ -11,25 +11,22 @@ from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, utility
-from scripts.engine.core.ui import ui
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
 from scripts.engine.internal.component import (
     Aesthetic,
     Afflictions,
-    Blocking,
     Exists,
     FOV,
     HasCombatStats,
     Identity,
     IsActive,
-    IsActor,
-    IsGod,
     IsPlayer,
     Knowledge,
     Lifespan,
     LightSource,
     Opinion,
+    Physicality,
     Position,
     Reaction,
     Resources,
@@ -41,6 +38,7 @@ from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
     EffectType,
+    Height,
     HitType,
     HitTypeType,
     INFINITE,
@@ -66,6 +64,7 @@ from scripts.engine.internal.definition import (
     ApplyAfflictionEffectData,
     DamageEffectData,
     EffectData,
+    GodData,
     MoveActorEffectData,
     ProjectileData,
     TerrainData,
@@ -122,20 +121,19 @@ def create_entity(components: List[Component] = None) -> EntityID:
     return entity
 
 
-def create_god(god_name: str) -> EntityID:
+def create_god(god_data: GodData) -> EntityID:
     """
     Create an entity with all of the components to be a god. god_name must be in the gods json file.
     """
-    data = library.GODS[god_name]
     god: List[Component] = []
 
-    god.append(Identity(data.name, data.description))
-    god.append(IsGod())
-    god.append(Opinion())
+    god.append(Identity(god_data.name, god_data.description))
+    god.append(Opinion(god_data.attitudes))
+    god.append(Reaction(god_data.reactions))
     god.append((Resources(INFINITE, INFINITE)))
     entity = create_entity(god)
 
-    logging.debug(f"God, '{data.name}', created.")
+    logging.debug(f"God, '{god_data.name}', created.")
 
     return entity
 
@@ -158,11 +156,10 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     # actor components
     if is_player:
         components.append(IsPlayer())
-    components.append(IsActor())
     components.append(Position(*occupied_tiles))
     components.append(Identity(name, actor_data.description))
     components.append(HasCombatStats())
-    components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
+    components.append(Physicality(True, actor_data.height))
     components.append(Traits(actor_data.trait_names))
     components.append(FOV())
     components.append(Tracked(chronicle.get_time()))
@@ -251,7 +248,7 @@ def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int], lifesp
     components.append(Lifespan(lifespan))
     components.append(Position(*occupied_tiles))
     components.append(Identity(terrain_data.name, terrain_data.description))
-    components.append(Blocking(terrain_data.blocks_movement, terrain_data.blocks_sight))
+    components.append(Physicality(terrain_data.blocks_movement, terrain_data.height))
 
     # add aesthetic N.B. translation to screen coordinates is handled by the camera
     sprites = build_sprites_from_paths([terrain_data.sprite_paths], (TILE_SIZE, TILE_SIZE))
@@ -290,7 +287,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
-    projectile.append(Position((x, y)))  # FIXME - check position not blocked before spawning
+    projectile.append(Position((x, y)))  # TODO - check position not blocked before spawning
     projectile.append(Resources(999, 999))
     projectile.append(Afflictions())
     projectile.append(IsActive())
@@ -354,7 +351,7 @@ def create_pathfinder() -> tcod.path.Pathfinder:
     """
     game_map = get_game_map()
 
-    # combine entity blocking and map blocking maps
+    # combine entity blocking and tile blocking maps
     cost_map = game_map.block_movement_map | get_entity_blocking_movement_map()
 
     # create graph to represent the map and a pathfinder to navigate
@@ -497,7 +494,7 @@ def get_game_map() -> GameMap:
     if store.current_game_map:
         game_map = store.current_game_map
     else:
-        raise Exception("get_game_map: Tried to get the game_map but there isnt one.")
+        raise AttributeError("get_game_map: Tried to get the game_map but there isnt one.")
     return game_map
 
 
@@ -513,12 +510,12 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
         _tile = game_map.tile_map[x][y]
 
     except IndexError:
-        raise Exception(f"Tried to get tile({x},{y}), which doesnt exist.")
+        raise IndexError(f"Tried to get tile({x},{y}), which doesnt exist.")
 
     if _is_tile_in_bounds(_tile):
         return _tile
     else:
-        raise Exception(f"Tried to get tile({x},{y}), which is out of bounds.")
+        raise IndexError(f"Tried to get tile({x},{y}), which is out of bounds.")
 
 
 def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List[Tile]:
@@ -536,9 +533,8 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
 
         # make sure it is in bounds
         tile = get_tile((x, y))
-        if tile:
-            if _is_tile_in_bounds(tile):
-                tiles.append(game_map.tile_map[x][y])
+        if _is_tile_in_bounds(tile):
+            tiles.append(game_map.tile_map[x][y])
 
     return tiles
 
@@ -571,10 +567,10 @@ def get_entity_blocking_movement_map() -> np.array:
 
     game_map = get_game_map()
     blocking_map = np.zeros((game_map.width, game_map.height), dtype=bool, order="F")
-    for entity, (pos, blocking) in query.position_and_blocking:
-        assert isinstance(blocking, Blocking)
+    for entity, (pos, physicality) in query.position_and_physicality:
+        assert isinstance(physicality, Physicality)
         assert isinstance(pos, Position)
-        if blocking.blocks_movement:
+        if physicality.blocks_movement:
             blocking_map[pos.x, pos.y] = True
 
     return blocking_map
@@ -712,9 +708,8 @@ def _get_furthest_free_position(
     for distance in range(1, max_distance + 1):
 
         # allow throw to hit target
-        if travel_type == TravelMethod.ARC:
-            if distance == max_distance + 1:
-                check_for_target = True
+        if travel_type == TravelMethod.ARC and distance == max_distance + 1:
+            check_for_target = True
 
         # get current position
         current_x = start_x + (dir_x * distance)
@@ -769,7 +764,9 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
         return snecs.entity_component(entity, component)
     else:
         name = get_name(entity)
-        raise Exception(f"'{name}'({entity}) tried to get {component.__name__}, but it was not found.")
+        raise AttributeError(
+            f"get_entitys_component:'{name}'({entity}) tried to get {component.__name__}, " f"but it was not found."
+        )
 
 
 def get_name(entity: EntityID) -> str:
@@ -795,14 +792,14 @@ def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
     stat_data = library.BASE_STATS_PRIMARY[stat]
     value += stat_data.base_value
 
-    trait = get_entitys_component(entity, Traits)
-    if trait:
+    if entity_has_component(entity, Traits):
+        trait = get_entitys_component(entity, Traits)
         for name in trait.names:
             data = library.TRAITS[name]
             value += getattr(data, stat)
 
-    afflictions = get_entitys_component(entity, Afflictions)
-    if afflictions:
+    if entity_has_component(entity, Afflictions):
+        afflictions = get_entitys_component(entity, Afflictions)
         for modifier in afflictions.stat_modifiers.values():
             if modifier[0] == stat:
                 value += modifier[1]
@@ -833,8 +830,8 @@ def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> i
     value += get_primary_stat(entity, PrimaryStat.EXACTITUDE) * stat_data.exactitude_mod
 
     # afflictions
-    afflictions = get_entitys_component(entity, Afflictions)
-    if afflictions:
+    if entity_has_component(entity, Afflictions):
+        afflictions = get_entitys_component(entity, Afflictions)
         for modifier in afflictions.stat_modifiers.values():
             if modifier[0] == stat:
                 value += modifier[1]
@@ -851,13 +848,11 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     """
     knowledge = get_entitys_component(entity, Knowledge)
     try:
-        if knowledge:
-            return knowledge.skills[skill_name]
+        return knowledge.skills[skill_name]
     except KeyError:
-        pass
-
-    logging.warning(f"'{get_name(entity)}' tried to use a skill, '{skill_name}', they dont know.")
-    raise Exception("Skill not found")
+        raise KeyError(
+            f"get_known_skill: '{get_name(entity)}' tried to use a skill, '{skill_name}', they dont  " f"know."
+        )
 
 
 def get_affected_entities(
@@ -1007,7 +1002,10 @@ def _is_tile_blocking_sight(tile: Tile) -> bool:
     """
     Check if a tile is blocking sight
     """
-    return tile.blocks_sight
+    # assumes tile are min or max height only.
+    if tile.height == Height.MAX:
+        return True
+    return False
 
 
 def _is_tile_visible_to_entity(tile: Tile, entity: EntityID) -> bool:
@@ -1072,24 +1070,31 @@ def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
     x = tile.x
     y = tile.y
     # Any entities that block movement?
-    for entity, (position, blocking) in get_components([Position, Blocking]):
+    for entity, (position, physicality) in get_components([Position, Physicality]):
         assert isinstance(position, Position)
-        assert isinstance(blocking, Blocking)
+        assert isinstance(physicality, Physicality)
 
-        if (x, y) in position and blocking.blocks_movement:
+        if (x, y) in position and physicality.blocks_movement:
             return True
     return False
 
 
-def _tile_has_entity_blocking_sight(tile: Tile) -> bool:
+def _tile_has_entity_blocking_sight(tile: Tile, active_entity: EntityID) -> bool:
     x = tile.x
     y = tile.y
-    # Any entities that block sight?
-    for entity, (position, blocking) in get_components([Position, Blocking]):
-        assert isinstance(position, Position)
-        assert isinstance(blocking, Blocking)
 
-        if (x, y) in position and blocking.blocks_sight:
+    if entity_has_component(active_entity, Physicality):
+        viewer_height = get_entitys_component(active_entity, Physicality).height
+    else:
+        # viewer has no height, assume everything blocks
+        return True
+
+    # Any entities that block sight?
+    for entity, (position, physicality) in get_components([Position, Physicality]):
+        assert isinstance(position, Position)
+        assert isinstance(physicality, Physicality)
+
+        if (x, y) in position and physicality.height > viewer_height:
             return True
     return False
 
@@ -1099,7 +1104,6 @@ def _can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> boo
     Check if entity can afford the resource cost
     """
     resources = get_entitys_component(entity, Resources)
-    name = get_name(entity)
 
     # Check if cost can be paid
     value = getattr(resources, resource.lower())
@@ -1142,7 +1146,9 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
         if entity == player:
             store.log_message("I cannot afford to do that.")
         else:
-            logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, which they can`t afford.")
+            logging.warning(
+                f"can_use_skill: '{get_name(entity)}' tried to use {skill_name}, which they can`t" f"afford."
+            )
 
     # log/inform on cooldown
     if not not_on_cooldown:
@@ -1155,7 +1161,8 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
             else:
                 cooldown_msg = str(cooldown)
             logging.warning(
-                f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait " f"{cooldown_msg} more rounds."
+                f"can_use_skill: '{get_name(entity)}' tried to use {skill_name}, but needs to wait "
+                f" {cooldown_msg} more rounds."
             )
 
     # we've reached the end; no good.
@@ -1239,17 +1246,12 @@ def apply_skill(skill: Skill) -> bool:
     return False
 
 
-def set_skill_on_cooldown(skill: Skill) -> bool:
+def set_skill_on_cooldown(entity: EntityID, skill_name: str, cooldown_duration: int):
     """
-    Sets a skill on cooldown
+    Sets an entity's skill on cooldown.
     """
-    user = skill.user
-    name = skill.__class__.__name__
-    knowledge = get_entitys_component(user, Knowledge)
-    if knowledge:
-        knowledge.set_skill_cooldown(name, skill.base_cooldown)
-        return True
-    return False
+    knowledge = get_entitys_component(entity, Knowledge)
+    knowledge.set_skill_cooldown(skill_name, cooldown_duration)
 
 
 def apply_affliction(affliction: Affliction) -> bool:
@@ -1404,32 +1406,6 @@ def remove_component(entity: EntityID, component: Type[Component]):
     snecs.remove_component(entity, component)
 
 
-def judge_action(entity: EntityID, action_name: str):
-    """
-    Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards
-    the tags in that skill.
-    """
-    for god, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
-        assert isinstance(opinion, Opinion)
-        assert isinstance(identity, Identity)
-
-        attitudes = library.GODS[identity.name].attitudes
-
-        # check if the god has an attitude towards the action and apply the opinion change,
-        # adding the entity to the dict if necessary
-        if action_name in attitudes.keys():
-            if entity in opinion.opinions:
-                opinion.opinions[entity] = opinion.opinions[entity] + attitudes[action_name].opinion_change
-            else:
-                opinion.opinions[entity] = attitudes[action_name].opinion_change
-
-            name = get_name(entity)
-            logging.info(
-                f"'{identity.name}' reacted to '{name}' using {action_name}.  New "
-                f"opinion = {opinion.opinions[entity]}"
-            )
-
-
 def remove_affliction(entity: EntityID, affliction: Affliction):
     """
     Remove affliction from active list and undo any stat modification.
@@ -1509,63 +1485,3 @@ def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_
     logging.debug(log_string)
 
     return mitigated_to_hit_score
-
-
-def choose_interventions(active_entity: EntityID, action_name: str) -> List[Tuple[EntityID, str]]:
-    """
-    Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
-    or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).
-    """
-    chosen_interventions = []
-    desire_to_intervene = 10
-    desire_to_do_nothing = 75  # weighting for doing nothing
-
-    for entity, (is_god, opinion, identity, knowledge) in get_components([IsGod, Opinion, Identity, Knowledge]):
-        assert isinstance(opinion, Opinion)
-        assert isinstance(identity, Identity)
-        assert isinstance(knowledge, Knowledge)
-
-        attitudes = library.GODS[identity.name].attitudes
-
-        # check if the god has an attitude towards the action and increase likelihood of intervening
-        if action_name in attitudes:
-            desire_to_intervene = 30
-
-        # get eligible interventions and their weightings. Need separate lists for random.choices
-        eligible_interventions = []
-        intervention_weightings = []
-        for intervention_name in knowledge.skill_names:
-            intervention_data = library.GODS[identity.name].interventions[intervention_name]
-
-            # is the god willing to intervene i.e. does the opinion score meet the required opinion
-            try:
-                opinion_score = opinion.opinions[active_entity]
-            except KeyError:
-                opinion_score = 0
-
-            required_opinion = intervention_data.required_opinion
-            # check if greater or lower, depending on whether required opinion is positive or negative
-            if 0 <= required_opinion < opinion_score:
-                amount_exceeding_requirement = opinion_score - required_opinion
-
-                eligible_interventions.append(intervention_name)
-                intervention_weightings.append(amount_exceeding_requirement)
-
-            elif 0 > required_opinion > opinion_score:
-                amount_exceeding_requirement = required_opinion - opinion_score  # N.B. opposite to above
-                eligible_interventions.append(intervention_name)
-                intervention_weightings.append(amount_exceeding_requirement)
-
-        # add chance to do nothing
-        eligible_interventions.append("Nothing")
-        intervention_weightings.append(desire_to_do_nothing - desire_to_intervene)
-
-        # which intervention, if any, shall the god consider using?
-        (chosen_intervention,) = random.choices(eligible_interventions, intervention_weightings)
-        # N.B. use , to unpack the result
-
-        # if god has chosen to take an action then add to list
-        if chosen_intervention != "Nothing":
-            chosen_interventions.append((active_entity, chosen_intervention))
-
-    return chosen_interventions

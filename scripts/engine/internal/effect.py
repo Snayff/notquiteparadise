@@ -12,11 +12,11 @@ from scripts.engine.internal import library
 from scripts.engine.internal.component import (
     Aesthetic,
     Afflictions,
-    Blocking,
     HasCombatStats,
     Identity,
     Knowledge,
     Lifespan,
+    Physicality,
     Position,
     Resources,
 )
@@ -24,6 +24,7 @@ from scripts.engine.internal.constant import (
     DamageTypeType,
     Direction,
     DirectionType,
+    EventType,
     InteractionEvent,
     PrimaryStatType,
     TargetTag,
@@ -104,12 +105,11 @@ class DamageEffect(Effect):
             logging.info(f"Damage given to DamageEffect is {self.damage} and was therefore not executed.")
             return False, self.failure_effects
 
-        if not world.entity_has_component(self.origin, HasCombatStats) or not world.entity_has_component(
-            self.target, HasCombatStats
-        ):
-            logging.info(f"Either caster or target doesnt have combat stats so damage cannot be applied.")
+        if not world.entity_has_component(self.target, Resources):
+            logging.info(f"Target doesnt have resources so damage cannot be applied.")
             return False, self.failure_effects
 
+        # get combat stats
         defenders_stats = world.create_combat_stats(self.target)
         attackers_stats = world.create_combat_stats(self.origin)
 
@@ -129,7 +129,8 @@ class DamageEffect(Effect):
 
             # post interaction event
             event = pygame.event.Event(
-                InteractionEvent.DAMAGE,
+                EventType.INTERACTION,
+                subtype=InteractionEvent.DAMAGE,
                 origin=self.origin,
                 target=self.target,
                 amount=damage,
@@ -194,7 +195,8 @@ class MoveActorEffect(Effect):
 
                     # post interaction event
                     event = pygame.event.Event(
-                        InteractionEvent.MOVE,
+                        EventType.INTERACTION,
+                        subtype=InteractionEvent.MOVE,
                         origin=self.origin,
                         target=self.target,
                         direction=self.direction,
@@ -241,16 +243,16 @@ class MoveActorEffect(Effect):
             if is_tile_blocking_movement:
                 from scripts.engine.core import query
 
-                for blocking_entity, (pos, blocking) in query.position_and_blocking:
+                for other_entity, (pos, physicality) in query.position_and_physicality:
                     assert isinstance(pos, Position)
-                    assert isinstance(blocking, Blocking)
+                    assert isinstance(physicality, Physicality)
                     if (
-                        blocking_entity != entity
-                        and blocking.blocks_movement
+                        other_entity != entity
+                        and physicality.blocks_movement
                         and (target_x, target_y) in pos.coordinates
                     ):
                         # blocked by entity
-                        blockers_name = world.get_name(blocking_entity)
+                        blockers_name = world.get_name(other_entity)
                         logging.debug(
                             f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
                             f" by '{blockers_name}'. "
@@ -287,22 +289,22 @@ class AffectStatEffect(Effect):
         success = False
         afflictions = world.get_entitys_component(self.target, Afflictions)
 
-        if afflictions:
-            # if not already applied
-            if self.cause_name not in afflictions.stat_modifiers:
-                afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
+        # if not already applied
+        if self.cause_name not in afflictions.stat_modifiers:
+            afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
 
-                # post interaction event
-                event = pygame.event.Event(
-                    InteractionEvent.AFFECT_STAT,
-                    origin=self.origin,
-                    target=self.target,
-                    stat=self.stat_to_target,
-                    amount=self.affect_amount,
-                )
-                pygame.event.post(event)
+            # post interaction event
+            event = pygame.event.Event(
+                EventType.INTERACTION,
+                subtype=InteractionEvent.AFFECT_STAT,
+                origin=self.origin,
+                target=self.target,
+                stat=self.stat_to_target,
+                amount=self.affect_amount,
+            )
+            pygame.event.post(event)
 
-                success = True
+            success = True
 
         if success:
             return True, self.success_effects
@@ -341,7 +343,11 @@ class ApplyAfflictionEffect(Effect):
 
             # post interaction event
             event = pygame.event.Event(
-                InteractionEvent.AFFLICTION, origin=self.origin, target=self.target, name=self.affliction_name
+                EventType.INTERACTION,
+                subtype=InteractionEvent.AFFLICTION,
+                origin=self.origin,
+                target=self.target,
+                name=self.affliction_name,
             )
             pygame.event.post(event)
 
@@ -380,7 +386,11 @@ class AffectCooldownEffect(Effect):
 
             # post interaction event
             event = pygame.event.Event(
-                InteractionEvent.AFFECT_COOLDOWN, origin=self.origin, target=self.target, amount=self.affect_amount
+                EventType.INTERACTION,
+                subtype=InteractionEvent.AFFECT_COOLDOWN,
+                origin=self.origin,
+                target=self.target,
+                amount=self.affect_amount,
             )
             pygame.event.post(event)
 

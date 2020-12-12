@@ -74,7 +74,7 @@ VIDEO_CONFIG: VideoConfigData = VideoConfigData(Dimensions(1, 1), Dimensions(1, 
 GAME_CONFIG: GameConfigData = GameConfigData(
     HitTypeData(HitInfoData(0, 0.0), HitInfoData(0, 0.0), HitInfoData(0, 0.0)),
     BaseValueData(0, 0, 0),
-    DefaultValueData(0, True, 0.0),
+    DefaultValueData(0, 0.0),
 )  # load empty object
 
 # build default list for input - needed in case json doesnt include all required values

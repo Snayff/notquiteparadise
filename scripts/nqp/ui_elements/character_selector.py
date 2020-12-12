@@ -11,7 +11,7 @@ from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UIPanel, UITe
 
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import GameEvent, GAP_SIZE, RenderLayer, TILE_SIZE, TraitGroup
+from scripts.engine.internal.constant import EventType, GameEvent, GAP_SIZE, Height, RenderLayer, TILE_SIZE, TraitGroup
 from scripts.engine.internal.definition import ActorData
 from scripts.engine.widgets.panel import Panel
 
@@ -257,8 +257,9 @@ class CharacterSelector(Panel):
             description="Player desc",
             position_offsets=[(0, 0)],
             trait_names=traits,
+            height="middling",  # type: ignore  # need to pass as str to be converted during post-init
         )
 
         # fire event
-        new_event = pygame.event.Event(GameEvent.START_GAME, player_data=player_data)
+        new_event = pygame.event.Event(EventType.GAME, subtype=GameEvent.START_GAME, player_data=player_data)
         pygame.event.post(new_event)

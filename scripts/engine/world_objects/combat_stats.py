@@ -1,14 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import world
 from scripts.engine.internal.constant import PrimaryStat, SecondaryStat
-
-if TYPE_CHECKING:
-    pass
 
 
 class CombatStats:

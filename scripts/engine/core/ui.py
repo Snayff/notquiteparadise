@@ -9,7 +9,7 @@ from pygame_gui import UIManager
 
 from scripts.engine.core import utility
 from scripts.engine.internal import debug, library
-from scripts.engine.internal.constant import ASSET_PATH, DATA_PATH, UIElement, UIElementType
+from scripts.engine.internal.constant import ASSET_PATH, DATA_PATH, UIElement
 from scripts.engine.widgets.screen_message import ScreenMessage
 
 if TYPE_CHECKING:
@@ -58,7 +58,7 @@ class UI:
         self._gui = UIManager((desired_width, desired_height), DATA_PATH / "ui/themes.json")
 
         # elements info
-        self._elements: Dict[UIElementType, Union[Panel, Window]] = {}  # dict of all init'd ui_manager elements
+        self._elements: Dict[UIElement, Union[Panel, Window]] = {}  # dict of all init'd ui_manager elements
 
         # process config
         self._load_display_config()
@@ -114,7 +114,7 @@ class UI:
 
     ##################### GET ############################
 
-    def get_element(self, element_type: UIElementType) -> Union[Panel, Window]:
+    def get_element(self, element_type: UIElement) -> Union[Panel, Window]:
         """
         Get UI element.
         """
@@ -150,7 +150,7 @@ class UI:
 
         self._gui.preload_fonts(fonts)
 
-    def register_element(self, element_type: UIElementType, element: Union[Panel, Window]):
+    def register_element(self, element_type: UIElement, element: Union[Panel, Window]):
         """
         Register the specified UI element. Can be returned with get_element at a later date. If it already exists
         current instance will be overwritten.
@@ -169,7 +169,7 @@ class UI:
         """
         text = f"<font face=barlow color={colour} size={size}>{message}</font>"
         rect = pygame.Rect((self.base_width / 4, self.base_height / 4), (self.base_width / 2, -1))
-        screen_message = ScreenMessage(rect, text, self.get_gui_manager())
+        ScreenMessage(rect, text, self.get_gui_manager())
 
     ######################## KILL ###############################################
 
@@ -182,7 +182,7 @@ class UI:
         for element_type in elements.keys():
             self.kill_element(element_type)
 
-    def kill_element(self, element_type: UIElementType):
+    def kill_element(self, element_type: UIElement):
         """
         Remove any reference to the element.
         """
@@ -192,7 +192,7 @@ class UI:
 
     ################################ QUERIES #################################################################
 
-    def element_is_visible(self, element_type: UIElementType) -> bool:
+    def element_is_visible(self, element_type: UIElement) -> bool:
         """
         Check if an element is visible.
         """
@@ -202,7 +202,7 @@ class UI:
         else:
             return False
 
-    def element_is_active(self, element_type: UIElementType) -> bool:
+    def element_is_active(self, element_type: UIElement) -> bool:
         """
         Check if an element has been created and is visible
         """
@@ -211,7 +211,7 @@ class UI:
         else:
             return False
 
-    def has_element(self, element_type: UIElementType) -> bool:
+    def has_element(self, element_type: UIElement) -> bool:
         """
         Check if an element exists
         """
@@ -222,7 +222,7 @@ class UI:
 
     ################################ UNIVERSAL ACTIONS #############################################
 
-    def set_element_visibility(self, element_type: UIElementType, visible: bool) -> bool:
+    def set_element_visibility(self, element_type: UIElement, visible: bool) -> bool:
         """
         Set whether the element is visible or not. Returns true if successful, false if element not found.
         """

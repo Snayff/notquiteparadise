@@ -8,5 +8,5 @@ class TestState:
         """
         Test changing the state
         """
-        state.set_new(GameState.GAMEMAP)
-        assert state.get_current() == GameState.GAMEMAP
+        state.set_new(GameState.GAME_MAP)
+        assert state.get_current() == GameState.GAME_MAP

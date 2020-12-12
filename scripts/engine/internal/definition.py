@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, TYPE_CHECKING
+from typing import Dict, List, Optional, Tuple, TYPE_CHECKING, Union
 
 from scripts.engine.internal.constant import (
     AfflictionCategory,
@@ -13,14 +13,15 @@ from scripts.engine.internal.constant import (
     DirectionType,
     EffectType,
     EffectTypeType,
-    InteractionTriggerType,
+    Height,
+    HeightType,
     PrimaryStat,
     PrimaryStatType,
     ProjectileExpiryType,
     ProjectileSpeed,
     ProjectileSpeedType,
+    ReactionTriggerType,
     RenderLayer,
-    RenderLayerType,
     Resource,
     ResourceType,
     SecondaryStatType,
@@ -44,12 +45,13 @@ if TYPE_CHECKING:
     from scripts.engine.internal.action import Skill
     from scripts.engine.internal.effect import Effect
 
+
 #################################################################
 # This module is for specifying all defined data sets.
 #################################################################
 
 
-######################### Aesthetics ##################################
+##################### COMPONENT INFO #################################
 
 
 @register_dataclass_with_json
@@ -88,32 +90,13 @@ class TraitSpritePathsData:
     Also used to hold and map data from json.
     """
 
-    render_order: RenderLayerType = field(default=RenderLayer.BOTTOM)
+    render_order: RenderLayer = field(default=RenderLayer.BOTTOM)
     icon: str = field(default="none")
     idle: str = field(default="none")
     attack: str = field(default="none")
     hit: str = field(default="none")
     dead: str = field(default="none")
     move: str = field(default="none")
-
-
-##################### ACTORS #################################
-
-
-@register_dataclass_with_json
-@dataclass
-class ActorData:
-    """
-    Data class for an actor.
-    Also used to hold and map data from json.
-    """
-
-    key: str = "none"
-    possible_names: List[str] = field(default_factory=list)
-    description: str = "none"
-    position_offsets: List[Tuple[int, int]] = field(default_factory=list)
-    trait_names: List[str] = field(default_factory=list)
-    behaviour_name: str = "none"
 
 
 @register_dataclass_with_json
@@ -184,7 +167,29 @@ class BaseSecondaryStatData:
     exactitude_mod: int = 0
 
 
-####################### NON-ACTOR ENTITIES ######################
+####################### ENTITY TYPES ######################
+
+
+@register_dataclass_with_json
+@dataclass
+class ActorData:
+    """
+    Data class for an actor.
+    Also used to hold and map data from json.
+    """
+
+    key: str = "none"
+    possible_names: List[str] = field(default_factory=list)
+    description: str = "none"
+    position_offsets: List[Tuple[int, int]] = field(default_factory=list)
+    trait_names: List[str] = field(default_factory=list)
+    behaviour_name: str = "none"
+    height: HeightType = Height.MIN
+
+    def __post_init__(self):
+        # map external str to internal int
+        if isinstance(self.height, str):
+            self.height = getattr(Height, self.height.upper())
 
 
 @register_dataclass_with_json
@@ -212,7 +217,7 @@ class ProjectileData:
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
 
     # how does it travel?
-    speed: ProjectileSpeedType = ProjectileSpeed.SLOW
+    speed: ProjectileSpeedType = ProjectileSpeed.SLOW  # takes str from json and is converted in post_init
     travel_method: TravelMethodType = TravelMethod.STANDARD
     range: int = 1
 
@@ -221,7 +226,9 @@ class ProjectileData:
     expiry_type: Optional[ProjectileExpiryType] = None
 
     def __post_init__(self):
-        self.speed = getattr(ProjectileSpeed, self.speed.upper())
+        # map external str to internal int
+        if isinstance(self.speed, str):
+            self.speed = getattr(ProjectileSpeed, self.speed.upper())
 
 
 @register_dataclass_with_json
@@ -234,53 +241,34 @@ class TerrainData:
 
     name: str = "none"
     description: str = "none"
-    blocks_sight: bool = False
+    height: HeightType = Height.MIN
     blocks_movement: bool = False
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
-    reactions: Dict[InteractionTriggerType, EffectData] = field(default_factory=dict)
+    reactions: Dict[ReactionTriggerType, ReactionData] = field(default_factory=dict)
     light: Optional[LightData] = None
 
-
-################### GODS ###################################################
-
-
-@register_dataclass_with_json
-@dataclass
-class AttitudeData:
-    """
-    Data class for  a god's attitude
-    """
-
-    action: str = field(default="none")
-    opinion_change: int = 0
-
-
-@register_dataclass_with_json
-@dataclass
-class InterventionData:
-    """
-    Data class for a god's intervention
-    """
-
-    skill_key: str = field(default="none")
-    required_opinion: int = 0
+    def __post_init__(self):
+        # map external str to internal int
+        if isinstance(self.height, str):
+            self.height = getattr(Height, self.height.upper())
 
 
 @register_dataclass_with_json
 @dataclass
 class GodData:
     """
-    Data class for a god
+    Data class for a god. If a reaction.reactions is a skill name (a str) then the skill name must also be in
+    known_skills.
     """
 
-    name: str = field(default="none")
-    description: str = field(default="none")
-    attitudes: Dict[str, AttitudeData] = field(default_factory=dict)
-    interventions: Dict[str, InterventionData] = field(default_factory=dict)
+    name: str = "none"
+    description: str = "none"
+    attitudes: Dict[ReactionTriggerType, int] = field(default_factory=dict)
+    reactions: Dict[ReactionTriggerType, ReactionData] = field(default_factory=dict)
 
 
-####################### WORLD ######################
+####################### WORLD GENERATION ######################
 
 
 @register_dataclass_with_json
@@ -407,7 +395,25 @@ class AfflictionData:
     shape_size: int = 1
     target_tags: List[TargetTagType] = field(default_factory=list)
     identity_tags: List[EffectTypeType] = field(default_factory=list)
-    triggers: List[InteractionTriggerType] = field(default_factory=list)
+    triggers: List[ReactionTriggerType] = field(default_factory=list)
+
+
+@register_dataclass_with_json
+@dataclass()
+class ReactionData:
+    """
+    Data class for a reaction.
+    """
+
+    required_opinion: Optional[int] = None
+    reaction: Union[EffectData, str] = ""  # str is skill name
+    chance: int = 100
+
+    def __post_init__(self):
+        from scripts.engine.core import utility
+
+        # ensure clamped between 0-100
+        self.chance = utility.clamp(self.chance, 0, 100)
 
 
 ################### EFFECTS ###################################################
@@ -561,7 +567,6 @@ class BaseValueData:
 @dataclass
 class DefaultValueData:
     time_per_round: int
-    entity_blocks_sight: bool
     reduced_effectiveness_multi_tile_modifier: float
 
 
