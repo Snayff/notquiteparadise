@@ -141,13 +141,13 @@ class Camera:
 
     def is_in_camera_view(self, pos: Tuple[float, float]) -> bool:
         # TODO: implement this
-        return 1
+        return True
 
     def get_render_pos(self, pos: Tuple[float, float]) -> Tuple[float, float]:
         """
         Converts world position to render position (in pixels) by applying the camera's position.
         """
-        return [pos[0] - self.start_x * TILE_SIZE, pos[1] - self.start_y * TILE_SIZE]
+        return (pos[0] - self.start_x * TILE_SIZE, pos[1] - self.start_y * TILE_SIZE)
 
     ############### RENDER CORE #################
 
