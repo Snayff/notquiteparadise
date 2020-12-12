@@ -11,7 +11,7 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.138.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.139.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 DEBUG_START = True  # Whether to start directly in debug map
 
 MAX_SKILLS = 6
@@ -147,14 +147,14 @@ class UIElement(IntEnum):
     The different, single instance UI elements
     """
 
-MESSAGE_LOG = auto()
-ACTOR_INFO = auto()
-SKILL_BAR = auto()
-ENTITY_QUEUE = auto()
-TILE_INFO = auto()
-DUNGEN_VIEWER = auto()
-TITLE_SCREEN = auto()
-CHARACTER_SELECTOR = auto()
+    MESSAGE_LOG = auto()
+    ACTOR_INFO = auto()
+    SKILL_BAR = auto()
+    ENTITY_QUEUE = auto()
+    TILE_INFO = auto()
+    DUNGEN_VIEWER = auto()
+    TITLE_SCREEN = auto()
+    CHARACTER_SELECTOR = auto()
 
 
 class InputIntent(SimpleNamespace):

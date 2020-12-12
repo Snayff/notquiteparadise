@@ -79,7 +79,8 @@ def game_loop():
         # get info to support UI updates and handling events
         current_state = state.get_current()
         turn_holder = chronicle.get_turn_holder()
-        player = world.get_player()
+        if current_state == GameState.GAME_MAP:
+            player = world.get_player()
 
         # process any deletions from last frame
         # this copies snecs.process_pending_deletions() but adds extra steps.
@@ -118,7 +119,7 @@ def game_loop():
         debug.update()
         ui.update(time_delta)
 
-        if current_state == GameState.GAMEMAP:
+        if current_state == GameState.GAME_MAP:
             # show the new state
             camera.update(0.01)
             camera.render(ui._window)
