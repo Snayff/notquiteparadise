@@ -274,6 +274,7 @@
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">processors</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.command</span> <span class="kn">import</span> <span class="n">initialise_game</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">game</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.main.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -333,7 +334,8 @@
         <span class="c1"># get info to support UI updates and handling events</span>
         <span class="n">current_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span>
         <span class="n">turn_holder</span> <span class="o">=</span> <span class="n">chronicle</span><span class="o">.</span><span class="n">get_turn_holder</span><span class="p">()</span>
-        <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">current_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">:</span>
+            <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
 
         <span class="c1"># process any deletions from last frame</span>
         <span class="c1"># this copies snecs.process_pending_deletions() but adds extra steps.</span>
@@ -372,7 +374,10 @@
         <span class="n">debug</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="n">ui</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 
-        <span class="c1"># show the new state</span>
+        <span class="k">if</span> <span class="n">current_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">:</span>
+            <span class="c1"># show the new state</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ui</span><span class="o">.</span><span class="n">_window</span><span class="p">)</span>
         <span class="n">ui</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
 

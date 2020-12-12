@@ -287,11 +287,11 @@
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.affliction</span> <span class="kn">import</span> <span class="n">BoggedDown</span><span class="p">,</span> <span class="n">Flaming</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.behaviour</span> <span class="kn">import</span> <span class="n">FollowPlayer</span><span class="p">,</span> <span class="n">Projectile</span><span class="p">,</span> <span class="n">SearchAndAttack</span><span class="p">,</span> <span class="n">SkipTurn</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.skill</span> <span class="kn">import</span> <span class="n">BasicAttack</span><span class="p">,</span> <span class="n">Lunge</span><span class="p">,</span> <span class="n">Move</span><span class="p">,</span> <span class="n">Splash</span><span class="p">,</span> <span class="n">TarAndFeather</span>
-<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">Camera</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.character_selector</span> <span class="kn">import</span> <span class="n">CharacterSelector</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.message_log</span> <span class="kn">import</span> <span class="n">MessageLog</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.skill_bar</span> <span class="kn">import</span> <span class="n">SkillBar</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.title_screen</span> <span class="kn">import</span> <span class="n">TitleScreen</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"initialise_game"</span><span class="p">,</span> <span class="s2">"goto_character_select"</span><span class="p">,</span> <span class="s2">"load_game"</span><span class="p">,</span> <span class="s2">"exit_game"</span><span class="p">,</span> <span class="s2">"win_game"</span><span class="p">,</span> <span class="s2">"register_actions"</span><span class="p">]</span>
 
@@ -350,9 +350,6 @@
     <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
 
     <span class="c1"># show the in game screens</span>
-    <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
@@ -419,10 +416,6 @@
     <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
 
     <span class="c1"># show the in game screens</span>
-    <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-
     <span class="n">message_log</span> <span class="o">=</span> <span class="n">MessageLog</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="n">message_log</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
@@ -468,11 +461,6 @@
         <span class="n">save</span> <span class="o">=</span> <span class="n">save_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">".json"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
         <span class="n">state</span><span class="o">.</span><span class="n">load_game</span><span class="p">(</span><span class="n">save</span><span class="p">)</span>
         <span class="k">break</span>
-
-    <span class="c1"># show the in game screens</span>
-    <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="n">message_log</span> <span class="o">=</span> <span class="n">MessageLog</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="n">message_log</span><span class="p">)</span>
@@ -585,12 +573,6 @@
     <span class="n">skill_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">desired_width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">skill_width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">skill_y</span> <span class="o">=</span> <span class="o">-</span><span class="n">SKILL_BUTTON_SIZE</span>
 
-    <span class="c1"># Camera</span>
-    <span class="n">camera_width</span> <span class="o">=</span> <span class="n">desired_width</span>
-    <span class="n">camera_height</span> <span class="o">=</span> <span class="n">desired_height</span>
-    <span class="n">camera_x</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">camera_y</span> <span class="o">=</span> <span class="mi">0</span>
-
     <span class="c1"># Title Screen</span>
     <span class="n">title_screen_width</span> <span class="o">=</span> <span class="n">desired_width</span>
     <span class="n">title_screen_height</span> <span class="o">=</span> <span class="n">desired_height</span>
@@ -625,7 +607,6 @@
         <span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">message_x</span><span class="p">,</span> <span class="n">message_y</span><span class="p">),</span> <span class="p">(</span><span class="n">message_width</span><span class="p">,</span> <span class="n">message_height</span><span class="p">)),</span>
         <span class="n">UIElement</span><span class="o">.</span><span class="n">TILE_INFO</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">tile_info_x</span><span class="p">,</span> <span class="n">tile_info_y</span><span class="p">),</span> <span class="p">(</span><span class="n">tile_info_width</span><span class="p">,</span> <span class="n">tile_info_height</span><span class="p">)),</span>
         <span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">skill_x</span><span class="p">,</span> <span class="n">skill_y</span><span class="p">),</span> <span class="p">(</span><span class="n">skill_width</span><span class="p">,</span> <span class="n">skill_height</span><span class="p">)),</span>
-        <span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">camera_x</span><span class="p">,</span> <span class="n">camera_y</span><span class="p">),</span> <span class="p">(</span><span class="n">camera_width</span><span class="p">,</span> <span class="n">camera_height</span><span class="p">)),</span>
         <span class="n">UIElement</span><span class="o">.</span><span class="n">DUNGEN_VIEWER</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span>
             <span class="p">(</span><span class="n">dungen_viewer_x</span><span class="p">,</span> <span class="n">dungen_viewer_y</span><span class="p">),</span> <span class="p">(</span><span class="n">dungen_viewer_width</span><span class="p">,</span> <span class="n">dungen_viewer_height</span><span class="p">)</span>
         <span class="p">),</span>

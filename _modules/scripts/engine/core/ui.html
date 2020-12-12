@@ -302,7 +302,7 @@
         <span class="c1"># base values</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_width</span> <span class="o">=</span> <span class="n">base_width</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_height</span> <span class="o">=</span> <span class="n">base_height</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_main_surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">desired_width</span><span class="p">,</span> <span class="n">desired_height</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">SRCALPHA</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_main_surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">base_width</span><span class="p">,</span> <span class="n">base_height</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">SRCALPHA</span><span class="p">)</span>
 
         <span class="c1"># values to scale to</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desired_width</span> <span class="o">=</span> <span class="n">desired_width</span>
@@ -342,14 +342,16 @@
         <span class="n">main_surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_main_surface</span>
 
         <span class="c1"># clear previous frame</span>
-        <span class="n">main_surface</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="c1">#main_surface.fill((0, 0, 0))</span>
 
         <span class="c1"># draw everything</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_draw_debug</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gui</span><span class="o">.</span><span class="n">draw_ui</span><span class="p">(</span><span class="n">main_surface</span><span class="p">)</span>
 
         <span class="c1"># update the display</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">main_surface</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="c1">#self._window.blit(pygame.transform.scale(main_surface, self._window.get_size()), (0, 0))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gui</span><span class="o">.</span><span class="n">draw_ui</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">)</span>
+
         <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>  <span class="c1"># make sure to do this as the last drawing element in a frame</span></div>
 
     <span class="k">def</span> <span class="nf">_draw_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

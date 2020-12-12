@@ -281,6 +281,7 @@
 
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.actor_info</span> <span class="kn">import</span> <span class="n">ActorInfo</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.dungen_viewer</span> <span class="kn">import</span> <span class="n">DungenViewer</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 
 
 <div class="viewcode-block" id="process_intent"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.intent.process_intent">[docs]</a><span class="k">def</span> <span class="nf">process_intent</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameState</span><span class="p">):</span>
@@ -404,15 +405,10 @@
                         <span class="c1"># pass centre as it doesnt matter, the skill will pick the right direction</span>
                         <span class="n">_process_skill_use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">current_tile</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTRE</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="c1"># # trigger targeting overlay</span>
+                        <span class="c1"># trigger targeting overlay</span>
                         <span class="k">pass</span>
-                        <span class="c1"># state.set_new(GameState.TARGETING)</span>
-                        <span class="c1"># state.set_active_skill(skill_name)</span>
-                        <span class="c1"># if ui.has_element(UIElement.CAMERA):</span>
-                        <span class="c1">#     camera = ui.get_element(UIElement.CAMERA)</span>
-                        <span class="c1">#     camera.update_targeting_overlay(True, skill_name)</span>
 
-    <span class="c1">## Show actor info - we're in GAME_MAP so it cant be visible</span>
+    <span class="c1">## Show actor info - we're in GAMEMAP so it cant be visible</span>
     <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span><span class="p">:</span>
         <span class="c1"># show</span>
         <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">MENU</span><span class="p">)</span>
@@ -502,7 +498,8 @@
         <span class="c1"># update camera if position changes</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">!=</span> <span class="n">start_pos</span><span class="p">:</span>
-                <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">)</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+                <span class="c1">#ui.get_element(UIElement.CAMERA).set_target((pos.x, pos.y))</span>
+                <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Process skill use: tried to call camera but not init`d."</span><span class="p">)</span></div>
 
