@@ -19,6 +19,7 @@ from scripts.engine.internal.debug import enable_profiling, initialise_logging, 
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
 from scripts.nqp.processors import display, game
+from scripts.nqp.ui_elements.camera import camera
 
 
 def main():
@@ -78,7 +79,8 @@ def game_loop():
         # get info to support UI updates and handling events
         current_state = state.get_current()
         turn_holder = chronicle.get_turn_holder()
-        player = world.get_player()
+        if current_state == GameState.GAME_MAP:
+            player = world.get_player()
 
         # process any deletions from last frame
         # this copies snecs.process_pending_deletions() but adds extra steps.
@@ -117,7 +119,10 @@ def game_loop():
         debug.update()
         ui.update(time_delta)
 
-        # show the new state
+        if current_state == GameState.GAME_MAP:
+            # show the new state
+            camera.update(0.01)
+            camera.render(ui._window)
         ui.draw()
 
 

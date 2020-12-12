@@ -47,7 +47,7 @@ class UI:
         # base values
         self.base_width = base_width
         self.base_height = base_height
-        self._main_surface: pygame.Surface = pygame.Surface((desired_width, desired_height), pygame.SRCALPHA)
+        self._main_surface: pygame.Surface = pygame.Surface((base_width, base_height), pygame.SRCALPHA)
 
         # values to scale to
         self.desired_width = desired_width
@@ -87,14 +87,16 @@ class UI:
         main_surface = self._main_surface
 
         # clear previous frame
-        main_surface.fill((0, 0, 0))
+        #main_surface.fill((0, 0, 0))
 
         # draw everything
         self._draw_debug()
-        self._gui.draw_ui(main_surface)
 
         # update the display
-        self._window.blit(main_surface, (0, 0))
+        #self._window.blit(pygame.transform.scale(main_surface, self._window.get_size()), (0, 0))
+
+        self._gui.draw_ui(self._window)
+
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
     def _draw_debug(self):
