@@ -164,6 +164,9 @@ def _process_game_map_intents(intent: InputIntentType):
     elif intent == InputIntent.EXIT:
         command.exit_game()
 
+    elif intent == InputIntent.LEFT_CLICKED:
+        camera.process_intent(intent)
+
 
 def _process_targeting_mode_intents(intent):
     """

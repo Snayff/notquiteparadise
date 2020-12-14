@@ -33,7 +33,7 @@ def convert_to_intent(event: pygame.event) -> Optional[InputIntentType]:
     """
     intent = None
 
-    checks = {1: _check_directions, 2: _check_actions, 3: _check_dev_actions}
+    checks = {1: _check_directions, 2: _check_actions, 3: _check_dev_actions, 4: _check_mouse}
 
     # loop each check in turn and return first value found
     for check in checks.values():
@@ -43,6 +43,14 @@ def convert_to_intent(event: pygame.event) -> Optional[InputIntentType]:
             return intent
 
     return intent
+
+def _check_mouse(event: pygame.event) -> Optional[InputIntentType]:
+    """
+    Process mouse events such as clicks.
+    """
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.button == pygame.BUTTON_LEFT:
+            return InputIntent.LEFT_CLICKED
 
 
 def _check_directions(event: pygame.event):
