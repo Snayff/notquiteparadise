@@ -12,7 +12,7 @@ from scripts.engine.core import query, utility, world
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Aesthetic, Position
-from scripts.engine.internal.constant import TILE_SIZE, Height
+from scripts.engine.internal.constant import TILE_SIZE, Height, InputIntent, InputEvent
 from scripts.nqp import command
 
 
@@ -65,6 +65,8 @@ class Camera:
         self.move_duration = 0
         self.max_move_duration = 40
 
+        self.hovered_tile = None
+
     ############### PROPERTIES ##################
 
     @property
@@ -88,6 +90,19 @@ class Camera:
 
         self._update_camera_position(time_delta)
         self.visible_tiles = self._get_visible_tiles()
+        self._process_events()
+
+    def _process_events(self):
+        mx, my = pygame.mouse.get_pos()
+
+        hover_pos = (int(self.start_x + mx / TILE_SIZE), int(self.start_y + my / TILE_SIZE))
+        self.hovered_tile = world.get_tile(hover_pos)
+
+    def process_intent(self, intent):
+        if intent == InputIntent.LEFT_CLICKED:
+            if self.hovered_tile and self.hovered_tile.is_visible:
+                event = pygame.event.Event(InputEvent.TILE_CLICK, tile_pos=(self.hovered_tile.x, self.hovered_tile.y))
+                pygame.event.post(event)
 
     def _update_camera_position(self, time_delta: float):
         """
@@ -120,6 +135,9 @@ class Camera:
         if not self.show_all:
             self._draw_lighting(internal_surf)
         self._draw_walls(internal_surf)
+        if self.hovered_tile and self.hovered_tile.is_visible:
+            hover_r = pygame.Rect((self.hovered_tile.x - self.start_x) * TILE_SIZE, (self.hovered_tile.y - self.start_y) * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+            pygame.draw.rect(internal_surf, (200, 200, 0), hover_r, 1)
         target_surf.blit(pygame.transform.scale(internal_surf, target_surf.get_size()), (0, 0))
 
     def _get_visible_tiles(self):
@@ -140,8 +158,13 @@ class Camera:
     ################ UTILITY ####################
 
     def is_in_camera_view(self, pos: Tuple[float, float]) -> bool:
-        # TODO: implement this
-        return True
+        """
+        is the position inside the current camera view
+        """
+        x, y = pos
+        in_view = (self.start_x <= x < self.end_x) and (self.start_y <= y < self.end_y)
+
+        return in_view
 
     def get_render_pos(self, pos: Tuple[float, float]) -> Tuple[float, float]:
         """

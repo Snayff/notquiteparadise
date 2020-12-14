@@ -102,7 +102,7 @@ def game_loop():
         # update based on input events
         for event in pygame.event.get():
             # InputEvent doesnt cover key presses so filter out what we dont want instead
-            if event.type in (EventType.INPUT, pygame.KEYDOWN):
+            if event.type in (EventType.INPUT, pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
                 processors.input.process_input_event(event, current_state)
 
             if event.type == EventType.GAME:
@@ -121,7 +121,7 @@ def game_loop():
 
         if current_state == GameState.GAME_MAP:
             # show the new state
-            camera.update(0.01)
+            camera.update(time_delta)
             camera.render(ui._window)
         ui.draw()
 

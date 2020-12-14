@@ -11,7 +11,7 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.139.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.140.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 DEBUG_START = True  # Whether to start directly in debug map
 
 MAX_SKILLS = 6
@@ -187,6 +187,7 @@ class InputIntent(SimpleNamespace):
     TEST = InputIntentType("test")
     DUNGEON_DEV_VIEW = InputIntentType("dungeon_dev_toggle")
     TOGGLE_UI = InputIntentType("toggle_ui")
+    LEFT_CLICKED = InputIntentType("left_clicked")
 
 
 class Direction(SimpleNamespace):
