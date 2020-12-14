@@ -267,7 +267,7 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">clamp</span><span class="p">,</span> <span class="n">convert_tile_string_to_xy</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">Height</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">Height</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">InputEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">command</span>
 
 
@@ -318,7 +318,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">target_y</span> <span class="o">=</span> <span class="mf">0.0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">move_duration</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_move_duration</span> <span class="o">=</span> <span class="mi">40</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_move_duration</span> <span class="o">=</span> <span class="mi">40</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="c1">############### PROPERTIES ##################</span>
 
@@ -342,7 +344,20 @@
 <span class="sd">        """</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_camera_position</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">visible_tiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_visible_tiles</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visible_tiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_visible_tiles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_process_events</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_process_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mx</span><span class="p">,</span> <span class="n">my</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">get_pos</span><span class="p">()</span>
+
+        <span class="n">hover_pos</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_x</span> <span class="o">+</span> <span class="n">mx</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">+</span> <span class="n">my</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">hover_pos</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Camera.process_intent"><a class="viewcode-back" href="../../../../scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.camera.Camera.process_intent">[docs]</a>    <span class="k">def</span> <span class="nf">process_intent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intent</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">LEFT_CLICKED</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">is_visible</span><span class="p">:</span>
+                <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">InputEvent</span><span class="o">.</span><span class="n">TILE_CLICK</span><span class="p">,</span> <span class="n">tile_pos</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+                <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_update_camera_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -375,6 +390,9 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_draw_lighting</span><span class="p">(</span><span class="n">internal_surf</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_draw_walls</span><span class="p">(</span><span class="n">internal_surf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">is_visible</span><span class="p">:</span>
+            <span class="n">hover_r</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="n">internal_surf</span><span class="p">,</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">hover_r</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">target_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">internal_surf</span><span class="p">,</span> <span class="n">target_surf</span><span class="o">.</span><span class="n">get_size</span><span class="p">()),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></div>
 
     <span class="k">def</span> <span class="nf">_get_visible_tiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -395,8 +413,13 @@
     <span class="c1">################ UTILITY ####################</span>
 
 <div class="viewcode-block" id="Camera.is_in_camera_view"><a class="viewcode-back" href="../../../../scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.camera.Camera.is_in_camera_view">[docs]</a>    <span class="k">def</span> <span class="nf">is_in_camera_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="c1"># TODO: implement this</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
+        <span class="sd">"""</span>
+<span class="sd">        is the position inside the current camera view</span>
+<span class="sd">        """</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pos</span>
+        <span class="n">in_view</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_x</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_x</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_y</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">in_view</span></div>
 
 <div class="viewcode-block" id="Camera.get_render_pos"><a class="viewcode-back" href="../../../../scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.camera.Camera.get_render_pos">[docs]</a>    <span class="k">def</span> <span class="nf">get_render_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
         <span class="sd">"""</span>

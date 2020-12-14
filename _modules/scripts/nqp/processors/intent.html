@@ -417,7 +417,10 @@
         <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">EXIT</span><span class="p">:</span>
-        <span class="n">command</span><span class="o">.</span><span class="n">exit_game</span><span class="p">()</span></div>
+        <span class="n">command</span><span class="o">.</span><span class="n">exit_game</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">LEFT_CLICKED</span><span class="p">:</span>
+        <span class="n">camera</span><span class="o">.</span><span class="n">process_intent</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="_process_targeting_mode_intents"><a class="viewcode-back" href="../../../../nqp/processors/intent.html#scripts.nqp.processors.intent._process_targeting_mode_intents">[docs]</a><span class="k">def</span> <span class="nf">_process_targeting_mode_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">):</span>

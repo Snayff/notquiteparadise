@@ -288,7 +288,7 @@
 <span class="sd">    """</span>
     <span class="n">intent</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">_check_directions</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="n">_check_actions</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="n">_check_dev_actions</span><span class="p">}</span>
+    <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">_check_directions</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="n">_check_actions</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="n">_check_dev_actions</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="n">_check_mouse</span><span class="p">}</span>
 
     <span class="c1"># loop each check in turn and return first value found</span>
     <span class="k">for</span> <span class="n">check</span> <span class="ow">in</span> <span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -298,6 +298,16 @@
             <span class="k">return</span> <span class="n">intent</span>
 
     <span class="k">return</span> <span class="n">intent</span></div>
+
+<span class="k">def</span> <span class="nf">_check_mouse</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">InputIntentType</span><span class="p">]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Process mouse events such as clicks.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">MOUSEBUTTONDOWN</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">BUTTON_LEFT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">LEFT_CLICKED</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
 
 
 <span class="k">def</span> <span class="nf">_check_directions</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">):</span>

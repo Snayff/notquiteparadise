@@ -357,7 +357,7 @@
         <span class="c1"># update based on input events</span>
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
             <span class="c1"># InputEvent doesnt cover key presses so filter out what we dont want instead</span>
-            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">INPUT</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">INPUT</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">MOUSEBUTTONDOWN</span><span class="p">):</span>
                 <span class="n">processors</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">process_input_event</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">current_state</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">:</span>
@@ -376,7 +376,7 @@
 
         <span class="k">if</span> <span class="n">current_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">:</span>
             <span class="c1"># show the new state</span>
-            <span class="n">camera</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
             <span class="n">camera</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ui</span><span class="o">.</span><span class="n">_window</span><span class="p">)</span>
         <span class="n">ui</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
