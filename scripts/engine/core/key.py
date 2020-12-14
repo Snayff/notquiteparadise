@@ -52,6 +52,8 @@ def _check_mouse(event: pygame.event) -> Optional[InputIntentType]:
         if event.button == pygame.BUTTON_LEFT:
             return InputIntent.LEFT_CLICKED
 
+    return None
+
 
 def _check_directions(event: pygame.event):
     """
