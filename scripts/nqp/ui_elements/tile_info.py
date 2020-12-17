@@ -26,6 +26,8 @@ class TileInfo(Panel):
         self.selected_tile_pos: Tuple[int, int] = (0, 0)
         self.sections: List[UIElement] = []
 
+        self.text_size = 4
+
         # complete base class init
         super().__init__(
             rect,
@@ -130,13 +132,10 @@ class TileInfo(Panel):
             sections.append(ui_image)
             ui_image = None  # clear to prevent any carry over
 
-            # update position
-            current_y += ICON_IN_TEXT_SIZE + GAP_SIZE
-
             # collect text for the section
             text = ""
             for line in info[section_number]:
-                text += line + "<br>"
+                text += f"<font face=barlow size={self.text_size}>{line}</font> <br>"
 
             # create textbox
             rect = pygame.Rect((x, current_y), (width, text_height))
@@ -149,6 +148,10 @@ class TileInfo(Panel):
                 container=self.get_container(),
             )
             sections.append(ui_text)
+
+            # update position
+            current_y += ICON_IN_TEXT_SIZE + GAP_SIZE
+
             ui_text = None  # clear to prevent any carry over
 
             # increment section

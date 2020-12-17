@@ -7,6 +7,7 @@ from scripts.engine.core.ui import ui
 from scripts.engine.internal.component import Position
 from scripts.engine.internal.constant import EventType, GameState, InputEvent, InputIntent, UIElement
 from scripts.nqp.processors.intent import process_intent
+from scripts.nqp import command
 
 __all__ = ["process_input_event"]
 
@@ -42,7 +43,11 @@ def process_input_event(event: pygame.event, game_state: GameState):
                     assert isinstance(position, Position)
                     if (x, y) in position.coordinates:
                         # found entity, set to selected
-                        actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
+                        if ui.has_element(UIElement.ACTOR_INFO):
+                            ui.kill_element(UIElement.ACTOR_INFO)
+
+                        actor_info: ActorInfo = ActorInfo(command.get_element_rect(UIElement.ACTOR_INFO), ui.get_gui_manager())
+                        ui.register_element(UIElement.ACTOR_INFO, actor_info)
                         actor_info.set_entity(entity)
                         intent = InputIntent.ACTOR_INFO_TOGGLE
 

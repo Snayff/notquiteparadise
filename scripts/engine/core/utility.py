@@ -61,7 +61,7 @@ def get_image(
         desired_dimensions = (TILE_SIZE, TILE_SIZE)
 
     # check if image path provided
-    if img_path.lower() != "none":
+    if str(img_path).lower() != "none":
 
         if f"{img_path}{desired_dimensions}" in store.images:
             image = store.images[f"{img_path}{desired_dimensions}"]

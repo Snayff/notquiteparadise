@@ -119,10 +119,14 @@ def game_loop():
         debug.update()
         ui.update(time_delta)
 
-        if current_state == GameState.GAME_MAP:
-            # show the new state
-            camera.update(time_delta)
-            camera.render(ui._window)
+        try:
+            world.get_game_map()
+            if current_state in [GameState.GAME_MAP, GameState.MENU]:
+                # show the new state
+                camera.update(time_delta)
+                camera.render(ui._window)
+        except AttributeError:
+            pass
         ui.draw()
 
 

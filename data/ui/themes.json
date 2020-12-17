@@ -6,18 +6,18 @@
              "disabled_bg":"#c21515",
              "selected_bg":"#021166",
              "dark_bg":"#0f0f0e",
-             
+
              "normal_text":"#ffffff",
              "hovered_text":"#c28015",
              "selected_text":"#c28015",
              "disabled_text":"#c21515",
-             
+
              "link_text": "#7f11ad",
              "link_hover": "#2020FF",
              "link_selected": "#551A8B",
-             
+
              "text_shadow": "#000000",
-             
+
              "normal_border": "#c28015",
              "hovered_border": "#c28015",
              "disabled_border": "#c21515",
@@ -61,7 +61,7 @@
     "drop_down_menu.#drop_down_options_list.button": {
         "prototype": "#drop_down_text_prototype"
     },
-     "button": {
+    "button": {
          "font": {
              "name": "barlow",
              "size": "14",
