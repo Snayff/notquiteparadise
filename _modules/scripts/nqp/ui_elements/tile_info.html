@@ -281,6 +281,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">selected_tile_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UIElement</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_size</span> <span class="o">=</span> <span class="mi">4</span>
+
         <span class="c1"># complete base class init</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">rect</span><span class="p">,</span>
@@ -385,13 +387,10 @@
             <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_image</span><span class="p">)</span>
             <span class="n">ui_image</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># clear to prevent any carry over</span>
 
-            <span class="c1"># update position</span>
-            <span class="n">current_y</span> <span class="o">+=</span> <span class="n">ICON_IN_TEXT_SIZE</span> <span class="o">+</span> <span class="n">GAP_SIZE</span>
-
             <span class="c1"># collect text for the section</span>
             <span class="n">text</span> <span class="o">=</span> <span class="s2">""</span>
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="n">section_number</span><span class="p">]:</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="n">line</span> <span class="o">+</span> <span class="s2">"&lt;br&gt;"</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"&lt;font face=barlow size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text_size</span><span class="si">}</span><span class="s2">&gt;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&lt;/font&gt; &lt;br&gt;"</span>
 
             <span class="c1"># create textbox</span>
             <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">),</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">text_height</span><span class="p">))</span>
@@ -404,6 +403,10 @@
                 <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
             <span class="p">)</span>
             <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_text</span><span class="p">)</span>
+
+            <span class="c1"># update position</span>
+            <span class="n">current_y</span> <span class="o">+=</span> <span class="n">ICON_IN_TEXT_SIZE</span> <span class="o">+</span> <span class="n">GAP_SIZE</span>
+
             <span class="n">ui_text</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># clear to prevent any carry over</span>
 
             <span class="c1"># increment section</span>

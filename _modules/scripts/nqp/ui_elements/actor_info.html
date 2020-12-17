@@ -295,15 +295,17 @@
         <span class="c1"># sections</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PygameUiElement</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_base_positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># complete base class init</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">"actor_info"</span><span class="p">)</span>
 
         <span class="c1"># setup scroll bar</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_size</span> <span class="o">=</span> <span class="mf">0.3</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar</span> <span class="o">=</span> <span class="n">UIVerticalScrollBar</span><span class="p">(</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">)),</span>
-            <span class="mf">0.5</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_size</span><span class="p">,</span>
             <span class="n">manager</span><span class="p">,</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="bp">self</span><span class="p">,</span>
@@ -328,6 +330,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span> <span class="o">=</span> <span class="n">entity</span></div>
 
     <span class="c1">############### ACTIONS #########################</span>
+
+    <span class="k">def</span> <span class="nf">_shift_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_y</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">):</span>
+            <span class="n">child</span><span class="o">.</span><span class="n">set_relative_position</span><span class="p">((</span><span class="n">child</span><span class="o">.</span><span class="n">relative_rect</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_base_positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">target_y</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ActorInfo.update"><a class="viewcode-back" href="../../../../scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.actor_info.ActorInfo.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+        <span class="n">new_y_portion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar</span><span class="o">.</span><span class="n">bottom_limit</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_base_positions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">relative_rect</span><span class="o">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_base_positions</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">new_y</span> <span class="o">=</span> <span class="n">new_y_portion</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_base_positions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">relative_rect</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_base_positions</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_shift_children</span><span class="p">(</span><span class="n">new_y</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ActorInfo.show"><a class="viewcode-back" href="../../../../scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.actor_info.ActorInfo.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -450,6 +464,7 @@
 <span class="sd">        Create sections for the information about the tile</span>
 <span class="sd">        """</span>
         <span class="n">sections</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">section_base_positions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">current_y</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">current_text_block</span> <span class="o">=</span> <span class="s2">""</span>
 
@@ -480,6 +495,7 @@
                         <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
                     <span class="p">)</span>
                     <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_text</span><span class="p">)</span>
+                    <span class="n">section_base_positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_text</span><span class="o">.</span><span class="n">relative_rect</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 
                     <span class="c1"># update position</span>
                     <span class="n">current_y</span> <span class="o">+=</span> <span class="n">ui_text</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">GAP_SIZE</span>
@@ -508,6 +524,7 @@
                     <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
                 <span class="p">)</span>
                 <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_image</span><span class="p">)</span>
+                <span class="n">section_base_positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_image</span><span class="o">.</span><span class="n">relative_rect</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 
                 <span class="c1"># update position</span>
                 <span class="n">current_y</span> <span class="o">+=</span> <span class="n">image_height</span> <span class="o">+</span> <span class="n">GAP_SIZE</span>
@@ -528,9 +545,11 @@
                 <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
             <span class="p">)</span>
             <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_text</span><span class="p">)</span>
+            <span class="n">section_base_positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_text</span><span class="o">.</span><span class="n">relative_rect</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 
         <span class="c1"># update main sections list</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="n">sections</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="n">sections</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_base_positions</span> <span class="o">=</span> <span class="n">section_base_positions</span></div>
 </pre></div>
 
           </article>
