@@ -157,8 +157,7 @@ def _process_game_map_intents(intent: InputIntentType):
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:
         # show
         state.set_new(GameState.MENU)
-        actor_info = ActorInfo(command.get_element_rect(UIElement.ACTOR_INFO), ui.get_gui_manager())
-        ui.register_element(UIElement.ACTOR_INFO, actor_info)
+        actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
 
     elif intent == InputIntent.EXIT:

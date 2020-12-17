@@ -12,7 +12,9 @@ from scripts.engine.core import query, utility, world
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Aesthetic, Position
-from scripts.engine.internal.constant import TILE_SIZE, Height, InputIntent, InputEvent
+from scripts.engine.internal.constant import TILE_SIZE, Height, InputIntent, InputEvent, EventType, UIElement
+from scripts.engine.core.ui import ui
+from scripts.nqp.ui_elements.tile_info import TileInfo
 from scripts.nqp import command
 
 
@@ -94,14 +96,33 @@ class Camera:
 
     def _process_events(self):
         mx, my = pygame.mouse.get_pos()
+        mx /= self._desired_width / self._base_width
+        my /= self._desired_height / self._base_height
 
         hover_pos = (int(self.start_x + mx / TILE_SIZE), int(self.start_y + my / TILE_SIZE))
-        self.hovered_tile = world.get_tile(hover_pos)
+        try:
+            new_hover = world.get_tile(hover_pos)
+            if (new_hover is self.hovered_tile) == False:
+                if new_hover.is_visible:
+                    if not ui.has_element(UIElement.TILE_INFO):
+                        tile_info: TileInfo = TileInfo(command.get_element_rect(UIElement.TILE_INFO), ui.get_gui_manager())
+                        ui.register_element(UIElement.TILE_INFO, tile_info)
+
+                    tile_info = ui.get_element(UIElement.TILE_INFO)
+                    tile_info.set_selected_tile_pos(hover_pos)
+                    tile_info.cleanse()
+                    ui.set_element_visibility(UIElement.TILE_INFO, True)
+                else:
+                    ui.set_element_visibility(UIElement.TILE_INFO, False)
+            self.hovered_tile = new_hover
+        except IndexError:
+            pass
+
 
     def process_intent(self, intent):
         if intent == InputIntent.LEFT_CLICKED:
             if self.hovered_tile and self.hovered_tile.is_visible:
-                event = pygame.event.Event(InputEvent.TILE_CLICK, tile_pos=(self.hovered_tile.x, self.hovered_tile.y))
+                event = pygame.event.Event(EventType.INPUT, subtype=InputEvent.TILE_CLICK, tile_pos=(self.hovered_tile.x, self.hovered_tile.y))
                 pygame.event.post(event)
 
     def _update_camera_position(self, time_delta: float):

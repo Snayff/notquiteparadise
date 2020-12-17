@@ -40,15 +40,17 @@ class ActorInfo(Window):
         # sections
         self.selected_entity: Optional[EntityID] = None
         self.sections: List[PygameUiElement] = []
+        self.section_base_positions: List[int] = []
 
         # complete base class init
         super().__init__(rect, manager, object_id="actor_info")
 
         # setup scroll bar
         self.scrollbar_width = 50
+        self.scrollbar_size = 0.3
         self.scrollbar = UIVerticalScrollBar(
             pygame.Rect((rect.width - self.scrollbar_width, 0), (self.scrollbar_width, rect.height)),
-            0.5,
+            self.scrollbar_size,
             manager,
             self,
             self,
@@ -73,6 +75,18 @@ class ActorInfo(Window):
         self.selected_entity = entity
 
     ############### ACTIONS #########################
+
+    def _shift_children(self, target_y):
+        for i, child in enumerate(self.sections):
+            child.set_relative_position((child.relative_rect.x, self.section_base_positions[i] - target_y))
+
+    def update(self, time_delta: float):
+        super().update(time_delta)
+        new_y_portion = self.scrollbar.scroll_position / self.scrollbar.bottom_limit / (1 - self.scrollbar_size)
+        if self.sections != []:
+            if self.section_base_positions[-1] + self.sections[-1].relative_rect.height > self.rect.height - self.section_base_positions[0]:
+                new_y = new_y_portion * (self.section_base_positions[-1] + self.sections[-1].relative_rect.height - (self.rect.height - self.section_base_positions[0]))
+                self._shift_children(new_y)
 
     def show(self):
         """
@@ -195,6 +209,7 @@ class ActorInfo(Window):
         Create sections for the information about the tile
         """
         sections = []
+        section_base_positions = []
         current_y = 0
         current_text_block = ""
 
@@ -225,6 +240,7 @@ class ActorInfo(Window):
                         container=self.get_container(),
                     )
                     sections.append(ui_text)
+                    section_base_positions.append(ui_text.relative_rect.y)
 
                     # update position
                     current_y += ui_text.rect.height + GAP_SIZE
@@ -253,6 +269,7 @@ class ActorInfo(Window):
                     container=self.get_container(),
                 )
                 sections.append(ui_image)
+                section_base_positions.append(ui_image.relative_rect.y)
 
                 # update position
                 current_y += image_height + GAP_SIZE
@@ -273,6 +290,8 @@ class ActorInfo(Window):
                 container=self.get_container(),
             )
             sections.append(ui_text)
+            section_base_positions.append(ui_text.relative_rect.y)
 
         # update main sections list
         self.sections = sections
+        self.section_base_positions = section_base_positions
