@@ -149,9 +149,10 @@ def _process_game_map_intents(intent: InputIntentType):
                     if skill.targeting_method == TargetingMethod.AUTO:
                         # pass centre as it doesnt matter, the skill will pick the right direction
                         _process_skill_use(player, skill, current_tile, Direction.CENTRE)
-                    else:
+                    elif skill.targeting_method == TargetingMethod.TARGET:
                         # trigger targeting overlay
-                        pass
+                        state.set_new(GameState.TARGETING)
+                        state.set_active_skill(skill_name)
 
     ## Show actor info - we're in GAMEMAP so it cant be visible
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:
@@ -190,6 +191,9 @@ def _process_targeting_mode_intents(intent):
         # go back to previous state
         state.set_new(state.get_previous())
 
+    elif intent == InputIntent.LEFT_CLICKED:
+        camera.process_intent(intent)
+
     ## Select new skill
     elif intent in possible_skill_intents:
         pressed_skill_name = _get_pressed_skills_name(intent)
@@ -214,7 +218,7 @@ def _process_targeting_mode_intents(intent):
 
                 # resume previous state
                 state.set_new(state.get_previous())
-                ui.update_targeting_overlay(False)
+                #ui.update_targeting_overlay(False)
 
 
 def _process_menu_intents(intent):

@@ -8,11 +8,11 @@ import pytweening
 from pygame.rect import Rect
 from pygame.surface import Surface
 
-from scripts.engine.core import query, utility, world
+from scripts.engine.core import query, utility, world, state
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Aesthetic, Position
-from scripts.engine.internal.constant import TILE_SIZE, Height, InputIntent, InputEvent, EventType, UIElement
+from scripts.engine.internal.constant import TILE_SIZE, Height, InputIntent, InputEvent, EventType, UIElement, GameState
 from scripts.engine.core.ui import ui
 from scripts.nqp.ui_elements.tile_info import TileInfo
 from scripts.nqp import command
@@ -156,6 +156,18 @@ class Camera:
         if not self.show_all:
             self._draw_lighting(internal_surf)
         self._draw_walls(internal_surf)
+        if state.get_current() == GameState.TARGETING:
+            player = world.get_player()
+            position = world.get_entitys_component(player, Position)
+            active_skill_name = state.get_active_skill()
+            skill = world.get_known_skill(player, active_skill_name)
+            for direction in skill.target_directions:
+                target_x = position.x + direction[0]
+                target_y = position.y + direction[1]
+                tile = world.get_tile((target_x, target_y))
+                if tile.is_visible:
+                    option_r = pygame.Rect((target_x - self.start_x) * TILE_SIZE, (target_y - self.start_y) * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                    pygame.draw.rect(internal_surf, (50, 150, 200), option_r, 1)
         if self.hovered_tile and self.hovered_tile.is_visible:
             hover_r = pygame.Rect((self.hovered_tile.x - self.start_x) * TILE_SIZE, (self.hovered_tile.y - self.start_y) * TILE_SIZE, TILE_SIZE, TILE_SIZE)
             pygame.draw.rect(internal_surf, (200, 200, 0), hover_r, 1)

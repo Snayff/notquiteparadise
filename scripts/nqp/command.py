@@ -240,7 +240,6 @@ def win_game():
     timer = Timer(2.0, goto_to_title)
     timer.start()
 
-
 ############### NAVIGATION  #####################
 
 
