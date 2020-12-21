@@ -121,7 +121,7 @@ def game_loop():
 
         try:
             world.get_game_map()
-            if current_state in [GameState.GAME_MAP, GameState.MENU]:
+            if current_state in [GameState.GAME_MAP, GameState.MENU, GameState.TARGETING]:
                 # show the new state
                 camera.update(time_delta)
                 camera.render(ui._window)
