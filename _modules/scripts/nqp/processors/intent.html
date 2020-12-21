@@ -404,9 +404,10 @@
                     <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">targeting_method</span> <span class="o">==</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">AUTO</span><span class="p">:</span>
                         <span class="c1"># pass centre as it doesnt matter, the skill will pick the right direction</span>
                         <span class="n">_process_skill_use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">current_tile</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTRE</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">skill</span><span class="o">.</span><span class="n">targeting_method</span> <span class="o">==</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">TARGET</span><span class="p">:</span>
                         <span class="c1"># trigger targeting overlay</span>
-                        <span class="k">pass</span>
+                        <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">TARGETING</span><span class="p">)</span>
+                        <span class="n">state</span><span class="o">.</span><span class="n">set_active_skill</span><span class="p">(</span><span class="n">skill_name</span><span class="p">)</span>
 
     <span class="c1">## Show actor info - we're in GAMEMAP so it cant be visible</span>
     <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">ACTOR_INFO_TOGGLE</span><span class="p">:</span>
@@ -445,6 +446,9 @@
         <span class="c1"># go back to previous state</span>
         <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_previous</span><span class="p">())</span>
 
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">LEFT_CLICKED</span><span class="p">:</span>
+        <span class="n">camera</span><span class="o">.</span><span class="n">process_intent</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span>
+
     <span class="c1">## Select new skill</span>
     <span class="k">elif</span> <span class="n">intent</span> <span class="ow">in</span> <span class="n">possible_skill_intents</span><span class="p">:</span>
         <span class="n">pressed_skill_name</span> <span class="o">=</span> <span class="n">_get_pressed_skills_name</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span>
@@ -468,8 +472,8 @@
                 <span class="n">_process_skill_use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 
                 <span class="c1"># resume previous state</span>
-                <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_previous</span><span class="p">())</span>
-                <span class="n">ui</span><span class="o">.</span><span class="n">update_targeting_overlay</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+                <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_previous</span><span class="p">())</span></div>
+                <span class="c1">#ui.update_targeting_overlay(False)</span>
 
 
 <span class="k">def</span> <span class="nf">_process_menu_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">):</span>

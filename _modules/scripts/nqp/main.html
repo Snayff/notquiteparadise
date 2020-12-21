@@ -376,7 +376,7 @@
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">current_state</span> <span class="ow">in</span> <span class="p">[</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">,</span> <span class="n">GameState</span><span class="o">.</span><span class="n">MENU</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">current_state</span> <span class="ow">in</span> <span class="p">[</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">,</span> <span class="n">GameState</span><span class="o">.</span><span class="n">MENU</span><span class="p">,</span> <span class="n">GameState</span><span class="o">.</span><span class="n">TARGETING</span><span class="p">]:</span>
                 <span class="c1"># show the new state</span>
                 <span class="n">camera</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
                 <span class="n">camera</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ui</span><span class="o">.</span><span class="n">_window</span><span class="p">)</span>
