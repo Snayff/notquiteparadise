@@ -2,13 +2,11 @@ from __future__ import annotations
 
 import logging
 
-import numpy as np
 import pygame
 import tcod
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, world
-from scripts.engine.internal import library
 from scripts.engine.internal.component import (
     Afflictions,
     FOV,
@@ -26,9 +24,7 @@ from scripts.engine.internal.constant import (
     EventType,
     FOV_ALGORITHM,
     FOV_LIGHT_WALLS,
-    GameEvent,
     INFINITE,
-    InteractionEvent,
     MAX_ACTIVATION_DISTANCE,
     ReactionTrigger,
     ReactionTriggerType,
@@ -45,8 +41,8 @@ __all__ = [
 ]
 
 from scripts.engine.internal.definition import EffectData, ReactionData
-from scripts.engine.internal.event import AffectCooldownEvent, AffectStatEvent, AfflictionEvent, DamageEvent, MoveEvent, \
-    Subscriber, WinConditionMetEvent, publisher
+from scripts.engine.core.event import AffectCooldownEvent, AffectStatEvent, AfflictionEvent, DamageEvent, MoveEvent, \
+    Subscriber, WinConditionMetEvent, event_hub
 from scripts.engine.world_objects.tile import Tile
 
 ########################### GENERAL ################################
@@ -430,5 +426,5 @@ def _process_win_condition(event: pygame.event):
         assert isinstance(position, Position)
         if player_pos.x == position.x and player_pos.y == position.y:
             # post game event
-            publisher.publish(WinConditionMetEvent())
+            event_hub.post(WinConditionMetEvent())
             break

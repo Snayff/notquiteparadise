@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-import logging
 from abc import ABC, abstractmethod
-
-__all__ = []
-
 from typing import Dict, List, Tuple
-
 from snecs.typedefs import EntityID
-
-from scripts.engine.internal.constant import DamageType, DamageTypeType, Direction, DirectionType, EventType, \
-    GameEvent, InteractionEvent, PrimaryStatType, UIElement
+from scripts.engine.internal.constant import DamageTypeType, DirectionType, EventType, \
+    PrimaryStatType, UIElement
 from scripts.engine.internal.definition import ActorData
+
+
+__all__ = ["event_hub", "Subscriber", "MoveEvent", "DamageEvent", "AffectStatEvent", "AffectCooldownEvent",
+    "AfflictionEvent", "AlterTerrainEvent", "ExitGameEvent", "ExitMenuEvent", "NewGameEvent", "NewTurnEvent",
+    "NewRoundEvent", "EndRoundEvent", "EndTurnEvent", "StartGameEvent", "LoadGameEvent", "WinConditionMetEvent"]
 
 
 class EventHub:
@@ -22,7 +21,7 @@ class EventHub:
         self.events: List[Event] = []
         self.subscribers: Dict = {}
 
-    def notify(self, event: Event):
+    def post(self, event: Event):
         """
         Log an event ready for notifying subscribers.
         """
@@ -54,24 +53,6 @@ class EventHub:
 
 
 event_hub = EventHub()
-
-
-class Publisher:
-    # TODO - Can we remove and just publish directly to the hub?
-    """
-    Class to create events and log them with the event hub
-    """
-    def __init__(self):
-        self.event_hub: EventHub = event_hub
-
-    def publish(self, event: Event):
-        """
-        Publish an event to the hub.
-        """
-        self.event_hub.notify(event)
-
-
-publisher = Publisher()
 
 
 class Subscriber(ABC):

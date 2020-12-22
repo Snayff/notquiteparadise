@@ -6,20 +6,19 @@ import traceback
 
 import pygame
 import snecs
-from pygame.constants import USEREVENT
 from snecs.world import default_world
 
 import scripts.nqp.processors.input
-from scripts.engine.core import chronicle, state, system, world
+from scripts.engine.core import chronicle, state, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug
 from scripts.engine.internal.component import NQPComponent
-from scripts.engine.internal.constant import EventType, GameEvent, GameState, InputEvent, InteractionEvent
+from scripts.engine.internal.constant import GameState
 from scripts.engine.internal.debug import enable_profiling, initialise_logging, kill_logging
-from scripts.engine.internal.event import event_hub
+from scripts.engine.core.event import event_hub
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
-from scripts.nqp.processors import display, game
+from scripts.nqp.processors import display
 from scripts.nqp.ui_elements.camera import camera
 
 
@@ -80,8 +79,7 @@ def game_loop():
         # get info to support UI updates and handling events
         current_state = state.get_current()
         turn_holder = chronicle.get_turn_holder()
-        if current_state == GameState.GAME_MAP:
-            player = world.get_player()
+        player = world.get_player()
 
         # process any deletions from last frame
         # this copies snecs.process_pending_deletions() but adds extra steps.

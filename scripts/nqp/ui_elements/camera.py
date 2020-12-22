@@ -12,7 +12,7 @@ from scripts.engine.core import query, utility, world, state
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Aesthetic, Position
-from scripts.engine.internal.constant import TILE_SIZE, Height, InputIntent, InputEvent, EventType, UIElement, GameState
+from scripts.engine.internal.constant import TILE_SIZE, Height, InputIntent, InputEventType, EventType, UIElement, GameState
 from scripts.engine.core.ui import ui
 from scripts.nqp.ui_elements.tile_info import TileInfo
 from scripts.nqp import command
@@ -111,7 +111,7 @@ class Camera:
     def process_intent(self, intent):
         if intent == InputIntent.LEFT_CLICKED:
             if self.hovered_tile and self.hovered_tile.is_visible:
-                event = pygame.event.Event(EventType.INPUT, subtype=InputEvent.TILE_CLICK, tile_pos=(self.hovered_tile.x, self.hovered_tile.y))
+                event = pygame.event.Event(EventType.INPUT, subtype=InputEventType.TILE_CLICK, tile_pos=(self.hovered_tile.x, self.hovered_tile.y))
                 pygame.event.post(event)
 
     def _update_camera_position(self, time_delta: float):

@@ -4,7 +4,6 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Tuple, TYPE_CHECKING
 
-import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import query, utility, world
@@ -12,7 +11,6 @@ from scripts.engine.internal import library
 from scripts.engine.internal.component import (
     Aesthetic,
     Afflictions,
-    HasCombatStats,
     Identity,
     Knowledge,
     Lifespan,
@@ -24,14 +22,12 @@ from scripts.engine.internal.constant import (
     DamageTypeType,
     Direction,
     DirectionType,
-    EventType,
-    InteractionEvent,
     PrimaryStatType,
     TargetTag,
 )
-from scripts.engine.internal.event import AffectCooldownEvent, AffectStatEvent, AfflictionEvent, AlterTerrainEvent, \
+from scripts.engine.core.event import AffectCooldownEvent, AffectStatEvent, AfflictionEvent, AlterTerrainEvent, \
     DamageEvent, MoveEvent, \
-    publisher
+    event_hub
 
 if TYPE_CHECKING:
     from typing import List
@@ -138,7 +134,7 @@ class DamageEffect(Effect):
                 damage_type=self.damage_type,
                 remaining_hp=defenders_resources.health,
             )
-            publisher.publish(event)
+            event_hub.post(event)
 
             # check if target is dead
             if damage >= defenders_resources.health:
@@ -201,7 +197,7 @@ class MoveActorEffect(Effect):
                         direction=self.direction,
                         new_pos=(new_x, new_y)
                     )
-                    publisher.publish(event)
+                    event_hub.post(event)
 
                     success = True
 
@@ -299,7 +295,7 @@ class AffectStatEffect(Effect):
                 stat_to_target=self.stat_to_target,
                 amount=self.affect_amount,
             )
-            publisher.publish(event)
+            event_hub.post(event)
 
             success = True
 
@@ -344,7 +340,7 @@ class ApplyAfflictionEffect(Effect):
                 target=self.target,
                 affliction_name=self.affliction_name,
             )
-            publisher.publish(event)
+            event_hub.post(event)
 
             return True, self.success_effects
 
@@ -385,7 +381,7 @@ class AffectCooldownEffect(Effect):
                 target=self.target,
                 amount=self.affect_amount,
             )
-            publisher.publish(event)
+            event_hub.post(event)
 
             logging.debug(
                 f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to "
@@ -458,7 +454,7 @@ class AlterTerrainEffect(Effect):
                 terrain_name=self.terrain_name,
                 duration=self.affect_amount
             )
-            publisher.publish(event)
+            event_hub.post(event)
 
         return result
 
@@ -485,6 +481,6 @@ class AlterTerrainEffect(Effect):
                 terrain_name=self.terrain_name,
                 duration=self.affect_amount
             )
-            publisher.publish(event)
+            event_hub.post(event)
 
         return result

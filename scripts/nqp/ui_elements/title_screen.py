@@ -1,19 +1,19 @@
 from __future__ import annotations
 
 import logging
-from typing import Type, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 import pygame
 import pygame_gui
 from pygame import Rect
-from pygame_gui.elements import UIButton, UIPanel
+from pygame_gui.elements import UIButton
 
-from scripts.engine.internal.constant import EventType, GameEvent, InputEvent, RenderLayer
-from scripts.engine.internal.event import ExitGameEvent, LoadGameEvent, NewGameEvent, publisher
+from scripts.engine.internal.constant import RenderLayer
+from scripts.engine.core.event import ExitGameEvent, LoadGameEvent, NewGameEvent, event_hub
 from scripts.engine.widgets.panel import Panel
 
 if TYPE_CHECKING:
-    from typing import Any, Dict, List, Optional, Tuple, Union
+    from typing import List
 
     from pygame_gui import UIManager
 
@@ -61,7 +61,7 @@ class TitleScreen(Panel):
                 ids = event.ui_object_id.split(".")
                 button_id = ids[-1]  # get last element
                 new_event = self.button_events[button_id]
-                publisher.publish(new_event)
+                event_hub.post(new_event)
 
                 logging.debug(f"TitleScreen button '{button_id}' pressed.")
 

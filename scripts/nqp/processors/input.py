@@ -5,7 +5,7 @@ import pygame
 from scripts.engine.core import chronicle, key, query, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal.component import Position
-from scripts.engine.internal.constant import EventType, GameState, InputEvent, InputIntent, UIElement
+from scripts.engine.internal.constant import EventType, GameState, InputEventType, InputIntent, UIElement
 from scripts.nqp.processors.intent import process_intent
 from scripts.nqp import command
 
@@ -19,13 +19,13 @@ def process_input_event(event: pygame.event, game_state: GameState):
     Extract the intent from the event and process them in the context of the game state. If an event can only be
     called in one way then no intent is generated and the event will directly go to the relevant action.
 
-    This covers the custom InputEvent and pygame pygame.KEYDOWN events.
+    This covers the custom InputEventType and pygame pygame.KEYDOWN events.
     """
     intent = None
 
     # some events only apply to certain GameStates, we need to process them and separate them
     if event.type == EventType.INPUT:
-        if event.subtype == InputEvent.TILE_CLICK:
+        if event.subtype == InputEventType.TILE_CLICK:
 
             if game_state == GameState.TARGETING:
                 # Activate skill on mouse click while in targeting mode
@@ -52,7 +52,7 @@ def process_input_event(event: pygame.event, game_state: GameState):
                         actor_info.set_entity(entity)
                         intent = InputIntent.ACTOR_INFO_TOGGLE
 
-        elif event.subtype == InputEvent.SKILL_BAR_CLICK:
+        elif event.subtype == InputEventType.SKILL_BAR_CLICK:
             intent = event.skill_intent
 
     else:

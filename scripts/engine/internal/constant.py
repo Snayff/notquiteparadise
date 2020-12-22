@@ -77,7 +77,7 @@ class EventType(IntEnum):
     INTERACTION = auto()
 
 
-class InputEvent(IntEnum):
+class InputEventType(IntEnum):
     """
     Custom pygame event names triggered by input. These need to be interpreted into intents.
     """
@@ -86,7 +86,7 @@ class InputEvent(IntEnum):
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
 
 
-class GameEvent(IntEnum):
+class GameEventType(IntEnum):
     """
     Custom pygame event names triggered by the game
     """
@@ -103,7 +103,7 @@ class GameEvent(IntEnum):
     END_ROUND = auto()
 
 
-class InteractionEvent(IntEnum):
+class InteractionEventType(IntEnum):
     """
     Custom pygame events to trigger interactions. Think of these as categories for Reaction Triggers.
     """

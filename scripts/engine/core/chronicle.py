@@ -3,15 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-import pygame
 from snecs.typedefs import EntityID
 
-from scripts.engine.core import query, state, system, world
+from scripts.engine.core import query, world
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Tracked
-from scripts.engine.internal.constant import EventType, GameEvent, GameState
 from scripts.engine.internal.data import store
-from scripts.engine.internal.event import EndRoundEvent, EndTurnEvent, NewRoundEvent, NewTurnEvent, publisher
+from scripts.engine.core.event import EndRoundEvent, EndTurnEvent, NewRoundEvent, NewTurnEvent, event_hub
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple
@@ -90,7 +88,7 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
         set_time_in_round(get_time_in_round() + time_progressed)
 
     # post game event
-    publisher.publish(NewTurnEvent())
+    event_hub.post(NewTurnEvent())
 
     # log new turn holder
     name = world.get_name(turn_holder)
@@ -109,7 +107,7 @@ def end_turn(entity: EntityID, time_spent: int):
         next_turn()
 
         # post game event
-        publisher.publish(EndTurnEvent())
+        event_hub.post(EndTurnEvent())
 
     else:
         logging.warning(f"Tried to end {world.get_name(entity)}'s turn but they're not turn holder.")
@@ -121,7 +119,7 @@ def next_round():
     """
 
     # post game event
-    publisher.publish(NewRoundEvent())
+    event_hub.post(NewRoundEvent())
 
     # increment rounds
     _increment_round_number()
@@ -135,7 +133,7 @@ def end_round():
     """
 
     # post game event
-    publisher.publish(EndRoundEvent())
+    event_hub.post(EndRoundEvent())
 
 
 def _increment_round_number():

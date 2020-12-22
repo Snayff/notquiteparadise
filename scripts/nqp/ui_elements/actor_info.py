@@ -20,7 +20,7 @@ from scripts.engine.internal.constant import (
     SecondaryStat,
     UIElement,
 )
-from scripts.engine.internal.event import ExitMenuEvent, publisher
+from scripts.engine.core.event import ExitMenuEvent, event_hub
 from scripts.engine.widgets.window import Window
 
 if TYPE_CHECKING:
@@ -200,7 +200,7 @@ class ActorInfo(Window):
     def process_close_button(self):
 
         # post game event
-        publisher.publish(ExitMenuEvent(UIElement.ACTOR_INFO))
+        event_hub.post(ExitMenuEvent(UIElement.ACTOR_INFO))
 
     ############## CREATE ########################
 
