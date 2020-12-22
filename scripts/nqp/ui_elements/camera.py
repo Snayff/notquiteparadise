@@ -1,6 +1,6 @@
 import logging
-from typing import Iterable, List, Optional, Tuple
 import os
+from typing import Iterable, List, Optional, Tuple
 
 import pygame
 import pygame_gui
@@ -8,15 +8,22 @@ import pytweening
 from pygame.rect import Rect
 from pygame.surface import Surface
 
-from scripts.engine.core import query, utility, world, state
+from scripts.engine.core import query, state, utility, world
+from scripts.engine.core.ui import ui
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Aesthetic, Position
-from scripts.engine.internal.constant import TILE_SIZE, Height, InputIntent, InputEventType, EventType, UIElement, GameState
-from scripts.engine.core.ui import ui
-from scripts.nqp.ui_elements.tile_info import TileInfo
+from scripts.engine.internal.constant import (
+    EventType,
+    GameState,
+    Height,
+    InputEventType,
+    InputIntent,
+    TILE_SIZE,
+    UIElement,
+)
 from scripts.nqp import command
-
+from scripts.nqp.ui_elements.tile_info import TileInfo
 
 __all__ = ["camera"]
 
@@ -94,7 +101,9 @@ class Camera:
             if (new_hover is self.hovered_tile) == False:
                 if new_hover.is_visible:
                     if not ui.has_element(UIElement.TILE_INFO):
-                        tile_info: TileInfo = TileInfo(command.get_element_rect(UIElement.TILE_INFO), ui.get_gui_manager())
+                        tile_info: TileInfo = TileInfo(
+                            command.get_element_rect(UIElement.TILE_INFO), ui.get_gui_manager()
+                        )
                         ui.register_element(UIElement.TILE_INFO, tile_info)
 
                     tile_info = ui.get_element(UIElement.TILE_INFO)
@@ -107,11 +116,14 @@ class Camera:
         except IndexError:
             pass
 
-
     def process_intent(self, intent):
         if intent == InputIntent.LEFT_CLICKED:
             if self.hovered_tile and self.hovered_tile.is_visible:
-                event = pygame.event.Event(EventType.INPUT, subtype=InputEventType.TILE_CLICK, tile_pos=(self.hovered_tile.x, self.hovered_tile.y))
+                event = pygame.event.Event(
+                    EventType.INPUT,
+                    subtype=InputEventType.TILE_CLICK,
+                    tile_pos=(self.hovered_tile.x, self.hovered_tile.y),
+                )
                 pygame.event.post(event)
 
     def _update_camera_position(self, time_delta: float):
@@ -155,10 +167,20 @@ class Camera:
                 target_y = position.y + direction[1]
                 tile = world.get_tile((target_x, target_y))
                 if tile.is_visible:
-                    option_r = pygame.Rect((target_x - self.start_x) * TILE_SIZE, (target_y - self.start_y) * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                    option_r = pygame.Rect(
+                        (target_x - self.start_x) * TILE_SIZE,
+                        (target_y - self.start_y) * TILE_SIZE,
+                        TILE_SIZE,
+                        TILE_SIZE,
+                    )
                     pygame.draw.rect(internal_surf, (50, 150, 200), option_r, 1)
         if self.hovered_tile and self.hovered_tile.is_visible:
-            hover_r = pygame.Rect((self.hovered_tile.x - self.start_x) * TILE_SIZE, (self.hovered_tile.y - self.start_y) * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+            hover_r = pygame.Rect(
+                (self.hovered_tile.x - self.start_x) * TILE_SIZE,
+                (self.hovered_tile.y - self.start_y) * TILE_SIZE,
+                TILE_SIZE,
+                TILE_SIZE,
+            )
             pygame.draw.rect(internal_surf, (200, 200, 0), hover_r, 1)
         target_surf.blit(pygame.transform.scale(internal_surf, target_surf.get_size()), (0, 0))
 
@@ -216,8 +238,12 @@ class Camera:
                 if self.is_in_camera_view(position):
                     tile = world.get_tile(position)
                     if tile.is_visible or self.show_all:
-                        #self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
-                        map_surf.blit(aesthetic.current_sprite, self.get_render_pos((draw_position[0] * TILE_SIZE, draw_position[1] * TILE_SIZE)), src_area)
+                        # self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
+                        map_surf.blit(
+                            aesthetic.current_sprite,
+                            self.get_render_pos((draw_position[0] * TILE_SIZE, draw_position[1] * TILE_SIZE)),
+                            src_area,
+                        )
 
     def _draw_lighting(self, map_surf: pygame.Surface):
         light_box = world.get_game_map().light_box

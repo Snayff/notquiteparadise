@@ -2,21 +2,39 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from typing import Dict, List, Tuple
+
 from snecs.typedefs import EntityID
-from scripts.engine.internal.constant import DamageTypeType, DirectionType, EventType, \
-    PrimaryStatType, UIElement
+
+from scripts.engine.internal.constant import DamageTypeType, DirectionType, EventType, PrimaryStatType, UIElement
 from scripts.engine.internal.definition import ActorData
 
-
-__all__ = ["event_hub", "Subscriber", "MoveEvent", "DamageEvent", "AffectStatEvent", "AffectCooldownEvent",
-    "AfflictionEvent", "AlterTerrainEvent", "ExitGameEvent", "ExitMenuEvent", "NewGameEvent", "NewTurnEvent",
-    "NewRoundEvent", "EndRoundEvent", "EndTurnEvent", "StartGameEvent", "LoadGameEvent", "WinConditionMetEvent"]
+__all__ = [
+    "event_hub",
+    "Subscriber",
+    "MoveEvent",
+    "DamageEvent",
+    "AffectStatEvent",
+    "AffectCooldownEvent",
+    "AfflictionEvent",
+    "AlterTerrainEvent",
+    "ExitGameEvent",
+    "ExitMenuEvent",
+    "NewGameEvent",
+    "NewTurnEvent",
+    "NewRoundEvent",
+    "EndRoundEvent",
+    "EndTurnEvent",
+    "StartGameEvent",
+    "LoadGameEvent",
+    "WinConditionMetEvent",
+]
 
 
 class EventHub:
     """
     Event hub to handle the interactions between events and subscribers
     """
+
     def __init__(self):
         self.events: List[Event] = []
         self.subscribers: Dict = {}
@@ -59,6 +77,7 @@ class Subscriber(ABC):
     """
     Class to set default behaviour for handlers listening for events
     """
+
     def __init__(self, name: str):
         self.name: str = name
         self.event_hub: EventHub = event_hub
@@ -81,6 +100,7 @@ class Event(ABC):
     """
     Events to cause top level actions to take place
     """
+
     def __init__(self, event_type: EventType):
         """
         Base class for events
@@ -89,6 +109,7 @@ class Event(ABC):
 
 
 ######################### INTERACTION EVENTS #########################
+
 
 class MoveEvent(Event):
     def __init__(self, origin: EntityID, target: EntityID, direction: DirectionType, new_pos: Tuple[int, int]):
@@ -101,8 +122,7 @@ class MoveEvent(Event):
 
 
 class DamageEvent(Event):
-    def __init__(self, origin: EntityID, target: EntityID, amount: int, damage_type: DamageTypeType,
-            remaining_hp: int):
+    def __init__(self, origin: EntityID, target: EntityID, amount: int, damage_type: DamageTypeType, remaining_hp: int):
         super().__init__(EventType.INTERACTION)
 
         self.origin: EntityID = origin
@@ -151,6 +171,7 @@ class AlterTerrainEvent(Event):
 
 
 ######################### GAME EVENTS #########################
+
 
 class ExitMenuEvent(Event):
     def __init__(self, menu: UIElement):
@@ -204,5 +225,3 @@ class NewRoundEvent(Event):
 class EndRoundEvent(Event):
     def __init__(self):
         super().__init__(EventType.GAME)
-
-

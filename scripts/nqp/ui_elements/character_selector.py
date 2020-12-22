@@ -9,11 +9,11 @@ from pygame import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UITextBox
 
+from scripts.engine.core.event import event_hub, StartGameEvent
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import GAP_SIZE, RenderLayer, TILE_SIZE, TraitGroup
 from scripts.engine.internal.definition import ActorData
-from scripts.engine.core.event import StartGameEvent, event_hub
 from scripts.engine.widgets.panel import Panel
 
 if TYPE_CHECKING:
@@ -260,4 +260,3 @@ class CharacterSelector(Panel):
 
         # post game event
         event_hub.post(StartGameEvent(player_data))
-

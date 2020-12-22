@@ -1,13 +1,21 @@
 from __future__ import annotations
 
 from scripts.engine.core import chronicle, system
+from scripts.engine.core.event import (
+    EndRoundEvent,
+    EndTurnEvent,
+    ExitGameEvent,
+    ExitMenuEvent,
+    LoadGameEvent,
+    NewGameEvent,
+    NewRoundEvent,
+    NewTurnEvent,
+    StartGameEvent,
+    Subscriber,
+    WinConditionMetEvent,
+)
 from scripts.engine.core.ui import ui
 from scripts.engine.internal.constant import EventType, InputIntent, UIElement
-from scripts.engine.core.event import EndRoundEvent, EndTurnEvent, ExitGameEvent, ExitMenuEvent, LoadGameEvent, \
-    NewGameEvent, \
-    NewRoundEvent, NewTurnEvent, \
-    StartGameEvent, \
-    Subscriber, WinConditionMetEvent
 from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent
 

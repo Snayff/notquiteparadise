@@ -7,6 +7,15 @@ from typing import Tuple, TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import query, utility, world
+from scripts.engine.core.event import (
+    AffectCooldownEvent,
+    AffectStatEvent,
+    AfflictionEvent,
+    AlterTerrainEvent,
+    DamageEvent,
+    event_hub,
+    MoveEvent,
+)
 from scripts.engine.internal import library
 from scripts.engine.internal.component import (
     Aesthetic,
@@ -18,16 +27,7 @@ from scripts.engine.internal.component import (
     Position,
     Resources,
 )
-from scripts.engine.internal.constant import (
-    DamageTypeType,
-    Direction,
-    DirectionType,
-    PrimaryStatType,
-    TargetTag,
-)
-from scripts.engine.core.event import AffectCooldownEvent, AffectStatEvent, AfflictionEvent, AlterTerrainEvent, \
-    DamageEvent, MoveEvent, \
-    event_hub
+from scripts.engine.internal.constant import DamageTypeType, Direction, DirectionType, PrimaryStatType, TargetTag
 
 if TYPE_CHECKING:
     from typing import List
@@ -192,10 +192,7 @@ class MoveActorEffect(Effect):
 
                     # post interaction event
                     event = MoveEvent(
-                        origin=self.origin,
-                        target=self.target,
-                        direction=self.direction,
-                        new_pos=(new_x, new_y)
+                        origin=self.origin, target=self.target, direction=self.direction, new_pos=(new_x, new_y)
                     )
                     event_hub.post(event)
 
@@ -449,10 +446,7 @@ class AlterTerrainEffect(Effect):
 
             # post interaction event
             event = AlterTerrainEvent(
-                origin=self.origin,
-                target=self.target,
-                terrain_name=self.terrain_name,
-                duration=self.affect_amount
+                origin=self.origin, target=self.target, terrain_name=self.terrain_name, duration=self.affect_amount
             )
             event_hub.post(event)
 
@@ -476,10 +470,7 @@ class AlterTerrainEffect(Effect):
         if result:
             # post interaction event
             event = AlterTerrainEvent(
-                origin=self.origin,
-                target=self.target,
-                terrain_name=self.terrain_name,
-                duration=self.affect_amount
+                origin=self.origin, target=self.target, terrain_name=self.terrain_name, duration=self.affect_amount
             )
             event_hub.post(event)
 

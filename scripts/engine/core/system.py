@@ -40,9 +40,17 @@ __all__ = [
     "reduce_lifespan_durations",
 ]
 
+from scripts.engine.core.event import (
+    AffectCooldownEvent,
+    AffectStatEvent,
+    AfflictionEvent,
+    DamageEvent,
+    event_hub,
+    MoveEvent,
+    Subscriber,
+    WinConditionMetEvent,
+)
 from scripts.engine.internal.definition import EffectData, ReactionData
-from scripts.engine.core.event import AffectCooldownEvent, AffectStatEvent, AfflictionEvent, DamageEvent, MoveEvent, \
-    Subscriber, WinConditionMetEvent, event_hub
 from scripts.engine.world_objects.tile import Tile
 
 ########################### GENERAL ################################
@@ -235,6 +243,7 @@ def reduce_lifespan_durations():
 
 
 ########################### GENERIC REACTION HANDLING ##############################
+
 
 class InteractionEventSubscriber(Subscriber):
     """
