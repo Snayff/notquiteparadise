@@ -247,6 +247,8 @@
         </li>
         <li class="md-nav__item"><a href="#module-scripts.engine.core.dungen" class="md-nav__link">scripts.engine.core.dungen module</a>
         </li>
+        <li class="md-nav__item"><a href="#module-scripts.engine.core.event" class="md-nav__link">scripts.engine.core.event module</a>
+        </li>
         <li class="md-nav__item"><a href="#module-scripts.engine.core.key" class="md-nav__link">scripts.engine.core.key module</a>
         </li>
         <li class="md-nav__item"><a href="#module-scripts.engine.core.query" class="md-nav__link">scripts.engine.core.query module</a>
@@ -616,6 +618,252 @@ Floor == True, Wall == False.</p>
 </dd></dl>
 
 
+<span id="scripts-engine-core-event-module"></span><h2 id="module-scripts.engine.core.event">scripts.engine.core.event module<a class="headerlink" href="#module-scripts.engine.core.event" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.core.event.AffectCooldownEvent">
+<em class="property">class </em><code class="sig-name descname">AffectCooldownEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#AffectCooldownEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.AffectCooldownEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.AffectCooldownEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#AffectCooldownEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.AffectCooldownEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.AffectStatEvent">
+<em class="property">class </em><code class="sig-name descname">AffectStatEvent</code><span class="sig-paren">(</span><em class="sig-param">origin: int</em>, <em class="sig-param">target: int</em>, <em class="sig-param">stat_to_target: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">amount: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#AffectStatEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.AffectStatEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.AffectStatEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">origin: int</em>, <em class="sig-param">target: int</em>, <em class="sig-param">stat_to_target: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">amount: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#AffectStatEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.AffectStatEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.AfflictionEvent">
+<em class="property">class </em><code class="sig-name descname">AfflictionEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">affliction_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#AfflictionEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.AfflictionEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.AfflictionEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">affliction_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#AfflictionEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.AfflictionEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.AlterTerrainEvent">
+<em class="property">class </em><code class="sig-name descname">AlterTerrainEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">terrain_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#AlterTerrainEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.AlterTerrainEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.AlterTerrainEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">terrain_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#AlterTerrainEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.AlterTerrainEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.DamageEvent">
+<em class="property">class </em><code class="sig-name descname">DamageEvent</code><span class="sig-paren">(</span><em class="sig-param">origin: int</em>, <em class="sig-param">target: int</em>, <em class="sig-param">amount: int</em>, <em class="sig-param">damage_type: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">remaining_hp: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#DamageEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.DamageEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.DamageEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">origin: int</em>, <em class="sig-param">target: int</em>, <em class="sig-param">amount: int</em>, <em class="sig-param">damage_type: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">remaining_hp: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#DamageEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.DamageEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.EndRoundEvent">
+<em class="property">class </em><code class="sig-name descname">EndRoundEvent</code><a class="reference internal" href="_modules/scripts/engine/core/event.html#EndRoundEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.EndRoundEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.EndRoundEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#EndRoundEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.EndRoundEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.EndTurnEvent">
+<em class="property">class </em><code class="sig-name descname">EndTurnEvent</code><a class="reference internal" href="_modules/scripts/engine/core/event.html#EndTurnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.EndTurnEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.EndTurnEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#EndTurnEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.EndTurnEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.Event">
+<em class="property">class </em><code class="sig-name descname">Event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Events to cause top level actions to take place</p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.Event.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#Event.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.Event.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.EventHub">
+<em class="property">class </em><code class="sig-name descname">EventHub</code><a class="reference internal" href="_modules/scripts/engine/core/event.html#EventHub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.EventHub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Event hub to handle the interactions between events and subscribers</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.EventHub.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#EventHub.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.EventHub.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.event.EventHub.post">
+<code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event">scripts.engine.core.event.Event</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#EventHub.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.EventHub.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log an event ready for notifying subscribers.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.event.EventHub.subscribe">
+<code class="sig-name descname">subscribe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em>, <em class="sig-param"><span class="n">subscriber</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.core.event.Subscriber" title="scripts.engine.core.event.Subscriber">scripts.engine.core.event.Subscriber</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#EventHub.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.EventHub.subscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a subscriber with an EventType</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.event.EventHub.unsubscribe">
+<code class="sig-name descname">unsubscribe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em>, <em class="sig-param"><span class="n">subscriber</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.core.event.Subscriber" title="scripts.engine.core.event.Subscriber">scripts.engine.core.event.Subscriber</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#EventHub.unsubscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.EventHub.unsubscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a subscribers registration to an EventType</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.event.EventHub.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#EventHub.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.EventHub.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Notify subscribers of their registered event.</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.ExitGameEvent">
+<em class="property">class </em><code class="sig-name descname">ExitGameEvent</code><a class="reference internal" href="_modules/scripts/engine/core/event.html#ExitGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.ExitGameEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.ExitGameEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#ExitGameEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.ExitGameEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.ExitMenuEvent">
+<em class="property">class </em><code class="sig-name descname">ExitMenuEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">menu</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.constant.UIElement" title="scripts.engine.internal.constant.UIElement">scripts.engine.internal.constant.UIElement</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#ExitMenuEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.ExitMenuEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.ExitMenuEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">menu</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.constant.UIElement" title="scripts.engine.internal.constant.UIElement">scripts.engine.internal.constant.UIElement</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#ExitMenuEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.ExitMenuEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.LoadGameEvent">
+<em class="property">class </em><code class="sig-name descname">LoadGameEvent</code><a class="reference internal" href="_modules/scripts/engine/core/event.html#LoadGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.LoadGameEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.LoadGameEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#LoadGameEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.LoadGameEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.MoveEvent">
+<em class="property">class </em><code class="sig-name descname">MoveEvent</code><span class="sig-paren">(</span><em class="sig-param">origin: int, target: int, direction: NewType.&lt;locals&gt;.new_type, new_pos: Tuple[int, int]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#MoveEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.MoveEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.MoveEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">origin: int, target: int, direction: NewType.&lt;locals&gt;.new_type, new_pos: Tuple[int, int]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#MoveEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.MoveEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.NewGameEvent">
+<em class="property">class </em><code class="sig-name descname">NewGameEvent</code><a class="reference internal" href="_modules/scripts/engine/core/event.html#NewGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.NewGameEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.NewGameEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#NewGameEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.NewGameEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.NewRoundEvent">
+<em class="property">class </em><code class="sig-name descname">NewRoundEvent</code><a class="reference internal" href="_modules/scripts/engine/core/event.html#NewRoundEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.NewRoundEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.NewRoundEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#NewRoundEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.NewRoundEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.NewTurnEvent">
+<em class="property">class </em><code class="sig-name descname">NewTurnEvent</code><a class="reference internal" href="_modules/scripts/engine/core/event.html#NewTurnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.NewTurnEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.NewTurnEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#NewTurnEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.NewTurnEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.StartGameEvent">
+<em class="property">class </em><code class="sig-name descname">StartGameEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">player_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.definition.ActorData" title="scripts.engine.internal.definition.ActorData">scripts.engine.internal.definition.ActorData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#StartGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.StartGameEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.StartGameEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">player_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.definition.ActorData" title="scripts.engine.internal.definition.ActorData">scripts.engine.internal.definition.ActorData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#StartGameEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.StartGameEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.Subscriber">
+<em class="property">class </em><code class="sig-name descname">Subscriber</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#Subscriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.Subscriber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Class to set default behaviour for handlers listening for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.Subscriber.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#Subscriber.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.Subscriber.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.event.Subscriber.process_event">
+<em class="property">abstract </em><code class="sig-name descname">process_event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event">scripts.engine.core.event.Event</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#Subscriber.process_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.Subscriber.process_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process game events.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.event.Subscriber.subscribe">
+<code class="sig-name descname">subscribe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#Subscriber.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.Subscriber.subscribe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.event.Subscriber.unsubscribe">
+<code class="sig-name descname">unsubscribe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#Subscriber.unsubscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.Subscriber.unsubscribe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.core.event.WinConditionMetEvent">
+<em class="property">class </em><code class="sig-name descname">WinConditionMetEvent</code><a class="reference internal" href="_modules/scripts/engine/core/event.html#WinConditionMetEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.WinConditionMetEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Event" title="scripts.engine.core.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.core.event.WinConditionMetEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/event.html#WinConditionMetEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.event.WinConditionMetEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+
+
 <span id="scripts-engine-core-key-module"></span><h2 id="module-scripts.engine.core.key">scripts.engine.core.key module<a class="headerlink" href="#module-scripts.engine.core.key" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="scripts.engine.core.key.convert_to_intent">
@@ -685,6 +933,22 @@ Floor == True, Wall == False.</p>
 
 
 <span id="scripts-engine-core-system-module"></span><h2 id="module-scripts.engine.core.system">scripts.engine.core.system module<a class="headerlink" href="#module-scripts.engine.core.system" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.core.system.InteractionEventSubscriber">
+<em class="property">class </em><code class="sig-name descname">InteractionEventSubscriber</code><a class="reference internal" href="_modules/scripts/engine/core/system.html#InteractionEventSubscriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.system.InteractionEventSubscriber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.event.Subscriber" title="scripts.engine.core.event.Subscriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.event.Subscriber</span></code></a></p>
+<p>Handle interaction events.</p>
+<dl class="py method">
+<dt id="scripts.engine.core.system.InteractionEventSubscriber.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/system.html#InteractionEventSubscriber.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.system.InteractionEventSubscriber.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.system.InteractionEventSubscriber.process_event">
+<code class="sig-name descname">process_event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/system.html#InteractionEventSubscriber.process_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.system.InteractionEventSubscriber.process_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process game events.</p>
+</dd></dl>
+</dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.system.process_activations">
 <code class="sig-name descname">process_activations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/system.html#process_activations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.system.process_activations" title="Permalink to this definition">¶</a></dt>
@@ -694,11 +958,6 @@ Floor == True, Wall == False.</p>
 <dt id="scripts.engine.core.system.process_fov">
 <code class="sig-name descname">process_fov</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/system.html#process_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.system.process_fov" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update FOV for all active entities</p>
-</dd></dl>
-<dl class="py function">
-<dt id="scripts.engine.core.system.process_interaction_event">
-<code class="sig-name descname">process_interaction_event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">pygame.event</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/system.html#process_interaction_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.system.process_interaction_event" title="Permalink to this definition">¶</a></dt>
-<dd><p>Passes an interaction event to the relevant functions.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.system.process_light_map">

@@ -257,13 +257,11 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">tcod</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Afflictions</span><span class="p">,</span>
     <span class="n">FOV</span><span class="p">,</span>
@@ -281,9 +279,7 @@
     <span class="n">EventType</span><span class="p">,</span>
     <span class="n">FOV_ALGORITHM</span><span class="p">,</span>
     <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span>
-    <span class="n">GameEvent</span><span class="p">,</span>
     <span class="n">INFINITE</span><span class="p">,</span>
-    <span class="n">InteractionEvent</span><span class="p">,</span>
     <span class="n">MAX_ACTIVATION_DISTANCE</span><span class="p">,</span>
     <span class="n">ReactionTrigger</span><span class="p">,</span>
     <span class="n">ReactionTriggerType</span><span class="p">,</span>
@@ -297,9 +293,18 @@
     <span class="s2">"reduce_skill_cooldowns"</span><span class="p">,</span>
     <span class="s2">"reduce_affliction_durations"</span><span class="p">,</span>
     <span class="s2">"reduce_lifespan_durations"</span><span class="p">,</span>
-    <span class="s2">"process_interaction_event"</span><span class="p">,</span>
 <span class="p">]</span>
 
+<span class="kn">from</span> <span class="nn">scripts.engine.core.event</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AffectCooldownEvent</span><span class="p">,</span>
+    <span class="n">AffectStatEvent</span><span class="p">,</span>
+    <span class="n">AfflictionEvent</span><span class="p">,</span>
+    <span class="n">DamageEvent</span><span class="p">,</span>
+    <span class="n">event_hub</span><span class="p">,</span>
+    <span class="n">MoveEvent</span><span class="p">,</span>
+    <span class="n">Subscriber</span><span class="p">,</span>
+    <span class="n">WinConditionMetEvent</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">ReactionData</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
@@ -495,42 +500,45 @@
 <span class="c1">########################### GENERIC REACTION HANDLING ##############################</span>
 
 
-<div class="viewcode-block" id="process_interaction_event"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.system.process_interaction_event">[docs]</a><span class="k">def</span> <span class="nf">process_interaction_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="InteractionEventSubscriber"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.system.InteractionEventSubscriber">[docs]</a><span class="k">class</span> <span class="nc">InteractionEventSubscriber</span><span class="p">(</span><span class="n">Subscriber</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Passes an interaction event to the relevant functions.</span>
+<span class="sd">    Handle interaction events.</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">InteractionEvent</span><span class="o">.</span><span class="n">MOVE</span><span class="p">:</span>
-        <span class="c1"># print(f"Caught MOVE: {event.origin}, {event.target}, {event.direction}, {event.new_pos}")</span>
-        <span class="n">_handle_proximity_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-        <span class="n">_process_win_condition</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
-        <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">MOVE</span><span class="p">)</span>
-        <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">MOVED</span><span class="p">)</span>
+<div class="viewcode-block" id="InteractionEventSubscriber.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.system.InteractionEventSubscriber.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"interaction_subscriber"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">INTERACTION</span><span class="p">)</span></div>
 
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">InteractionEvent</span><span class="o">.</span><span class="n">DAMAGE</span><span class="p">:</span>
-        <span class="c1"># print(f"Caught DAMAGE: {event.origin}, {event.target}, {event.amount}, {event.damage_type},</span>
-        <span class="c1"># {event.remaining_hp}")</span>
-        <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">DEAL_DAMAGE</span><span class="p">)</span>
-        <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">TAKE_DAMAGE</span><span class="p">)</span>
+<div class="viewcode-block" id="InteractionEventSubscriber.process_event"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.system.InteractionEventSubscriber.process_event">[docs]</a>    <span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">MoveEvent</span><span class="p">):</span>
+            <span class="n">_handle_proximity_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="n">_process_win_condition</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">remaining_hp</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">KILL</span><span class="p">)</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">DIE</span><span class="p">)</span>
+            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">MOVE</span><span class="p">)</span>
+            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">MOVED</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">InteractionEvent</span><span class="o">.</span><span class="n">AFFECT_STAT</span><span class="p">:</span>
-        <span class="c1"># print(f"Caught AFFECT_STAT: {event.origin}, {event.target}, {event.stat}, {event.amount}")</span>
-        <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">CAUSED_AFFECT_STAT</span><span class="p">)</span>
-        <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">STAT_AFFECTED</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">DamageEvent</span><span class="p">):</span>
+            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">DEAL_DAMAGE</span><span class="p">)</span>
+            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">TAKE_DAMAGE</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">InteractionEvent</span><span class="o">.</span><span class="n">AFFECT_COOLDOWN</span><span class="p">:</span>
-        <span class="c1"># print(f"Caught AFFECT_COOLDOWN: {event.origin}, {event.target}, {event.amount}")</span>
-        <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">CAUSED_AFFECT_COOLDOWN</span><span class="p">)</span>
-        <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">COOLDOWN_AFFECTED</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">remaining_hp</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">KILL</span><span class="p">)</span>
+                <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">DIE</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">subtype</span> <span class="o">==</span> <span class="n">InteractionEvent</span><span class="o">.</span><span class="n">AFFLICTION</span><span class="p">:</span>
-        <span class="c1"># print(f"Caught AFFLICTION: {event.origin}, {event.target}, {event.name}")</span>
-        <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">CAUSED_AFFLICTION</span><span class="p">)</span>
-        <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">AFFLICTED</span><span class="p">)</span></div>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">AffectStatEvent</span><span class="p">):</span>
+            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">CAUSED_AFFECT_STAT</span><span class="p">)</span>
+            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">STAT_AFFECTED</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">AffectCooldownEvent</span><span class="p">):</span>
+            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">CAUSED_AFFECT_COOLDOWN</span><span class="p">)</span>
+            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">COOLDOWN_AFFECTED</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">AfflictionEvent</span><span class="p">):</span>
+            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">CAUSED_AFFLICTION</span><span class="p">)</span>
+            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">AFFLICTED</span><span class="p">)</span></div></div>
+
+
+<span class="n">interaction_subscriber</span> <span class="o">=</span> <span class="n">InteractionEventSubscriber</span><span class="p">()</span>
 
 
 <span class="k">def</span> <span class="nf">_process_opinions</span><span class="p">(</span><span class="n">causing_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">reaction_trigger</span><span class="p">:</span> <span class="n">ReactionTriggerType</span><span class="p">):</span>
@@ -681,8 +689,8 @@
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_win_condition</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
-            <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">WIN_CONDITION_MET</span><span class="p">)</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="c1"># post game event</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">WinConditionMetEvent</span><span class="p">())</span>
             <span class="k">break</span>
 </pre></div>
 

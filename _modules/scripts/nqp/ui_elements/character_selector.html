@@ -262,11 +262,12 @@
 <span class="kn">import</span> <span class="nn">pygame_gui</span>
 <span class="kn">from</span> <span class="nn">pygame</span> <span class="kn">import</span> <span class="n">Rect</span>
 <span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UIManager</span>
-<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIDropDownMenu</span><span class="p">,</span> <span class="n">UIImage</span><span class="p">,</span> <span class="n">UIPanel</span><span class="p">,</span> <span class="n">UITextBox</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIDropDownMenu</span><span class="p">,</span> <span class="n">UIImage</span><span class="p">,</span> <span class="n">UITextBox</span>
 
+<span class="kn">from</span> <span class="nn">scripts.engine.core.event</span> <span class="kn">import</span> <span class="n">event_hub</span><span class="p">,</span> <span class="n">StartGameEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">build_sprites_from_paths</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">GameEvent</span><span class="p">,</span> <span class="n">GAP_SIZE</span><span class="p">,</span> <span class="n">Height</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TraitGroup</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GAP_SIZE</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TraitGroup</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.widgets.panel</span> <span class="kn">import</span> <span class="n">Panel</span>
 
@@ -330,11 +331,8 @@
                 <span class="n">button_id</span> <span class="o">=</span> <span class="n">ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># get last element</span>
                 <span class="n">new_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_events</span><span class="p">[</span><span class="n">button_id</span><span class="p">]</span>
 
-                <span class="c1"># post a blank event or process the func</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_event</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">EventType</span><span class="p">):</span>
-                    <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">new_event</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">new_event</span><span class="p">()</span>
+                <span class="c1"># process the func from the button</span>
+                <span class="n">new_event</span><span class="p">()</span>
 
                 <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CharacterSelector button '</span><span class="si">{</span><span class="n">button_id</span><span class="si">}</span><span class="s2">' pressed."</span><span class="p">)</span>
 
@@ -515,9 +513,8 @@
             <span class="n">height</span><span class="o">=</span><span class="s2">"middling"</span><span class="p">,</span>  <span class="c1"># type: ignore  # need to pass as str to be converted during post-init</span>
         <span class="p">)</span>
 
-        <span class="c1"># fire event</span>
-        <span class="n">new_event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">START_GAME</span><span class="p">,</span> <span class="n">player_data</span><span class="o">=</span><span class="n">player_data</span><span class="p">)</span>
-        <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">new_event</span><span class="p">)</span></div>
+        <span class="c1"># post game event</span>
+        <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">StartGameEvent</span><span class="p">(</span><span class="n">player_data</span><span class="p">))</span></div>
 </pre></div>
 
           </article>

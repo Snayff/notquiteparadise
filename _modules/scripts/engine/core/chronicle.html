@@ -258,13 +258,12 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
-<span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.event</span> <span class="kn">import</span> <span class="n">EndRoundEvent</span><span class="p">,</span> <span class="n">EndTurnEvent</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">,</span> <span class="n">NewRoundEvent</span><span class="p">,</span> <span class="n">NewTurnEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Tracked</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">GameEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -343,8 +342,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">set_time_in_round</span><span class="p">(</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span>
 
-    <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_TURN</span><span class="p">)</span>
-    <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+    <span class="c1"># post game event</span>
+    <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">NewTurnEvent</span><span class="p">())</span>
 
     <span class="c1"># log new turn holder</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">turn_holder</span><span class="p">)</span>
@@ -359,10 +358,11 @@
 <span class="sd">    N.B. If entity given is NOT the turn holder then nothing happens.</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">get_turn_holder</span><span class="p">():</span>
-        <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">END_TURN</span><span class="p">)</span>
-        <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-
         <span class="n">world</span><span class="o">.</span><span class="n">spend_time</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">)</span>
+        <span class="n">next_turn</span><span class="p">()</span>
+
+        <span class="c1"># post game event</span>
+        <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">EndTurnEvent</span><span class="p">())</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to end </span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">'s turn but they're not turn holder."</span><span class="p">)</span></div>
@@ -372,8 +372,9 @@
     <span class="sd">"""</span>
 <span class="sd">    Move to the next round. Posts NEW_ROUND event.</span>
 <span class="sd">    """</span>
-    <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">NEW_ROUND</span><span class="p">)</span>
-    <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+    <span class="c1"># post game event</span>
+    <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">NewRoundEvent</span><span class="p">())</span>
 
     <span class="c1"># increment rounds</span>
     <span class="n">_increment_round_number</span><span class="p">()</span>
@@ -385,8 +386,9 @@
     <span class="sd">"""</span>
 <span class="sd">    Posts END_ROUND event.</span>
 <span class="sd">    """</span>
-    <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">GameEvent</span><span class="o">.</span><span class="n">END_ROUND</span><span class="p">)</span>
-    <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+
+    <span class="c1"># post game event</span>
+    <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">EndRoundEvent</span><span class="p">())</span></div>
 
 
 <span class="k">def</span> <span class="nf">_increment_round_number</span><span class="p">():</span>

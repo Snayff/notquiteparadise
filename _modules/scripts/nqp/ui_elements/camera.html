@@ -254,8 +254,8 @@
             
   <h1 id="modules-scripts-nqp-ui-elements-camera--page-root">Source code for scripts.nqp.ui_elements.camera</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">pygame_gui</span>
@@ -263,15 +263,22 @@
 <span class="kn">from</span> <span class="nn">pygame.rect</span> <span class="kn">import</span> <span class="n">Rect</span>
 <span class="kn">from</span> <span class="nn">pygame.surface</span> <span class="kn">import</span> <span class="n">Surface</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">state</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">clamp</span><span class="p">,</span> <span class="n">convert_tile_string_to_xy</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">Height</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">InputEvent</span><span class="p">,</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">UIElement</span><span class="p">,</span> <span class="n">GameState</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
-<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.tile_info</span> <span class="kn">import</span> <span class="n">TileInfo</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EventType</span><span class="p">,</span>
+    <span class="n">GameState</span><span class="p">,</span>
+    <span class="n">Height</span><span class="p">,</span>
+    <span class="n">InputEventType</span><span class="p">,</span>
+    <span class="n">InputIntent</span><span class="p">,</span>
+    <span class="n">TILE_SIZE</span><span class="p">,</span>
+    <span class="n">UIElement</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">command</span>
-
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.tile_info</span> <span class="kn">import</span> <span class="n">TileInfo</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"camera"</span><span class="p">]</span>
 
@@ -295,17 +302,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">move_edge_size</span> <span class="o">=</span> <span class="mi">4</span>
-
-        <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_height</span><span class="p">)</span>
-
-        <span class="c1"># store this now so we can refer to it later</span>
-        <span class="c1">#game_map = world.get_game_map()</span>
-        <span class="c1">#self.map_width = game_map.width</span>
-        <span class="c1">#self.map_height = game_map.height</span>
-
-        <span class="c1"># determine how many tiles to show; max rows and cols in game map or max we can show based on size</span>
-        <span class="c1">#self.rows = min(rect.width // TILE_SIZE, game_map.height - 1)</span>
-        <span class="c1">#self.columns = min(rect.height // TILE_SIZE, game_map.width - 1)</span>
 
         <span class="c1"># duration of the animation - only used when animating the camera move</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">move_duration</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -360,7 +356,9 @@
             <span class="k">if</span> <span class="p">(</span><span class="n">new_hover</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">new_hover</span><span class="o">.</span><span class="n">is_visible</span><span class="p">:</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">ui</span><span class="o">.</span><span class="n">has_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TILE_INFO</span><span class="p">):</span>
-                        <span class="n">tile_info</span><span class="p">:</span> <span class="n">TileInfo</span> <span class="o">=</span> <span class="n">TileInfo</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TILE_INFO</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
+                        <span class="n">tile_info</span><span class="p">:</span> <span class="n">TileInfo</span> <span class="o">=</span> <span class="n">TileInfo</span><span class="p">(</span>
+                            <span class="n">command</span><span class="o">.</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TILE_INFO</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">()</span>
+                        <span class="p">)</span>
                         <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TILE_INFO</span><span class="p">,</span> <span class="n">tile_info</span><span class="p">)</span>
 
                     <span class="n">tile_info</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">TILE_INFO</span><span class="p">)</span>
@@ -373,11 +371,14 @@
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="k">pass</span>
 
-
 <div class="viewcode-block" id="Camera.process_intent"><a class="viewcode-back" href="../../../../scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.camera.Camera.process_intent">[docs]</a>    <span class="k">def</span> <span class="nf">process_intent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intent</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">LEFT_CLICKED</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">is_visible</span><span class="p">:</span>
-                <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">INPUT</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="n">InputEvent</span><span class="o">.</span><span class="n">TILE_CLICK</span><span class="p">,</span> <span class="n">tile_pos</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+                <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span>
+                    <span class="n">EventType</span><span class="o">.</span><span class="n">INPUT</span><span class="p">,</span>
+                    <span class="n">subtype</span><span class="o">=</span><span class="n">InputEventType</span><span class="o">.</span><span class="n">TILE_CLICK</span><span class="p">,</span>
+                    <span class="n">tile_pos</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span>
+                <span class="p">)</span>
                 <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_update_camera_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
@@ -421,10 +422,20 @@
                 <span class="n">target_y</span> <span class="o">=</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">is_visible</span><span class="p">:</span>
-                    <span class="n">option_r</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">target_x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="p">(</span><span class="n">target_y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
+                    <span class="n">option_r</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">target_x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span>
+                        <span class="p">(</span><span class="n">target_y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span>
+                        <span class="n">TILE_SIZE</span><span class="p">,</span>
+                        <span class="n">TILE_SIZE</span><span class="p">,</span>
+                    <span class="p">)</span>
                     <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="n">internal_surf</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">option_r</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">is_visible</span><span class="p">:</span>
-            <span class="n">hover_r</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
+            <span class="n">hover_r</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span>
+                <span class="n">TILE_SIZE</span><span class="p">,</span>
+                <span class="n">TILE_SIZE</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="n">internal_surf</span><span class="p">,</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">hover_r</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">target_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">internal_surf</span><span class="p">,</span> <span class="n">target_surf</span><span class="o">.</span><span class="n">get_size</span><span class="p">()),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></div>
 
@@ -482,8 +493,12 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_in_camera_view</span><span class="p">(</span><span class="n">position</span><span class="p">):</span>
                     <span class="n">tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">is_visible</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">:</span>
-                        <span class="c1">#self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)</span>
-                        <span class="n">map_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_render_pos</span><span class="p">((</span><span class="n">draw_position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">draw_position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">)),</span> <span class="n">src_area</span><span class="p">)</span>
+                        <span class="c1"># self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)</span>
+                        <span class="n">map_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
+                            <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">get_render_pos</span><span class="p">((</span><span class="n">draw_position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">draw_position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">)),</span>
+                            <span class="n">src_area</span><span class="p">,</span>
+                        <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_draw_lighting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
         <span class="n">light_box</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span><span class="o">.</span><span class="n">light_box</span>
@@ -518,6 +533,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">target_x</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_width</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">target_y</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_height</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span></div></div>
+
 
 <span class="k">if</span> <span class="s2">"GENERATING_SPHINX_DOCS"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>  <span class="c1"># when building in CI these fail</span>
     <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">()</span>

@@ -20,6 +20,14 @@ scripts.engine.core.dungen module
    :undoc-members:
    :show-inheritance:
 
+scripts.engine.core.event module
+--------------------------------
+
+.. automodule:: scripts.engine.core.event
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.engine.core.key module
 ------------------------------
 

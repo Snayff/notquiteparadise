@@ -287,13 +287,21 @@
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.affliction</span> <span class="kn">import</span> <span class="n">BoggedDown</span><span class="p">,</span> <span class="n">Flaming</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.behaviour</span> <span class="kn">import</span> <span class="n">FollowPlayer</span><span class="p">,</span> <span class="n">Projectile</span><span class="p">,</span> <span class="n">SearchAndAttack</span><span class="p">,</span> <span class="n">SkipTurn</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.skill</span> <span class="kn">import</span> <span class="n">BasicAttack</span><span class="p">,</span> <span class="n">Lunge</span><span class="p">,</span> <span class="n">Move</span><span class="p">,</span> <span class="n">Splash</span><span class="p">,</span> <span class="n">TarAndFeather</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.character_selector</span> <span class="kn">import</span> <span class="n">CharacterSelector</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.message_log</span> <span class="kn">import</span> <span class="n">MessageLog</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.skill_bar</span> <span class="kn">import</span> <span class="n">SkillBar</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.title_screen</span> <span class="kn">import</span> <span class="n">TitleScreen</span>
-<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"initialise_game"</span><span class="p">,</span> <span class="s2">"goto_character_select"</span><span class="p">,</span> <span class="s2">"load_game"</span><span class="p">,</span> <span class="s2">"exit_game"</span><span class="p">,</span> <span class="s2">"win_game"</span><span class="p">,</span> <span class="s2">"register_actions"</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"initialise_game"</span><span class="p">,</span>
+    <span class="s2">"goto_character_select"</span><span class="p">,</span>
+    <span class="s2">"load_game"</span><span class="p">,</span>
+    <span class="s2">"exit_game"</span><span class="p">,</span>
+    <span class="s2">"win_game"</span><span class="p">,</span>
+    <span class="s2">"register_actions"</span><span class="p">,</span>
+    <span class="s2">"get_element_rect"</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="initialise_game"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.initialise_game">[docs]</a><span class="k">def</span> <span class="nf">initialise_game</span><span class="p">():</span>
@@ -416,9 +424,9 @@
     <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
 
     <span class="c1"># show the in game screens</span>
-    <span class="n">message_log</span> <span class="o">=</span> <span class="n">MessageLog</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="n">message_log</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())</span>
+    <span class="c1"># ui.register_element(UIElement.MESSAGE_LOG, message_log)</span>
+    <span class="c1"># ui.set_element_visibility(UIElement.MESSAGE_LOG, True)</span>
 
     <span class="n">skill_bar</span> <span class="o">=</span> <span class="n">SkillBar</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="n">skill_bar</span><span class="p">)</span>
@@ -494,6 +502,7 @@
     <span class="c1"># quit to main menu after a few seconds</span>
     <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">goto_to_title</span><span class="p">)</span>
     <span class="n">timer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
 
 <span class="c1">############### NAVIGATION  #####################</span>
 

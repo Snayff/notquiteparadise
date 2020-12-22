@@ -259,15 +259,22 @@
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
 
-<span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.event</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AffectCooldownEvent</span><span class="p">,</span>
+    <span class="n">AffectStatEvent</span><span class="p">,</span>
+    <span class="n">AfflictionEvent</span><span class="p">,</span>
+    <span class="n">AlterTerrainEvent</span><span class="p">,</span>
+    <span class="n">DamageEvent</span><span class="p">,</span>
+    <span class="n">event_hub</span><span class="p">,</span>
+    <span class="n">MoveEvent</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Aesthetic</span><span class="p">,</span>
     <span class="n">Afflictions</span><span class="p">,</span>
-    <span class="n">HasCombatStats</span><span class="p">,</span>
     <span class="n">Identity</span><span class="p">,</span>
     <span class="n">Knowledge</span><span class="p">,</span>
     <span class="n">Lifespan</span><span class="p">,</span>
@@ -275,15 +282,7 @@
     <span class="n">Position</span><span class="p">,</span>
     <span class="n">Resources</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">DamageTypeType</span><span class="p">,</span>
-    <span class="n">Direction</span><span class="p">,</span>
-    <span class="n">DirectionType</span><span class="p">,</span>
-    <span class="n">EventType</span><span class="p">,</span>
-    <span class="n">InteractionEvent</span><span class="p">,</span>
-    <span class="n">PrimaryStatType</span><span class="p">,</span>
-    <span class="n">TargetTag</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">DamageTypeType</span><span class="p">,</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">DirectionType</span><span class="p">,</span> <span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">TargetTag</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
@@ -383,16 +382,14 @@
             <span class="n">defenders_resources</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
 
             <span class="c1"># post interaction event</span>
-            <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span>
-                <span class="n">EventType</span><span class="o">.</span><span class="n">INTERACTION</span><span class="p">,</span>
-                <span class="n">subtype</span><span class="o">=</span><span class="n">InteractionEvent</span><span class="o">.</span><span class="n">DAMAGE</span><span class="p">,</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">DamageEvent</span><span class="p">(</span>
                 <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
                 <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
                 <span class="n">amount</span><span class="o">=</span><span class="n">damage</span><span class="p">,</span>
                 <span class="n">damage_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">damage_type</span><span class="p">,</span>
                 <span class="n">remaining_hp</span><span class="o">=</span><span class="n">defenders_resources</span><span class="o">.</span><span class="n">health</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
             <span class="c1"># check if target is dead</span>
             <span class="k">if</span> <span class="n">damage</span> <span class="o">&gt;=</span> <span class="n">defenders_resources</span><span class="o">.</span><span class="n">health</span><span class="p">:</span>
@@ -449,15 +446,10 @@
                     <span class="n">_position</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">)</span>
 
                     <span class="c1"># post interaction event</span>
-                    <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span>
-                        <span class="n">EventType</span><span class="o">.</span><span class="n">INTERACTION</span><span class="p">,</span>
-                        <span class="n">subtype</span><span class="o">=</span><span class="n">InteractionEvent</span><span class="o">.</span><span class="n">MOVE</span><span class="p">,</span>
-                        <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
-                        <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
-                        <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span>
-                        <span class="n">new_pos</span><span class="o">=</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">),</span>
+                    <span class="n">event</span> <span class="o">=</span> <span class="n">MoveEvent</span><span class="p">(</span>
+                        <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="n">new_pos</span><span class="o">=</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">)</span>
                     <span class="p">)</span>
-                    <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+                    <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
                     <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -549,15 +541,13 @@
             <span class="n">afflictions</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cause_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stat_to_target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">)</span>
 
             <span class="c1"># post interaction event</span>
-            <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span>
-                <span class="n">EventType</span><span class="o">.</span><span class="n">INTERACTION</span><span class="p">,</span>
-                <span class="n">subtype</span><span class="o">=</span><span class="n">InteractionEvent</span><span class="o">.</span><span class="n">AFFECT_STAT</span><span class="p">,</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">AffectStatEvent</span><span class="p">(</span>
                 <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
                 <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
-                <span class="n">stat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stat_to_target</span><span class="p">,</span>
+                <span class="n">stat_to_target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stat_to_target</span><span class="p">,</span>
                 <span class="n">amount</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
             <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -597,14 +587,12 @@
             <span class="n">world</span><span class="o">.</span><span class="n">apply_affliction</span><span class="p">(</span><span class="n">affliction_instance</span><span class="p">)</span>
 
             <span class="c1"># post interaction event</span>
-            <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span>
-                <span class="n">EventType</span><span class="o">.</span><span class="n">INTERACTION</span><span class="p">,</span>
-                <span class="n">subtype</span><span class="o">=</span><span class="n">InteractionEvent</span><span class="o">.</span><span class="n">AFFLICTION</span><span class="p">,</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">AfflictionEvent</span><span class="p">(</span>
                 <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
                 <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
-                <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affliction_name</span><span class="p">,</span>
+                <span class="n">affliction_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affliction_name</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_effects</span>
 
@@ -640,14 +628,12 @@
             <span class="n">knowledge</span><span class="o">.</span><span class="n">set_skill_cooldown</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_name</span><span class="p">,</span> <span class="n">current_cooldown</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">)</span>
 
             <span class="c1"># post interaction event</span>
-            <span class="n">event</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span>
-                <span class="n">EventType</span><span class="o">.</span><span class="n">INTERACTION</span><span class="p">,</span>
-                <span class="n">subtype</span><span class="o">=</span><span class="n">InteractionEvent</span><span class="o">.</span><span class="n">AFFECT_COOLDOWN</span><span class="p">,</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">AffectCooldownEvent</span><span class="p">(</span>
                 <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
                 <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
                 <span class="n">amount</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"Reduced cooldown of skill '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">' from </span><span class="si">{</span><span class="n">current_cooldown</span><span class="si">}</span><span class="s2"> to "</span>
@@ -709,10 +695,15 @@
         <span class="c1"># can we create the terrain?</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">duplicate</span><span class="p">:</span>
             <span class="c1"># create target</span>
-
             <span class="n">terrain_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">[</span><span class="n">terrain_name</span><span class="p">]</span>
             <span class="n">world</span><span class="o">.</span><span class="n">create_terrain</span><span class="p">(</span><span class="n">terrain_data</span><span class="p">,</span> <span class="p">(</span><span class="n">target_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span><span class="p">)</span>
             <span class="n">result</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># post interaction event</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">AlterTerrainEvent</span><span class="p">(</span>
+                <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">terrain_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">terrain_name</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span>
+            <span class="p">)</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span>
 
@@ -729,6 +720,14 @@
             <span class="k">if</span> <span class="n">identity</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">terrain_name</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">target_pos</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
                 <span class="n">lifespan</span><span class="o">.</span><span class="n">duration</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+            <span class="c1"># post interaction event</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">AlterTerrainEvent</span><span class="p">(</span>
+                <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">terrain_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">terrain_name</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affect_amount</span>
+            <span class="p">)</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 </pre></div>
