@@ -1,57 +1,66 @@
 from __future__ import annotations
 
-import pygame
-
 from scripts.engine.core import chronicle, system
 from scripts.engine.core.ui import ui
-from scripts.engine.internal.constant import GameEvent, GameState, InputIntent, UIElement
+from scripts.engine.internal.constant import EventType, GameEvent, GameState, InputIntent, UIElement
+from scripts.engine.internal.event import EndRoundEvent, EndTurnEvent, ExitGameEvent, ExitMenuEvent, LoadGameEvent, \
+    NewGameEvent, \
+    NewRoundEvent, NewTurnEvent, \
+    StartGameEvent, \
+    Subscriber, WinConditionMetEvent
 from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent
 
-__all__ = ["process_game_event"]
+__all__ = []
 
 
-def process_game_event(event: pygame.event, game_state: GameState):
-    intent = None
+class GameEventSubscriber(Subscriber):
+    """
+    Handle interaction events.
+    """
 
-    if event.subtype == GameEvent.EXIT_MENU:
-        ## Exit Actor Info
-        if event.menu == UIElement.ACTOR_INFO:
-            intent = InputIntent.ACTOR_INFO_TOGGLE
+    def __init__(self):
+        super().__init__("game_subscriber")
+        self.subscribe(EventType.GAME)
 
-    elif event.subtype == GameEvent.NEW_GAME:
-        ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
-        command.goto_character_select()
+    def process_event(self, event):
+        if isinstance(event, ExitMenuEvent):
+            # Exit Actor Info
+            if event.menu == UIElement.ACTOR_INFO:
+                process_intent(InputIntent.ACTOR_INFO_TOGGLE)
 
-    elif event.subtype == GameEvent.START_GAME:
-        ui.set_element_visibility(UIElement.CHARACTER_SELECTOR, False)
-        command.start_game(event.player_data)
+        elif isinstance(event, NewGameEvent):
+            ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
+            command.goto_character_select()
 
-    elif event.subtype == GameEvent.LOAD_GAME:
-        ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
-        command.load_game()
+        elif isinstance(event, StartGameEvent):
+            ui.set_element_visibility(UIElement.CHARACTER_SELECTOR, False)
+            command.start_game(event.player_data)
 
-    elif event.subtype == GameEvent.EXIT_GAME:
-        command.exit_game()
+        elif isinstance(event, LoadGameEvent):
+            ui.set_element_visibility(UIElement.TITLE_SCREEN, False)
+            command.load_game()
 
-    elif event.subtype == GameEvent.WIN_CONDITION_MET:
-        command.win_game()
+        elif isinstance(event, ExitGameEvent):
+            command.exit_game()
 
-    elif event.subtype == GameEvent.NEW_TURN:
-        pass
+        elif isinstance(event, WinConditionMetEvent):
+            command.win_game()
 
-    elif event.subtype == GameEvent.END_TURN:
-        _process_end_turn()
+        elif isinstance(event, NewTurnEvent):
+            pass
 
-    elif event.subtype == GameEvent.NEW_ROUND:
-        pass
+        elif isinstance(event, EndTurnEvent):
+            _process_end_turn()
 
-    elif event.subtype == GameEvent.END_ROUND:
-        pass
+        elif isinstance(event, NewRoundEvent):
+            pass
 
-    # if we have an intent we need to process, do so
-    if intent:
-        process_intent(intent, game_state)
+        elif isinstance(event, EndRoundEvent):
+            _process_end_round()
+
+
+game_subscriber = GameEventSubscriber()
 
 
 def _process_end_turn():

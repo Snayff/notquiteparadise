@@ -38,7 +38,8 @@ from scripts.nqp.ui_elements.skill_bar import SkillBar
 from scripts.nqp.ui_elements.title_screen import TitleScreen
 from scripts.nqp.ui_elements.camera import camera
 
-__all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game", "register_actions"]
+__all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game", "register_actions",
+    "get_element_rect"]
 
 
 def initialise_game():
@@ -161,9 +162,9 @@ def start_game(player_data: ActorData):
     world.create_god(god_data)
 
     # show the in game screens
-    message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
-    ui.register_element(UIElement.MESSAGE_LOG, message_log)
-    ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+    # message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
+    # ui.register_element(UIElement.MESSAGE_LOG, message_log)
+    # ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
 
     skill_bar = SkillBar(get_element_rect(UIElement.SKILL_BAR), ui.get_gui_manager())
     ui.register_element(UIElement.SKILL_BAR, skill_bar)

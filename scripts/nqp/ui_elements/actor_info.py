@@ -13,8 +13,6 @@ from scripts.engine.core.utility import get_class_members
 from scripts.engine.internal.component import Aesthetic, Afflictions, Identity, Resources, Traits
 from scripts.engine.internal.constant import (
     ASSET_PATH,
-    EventType,
-    GameEvent,
     GAP_SIZE,
     ICON_SIZE,
     INFINITE,
@@ -22,6 +20,7 @@ from scripts.engine.internal.constant import (
     SecondaryStat,
     UIElement,
 )
+from scripts.engine.internal.event import ExitMenuEvent, publisher
 from scripts.engine.widgets.window import Window
 
 if TYPE_CHECKING:
@@ -199,8 +198,9 @@ class ActorInfo(Window):
         self.sections = []
 
     def process_close_button(self):
-        event = pygame.event.Event(EventType.GAME, subtype=GameEvent.EXIT_MENU, menu=UIElement.ACTOR_INFO)
-        pygame.event.post(event)
+
+        # post game event
+        publisher.publish(ExitMenuEvent(UIElement.ACTOR_INFO))
 
     ############## CREATE ########################
 

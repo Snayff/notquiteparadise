@@ -16,6 +16,7 @@ from scripts.engine.internal import debug
 from scripts.engine.internal.component import NQPComponent
 from scripts.engine.internal.constant import EventType, GameEvent, GameState, InputEvent, InteractionEvent
 from scripts.engine.internal.debug import enable_profiling, initialise_logging, kill_logging
+from scripts.engine.internal.event import event_hub
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
 from scripts.nqp.processors import display, game
@@ -99,20 +100,13 @@ def game_loop():
             except KeyError:
                 chronicle.rebuild_turn_queue()
 
-        # update based on input events
+        # process pygame events
         for event in pygame.event.get():
-            # InputEvent doesnt cover key presses so filter out what we dont want instead
-            if event.type in (EventType.INPUT, pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
-                processors.input.process_input_event(event, current_state)
+            processors.input.process_input_event(event, current_state)
+            ui.process_ui_events(event)
 
-            if event.type == EventType.GAME:
-                processors.game.process_game_event(event, current_state)
-
-            if event.type == EventType.INTERACTION:
-                system.process_interaction_event(event)  # only happens in gamemap so doesnt need state
-
-            if event.type not in (EventType.INTERACTION, EventType.GAME):
-                ui.process_ui_events(event)
+        # process NQP events
+        event_hub.update()
 
         # allow everything to update in response to new state
         display.process_updates(time_delta, current_state)
@@ -120,13 +114,13 @@ def game_loop():
         ui.update(time_delta)
 
         try:
-            world.get_game_map()
             if current_state in [GameState.GAME_MAP, GameState.MENU, GameState.TARGETING]:
                 # show the new state
                 camera.update(time_delta)
                 camera.render(ui._window)
         except AttributeError:
             pass
+
         ui.draw()
 
 

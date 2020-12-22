@@ -41,17 +41,6 @@ class Camera:
 
         self.move_edge_size = 4
 
-        rect = pygame.Rect(0, 0, self._base_width, self._base_height)
-
-        # store this now so we can refer to it later
-        #game_map = world.get_game_map()
-        #self.map_width = game_map.width
-        #self.map_height = game_map.height
-
-        # determine how many tiles to show; max rows and cols in game map or max we can show based on size
-        #self.rows = min(rect.width // TILE_SIZE, game_map.height - 1)
-        #self.columns = min(rect.height // TILE_SIZE, game_map.width - 1)
-
         # duration of the animation - only used when animating the camera move
         self.move_duration = 0.0
         self.max_move_duration = 40  # in ms
@@ -263,6 +252,7 @@ class Camera:
         else:
             self.target_x = pos[0] - int((self._base_width / TILE_SIZE) / 2)
             self.target_y = pos[1] - int((self._base_height / TILE_SIZE) / 2)
+
 
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
     camera = Camera()

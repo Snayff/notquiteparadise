@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pygame
 
-from scripts.engine.core import key, query, world
+from scripts.engine.core import chronicle, key, query, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal.component import Position
 from scripts.engine.internal.constant import EventType, GameState, InputEvent, InputIntent, UIElement
@@ -35,7 +35,7 @@ def process_input_event(event: pygame.event, game_state: GameState):
                 direction = (max(-1, min(1, event_x - position.x)), max(-1, min(1, position.y - event_y)))
                 intent = key.convert_vector_to_intent(direction)
 
-            elif game_state == GameState.GAME_MAP:
+            elif game_state == GameState.GAME_MAP and chronicle.get_turn_holder() == world.get_player():
                 # Activate Actor Info Menu
                 x, y = event.tile_pos
                 # get entity on tile
@@ -46,7 +46,8 @@ def process_input_event(event: pygame.event, game_state: GameState):
                         if ui.has_element(UIElement.ACTOR_INFO):
                             ui.kill_element(UIElement.ACTOR_INFO)
 
-                        actor_info: ActorInfo = ActorInfo(command.get_element_rect(UIElement.ACTOR_INFO), ui.get_gui_manager())
+                        actor_info: ActorInfo = ActorInfo(command.get_element_rect(UIElement.ACTOR_INFO),
+                                                          ui.get_gui_manager())
                         ui.register_element(UIElement.ACTOR_INFO, actor_info)
                         actor_info.set_entity(entity)
                         intent = InputIntent.ACTOR_INFO_TOGGLE

@@ -29,6 +29,9 @@ from scripts.engine.internal.constant import (
     PrimaryStatType,
     TargetTag,
 )
+from scripts.engine.internal.event import AffectCooldownEvent, AffectStatEvent, AfflictionEvent, AlterTerrainEvent, \
+    DamageEvent, MoveEvent, \
+    publisher
 
 if TYPE_CHECKING:
     from typing import List
@@ -128,16 +131,14 @@ class DamageEffect(Effect):
             defenders_resources = world.get_entitys_component(self.target, Resources)
 
             # post interaction event
-            event = pygame.event.Event(
-                EventType.INTERACTION,
-                subtype=InteractionEvent.DAMAGE,
+            event = DamageEvent(
                 origin=self.origin,
                 target=self.target,
                 amount=damage,
                 damage_type=self.damage_type,
                 remaining_hp=defenders_resources.health,
             )
-            pygame.event.post(event)
+            publisher.publish(event)
 
             # check if target is dead
             if damage >= defenders_resources.health:
@@ -194,15 +195,13 @@ class MoveActorEffect(Effect):
                     _position.set(new_x, new_y)
 
                     # post interaction event
-                    event = pygame.event.Event(
-                        EventType.INTERACTION,
-                        subtype=InteractionEvent.MOVE,
+                    event = MoveEvent(
                         origin=self.origin,
                         target=self.target,
                         direction=self.direction,
-                        new_pos=(new_x, new_y),
+                        new_pos=(new_x, new_y)
                     )
-                    pygame.event.post(event)
+                    publisher.publish(event)
 
                     success = True
 
@@ -294,15 +293,13 @@ class AffectStatEffect(Effect):
             afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
 
             # post interaction event
-            event = pygame.event.Event(
-                EventType.INTERACTION,
-                subtype=InteractionEvent.AFFECT_STAT,
+            event = AffectStatEvent(
                 origin=self.origin,
                 target=self.target,
-                stat=self.stat_to_target,
+                stat_to_target=self.stat_to_target,
                 amount=self.affect_amount,
             )
-            pygame.event.post(event)
+            publisher.publish(event)
 
             success = True
 
@@ -342,14 +339,12 @@ class ApplyAfflictionEffect(Effect):
             world.apply_affliction(affliction_instance)
 
             # post interaction event
-            event = pygame.event.Event(
-                EventType.INTERACTION,
-                subtype=InteractionEvent.AFFLICTION,
+            event = AfflictionEvent(
                 origin=self.origin,
                 target=self.target,
-                name=self.affliction_name,
+                affliction_name=self.affliction_name,
             )
-            pygame.event.post(event)
+            publisher.publish(event)
 
             return True, self.success_effects
 
@@ -385,14 +380,12 @@ class AffectCooldownEffect(Effect):
             knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.affect_amount)
 
             # post interaction event
-            event = pygame.event.Event(
-                EventType.INTERACTION,
-                subtype=InteractionEvent.AFFECT_COOLDOWN,
+            event = AffectCooldownEvent(
                 origin=self.origin,
                 target=self.target,
                 amount=self.affect_amount,
             )
-            pygame.event.post(event)
+            publisher.publish(event)
 
             logging.debug(
                 f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to "
@@ -454,10 +447,18 @@ class AlterTerrainEffect(Effect):
         # can we create the terrain?
         if not duplicate:
             # create target
-
             terrain_data = library.TERRAIN[terrain_name]
             world.create_terrain(terrain_data, (target_pos.x, target_pos.y), self.affect_amount)
             result = True
+
+            # post interaction event
+            event = AlterTerrainEvent(
+                origin=self.origin,
+                target=self.target,
+                terrain_name=self.terrain_name,
+                duration=self.affect_amount
+            )
+            publisher.publish(event)
 
         return result
 
@@ -474,5 +475,16 @@ class AlterTerrainEffect(Effect):
             if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
                 lifespan.duration -= self.affect_amount
                 result = True
+                break
+
+        if result:
+            # post interaction event
+            event = AlterTerrainEvent(
+                origin=self.origin,
+                target=self.target,
+                terrain_name=self.terrain_name,
+                duration=self.affect_amount
+            )
+            publisher.publish(event)
 
         return result

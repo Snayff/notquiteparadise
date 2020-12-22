@@ -29,11 +29,15 @@ from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
 from scripts.nqp.ui_elements.camera import camera
 
 
-def process_intent(intent: InputIntentType, game_state: GameState):
+def process_intent(intent: InputIntentType, game_state: GameState = None):
     """
-    Process the intent in the context of the game state. Intents are game state sensitive.
+    Process the intent in the context of the game state. Intents are game state sensitive. If no game state  is
+    passed the current one will be obtained.
     """
     _process_stateless_intents(intent)
+
+    if not game_state:
+        game_state = state.get_current()
 
     if game_state == GameState.GAME_MAP:
         _process_game_map_intents(intent)
