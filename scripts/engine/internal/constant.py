@@ -77,7 +77,7 @@ class EventType(IntEnum):
     INTERACTION = auto()
 
 
-class InputEventType(IntEnum):
+class InputEvent(IntEnum):
     """
     Custom pygame event names triggered by input. These need to be interpreted into intents.
     """
@@ -86,34 +86,33 @@ class InputEventType(IntEnum):
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
 
 
-class GameEventType(IntEnum):
+class GameEvent(IntEnum):
     """
     Custom pygame event names triggered by the game
     """
 
-    EXIT_MENU = auto()
-    NEW_GAME = auto()
-    LOAD_GAME = auto()
-    EXIT_GAME = auto()
-    WIN_CONDITION_MET = auto()
-    START_GAME = auto()
-    NEW_TURN = auto()
-    END_TURN = auto()
-    NEW_ROUND = auto()
-    END_ROUND = auto()
+    EXIT_MENU = pygame.USEREVENT + 100
+    NEW_GAME = pygame.USEREVENT + 101
+    LOAD_GAME = pygame.USEREVENT + 102
+    EXIT_GAME = pygame.USEREVENT + 103
+    WIN_CONDITION_MET = pygame.USEREVENT + 104
+    START_GAME = pygame.USEREVENT + 105
+    NEW_TURN = pygame.USEREVENT + 106
+    END_TURN = pygame.USEREVENT + 107
+    NEW_ROUND = pygame.USEREVENT + 108
+    END_ROUND = pygame.USEREVENT + 109
 
 
-class InteractionEventType(IntEnum):
+class InteractionEvent(IntEnum):
     """
     Custom pygame events to trigger interactions. Think of these as categories for Reaction Triggers.
     """
 
-    MOVE = auto()
-    DAMAGE = auto()
-    AFFECT_STAT = auto()
-    AFFECT_COOLDOWN = auto()
-    AFFLICTION = auto()
-    ALTER_TERRAIN = auto()
+    MOVE = pygame.USEREVENT + 200
+    DAMAGE = pygame.USEREVENT + 201
+    AFFECT_STAT = pygame.USEREVENT + 202
+    AFFECT_COOLDOWN = pygame.USEREVENT + 203
+    AFFLICTION = pygame.USEREVENT + 204
 
 
 class RenderLayer(IntEnum):

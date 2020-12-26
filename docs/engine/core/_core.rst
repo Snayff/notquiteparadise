@@ -6,7 +6,6 @@ Core
 
     chronicle
     dungen
-    event
     key
     query
     state

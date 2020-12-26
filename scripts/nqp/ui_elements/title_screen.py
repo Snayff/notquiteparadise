@@ -1,19 +1,18 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import Type, TYPE_CHECKING
 
 import pygame
 import pygame_gui
 from pygame import Rect
-from pygame_gui.elements import UIButton
+from pygame_gui.elements import UIButton, UIPanel
 
-from scripts.engine.core.event import event_hub, ExitGameEvent, LoadGameEvent, NewGameEvent
-from scripts.engine.internal.constant import RenderLayer
+from scripts.engine.internal.constant import EventType, GameEvent, InputEvent, RenderLayer
 from scripts.engine.widgets.panel import Panel
 
 if TYPE_CHECKING:
-    from typing import List
+    from typing import Any, Dict, List, Optional, Tuple, Union
 
     from pygame_gui import UIManager
 
@@ -28,9 +27,9 @@ class TitleScreen(Panel):
     def __init__(self, rect: Rect, manager: UIManager):
 
         self.button_events = {
-            "new_game": NewGameEvent(),
-            "load_game": LoadGameEvent(),
-            "exit_game": ExitGameEvent(),
+            "new_game": pygame.event.Event(EventType.GAME, subtype=GameEvent.NEW_GAME),
+            "load_game": pygame.event.Event(EventType.GAME, subtype=GameEvent.LOAD_GAME),
+            "exit_game": pygame.event.Event(EventType.GAME, subtype=GameEvent.EXIT_GAME),
         }
 
         self.buttons: List[UIButton] = []
@@ -61,7 +60,7 @@ class TitleScreen(Panel):
                 ids = event.ui_object_id.split(".")
                 button_id = ids[-1]  # get last element
                 new_event = self.button_events[button_id]
-                event_hub.post(new_event)
+                pygame.event.post(new_event)
 
                 logging.debug(f"TitleScreen button '{button_id}' pressed.")
 
@@ -90,7 +89,7 @@ class TitleScreen(Panel):
                 relative_rect=Rect((x, y), (width, height)),
                 text=friendly_name.title(),
                 manager=manager,
-                container=self,
+                container=self.get_container(),
                 object_id=f"{name}",
             )
 

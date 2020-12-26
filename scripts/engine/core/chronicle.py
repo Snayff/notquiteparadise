@@ -3,12 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+import pygame
 from snecs.typedefs import EntityID
 
-from scripts.engine.core import query, world
-from scripts.engine.core.event import EndRoundEvent, EndTurnEvent, event_hub, NewRoundEvent, NewTurnEvent
+from scripts.engine.core import query, system, world
 from scripts.engine.internal import library
 from scripts.engine.internal.component import Tracked
+from scripts.engine.internal.constant import EventType, GameEvent
 from scripts.engine.internal.data import store
 
 if TYPE_CHECKING:
@@ -87,8 +88,8 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
     else:
         set_time_in_round(get_time_in_round() + time_progressed)
 
-    # post game event
-    event_hub.post(NewTurnEvent())
+    event = pygame.event.Event(EventType.GAME, subtype=GameEvent.NEW_TURN)
+    pygame.event.post(event)
 
     # log new turn holder
     name = world.get_name(turn_holder)
@@ -103,11 +104,10 @@ def end_turn(entity: EntityID, time_spent: int):
     N.B. If entity given is NOT the turn holder then nothing happens.
     """
     if entity == get_turn_holder():
-        world.spend_time(entity, time_spent)
-        next_turn()
+        event = pygame.event.Event(EventType.GAME, subtype=GameEvent.END_TURN)
+        pygame.event.post(event)
 
-        # post game event
-        event_hub.post(EndTurnEvent())
+        world.spend_time(entity, time_spent)
 
     else:
         logging.warning(f"Tried to end {world.get_name(entity)}'s turn but they're not turn holder.")
@@ -117,9 +117,8 @@ def next_round():
     """
     Move to the next round. Posts NEW_ROUND event.
     """
-
-    # post game event
-    event_hub.post(NewRoundEvent())
+    event = pygame.event.Event(EventType.GAME, subtype=GameEvent.NEW_ROUND)
+    pygame.event.post(event)
 
     # increment rounds
     _increment_round_number()
@@ -131,9 +130,8 @@ def end_round():
     """
     Posts END_ROUND event.
     """
-
-    # post game event
-    event_hub.post(EndRoundEvent())
+    event = pygame.event.Event(EventType.GAME, subtype=GameEvent.END_ROUND)
+    pygame.event.post(event)
 
 
 def _increment_round_number():

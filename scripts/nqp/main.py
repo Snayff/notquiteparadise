@@ -6,19 +6,19 @@ import traceback
 
 import pygame
 import snecs
+from pygame.constants import USEREVENT
 from snecs.world import default_world
 
 import scripts.nqp.processors.input
-from scripts.engine.core import chronicle, state, world
-from scripts.engine.core.event import event_hub
+from scripts.engine.core import chronicle, state, system, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug
 from scripts.engine.internal.component import NQPComponent
-from scripts.engine.internal.constant import GameState
+from scripts.engine.internal.constant import EventType, GameEvent, GameState, InputEvent, InteractionEvent
 from scripts.engine.internal.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
-from scripts.nqp.processors import display
+from scripts.nqp.processors import display, game
 from scripts.nqp.ui_elements.camera import camera
 
 
@@ -79,7 +79,8 @@ def game_loop():
         # get info to support UI updates and handling events
         current_state = state.get_current()
         turn_holder = chronicle.get_turn_holder()
-        player = world.get_player()
+        if current_state == GameState.GAME_MAP:
+            player = world.get_player()
 
         # process any deletions from last frame
         # this copies snecs.process_pending_deletions() but adds extra steps.
@@ -98,13 +99,20 @@ def game_loop():
             except KeyError:
                 chronicle.rebuild_turn_queue()
 
-        # process pygame events
+        # update based on input events
         for event in pygame.event.get():
-            processors.input.process_input_event(event, current_state)
-            ui.process_ui_events(event)
+            # InputEvent doesnt cover key presses so filter out what we dont want instead
+            if event.type in (EventType.INPUT, pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
+                processors.input.process_input_event(event, current_state)
 
-        # process NQP events
-        event_hub.update()
+            if event.type == EventType.GAME:
+                processors.game.process_game_event(event, current_state)
+
+            if event.type == EventType.INTERACTION:
+                system.process_interaction_event(event)  # only happens in gamemap so doesnt need state
+
+            if event.type not in (EventType.INTERACTION, EventType.GAME):
+                ui.process_ui_events(event)
 
         # allow everything to update in response to new state
         display.process_updates(time_delta, current_state)
@@ -112,13 +120,13 @@ def game_loop():
         ui.update(time_delta)
 
         try:
+            world.get_game_map()
             if current_state in [GameState.GAME_MAP, GameState.MENU, GameState.TARGETING]:
                 # show the new state
                 camera.update(time_delta)
                 camera.render(ui._window)
         except AttributeError:
             pass
-
         ui.draw()
 
 

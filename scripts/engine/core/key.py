@@ -44,7 +44,6 @@ def convert_to_intent(event: pygame.event) -> Optional[InputIntentType]:
 
     return intent
 
-
 def _check_mouse(event: pygame.event) -> Optional[InputIntentType]:
     """
     Process mouse events such as clicks.

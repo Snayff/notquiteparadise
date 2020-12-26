@@ -7,12 +7,11 @@ import pygame
 import pygame_gui
 from pygame import Rect
 from pygame_gui import UIManager
-from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UITextBox
+from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UIPanel, UITextBox
 
-from scripts.engine.core.event import event_hub, StartGameEvent
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import GAP_SIZE, RenderLayer, TILE_SIZE, TraitGroup
+from scripts.engine.internal.constant import EventType, GameEvent, GAP_SIZE, Height, RenderLayer, TILE_SIZE, TraitGroup
 from scripts.engine.internal.definition import ActorData
 from scripts.engine.widgets.panel import Panel
 
@@ -76,8 +75,11 @@ class CharacterSelector(Panel):
                 button_id = ids[-1]  # get last element
                 new_event = self.button_events[button_id]
 
-                # process the func from the button
-                new_event()
+                # post a blank event or process the func
+                if isinstance(new_event, pygame.event.EventType):
+                    pygame.event.post(new_event)
+                else:
+                    new_event()
 
                 logging.debug(f"CharacterSelector button '{button_id}' pressed.")
 
@@ -258,5 +260,6 @@ class CharacterSelector(Panel):
             height="middling",  # type: ignore  # need to pass as str to be converted during post-init
         )
 
-        # post game event
-        event_hub.post(StartGameEvent(player_data))
+        # fire event
+        new_event = pygame.event.Event(EventType.GAME, subtype=GameEvent.START_GAME, player_data=player_data)
+        pygame.event.post(new_event)
