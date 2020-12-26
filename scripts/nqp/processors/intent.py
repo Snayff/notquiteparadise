@@ -149,7 +149,7 @@ def _process_game_map_intents(intent: InputIntentType):
                     if skill.targeting_method == TargetingMethod.AUTO:
                         # pass centre as it doesnt matter, the skill will pick the right direction
                         _process_skill_use(player, skill, current_tile, Direction.CENTRE)
-                    elif skill.targeting_method == TargetingMethod.TARGET:
+                    elif skill.targeting_method in [TargetingMethod.TARGET, TargetingMethod.LINE_OF_SIGHT]:
                         # trigger targeting overlay
                         state.set_new(GameState.TARGETING)
                         state.set_active_skill(skill_name)
@@ -212,6 +212,8 @@ def _process_targeting_mode_intents(intent):
         if position and skill and direction:
             outermost = position.get_outermost(direction)
             tile = world.get_tile((outermost[0] + direction[0], outermost[1] + direction[1]))
+            if skill.targeting_method == TargetingMethod.LINE_OF_SIGHT:
+                tile = world.get_tile(state.get_active_skill_target())
             if tile:
                 # we already checked if we could use the skill before activating the targeting mode
                 _process_skill_use(player, skill, tile, direction)

@@ -346,6 +346,7 @@ class TargetingMethod(SimpleNamespace):
 
     AUTO = TargetingMethodType("auto")
     TARGET = TargetingMethodType("target")
+    LINE_OF_SIGHT = TargetingMethodType("line")
 
 
 class Shape(SimpleNamespace):

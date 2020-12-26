@@ -29,6 +29,7 @@ class Store:
         self.current_game_state: GameState = GameState.LOADING
         self.previous_game_state: GameState = GameState.LOADING
         self.active_skill = None
+        self.active_skill_target = None
 
         # used in world
         from scripts.engine.world_objects.game_map import GameMap
