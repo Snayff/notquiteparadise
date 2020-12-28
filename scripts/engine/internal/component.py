@@ -497,7 +497,11 @@ class Opinion(NQPComponent):
         self.attitudes: Dict[ReactionTriggerType, int] = attitudes
 
     def serialize(self):
-        return self.opinions
+        _dict = {
+            "attitudes": self.attitudes,
+            "opinions": self.opinions
+        }
+        return _dict
 
     @classmethod
     def deserialize(cls, serialised):
@@ -537,11 +541,30 @@ class LightSource(NQPComponent):
         self.radius: int = radius
 
     def serialize(self):
-        return self.light_id
+        from scripts.engine.core import world
+        game_map = world.get_game_map()
+        light_box = game_map.light_box
+        light = light_box.get_light(self.light_id)
+
+        _dict = {
+            "pos": light.position,
+            "radius": self.radius,
+            "colour": light.colour,
+            "alpha": light.alpha
+        }
+        return _dict
 
     @classmethod
     def deserialize(cls, serialised):
-        return LightSource(*serialised)
+        pos = serialised["pos"]
+        radius = serialised["radius"]
+        colour = serialised["colour"]
+        alpha = serialised["alpha"]
+
+        from scripts.engine.core import world
+        light_id = world.create_light(pos, radius, colour, alpha)
+
+        return LightSource(light_id, radius)
 
     def on_delete(self):
         """

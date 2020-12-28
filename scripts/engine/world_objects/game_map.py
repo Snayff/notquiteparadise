@@ -108,7 +108,7 @@ class GameMap:
 
         # get all the non-blocking, or "air", tiles.
         self._air_tile_positions = np.argwhere(self._block_sight_map == 1).tolist()
-        # self.block_sight_map == 0 does the if not block_sight_map part of the loop.
+        # self.block_sight_map == 1 does the if not block_sight_map part of the loop.
         # np.argwhere gets the indexes of all nonzero elements.
         # tolist converts this back into a nested list.
 
@@ -130,7 +130,13 @@ class GameMap:
                 # add to the column
                 tiles[x].append(self.tile_map[x][y].serialise())
 
-        _dict = {"width": self.width, "height": self.height, "tiles": tiles, "seed": self.seed}
+        _dict = {
+            "width": self.width,
+            "height": self.height,
+            "tiles": tiles,
+            "seed": self.seed,
+            "map_name":  self.name
+        }
         return _dict
 
     @classmethod
@@ -140,7 +146,7 @@ class GameMap:
         """
         try:
             seed = serialised["seed"]
-            algo_name = serialised["algorithm_name"]
+            map_name = serialised["map_name"]
             width = serialised["width"]
             height = serialised["height"]
 
@@ -150,9 +156,10 @@ class GameMap:
                 for y in range(height):
                     tiles[x].append(Tile.deserialise(serialised["tiles"][x][y]))
 
-            game_map = GameMap(seed, algo_name)
+            game_map = GameMap(map_name, seed)
             game_map.tile_map = tiles
             return game_map
+
         except KeyError as e:
             logging.warning(f"GameMap.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
             raise KeyError  # throw exception to hit outer error handler and exit

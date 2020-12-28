@@ -752,7 +752,7 @@ def get_player() -> EntityID:
     """
     for entity, (flag,) in get_components([IsPlayer]):
         return entity
-    raise ValueError
+    raise ValueError("Player not found.")
 
 
 def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
