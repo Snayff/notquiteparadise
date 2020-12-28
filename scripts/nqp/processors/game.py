@@ -20,6 +20,9 @@ from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent
 
 
+__all__ = ["GameEventSubscriber"]
+
+
 class GameEventSubscriber(Subscriber):
     """
     Handle interaction events.
@@ -63,9 +66,6 @@ class GameEventSubscriber(Subscriber):
 
         elif isinstance(event, EndRoundEvent):
             _process_end_round()
-
-
-game_subscriber = GameEventSubscriber()
 
 
 def _process_end_turn():

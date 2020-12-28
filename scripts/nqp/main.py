@@ -79,7 +79,6 @@ def game_loop():
         # get info to support UI updates and handling events
         current_state = state.get_current()
         turn_holder = chronicle.get_turn_holder()
-        player = world.get_player()
 
         # process any deletions from last frame
         # this copies snecs.process_pending_deletions() but adds extra steps.
@@ -91,12 +90,13 @@ def game_loop():
             snecs.delete_entity_immediately(entity, default_world)
 
         # have enemy take turn
-        if current_state == GameState.GAME_MAP and turn_holder != player:
-            # just in case the turn holder has died but not been replaced as expected
-            try:
-                world.take_turn(turn_holder)
-            except KeyError:
-                chronicle.rebuild_turn_queue()
+        if current_state == GameState.GAME_MAP:
+            if turn_holder != world.get_player():
+                # just in case the turn holder has died but not been replaced as expected
+                try:
+                    world.take_turn(turn_holder)
+                except KeyError:
+                    chronicle.rebuild_turn_queue()
 
         # process pygame events
         for event in pygame.event.get():

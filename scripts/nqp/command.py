@@ -32,6 +32,7 @@ from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
 from scripts.nqp.actions.behaviour import FollowPlayer, Projectile, SearchAndAttack, SkipTurn
 from scripts.nqp.actions.skill import BasicAttack, Lunge, Move, Splash, TarAndFeather
+from scripts.nqp.processors.game import GameEventSubscriber
 from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.character_selector import CharacterSelector
 from scripts.nqp.ui_elements.message_log import MessageLog
@@ -54,6 +55,7 @@ def initialise_game():
     Init the game`s required info
     """
     register_actions()
+    init_subscribers()
 
     if DEBUG_START:
         _start_debug_game()
@@ -303,6 +305,14 @@ def register_actions():
     register_action(TarAndFeather)
     register_action(Splash)
 
+
+def init_subscribers():
+    """
+    Initialise event subscribers.
+
+    N.B. When init'd they are held in reference by the event hub and do not need to be referred to directly.
+    """
+    game_subscriber = GameEventSubscriber()
 
 ##################### UI ######################
 
