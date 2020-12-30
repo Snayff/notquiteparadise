@@ -503,6 +503,7 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     Get the tile at the specified location. Raises exception if out of bounds or doesnt exist.
     """
     game_map = store.current_game_map  # not using get_game_map for performance
+    assert isinstance(game_map, GameMap)
     x, y = tile_pos
 
     try:
@@ -524,6 +525,7 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
     """
     start_x, start_y = start_pos
     game_map = store.current_game_map  # not using get_game_map for performance
+    assert isinstance(game_map, GameMap)
     tiles = []
 
     for coord in coords:
@@ -936,6 +938,7 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> boo
     Check if a given tag applies to the tile.  True if tag applies.
     """
     game_map = store.current_game_map  # not using get_game_map for performance
+    assert isinstance(game_map, GameMap)
 
     # before we even check tags, lets confirm it is in bounds
     if not _is_tile_in_bounds(tile, game_map):
