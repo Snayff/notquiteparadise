@@ -5,6 +5,7 @@ import pytest
 from scripts.engine.core import state
 from scripts.engine.internal.constant import GameState, Height, SAVE_PATH
 
+# N.B. parametrize errors out with only 1 arg so add second unused arg.
 test_set_state_parameters = [
     (GameState.LOADING, 0),
     (GameState.GAME_MAP, 0),

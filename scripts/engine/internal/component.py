@@ -627,7 +627,8 @@ class Reaction(NQPComponent):
             if isinstance(reaction_data["reaction"], str):
                 reaction = reaction_data["reaction"]
             else:
-                effect_dataclass = getattr(sys.modules[__name__], reaction_data["effect_dataclass_name"])
+                effect_dataclass = getattr(sys.modules["scripts.engine.internal.definition"],
+                                           reaction_data["effect_dataclass_name"])
                 reaction = effect_dataclass(reaction_data["reaction"])
 
 
@@ -652,7 +653,10 @@ class Lifespan(NQPComponent):
         self.duration = duration
 
     def serialize(self):
-        return self.duration
+        _dict = {
+            "duration": self.duration
+        }
+        return _dict
 
     @classmethod
     def deserialize(cls, serialised):
