@@ -274,6 +274,8 @@
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">command</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors.intent</span> <span class="kn">import</span> <span class="n">process_intent</span>
 
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"GameEventSubscriber"</span><span class="p">]</span>
+
 
 <div class="viewcode-block" id="GameEventSubscriber"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.game.GameEventSubscriber">[docs]</a><span class="k">class</span> <span class="nc">GameEventSubscriber</span><span class="p">(</span><span class="n">Subscriber</span><span class="p">):</span>
     <span class="sd">"""</span>
@@ -318,9 +320,6 @@
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">EndRoundEvent</span><span class="p">):</span>
             <span class="n">_process_end_round</span><span class="p">()</span></div></div>
-
-
-<span class="n">game_subscriber</span> <span class="o">=</span> <span class="n">GameEventSubscriber</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="_process_end_turn"><a class="viewcode-back" href="../../../../nqp/processors/game.html#scripts.nqp.processors.game._process_end_turn">[docs]</a><span class="k">def</span> <span class="nf">_process_end_turn</span><span class="p">():</span>

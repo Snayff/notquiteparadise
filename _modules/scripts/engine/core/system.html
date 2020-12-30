@@ -262,6 +262,16 @@
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.event</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AffectCooldownEvent</span><span class="p">,</span>
+    <span class="n">AffectStatEvent</span><span class="p">,</span>
+    <span class="n">AfflictionEvent</span><span class="p">,</span>
+    <span class="n">DamageEvent</span><span class="p">,</span>
+    <span class="n">event_hub</span><span class="p">,</span>
+    <span class="n">MoveEvent</span><span class="p">,</span>
+    <span class="n">Subscriber</span><span class="p">,</span>
+    <span class="n">WinConditionMetEvent</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Afflictions</span><span class="p">,</span>
     <span class="n">FOV</span><span class="p">,</span>
@@ -284,6 +294,8 @@
     <span class="n">ReactionTrigger</span><span class="p">,</span>
     <span class="n">ReactionTriggerType</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">ReactionData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"process_activations"</span><span class="p">,</span>
@@ -294,19 +306,6 @@
     <span class="s2">"reduce_affliction_durations"</span><span class="p">,</span>
     <span class="s2">"reduce_lifespan_durations"</span><span class="p">,</span>
 <span class="p">]</span>
-
-<span class="kn">from</span> <span class="nn">scripts.engine.core.event</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">AffectCooldownEvent</span><span class="p">,</span>
-    <span class="n">AffectStatEvent</span><span class="p">,</span>
-    <span class="n">AfflictionEvent</span><span class="p">,</span>
-    <span class="n">DamageEvent</span><span class="p">,</span>
-    <span class="n">event_hub</span><span class="p">,</span>
-    <span class="n">MoveEvent</span><span class="p">,</span>
-    <span class="n">Subscriber</span><span class="p">,</span>
-    <span class="n">WinConditionMetEvent</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">ReactionData</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
 <span class="c1">########################### GENERAL ################################</span>
 

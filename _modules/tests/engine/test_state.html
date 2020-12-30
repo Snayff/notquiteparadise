@@ -253,18 +253,97 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <h1 id="modules-tests-engine-test-state--page-root">Source code for tests.engine.test_state</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">state</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">state</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">Height</span><span class="p">,</span> <span class="n">SAVE_PATH</span>
+
+<span class="c1"># N.B. parametrize errors out with only 1 arg so add second unused arg.</span>
+<span class="n">test_set_state_parameters</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">LOADING</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">PLAYER_DEAD</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">TARGETING</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">EXITING</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">DEVELOPER</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">MENU</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="p">]</span>
 
 
-<div class="viewcode-block" id="TestState"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_state.TestState">[docs]</a><span class="k">class</span> <span class="nc">TestState</span><span class="p">:</span>
+<div class="viewcode-block" id="test_set_state"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_state.test_set_state">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">([</span><span class="s2">"game_state"</span><span class="p">,</span> <span class="s2">"_"</span><span class="p">],</span> <span class="n">test_set_state_parameters</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_set_state</span><span class="p">(</span><span class="n">game_state</span><span class="p">:</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Test changing the state</span>
+<span class="sd">    """</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">game_state</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">state</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span> <span class="o">==</span> <span class="n">game_state</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">state</span><span class="o">.</span><span class="n">get_previous</span><span class="p">()</span> <span class="o">==</span> <span class="n">game_state</span></div>
 
-<div class="viewcode-block" id="TestState.test_set_state"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_state.TestState.test_set_state">[docs]</a>    <span class="k">def</span> <span class="nf">test_set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        Test changing the state</span>
-<span class="sd">        """</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">state</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span></div></div>
+
+<span class="k">def</span> <span class="nf">_init_world</span><span class="p">():</span>
+    <span class="c1"># create clean snecs.world</span>
+    <span class="kn">import</span> <span class="nn">snecs</span>
+    <span class="n">empty_world</span> <span class="o">=</span> <span class="n">snecs</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">move_world</span><span class="p">(</span><span class="n">empty_world</span><span class="p">)</span>
+
+    <span class="c1"># init and save map</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
+    <span class="n">game_map</span> <span class="o">=</span> <span class="n">GameMap</span><span class="p">(</span><span class="s2">"debug"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span> <span class="o">=</span> <span class="n">game_map</span>
+
+    <span class="c1"># populate the map</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span>
+    <span class="n">player_data</span> <span class="o">=</span> <span class="n">ActorData</span><span class="p">(</span>
+        <span class="n">key</span><span class="o">=</span><span class="s2">"player"</span><span class="p">,</span>
+        <span class="n">possible_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"player"</span><span class="p">],</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Player desc"</span><span class="p">,</span>
+        <span class="n">position_offsets</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
+        <span class="n">trait_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"shoom"</span><span class="p">,</span> <span class="s2">"soft_tops"</span><span class="p">,</span> <span class="s2">"dandy"</span><span class="p">],</span>
+        <span class="n">height</span><span class="o">=</span><span class="n">Height</span><span class="o">.</span><span class="n">MIDDLING</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">game_map</span><span class="o">.</span><span class="n">generate_new_map</span><span class="p">(</span><span class="n">player_data</span><span class="p">)</span>
+
+    <span class="c1"># init the player</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+
+    <span class="c1"># tell places about the player</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span>
+    <span class="n">chronicle</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+
+    <span class="c1"># create actor near to player</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Position</span>
+    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
+    <span class="n">actor_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">ACTORS</span><span class="p">[</span><span class="s2">"crocturion"</span><span class="p">]</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1"># create god</span>
+    <span class="n">god_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="s2">"the_small_gods"</span><span class="p">]</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
+
+    <span class="c1"># create terrain next to the player</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">create_terrain</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">[</span><span class="s2">"bog"</span><span class="p">],</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="test_save_game"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_state.test_save_game">[docs]</a><span class="k">def</span> <span class="nf">test_save_game</span><span class="p">():</span>
+    <span class="n">_init_world</span><span class="p">()</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">save_game</span><span class="p">()</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">dump_save_game</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="test_load_game"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_state.test_load_game">[docs]</a><span class="k">def</span> <span class="nf">test_load_game</span><span class="p">():</span>
+    <span class="n">full_save_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">SAVE_PATH</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">save_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">full_save_path</span><span class="p">):</span>
+        <span class="n">save</span> <span class="o">=</span> <span class="n">save_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">".json"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">load_game</span><span class="p">(</span><span class="n">save</span><span class="p">)</span>
+        <span class="k">break</span></div>
+
+
 </pre></div>
 
           </article>

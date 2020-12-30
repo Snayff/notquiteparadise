@@ -265,6 +265,19 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">MAX_SAVES</span><span class="p">,</span> <span class="n">SAVE_PATH</span><span class="p">,</span> <span class="n">VERSION</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
 
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"get_previous"</span><span class="p">,</span>
+    <span class="s2">"get_internal_clock"</span><span class="p">,</span>
+    <span class="s2">"get_active_skill"</span><span class="p">,</span>
+    <span class="s2">"get_current"</span><span class="p">,</span>
+    <span class="s2">"set_active_skill"</span><span class="p">,</span>
+    <span class="s2">"update_clock"</span><span class="p">,</span>
+    <span class="s2">"set_new"</span><span class="p">,</span>
+    <span class="s2">"save_game"</span><span class="p">,</span>
+    <span class="s2">"dump_save_game"</span><span class="p">,</span>
+    <span class="s2">"load_game"</span><span class="p">,</span>
+<span class="p">]</span>
+
 <span class="n">_SAVE</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="c1">################### GET ##############################</span>
@@ -406,8 +419,8 @@
         <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loading data from a previous version, </span><span class="si">{</span><span class="n">save</span><span class="p">[</span><span class="s1">'version'</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
 
     <span class="c1"># deserialise data</span>
-    <span class="n">new_world</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">deserialise</span><span class="p">(</span><span class="n">save</span><span class="p">[</span><span class="s2">"world"</span><span class="p">])</span>
     <span class="n">store</span><span class="o">.</span><span class="n">deserialise</span><span class="p">(</span><span class="n">save</span><span class="p">[</span><span class="s2">"store"</span><span class="p">])</span>
+    <span class="n">new_world</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">deserialise</span><span class="p">(</span><span class="n">save</span><span class="p">[</span><span class="s2">"world"</span><span class="p">])</span>
 
     <span class="c1"># set the data as the default world</span>
     <span class="n">world</span><span class="o">.</span><span class="n">move_world</span><span class="p">(</span><span class="n">new_world</span><span class="p">)</span>

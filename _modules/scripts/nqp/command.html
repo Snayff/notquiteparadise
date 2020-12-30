@@ -287,6 +287,7 @@
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.affliction</span> <span class="kn">import</span> <span class="n">BoggedDown</span><span class="p">,</span> <span class="n">Flaming</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.behaviour</span> <span class="kn">import</span> <span class="n">FollowPlayer</span><span class="p">,</span> <span class="n">Projectile</span><span class="p">,</span> <span class="n">SearchAndAttack</span><span class="p">,</span> <span class="n">SkipTurn</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.skill</span> <span class="kn">import</span> <span class="n">BasicAttack</span><span class="p">,</span> <span class="n">Lunge</span><span class="p">,</span> <span class="n">Move</span><span class="p">,</span> <span class="n">Splash</span><span class="p">,</span> <span class="n">TarAndFeather</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.processors.game</span> <span class="kn">import</span> <span class="n">GameEventSubscriber</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.character_selector</span> <span class="kn">import</span> <span class="n">CharacterSelector</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.message_log</span> <span class="kn">import</span> <span class="n">MessageLog</span>
@@ -309,6 +310,7 @@
 <span class="sd">    Init the game`s required info</span>
 <span class="sd">    """</span>
     <span class="n">register_actions</span><span class="p">()</span>
+    <span class="n">init_subscribers</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">DEBUG_START</span><span class="p">:</span>
         <span class="n">_start_debug_game</span><span class="p">()</span>
@@ -357,8 +359,7 @@
     <span class="n">god_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="s2">"the_small_gods"</span><span class="p">]</span>
     <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
 
-    <span class="c1"># show the in game screens</span>
-
+    <span class="c1"># update draw position for all entities</span>
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
@@ -372,11 +373,10 @@
     <span class="n">system</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
 
     <span class="c1"># point the camera at the player, now that FOV is updated</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-    <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># create terrain next to the player</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_terrain</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">[</span><span class="s2">"bog"</span><span class="p">],</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">create_terrain</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">[</span><span class="s2">"bog"</span><span class="p">],</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 
     <span class="c1"># loading finished, give player control</span>
     <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">)</span>
@@ -470,10 +470,11 @@
         <span class="n">state</span><span class="o">.</span><span class="n">load_game</span><span class="p">(</span><span class="n">save</span><span class="p">)</span>
         <span class="k">break</span>
 
-    <span class="n">message_log</span> <span class="o">=</span> <span class="n">MessageLog</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="n">message_log</span><span class="p">)</span>
-    <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># move camera to player</span>
+    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">(),</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
 
+    <span class="c1"># show UI</span>
     <span class="n">skill_bar</span> <span class="o">=</span> <span class="n">SkillBar</span><span class="p">(</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">())</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="n">skill_bar</span><span class="p">)</span>
     <span class="n">ui</span><span class="o">.</span><span class="n">set_element_visibility</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">SKILL_BAR</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
@@ -557,6 +558,15 @@
     <span class="n">register_action</span><span class="p">(</span><span class="n">Lunge</span><span class="p">)</span>
     <span class="n">register_action</span><span class="p">(</span><span class="n">TarAndFeather</span><span class="p">)</span>
     <span class="n">register_action</span><span class="p">(</span><span class="n">Splash</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="init_subscribers"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.init_subscribers">[docs]</a><span class="k">def</span> <span class="nf">init_subscribers</span><span class="p">():</span>
+    <span class="sd">"""</span>
+<span class="sd">    Initialise event subscribers.</span>
+
+<span class="sd">    N.B. When init'd they are held in reference by the event hub and do not need to be referred to directly.</span>
+<span class="sd">    """</span>
+    <span class="n">game_subscriber</span> <span class="o">=</span> <span class="n">GameEventSubscriber</span><span class="p">()</span></div>
 
 
 <span class="c1">##################### UI ######################</span>

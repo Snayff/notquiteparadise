@@ -744,7 +744,7 @@
 
 <div class="viewcode-block" id="get_game_map"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.get_game_map">[docs]</a><span class="k">def</span> <span class="nf">get_game_map</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GameMap</span><span class="p">:</span>
     <span class="sd">"""</span>
-<span class="sd">    Get current game_map</span>
+<span class="sd">    Get current game_map. Raises AttributeError if game_map doesnt exist.</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span><span class="p">:</span>
         <span class="n">game_map</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span>
@@ -757,18 +757,18 @@
     <span class="sd">"""</span>
 <span class="sd">    Get the tile at the specified location. Raises exception if out of bounds or doesnt exist.</span>
 <span class="sd">    """</span>
-    <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">tile_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">tile_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">game_map</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span>  <span class="c1"># not using get_game_map for performance</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">game_map</span><span class="p">,</span> <span class="n">GameMap</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">tile_pos</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">_tile</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tile_map</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tile_map</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span>
 
     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to get tile(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), which doesnt exist."</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">_tile</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">_tile</span>
+    <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">game_map</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tile</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tried to get tile(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), which is out of bounds."</span><span class="p">)</span></div>
 
@@ -779,7 +779,8 @@
 <span class="sd">    position given.</span>
 <span class="sd">    """</span>
     <span class="n">start_x</span><span class="p">,</span> <span class="n">start_y</span> <span class="o">=</span> <span class="n">start_pos</span>
-    <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
+    <span class="n">game_map</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span>  <span class="c1"># not using get_game_map for performance</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">game_map</span><span class="p">,</span> <span class="n">GameMap</span><span class="p">)</span>
     <span class="n">tiles</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">:</span>
@@ -788,7 +789,7 @@
 
         <span class="c1"># make sure it is in bounds</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="n">get_tile</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">game_map</span><span class="p">):</span>
             <span class="n">tiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">tile_map</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">tiles</span></div>
@@ -1007,7 +1008,7 @@
 <span class="sd">    """</span>
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">flag</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">get_components</span><span class="p">([</span><span class="n">IsPlayer</span><span class="p">]):</span>
         <span class="k">return</span> <span class="n">entity</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span></div>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Player not found."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_entitys_component"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.get_entitys_component">[docs]</a><span class="k">def</span> <span class="nf">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">component</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">_C</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">_C</span><span class="p">:</span>
@@ -1191,17 +1192,20 @@
     <span class="sd">"""</span>
 <span class="sd">    Check if a given tag applies to the tile.  True if tag applies.</span>
 <span class="sd">    """</span>
+    <span class="n">game_map</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span>  <span class="c1"># not using get_game_map for performance</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">game_map</span><span class="p">,</span> <span class="n">GameMap</span><span class="p">)</span>
+
     <span class="c1"># before we even check tags, lets confirm it is in bounds</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">game_map</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">OPEN_SPACE</span><span class="p">:</span>
         <span class="c1"># if nothing is blocking movement</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_tile_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_tile_has_entity_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_tile_has_entity_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">True</span>
     <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">:</span>
         <span class="c1"># if anything is blocking</span>
-        <span class="k">if</span> <span class="n">_is_tile_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_tile_has_entity_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="ow">or</span> <span class="n">_tile_has_entity_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">True</span>
     <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">SELF</span><span class="p">:</span>
         <span class="c1"># if entity on tile is same as active entity</span>
@@ -1226,11 +1230,11 @@
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">IS_VISIBLE</span><span class="p">:</span>
         <span class="c1"># if player can see the tile</span>
-        <span class="k">return</span> <span class="n">_is_tile_visible_to_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_is_tile_visible_to_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">,</span> <span class="n">game_map</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">NO_BLOCKING_TILE</span><span class="p">:</span>
         <span class="c1"># if tile isnt blocking movement</span>
-        <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
-            <span class="k">return</span> <span class="ow">not</span> <span class="n">_is_tile_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">game_map</span><span class="p">):</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span>
 
     <span class="c1"># If we've hit here it must be false!</span>
     <span class="k">return</span> <span class="kc">False</span></div>
@@ -1263,12 +1267,11 @@
     <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">_is_tile_visible_to_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_is_tile_visible_to_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">game_map</span><span class="p">:</span> <span class="n">GameMap</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Check if the specified tile is visible to the entity</span>
 <span class="sd">    """</span>
     <span class="n">fov_map</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">FOV</span><span class="p">)</span><span class="o">.</span><span class="n">map</span>
-    <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
     <span class="n">light_map</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">light_map</span>
 
     <span class="c1"># combine maps</span>
@@ -1277,23 +1280,11 @@
     <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">visible_map</span><span class="p">[</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
 
 
-<span class="k">def</span> <span class="nf">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">game_map</span><span class="p">:</span> <span class="n">GameMap</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Check if specified tile is in the map.</span>
 <span class="sd">    """</span>
-    <span class="n">game_map</span> <span class="o">=</span> <span class="n">get_game_map</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span>
-
-
-<span class="k">def</span> <span class="nf">_is_tile_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">"""</span>
-<span class="sd">    Check if the specified tile is blocking movement</span>
-<span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_tile_has_any_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -1324,6 +1315,7 @@
 <span class="k">def</span> <span class="nf">_tile_has_entity_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span>
+
     <span class="c1"># Any entities that block movement?</span>
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">physicality</span><span class="p">)</span> <span class="ow">in</span> <span class="n">get_components</span><span class="p">([</span><span class="n">Position</span><span class="p">,</span> <span class="n">Physicality</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>

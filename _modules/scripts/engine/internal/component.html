@@ -255,6 +255,7 @@
   <h1 id="modules-scripts-engine-internal-component--page-root">Source code for scripts.engine.internal.component</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
@@ -262,7 +263,15 @@
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">RegisteredComponent</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">EffectType</span><span class="p">,</span> <span class="n">HeightType</span><span class="p">,</span> <span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">ReactionTriggerType</span><span class="p">,</span> <span class="n">RenderLayer</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EffectType</span><span class="p">,</span>
+    <span class="n">HeightType</span><span class="p">,</span>
+    <span class="n">PrimaryStatType</span><span class="p">,</span>
+    <span class="n">ReactionTrigger</span><span class="p">,</span>
+    <span class="n">ReactionTriggerType</span><span class="p">,</span>
+    <span class="n">RenderLayer</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">ReactionData</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
@@ -270,7 +279,31 @@
     <span class="kn">import</span> <span class="nn">pygame</span>
 
     <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">,</span> <span class="n">Skill</span>
-    <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ReactionData</span><span class="p">,</span> <span class="n">TraitSpritePathsData</span><span class="p">,</span> <span class="n">TraitSpritesData</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">TraitSpritePathsData</span><span class="p">,</span> <span class="n">TraitSpritesData</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"Exists"</span><span class="p">,</span>
+    <span class="s2">"IsPlayer"</span><span class="p">,</span>
+    <span class="s2">"IsActive"</span><span class="p">,</span>
+    <span class="s2">"HasCombatStats"</span><span class="p">,</span>
+    <span class="s2">"WinCondition"</span><span class="p">,</span>
+    <span class="s2">"Position"</span><span class="p">,</span>
+    <span class="s2">"Aesthetic"</span><span class="p">,</span>
+    <span class="s2">"Tracked"</span><span class="p">,</span>
+    <span class="s2">"Resources"</span><span class="p">,</span>
+    <span class="s2">"Physicality"</span><span class="p">,</span>
+    <span class="s2">"Identity"</span><span class="p">,</span>
+    <span class="s2">"Traits"</span><span class="p">,</span>
+    <span class="s2">"Thought"</span><span class="p">,</span>
+    <span class="s2">"Knowledge"</span><span class="p">,</span>
+    <span class="s2">"Afflictions"</span><span class="p">,</span>
+    <span class="s2">"Opinion"</span><span class="p">,</span>
+    <span class="s2">"FOV"</span><span class="p">,</span>
+    <span class="s2">"LightSource"</span><span class="p">,</span>
+    <span class="s2">"Reaction"</span><span class="p">,</span>
+    <span class="s2">"Lifespan"</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <span class="c1">##########################################################</span>
@@ -478,7 +511,7 @@
             <span class="n">sprite_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">sprite_path</span><span class="p">))</span>
 
         <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">"draw_pos"</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_y</span><span class="p">),</span>
+            <span class="s2">"draw_pos"</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_draw_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_draw_y</span><span class="p">),</span>  <span class="c1"># use target to align with actual position</span>
             <span class="s2">"render_layer"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_layer</span><span class="p">,</span>
             <span class="s2">"sprite_paths"</span><span class="p">:</span> <span class="n">sprite_paths</span><span class="p">,</span>
         <span class="p">}</span>
@@ -752,11 +785,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">attitudes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ReactionTriggerType</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">attitudes</span></div>
 
 <div class="viewcode-block" id="Opinion.serialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Opinion.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">opinions</span></div>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"attitudes"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">attitudes</span><span class="p">,</span> <span class="s2">"opinions"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">opinions</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">_dict</span></div>
 
 <div class="viewcode-block" id="Opinion.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Opinion.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Opinion</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
+        <span class="n">attitudes</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"attitudes"</span><span class="p">]</span>
+        <span class="n">opinions</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">opinion</span> <span class="ow">in</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"opinions"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">opinions</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">entity</span><span class="p">)]</span> <span class="o">=</span> <span class="n">opinion</span>
+
+        <span class="k">return</span> <span class="n">Opinion</span><span class="p">(</span><span class="n">attitudes</span><span class="p">,</span> <span class="n">opinions</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="FOV"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.FOV">[docs]</a><span class="k">class</span> <span class="nc">FOV</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
@@ -792,11 +832,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">radius</span></div>
 
 <div class="viewcode-block" id="LightSource.serialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.LightSource.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_id</span></div>
+        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
+
+        <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
+        <span class="n">light_box</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">light_box</span>
+        <span class="n">light</span> <span class="o">=</span> <span class="n">light_box</span><span class="o">.</span><span class="n">get_light</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_id</span><span class="p">)</span>
+
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"pos"</span><span class="p">:</span> <span class="n">light</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span> <span class="s2">"colour"</span><span class="p">:</span> <span class="n">light</span><span class="o">.</span><span class="n">colour</span><span class="p">,</span> <span class="s2">"alpha"</span><span class="p">:</span> <span class="n">light</span><span class="o">.</span><span class="n">alpha</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">_dict</span></div>
 
 <div class="viewcode-block" id="LightSource.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.LightSource.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">LightSource</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"pos"</span><span class="p">]</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"radius"</span><span class="p">]</span>
+        <span class="n">colour</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"colour"</span><span class="p">]</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"alpha"</span><span class="p">]</span>
+
+        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
+
+        <span class="n">light_id</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_light</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">colour</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">LightSource</span><span class="p">(</span><span class="n">light_id</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="LightSource.on_delete"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.LightSource.on_delete">[docs]</a>    <span class="k">def</span> <span class="nf">on_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -817,16 +873,48 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ReactionTriggerType</span><span class="p">,</span> <span class="n">ReactionData</span><span class="p">]</span> <span class="o">=</span> <span class="n">reactions</span></div>
 
 <div class="viewcode-block" id="Reaction.serialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Reaction.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">serialised</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">for</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">reaction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reactions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">serialised</span><span class="p">[</span><span class="n">trigger</span><span class="p">]</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">reaction</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">reaction_data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reactions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># reaction can be skill name (str) or effect data so need to handle both</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reaction_data</span><span class="o">.</span><span class="n">reaction</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">reaction</span> <span class="o">=</span> <span class="n">reaction_data</span><span class="o">.</span><span class="n">reaction</span>
+                <span class="n">effect_dataclass_name</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">reaction</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">reaction_data</span><span class="o">.</span><span class="n">reaction</span><span class="p">)</span>
+                <span class="n">effect_dataclass_name</span> <span class="o">=</span> <span class="n">reaction_data</span><span class="o">.</span><span class="n">reaction</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
 
-        <span class="k">return</span> <span class="n">serialised</span></div>
+            <span class="n">_dict</span><span class="p">[</span><span class="n">trigger</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">"required_opinion"</span><span class="p">:</span> <span class="n">reaction_data</span><span class="o">.</span><span class="n">required_opinion</span><span class="p">,</span>
+                <span class="s2">"reaction"</span><span class="p">:</span> <span class="n">reaction</span><span class="p">,</span>
+                <span class="s2">"effect_dataclass_name"</span><span class="p">:</span> <span class="n">effect_dataclass_name</span><span class="p">,</span>
+                <span class="s2">"chance"</span><span class="p">:</span> <span class="n">reaction_data</span><span class="o">.</span><span class="n">chance</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">_dict</span></div>
 
 <div class="viewcode-block" id="Reaction.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Reaction.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Reaction</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
+        <span class="n">reactions</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">reaction_data</span> <span class="ow">in</span> <span class="n">serialised</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># reaction can be skill name (str) or effect data so need to handle both</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reaction_data</span><span class="p">[</span><span class="s2">"reaction"</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">reaction</span> <span class="o">=</span> <span class="n">reaction_data</span><span class="p">[</span><span class="s2">"reaction"</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">effect_dataclass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s2">"scripts.engine.internal.definition"</span><span class="p">],</span> <span class="n">reaction_data</span><span class="p">[</span><span class="s2">"effect_dataclass_name"</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">reaction</span> <span class="o">=</span> <span class="n">effect_dataclass</span><span class="p">(</span><span class="n">reaction_data</span><span class="p">[</span><span class="s2">"reaction"</span><span class="p">])</span>
+
+            <span class="n">_reaction_data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">"required_opinion"</span><span class="p">:</span> <span class="n">reaction_data</span><span class="p">[</span><span class="s2">"required_opinion"</span><span class="p">],</span>
+                <span class="s2">"reaction"</span><span class="p">:</span> <span class="n">reaction</span><span class="p">,</span>
+                <span class="s2">"chance"</span><span class="p">:</span> <span class="n">reaction_data</span><span class="p">[</span><span class="s2">"chance"</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="n">reactions</span><span class="p">[</span><span class="n">trigger</span><span class="p">]</span> <span class="o">=</span> <span class="n">ReactionData</span><span class="p">(</span><span class="o">**</span><span class="n">_reaction_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Reaction</span><span class="p">(</span><span class="n">reactions</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="Lifespan"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Lifespan">[docs]</a><span class="k">class</span> <span class="nc">Lifespan</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
@@ -840,7 +928,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span></div>
 
 <div class="viewcode-block" id="Lifespan.serialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Lifespan.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span></div>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"duration"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">_dict</span></div>
 
 <div class="viewcode-block" id="Lifespan.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Lifespan.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>

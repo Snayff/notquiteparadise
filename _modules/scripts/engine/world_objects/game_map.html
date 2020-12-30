@@ -363,7 +363,7 @@
 
         <span class="c1"># get all the non-blocking, or "air", tiles.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_air_tile_positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_sight_map</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-        <span class="c1"># self.block_sight_map == 0 does the if not block_sight_map part of the loop.</span>
+        <span class="c1"># self.block_sight_map == 1 does the if not block_sight_map part of the loop.</span>
         <span class="c1"># np.argwhere gets the indexes of all nonzero elements.</span>
         <span class="c1"># tolist converts this back into a nested list.</span>
 
@@ -385,7 +385,7 @@
                 <span class="c1"># add to the column</span>
                 <span class="n">tiles</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tile_map</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">serialise</span><span class="p">())</span>
 
-        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"width"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="s2">"height"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="s2">"tiles"</span><span class="p">:</span> <span class="n">tiles</span><span class="p">,</span> <span class="s2">"seed"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">}</span>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"width"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="s2">"height"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="s2">"tiles"</span><span class="p">:</span> <span class="n">tiles</span><span class="p">,</span> <span class="s2">"seed"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="s2">"map_name"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">_dict</span></div>
 
 <div class="viewcode-block" id="GameMap.deserialise"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap.deserialise">[docs]</a>    <span class="nd">@classmethod</span>
@@ -395,7 +395,7 @@
 <span class="sd">        """</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">seed</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"seed"</span><span class="p">]</span>
-            <span class="n">algo_name</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"algorithm_name"</span><span class="p">]</span>
+            <span class="n">map_name</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"map_name"</span><span class="p">]</span>
             <span class="n">width</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"width"</span><span class="p">]</span>
             <span class="n">height</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"height"</span><span class="p">]</span>
 
@@ -405,9 +405,10 @@
                 <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
                     <span class="n">tiles</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tile</span><span class="o">.</span><span class="n">deserialise</span><span class="p">(</span><span class="n">serialised</span><span class="p">[</span><span class="s2">"tiles"</span><span class="p">][</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]))</span>
 
-            <span class="n">game_map</span> <span class="o">=</span> <span class="n">GameMap</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">algo_name</span><span class="p">)</span>
+            <span class="n">game_map</span> <span class="o">=</span> <span class="n">GameMap</span><span class="p">(</span><span class="n">map_name</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
             <span class="n">game_map</span><span class="o">.</span><span class="n">tile_map</span> <span class="o">=</span> <span class="n">tiles</span>
             <span class="k">return</span> <span class="n">game_map</span>
+
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"GameMap.Deserialise: Incorrect key (</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">) given. Data not loaded correctly."</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">KeyError</span>  <span class="c1"># throw exception to hit outer error handler and exit</span></div>

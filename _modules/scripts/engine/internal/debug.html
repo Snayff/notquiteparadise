@@ -448,7 +448,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">is_profiling</span><span class="p">:</span>
         <span class="k">return</span>
 
-    <span class="n">_</span> <span class="o">=</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="o">.</span><span class="n">create_stats</span><span class="p">()</span>
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="o">.</span><span class="n">create_stats</span><span class="p">()</span>
 
     <span class="c1">#  create folders and prevent FileNotFoundError</span>
     <span class="n">path</span> <span class="o">=</span> <span class="s2">"tests"</span>
@@ -463,7 +463,7 @@
 
     <span class="c1"># dump the profiler stats</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
-    <span class="n">ps</span> <span class="o">=</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">"cumulative"</span><span class="p">)</span>
+    <span class="n">ps</span> <span class="o">=</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">"tottime"</span><span class="p">)</span>
     <span class="n">ps</span><span class="o">.</span><span class="n">dump_stats</span><span class="p">(</span><span class="s2">"tests/.metrics/profiling/profile.dump"</span><span class="p">)</span>
 
     <span class="c1"># convert profiling to human readable format</span>
@@ -472,7 +472,7 @@
         <span class="s2">"tests/.metrics/profiling/"</span> <span class="o">+</span> <span class="n">date_and_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">@%H%M"</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">VERSION</span> <span class="o">+</span> <span class="s2">".profile"</span><span class="p">,</span> <span class="s2">"w"</span>
     <span class="p">)</span>
     <span class="n">ps</span> <span class="o">=</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">(</span><span class="s2">"tests/.metrics/profiling/profile.dump"</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">out_stream</span><span class="p">)</span>
-    <span class="n">ps</span><span class="o">.</span><span class="n">strip_dirs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">"cumulative"</span><span class="p">)</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
+    <span class="n">ps</span><span class="o">.</span><span class="n">strip_dirs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">"tottime"</span><span class="p">)</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="performance_test"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.debug.performance_test">[docs]</a><span class="k">def</span> <span class="nf">performance_test</span><span class="p">(</span>

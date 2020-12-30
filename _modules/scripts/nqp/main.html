@@ -334,7 +334,6 @@
         <span class="c1"># get info to support UI updates and handling events</span>
         <span class="n">current_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span>
         <span class="n">turn_holder</span> <span class="o">=</span> <span class="n">chronicle</span><span class="o">.</span><span class="n">get_turn_holder</span><span class="p">()</span>
-        <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
 
         <span class="c1"># process any deletions from last frame</span>
         <span class="c1"># this copies snecs.process_pending_deletions() but adds extra steps.</span>
@@ -346,12 +345,13 @@
             <span class="n">snecs</span><span class="o">.</span><span class="n">delete_entity_immediately</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">default_world</span><span class="p">)</span>
 
         <span class="c1"># have enemy take turn</span>
-        <span class="k">if</span> <span class="n">current_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span> <span class="ow">and</span> <span class="n">turn_holder</span> <span class="o">!=</span> <span class="n">player</span><span class="p">:</span>
-            <span class="c1"># just in case the turn holder has died but not been replaced as expected</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">world</span><span class="o">.</span><span class="n">take_turn</span><span class="p">(</span><span class="n">turn_holder</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                <span class="n">chronicle</span><span class="o">.</span><span class="n">rebuild_turn_queue</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">current_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">turn_holder</span> <span class="o">!=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">():</span>
+                <span class="c1"># just in case the turn holder has died but not been replaced as expected</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">world</span><span class="o">.</span><span class="n">take_turn</span><span class="p">(</span><span class="n">turn_holder</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">chronicle</span><span class="o">.</span><span class="n">rebuild_turn_queue</span><span class="p">()</span>
 
         <span class="c1"># process pygame events</span>
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
