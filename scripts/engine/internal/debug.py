@@ -193,7 +193,7 @@ def _dump_profiling_data():
     if not _debugger.is_profiling:
         return
 
-    _ = _debugger.profiler.create_stats()
+    _debugger.profiler.create_stats()
 
     #  create folders and prevent FileNotFoundError
     path = "tests"
@@ -208,7 +208,7 @@ def _dump_profiling_data():
 
     # dump the profiler stats
     s = io.StringIO()
-    ps = pstats.Stats(_debugger.profiler, stream=s).sort_stats("cumulative")
+    ps = pstats.Stats(_debugger.profiler, stream=s).sort_stats("tottime")
     ps.dump_stats("tests/.metrics/profiling/profile.dump")
 
     # convert profiling to human readable format
@@ -217,7 +217,7 @@ def _dump_profiling_data():
         "tests/.metrics/profiling/" + date_and_time.strftime("%Y%m%d@%H%M") + "_" + VERSION + ".profile", "w"
     )
     ps = pstats.Stats("tests/.metrics/profiling/profile.dump", stream=out_stream)
-    ps.strip_dirs().sort_stats("cumulative").print_stats()
+    ps.strip_dirs().sort_stats("tottime").print_stats()
 
 
 def performance_test(

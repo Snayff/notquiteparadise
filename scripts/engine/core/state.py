@@ -10,6 +10,19 @@ from scripts.engine.internal import library
 from scripts.engine.internal.constant import GameState, MAX_SAVES, SAVE_PATH, VERSION
 from scripts.engine.internal.data import store
 
+__all__ = [
+    "get_previous",
+    "get_internal_clock",
+    "get_active_skill",
+    "get_current",
+    "set_active_skill",
+    "update_clock",
+    "set_new",
+    "save_game",
+    "dump_save_game",
+    "load_game",
+]
+
 _SAVE = {}
 
 ################### GET ##############################
@@ -151,8 +164,8 @@ def load_game(filename: str):
         logging.warning(f"Loading data from a previous version, {save['version']}.")
 
     # deserialise data
-    new_world = world.deserialise(save["world"])
     store.deserialise(save["store"])
+    new_world = world.deserialise(save["world"])
 
     # set the data as the default world
     world.move_world(new_world)

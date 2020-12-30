@@ -13,6 +13,8 @@ from scripts.engine.internal.constant import GameState
 if TYPE_CHECKING:
     from typing import Any, Dict, Optional, Type
 
+    from scripts.engine.world_objects.game_map import GameMap
+
 __all__ = ["store"]
 
 
@@ -31,8 +33,6 @@ class Store:
         self.active_skill = None
 
         # used in world
-        from scripts.engine.world_objects.game_map import GameMap
-
         self.current_game_map: Optional[GameMap] = None
 
         # used in chronicle
@@ -44,8 +44,6 @@ class Store:
         self.turn_holder: EntityID = -1  # current acting entity
         self.previous_turn_holder: EntityID = -1  # current acting entity
 
-        self.message_log: List[str] = []
-
         ################### NOT SERIALISED #######################################
 
         # used to hold images called during runtime so only one copy ever exists.
@@ -55,6 +53,8 @@ class Store:
         self.skill_registry: Dict[str, Type[Skill]] = {}
         self.affliction_registry: Dict[str, Type[Affliction]] = {}
         self.behaviour_registry: Dict[str, Type[Behaviour]] = {}
+
+        self.message_log: List[str] = []
 
     def serialise(self) -> Dict[str, Any]:
         """
@@ -85,13 +85,9 @@ class Store:
         try:
             self.current_game_state = serialised["current_game_state"]
             self.previous_game_state = serialised["previous_game_state"]
-            if serialised["current_game_map"]:
-                from scripts.engine.world_objects.game_map import GameMap
+            from scripts.engine.world_objects.game_map import GameMap
 
-                game_map = GameMap.deserialise(serialised["current_game_map"])
-            else:
-                game_map = None
-            self.current_game_map = game_map
+            self.current_game_map = GameMap.deserialise(serialised["current_game_map"])
             self.turn_queue = serialised["turn_queue"]
             self.round = serialised["round"]
             self.time = serialised["time"]

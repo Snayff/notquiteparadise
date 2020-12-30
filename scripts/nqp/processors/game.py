@@ -19,6 +19,8 @@ from scripts.engine.internal.constant import EventType, InputIntent, UIElement
 from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent
 
+__all__ = ["GameEventSubscriber"]
+
 
 class GameEventSubscriber(Subscriber):
     """
@@ -63,9 +65,6 @@ class GameEventSubscriber(Subscriber):
 
         elif isinstance(event, EndRoundEvent):
             _process_end_round()
-
-
-game_subscriber = GameEventSubscriber()
 
 
 def _process_end_turn():

@@ -32,6 +32,7 @@ from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
 from scripts.nqp.actions.behaviour import FollowPlayer, Projectile, SearchAndAttack, SkipTurn
 from scripts.nqp.actions.skill import BasicAttack, Lunge, Move, Splash, TarAndFeather
+from scripts.nqp.processors.game import GameEventSubscriber
 from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.character_selector import CharacterSelector
 from scripts.nqp.ui_elements.message_log import MessageLog
@@ -54,6 +55,7 @@ def initialise_game():
     Init the game`s required info
     """
     register_actions()
+    init_subscribers()
 
     if DEBUG_START:
         _start_debug_game()
@@ -102,8 +104,7 @@ def _start_debug_game():
     god_data = library.GODS["the_small_gods"]
     world.create_god(god_data)
 
-    # show the in game screens
-
+    # update draw position for all entities
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
         assert isinstance(aesthetic, Aesthetic)
         assert isinstance(position, Position)
@@ -117,11 +118,10 @@ def _start_debug_game():
     system.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
-    pos = world.get_entitys_component(player, Position)
-    camera.set_target((pos.x, pos.y), True)
+    camera.set_target((player_pos.x, player_pos.y), True)
 
     # create terrain next to the player
-    world.create_terrain(library.TERRAIN["bog"], (pos.x + 1, pos.y))
+    world.create_terrain(library.TERRAIN["bog"], (player_pos.x + 1, player_pos.y))
 
     # loading finished, give player control
     state.set_new(GameState.GAME_MAP)
@@ -215,10 +215,11 @@ def load_game():
         state.load_game(save)
         break
 
-    message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
-    ui.register_element(UIElement.MESSAGE_LOG, message_log)
-    ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+    # move camera to player
+    player_pos = world.get_entitys_component(world.get_player(), Position)
+    camera.set_target((player_pos.x, player_pos.y), True)
 
+    # show UI
     skill_bar = SkillBar(get_element_rect(UIElement.SKILL_BAR), ui.get_gui_manager())
     ui.register_element(UIElement.SKILL_BAR, skill_bar)
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
@@ -302,6 +303,15 @@ def register_actions():
     register_action(Lunge)
     register_action(TarAndFeather)
     register_action(Splash)
+
+
+def init_subscribers():
+    """
+    Initialise event subscribers.
+
+    N.B. When init'd they are held in reference by the event hub and do not need to be referred to directly.
+    """
+    game_subscriber = GameEventSubscriber()
 
 
 ##################### UI ######################

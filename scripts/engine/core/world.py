@@ -489,7 +489,7 @@ def _create_alter_terrain_effect(
 
 def get_game_map() -> GameMap:
     """
-    Get current game_map
+    Get current game_map. Raises AttributeError if game_map doesnt exist.
     """
     if store.current_game_map:
         game_map = store.current_game_map
@@ -502,18 +502,18 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     """
     Get the tile at the specified location. Raises exception if out of bounds or doesnt exist.
     """
-    game_map = get_game_map()
-    x = tile_pos[0]
-    y = tile_pos[1]
+    game_map = store.current_game_map  # not using get_game_map for performance
+    assert isinstance(game_map, GameMap)
+    x, y = tile_pos
 
     try:
-        _tile = game_map.tile_map[x][y]
+        tile = game_map.tile_map[x][y]
 
     except IndexError:
         raise IndexError(f"Tried to get tile({x},{y}), which doesnt exist.")
 
-    if _is_tile_in_bounds(_tile):
-        return _tile
+    if _is_tile_in_bounds(tile, game_map):
+        return tile
     else:
         raise IndexError(f"Tried to get tile({x},{y}), which is out of bounds.")
 
@@ -524,7 +524,8 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
     position given.
     """
     start_x, start_y = start_pos
-    game_map = get_game_map()
+    game_map = store.current_game_map  # not using get_game_map for performance
+    assert isinstance(game_map, GameMap)
     tiles = []
 
     for coord in coords:
@@ -533,7 +534,7 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
 
         # make sure it is in bounds
         tile = get_tile((x, y))
-        if _is_tile_in_bounds(tile):
+        if _is_tile_in_bounds(tile, game_map):
             tiles.append(game_map.tile_map[x][y])
 
     return tiles
@@ -752,7 +753,7 @@ def get_player() -> EntityID:
     """
     for entity, (flag,) in get_components([IsPlayer]):
         return entity
-    raise ValueError
+    raise ValueError("Player not found.")
 
 
 def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
@@ -936,17 +937,20 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> boo
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
+    game_map = store.current_game_map  # not using get_game_map for performance
+    assert isinstance(game_map, GameMap)
+
     # before we even check tags, lets confirm it is in bounds
-    if not _is_tile_in_bounds(tile):
+    if not _is_tile_in_bounds(tile, game_map):
         return False
 
     if tag == TargetTag.OPEN_SPACE:
         # if nothing is blocking movement
-        if not _is_tile_blocking_movement(tile) and not _tile_has_entity_blocking_movement(tile):
+        if not tile.blocks_movement and not _tile_has_entity_blocking_movement(tile):
             return True
     elif tag == TargetTag.BLOCKED_MOVEMENT:
         # if anything is blocking
-        if _is_tile_blocking_movement(tile) or _tile_has_entity_blocking_movement(tile):
+        if tile.blocks_movement or _tile_has_entity_blocking_movement(tile):
             return True
     elif tag == TargetTag.SELF:
         # if entity on tile is same as active entity
@@ -971,11 +975,11 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> boo
         return True
     elif tag == TargetTag.IS_VISIBLE:
         # if player can see the tile
-        return _is_tile_visible_to_entity(tile, active_entity)
+        return _is_tile_visible_to_entity(tile, active_entity, game_map)
     elif tag == TargetTag.NO_BLOCKING_TILE:
         # if tile isnt blocking movement
-        if _is_tile_in_bounds(tile):
-            return not _is_tile_blocking_movement(tile)
+        if _is_tile_in_bounds(tile, game_map):
+            return not tile.blocks_movement
 
     # If we've hit here it must be false!
     return False
@@ -1008,12 +1012,11 @@ def _is_tile_blocking_sight(tile: Tile) -> bool:
     return False
 
 
-def _is_tile_visible_to_entity(tile: Tile, entity: EntityID) -> bool:
+def _is_tile_visible_to_entity(tile: Tile, entity: EntityID, game_map: GameMap) -> bool:
     """
     Check if the specified tile is visible to the entity
     """
     fov_map = get_entitys_component(entity, FOV).map
-    game_map = get_game_map()
     light_map = game_map.light_map
 
     # combine maps
@@ -1022,23 +1025,11 @@ def _is_tile_visible_to_entity(tile: Tile, entity: EntityID) -> bool:
     return bool(visible_map[tile.x, tile.y])
 
 
-def _is_tile_in_bounds(tile: Tile) -> bool:
+def _is_tile_in_bounds(tile: Tile, game_map: GameMap) -> bool:
     """
     Check if specified tile is in the map.
     """
-    game_map = get_game_map()
-
-    if (0 <= tile.x < game_map.width) and (0 <= tile.y < game_map.height):
-        return True
-    else:
-        return False
-
-
-def _is_tile_blocking_movement(tile: Tile) -> bool:
-    """
-    Check if the specified tile is blocking movement
-    """
-    return tile.blocks_movement
+    return (0 <= tile.x < game_map.width) and (0 <= tile.y < game_map.height)
 
 
 def _tile_has_any_entity(tile: Tile) -> bool:
@@ -1069,6 +1060,7 @@ def _tile_has_specific_entity(tile: Tile, active_entity: EntityID) -> bool:
 def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
     x = tile.x
     y = tile.y
+
     # Any entities that block movement?
     for entity, (position, physicality) in get_components([Position, Physicality]):
         assert isinstance(position, Position)
