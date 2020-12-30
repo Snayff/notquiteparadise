@@ -7,7 +7,9 @@ import numpy as np
 from snecs import RegisteredComponent
 from snecs.typedefs import EntityID
 
-from scripts.engine.internal.constant import EffectType, HeightType, PrimaryStatType, ReactionTriggerType, RenderLayer
+from scripts.engine.internal.constant import EffectType, HeightType, PrimaryStatType, ReactionTrigger, \
+    ReactionTriggerType, RenderLayer
+from scripts.engine.internal.definition import ReactionData
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple, Type
@@ -15,7 +17,13 @@ if TYPE_CHECKING:
     import pygame
 
     from scripts.engine.internal.action import Affliction, Behaviour, Skill
-    from scripts.engine.internal.definition import ReactionData, TraitSpritePathsData, TraitSpritesData
+    from scripts.engine.internal.definition import TraitSpritePathsData, TraitSpritesData
+
+
+
+__all__ = ["Exists", "IsPlayer", "IsActive", "HasCombatStats", "WinCondition", "Position", "Aesthetic", "Tracked",
+    "Resources", "Physicality", "Identity", "Traits", "Thought", "Knowledge", "Afflictions", "Opinion", "FOV",
+    "LightSource", "Reaction", "Lifespan"]
 
 
 ##########################################################
@@ -592,7 +600,12 @@ class Reaction(NQPComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        return Reaction(*serialised)
+        reactions = {}
+
+        for name, reaction in serialised.items():
+            reactions[getattr(ReactionTrigger, name)] = ReactionData(*reaction)
+
+        return Reaction(reactions)
 
 
 class Lifespan(NQPComponent):
