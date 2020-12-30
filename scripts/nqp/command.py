@@ -217,14 +217,11 @@ def load_game():
         state.load_game(save)
         break
 
-    # ensure display is correct
-    system.process_light_map()
-    system.process_fov()
-    system.process_tile_visibility()
-
+    # move camera to player
     player_pos = world.get_entitys_component(world.get_player(), Position)
     camera.set_target((player_pos.x, player_pos.y), True)
 
+    # show UI
     skill_bar = SkillBar(get_element_rect(UIElement.SKILL_BAR), ui.get_gui_manager())
     ui.register_element(UIElement.SKILL_BAR, skill_bar)
     ui.set_element_visibility(UIElement.SKILL_BAR, True)

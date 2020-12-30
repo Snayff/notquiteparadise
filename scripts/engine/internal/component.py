@@ -223,7 +223,7 @@ class Aesthetic(NQPComponent):
             sprite_paths.append(asdict(sprite_path))
 
         _dict = {
-            "draw_pos": (self.draw_x, self.draw_y),
+            "draw_pos": (self.target_draw_x, self.target_draw_y),  # use target to align with actual position
             "render_layer": self.render_layer,
             "sprite_paths": sprite_paths,
         }
@@ -239,13 +239,11 @@ class Aesthetic(NQPComponent):
         # unpack sprite paths
         sprite_paths = []
         from scripts.engine.internal.definition import TraitSpritePathsData
-
         for sprite_path in _sprite_paths:
             sprite_paths.append(TraitSpritePathsData(**sprite_path))
 
         # convert sprite paths to sprites
         from scripts.engine.core import utility
-
         sprites = utility.build_sprites_from_paths(sprite_paths)
 
         return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
