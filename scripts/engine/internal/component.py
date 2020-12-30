@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from dataclasses import asdict
 from typing import TYPE_CHECKING
 
@@ -9,7 +10,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine.internal.constant import EffectType, HeightType, PrimaryStatType, ReactionTrigger, \
     ReactionTriggerType, RenderLayer
-from scripts.engine.internal.definition import ReactionData
+from scripts.engine.internal.definition import EffectData, ReactionData
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple, Type
@@ -511,7 +512,13 @@ class Opinion(NQPComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        return Opinion(*serialised)
+        attitudes = serialised["attitudes"]
+        opinions = {}
+
+        for entity, opinion in serialised["opinions"].items():
+            opinions[int(entity)] = opinion
+
+        return Opinion(attitudes, opinions)
 
 
 class FOV(NQPComponent):
@@ -591,19 +598,45 @@ class Reaction(NQPComponent):
         self.reactions: Dict[ReactionTriggerType, ReactionData] = reactions
 
     def serialize(self):
-        serialised = {}
+        _dict = {}
 
-        for trigger, reaction in self.reactions.items():
-            serialised[trigger] = asdict(reaction)
+        for trigger, reaction_data in self.reactions.items():
+            # reaction can be skill name (str) or effect data so need to handle both
+            if isinstance(reaction_data.reaction, str):
+                reaction = reaction_data.reaction
+                effect_dataclass_name = None
+            else:
+                reaction = asdict(reaction_data.reaction)
+                effect_dataclass_name = reaction_data.reaction.__class__.__name__
 
-        return serialised
+            _dict[trigger] = {
+                "required_opinion": reaction_data.required_opinion,
+                "reaction": reaction,
+                "effect_dataclass_name": effect_dataclass_name,
+                "chance": reaction_data.chance
+            }
+
+        return _dict
 
     @classmethod
     def deserialize(cls, serialised):
         reactions = {}
 
-        for name, reaction in serialised.items():
-            reactions[getattr(ReactionTrigger, name)] = ReactionData(*reaction)
+        for trigger, reaction_data in serialised.items():
+            # reaction can be skill name (str) or effect data so need to handle both
+            if isinstance(reaction_data["reaction"], str):
+                reaction = reaction_data["reaction"]
+            else:
+                effect_dataclass = getattr(sys.modules[__name__], reaction_data["effect_dataclass_name"])
+                reaction = effect_dataclass(reaction_data["reaction"])
+
+
+            _reaction_data = {
+                "required_opinion": reaction_data["required_opinion"],
+                "reaction": reaction,
+                "chance": reaction_data["chance"]
+            }
+            reactions[trigger] = ReactionData(**_reaction_data)
 
         return Reaction(reactions)
 

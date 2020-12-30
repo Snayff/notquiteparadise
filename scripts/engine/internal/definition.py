@@ -419,7 +419,7 @@ class ReactionData:
 ################### EFFECTS ###################################################
 
 
-@dataclass
+@dataclass()
 class EffectData(ABC):
     """
     Base data class for an effect.
