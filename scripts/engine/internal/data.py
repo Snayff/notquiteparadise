@@ -12,6 +12,7 @@ from scripts.engine.internal.constant import GameState
 
 if TYPE_CHECKING:
     from typing import Any, Dict, Optional, Type
+
     from scripts.engine.world_objects.game_map import GameMap
 
 __all__ = ["store"]
@@ -85,6 +86,7 @@ class Store:
             self.current_game_state = serialised["current_game_state"]
             self.previous_game_state = serialised["previous_game_state"]
             from scripts.engine.world_objects.game_map import GameMap
+
             self.current_game_map = GameMap.deserialise(serialised["current_game_map"])
             self.turn_queue = serialised["turn_queue"]
             self.round = serialised["round"]

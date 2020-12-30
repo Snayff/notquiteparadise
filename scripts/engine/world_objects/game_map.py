@@ -130,13 +130,7 @@ class GameMap:
                 # add to the column
                 tiles[x].append(self.tile_map[x][y].serialise())
 
-        _dict = {
-            "width": self.width,
-            "height": self.height,
-            "tiles": tiles,
-            "seed": self.seed,
-            "map_name":  self.name
-        }
+        _dict = {"width": self.width, "height": self.height, "tiles": tiles, "seed": self.seed, "map_name": self.name}
         return _dict
 
     @classmethod

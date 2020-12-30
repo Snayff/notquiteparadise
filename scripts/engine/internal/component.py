@@ -8,8 +8,14 @@ import numpy as np
 from snecs import RegisteredComponent
 from snecs.typedefs import EntityID
 
-from scripts.engine.internal.constant import EffectType, HeightType, PrimaryStatType, ReactionTrigger, \
-    ReactionTriggerType, RenderLayer
+from scripts.engine.internal.constant import (
+    EffectType,
+    HeightType,
+    PrimaryStatType,
+    ReactionTrigger,
+    ReactionTriggerType,
+    RenderLayer,
+)
 from scripts.engine.internal.definition import EffectData, ReactionData
 
 if TYPE_CHECKING:
@@ -21,10 +27,28 @@ if TYPE_CHECKING:
     from scripts.engine.internal.definition import TraitSpritePathsData, TraitSpritesData
 
 
-
-__all__ = ["Exists", "IsPlayer", "IsActive", "HasCombatStats", "WinCondition", "Position", "Aesthetic", "Tracked",
-    "Resources", "Physicality", "Identity", "Traits", "Thought", "Knowledge", "Afflictions", "Opinion", "FOV",
-    "LightSource", "Reaction", "Lifespan"]
+__all__ = [
+    "Exists",
+    "IsPlayer",
+    "IsActive",
+    "HasCombatStats",
+    "WinCondition",
+    "Position",
+    "Aesthetic",
+    "Tracked",
+    "Resources",
+    "Physicality",
+    "Identity",
+    "Traits",
+    "Thought",
+    "Knowledge",
+    "Afflictions",
+    "Opinion",
+    "FOV",
+    "LightSource",
+    "Reaction",
+    "Lifespan",
+]
 
 
 ##########################################################
@@ -248,11 +272,13 @@ class Aesthetic(NQPComponent):
         # unpack sprite paths
         sprite_paths = []
         from scripts.engine.internal.definition import TraitSpritePathsData
+
         for sprite_path in _sprite_paths:
             sprite_paths.append(TraitSpritePathsData(**sprite_path))
 
         # convert sprite paths to sprites
         from scripts.engine.core import utility
+
         sprites = utility.build_sprites_from_paths(sprite_paths)
 
         return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
@@ -504,10 +530,7 @@ class Opinion(NQPComponent):
         self.attitudes: Dict[ReactionTriggerType, int] = attitudes
 
     def serialize(self):
-        _dict = {
-            "attitudes": self.attitudes,
-            "opinions": self.opinions
-        }
+        _dict = {"attitudes": self.attitudes, "opinions": self.opinions}
         return _dict
 
     @classmethod
@@ -555,16 +578,12 @@ class LightSource(NQPComponent):
 
     def serialize(self):
         from scripts.engine.core import world
+
         game_map = world.get_game_map()
         light_box = game_map.light_box
         light = light_box.get_light(self.light_id)
 
-        _dict = {
-            "pos": light.position,
-            "radius": self.radius,
-            "colour": light.colour,
-            "alpha": light.alpha
-        }
+        _dict = {"pos": light.position, "radius": self.radius, "colour": light.colour, "alpha": light.alpha}
         return _dict
 
     @classmethod
@@ -575,6 +594,7 @@ class LightSource(NQPComponent):
         alpha = serialised["alpha"]
 
         from scripts.engine.core import world
+
         light_id = world.create_light(pos, radius, colour, alpha)
 
         return LightSource(light_id, radius)
@@ -613,7 +633,7 @@ class Reaction(NQPComponent):
                 "required_opinion": reaction_data.required_opinion,
                 "reaction": reaction,
                 "effect_dataclass_name": effect_dataclass_name,
-                "chance": reaction_data.chance
+                "chance": reaction_data.chance,
             }
 
         return _dict
@@ -627,15 +647,15 @@ class Reaction(NQPComponent):
             if isinstance(reaction_data["reaction"], str):
                 reaction = reaction_data["reaction"]
             else:
-                effect_dataclass = getattr(sys.modules["scripts.engine.internal.definition"],
-                                           reaction_data["effect_dataclass_name"])
+                effect_dataclass = getattr(
+                    sys.modules["scripts.engine.internal.definition"], reaction_data["effect_dataclass_name"]
+                )
                 reaction = effect_dataclass(reaction_data["reaction"])
-
 
             _reaction_data = {
                 "required_opinion": reaction_data["required_opinion"],
                 "reaction": reaction,
-                "chance": reaction_data["chance"]
+                "chance": reaction_data["chance"],
             }
             reactions[trigger] = ReactionData(**_reaction_data)
 
@@ -653,9 +673,7 @@ class Lifespan(NQPComponent):
         self.duration = duration
 
     def serialize(self):
-        _dict = {
-            "duration": self.duration
-        }
+        _dict = {"duration": self.duration}
         return _dict
 
     @classmethod
