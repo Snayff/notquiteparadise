@@ -104,8 +104,7 @@ def _start_debug_game():
     god_data = library.GODS["the_small_gods"]
     world.create_god(god_data)
 
-    # show the in game screens
-
+    # update draw position for all entities
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
         assert isinstance(aesthetic, Aesthetic)
         assert isinstance(position, Position)
@@ -119,11 +118,10 @@ def _start_debug_game():
     system.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
-    pos = world.get_entitys_component(player, Position)
-    camera.set_target((pos.x, pos.y), True)
+    camera.set_target((player_pos.x, player_pos.y), True)
 
     # create terrain next to the player
-    world.create_terrain(library.TERRAIN["bog"], (pos.x + 1, pos.y))
+    world.create_terrain(library.TERRAIN["bog"], (player_pos.x + 1, player_pos.y))
 
     # loading finished, give player control
     state.set_new(GameState.GAME_MAP)

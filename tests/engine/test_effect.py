@@ -17,14 +17,13 @@ from scripts.engine.internal.effect import (
     MoveActorEffect,
 )
 from scripts.engine.world_objects.game_map import GameMap
-
+from scripts.nqp.command import register_actions
 
 ##############################################################
 #
 # !IMPORTANT! Using pytest-benchmark causes the damage effect test to hang indefinitely and the others to fail
 #
 ###############################################################
-from scripts.nqp.command import register_actions
 
 # register all actions with engine
 register_actions()

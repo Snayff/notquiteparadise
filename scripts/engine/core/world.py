@@ -503,17 +503,16 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     Get the tile at the specified location. Raises exception if out of bounds or doesnt exist.
     """
     game_map = get_game_map()
-    x = tile_pos[0]
-    y = tile_pos[1]
+    x, y = tile_pos
 
     try:
-        _tile = game_map.tile_map[x][y]
+        tile = game_map.tile_map[x][y]
 
     except IndexError:
         raise IndexError(f"Tried to get tile({x},{y}), which doesnt exist.")
 
-    if _is_tile_in_bounds(_tile):
-        return _tile
+    if _is_tile_in_bounds(tile):
+        return tile
     else:
         raise IndexError(f"Tried to get tile({x},{y}), which is out of bounds.")
 
@@ -1028,10 +1027,7 @@ def _is_tile_in_bounds(tile: Tile) -> bool:
     """
     game_map = get_game_map()
 
-    if (0 <= tile.x < game_map.width) and (0 <= tile.y < game_map.height):
-        return True
-    else:
-        return False
+    return (0 <= tile.x < game_map.width) and (0 <= tile.y < game_map.height)
 
 
 def _is_tile_blocking_movement(tile: Tile) -> bool:
