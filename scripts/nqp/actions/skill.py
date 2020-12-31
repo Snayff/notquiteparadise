@@ -39,7 +39,7 @@ class Move(Skill):
 
         super().__init__(user, tile, direction)
 
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[MoveActorEffect]:  # type:ignore
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[MoveActorEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -64,7 +64,7 @@ class BasicAttack(Skill):
     Basic attack for an entity
     """
 
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -104,7 +104,7 @@ class Lunge(Skill):
         super().__init__(user, _tile, direction)
         self.move_amount = 2
 
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the skill effects
         """
@@ -190,7 +190,7 @@ class TarAndFeather(Skill):
         self.reduced_modifier = 0.5
         self.cone_size = 1
 
-    def build_effects(self, hit_entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _build_effects(self, hit_entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the skill effects
         """
@@ -252,7 +252,7 @@ class Splash(Skill):
     Simple projectile attack
     """
 
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """

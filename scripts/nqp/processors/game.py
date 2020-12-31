@@ -94,5 +94,6 @@ def _process_end_round():
     system.reduce_skill_cooldowns()
     system.reduce_affliction_durations()
     system.reduce_lifespan_durations()
+    system.reduce_immunity_durations()
 
     chronicle.next_round()
