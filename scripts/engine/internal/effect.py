@@ -188,8 +188,9 @@ class MoveActorEffect(Effect):
 
                 # update position
                 if _position:
-                    logging.debug(f"->'{world.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x},"
-                                  f"{new_y}).")
+                    logging.debug(
+                        f"->'{world.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x}," f"{new_y})."
+                    )
                     _position.set(new_x, new_y)
 
                     # post interaction event
@@ -333,8 +334,10 @@ class ApplyAfflictionEffect(Effect):
 
         # check for immunities
         if world.entity_has_immunity(target, affliction_name):
-            logging.debug(f"'{world.get_name(self.origin)}' failed to apply {affliction_name} to  "
-                          f"'{world.get_name(self.target)}' as they are immune.")
+            logging.debug(
+                f"'{world.get_name(self.origin)}' failed to apply {affliction_name} to  "
+                f"'{world.get_name(self.target)}' as they are immune."
+            )
             return False, self.failure_effects
 
         # add the affliction to the afflictions component

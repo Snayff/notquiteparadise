@@ -20,7 +20,8 @@ from scripts.engine.core.event import (
 from scripts.engine.internal.component import (
     Afflictions,
     FOV,
-    Immunities, IsActive,
+    Immunities,
+    IsActive,
     Knowledge,
     Lifespan,
     Opinion,
@@ -260,8 +261,8 @@ def reduce_immunity_durations():
             # handle expiry
             if duration <= 0:
                 immunities.active.pop(immunity_name)
-                logging.debug(f"Removed {immunity_name} from '{world.get_name(entity)}'s "
-                              f"list of immunities.")
+                logging.debug(f"Removed {immunity_name} from '{world.get_name(entity)}'s " f"list of immunities.")
+
 
 ########################### GENERIC REACTION HANDLING ##############################
 
