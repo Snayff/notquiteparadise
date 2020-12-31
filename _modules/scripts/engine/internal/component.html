@@ -933,7 +933,31 @@
 
 <div class="viewcode-block" id="Lifespan.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Lifespan.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Lifespan</span><span class="p">(</span><span class="o">*</span><span class="n">serialised</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">Lifespan</span><span class="p">(</span><span class="n">serialised</span><span class="p">[</span><span class="s2">"duration"</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="Immunities"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Immunities">[docs]</a><span class="k">class</span> <span class="nc">Immunities</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Holds the details of anything the entity is immune to.</span>
+
+<span class="sd">    Can be set to INFINITE, which prevents it being reduced each turn.</span>
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="Immunities.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Immunities.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">immunities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># handle mutable default</span>
+        <span class="k">if</span> <span class="n">immunities</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">immunities</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">immunities</span>  <span class="c1"># name, duration</span></div>
+
+<div class="viewcode-block" id="Immunities.serialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Immunities.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"active"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">_dict</span></div>
+
+<div class="viewcode-block" id="Immunities.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.component.Immunities.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+
+        <span class="k">return</span> <span class="n">Immunities</span><span class="p">(</span><span class="n">serialised</span><span class="p">[</span><span class="s2">"active"</span><span class="p">])</span></div></div>
 </pre></div>
 
           </article>

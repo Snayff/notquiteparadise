@@ -508,6 +508,33 @@ full-World serialization feature.</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
+<dt id="scripts.engine.internal.component.Immunities">
+<em class="property">class </em><code class="sig-name descname">Immunities</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">immunities</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/component.html#Immunities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Immunities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../scripts.engine.internal.html#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
+<p>Holds the details of anything the entity is immune to.</p>
+<p>Can be set to INFINITE, which prevents it being reduced each turn.</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.component.Immunities.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">immunities</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/component.html#Immunities.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Immunities.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.component.Immunities.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/component.html#Immunities.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Immunities.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize a serialized instance of this component.</p>
+<p>Will get the output of <cite>serialize</cite> as an argument.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.component.Immunities.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/component.html#Immunities.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Immunities.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize an instance of this component into a simpler type.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
 <dt id="scripts.engine.internal.component.IsActive">
 <em class="property">class </em><code class="sig-name descname">IsActive</code><a class="reference internal" href="../../_modules/scripts/engine/internal/component.html#IsActive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.IsActive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../scripts.engine.internal.html#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>

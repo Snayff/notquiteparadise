@@ -366,11 +366,6 @@
 <em class="property">class </em><code class="sig-name descname">Action</code><a class="reference internal" href="../../_modules/scripts/engine/internal/action.html#Action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
 <p>Action taken during the game. A container for Effects.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.action.Action.build_effects">
-<em class="property">abstract </em><code class="sig-name descname">build_effects</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span> → List<span class="p">[</span>Effect<span class="p">]</span><a class="reference internal" href="../../_modules/scripts/engine/internal/action.html#Action.build_effects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Action.build_effects" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build the effects of this skill applying to a single entity. Must be overridden in subclass.</p>
-</dd></dl>
 </dd></dl>
 <dl class="py class">
 <dt id="scripts.engine.internal.action.Affliction">
@@ -392,11 +387,6 @@ the user and target.</p>
 <dd><p>Apply the affliction to the affected entity.
 An iterator over pairs of (affected entity, [effects]). Use affected entity position.  Applies to each
 entity only once.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.action.Affliction.build_effects">
-<em class="property">abstract </em><code class="sig-name descname">build_effects</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span> → List<span class="p">[</span>Effect<span class="p">]</span><a class="reference internal" href="../../_modules/scripts/engine/internal/action.html#Affliction.build_effects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Affliction.build_effects" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build the effects of this skill applying to a single entity. Must be overridden in subclass.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="scripts.engine.internal.action.Affliction.trigger">
@@ -440,11 +430,6 @@ the user and target.</p>
 <code class="sig-name descname">apply</code><span class="sig-paren">(</span><span class="sig-paren">)</span> → Iterator<span class="p">[</span>Tuple<span class="p">[</span>EntityID<span class="p">, </span>List<span class="p">[</span>Effect<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="../../_modules/scripts/engine/internal/action.html#Skill.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill.apply" title="Permalink to this definition">¶</a></dt>
 <dd><p>An iterator over pairs of (affected entity, [effects]). Uses target tile. Can apply to an entity multiple
 times.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.action.Skill.build_effects">
-<em class="property">abstract </em><code class="sig-name descname">build_effects</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span> → List<span class="p">[</span>Effect<span class="p">]</span><a class="reference internal" href="../../_modules/scripts/engine/internal/action.html#Skill.build_effects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill.build_effects" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build the effects of this skill applying to a single entity. Must be overridden in subclass.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="scripts.engine.internal.action.Skill.get_animation">

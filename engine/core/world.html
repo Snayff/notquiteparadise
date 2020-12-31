@@ -374,6 +374,11 @@
 <dd><p>Add a component to the entity</p>
 </dd></dl>
 <dl class="py function">
+<dt id="scripts.engine.core.world.add_immunity">
+<code class="sig-name descname">add_immunity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">immunity_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#add_immunity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.add_immunity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an immunity to an Entity’s Immunities Component. If entity has no Immunities Component one will be added.</p>
+</dd></dl>
+<dl class="py function">
 <dt id="scripts.engine.core.world.apply_affliction">
 <code class="sig-name descname">apply_affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#apply_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.apply_affliction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the affliction’s effects. Returns True is successful if criteria to trigger the affliction was met,
@@ -382,7 +387,7 @@ False if not.</p>
 <dl class="py function">
 <dt id="scripts.engine.core.world.apply_damage">
 <code class="sig-name descname">apply_damage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">damage</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#apply_damage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.apply_damage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove damage from entity’s health. Return remaining health.</p>
+<dd><p>Remove damage from entity’s health. Return True is damage was applied.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.world.apply_skill">
@@ -466,6 +471,11 @@ Returns the light_id of the Light.</p>
 <dt id="scripts.engine.core.world.delete_entity">
 <code class="sig-name descname">delete_entity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#delete_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.delete_entity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Queues entity for removal from the world_objects. Happens at the next run of process.</p>
+</dd></dl>
+<dl class="py function">
+<dt id="scripts.engine.core.world.entity_has_immunity">
+<code class="sig-name descname">entity_has_immunity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../../_modules/scripts/engine/core/world.html#entity_has_immunity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.world.entity_has_immunity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if an entity has immunity to the named Action.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.engine.core.world.get_a_star_direction">

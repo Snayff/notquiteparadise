@@ -228,7 +228,15 @@
               <ul class="md-nav__list">
         <li class="md-nav__item"><a href="#tools-used" class="md-nav__link">Tools Used</a>
         </li>
-        <li class="md-nav__item"><a href="#naming-conventions" class="md-nav__link">Naming conventions</a>
+        <li class="md-nav__item"><a href="#style-guide" class="md-nav__link">Style Guide</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#naming" class="md-nav__link">Naming</a>
+        </li>
+        <li class="md-nav__item"><a href="#structure" class="md-nav__link">Structure</a>
+        </li>
+        <li class="md-nav__item"><a href="#reporting" class="md-nav__link">Reporting</a>
+        </li></ul>
+            </nav>
         </li>
         <li class="md-nav__item"><a href="#contributing" class="md-nav__link">Contributing</a><nav class="md-nav">
               <ul class="md-nav__list">
@@ -260,7 +268,7 @@
     <li class="md-nav__item">
     
     
-      <a href="#naming-conventions" class="md-nav__link">Naming conventions</a>
+      <a href="#style-guide" class="md-nav__link">Style Guide</a>
       
     
     </li>
@@ -307,7 +315,15 @@
               <ul class="md-nav__list">
         <li class="md-nav__item"><a href="#tools-used" class="md-nav__link">Tools Used</a>
         </li>
-        <li class="md-nav__item"><a href="#naming-conventions" class="md-nav__link">Naming conventions</a>
+        <li class="md-nav__item"><a href="#style-guide" class="md-nav__link">Style Guide</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#naming" class="md-nav__link">Naming</a>
+        </li>
+        <li class="md-nav__item"><a href="#structure" class="md-nav__link">Structure</a>
+        </li>
+        <li class="md-nav__item"><a href="#reporting" class="md-nav__link">Reporting</a>
+        </li></ul>
+            </nav>
         </li>
         <li class="md-nav__item"><a href="#contributing" class="md-nav__link">Contributing</a><nav class="md-nav">
               <ul class="md-nav__list">
@@ -352,20 +368,38 @@
 <p>When you submit a pull request the CI, Github Actions, will run  pytext and mypy automatically. Out of courtesy, black and isort, which change your code, are ready for you to use but are not applied directly.</p>
 
 
-<h2 id="naming-conventions">Naming conventions<a class="headerlink" href="#naming-conventions" title="Permalink to this headline">¶</a></h2>
-<p>Below are the naming conventions followed in Not Quite Paradise:
-* If only one of a class should exist the creation function is called “init_[object]”, otherwise “create_[object]”.
-* Where the object is taken as an argument the function name should default to “create_[object_type]”.
-* If checking a bool use IsA or HasA.
-* If setting a variable from statically held data prefix with “load_[data]”
-* Where a variable name contains “name” the variable may include spaces and other special characters. Where it includes “key” it may contain alphanumeric values only.
-* “Handle” is for a conditional execution, i.e. the function will check criteria is met before executing.
-* “Process” is for a mass application of a function. e.g. “process_lighting” applies lighting to all applicable entities.
-* Arguments should be in a consistent order:
-1. Identifiers (entity, skill, etc.)
-2. Affected items (position, tiles, etc.)
-3. Qualifiers
-* Externally held data should be defined in a dataclass in definitions.py.</p>
+<h2 id="style-guide">Style Guide<a class="headerlink" href="#style-guide" title="Permalink to this headline">¶</a></h2>
+
+<h3 id="naming">Naming<a class="headerlink" href="#naming" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>If only one of a class should exist the creation function is called “init_[object]”, otherwise “create_[object]”.</p></li>
+<li><p>Where the object is taken as an argument the function name should default to “create_[object_type]”.</p></li>
+<li><p>If checking a bool use IsA or HasA.</p></li>
+<li><p>If setting a variable from statically held data prefix with “load_[data]”</p></li>
+<li><p>Where a variable name contains “name” the variable may include spaces and other special characters. Where it includes “key” it may contain alphanumeric values only.</p></li>
+<li><p>“Handle” is for a conditional execution, i.e. the function will check criteria is met before executing.</p></li>
+<li><p>“Process” is for a mass application of a function. e.g. “process_lighting” applies lighting to all applicable entities.</p></li>
+<li><p>Arguments should be in a consistent order:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Identifiers (entity, skill, etc.)</p></li>
+<li><p>Affected items (position, tiles, etc.)</p></li>
+<li><p>Qualifiers</p></li>
+</ol>
+
+
+<h3 id="structure">Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Externally held data should be defined in a dataclass in definitions.py.</p></li>
+</ul>
+
+
+<h3 id="reporting">Reporting<a class="headerlink" href="#reporting" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Functions that change state should confirm when they have done so, via the log.</p></li>
+<li><p>Logging statements should include their containing function as a prefix when used to log an error. e.g. <cite>logging.debug(f”my_function: An error statement”)</cite></p></li>
+</ul>
+
 
 
 <h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
