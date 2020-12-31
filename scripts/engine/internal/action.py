@@ -43,7 +43,7 @@ class Action(ABC):
     shape_size: int
 
     @abstractmethod
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the effects of this skill applying to a single entity. Must be overridden in subclass.
         """
@@ -81,7 +81,7 @@ class Skill(Action):
         self.ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
 
     @abstractmethod
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the effects of this skill applying to a single entity. Must be overridden in subclass.
         """
@@ -130,7 +130,7 @@ class Skill(Action):
         for entity in world.get_affected_entities(
             (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
         ):
-            yield entity, self.build_effects(entity)
+            yield entity, self._build_effects(entity)
             entity_names.append(world.get_name(entity))
 
     def use(self) -> bool:
@@ -211,7 +211,7 @@ class Affliction(Action):
         self.duration = duration
 
     @abstractmethod
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the effects of this skill applying to a single entity. Must be overridden in subclass.
         """
@@ -252,14 +252,14 @@ class Affliction(Action):
                 for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
                     if entity not in entities:
                         entities.add(entity)
-                        yield entity, self.build_effects(entity)
+                        yield entity, self._build_effects(entity)
                         entity_names.append(world.get_name(entity))
 
     def trigger(self):
         """
         Trigger the affliction on the affected entity
         """
-        yield self.affected_entity, self.build_effects(self.affected_entity)
+        yield self.affected_entity, self._build_effects(self.affected_entity)
 
 
 class Behaviour(ABC):
