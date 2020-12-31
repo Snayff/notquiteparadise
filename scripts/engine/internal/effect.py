@@ -188,6 +188,8 @@ class MoveActorEffect(Effect):
 
                 # update position
                 if _position:
+                    logging.debug(f"->'{world.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x},"
+                                  f"{new_y}).")
                     _position.set(new_x, new_y)
 
                     # post interaction event
@@ -246,7 +248,7 @@ class MoveActorEffect(Effect):
                         # blocked by entity
                         blockers_name = world.get_name(other_entity)
                         logging.debug(
-                            f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
+                            f"'{name}' tried to move {direction_name} to ({target_x},{target_y}) but was blocked"
                             f" by '{blockers_name}'. "
                         )
                         break
@@ -322,20 +324,33 @@ class ApplyAfflictionEffect(Effect):
         Applies an affliction to an entity
         """
         logging.debug("Evaluating Apply Affliction Effect...")
+        affliction_name = self.affliction_name
+        origin = self.origin
+        target = self.target
+        duration = self.duration
 
-        affliction_instance = world.create_affliction(self.affliction_name, self.origin, self.target, self.duration)
+        affliction_instance = world.create_affliction(affliction_name, origin, target, duration)
+
+        # check for immunities
+        if world.entity_has_immunity(target, affliction_name):
+            logging.debug(f"'{world.get_name(self.origin)}' failed to apply {affliction_name} to  "
+                          f"'{world.get_name(self.target)}' as they are immune.")
+            return False, self.failure_effects
 
         # add the affliction to the afflictions component
-        if world.entity_has_component(self.target, Afflictions):
-            afflictions = world.get_entitys_component(self.target, Afflictions)
+        if world.entity_has_component(target, Afflictions):
+            afflictions = world.get_entitys_component(target, Afflictions)
             afflictions.add(affliction_instance)
             world.apply_affliction(affliction_instance)
 
+            # add immunities to prevent further applications for the duration
+            world.add_immunity(target, affliction_name, duration + 2)
+
             # post interaction event
             event = AfflictionEvent(
-                origin=self.origin,
-                target=self.target,
-                affliction_name=self.affliction_name,
+                origin=origin,
+                target=target,
+                affliction_name=affliction_name,
             )
             event_hub.post(event)
 

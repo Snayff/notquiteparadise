@@ -20,7 +20,7 @@ from scripts.engine.core.event import (
 from scripts.engine.internal.component import (
     Afflictions,
     FOV,
-    IsActive,
+    Immunities, IsActive,
     Knowledge,
     Lifespan,
     Opinion,
@@ -50,6 +50,7 @@ __all__ = [
     "reduce_skill_cooldowns",
     "reduce_affliction_durations",
     "reduce_lifespan_durations",
+    "reduce_immunity_durations",
 ]
 
 ########################### GENERAL ################################
@@ -222,6 +223,7 @@ def reduce_affliction_durations():
             # handle expiry
             if affliction.duration <= 0:
                 world.remove_affliction(entity, affliction)
+                logging.debug(f"Removed {affliction.f_name} from '{world.get_name(entity)}'.")
 
 
 def reduce_lifespan_durations():
@@ -237,9 +239,29 @@ def reduce_lifespan_durations():
 
         # handle expiry
         if lifespan.duration <= 0:
-            logging.debug(f"{world.get_name(entity)}`s lifespan has expired. ")
             world.kill_entity(entity)
+            logging.debug(f"'{world.get_name(entity)}'s lifespan has expired and they have been killed.")
 
+
+def reduce_immunity_durations():
+    """
+    Reduce all immunity durations
+    """
+    for entity, (immunities,) in query.immunities:
+        assert isinstance(immunities, Immunities)
+        _active = immunities.active.copy()
+        for immunity_name, duration in _active.items():
+
+            if duration != INFINITE:
+                # reduce duration if not infinite
+                immunities.active[immunity_name] -= 1
+                duration -= 1
+
+            # handle expiry
+            if duration <= 0:
+                immunities.active.pop(immunity_name)
+                logging.debug(f"Removed {immunity_name} from '{world.get_name(entity)}'s "
+                              f"list of immunities.")
 
 ########################### GENERIC REACTION HANDLING ##############################
 
@@ -299,7 +321,7 @@ def _process_opinions(causing_entity: EntityID, reaction_trigger: ReactionTrigge
 
             logging.debug(
                 f"{world.get_name(entity)}`s opinion of {world.get_name(causing_entity)} is now "
-                f" {opinion.opinions[causing_entity]}."
+                f"{opinion.opinions[causing_entity]} due to {reaction_trigger}."
             )
 
 

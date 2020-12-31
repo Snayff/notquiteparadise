@@ -9,7 +9,7 @@ from scripts.engine.internal.component import (
     FOV,
     HasCombatStats,
     Identity,
-    IsActive,
+    Immunities, IsActive,
     Knowledge,
     Lifespan,
     LightSource,
@@ -31,6 +31,7 @@ __all__ = [
     "lifespan",
     "opinion",
     "reaction",
+    "immunities",
     "position_and_light_source",
     "position_and_reaction",
     "not_position",
@@ -68,8 +69,10 @@ opinion = get_components([Opinion]).compile()
 
 reaction = get_components([Reaction]).compile()
 
+immunities = get_components([Immunities]).compile()
 
 ################## MULTI QUERIES ##########################
+
 
 position_and_light_source = get_components([Position, LightSource]).compile()
 

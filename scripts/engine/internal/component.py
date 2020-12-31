@@ -678,4 +678,28 @@ class Lifespan(NQPComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        return Lifespan(*serialised)
+        return Lifespan(serialised["duration"])
+
+
+class Immunities(NQPComponent):
+    """
+    Holds the details of anything the entity is immune to.
+
+    Can be set to INFINITE, which prevents it being reduced each turn.
+    """
+
+    def __init__(self, immunities: Dict[str, int] = None):
+        # handle mutable default
+        if immunities is None:
+            immunities = {}
+
+        self.active: Dict[str, int] = immunities  # name, duration
+
+    def serialize(self):
+        _dict = {"active": self.active}
+        return _dict
+
+    @classmethod
+    def deserialize(cls, serialised):
+
+        return Immunities(serialised["active"])

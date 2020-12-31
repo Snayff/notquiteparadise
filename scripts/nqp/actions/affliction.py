@@ -48,7 +48,3 @@ class Flaming(Affliction):
         )
 
         return [damage_effect]
-
-
-# class Immunity(Affliction):
-#     def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:

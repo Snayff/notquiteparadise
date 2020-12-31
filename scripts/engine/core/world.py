@@ -20,7 +20,7 @@ from scripts.engine.internal.component import (
     FOV,
     HasCombatStats,
     Identity,
-    IsActive,
+    Immunities, IsActive,
     IsPlayer,
     Knowledge,
     Lifespan,
@@ -133,7 +133,7 @@ def create_god(god_data: GodData) -> EntityID:
     god.append((Resources(INFINITE, INFINITE)))
     entity = create_entity(god)
 
-    logging.debug(f"God, '{god_data.name}', created.")
+    logging.debug(f"God Entity, '{god_data.name}', created.")
 
     return entity
 
@@ -163,6 +163,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(Traits(actor_data.trait_names))
     components.append(FOV())
     components.append(Tracked(chronicle.get_time()))
+    components.append(Immunities())
 
     # set up light
     radius = 2  # TODO - pull radius and colour from external data
@@ -227,7 +228,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     stats = create_combat_stats(entity)
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
-    logging.debug(f"Entity, '{name}', created.")
+    logging.debug(f"Actor Entity, '{name}', created.")
 
     return entity
 
@@ -265,6 +266,8 @@ def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int], lifesp
 
     # create the entity
     entity = create_entity(components)
+
+    logging.debug(f"Terrain Entity, '{terrain_data.name}', created.")
 
     return entity
 
@@ -1161,6 +1164,36 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     return False
 
 
+def entity_has_immunity(entity: EntityID, name: str) -> bool:
+    """
+    Check if an entity has immunity to the named Action.
+    """
+    try:
+        immunity = get_entitys_component(entity, Immunities)
+        if name in immunity.active:
+            return True
+        else:
+            return False
+
+    except AttributeError:
+        logging.info(f"entity_has_immunity: `{get_name(entity)}`, ({entity}), does not have Immunities Component.")
+        return False
+
+
+def add_immunity(entity: EntityID, immunity_name: str, duration: int):
+    """
+    Add an immunity to an Entity's Immunities Component. If entity has no Immunities Component one will be added.
+    """
+    try:
+        immunity = get_entitys_component(entity, Immunities)
+        immunity.active[immunity_name] = duration
+
+    except AttributeError:
+        add_component(entity, Immunities({immunity_name: duration}))
+
+    logging.debug(f"'{get_name(entity)}' is now immune to {immunity_name} for {duration} rounds.")
+
+
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
 
 
@@ -1231,7 +1264,7 @@ def apply_skill(skill: Skill) -> bool:
             return False
     else:
         logging.info(
-            f'Could not apply skill "{skill.__class__.__name__}", target tile does not have required '
+            f"Could not apply skill '{skill.__class__.__name__}', target tile does not have required "
             f"tags ({skill.target_tags})."
         )
 
@@ -1301,7 +1334,7 @@ def take_turn(entity: EntityID) -> bool:
 
 def apply_damage(entity: EntityID, damage: int) -> bool:
     """
-    Remove damage from entity's health. Return remaining health.
+    Remove damage from entity's health. Return True is damage was applied.
     """
     if damage <= 0:
         logging.info(f"Damage was {damage} and therefore nothing was done.")
