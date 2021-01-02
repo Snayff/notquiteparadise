@@ -104,7 +104,6 @@ def end_turn(entity: EntityID, time_spent: int):
     """
     if entity == get_turn_holder():
         world.spend_time(entity, time_spent)
-        next_turn()
 
         # post game event
         event_hub.post(EndTurnEvent())
