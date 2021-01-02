@@ -3,8 +3,8 @@ from __future__ import annotations
 import pygame
 
 from scripts.engine.core import chronicle, key, query, world
-from scripts.engine.core.ui import ui
 from scripts.engine.core.component import Position
+from scripts.engine.core.ui import ui
 from scripts.engine.internal.constant import EventType, GameState, InputEventType, InputIntent, UIElement
 from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent

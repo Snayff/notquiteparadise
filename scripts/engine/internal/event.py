@@ -27,7 +27,7 @@ __all__ = [
     "StartGameEvent",
     "LoadGameEvent",
     "WinConditionMetEvent",
-    "MessageEvent"
+    "MessageEvent",
 ]
 
 
@@ -233,4 +233,3 @@ class MessageEvent(Event):
         super().__init__(EventType.GAME)
 
         self.message = message
-

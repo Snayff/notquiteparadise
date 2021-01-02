@@ -10,10 +10,10 @@ import snecs
 from snecs import Component
 
 from scripts.engine.core import chronicle, state, system, utility, world
+from scripts.engine.core.component import Aesthetic, Position, WinCondition
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import library
 from scripts.engine.internal.action import register_action
-from scripts.engine.core.component import Aesthetic, Position, WinCondition
 from scripts.engine.internal.constant import (
     ASSET_PATH,
     DEBUG_START,

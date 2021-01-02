@@ -48,7 +48,7 @@ __all__ = [
     "LightSource",
     "Reaction",
     "Lifespan",
-    "Immunities"
+    "Immunities",
 ]
 
 

@@ -8,10 +8,10 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 
 from scripts.engine.core import state, utility, world
+from scripts.engine.core.component import Aesthetic, Position
 from scripts.engine.core.ui import ui
 from scripts.engine.core.utility import clamp
 from scripts.engine.internal import library
-from scripts.engine.core.component import Aesthetic, Position
 from scripts.engine.internal.constant import (
     EventType,
     GameState,

@@ -11,9 +11,6 @@ from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, utility
-from scripts.engine.internal.event import MessageEvent, event_hub
-from scripts.engine.core.utility import build_sprites_from_paths
-from scripts.engine.internal import library
 from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
@@ -36,6 +33,17 @@ from scripts.engine.core.component import (
     Tracked,
     Traits,
 )
+from scripts.engine.core.effect import (
+    AffectCooldownEffect,
+    AffectStatEffect,
+    AlterTerrainEffect,
+    ApplyAfflictionEffect,
+    DamageEffect,
+    Effect,
+    MoveActorEffect,
+)
+from scripts.engine.core.utility import build_sprites_from_paths
+from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
@@ -71,15 +79,7 @@ from scripts.engine.internal.definition import (
     ProjectileData,
     TerrainData,
 )
-from scripts.engine.core.effect import (
-    AffectCooldownEffect,
-    AffectStatEffect,
-    AlterTerrainEffect,
-    ApplyAfflictionEffect,
-    DamageEffect,
-    Effect,
-    MoveActorEffect,
-)
+from scripts.engine.internal.event import event_hub, MessageEvent
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
@@ -309,6 +309,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     behaviour = store.behaviour_registry["Projectile"]
     thought = Thought(behaviour(entity))
     from scripts.engine.internal.action import Projectile
+
     assert isinstance(thought.behaviour, Projectile)
     thought.behaviour.data = data  # projectile is a  special case and requires the data set
     add_component(entity, thought)

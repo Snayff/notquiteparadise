@@ -19,6 +19,7 @@ from scripts.engine.internal.constant import (
 
 if TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple, Type, Union
+
     from scripts.engine.internal.definition import TraitSpritePathsData, TraitSpritesData
 
 __all__ = [

@@ -7,16 +7,6 @@ import tcod
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, world
-from scripts.engine.internal.event import (
-    AffectCooldownEvent,
-    AffectStatEvent,
-    AfflictionEvent,
-    DamageEvent,
-    event_hub,
-    MoveEvent,
-    Subscriber,
-    WinConditionMetEvent,
-)
 from scripts.engine.core.component import (
     Afflictions,
     FOV,
@@ -41,6 +31,16 @@ from scripts.engine.internal.constant import (
     ReactionTriggerType,
 )
 from scripts.engine.internal.definition import EffectData, ReactionData
+from scripts.engine.internal.event import (
+    AffectCooldownEvent,
+    AffectStatEvent,
+    AfflictionEvent,
+    DamageEvent,
+    event_hub,
+    MoveEvent,
+    Subscriber,
+    WinConditionMetEvent,
+)
 from scripts.engine.world_objects.tile import Tile
 
 __all__ = [

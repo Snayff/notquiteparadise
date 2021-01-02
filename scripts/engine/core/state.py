@@ -58,6 +58,7 @@ def get_current() -> GameState:
 
 ################### MANAGING STATE ###################
 
+
 def initialise_engine():
     """
     Initialise engine resources.
@@ -65,14 +66,15 @@ def initialise_engine():
     N.B. Must be called before using the rest of the engine.
     """
     # load modules that have module level instances the engine needs
-    import scripts.engine.core.ui
-    import scripts.engine.internal.debug
-    import scripts.engine.internal.data
-    import scripts.engine.internal.library
     import scripts.engine.core.system
+    import scripts.engine.core.ui
+    import scripts.engine.internal.data
+    import scripts.engine.internal.debug
+    import scripts.engine.internal.library
 
     # register any Actions that exist within the engine
-    from scripts.engine.internal.action import register_action, Projectile
+    from scripts.engine.internal.action import Projectile, register_action
+
     register_action(Projectile)
 
 
@@ -105,6 +107,7 @@ def set_active_skill(skill_name: str):
 
 
 ##################### SAVE AND LOAD #######################
+
 
 def save_game():
     """

@@ -7,16 +7,6 @@ from typing import Tuple, TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import query, utility, world
-from scripts.engine.internal.event import (
-    AffectCooldownEvent,
-    AffectStatEvent,
-    AfflictionEvent,
-    AlterTerrainEvent,
-    DamageEvent,
-    event_hub,
-    MoveEvent,
-)
-from scripts.engine.internal import library
 from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
@@ -27,7 +17,17 @@ from scripts.engine.core.component import (
     Position,
     Resources,
 )
+from scripts.engine.internal import library
 from scripts.engine.internal.constant import DamageTypeType, Direction, DirectionType, PrimaryStatType, TargetTag
+from scripts.engine.internal.event import (
+    AffectCooldownEvent,
+    AffectStatEvent,
+    AfflictionEvent,
+    AlterTerrainEvent,
+    DamageEvent,
+    event_hub,
+    MoveEvent,
+)
 
 if TYPE_CHECKING:
     from typing import List

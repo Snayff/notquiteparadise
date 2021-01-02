@@ -9,9 +9,8 @@ from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import utility, world
-from scripts.engine.internal.event import event_hub, ExitMenuEvent
-from scripts.engine.core.utility import get_class_members
 from scripts.engine.core.component import Aesthetic, Afflictions, Identity, Resources, Traits
+from scripts.engine.core.utility import get_class_members
 from scripts.engine.internal.constant import (
     ASSET_PATH,
     GAP_SIZE,
@@ -21,6 +20,7 @@ from scripts.engine.internal.constant import (
     SecondaryStat,
     UIElement,
 )
+from scripts.engine.internal.event import event_hub, ExitMenuEvent
 from scripts.engine.widgets.window import Window
 
 if TYPE_CHECKING:

@@ -9,18 +9,21 @@ from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, world
 from scripts.engine.core.component import Aesthetic, Position
+from scripts.engine.core.effect import Effect
 from scripts.engine.internal.constant import (
     AfflictionCategoryType,
     DirectionType,
     EffectTypeType,
-    ProjectileExpiry, ReactionTriggerType,
+    ProjectileExpiry,
+    ReactionTriggerType,
     ResourceType,
     ShapeType,
-    TargetTag, TargetingMethodType,
-    TargetTagType, TerrainCollision,
+    TargetingMethodType,
+    TargetTag,
+    TargetTagType,
+    TerrainCollision,
 )
 from scripts.engine.internal.definition import ProjectileData
-from scripts.engine.core.effect import Effect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:

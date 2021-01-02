@@ -3,8 +3,8 @@ from __future__ import annotations
 import pytweening
 
 from scripts.engine.core import query, utility, world
-from scripts.engine.core.utility import is_close
 from scripts.engine.core.component import Aesthetic, LightSource
+from scripts.engine.core.utility import is_close
 from scripts.engine.internal.constant import GameState, TILE_SIZE
 
 __all__ = ["process_updates"]

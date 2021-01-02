@@ -6,10 +6,10 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import query, world
-from scripts.engine.internal.event import EndRoundEvent, EndTurnEvent, event_hub, NewRoundEvent, NewTurnEvent
-from scripts.engine.internal import library
 from scripts.engine.core.component import Tracked
+from scripts.engine.internal import library
 from scripts.engine.internal.data import store
+from scripts.engine.internal.event import EndRoundEvent, EndTurnEvent, event_hub, NewRoundEvent, NewTurnEvent
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple
