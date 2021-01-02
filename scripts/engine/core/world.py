@@ -11,10 +11,10 @@ from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, utility
-from scripts.engine.core.event import MessageEvent, event_hub
+from scripts.engine.internal.event import MessageEvent, event_hub
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
-from scripts.engine.internal.component import (
+from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
     Exists,
@@ -71,7 +71,7 @@ from scripts.engine.internal.definition import (
     ProjectileData,
     TerrainData,
 )
-from scripts.engine.internal.effect import (
+from scripts.engine.core.effect import (
     AffectCooldownEffect,
     AffectStatEffect,
     AlterTerrainEffect,
@@ -307,7 +307,11 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     entity = create_entity(projectile)
 
     behaviour = store.behaviour_registry["Projectile"]
-    add_component(entity, Thought(behaviour(entity, data)))  # type: ignore  # this works for projectile special case
+    thought = Thought(behaviour(entity))
+    from scripts.engine.internal.action import Projectile
+    assert isinstance(thought.behaviour, Projectile)
+    thought.behaviour.data = data  # projectile is a  special case and requires the data set
+    add_component(entity, thought)
 
     move = store.skill_registry["Move"]
     known_skills = [move]

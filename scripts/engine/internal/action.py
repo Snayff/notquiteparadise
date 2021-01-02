@@ -3,12 +3,12 @@ from __future__ import annotations
 import logging
 import os
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, world
-from scripts.engine.internal.component import Aesthetic, Position
+from scripts.engine.core.component import Aesthetic, Position
 from scripts.engine.internal.constant import (
     AfflictionCategoryType,
     DirectionType,
@@ -20,7 +20,7 @@ from scripts.engine.internal.constant import (
     TargetTagType, TerrainCollision,
 )
 from scripts.engine.internal.definition import ProjectileData
-from scripts.engine.internal.effect import Effect
+from scripts.engine.core.effect import Effect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -308,10 +308,10 @@ class Projectile(Behaviour):
     Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
     """
 
-    def __init__(self, attached_entity: EntityID, data: ProjectileData):
+    def __init__(self, attached_entity: EntityID):
         super().__init__(attached_entity)
 
-        self.data = data
+        self.data: ProjectileData = ProjectileData()
         self.distance_travelled = 0
 
     def act(self):

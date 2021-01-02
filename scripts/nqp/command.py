@@ -12,8 +12,8 @@ from snecs import Component
 from scripts.engine.core import chronicle, state, system, utility, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import library
-from scripts.engine.internal.action import Projectile, register_action
-from scripts.engine.internal.component import Aesthetic, Position, WinCondition
+from scripts.engine.internal.action import register_action
+from scripts.engine.core.component import Aesthetic, Position, WinCondition
 from scripts.engine.internal.constant import (
     ASSET_PATH,
     DEBUG_START,
@@ -35,7 +35,6 @@ from scripts.nqp.actions.skill import BasicAttack, Lunge, Move, Splash, TarAndFe
 from scripts.nqp.processors.game import GameEventSubscriber
 from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.character_selector import CharacterSelector
-from scripts.nqp.ui_elements.message_log import MessageLog
 from scripts.nqp.ui_elements.skill_bar import SkillBar
 from scripts.nqp.ui_elements.title_screen import TitleScreen
 

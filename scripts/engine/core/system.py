@@ -7,7 +7,7 @@ import tcod
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, world
-from scripts.engine.core.event import (
+from scripts.engine.internal.event import (
     AffectCooldownEvent,
     AffectStatEvent,
     AfflictionEvent,
@@ -17,7 +17,7 @@ from scripts.engine.core.event import (
     Subscriber,
     WinConditionMetEvent,
 )
-from scripts.engine.internal.component import (
+from scripts.engine.core.component import (
     Afflictions,
     FOV,
     Immunities,

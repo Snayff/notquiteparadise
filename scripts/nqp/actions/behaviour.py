@@ -6,7 +6,7 @@ import random
 from scripts.engine.core import chronicle, world
 from scripts.engine.internal import library
 from scripts.engine.internal.action import Behaviour
-from scripts.engine.internal.component import Knowledge, Position
+from scripts.engine.core.component import Knowledge, Position
 from scripts.engine.internal.constant import Direction, TargetTag
 
 

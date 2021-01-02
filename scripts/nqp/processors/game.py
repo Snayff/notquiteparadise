@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from scripts.engine.core import chronicle, system
-from scripts.engine.core.event import (
+from scripts.engine.internal.event import (
     EndRoundEvent,
     EndTurnEvent,
     ExitGameEvent,

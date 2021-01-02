@@ -23,7 +23,7 @@ __all__ = [
     "load_game",
 ]
 
-_SAVE = {}
+_save = {}
 
 ################### GET ##############################
 
@@ -56,17 +56,24 @@ def get_current() -> GameState:
     return store.current_game_state
 
 
-################### SET ##############################
-
-
-def set_active_skill(skill_name: str):
-    """
-    Set the active skill. Used for targeting mode.
-    """
-    store.active_skill = skill_name
-
-
 ################### MANAGING STATE ###################
+
+def initialise_engine():
+    """
+    Initialise engine resources.
+
+    N.B. Must be called before using the rest of the engine.
+    """
+    # load modules that have module level instances the engine needs
+    import scripts.engine.core.ui
+    import scripts.engine.internal.debug
+    import scripts.engine.internal.data
+    import scripts.engine.internal.library
+    import scripts.engine.core.system
+
+    # register any Actions that exist within the engine
+    from scripts.engine.internal.action import register_action, Projectile
+    register_action(Projectile)
 
 
 def update_clock() -> float:
@@ -90,14 +97,23 @@ def set_new(new_game_state: GameState):
     logging.info(log_string)
 
 
+def set_active_skill(skill_name: str):
+    """
+    Set the active skill. Used for targeting mode.
+    """
+    store.active_skill = skill_name
+
+
+##################### SAVE AND LOAD #######################
+
 def save_game():
     """
     Serialise the game data to an internal container
     """
-    global _SAVE
+    global _save
 
     # clear existing save data
-    _SAVE = {}
+    _save = {}
 
     # get the info needed
     full_save_path = SAVE_PATH
@@ -132,16 +148,16 @@ def save_game():
         os.remove(str(full_save_path / save_name))
 
     # update save data
-    _SAVE[new_save_name] = save
+    _save[new_save_name] = save
 
 
 def dump_save_game():
     """
     Export the save game data, if it exists, to an external json file
     """
-    global _SAVE
+    global _save
 
-    for save_name, save_values in _SAVE.items():
+    for save_name, save_values in _save.items():
 
         # write to json
         str_path = str(SAVE_PATH / save_name) + ".json"

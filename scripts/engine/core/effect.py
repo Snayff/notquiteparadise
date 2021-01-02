@@ -7,7 +7,7 @@ from typing import Tuple, TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import query, utility, world
-from scripts.engine.core.event import (
+from scripts.engine.internal.event import (
     AffectCooldownEvent,
     AffectStatEvent,
     AfflictionEvent,
@@ -17,7 +17,7 @@ from scripts.engine.core.event import (
     MoveEvent,
 )
 from scripts.engine.internal import library
-from scripts.engine.internal.component import (
+from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
     Identity,

@@ -43,7 +43,7 @@ if TYPE_CHECKING:
     from snecs.typedefs import EntityID
 
     from scripts.engine.internal.action import Skill
-    from scripts.engine.internal.effect import Effect
+    from scripts.engine.core.effect import Effect
 
 
 #################################################################

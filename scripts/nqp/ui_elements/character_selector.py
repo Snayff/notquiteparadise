@@ -9,7 +9,7 @@ from pygame import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UITextBox
 
-from scripts.engine.core.event import event_hub, StartGameEvent
+from scripts.engine.internal.event import event_hub, StartGameEvent
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import GAP_SIZE, RenderLayer, TILE_SIZE, TraitGroup

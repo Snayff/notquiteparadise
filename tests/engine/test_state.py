@@ -61,7 +61,7 @@ def _init_world():
     chronicle.set_turn_holder(player)
 
     # create actor near to player
-    from scripts.engine.internal.component import Position
+    from scripts.engine.core.component import Position
     player_pos = world.get_entitys_component(player, Position)
     from scripts.engine.internal import library
     actor_data = library.ACTORS["crocturion"]
@@ -75,17 +75,22 @@ def _init_world():
     world.create_terrain(library.TERRAIN["bog"], (player_pos.x + 1, player_pos.y))
 
 
-def test_save_game():
+def test_save_game(benchmark):
+    _init_world()
+    benchmark(state.save_game)
+
+
+def test_dump_save_game(benchmark):
     _init_world()
     state.save_game()
-    state.dump_save_game()
+    benchmark(state.dump_save_game)
 
 
-def test_load_game():
+def test_load_game(benchmark):
     full_save_path = str(SAVE_PATH)
     for save_name in os.listdir(full_save_path):
         save = save_name.replace(".json", "")
-        state.load_game(save)
+        benchmark(state.load_game, save)
         break
 
 

@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import query, world
-from scripts.engine.core.event import EndRoundEvent, EndTurnEvent, event_hub, NewRoundEvent, NewTurnEvent
+from scripts.engine.internal.event import EndRoundEvent, EndTurnEvent, event_hub, NewRoundEvent, NewTurnEvent
 from scripts.engine.internal import library
-from scripts.engine.internal.component import Tracked
+from scripts.engine.core.component import Tracked
 from scripts.engine.internal.data import store
 
 if TYPE_CHECKING:

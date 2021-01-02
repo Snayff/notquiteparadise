@@ -8,7 +8,7 @@ import pygame_gui
 from pygame import Rect
 from pygame_gui.elements import UIButton
 
-from scripts.engine.core.event import event_hub, ExitGameEvent, LoadGameEvent, NewGameEvent
+from scripts.engine.internal.event import event_hub, ExitGameEvent, LoadGameEvent, NewGameEvent
 from scripts.engine.internal.constant import RenderLayer
 from scripts.engine.widgets.panel import Panel
 

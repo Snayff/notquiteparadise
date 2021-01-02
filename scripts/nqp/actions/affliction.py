@@ -7,7 +7,7 @@ from snecs.typedefs import EntityID
 from scripts.engine.internal import library
 from scripts.engine.internal.action import Affliction
 from scripts.engine.internal.constant import DamageType, PrimaryStat
-from scripts.engine.internal.effect import AffectStatEffect, DamageEffect
+from scripts.engine.core.effect import AffectStatEffect, DamageEffect
 
 if TYPE_CHECKING:
     from typing import List
