@@ -23,7 +23,7 @@ from scripts.engine.internal.constant import (
     TargetTagType,
     TerrainCollision,
 )
-from scripts.engine.internal.definition import ProjectileData
+from scripts.engine.internal.definition import DelayedSkillData, ProjectileData
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -416,3 +416,17 @@ class Projectile(Behaviour):
             self.data.skill_instance.target_tile = target_tile
 
         return should_activate, should_move
+
+
+class DelayedSkill(Behaviour):
+    """
+    After duration ends trigger skill centred on self.
+    """
+    def __init__(self, attached_entity: EntityID):
+        super().__init__(attached_entity)
+
+        self.data: DelayedSkillData = DelayedSkillData()
+        self.duration = 0
+
+    def act(self):
+        pass

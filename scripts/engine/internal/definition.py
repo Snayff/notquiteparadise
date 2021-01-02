@@ -233,6 +233,23 @@ class ProjectileData:
 
 @register_dataclass_with_json
 @dataclass
+class DelayedSkillData:
+    """
+    Data class for a Delayed Skill
+    """
+    # this will be overwritten or will break, but need defaults to allow passing
+    creator: EntityID = 0  # type: ignore
+
+    skill_name: str = "none"
+    skill_instance: Optional[Skill] = None
+    name: str = "none"
+    description: str = "none"
+    duration: int = 0
+    sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
+
+
+@register_dataclass_with_json
+@dataclass
 class TerrainData:
     """
     Data class for terrain.

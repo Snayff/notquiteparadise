@@ -226,6 +226,8 @@ class Position(NQPComponent):
 class Aesthetic(NQPComponent):
     """
     An entity's sprite.
+
+    N.B. translation to screen coordinates is handled by the camera
     """
 
     def __init__(

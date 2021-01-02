@@ -73,7 +73,7 @@ from scripts.engine.internal.definition import (
     AlterTerrainEffectData,
     ApplyAfflictionEffectData,
     DamageEffectData,
-    EffectData,
+    DelayedSkillData, EffectData,
     GodData,
     MoveActorEffectData,
     ProjectileData,
@@ -289,12 +289,11 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
 
-    # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
-    projectile.append(Position((x, y)))  # TODO - check position not blocked before spawning
-    projectile.append(Resources(999, 999))
-    projectile.append(Afflictions())
+    projectile.append(Position((x, y)))
+    projectile.append(Resources(999, 999))  # TODO - remove need to have Resources
+    projectile.append(Afflictions())  # TODO - remove need to have Afflictions
     projectile.append(IsActive())
 
     # set up light
@@ -306,10 +305,10 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     entity = create_entity(projectile)
 
+    # add post-creation components
     behaviour = store.behaviour_registry["Projectile"]
     thought = Thought(behaviour(entity))
     from scripts.engine.internal.action import Projectile
-
     assert isinstance(thought.behaviour, Projectile)
     thought.behaviour.data = data  # projectile is a  special case and requires the data set
     add_component(entity, thought)
@@ -318,9 +317,42 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     known_skills = [move]
     add_component(entity, Knowledge(known_skills))
 
-    logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
+    logging.debug(f"{projectile_name}`s created at ({x},{y}) heading {data.direction}.")
 
     return entity
+
+
+def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], data: DelayedSkillData) -> EntityID:
+    """
+    Create an entity with all of the components to be a delayed skill. Returns Entity ID.
+    """
+    skill_name = data.skill_name
+    delayed_skill: List[Component] = []
+    x, y = tile_pos
+
+    name = get_name(creating_entity)
+    delayed_skill_name = f"{name}s {skill_name}`s projectile"
+    desc = f"{skill_name} incoming."
+    delayed_skill.append(Identity(delayed_skill_name, desc))
+
+    sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
+
+    delayed_skill.append(Aesthetic(sprites.idle, sprites, [data.sprite_paths], RenderLayer.TERRAIN, (x, y)))
+    delayed_skill.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
+    delayed_skill.append(Position((x, y)))
+    delayed_skill.append(IsActive())
+
+    entity = create_entity(delayed_skill)
+
+    # add post-creation components
+    behaviour = store.behaviour_registry["DelayedSkill"]
+    thought = Thought(behaviour(entity))
+    from scripts.engine.internal.action import DelayedSkill
+    assert isinstance(thought.behaviour, DelayedSkill)
+    add_component(entity, thought)
+
+    logging.debug(f"{delayed_skill_name}`s delayed skill created at ({x},{y}) and will trigger in {data.duration} "
+                  f"rounds.")
 
 
 def create_affliction(name: str, creator: EntityID, target: EntityID, duration: int) -> Affliction:
