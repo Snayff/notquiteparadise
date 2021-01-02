@@ -323,22 +323,6 @@
 </dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="scripts.nqp.actions.behaviour.Projectile">
-<em class="property">class </em><code class="sig-name descname">Projectile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData" title="scripts.engine.internal.definition.ProjectileData">scripts.engine.internal.definition.ProjectileData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/behaviour.html#Projectile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.behaviour.Projectile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.action.Behaviour" title="scripts.engine.internal.action.Behaviour"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.action.Behaviour</span></code></a></p>
-<p>Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.</p>
-<dl class="py method">
-<dt id="scripts.nqp.actions.behaviour.Projectile.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData" title="scripts.engine.internal.definition.ProjectileData">scripts.engine.internal.definition.ProjectileData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/behaviour.html#Projectile.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.behaviour.Projectile.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.nqp.actions.behaviour.Projectile.act">
-<code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/behaviour.html#Projectile.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.behaviour.Projectile.act" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform the behaviour</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
 <dt id="scripts.nqp.actions.behaviour.SearchAndAttack">
 <em class="property">class </em><code class="sig-name descname">SearchAndAttack</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/behaviour.html#SearchAndAttack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.behaviour.SearchAndAttack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.action.Behaviour" title="scripts.engine.internal.action.Behaviour"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.action.Behaviour</span></code></a></p>
@@ -472,7 +456,7 @@ N.B. ignores provided tile.</p>
 <dd></dd></dl>
 <dl class="py method">
 <dt id="scripts.nqp.actions.skill.Move.get_animation">
-<code class="sig-name descname">get_animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aesthetic</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.component.Aesthetic" title="scripts.engine.internal.component.Aesthetic">scripts.engine.internal.component.Aesthetic</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/skill.html#Move.get_animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.skill.Move.get_animation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aesthetic</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.component.Aesthetic" title="scripts.engine.core.component.Aesthetic">scripts.engine.core.component.Aesthetic</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/skill.html#Move.get_animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.skill.Move.get_animation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the animation to play when executing the skill. Defaults to attack sprite. Override in subclass if
 another is needed.</p>
 </dd></dl>

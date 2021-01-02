@@ -5,11 +5,10 @@ Internal
     :caption: Internal
 
     action
-    component
     constant
     data
     debug
     definition
-    effect
+    event
     extend_json
     library

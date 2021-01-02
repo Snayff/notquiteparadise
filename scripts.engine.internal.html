@@ -245,8 +245,6 @@
         </li>
         <li class="md-nav__item"><a href="#module-scripts.engine.internal.action" class="md-nav__link">scripts.engine.internal.action module</a>
         </li>
-        <li class="md-nav__item"><a href="#module-scripts.engine.internal.component" class="md-nav__link">scripts.engine.internal.component module</a>
-        </li>
         <li class="md-nav__item"><a href="#module-scripts.engine.internal.constant" class="md-nav__link">scripts.engine.internal.constant module</a>
         </li>
         <li class="md-nav__item"><a href="#module-scripts.engine.internal.data" class="md-nav__link">scripts.engine.internal.data module</a>
@@ -255,7 +253,7 @@
         </li>
         <li class="md-nav__item"><a href="#module-scripts.engine.internal.definition" class="md-nav__link">scripts.engine.internal.definition module</a>
         </li>
-        <li class="md-nav__item"><a href="#module-scripts.engine.internal.effect" class="md-nav__link">scripts.engine.internal.effect module</a>
+        <li class="md-nav__item"><a href="#module-scripts.engine.internal.event" class="md-nav__link">scripts.engine.internal.event module</a>
         </li>
         <li class="md-nav__item"><a href="#module-scripts.engine.internal.extend_json" class="md-nav__link">scripts.engine.internal.extend_json module</a>
         </li>
@@ -381,6 +379,22 @@ will use Actions.</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
+<dt id="scripts.engine.internal.action.Projectile">
+<em class="property">class </em><code class="sig-name descname">Projectile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#Projectile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Projectile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.action.Behaviour" title="scripts.engine.internal.action.Behaviour"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.action.Behaviour</span></code></a></p>
+<p>Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.action.Projectile.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#Projectile.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Projectile.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.action.Projectile.act">
+<code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#Projectile.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Projectile.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the behaviour</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
 <dt id="scripts.engine.internal.action.Skill">
 <em class="property">class </em><code class="sig-name descname">Skill</code><span class="sig-paren">(</span><em class="sig-param">user: int</em>, <em class="sig-param">target_tile: scripts.engine.world_objects.tile.Tile</em>, <em class="sig-param">direction: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#Skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.action.Action" title="scripts.engine.internal.action.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.action.Action</span></code></a></p>
@@ -406,7 +420,7 @@ times.</p>
 <dd></dd></dl>
 <dl class="py method">
 <dt id="scripts.engine.internal.action.Skill.get_animation">
-<code class="sig-name descname">get_animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aesthetic</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.component.Aesthetic" title="scripts.engine.internal.component.Aesthetic">scripts.engine.internal.component.Aesthetic</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#Skill.get_animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill.get_animation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aesthetic</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.component.Aesthetic" title="scripts.engine.core.component.Aesthetic">scripts.engine.core.component.Aesthetic</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#Skill.get_animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill.get_animation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the animation to play when executing the skill. Defaults to attack sprite. Override in subclass if
 another is needed.</p>
 </dd></dl>
@@ -453,610 +467,6 @@ another is needed.</p>
 <code class="sig-name descname">register_action</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cls</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>Union<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.action.Action" title="scripts.engine.internal.action.Action">Action</a><span class="p">, </span><a class="reference internal" href="#scripts.engine.internal.action.Behaviour" title="scripts.engine.internal.action.Behaviour">Behaviour</a><span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#register_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.register_action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialises the class properties set by external data, if appropriate, and adds to the action registry for use
 by the engine.</p>
-</dd></dl>
-
-
-<span id="scripts-engine-internal-component-module"></span><h2 id="module-scripts.engine.internal.component">scripts.engine.internal.component module<a class="headerlink" href="#module-scripts.engine.internal.component" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Aesthetic">
-<em class="property">class </em><code class="sig-name descname">Aesthetic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_sprite</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a></span></em>, <em class="sig-param"><span class="n">sprites</span><span class="p">:</span> <span class="n">TraitSpritesData</span></em>, <em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span>TraitSpritePathsData<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">render_layer</span><span class="p">:</span> <span class="n">RenderLayer</span></em>, <em class="sig-param"><span class="n">draw_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Aesthetic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Aesthetic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An entity’s sprite.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Aesthetic.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_sprite</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a></span></em>, <em class="sig-param"><span class="n">sprites</span><span class="p">:</span> <span class="n">TraitSpritesData</span></em>, <em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span>TraitSpritePathsData<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">render_layer</span><span class="p">:</span> <span class="n">RenderLayer</span></em>, <em class="sig-param"><span class="n">draw_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Aesthetic.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Aesthetic.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Aesthetic.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Aesthetic.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Aesthetic.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Aesthetic.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Aesthetic.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Aesthetic.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Afflictions">
-<em class="property">class </em><code class="sig-name descname">Afflictions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">active</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>Affliction<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stat_modifiers</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Tuple<span class="p">[</span>PrimaryStatType<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Afflictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Afflictions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An entity’s Boons and Banes. held in .active as a list of Affliction.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Afflictions.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">active</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>Affliction<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stat_modifiers</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Tuple<span class="p">[</span>PrimaryStatType<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Afflictions.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Afflictions.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Afflictions.add">
-<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Afflictions.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Afflictions.add" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Afflictions.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Afflictions.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Afflictions.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Afflictions.remove">
-<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Afflictions.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Afflictions.remove" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Afflictions.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Afflictions.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Afflictions.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Exists">
-<em class="property">class </em><code class="sig-name descname">Exists</code><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Exists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>Empty flag for all entities. Used to allow filters to search for a single component i.e. use a single condition.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Exists.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Exists.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Exists.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Exists.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Exists.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Exists.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.FOV">
-<em class="property">class </em><code class="sig-name descname">FOV</code><a class="reference internal" href="_modules/scripts/engine/internal/component.html#FOV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.FOV" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An entity’s field of view. Always starts blank.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.FOV.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#FOV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.FOV.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.FOV.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#FOV.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.FOV.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.FOV.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#FOV.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.FOV.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.HasCombatStats">
-<em class="property">class </em><code class="sig-name descname">HasCombatStats</code><a class="reference internal" href="_modules/scripts/engine/internal/component.html#HasCombatStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.HasCombatStats" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>A flag to show if an entity has stats used for combat.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.HasCombatStats.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#HasCombatStats.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.HasCombatStats.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.HasCombatStats.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#HasCombatStats.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.HasCombatStats.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Identity">
-<em class="property">class </em><code class="sig-name descname">Identity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">description</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Identity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An entity’s identity, such as name and description.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Identity.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">description</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Identity.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Identity.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Identity.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Identity.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Identity.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Identity.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Identity.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Identity.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Immunities">
-<em class="property">class </em><code class="sig-name descname">Immunities</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">immunities</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Immunities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Immunities" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>Holds the details of anything the entity is immune to.</p>
-<p>Can be set to INFINITE, which prevents it being reduced each turn.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Immunities.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">immunities</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Immunities.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Immunities.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Immunities.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Immunities.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Immunities.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Immunities.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Immunities.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Immunities.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.IsActive">
-<em class="property">class </em><code class="sig-name descname">IsActive</code><a class="reference internal" href="_modules/scripts/engine/internal/component.html#IsActive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.IsActive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>Whether the entity is active or not. Used to limit entity processing.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.IsActive.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#IsActive.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.IsActive.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.IsActive.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#IsActive.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.IsActive.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.IsPlayer">
-<em class="property">class </em><code class="sig-name descname">IsPlayer</code><a class="reference internal" href="_modules/scripts/engine/internal/component.html#IsPlayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.IsPlayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>Whether the entity is the player.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.IsPlayer.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#IsPlayer.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.IsPlayer.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.IsPlayer.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#IsPlayer.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.IsPlayer.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Knowledge">
-<em class="property">class </em><code class="sig-name descname">Knowledge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skills</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Type<span class="p">[</span>Skill<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">skill_order</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cooldowns</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Knowledge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Knowledge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An entity’s knowledge, including skills.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Knowledge.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skills</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Type<span class="p">[</span>Skill<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">skill_order</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cooldowns</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Knowledge.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Knowledge.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Knowledge.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Knowledge.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Knowledge.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Knowledge.learn_skill">
-<code class="sig-name descname">learn_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>Skill<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">add_to_order</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">set_cooldown</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Knowledge.learn_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Knowledge.learn_skill" title="Permalink to this definition">¶</a></dt>
-<dd><p>Learn a new skill.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Knowledge.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Knowledge.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Knowledge.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Knowledge.set_skill_cooldown">
-<code class="sig-name descname">set_skill_cooldown</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Knowledge.set_skill_cooldown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Knowledge.set_skill_cooldown" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the cooldown of a skill</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Lifespan">
-<em class="property">class </em><code class="sig-name descname">Lifespan</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Lifespan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Lifespan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>Holds info relating to the limited lifespan of an entity. E.g. temporary summons.</p>
-<p>Can be set to INFINITE, which prevents it being reduced each turn.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Lifespan.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Lifespan.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Lifespan.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Lifespan.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Lifespan.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Lifespan.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Lifespan.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Lifespan.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Lifespan.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.LightSource">
-<em class="property">class </em><code class="sig-name descname">LightSource</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">light_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">radius</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#LightSource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.LightSource" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An emitter of light. Takes the light_id from a Light. The Light must be added to the Lightbox of the
-Gamemap separately.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.LightSource.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">light_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">radius</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#LightSource.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.LightSource.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.LightSource.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#LightSource.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.LightSource.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.LightSource.on_delete">
-<code class="sig-name descname">on_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#LightSource.on_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.LightSource.on_delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete the associated light from the Gamemap’s Lightbox</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.LightSource.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#LightSource.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.LightSource.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.NQPComponent">
-<em class="property">class </em><code class="sig-name descname">NQPComponent</code><a class="reference internal" href="_modules/scripts/engine/internal/component.html#NQPComponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.NQPComponent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://snecs.slavfox.space/api/#snecs-component-registeredcomponent" title="(in snecs v1.2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></a></p>
-<p>Subclass snecs’ RegisteredComponent to extend with an on_delete method</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.NQPComponent.on_delete">
-<code class="sig-name descname">on_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#NQPComponent.on_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.NQPComponent.on_delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Opinion">
-<em class="property">class </em><code class="sig-name descname">Opinion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attitudes</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>ReactionTriggerType<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">opinions</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span>EntityID<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Opinion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Opinion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An entity’s views on other entities. {entity, opinion}</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Opinion.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attitudes</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>ReactionTriggerType<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">opinions</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span>EntityID<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Opinion.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Opinion.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Opinion.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Opinion.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Opinion.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Opinion.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Opinion.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Opinion.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Physicality">
-<em class="property">class </em><code class="sig-name descname">Physicality</code><span class="sig-paren">(</span><em class="sig-param">blocks_movement: bool</em>, <em class="sig-param">height: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Physicality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Physicality" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An entity’s physical existence within the world.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Physicality.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">blocks_movement: bool</em>, <em class="sig-param">height: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Physicality.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Physicality.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Physicality.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Physicality.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Physicality.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Physicality.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Physicality.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Physicality.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Position">
-<em class="property">class </em><code class="sig-name descname">Position</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">positions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Position" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<dl class="simple">
-<dt>An entity’s position on the map. At initiation provide all positions the entity holds. After initiation only need</dt><dd><p>to set the top left, or reference position as the other coordinates are held as offsets.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Position.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">positions</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Position.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Position.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Position.coordinates">
-<em class="property">property </em><code class="sig-name descname">coordinates</code><a class="headerlink" href="#scripts.engine.internal.component.Position.coordinates" title="Permalink to this definition">¶</a></dt>
-<dd><p>The list of coordinates that this Position represents</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>return</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Position.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Position.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Position.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Position.get_outermost">
-<code class="sig-name descname">get_outermost</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span> → Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Position.get_outermost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Position.get_outermost" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the outermost tile in the direction provided
-:param direction: Direction to use
-:return: The position of the outermost tile</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Position.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Position.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Position.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Position.set">
-<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Position.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Position.set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Position.x">
-<em class="property">property </em><code class="sig-name descname">x</code><a class="headerlink" href="#scripts.engine.internal.component.Position.x" title="Permalink to this definition">¶</a></dt>
-<dd><p>The x component of the top-left position</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>return</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Position.y">
-<em class="property">property </em><code class="sig-name descname">y</code><a class="headerlink" href="#scripts.engine.internal.component.Position.y" title="Permalink to this definition">¶</a></dt>
-<dd><p>The y component of the top-left position</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>return</p>
-</dd>
-</dl>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Reaction">
-<em class="property">class </em><code class="sig-name descname">Reaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reactions</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>ReactionTriggerType<span class="p">, </span>ReactionData<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Reaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Reaction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>Holds info about what triggers are in place and what happens as a result</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Reaction.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reactions</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>ReactionTriggerType<span class="p">, </span>ReactionData<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Reaction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Reaction.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Reaction.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Reaction.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Reaction.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Reaction.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Reaction.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Reaction.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Resources">
-<em class="property">class </em><code class="sig-name descname">Resources</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">health</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">stamina</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Resources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Resources" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An entity’s resources. Members align to Resource constants.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Resources.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">health</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">stamina</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Resources.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Resources.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Resources.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Resources.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Resources.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Resources.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Resources.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Resources.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Thought">
-<em class="property">class </em><code class="sig-name descname">Thought</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">behaviour</span><span class="p">:</span> <span class="n">Behaviour</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Thought"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Thought" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An ai behaviour to control an entity.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Thought.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">behaviour</span><span class="p">:</span> <span class="n">Behaviour</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Thought.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Thought.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Thought.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Thought.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Thought.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Thought.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Thought.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Thought.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Tracked">
-<em class="property">class </em><code class="sig-name descname">Tracked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_spent</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Tracked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Tracked" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>A component to hold info on activities of an entity</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Tracked.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_spent</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Tracked.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Tracked.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Tracked.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Tracked.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Tracked.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Tracked.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Tracked.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Tracked.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.Traits">
-<em class="property">class </em><code class="sig-name descname">Traits</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">trait_names</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Traits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Traits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>An entity’s traits. Class, archetype, skill set or otherwise defining group.</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Traits.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">trait_names</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Traits.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Traits.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Traits.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Traits.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Traits.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.Traits.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#Traits.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.Traits.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt id="scripts.engine.internal.component.WinCondition">
-<em class="property">class </em><code class="sig-name descname">WinCondition</code><a class="reference internal" href="_modules/scripts/engine/internal/component.html#WinCondition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.WinCondition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.component.NQPComponent" title="scripts.engine.internal.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.component.NQPComponent</span></code></a></p>
-<p>A flag to show that an entity is a win objective</p>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.WinCondition.deserialize">
-<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#WinCondition.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.WinCondition.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize a serialized instance of this component.</p>
-<p>Will get the output of <cite>serialize</cite> as an argument.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.component.WinCondition.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/component.html#WinCondition.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.component.WinCondition.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize an instance of this component into a simpler type.</p>
-<p>Override this in all your Component classes to make use of snecs’
-full-World serialization feature.</p>
-</dd></dl>
 </dd></dl>
 
 
@@ -1215,6 +625,10 @@ full-World serialization feature.</p>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.constant.GameEventType.LOAD_GAME">
 <code class="sig-name descname">LOAD_GAME</code><em class="property"> = 3</em><a class="headerlink" href="#scripts.engine.internal.constant.GameEventType.LOAD_GAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.GameEventType.MESSAGE">
+<code class="sig-name descname">MESSAGE</code><em class="property"> = 11</em><a class="headerlink" href="#scripts.engine.internal.constant.GameEventType.MESSAGE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.constant.GameEventType.NEW_GAME">
@@ -1910,11 +1324,6 @@ Should only be accessed via getters and setters, not directly.</p>
 <dt id="scripts.engine.internal.data.Store.deserialise">
 <code class="sig-name descname">deserialise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/data.html#Store.deserialise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.data.Store.deserialise" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the details from the serialised data back into the store.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.data.Store.log_message">
-<code class="sig-name descname">log_message</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/data.html#Store.log_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.data.Store.log_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a message to the log.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="scripts.engine.internal.data.Store.serialise">
@@ -3044,111 +2453,259 @@ Also used to hold and map data from json.</p>
 </dd></dl>
 
 
-<span id="scripts-engine-internal-effect-module"></span><h2 id="module-scripts.engine.internal.effect">scripts.engine.internal.effect module<a class="headerlink" href="#module-scripts.engine.internal.effect" title="Permalink to this headline">¶</a></h2>
+<span id="scripts-engine-internal-event-module"></span><h2 id="module-scripts.engine.internal.event">scripts.engine.internal.event module<a class="headerlink" href="#module-scripts.engine.internal.event" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="scripts.engine.internal.effect.AffectCooldownEffect">
-<em class="property">class </em><code class="sig-name descname">AffectCooldownEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">affect_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#AffectCooldownEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.AffectCooldownEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.effect.Effect</span></code></a></p>
+<dt id="scripts.engine.internal.event.AffectCooldownEvent">
+<em class="property">class </em><code class="sig-name descname">AffectCooldownEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#AffectCooldownEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.AffectCooldownEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
 <dl class="py method">
-<dt id="scripts.engine.internal.effect.AffectCooldownEffect.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">affect_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#AffectCooldownEffect.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.AffectCooldownEffect.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.effect.AffectCooldownEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> → Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#AffectCooldownEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.AffectCooldownEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reduces the cooldown of a skill of an entity</p>
+<dt id="scripts.engine.internal.event.AffectCooldownEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#AffectCooldownEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.AffectCooldownEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="scripts.engine.internal.effect.AffectStatEffect">
-<em class="property">class </em><code class="sig-name descname">AffectStatEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">cause_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">affect_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#AffectStatEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.AffectStatEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.effect.Effect</span></code></a></p>
+<dt id="scripts.engine.internal.event.AffectStatEvent">
+<em class="property">class </em><code class="sig-name descname">AffectStatEvent</code><span class="sig-paren">(</span><em class="sig-param">origin: int</em>, <em class="sig-param">target: int</em>, <em class="sig-param">stat_to_target: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">amount: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#AffectStatEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.AffectStatEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
 <dl class="py method">
-<dt id="scripts.engine.internal.effect.AffectStatEffect.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">cause_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">affect_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#AffectStatEffect.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.AffectStatEffect.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.effect.AffectStatEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> → Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#AffectStatEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.AffectStatEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Log the affliction and the stat modification in the Affliction component.</p>
+<dt id="scripts.engine.internal.event.AffectStatEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">origin: int</em>, <em class="sig-param">target: int</em>, <em class="sig-param">stat_to_target: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">amount: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#AffectStatEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.AffectStatEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="scripts.engine.internal.effect.AlterTerrainEffect">
-<em class="property">class </em><code class="sig-name descname">AlterTerrainEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">terrain_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">affect_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#AlterTerrainEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.AlterTerrainEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.effect.Effect</span></code></a></p>
+<dt id="scripts.engine.internal.event.AfflictionEvent">
+<em class="property">class </em><code class="sig-name descname">AfflictionEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">affliction_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#AfflictionEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.AfflictionEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
 <dl class="py method">
-<dt id="scripts.engine.internal.effect.AlterTerrainEffect.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">terrain_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">affect_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#AlterTerrainEffect.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.AlterTerrainEffect.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.effect.AlterTerrainEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> → Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#AlterTerrainEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.AlterTerrainEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create or reduce the duration of temporary terrain.</p>
+<dt id="scripts.engine.internal.event.AfflictionEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">affliction_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#AfflictionEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.AfflictionEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="scripts.engine.internal.effect.ApplyAfflictionEffect">
-<em class="property">class </em><code class="sig-name descname">ApplyAfflictionEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">affliction_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#ApplyAfflictionEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.ApplyAfflictionEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.effect.Effect</span></code></a></p>
+<dt id="scripts.engine.internal.event.AlterTerrainEvent">
+<em class="property">class </em><code class="sig-name descname">AlterTerrainEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">terrain_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#AlterTerrainEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.AlterTerrainEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
 <dl class="py method">
-<dt id="scripts.engine.internal.effect.ApplyAfflictionEffect.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">affliction_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#ApplyAfflictionEffect.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.ApplyAfflictionEffect.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.effect.ApplyAfflictionEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> → Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#ApplyAfflictionEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.ApplyAfflictionEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies an affliction to an entity</p>
+<dt id="scripts.engine.internal.event.AlterTerrainEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">terrain_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#AlterTerrainEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.AlterTerrainEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="scripts.engine.internal.effect.DamageEffect">
-<em class="property">class </em><code class="sig-name descname">DamageEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">accuracy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">damage</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">damage_type</span><span class="p">:</span> <span class="n">DamageTypeType</span></em>, <em class="sig-param"><span class="n">mod_stat</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">mod_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#DamageEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.DamageEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.effect.Effect</span></code></a></p>
+<dt id="scripts.engine.internal.event.DamageEvent">
+<em class="property">class </em><code class="sig-name descname">DamageEvent</code><span class="sig-paren">(</span><em class="sig-param">origin: int</em>, <em class="sig-param">target: int</em>, <em class="sig-param">amount: int</em>, <em class="sig-param">damage_type: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">remaining_hp: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#DamageEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.DamageEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
 <dl class="py method">
-<dt id="scripts.engine.internal.effect.DamageEffect.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">stat_to_target</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">accuracy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">damage</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">damage_type</span><span class="p">:</span> <span class="n">DamageTypeType</span></em>, <em class="sig-param"><span class="n">mod_stat</span><span class="p">:</span> <span class="n">PrimaryStatType</span></em>, <em class="sig-param"><span class="n">mod_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#DamageEffect.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.DamageEffect.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.effect.DamageEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> → Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#DamageEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.DamageEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resolve the damage effect and return the conditional effects based on if the damage is greater than 0.</p>
+<dt id="scripts.engine.internal.event.DamageEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">origin: int</em>, <em class="sig-param">target: int</em>, <em class="sig-param">amount: int</em>, <em class="sig-param">damage_type: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">remaining_hp: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#DamageEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.DamageEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="scripts.engine.internal.effect.Effect">
-<em class="property">class </em><code class="sig-name descname">Effect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#Effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.Effect" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.internal.event.EndRoundEvent">
+<em class="property">class </em><code class="sig-name descname">EndRoundEvent</code><a class="reference internal" href="_modules/scripts/engine/internal/event.html#EndRoundEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.EndRoundEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.EndRoundEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#EndRoundEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.EndRoundEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.EndTurnEvent">
+<em class="property">class </em><code class="sig-name descname">EndTurnEvent</code><a class="reference internal" href="_modules/scripts/engine/internal/event.html#EndTurnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.EndTurnEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.EndTurnEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#EndTurnEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.EndTurnEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.Event">
+<em class="property">class </em><code class="sig-name descname">Event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.Event" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
-<p>A collection of parameters and instructions to apply a change to an entity’s or tile’s state.</p>
+<p>Events to cause top level actions to take place</p>
+<p>Base class for events</p>
 <dl class="py method">
-<dt id="scripts.engine.internal.effect.Effect.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">potency</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#Effect.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.Effect.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.effect.Effect.evaluate">
-<em class="property">abstract </em><code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#Effect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.Effect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the effect, triggering more if needed. Must be overridden by subclass</p>
+<dt id="scripts.engine.internal.event.Event.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#Event.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.Event.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="scripts.engine.internal.effect.MoveActorEffect">
-<em class="property">class </em><code class="sig-name descname">MoveActorEffect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span></em>, <em class="sig-param"><span class="n">move_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#MoveActorEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.MoveActorEffect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.effect.Effect</span></code></a></p>
+<dt id="scripts.engine.internal.event.EventHub">
+<em class="property">class </em><code class="sig-name descname">EventHub</code><a class="reference internal" href="_modules/scripts/engine/internal/event.html#EventHub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.EventHub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Event hub to handle the interactions between events and subscribers</p>
 <dl class="py method">
-<dt id="scripts.engine.internal.effect.MoveActorEffect.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">success_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">failure_effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span></em>, <em class="sig-param"><span class="n">move_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#MoveActorEffect.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.MoveActorEffect.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.internal.event.EventHub.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#EventHub.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.EventHub.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 <dl class="py method">
-<dt id="scripts.engine.internal.effect.MoveActorEffect.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> → Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.effect.Effect" title="scripts.engine.internal.effect.Effect">Effect</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/internal/effect.html#MoveActorEffect.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.effect.MoveActorEffect.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resolve the move effect and return the conditional effects based on if the target moved the full amount.</p>
+<dt id="scripts.engine.internal.event.EventHub.post">
+<code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event">scripts.engine.internal.event.Event</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#EventHub.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.EventHub.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log an event ready for notifying subscribers.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.EventHub.subscribe">
+<code class="sig-name descname">subscribe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em>, <em class="sig-param"><span class="n">subscriber</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.event.Subscriber" title="scripts.engine.internal.event.Subscriber">scripts.engine.internal.event.Subscriber</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#EventHub.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.EventHub.subscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a subscriber with an EventType</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.EventHub.unsubscribe">
+<code class="sig-name descname">unsubscribe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em>, <em class="sig-param"><span class="n">subscriber</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.event.Subscriber" title="scripts.engine.internal.event.Subscriber">scripts.engine.internal.event.Subscriber</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#EventHub.unsubscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.EventHub.unsubscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a subscribers registration to an EventType</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.EventHub.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#EventHub.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.EventHub.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Notify subscribers of their registered event.</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.ExitGameEvent">
+<em class="property">class </em><code class="sig-name descname">ExitGameEvent</code><a class="reference internal" href="_modules/scripts/engine/internal/event.html#ExitGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.ExitGameEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.ExitGameEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#ExitGameEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.ExitGameEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.ExitMenuEvent">
+<em class="property">class </em><code class="sig-name descname">ExitMenuEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">menu</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.constant.UIElement" title="scripts.engine.internal.constant.UIElement">scripts.engine.internal.constant.UIElement</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#ExitMenuEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.ExitMenuEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.ExitMenuEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">menu</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.constant.UIElement" title="scripts.engine.internal.constant.UIElement">scripts.engine.internal.constant.UIElement</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#ExitMenuEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.ExitMenuEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.LoadGameEvent">
+<em class="property">class </em><code class="sig-name descname">LoadGameEvent</code><a class="reference internal" href="_modules/scripts/engine/internal/event.html#LoadGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.LoadGameEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.LoadGameEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#LoadGameEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.LoadGameEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.MessageEvent">
+<em class="property">class </em><code class="sig-name descname">MessageEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#MessageEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.MessageEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.MessageEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#MessageEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.MessageEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.MoveEvent">
+<em class="property">class </em><code class="sig-name descname">MoveEvent</code><span class="sig-paren">(</span><em class="sig-param">origin: int, target: int, direction: NewType.&lt;locals&gt;.new_type, new_pos: Tuple[int, int]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#MoveEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.MoveEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.MoveEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">origin: int, target: int, direction: NewType.&lt;locals&gt;.new_type, new_pos: Tuple[int, int]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#MoveEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.MoveEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.NewGameEvent">
+<em class="property">class </em><code class="sig-name descname">NewGameEvent</code><a class="reference internal" href="_modules/scripts/engine/internal/event.html#NewGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.NewGameEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.NewGameEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#NewGameEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.NewGameEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.NewRoundEvent">
+<em class="property">class </em><code class="sig-name descname">NewRoundEvent</code><a class="reference internal" href="_modules/scripts/engine/internal/event.html#NewRoundEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.NewRoundEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.NewRoundEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#NewRoundEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.NewRoundEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.NewTurnEvent">
+<em class="property">class </em><code class="sig-name descname">NewTurnEvent</code><a class="reference internal" href="_modules/scripts/engine/internal/event.html#NewTurnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.NewTurnEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.NewTurnEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#NewTurnEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.NewTurnEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.StartGameEvent">
+<em class="property">class </em><code class="sig-name descname">StartGameEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">player_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.definition.ActorData" title="scripts.engine.internal.definition.ActorData">scripts.engine.internal.definition.ActorData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#StartGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.StartGameEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.StartGameEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">player_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.definition.ActorData" title="scripts.engine.internal.definition.ActorData">scripts.engine.internal.definition.ActorData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#StartGameEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.StartGameEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.Subscriber">
+<em class="property">class </em><code class="sig-name descname">Subscriber</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#Subscriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.Subscriber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Class to set default behaviour for handlers listening for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.Subscriber.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#Subscriber.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.Subscriber.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.Subscriber.process_event">
+<em class="property">abstract </em><code class="sig-name descname">process_event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event">scripts.engine.internal.event.Event</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#Subscriber.process_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.Subscriber.process_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process game events.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.Subscriber.subscribe">
+<code class="sig-name descname">subscribe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#Subscriber.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.Subscriber.subscribe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.Subscriber.unsubscribe">
+<code class="sig-name descname">unsubscribe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#Subscriber.unsubscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.Subscriber.unsubscribe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.WinConditionMetEvent">
+<em class="property">class </em><code class="sig-name descname">WinConditionMetEvent</code><a class="reference internal" href="_modules/scripts/engine/internal/event.html#WinConditionMetEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.WinConditionMetEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.WinConditionMetEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#WinConditionMetEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.WinConditionMetEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
 </dd></dl>
 </dd></dl>
 

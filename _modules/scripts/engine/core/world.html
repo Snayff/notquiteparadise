@@ -266,9 +266,7 @@
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">utility</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">build_sprites_from_paths</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Aesthetic</span><span class="p">,</span>
     <span class="n">Afflictions</span><span class="p">,</span>
     <span class="n">Exists</span><span class="p">,</span>
@@ -290,6 +288,17 @@
     <span class="n">Tracked</span><span class="p">,</span>
     <span class="n">Traits</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.effect</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AffectCooldownEffect</span><span class="p">,</span>
+    <span class="n">AffectStatEffect</span><span class="p">,</span>
+    <span class="n">AlterTerrainEffect</span><span class="p">,</span>
+    <span class="n">ApplyAfflictionEffect</span><span class="p">,</span>
+    <span class="n">DamageEffect</span><span class="p">,</span>
+    <span class="n">Effect</span><span class="p">,</span>
+    <span class="n">MoveActorEffect</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">build_sprites_from_paths</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Direction</span><span class="p">,</span>
     <span class="n">DirectionType</span><span class="p">,</span>
@@ -325,15 +334,7 @@
     <span class="n">ProjectileData</span><span class="p">,</span>
     <span class="n">TerrainData</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.effect</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">AffectCooldownEffect</span><span class="p">,</span>
-    <span class="n">AffectStatEffect</span><span class="p">,</span>
-    <span class="n">AlterTerrainEffect</span><span class="p">,</span>
-    <span class="n">ApplyAfflictionEffect</span><span class="p">,</span>
-    <span class="n">DamageEffect</span><span class="p">,</span>
-    <span class="n">Effect</span><span class="p">,</span>
-    <span class="n">MoveActorEffect</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.event</span> <span class="kn">import</span> <span class="n">event_hub</span><span class="p">,</span> <span class="n">MessageEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects</span> <span class="kn">import</span> <span class="n">lighting</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.combat_stats</span> <span class="kn">import</span> <span class="n">CombatStats</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
@@ -561,7 +562,12 @@
     <span class="n">entity</span> <span class="o">=</span> <span class="n">create_entity</span><span class="p">(</span><span class="n">projectile</span><span class="p">)</span>
 
     <span class="n">behaviour</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">behaviour_registry</span><span class="p">[</span><span class="s2">"Projectile"</span><span class="p">]</span>
-    <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Thought</span><span class="p">(</span><span class="n">behaviour</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">data</span><span class="p">)))</span>  <span class="c1"># type: ignore  # this works for projectile special case</span>
+    <span class="n">thought</span> <span class="o">=</span> <span class="n">Thought</span><span class="p">(</span><span class="n">behaviour</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Projectile</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thought</span><span class="o">.</span><span class="n">behaviour</span><span class="p">,</span> <span class="n">Projectile</span><span class="p">)</span>
+    <span class="n">thought</span><span class="o">.</span><span class="n">behaviour</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>  <span class="c1"># projectile is a  special case and requires the data set</span>
+    <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">thought</span><span class="p">)</span>
 
     <span class="n">move</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="s2">"Move"</span><span class="p">]</span>
     <span class="n">known_skills</span> <span class="o">=</span> <span class="p">[</span><span class="n">move</span><span class="p">]</span>
@@ -1395,7 +1401,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">can_afford</span><span class="p">:</span>
         <span class="c1"># is it the player that can't afford it?</span>
         <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">player</span><span class="p">:</span>
-            <span class="n">store</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">"I cannot afford to do that."</span><span class="p">)</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="s2">"I cannot afford to do that."</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"can_use_skill: '</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' tried to use </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">, which they can`t"</span> <span class="sa">f</span><span class="s2">"afford."</span>
@@ -1405,7 +1411,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">not_on_cooldown</span><span class="p">:</span>
         <span class="c1"># is it the player that's can't afford it?</span>
         <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">player</span><span class="p">:</span>
-            <span class="n">store</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">"I'm not ready to do that, yet."</span><span class="p">)</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="s2">"I'm not ready to do that, yet."</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">cooldown</span> <span class="o">==</span> <span class="n">INFINITE</span><span class="p">:</span>
                 <span class="n">cooldown_msg</span> <span class="o">=</span> <span class="s2">"unknown"</span>
@@ -1655,7 +1661,7 @@
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># placeholder for player death</span>
-        <span class="n">store</span><span class="o">.</span><span class="n">log_message</span><span class="p">(</span><span class="s2">"I should have died just then."</span><span class="p">)</span></div>
+        <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="s2">"I should have died just then."</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="delete_entity"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.delete_entity">[docs]</a><span class="k">def</span> <span class="nf">delete_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">):</span>

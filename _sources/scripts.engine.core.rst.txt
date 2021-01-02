@@ -12,6 +12,14 @@ scripts.engine.core.chronicle module
    :undoc-members:
    :show-inheritance:
 
+scripts.engine.core.component module
+------------------------------------
+
+.. automodule:: scripts.engine.core.component
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.engine.core.dungen module
 ---------------------------------
 
@@ -20,10 +28,10 @@ scripts.engine.core.dungen module
    :undoc-members:
    :show-inheritance:
 
-scripts.engine.core.event module
---------------------------------
+scripts.engine.core.effect module
+---------------------------------
 
-.. automodule:: scripts.engine.core.event
+.. automodule:: scripts.engine.core.effect
    :members:
    :undoc-members:
    :show-inheritance:

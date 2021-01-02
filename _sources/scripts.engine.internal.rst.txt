@@ -12,14 +12,6 @@ scripts.engine.internal.action module
    :undoc-members:
    :show-inheritance:
 
-scripts.engine.internal.component module
-----------------------------------------
-
-.. automodule:: scripts.engine.internal.component
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 scripts.engine.internal.constant module
 ---------------------------------------
 
@@ -52,10 +44,10 @@ scripts.engine.internal.definition module
    :undoc-members:
    :show-inheritance:
 
-scripts.engine.internal.effect module
--------------------------------------
+scripts.engine.internal.event module
+------------------------------------
 
-.. automodule:: scripts.engine.internal.effect
+.. automodule:: scripts.engine.internal.event
    :members:
    :undoc-members:
    :show-inheritance:

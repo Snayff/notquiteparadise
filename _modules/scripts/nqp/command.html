@@ -265,10 +265,10 @@
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">Component</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">WinCondition</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">register_action</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">WinCondition</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ASSET_PATH</span><span class="p">,</span>
     <span class="n">DEBUG_START</span><span class="p">,</span>
@@ -285,12 +285,11 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">TraitSpritePathsData</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.affliction</span> <span class="kn">import</span> <span class="n">BoggedDown</span><span class="p">,</span> <span class="n">Flaming</span>
-<span class="kn">from</span> <span class="nn">scripts.nqp.actions.behaviour</span> <span class="kn">import</span> <span class="n">FollowPlayer</span><span class="p">,</span> <span class="n">Projectile</span><span class="p">,</span> <span class="n">SearchAndAttack</span><span class="p">,</span> <span class="n">SkipTurn</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.actions.behaviour</span> <span class="kn">import</span> <span class="n">FollowPlayer</span><span class="p">,</span> <span class="n">SearchAndAttack</span><span class="p">,</span> <span class="n">SkipTurn</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.skill</span> <span class="kn">import</span> <span class="n">BasicAttack</span><span class="p">,</span> <span class="n">Lunge</span><span class="p">,</span> <span class="n">Move</span><span class="p">,</span> <span class="n">Splash</span><span class="p">,</span> <span class="n">TarAndFeather</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors.game</span> <span class="kn">import</span> <span class="n">GameEventSubscriber</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.character_selector</span> <span class="kn">import</span> <span class="n">CharacterSelector</span>
-<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.message_log</span> <span class="kn">import</span> <span class="n">MessageLog</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.skill_bar</span> <span class="kn">import</span> <span class="n">SkillBar</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.title_screen</span> <span class="kn">import</span> <span class="n">TitleScreen</span>
 
@@ -547,7 +546,6 @@
     <span class="n">register_action</span><span class="p">(</span><span class="n">Flaming</span><span class="p">)</span>
 
     <span class="c1"># behaviour</span>
-    <span class="n">register_action</span><span class="p">(</span><span class="n">Projectile</span><span class="p">)</span>
     <span class="n">register_action</span><span class="p">(</span><span class="n">SkipTurn</span><span class="p">)</span>
     <span class="n">register_action</span><span class="p">(</span><span class="n">FollowPlayer</span><span class="p">)</span>
     <span class="n">register_action</span><span class="p">(</span><span class="n">SearchAndAttack</span><span class="p">)</span>
