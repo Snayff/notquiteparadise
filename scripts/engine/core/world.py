@@ -283,7 +283,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     x, y = tile_pos
 
     name = get_name(creating_entity)
-    projectile_name = f"{name}s {skill_name}`s projectile"
+    projectile_name = f"{name}`s {skill_name}`s projectile"
     desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
@@ -331,7 +331,7 @@ def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], d
     x, y = tile_pos
 
     name = get_name(creating_entity)
-    delayed_skill_name = f"{name}s {skill_name}`s projectile"
+    delayed_skill_name = f"{name}`s {skill_name}`s delayed skill"
     desc = f"{skill_name} incoming."
     delayed_skill.append(Identity(delayed_skill_name, desc))
 
@@ -349,10 +349,13 @@ def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], d
     thought = Thought(behaviour(entity))
     from scripts.engine.internal.action import DelayedSkill
     assert isinstance(thought.behaviour, DelayedSkill)
+    thought.behaviour.data = data
     add_component(entity, thought)
 
-    logging.debug(f"{delayed_skill_name}`s delayed skill created at ({x},{y}) and will trigger in {data.duration} "
-                  f"rounds.")
+    logging.debug(f"{delayed_skill_name}`s created at ({x},{y}) and will trigger in {data.duration} "
+                  f"turns.")
+
+    return entity
 
 
 def create_affliction(name: str, creator: EntityID, target: EntityID, duration: int) -> Affliction:
@@ -1484,11 +1487,12 @@ def learn_skill(entity: EntityID, skill_name: str):
     Add the skill name to the entity's knowledge component.
     """
     if not entity_has_component(entity, Knowledge):
-        add_component(entity, Knowledge([]))
+        logging.warning(f"{get_name(entity)} has no Knowledge component and cannot learn {skill_name}.")
+        return
+
     knowledge = get_entitys_component(entity, Knowledge)
-    if knowledge:
-        skill_class = store.skill_registry[skill_name]
-        knowledge.learn_skill(skill_class)
+    skill_class = store.skill_registry[skill_name]
+    knowledge.add(skill_class)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################

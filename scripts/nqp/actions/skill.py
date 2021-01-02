@@ -270,3 +270,13 @@ class Splash(Skill):
         )
 
         return [damage_effect]
+
+
+class TestDelayed(Skill):
+    """
+    Test the Delayed Skill functionality.
+    """
+
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+        logging.debug("test delayed cast successfully.")
+        return []

@@ -73,9 +73,10 @@ def initialise_engine():
     import scripts.engine.internal.library
 
     # register any Actions that exist within the engine
-    from scripts.engine.internal.action import Projectile, register_action
+    from scripts.engine.internal.action import Projectile, register_action, DelayedSkill
 
     register_action(Projectile)
+    register_action(DelayedSkill)
 
 
 def update_clock() -> float:

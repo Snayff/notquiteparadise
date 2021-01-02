@@ -129,6 +129,8 @@ class Skill(Action):
         cls.shape_size = cls.data.shape_size
         cls.uses_projectile = cls.data.uses_projectile
         cls.projectile_data = cls.data.projectile_data
+        cls.is_delayed = cls.data.is_delayed
+        cls.delayed_skill_data = cls.data.delayed_skill_data
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
@@ -151,9 +153,12 @@ class Skill(Action):
         # animate the skill user
         self._play_animation()
 
-        # create the projectile
+        # handle the delivery method of the skill
         if self.uses_projectile:
             self._create_projectile()
+            is_successful = True
+        elif self.is_delayed:
+            self._create_delayed_skill()
             is_successful = True
         else:
             is_successful = world.apply_skill(self)
@@ -349,7 +354,7 @@ class Projectile(Behaviour):
         # if we havent moved check for collision in current tile (it might be cast on top of enemy)
         if self.distance_travelled == 0 and world.tile_has_tag(entity, current_tile, TargetTag.OTHER_ENTITY):
             should_activate = True
-            logging.debug(f"`{world.get_name(entity)}` collided with an entity on cast at ({pos.x},{pos.y}).")
+            logging.debug(f"'{world.get_name(entity)}' collided with an entity on cast at ({pos.x},{pos.y}).")
 
         # if we havent travelled max distance or determined we should activate then move
         # N.b. not an elif because we want the precheck above to happen in isolation
@@ -443,7 +448,19 @@ class DelayedSkill(Behaviour):
         super().__init__(attached_entity)
 
         self.data: DelayedSkillData = DelayedSkillData()
-        self.duration = 0
 
     def act(self):
-        pass
+        if self.data.duration > 0:
+            self.data.duration -= 1
+            logging.debug(f"{world.get_name(self.entity)} will trigger in {self.data.duration} turns.")
+            chronicle.end_turn(self.entity, self.data.speed)
+            return
+
+        # apply skill, rather than using it, as the instance already exists and we are just using the effects
+        world.apply_skill(self.data.skill_instance)
+
+        # die after activating
+        world.kill_entity(self.entity)
+
+
+

@@ -192,7 +192,8 @@
                 "__dataclass__": "TraitSpritePathsData",
                 "idle": "skills/delayed_skill.png"
             },
-            "duration": 1
+            "duration": 1,
+            "speed": "slow"
         },
         "is_delayed": true
     }

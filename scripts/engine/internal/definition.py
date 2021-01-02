@@ -204,8 +204,6 @@ class ProjectileData:
 
     skill_name: str = "none"
     skill_instance: Optional[Skill] = None
-    name: str = "none"
-    description: str = "none"
 
     # who are we targeting?
     target_tags: List[TargetTagType] = field(default_factory=list)
@@ -242,11 +240,15 @@ class DelayedSkillData:
 
     skill_name: str = "none"
     skill_instance: Optional[Skill] = None
-    name: str = "none"
-    description: str = "none"
 
+    speed: ProjectileSpeedType = ProjectileSpeed.SLOW
     duration: int = 0
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
+
+    def __post_init__(self):
+        # map external str to internal int
+        if isinstance(self.speed, str):
+            self.speed = getattr(ProjectileSpeed, self.speed.upper())
 
 
 @register_dataclass_with_json
