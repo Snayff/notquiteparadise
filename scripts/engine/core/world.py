@@ -11,6 +11,7 @@ from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, utility
+from scripts.engine.core.event import MessageEvent, event_hub
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
 from scripts.engine.internal.component import (
@@ -1140,7 +1141,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not can_afford:
         # is it the player that can't afford it?
         if entity == player:
-            store.log_message("I cannot afford to do that.")
+            event_hub.post(MessageEvent("I cannot afford to do that."))
         else:
             logging.warning(
                 f"can_use_skill: '{get_name(entity)}' tried to use {skill_name}, which they can`t" f"afford."
@@ -1150,7 +1151,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not not_on_cooldown:
         # is it the player that's can't afford it?
         if entity == player:
-            store.log_message("I'm not ready to do that, yet.")
+            event_hub.post(MessageEvent("I'm not ready to do that, yet."))
         else:
             if cooldown == INFINITE:
                 cooldown_msg = "unknown"
@@ -1400,7 +1401,7 @@ def kill_entity(entity: EntityID):
 
     else:
         # placeholder for player death
-        store.log_message("I should have died just then.")
+        event_hub.post(MessageEvent("I should have died just then."))
 
 
 def delete_entity(entity: EntityID):

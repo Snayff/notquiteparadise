@@ -27,6 +27,7 @@ __all__ = [
     "StartGameEvent",
     "LoadGameEvent",
     "WinConditionMetEvent",
+    "MessageEvent"
 ]
 
 
@@ -225,3 +226,11 @@ class NewRoundEvent(Event):
 class EndRoundEvent(Event):
     def __init__(self):
         super().__init__(EventType.GAME)
+
+
+class MessageEvent(Event):
+    def __init__(self, message: str):
+        super().__init__(EventType.GAME)
+
+        self.message = message
+

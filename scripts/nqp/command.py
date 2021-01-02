@@ -12,7 +12,7 @@ from snecs import Component
 from scripts.engine.core import chronicle, state, system, utility, world
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import library
-from scripts.engine.internal.action import register_action
+from scripts.engine.internal.action import Projectile, register_action
 from scripts.engine.internal.component import Aesthetic, Position, WinCondition
 from scripts.engine.internal.constant import (
     ASSET_PATH,
@@ -30,7 +30,7 @@ from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
-from scripts.nqp.actions.behaviour import FollowPlayer, Projectile, SearchAndAttack, SkipTurn
+from scripts.nqp.actions.behaviour import FollowPlayer, SearchAndAttack, SkipTurn
 from scripts.nqp.actions.skill import BasicAttack, Lunge, Move, Splash, TarAndFeather
 from scripts.nqp.processors.game import GameEventSubscriber
 from scripts.nqp.ui_elements.camera import camera
@@ -292,7 +292,6 @@ def register_actions():
     register_action(Flaming)
 
     # behaviour
-    register_action(Projectile)
     register_action(SkipTurn)
     register_action(FollowPlayer)
     register_action(SearchAndAttack)
