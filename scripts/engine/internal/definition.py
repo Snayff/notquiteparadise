@@ -42,8 +42,8 @@ if TYPE_CHECKING:
     import pygame
     from snecs.typedefs import EntityID
 
+    from scripts.engine.core.effect import Effect
     from scripts.engine.internal.action import Skill
-    from scripts.engine.internal.effect import Effect
 
 
 #################################################################

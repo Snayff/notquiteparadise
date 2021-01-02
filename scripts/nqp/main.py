@@ -10,12 +10,12 @@ from snecs.world import default_world
 
 import scripts.nqp.processors.input
 from scripts.engine.core import chronicle, state, world
-from scripts.engine.core.event import event_hub
+from scripts.engine.core.component import NQPComponent
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug
-from scripts.engine.internal.component import NQPComponent
 from scripts.engine.internal.constant import GameState
 from scripts.engine.internal.debug import enable_profiling, initialise_logging, kill_logging
+from scripts.engine.internal.event import event_hub
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
 from scripts.nqp.processors import display
@@ -26,6 +26,9 @@ def main():
     """
     The entry for the game initialisation and game loop
     """
+    # init engine resources
+    state.initialise_engine()
+
     # initialise logging
     if debug.is_logging():
         initialise_logging()

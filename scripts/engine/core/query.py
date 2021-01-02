@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from snecs import Query
 
-from scripts.engine.internal.component import (
+from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
     Exists,

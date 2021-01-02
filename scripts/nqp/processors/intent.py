@@ -6,10 +6,10 @@ from typing import Optional, Type
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, state, utility, world
+from scripts.engine.core.component import Knowledge, Position
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug, library
 from scripts.engine.internal.action import Skill
-from scripts.engine.internal.component import Knowledge, Position
 from scripts.engine.internal.constant import (
     Direction,
     DirectionType,

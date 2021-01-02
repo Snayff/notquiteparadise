@@ -54,8 +54,6 @@ class Store:
         self.affliction_registry: Dict[str, Type[Affliction]] = {}
         self.behaviour_registry: Dict[str, Type[Behaviour]] = {}
 
-        self.message_log: List[str] = []
-
     def serialise(self) -> Dict[str, Any]:
         """
         Serialise all data held in the store.
@@ -96,12 +94,6 @@ class Store:
             self.turn_holder = serialised["turn_holder"]
         except KeyError as e:
             logging.warning(f"Store.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
-
-    def log_message(self, message: str):
-        """
-        Add a message to the log.
-        """
-        self.message_log.append(message)
 
 
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
