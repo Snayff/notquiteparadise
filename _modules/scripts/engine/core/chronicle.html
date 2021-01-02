@@ -359,7 +359,6 @@
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">get_turn_holder</span><span class="p">():</span>
         <span class="n">world</span><span class="o">.</span><span class="n">spend_time</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">)</span>
-        <span class="n">next_turn</span><span class="p">()</span>
 
         <span class="c1"># post game event</span>
         <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">EndTurnEvent</span><span class="p">())</span>
