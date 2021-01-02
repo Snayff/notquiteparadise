@@ -21,7 +21,8 @@
         ],
         "shape": "target",
         "shape_size": 1,
-        "uses_projectile": false
+        "uses_projectile": false,
+        "is_delayed": false
     },
     "BasicAttack": {
         "__dataclass__": "SkillData",
@@ -49,7 +50,8 @@
         ],
         "shape": "target",
         "shape_size": 1,
-        "uses_projectile": false
+        "uses_projectile": false,
+        "is_delayed": false
     },
     "Lunge": {
         "__dataclass__": "SkillData",
@@ -74,7 +76,8 @@
             "no_blocking_tile"
         ],
         "shape": "target",
-        "shape_size": 1
+        "shape_size": 1,
+        "is_delayed": false
     },
     "TarAndFeather": {
         "__dataclass__": "SkillData",
@@ -111,7 +114,8 @@
             "range": 5,
             "terrain_collision": "fizzle",
             "expiry_type": "fizzle"
-        }
+        },
+        "is_delayed": false
     },
     "Splash": {
         "__dataclass__": "SkillData",
@@ -152,6 +156,44 @@
             "range": 3,
             "terrain_collision": "fizzle",
             "expiry_type": "fizzle"
-        }
+        },
+        "is_delayed": false
+    },
+    "TestDelayed": {
+        "__dataclass__": "SkillData",
+        "name": "test delayed skill",
+        "description": "Throw water around",
+        "cooldown": 1,
+        "icon_path": "",
+        "resource_cost": 10,
+        "resource_type": "stamina",
+        "targeting_method": "target",
+        "target_directions": [
+            "down",
+            "down_left",
+            "down_right",
+            "left",
+            "right",
+            "up",
+            "up_left",
+            "up_right"
+        ],
+        "time_cost": 35,
+        "target_tags": [
+            "no_blocking_tile"
+        ],
+        "shape": "target",
+        "shape_size": 1,
+        "range": 3,
+        "uses_projectile": false,
+        "delayed_skill_data": {
+            "__dataclass__": "DelayedSkillData",
+            "sprite_paths": {
+                "__dataclass__": "TraitSpritePathsData",
+                "idle": "skills/delayed_skill.png"
+            },
+            "duration": 1
+        },
+        "is_delayed": true
     }
 }

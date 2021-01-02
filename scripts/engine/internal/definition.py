@@ -244,6 +244,7 @@ class DelayedSkillData:
     skill_instance: Optional[Skill] = None
     name: str = "none"
     description: str = "none"
+
     duration: int = 0
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
 
@@ -383,9 +384,11 @@ class SkillData:
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
 
-    # projectile info
-    uses_projectile: bool = True
+    # delivery method
+    uses_projectile: bool = False
     projectile_data: Optional[ProjectileData] = None
+    is_delayed: bool = False
+    delayed_skill_data: Optional[DelayedSkillData] = None
 
     def __post_init__(self):
         # convert directions to their constant values

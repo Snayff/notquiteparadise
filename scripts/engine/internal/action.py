@@ -69,17 +69,24 @@ class Skill(Action):
     resource_cost: int
     time_cost: int
     base_cooldown: int
-    targeting_method: TargetingMethodType
-    target_directions: List[DirectionType]
-    range: int
-    uses_projectile: bool
+    targeting_method: TargetingMethodType  # Tile, Direction, Auto
+
+    # targeting details
+    target_directions: List[DirectionType]  # needed for Direction
+    range: int  # needed for Tile, Auto
+
+    # delivery methods
+    uses_projectile: bool  # usable by for Tile, Direction, Auto
     projectile_data: Optional[ProjectileData]
+    is_delayed: bool  # usable by Tile, Auto  - Doesnt make sense for Direction to have a delayed cast.
+    delayed_skill_data: Optional[DelayedSkillData]
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
-        self.user = user
-        self.target_tile = target_tile
-        self.direction = direction
-        self.projectile = None
+        self.user: EntityID = user
+        self.target_tile: Tile = target_tile
+        self.direction: DirectionType = direction
+        self.projectile: Optional[EntityID] = None
+        self.delayed_skill: Optional[EntityID] = None
 
         # vars needed to keep track of changes
         self.ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
@@ -129,8 +136,6 @@ class Skill(Action):
         times.
         """
         entity_names = []
-        from scripts.engine.core import world
-
         for entity in world.get_affected_entities(
             (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
         ):
@@ -141,8 +146,6 @@ class Skill(Action):
         """
         If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
         """
-        from scripts.engine.core import world
-
         logging.debug(f"'{world.get_name(self.user)}' used '{self.__class__.__name__}'.")
 
         # animate the skill user
@@ -163,15 +166,13 @@ class Skill(Action):
         """
         projectile_data = self.projectile_data
 
-        # update projectile values
+        # update projectile instance values
         projectile_data.creator = self.user
         projectile_data.skill_name = self.name
         projectile_data.skill_instance = self
         projectile_data.direction = self.direction
 
         # create the projectile
-        from scripts.engine.core import world
-
         projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
 
         # add projectile to ignore list
@@ -180,12 +181,28 @@ class Skill(Action):
         # save the reference to the projectile entity
         self.projectile = projectile
 
+    def _create_delayed_skill(self):
+        delayed_skill_data = self.delayed_skill_data
+
+        # update delayed skill instance values
+        delayed_skill_data.creator = self.user
+        delayed_skill_data.skill_name = self.name
+        delayed_skill_data.skill_instance = self
+
+        # create the delayed skill
+        delayed_skill = world.create_delayed_skill(self.user, (self.target_tile.x, self.target_tile.y),
+                                                   delayed_skill_data)
+
+        # add to ignore list
+        self.ignore_entities.append(delayed_skill)
+
+        # save reference
+        self.delayed_skill = delayed_skill
+
     def _play_animation(self):
         """
         Play the provided animation on the entity's aesthetic component
         """
-        from scripts.engine.core import world
-
         if world.entity_has_component(self.user, Aesthetic):
             aesthetic = world.get_entitys_component(self.user, Aesthetic)
             animation = self.get_animation(aesthetic)
