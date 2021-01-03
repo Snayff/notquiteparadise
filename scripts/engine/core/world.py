@@ -1268,15 +1268,15 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
     Use the specified skill on the target tile, usually creating a projectile. Returns True is successful if
     criteria to use skill was met, False if not.
     """
-    # N.B. we init so that any overrides of the Skill.init are applied
+    # we init so that any overrides of the Skill.init are applied
     skill_cast = skill(user, target_tile, direction)
 
     # ensure they are the right target type
-    if tile_has_tags(user, skill_cast.target_tile, skill_cast.target_tags):
+    if tile_has_tags(user, skill_cast.target_tile, skill_cast.cast_tags):
         result = skill_cast.use()
         return result
     else:
-        logging.info(f"Could not use skill, target tile does not have required tags ({skill.target_tags}).")
+        logging.info(f"Could not use skill, target tile does not have required tags ({skill_cast.cast_tags}).")
 
     return False
 

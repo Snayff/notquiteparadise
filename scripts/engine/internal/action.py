@@ -115,6 +115,7 @@ class Skill(Action):
         cls.data = library.SKILLS[cls.__name__]
         cls.name = cls.__name__
         cls.f_name = cls.data.name
+        cls.cast_tags = cls.data.cast_tags
         cls.target_tags = cls.data.target_tags
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
