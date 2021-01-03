@@ -270,3 +270,24 @@ class Splash(Skill):
         )
 
         return [damage_effect]
+
+
+class Lightning(Skill):
+    """
+    Test the Delayed Skill functionality.
+    """
+
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
+        damage_effect = DamageEffect(
+            origin=self.user,
+            success_effects=[],
+            failure_effects=[],
+            target=entity,
+            stat_to_target=PrimaryStat.VIGOUR,
+            accuracy=library.GAME_CONFIG.base_values.accuracy + 20,
+            damage=int(library.GAME_CONFIG.base_values.damage * potency),
+            damage_type=DamageType.MUNDANE,
+            mod_stat=PrimaryStat.CLOUT,
+            mod_amount=0.1,
+        )
+        return [damage_effect]

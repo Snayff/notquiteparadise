@@ -226,6 +226,8 @@ class Position(NQPComponent):
 class Aesthetic(NQPComponent):
     """
     An entity's sprite.
+
+    N.B. translation to screen coordinates is handled by the camera
     """
 
     def __init__(
@@ -424,7 +426,7 @@ class Knowledge(NQPComponent):
         self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
 
         for skill_class in skills:
-            self.learn_skill(skill_class, _add_to_order, _set_cooldown)
+            self.add(skill_class, _add_to_order, _set_cooldown)
 
     def set_skill_cooldown(self, name: str, value: int):
         """
@@ -432,7 +434,7 @@ class Knowledge(NQPComponent):
         """
         self.cooldowns[name] = max(0, value)
 
-    def learn_skill(self, skill: Type[Skill], add_to_order: bool = True, set_cooldown: bool = True):
+    def add(self, skill: Type[Skill], add_to_order: bool = True, set_cooldown: bool = True):
         """
         Learn a new skill.
         """

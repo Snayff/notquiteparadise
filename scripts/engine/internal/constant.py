@@ -48,7 +48,7 @@ InputIntentType = NewType("InputIntentType", str)
 PrimaryStatType = NewType("PrimaryStatType", str)
 SecondaryStatType = NewType("SecondaryStatType", str)
 ResourceType = NewType("ResourceType", str)
-TargetTagType = NewType("TargetTagType", str)
+TileTagType = NewType("TileTagType", str)
 DamageTypeType = NewType("DamageTypeType", str)
 HitTypeType = NewType("HitTypeType", str)
 EffectTypeType = NewType("EffectTypeType", str)
@@ -283,20 +283,20 @@ class EffectType(SimpleNamespace):
     ALTER_TERRAIN = EffectTypeType("alter_terrain")
 
 
-class TargetTag(SimpleNamespace):
+class TileTag(SimpleNamespace):
     """
-    Types of target
+    Tags identifying a situation on a Tile.
     """
 
-    SELF = TargetTagType("self")
-    OTHER_ENTITY = TargetTagType("other_entity")
-    NO_ENTITY = TargetTagType("no_entity")
-    ANY = TargetTagType("any")
-    OPEN_SPACE = TargetTagType("open_space")
-    BLOCKED_MOVEMENT = TargetTagType("blocked_movement")
-    IS_VISIBLE = TargetTagType("is_visible")
-    NO_BLOCKING_TILE = TargetTagType("no_blocking_tile")
-    ACTOR = TargetTagType("actor")
+    SELF = TileTagType("self")
+    OTHER_ENTITY = TileTagType("other_entity")
+    NO_ENTITY = TileTagType("no_entity")
+    ANY = TileTagType("any")
+    OPEN_SPACE = TileTagType("open_space")
+    BLOCKED_MOVEMENT = TileTagType("blocked_movement")
+    IS_VISIBLE = TileTagType("is_visible")
+    NO_BLOCKING_TILE = TileTagType("no_blocking_tile")
+    ACTOR = TileTagType("actor")
 
 
 class DamageType(SimpleNamespace):
@@ -347,7 +347,8 @@ class TargetingMethod(SimpleNamespace):
     """
 
     AUTO = TargetingMethodType("auto")
-    TARGET = TargetingMethodType("target")
+    TILE = TargetingMethodType("tile")
+    DIRECTION = TargetingMethodType("direction")
 
 
 class Shape(SimpleNamespace):

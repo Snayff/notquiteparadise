@@ -58,9 +58,9 @@ from scripts.engine.internal.constant import (
     ResourceType,
     SecondaryStatType,
     ShapeType,
-    TargetTag,
-    TargetTagType,
     TILE_SIZE,
+    TileTag,
+    TileTagType,
     TraitGroup,
     TravelMethod,
     TravelMethodType,
@@ -73,6 +73,7 @@ from scripts.engine.internal.definition import (
     AlterTerrainEffectData,
     ApplyAfflictionEffectData,
     DamageEffectData,
+    DelayedSkillData,
     EffectData,
     GodData,
     MoveActorEffectData,
@@ -283,18 +284,17 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     x, y = tile_pos
 
     name = get_name(creating_entity)
-    projectile_name = f"{name}s {skill_name}`s projectile"
+    projectile_name = f"{name}`s {skill_name}`s projectile"
     desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
     sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
 
-    # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
-    projectile.append(Position((x, y)))  # TODO - check position not blocked before spawning
-    projectile.append(Resources(999, 999))
-    projectile.append(Afflictions())
+    projectile.append(Position((x, y)))
+    projectile.append(Resources(999, 999))  # TODO - remove need to have Resources
+    projectile.append(Afflictions())  # TODO - remove need to have Afflictions
     projectile.append(IsActive())
 
     # set up light
@@ -306,6 +306,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     entity = create_entity(projectile)
 
+    # add post-creation components
     behaviour = store.behaviour_registry["Projectile"]
     thought = Thought(behaviour(entity))
     from scripts.engine.internal.action import Projectile
@@ -318,7 +319,43 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     known_skills = [move]
     add_component(entity, Knowledge(known_skills))
 
-    logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
+    logging.debug(f"{projectile_name}`s created at ({x},{y}) heading {data.direction}.")
+
+    return entity
+
+
+def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], data: DelayedSkillData) -> EntityID:
+    """
+    Create an entity with all of the components to be a delayed skill. Returns Entity ID.
+    """
+    skill_name = data.skill_name
+    delayed_skill: List[Component] = []
+    x, y = tile_pos
+
+    name = get_name(creating_entity)
+    delayed_skill_name = f"{name}`s {skill_name}`s delayed skill"
+    desc = f"{skill_name} incoming."
+    delayed_skill.append(Identity(delayed_skill_name, desc))
+
+    sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
+
+    delayed_skill.append(Aesthetic(sprites.idle, sprites, [data.sprite_paths], RenderLayer.TERRAIN, (x, y)))
+    delayed_skill.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
+    delayed_skill.append(Position((x, y)))
+    delayed_skill.append(IsActive())
+
+    entity = create_entity(delayed_skill)
+
+    # add post-creation components
+    behaviour = store.behaviour_registry["DelayedSkill"]
+    thought = Thought(behaviour(entity))
+    from scripts.engine.internal.action import DelayedSkill
+
+    assert isinstance(thought.behaviour, DelayedSkill)
+    thought.behaviour.data = data
+    add_component(entity, thought)
+
+    logging.debug(f"{delayed_skill_name}`s created at ({x},{y}) and will trigger in {data.duration} " f"turns.")
 
     return entity
 
@@ -629,14 +666,14 @@ def get_reflected_direction(
     # work out position of adjacent walls
     adj_tile = get_tile((current_x, current_y - dir_y))
     if adj_tile:
-        collision_adj_y = tile_has_tag(active_entity, adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_y = tile_has_tag(active_entity, adj_tile, TileTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_y = True
 
     adj_tile = get_tile((current_x - dir_x, current_y))
     if adj_tile:
-        collision_adj_x = tile_has_tag(active_entity, adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_x = tile_has_tag(active_entity, adj_tile, TileTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_x = True
@@ -729,7 +766,7 @@ def _get_furthest_free_position(
 
         if tile:
             # did we hit something causing standard to stop
-            if tile_has_tag(active_entity, tile, TargetTag.BLOCKED_MOVEMENT):
+            if tile_has_tag(active_entity, tile, TileTag.BLOCKED_MOVEMENT):
                 # if we're ready to check for a target, do so
                 if check_for_target:
                     # we hit something, go back to last free tile
@@ -928,8 +965,8 @@ def get_cast_positions(
 
                 # check tile is open and in vision
                 tile = get_tile((x, y))
-                has_tags = tile_has_tags(entity, tile, [TargetTag.IS_VISIBLE, TargetTag.OPEN_SPACE])
-                has_self = tile_has_tag(entity, tile, TargetTag.SELF)
+                has_tags = tile_has_tags(entity, tile, [TileTag.IS_VISIBLE, TileTag.OPEN_SPACE])
+                has_self = tile_has_tag(entity, tile, TileTag.SELF)
                 if has_tags or has_self:
                     skill_dict[skill].append((x, y))
 
@@ -943,7 +980,7 @@ def get_cast_positions(
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
 
 
-def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> bool:
+def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
@@ -954,39 +991,39 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> boo
     if not _is_tile_in_bounds(tile, game_map):
         return False
 
-    if tag == TargetTag.OPEN_SPACE:
+    if tag == TileTag.OPEN_SPACE:
         # if nothing is blocking movement
         if not tile.blocks_movement and not _tile_has_entity_blocking_movement(tile):
             return True
-    elif tag == TargetTag.BLOCKED_MOVEMENT:
+    elif tag == TileTag.BLOCKED_MOVEMENT:
         # if anything is blocking
         if tile.blocks_movement or _tile_has_entity_blocking_movement(tile):
             return True
-    elif tag == TargetTag.SELF:
+    elif tag == TileTag.SELF:
         # if entity on tile is same as active entity
         if active_entity:
             assert isinstance(active_entity, EntityID)
             return _tile_has_specific_entity(tile, active_entity)
         else:
-            logging.warning("Tried to get TargetTag.SELF but gave no active_entity.")
-    elif tag == TargetTag.OTHER_ENTITY:
+            logging.warning("Tried to get TileTag.SELF but gave no active_entity.")
+    elif tag == TileTag.OTHER_ENTITY:
         # if entity on tile is not active entity
         if active_entity:
             assert isinstance(active_entity, EntityID)
             # check both possibilities. either the tile containing the active entity or not
             return _tile_has_other_entities(tile, active_entity)
         else:
-            logging.warning("Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.")
-    elif tag == TargetTag.NO_ENTITY:
+            logging.warning("Tried to get TileTag.OTHER_ENTITY but gave no active_entity.")
+    elif tag == TileTag.NO_ENTITY:
         # if the tile has no entity
         return not _tile_has_any_entity(tile)
-    elif tag == TargetTag.ANY:
+    elif tag == TileTag.ANY:
         # if the tile is anything at all
         return True
-    elif tag == TargetTag.IS_VISIBLE:
+    elif tag == TileTag.IS_VISIBLE:
         # if player can see the tile
         return _is_tile_visible_to_entity(tile, active_entity, game_map)
-    elif tag == TargetTag.NO_BLOCKING_TILE:
+    elif tag == TileTag.NO_BLOCKING_TILE:
         # if tile isnt blocking movement
         if _is_tile_in_bounds(tile, game_map):
             return not tile.blocks_movement
@@ -995,7 +1032,7 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> boo
     return False
 
 
-def tile_has_tags(active_entity: EntityID, tile: Tile, tags: List[TargetTagType]) -> bool:
+def tile_has_tags(active_entity: EntityID, tile: Tile, tags: List[TileTagType]) -> bool:
     """
     Check a tile has all required tags
     """
@@ -1233,15 +1270,15 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
     Use the specified skill on the target tile, usually creating a projectile. Returns True is successful if
     criteria to use skill was met, False if not.
     """
-    # N.B. we init so that any overrides of the Skill.init are applied
+    # we init so that any overrides of the Skill.init are applied
     skill_cast = skill(user, target_tile, direction)
 
     # ensure they are the right target type
-    if tile_has_tags(user, skill_cast.target_tile, skill_cast.target_tags):
+    if tile_has_tags(user, skill_cast.target_tile, skill_cast.cast_tags):
         result = skill_cast.use()
         return result
     else:
-        logging.info(f"Could not use skill, target tile does not have required tags ({skill.target_tags}).")
+        logging.info(f"Could not use skill, target tile does not have required tags ({skill_cast.cast_tags}).")
 
     return False
 
@@ -1452,11 +1489,12 @@ def learn_skill(entity: EntityID, skill_name: str):
     Add the skill name to the entity's knowledge component.
     """
     if not entity_has_component(entity, Knowledge):
-        add_component(entity, Knowledge([]))
+        logging.warning(f"{get_name(entity)} has no Knowledge component and cannot learn {skill_name}.")
+        return
+
     knowledge = get_entitys_component(entity, Knowledge)
-    if knowledge:
-        skill_class = store.skill_registry[skill_name]
-        knowledge.learn_skill(skill_class)
+    skill_class = store.skill_registry[skill_name]
+    knowledge.add(skill_class)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################

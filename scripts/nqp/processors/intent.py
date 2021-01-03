@@ -21,12 +21,10 @@ from scripts.engine.internal.constant import (
 )
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import command
-
-__all__ = ["process_intent"]
-
-from scripts.nqp.ui_elements.actor_info import ActorInfo
 from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
+
+__all__ = ["process_intent"]
 
 
 def process_intent(intent: InputIntentType, game_state: GameState = None):
@@ -153,7 +151,7 @@ def _process_game_map_intents(intent: InputIntentType):
                     if skill.targeting_method == TargetingMethod.AUTO:
                         # pass centre as it doesnt matter, the skill will pick the right direction
                         _process_skill_use(player, skill, current_tile, Direction.CENTRE)
-                    elif skill.targeting_method == TargetingMethod.TARGET:
+                    elif skill.targeting_method == TargetingMethod.TILE:
                         # trigger targeting overlay
                         state.set_new(GameState.TARGETING)
                         state.set_active_skill(skill_name)
@@ -162,7 +160,6 @@ def _process_game_map_intents(intent: InputIntentType):
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:
         # show
         state.set_new(GameState.MENU)
-        actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
 
     elif intent == InputIntent.EXIT:

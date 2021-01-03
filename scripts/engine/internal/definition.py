@@ -29,8 +29,8 @@ from scripts.engine.internal.constant import (
     ShapeType,
     TargetingMethod,
     TargetingMethodType,
-    TargetTagType,
     TerrainCollisionType,
+    TileTagType,
     TraitGroup,
     TraitGroupType,
     TravelMethod,
@@ -204,11 +204,9 @@ class ProjectileData:
 
     skill_name: str = "none"
     skill_instance: Optional[Skill] = None
-    name: str = "none"
-    description: str = "none"
 
     # who are we targeting?
-    target_tags: List[TargetTagType] = field(default_factory=list)
+    target_tags: List[TileTagType] = field(default_factory=list)
 
     # where are we going?
     direction: Optional[DirectionType] = None
@@ -224,6 +222,29 @@ class ProjectileData:
     # how does it interact?
     terrain_collision: Optional[TerrainCollisionType] = None
     expiry_type: Optional[ProjectileExpiryType] = None
+
+    def __post_init__(self):
+        # map external str to internal int
+        if isinstance(self.speed, str):
+            self.speed = getattr(ProjectileSpeed, self.speed.upper())
+
+
+@register_dataclass_with_json
+@dataclass
+class DelayedSkillData:
+    """
+    Data class for a Delayed Skill
+    """
+
+    # this will be overwritten or will break, but need defaults to allow passing
+    creator: EntityID = 0  # type: ignore
+
+    skill_name: str = "none"
+    skill_instance: Optional[Skill] = None
+
+    speed: ProjectileSpeedType = ProjectileSpeed.SLOW
+    duration: int = 0
+    sprite_paths: TraitSpritePathsData = TraitSpritePathsData(idle="skills/delayed_skill.png")
 
     def __post_init__(self):
         # map external str to internal int
@@ -349,7 +370,8 @@ class SkillData:
     icon_path: str = "none"
 
     # when do we use it?
-    target_tags: List[TargetTagType] = field(default_factory=list)
+    cast_tags: List[TileTagType] = field(default_factory=list)
+    target_tags: List[TileTagType] = field(default_factory=list)
 
     # what does it cost?
     resource_type: ResourceType = Resource.STAMINA
@@ -358,7 +380,7 @@ class SkillData:
     cooldown: int = 0
 
     # how does it travel from the user?
-    targeting_method: TargetingMethodType = TargetingMethod.TARGET
+    targeting_method: TargetingMethodType = TargetingMethod.TILE
     target_directions: List[DirectionType] = field(default_factory=list)
     range: int = 1
 
@@ -366,9 +388,11 @@ class SkillData:
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
 
-    # projectile info
-    uses_projectile: bool = True
+    # delivery method
+    uses_projectile: bool = False
     projectile_data: Optional[ProjectileData] = None
+    is_delayed: bool = False
+    delayed_skill_data: Optional[DelayedSkillData] = None
 
     def __post_init__(self):
         # convert directions to their constant values
@@ -393,7 +417,7 @@ class AfflictionData:
     category: AfflictionCategoryType = AfflictionCategory.BANE
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
-    target_tags: List[TargetTagType] = field(default_factory=list)
+    target_tags: List[TileTagType] = field(default_factory=list)
     identity_tags: List[EffectTypeType] = field(default_factory=list)
     triggers: List[ReactionTriggerType] = field(default_factory=list)
 

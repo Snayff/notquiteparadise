@@ -31,7 +31,7 @@ from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
 from scripts.nqp.actions.behaviour import FollowPlayer, SearchAndAttack, SkipTurn
-from scripts.nqp.actions.skill import BasicAttack, Lunge, Move, Splash, TarAndFeather
+from scripts.nqp.actions.skill import BasicAttack, Lightning, Lunge, Move, Splash, TarAndFeather
 from scripts.nqp.processors.game import GameEventSubscriber
 from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.character_selector import CharacterSelector
@@ -147,9 +147,11 @@ def start_game(player_data: ActorData):
     # init the player
     player = world.get_player()
 
+    # allocate player skills
+    world.learn_skill(player, "Lightning")
+
     # create win condition and place next to player
     player_pos = world.get_entitys_component(player, Position)
-
     win_x = player_pos.x + 1
     win_y = player_pos.y
     components: List[Component] = []
@@ -301,6 +303,7 @@ def register_actions():
     register_action(Lunge)
     register_action(TarAndFeather)
     register_action(Splash)
+    register_action(Lightning)
 
 
 def init_subscribers():

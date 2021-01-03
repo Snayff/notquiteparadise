@@ -8,7 +8,7 @@
         "range": 1,
         "resource_cost": 0,
         "resource_type": "stamina",
-        "targeting_method": "target",
+        "targeting_method": "tile",
         "target_directions": [
             "down",
             "left",
@@ -21,7 +21,8 @@
         ],
         "shape": "target",
         "shape_size": 1,
-        "uses_projectile": false
+        "uses_projectile": false,
+        "is_delayed": false
     },
     "BasicAttack": {
         "__dataclass__": "SkillData",
@@ -32,7 +33,7 @@
         "resource_cost": 10,
         "resource_type": "stamina",
         "range": 1,
-        "targeting_method": "target",
+        "targeting_method": "tile",
         "target_directions": [
             "down",
             "down_left",
@@ -44,12 +45,16 @@
             "up_right"
         ],
         "time_cost": 20,
+        "cast_tags": [
+            "actor"
+        ],
         "target_tags": [
-            "no_blocking_tile"
+            "actor"
         ],
         "shape": "target",
         "shape_size": 1,
-        "uses_projectile": false
+        "uses_projectile": false,
+        "is_delayed": false
     },
     "Lunge": {
         "__dataclass__": "SkillData",
@@ -59,7 +64,7 @@
         "name": "lunge",
         "resource_cost": 15,
         "resource_type": "stamina",
-        "targeting_method": "target",
+        "targeting_method": "direction",
         "uses_projectile": false,
         "projectile_data": null,
         "range": 2,
@@ -70,11 +75,15 @@
             "up"
         ],
         "time_cost": 30,
-        "target_tags": [
+        "cast_tags": [
             "no_blocking_tile"
         ],
+        "target_tags": [
+            "any"
+        ],
         "shape": "target",
-        "shape_size": 1
+        "shape_size": 1,
+        "is_delayed": false
     },
     "TarAndFeather": {
         "__dataclass__": "SkillData",
@@ -84,15 +93,22 @@
         "name": "tar and feather",
         "resource_cost": 15,
         "resource_type": "stamina",
-        "targeting_method": "target",
+        "targeting_method": "tile",
         "target_directions": [
             "down",
+            "down_left",
+            "down_right",
             "left",
             "right",
-            "up"
+            "up",
+            "up_left",
+            "up_right"
         ],
         "range": 5,
         "time_cost": 30,
+        "cast_tags": [
+            "no_blocking_tile"
+        ],
         "target_tags": [
             "no_blocking_tile"
         ],
@@ -111,7 +127,8 @@
             "range": 5,
             "terrain_collision": "fizzle",
             "expiry_type": "fizzle"
-        }
+        },
+        "is_delayed": false
     },
     "Splash": {
         "__dataclass__": "SkillData",
@@ -121,7 +138,7 @@
         "name": "splash",
         "resource_cost": 10,
         "resource_type": "stamina",
-        "targeting_method": "target",
+        "targeting_method": "tile",
         "target_directions": [
             "down",
             "down_left",
@@ -133,8 +150,11 @@
             "up_right"
         ],
         "time_cost": 35,
-        "target_tags": [
+        "cast_tags": [
             "no_blocking_tile"
+        ],
+        "target_tags": [
+            "other_entity"
         ],
         "shape": "target",
         "shape_size": 1,
@@ -152,6 +172,44 @@
             "range": 3,
             "terrain_collision": "fizzle",
             "expiry_type": "fizzle"
-        }
+        },
+        "is_delayed": false
+    },
+    "Lightning": {
+        "__dataclass__": "SkillData",
+        "name": "Call Lightning",
+        "description": "Shocking.",
+        "cooldown": 1,
+        "icon_path": "",
+        "resource_cost": 10,
+        "resource_type": "stamina",
+        "targeting_method": "tile",
+        "target_directions": [
+            "down",
+            "down_left",
+            "down_right",
+            "left",
+            "right",
+            "up",
+            "up_left",
+            "up_right"
+        ],
+        "time_cost": 35,
+        "cast_tags": [
+            "no_blocking_tile"
+        ],
+        "target_tags": [
+            "any"
+        ],
+        "shape": "target",
+        "shape_size": 1,
+        "range": 3,
+        "uses_projectile": false,
+        "delayed_skill_data": {
+            "__dataclass__": "DelayedSkillData",
+            "duration": 5,
+            "speed": "slow"
+        },
+        "is_delayed": true
     }
 }

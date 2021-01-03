@@ -7,7 +7,7 @@ from scripts.engine.core import chronicle, world
 from scripts.engine.core.component import Knowledge, Position
 from scripts.engine.internal import library
 from scripts.engine.internal.action import Behaviour
-from scripts.engine.internal.constant import Direction, TargetTag
+from scripts.engine.internal.constant import Direction, TileTag
 
 
 class SkipTurn(Behaviour):
@@ -160,7 +160,7 @@ class SearchAndAttack(Behaviour):
             y = pos.y + _dir[1]
 
             tile = world.get_tile((x, y))
-            has_tags = world.tile_has_tag(entity, tile, TargetTag.OPEN_SPACE)
+            has_tags = world.tile_has_tag(entity, tile, TileTag.OPEN_SPACE)
             if has_tags:
                 poss_directions.append((_dir[0], _dir[1]))
 
