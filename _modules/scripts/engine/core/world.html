@@ -313,9 +313,9 @@
     <span class="n">ResourceType</span><span class="p">,</span>
     <span class="n">SecondaryStatType</span><span class="p">,</span>
     <span class="n">ShapeType</span><span class="p">,</span>
-    <span class="n">TargetTag</span><span class="p">,</span>
-    <span class="n">TargetTagType</span><span class="p">,</span>
     <span class="n">TILE_SIZE</span><span class="p">,</span>
+    <span class="n">TileTag</span><span class="p">,</span>
+    <span class="n">TileTagType</span><span class="p">,</span>
     <span class="n">TraitGroup</span><span class="p">,</span>
     <span class="n">TravelMethod</span><span class="p">,</span>
     <span class="n">TravelMethodType</span><span class="p">,</span>
@@ -328,6 +328,7 @@
     <span class="n">AlterTerrainEffectData</span><span class="p">,</span>
     <span class="n">ApplyAfflictionEffectData</span><span class="p">,</span>
     <span class="n">DamageEffectData</span><span class="p">,</span>
+    <span class="n">DelayedSkillData</span><span class="p">,</span>
     <span class="n">EffectData</span><span class="p">,</span>
     <span class="n">GodData</span><span class="p">,</span>
     <span class="n">MoveActorEffectData</span><span class="p">,</span>
@@ -538,18 +539,17 @@
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">tile_pos</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">creating_entity</span><span class="p">)</span>
-    <span class="n">projectile_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">s </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">`s projectile"</span>
+    <span class="n">projectile_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">`s </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">`s projectile"</span>
     <span class="n">desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2"> on its way."</span>
     <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">projectile_name</span><span class="p">,</span> <span class="n">desc</span><span class="p">))</span>
 
     <span class="n">sprites</span> <span class="o">=</span> <span class="n">build_sprites_from_paths</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">],</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
 
-    <span class="c1"># translation to screen coordinates is handled by the camera</span>
     <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="o">.</span><span class="n">move</span><span class="p">,</span> <span class="n">sprites</span><span class="p">,</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">],</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))</span>
     <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tracked</span><span class="p">(</span><span class="n">chronicle</span><span class="o">.</span><span class="n">get_time_of_last_turn</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># allocate time to ensure they act next</span>
-    <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))</span>  <span class="c1"># TODO - check position not blocked before spawning</span>
-    <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Resources</span><span class="p">(</span><span class="mi">999</span><span class="p">,</span> <span class="mi">999</span><span class="p">))</span>
-    <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Afflictions</span><span class="p">())</span>
+    <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))</span>
+    <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Resources</span><span class="p">(</span><span class="mi">999</span><span class="p">,</span> <span class="mi">999</span><span class="p">))</span>  <span class="c1"># TODO - remove need to have Resources</span>
+    <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Afflictions</span><span class="p">())</span>  <span class="c1"># TODO - remove need to have Afflictions</span>
     <span class="n">projectile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">IsActive</span><span class="p">())</span>
 
     <span class="c1"># set up light</span>
@@ -561,6 +561,7 @@
 
     <span class="n">entity</span> <span class="o">=</span> <span class="n">create_entity</span><span class="p">(</span><span class="n">projectile</span><span class="p">)</span>
 
+    <span class="c1"># add post-creation components</span>
     <span class="n">behaviour</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">behaviour_registry</span><span class="p">[</span><span class="s2">"Projectile"</span><span class="p">]</span>
     <span class="n">thought</span> <span class="o">=</span> <span class="n">Thought</span><span class="p">(</span><span class="n">behaviour</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
     <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Projectile</span>
@@ -573,7 +574,43 @@
     <span class="n">known_skills</span> <span class="o">=</span> <span class="p">[</span><span class="n">move</span><span class="p">]</span>
     <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">(</span><span class="n">known_skills</span><span class="p">))</span>
 
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">`s projectile created at (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">) heading </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">direction</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">projectile_name</span><span class="si">}</span><span class="s2">`s created at (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">) heading </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">direction</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">entity</span></div>
+
+
+<div class="viewcode-block" id="create_delayed_skill"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.create_delayed_skill">[docs]</a><span class="k">def</span> <span class="nf">create_delayed_skill</span><span class="p">(</span><span class="n">creating_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">tile_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="n">DelayedSkillData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Create an entity with all of the components to be a delayed skill. Returns Entity ID.</span>
+<span class="sd">    """</span>
+    <span class="n">skill_name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">skill_name</span>
+    <span class="n">delayed_skill</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">tile_pos</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">get_name</span><span class="p">(</span><span class="n">creating_entity</span><span class="p">)</span>
+    <span class="n">delayed_skill_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">`s </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">`s delayed skill"</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2"> incoming."</span>
+    <span class="n">delayed_skill</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">delayed_skill_name</span><span class="p">,</span> <span class="n">desc</span><span class="p">))</span>
+
+    <span class="n">sprites</span> <span class="o">=</span> <span class="n">build_sprites_from_paths</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">],</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+
+    <span class="n">delayed_skill</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span><span class="p">,</span> <span class="n">sprites</span><span class="p">,</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">sprite_paths</span><span class="p">],</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))</span>
+    <span class="n">delayed_skill</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tracked</span><span class="p">(</span><span class="n">chronicle</span><span class="o">.</span><span class="n">get_time_of_last_turn</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># allocate time to ensure they act next</span>
+    <span class="n">delayed_skill</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))</span>
+    <span class="n">delayed_skill</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">IsActive</span><span class="p">())</span>
+
+    <span class="n">entity</span> <span class="o">=</span> <span class="n">create_entity</span><span class="p">(</span><span class="n">delayed_skill</span><span class="p">)</span>
+
+    <span class="c1"># add post-creation components</span>
+    <span class="n">behaviour</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">behaviour_registry</span><span class="p">[</span><span class="s2">"DelayedSkill"</span><span class="p">]</span>
+    <span class="n">thought</span> <span class="o">=</span> <span class="n">Thought</span><span class="p">(</span><span class="n">behaviour</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">DelayedSkill</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thought</span><span class="o">.</span><span class="n">behaviour</span><span class="p">,</span> <span class="n">DelayedSkill</span><span class="p">)</span>
+    <span class="n">thought</span><span class="o">.</span><span class="n">behaviour</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">thought</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">delayed_skill_name</span><span class="si">}</span><span class="s2">`s created at (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">) and will trigger in </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="si">}</span><span class="s2"> "</span> <span class="sa">f</span><span class="s2">"turns."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">entity</span></div>
 
@@ -884,14 +921,14 @@
     <span class="c1"># work out position of adjacent walls</span>
     <span class="n">adj_tile</span> <span class="o">=</span> <span class="n">get_tile</span><span class="p">((</span><span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span> <span class="o">-</span> <span class="n">dir_y</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">adj_tile</span><span class="p">:</span>
-        <span class="n">collision_adj_y</span> <span class="o">=</span> <span class="n">tile_has_tag</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">adj_tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">)</span>
+        <span class="n">collision_adj_y</span> <span class="o">=</span> <span class="n">tile_has_tag</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">adj_tile</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># found no tile</span>
         <span class="n">collision_adj_y</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="n">adj_tile</span> <span class="o">=</span> <span class="n">get_tile</span><span class="p">((</span><span class="n">current_x</span> <span class="o">-</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">adj_tile</span><span class="p">:</span>
-        <span class="n">collision_adj_x</span> <span class="o">=</span> <span class="n">tile_has_tag</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">adj_tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">)</span>
+        <span class="n">collision_adj_x</span> <span class="o">=</span> <span class="n">tile_has_tag</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">adj_tile</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># found no tile</span>
         <span class="n">collision_adj_x</span> <span class="o">=</span> <span class="kc">True</span>
@@ -984,7 +1021,7 @@
 
         <span class="k">if</span> <span class="n">tile</span><span class="p">:</span>
             <span class="c1"># did we hit something causing standard to stop</span>
-            <span class="k">if</span> <span class="n">tile_has_tag</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">tile_has_tag</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">):</span>
                 <span class="c1"># if we're ready to check for a target, do so</span>
                 <span class="k">if</span> <span class="n">check_for_target</span><span class="p">:</span>
                     <span class="c1"># we hit something, go back to last free tile</span>
@@ -1183,8 +1220,8 @@
 
                 <span class="c1"># check tile is open and in vision</span>
                 <span class="n">tile</span> <span class="o">=</span> <span class="n">get_tile</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
-                <span class="n">has_tags</span> <span class="o">=</span> <span class="n">tile_has_tags</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="p">[</span><span class="n">TargetTag</span><span class="o">.</span><span class="n">IS_VISIBLE</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">OPEN_SPACE</span><span class="p">])</span>
-                <span class="n">has_self</span> <span class="o">=</span> <span class="n">tile_has_tag</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">SELF</span><span class="p">)</span>
+                <span class="n">has_tags</span> <span class="o">=</span> <span class="n">tile_has_tags</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">IS_VISIBLE</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">OPEN_SPACE</span><span class="p">])</span>
+                <span class="n">has_self</span> <span class="o">=</span> <span class="n">tile_has_tag</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">SELF</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">has_tags</span> <span class="ow">or</span> <span class="n">has_self</span><span class="p">:</span>
                     <span class="n">skill_dict</span><span class="p">[</span><span class="n">skill</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
 
@@ -1198,7 +1235,7 @@
 <span class="c1">############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################</span>
 
 
-<div class="viewcode-block" id="tile_has_tag"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.tile_has_tag">[docs]</a><span class="k">def</span> <span class="nf">tile_has_tag</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="n">TargetTagType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="tile_has_tag"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.tile_has_tag">[docs]</a><span class="k">def</span> <span class="nf">tile_has_tag</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="n">TileTagType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Check if a given tag applies to the tile.  True if tag applies.</span>
 <span class="sd">    """</span>
@@ -1209,39 +1246,39 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">game_map</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">OPEN_SPACE</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">OPEN_SPACE</span><span class="p">:</span>
         <span class="c1"># if nothing is blocking movement</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_tile_has_entity_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">:</span>
         <span class="c1"># if anything is blocking</span>
         <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="ow">or</span> <span class="n">_tile_has_entity_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">SELF</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">SELF</span><span class="p">:</span>
         <span class="c1"># if entity on tile is same as active entity</span>
         <span class="k">if</span> <span class="n">active_entity</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">EntityID</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">_tile_has_specific_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Tried to get TargetTag.SELF but gave no active_entity."</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Tried to get TileTag.SELF but gave no active_entity."</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">:</span>
         <span class="c1"># if entity on tile is not active entity</span>
         <span class="k">if</span> <span class="n">active_entity</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">active_entity</span><span class="p">,</span> <span class="n">EntityID</span><span class="p">)</span>
             <span class="c1"># check both possibilities. either the tile containing the active entity or not</span>
             <span class="k">return</span> <span class="n">_tile_has_other_entities</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Tried to get TargetTag.OTHER_ENTITY but gave no active_entity."</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">NO_ENTITY</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Tried to get TileTag.OTHER_ENTITY but gave no active_entity."</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">NO_ENTITY</span><span class="p">:</span>
         <span class="c1"># if the tile has no entity</span>
         <span class="k">return</span> <span class="ow">not</span> <span class="n">_tile_has_any_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">ANY</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">ANY</span><span class="p">:</span>
         <span class="c1"># if the tile is anything at all</span>
         <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">IS_VISIBLE</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">IS_VISIBLE</span><span class="p">:</span>
         <span class="c1"># if player can see the tile</span>
         <span class="k">return</span> <span class="n">_is_tile_visible_to_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">,</span> <span class="n">game_map</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">NO_BLOCKING_TILE</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">NO_BLOCKING_TILE</span><span class="p">:</span>
         <span class="c1"># if tile isnt blocking movement</span>
         <span class="k">if</span> <span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">game_map</span><span class="p">):</span>
             <span class="k">return</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span>
@@ -1250,7 +1287,7 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="tile_has_tags"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.tile_has_tags">[docs]</a><span class="k">def</span> <span class="nf">tile_has_tags</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="tile_has_tags"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.tile_has_tags">[docs]</a><span class="k">def</span> <span class="nf">tile_has_tags</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Check a tile has all required tags</span>
 <span class="sd">    """</span>
@@ -1488,15 +1525,15 @@
 <span class="sd">    Use the specified skill on the target tile, usually creating a projectile. Returns True is successful if</span>
 <span class="sd">    criteria to use skill was met, False if not.</span>
 <span class="sd">    """</span>
-    <span class="c1"># N.B. we init so that any overrides of the Skill.init are applied</span>
+    <span class="c1"># we init so that any overrides of the Skill.init are applied</span>
     <span class="n">skill_cast</span> <span class="o">=</span> <span class="n">skill</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 
     <span class="c1"># ensure they are the right target type</span>
-    <span class="k">if</span> <span class="n">tile_has_tags</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">skill_cast</span><span class="o">.</span><span class="n">target_tile</span><span class="p">,</span> <span class="n">skill_cast</span><span class="o">.</span><span class="n">target_tags</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">tile_has_tags</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">skill_cast</span><span class="o">.</span><span class="n">target_tile</span><span class="p">,</span> <span class="n">skill_cast</span><span class="o">.</span><span class="n">cast_tags</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">skill_cast</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">result</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not use skill, target tile does not have required tags (</span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">target_tags</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not use skill, target tile does not have required tags (</span><span class="si">{</span><span class="n">skill_cast</span><span class="o">.</span><span class="n">cast_tags</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
@@ -1707,11 +1744,12 @@
 <span class="sd">    Add the skill name to the entity's knowledge component.</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">):</span>
-        <span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">([]))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2"> has no Knowledge component and cannot learn </span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="k">return</span>
+
     <span class="n">knowledge</span> <span class="o">=</span> <span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">knowledge</span><span class="p">:</span>
-        <span class="n">skill_class</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span>
-        <span class="n">knowledge</span><span class="o">.</span><span class="n">learn_skill</span><span class="p">(</span><span class="n">skill_class</span><span class="p">)</span></div>
+    <span class="n">skill_class</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span>
+    <span class="n">knowledge</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">skill_class</span><span class="p">)</span></div>
 
 
 <span class="c1">############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################</span>

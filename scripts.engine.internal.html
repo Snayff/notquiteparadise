@@ -319,7 +319,7 @@
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.action.Action.target_tags">
-<code class="sig-name descname">target_tags</code><em class="property">: List<span class="p">[</span>TargetTagType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.internal.action.Action.target_tags" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">target_tags</code><em class="property">: List<span class="p">[</span>TileTagType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.internal.action.Action.target_tags" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">
@@ -379,6 +379,22 @@ will use Actions.</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
+<dt id="scripts.engine.internal.action.DelayedSkill">
+<em class="property">class </em><code class="sig-name descname">DelayedSkill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#DelayedSkill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.DelayedSkill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.action.Behaviour" title="scripts.engine.internal.action.Behaviour"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.action.Behaviour</span></code></a></p>
+<p>After duration ends trigger skill centred on self.</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.action.DelayedSkill.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#DelayedSkill.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.DelayedSkill.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.internal.action.DelayedSkill.act">
+<code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#DelayedSkill.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.DelayedSkill.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the behaviour</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
 <dt id="scripts.engine.internal.action.Projectile">
 <em class="property">class </em><code class="sig-name descname">Projectile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#Projectile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Projectile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.action.Behaviour" title="scripts.engine.internal.action.Behaviour"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.action.Behaviour</span></code></a></p>
@@ -418,12 +434,24 @@ times.</p>
 <dt id="scripts.engine.internal.action.Skill.base_cooldown">
 <code class="sig-name descname">base_cooldown</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><a class="headerlink" href="#scripts.engine.internal.action.Skill.base_cooldown" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.action.Skill.cast_tags">
+<code class="sig-name descname">cast_tags</code><em class="property">: List<span class="p">[</span>TileTagType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.internal.action.Skill.cast_tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.action.Skill.delayed_skill_data">
+<code class="sig-name descname">delayed_skill_data</code><em class="property">: Optional<span class="p">[</span>DelayedSkillData<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.internal.action.Skill.delayed_skill_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 <dl class="py method">
 <dt id="scripts.engine.internal.action.Skill.get_animation">
 <code class="sig-name descname">get_animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aesthetic</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.component.Aesthetic" title="scripts.engine.core.component.Aesthetic">scripts.engine.core.component.Aesthetic</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#Skill.get_animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill.get_animation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the animation to play when executing the skill. Defaults to attack sprite. Override in subclass if
 another is needed.</p>
 </dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.action.Skill.is_delayed">
+<code class="sig-name descname">is_delayed</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#scripts.engine.internal.action.Skill.is_delayed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.action.Skill.projectile_data">
 <code class="sig-name descname">projectile_data</code><em class="property">: Optional<span class="p">[</span>ProjectileData<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.internal.action.Skill.projectile_data" title="Permalink to this definition">¶</a></dt>
@@ -1133,48 +1161,6 @@ N.B. does not use base move_cost</p>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="scripts.engine.internal.constant.TargetTag">
-<em class="property">class </em><code class="sig-name descname">TargetTag</code><a class="reference internal" href="_modules/scripts/engine/internal/constant.html#TargetTag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.constant.TargetTag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
-<p>Types of target</p>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.constant.TargetTag.ACTOR">
-<code class="sig-name descname">ACTOR</code><em class="property"> = 'actor'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetTag.ACTOR" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.constant.TargetTag.ANY">
-<code class="sig-name descname">ANY</code><em class="property"> = 'any'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetTag.ANY" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.constant.TargetTag.BLOCKED_MOVEMENT">
-<code class="sig-name descname">BLOCKED_MOVEMENT</code><em class="property"> = 'blocked_movement'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetTag.BLOCKED_MOVEMENT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.constant.TargetTag.IS_VISIBLE">
-<code class="sig-name descname">IS_VISIBLE</code><em class="property"> = 'is_visible'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetTag.IS_VISIBLE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.constant.TargetTag.NO_BLOCKING_TILE">
-<code class="sig-name descname">NO_BLOCKING_TILE</code><em class="property"> = 'no_blocking_tile'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetTag.NO_BLOCKING_TILE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.constant.TargetTag.NO_ENTITY">
-<code class="sig-name descname">NO_ENTITY</code><em class="property"> = 'no_entity'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetTag.NO_ENTITY" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.constant.TargetTag.OPEN_SPACE">
-<code class="sig-name descname">OPEN_SPACE</code><em class="property"> = 'open_space'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetTag.OPEN_SPACE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.constant.TargetTag.OTHER_ENTITY">
-<code class="sig-name descname">OTHER_ENTITY</code><em class="property"> = 'other_entity'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetTag.OTHER_ENTITY" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.constant.TargetTag.SELF">
-<code class="sig-name descname">SELF</code><em class="property"> = 'self'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetTag.SELF" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-</dd></dl>
-<dl class="py class">
 <dt id="scripts.engine.internal.constant.TargetingMethod">
 <em class="property">class </em><code class="sig-name descname">TargetingMethod</code><a class="reference internal" href="_modules/scripts/engine/internal/constant.html#TargetingMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.constant.TargetingMethod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
@@ -1184,8 +1170,12 @@ N.B. does not use base move_cost</p>
 <code class="sig-name descname">AUTO</code><em class="property"> = 'auto'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetingMethod.AUTO" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="scripts.engine.internal.constant.TargetingMethod.TARGET">
-<code class="sig-name descname">TARGET</code><em class="property"> = 'target'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetingMethod.TARGET" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.internal.constant.TargetingMethod.DIRECTION">
+<code class="sig-name descname">DIRECTION</code><em class="property"> = 'direction'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetingMethod.DIRECTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.TargetingMethod.TILE">
+<code class="sig-name descname">TILE</code><em class="property"> = 'tile'</em><a class="headerlink" href="#scripts.engine.internal.constant.TargetingMethod.TILE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">
@@ -1230,6 +1220,48 @@ N.B. does not use base move_cost</p>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.constant.TileCategory.WALL">
 <code class="sig-name descname">WALL</code><em class="property"> = 'wall'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileCategory.WALL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.constant.TileTag">
+<em class="property">class </em><code class="sig-name descname">TileTag</code><a class="reference internal" href="_modules/scripts/engine/internal/constant.html#TileTag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.constant.TileTag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
+<p>Tags identifying a situation on a Tile.</p>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.TileTag.ACTOR">
+<code class="sig-name descname">ACTOR</code><em class="property"> = 'actor'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileTag.ACTOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.TileTag.ANY">
+<code class="sig-name descname">ANY</code><em class="property"> = 'any'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileTag.ANY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.TileTag.BLOCKED_MOVEMENT">
+<code class="sig-name descname">BLOCKED_MOVEMENT</code><em class="property"> = 'blocked_movement'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileTag.BLOCKED_MOVEMENT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.TileTag.IS_VISIBLE">
+<code class="sig-name descname">IS_VISIBLE</code><em class="property"> = 'is_visible'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileTag.IS_VISIBLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.TileTag.NO_BLOCKING_TILE">
+<code class="sig-name descname">NO_BLOCKING_TILE</code><em class="property"> = 'no_blocking_tile'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileTag.NO_BLOCKING_TILE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.TileTag.NO_ENTITY">
+<code class="sig-name descname">NO_ENTITY</code><em class="property"> = 'no_entity'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileTag.NO_ENTITY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.TileTag.OPEN_SPACE">
+<code class="sig-name descname">OPEN_SPACE</code><em class="property"> = 'open_space'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileTag.OPEN_SPACE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.TileTag.OTHER_ENTITY">
+<code class="sig-name descname">OTHER_ENTITY</code><em class="property"> = 'other_entity'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileTag.OTHER_ENTITY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.TileTag.SELF">
+<code class="sig-name descname">SELF</code><em class="property"> = 'self'</em><a class="headerlink" href="#scripts.engine.internal.constant.TileTag.SELF" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">
@@ -1786,6 +1818,41 @@ Also used to hold and map data from json.</p>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">
+<dt id="scripts.engine.internal.definition.DelayedSkillData">
+<em class="property">class </em><code class="sig-name descname">DelayedSkillData</code><span class="sig-paren">(</span><em class="sig-param">creator: EntityID = 0</em>, <em class="sig-param">skill_name: str = 'none'</em>, <em class="sig-param">skill_instance: Optional[Skill] = None</em>, <em class="sig-param">speed: ProjectileSpeedType = 10</em>, <em class="sig-param">duration: int = 0</em>, <em class="sig-param">sprite_paths: TraitSpritePathsData = TraitSpritePathsData(render_order=&lt;RenderLayer.BOTTOM: 10&gt;</em>, <em class="sig-param">icon='none'</em>, <em class="sig-param">idle='skills/delayed_skill.png'</em>, <em class="sig-param">attack='none'</em>, <em class="sig-param">hit='none'</em>, <em class="sig-param">dead='none'</em>, <em class="sig-param">move='none')</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#DelayedSkillData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.DelayedSkillData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Data class for a Delayed Skill</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.definition.DelayedSkillData.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">creator: EntityID = 0</em>, <em class="sig-param">skill_name: str = 'none'</em>, <em class="sig-param">skill_instance: Optional[Skill] = None</em>, <em class="sig-param">speed: ProjectileSpeedType = 10</em>, <em class="sig-param">duration: int = 0</em>, <em class="sig-param">sprite_paths: TraitSpritePathsData = TraitSpritePathsData(render_order=&lt;RenderLayer.BOTTOM: 10&gt;</em>, <em class="sig-param">icon='none'</em>, <em class="sig-param">idle='skills/delayed_skill.png'</em>, <em class="sig-param">attack='none'</em>, <em class="sig-param">hit='none'</em>, <em class="sig-param">dead='none'</em>, <em class="sig-param">move='none')</em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.DelayedSkillData.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.definition.DelayedSkillData.creator">
+<code class="sig-name descname">creator</code><em class="property">: EntityID</em><em class="property"> = 0</em><a class="headerlink" href="#scripts.engine.internal.definition.DelayedSkillData.creator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.definition.DelayedSkillData.duration">
+<code class="sig-name descname">duration</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><em class="property"> = 0</em><a class="headerlink" href="#scripts.engine.internal.definition.DelayedSkillData.duration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.definition.DelayedSkillData.skill_instance">
+<code class="sig-name descname">skill_instance</code><em class="property">: Optional<span class="p">[</span>Skill<span class="p">]</span></em><em class="property"> = None</em><a class="headerlink" href="#scripts.engine.internal.definition.DelayedSkillData.skill_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.definition.DelayedSkillData.skill_name">
+<code class="sig-name descname">skill_name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><em class="property"> = 'none'</em><a class="headerlink" href="#scripts.engine.internal.definition.DelayedSkillData.skill_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.definition.DelayedSkillData.speed">
+<code class="sig-name descname">speed</code><em class="property">: ProjectileSpeedType</em><em class="property"> = 10</em><a class="headerlink" href="#scripts.engine.internal.definition.DelayedSkillData.speed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.definition.DelayedSkillData.sprite_paths">
+<code class="sig-name descname">sprite_paths</code><em class="property">: <a class="reference internal" href="#scripts.engine.internal.definition.TraitSpritePathsData" title="scripts.engine.internal.definition.TraitSpritePathsData">TraitSpritePathsData</a></em><em class="property"> = TraitSpritePathsData(render_order=&lt;RenderLayer.BOTTOM: 10&gt;, icon='none', idle='skills/delayed_skill.png', attack='none', hit='none', dead='none', move='none')</em><a class="headerlink" href="#scripts.engine.internal.definition.DelayedSkillData.sprite_paths" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class">
 <dt id="scripts.engine.internal.definition.Dimensions">
 <em class="property">class </em><code class="sig-name descname">Dimensions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">height</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">width</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#Dimensions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.Dimensions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
@@ -2031,21 +2098,17 @@ Also used to hold and map data from json.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="scripts.engine.internal.definition.ProjectileData">
-<em class="property">class </em><code class="sig-name descname">ProjectileData</code><span class="sig-paren">(</span><em class="sig-param">creator: EntityID = 0</em>, <em class="sig-param">skill_name: str = 'none'</em>, <em class="sig-param">skill_instance: Optional[Skill] = None</em>, <em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">target_tags: List[TargetTagType] = &lt;factory&gt;</em>, <em class="sig-param">direction: Optional[DirectionType] = None</em>, <em class="sig-param">sprite_paths: TraitSpritePathsData = &lt;factory&gt;</em>, <em class="sig-param">speed: ProjectileSpeedType = 10</em>, <em class="sig-param">travel_method: TravelMethodType = 'standard'</em>, <em class="sig-param">range: int = 1</em>, <em class="sig-param">terrain_collision: Optional[TerrainCollisionType] = None</em>, <em class="sig-param">expiry_type: Optional[ProjectileExpiryType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#ProjectileData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.ProjectileData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ProjectileData</code><span class="sig-paren">(</span><em class="sig-param">creator: EntityID = 0</em>, <em class="sig-param">skill_name: str = 'none'</em>, <em class="sig-param">skill_instance: Optional[Skill] = None</em>, <em class="sig-param">target_tags: List[TileTagType] = &lt;factory&gt;</em>, <em class="sig-param">direction: Optional[DirectionType] = None</em>, <em class="sig-param">sprite_paths: TraitSpritePathsData = &lt;factory&gt;</em>, <em class="sig-param">speed: ProjectileSpeedType = 10</em>, <em class="sig-param">travel_method: TravelMethodType = 'standard'</em>, <em class="sig-param">range: int = 1</em>, <em class="sig-param">terrain_collision: Optional[TerrainCollisionType] = None</em>, <em class="sig-param">expiry_type: Optional[ProjectileExpiryType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#ProjectileData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.ProjectileData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Data class for a projectile</p>
 <dl class="py method">
 <dt id="scripts.engine.internal.definition.ProjectileData.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">creator: EntityID = 0</em>, <em class="sig-param">skill_name: str = 'none'</em>, <em class="sig-param">skill_instance: Optional[Skill] = None</em>, <em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">target_tags: List[TargetTagType] = &lt;factory&gt;</em>, <em class="sig-param">direction: Optional[DirectionType] = None</em>, <em class="sig-param">sprite_paths: TraitSpritePathsData = &lt;factory&gt;</em>, <em class="sig-param">speed: ProjectileSpeedType = 10</em>, <em class="sig-param">travel_method: TravelMethodType = 'standard'</em>, <em class="sig-param">range: int = 1</em>, <em class="sig-param">terrain_collision: Optional[TerrainCollisionType] = None</em>, <em class="sig-param">expiry_type: Optional[ProjectileExpiryType] = None</em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.ProjectileData.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">creator: EntityID = 0</em>, <em class="sig-param">skill_name: str = 'none'</em>, <em class="sig-param">skill_instance: Optional[Skill] = None</em>, <em class="sig-param">target_tags: List[TileTagType] = &lt;factory&gt;</em>, <em class="sig-param">direction: Optional[DirectionType] = None</em>, <em class="sig-param">sprite_paths: TraitSpritePathsData = &lt;factory&gt;</em>, <em class="sig-param">speed: ProjectileSpeedType = 10</em>, <em class="sig-param">travel_method: TravelMethodType = 'standard'</em>, <em class="sig-param">range: int = 1</em>, <em class="sig-param">terrain_collision: Optional[TerrainCollisionType] = None</em>, <em class="sig-param">expiry_type: Optional[ProjectileExpiryType] = None</em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.ProjectileData.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.ProjectileData.creator">
 <code class="sig-name descname">creator</code><em class="property">: EntityID</em><em class="property"> = 0</em><a class="headerlink" href="#scripts.engine.internal.definition.ProjectileData.creator" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.definition.ProjectileData.description">
-<code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><em class="property"> = 'none'</em><a class="headerlink" href="#scripts.engine.internal.definition.ProjectileData.description" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.ProjectileData.direction">
@@ -2054,10 +2117,6 @@ Also used to hold and map data from json.</p>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.ProjectileData.expiry_type">
 <code class="sig-name descname">expiry_type</code><em class="property">: Optional<span class="p">[</span>ProjectileExpiryType<span class="p">]</span></em><em class="property"> = None</em><a class="headerlink" href="#scripts.engine.internal.definition.ProjectileData.expiry_type" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-<dl class="py attribute">
-<dt id="scripts.engine.internal.definition.ProjectileData.name">
-<code class="sig-name descname">name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><em class="property"> = 'none'</em><a class="headerlink" href="#scripts.engine.internal.definition.ProjectileData.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.ProjectileData.range">
@@ -2081,7 +2140,7 @@ Also used to hold and map data from json.</p>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.ProjectileData.target_tags">
-<code class="sig-name descname">target_tags</code><em class="property">: List<span class="p">[</span>TargetTagType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.internal.definition.ProjectileData.target_tags" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">target_tags</code><em class="property">: List<span class="p">[</span>TileTagType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.internal.definition.ProjectileData.target_tags" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.ProjectileData.terrain_collision">
@@ -2180,18 +2239,26 @@ Also used to hold and map data from json.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="scripts.engine.internal.definition.SkillData">
-<em class="property">class </em><code class="sig-name descname">SkillData</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">icon_path: str = 'none'</em>, <em class="sig-param">target_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">resource_type: NewType.&lt;locals&gt;.new_type = 'stamina'</em>, <em class="sig-param">resource_cost: int = 0</em>, <em class="sig-param">time_cost: int = 0</em>, <em class="sig-param">cooldown: int = 0</em>, <em class="sig-param">targeting_method: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">target_directions: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">range: int = 1</em>, <em class="sig-param">shape: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">shape_size: int = 1</em>, <em class="sig-param">uses_projectile: bool = True</em>, <em class="sig-param">projectile_data: Optional[scripts.engine.internal.definition.ProjectileData] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#SkillData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.SkillData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">SkillData</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">icon_path: str = 'none'</em>, <em class="sig-param">cast_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">target_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">resource_type: NewType.&lt;locals&gt;.new_type = 'stamina'</em>, <em class="sig-param">resource_cost: int = 0</em>, <em class="sig-param">time_cost: int = 0</em>, <em class="sig-param">cooldown: int = 0</em>, <em class="sig-param">targeting_method: NewType.&lt;locals&gt;.new_type = 'tile'</em>, <em class="sig-param">target_directions: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">range: int = 1</em>, <em class="sig-param">shape: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">shape_size: int = 1</em>, <em class="sig-param">uses_projectile: bool = False</em>, <em class="sig-param">projectile_data: Optional[scripts.engine.internal.definition.ProjectileData] = None</em>, <em class="sig-param">is_delayed: bool = False</em>, <em class="sig-param">delayed_skill_data: Optional[scripts.engine.internal.definition.DelayedSkillData] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/definition.html#SkillData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.definition.SkillData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Data class for a skill.
 Also used to hold and map data from json.</p>
 <dl class="py method">
 <dt id="scripts.engine.internal.definition.SkillData.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">icon_path: str = 'none'</em>, <em class="sig-param">target_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">resource_type: NewType.&lt;locals&gt;.new_type = 'stamina'</em>, <em class="sig-param">resource_cost: int = 0</em>, <em class="sig-param">time_cost: int = 0</em>, <em class="sig-param">cooldown: int = 0</em>, <em class="sig-param">targeting_method: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">target_directions: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">range: int = 1</em>, <em class="sig-param">shape: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">shape_size: int = 1</em>, <em class="sig-param">uses_projectile: bool = True</em>, <em class="sig-param">projectile_data: Optional[scripts.engine.internal.definition.ProjectileData] = None</em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">icon_path: str = 'none'</em>, <em class="sig-param">cast_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">target_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">resource_type: NewType.&lt;locals&gt;.new_type = 'stamina'</em>, <em class="sig-param">resource_cost: int = 0</em>, <em class="sig-param">time_cost: int = 0</em>, <em class="sig-param">cooldown: int = 0</em>, <em class="sig-param">targeting_method: NewType.&lt;locals&gt;.new_type = 'tile'</em>, <em class="sig-param">target_directions: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">range: int = 1</em>, <em class="sig-param">shape: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">shape_size: int = 1</em>, <em class="sig-param">uses_projectile: bool = False</em>, <em class="sig-param">projectile_data: Optional[scripts.engine.internal.definition.ProjectileData] = None</em>, <em class="sig-param">is_delayed: bool = False</em>, <em class="sig-param">delayed_skill_data: Optional[scripts.engine.internal.definition.DelayedSkillData] = None</em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 <dl class="py attribute">
+<dt id="scripts.engine.internal.definition.SkillData.cast_tags">
+<code class="sig-name descname">cast_tags</code><em class="property">: List[NewType.&lt;locals&gt;.new_type]</em><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.cast_tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
 <dt id="scripts.engine.internal.definition.SkillData.cooldown">
 <code class="sig-name descname">cooldown</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><em class="property"> = 0</em><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.cooldown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.definition.SkillData.delayed_skill_data">
+<code class="sig-name descname">delayed_skill_data</code><em class="property">: Optional<span class="p">[</span><a class="reference internal" href="#scripts.engine.internal.definition.DelayedSkillData" title="scripts.engine.internal.definition.DelayedSkillData">scripts.engine.internal.definition.DelayedSkillData</a><span class="p">]</span></em><em class="property"> = None</em><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.delayed_skill_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.SkillData.description">
@@ -2200,6 +2267,10 @@ Also used to hold and map data from json.</p>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.SkillData.icon_path">
 <code class="sig-name descname">icon_path</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><em class="property"> = 'none'</em><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.icon_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.definition.SkillData.is_delayed">
+<code class="sig-name descname">is_delayed</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><em class="property"> = False</em><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.is_delayed" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.SkillData.name">
@@ -2239,7 +2310,7 @@ Also used to hold and map data from json.</p>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.SkillData.targeting_method">
-<code class="sig-name descname">targeting_method</code><em class="property">: NewType.&lt;locals&gt;.new_type</em><em class="property"> = 'target'</em><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.targeting_method" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">targeting_method</code><em class="property">: NewType.&lt;locals&gt;.new_type</em><em class="property"> = 'tile'</em><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.targeting_method" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.SkillData.time_cost">
@@ -2247,7 +2318,7 @@ Also used to hold and map data from json.</p>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.definition.SkillData.uses_projectile">
-<code class="sig-name descname">uses_projectile</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><em class="property"> = True</em><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.uses_projectile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">uses_projectile</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><em class="property"> = False</em><a class="headerlink" href="#scripts.engine.internal.definition.SkillData.uses_projectile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">

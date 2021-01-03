@@ -347,6 +347,10 @@
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.DefaultValueData.__init__">(DefaultValueData method)</a>
 </li>
+        <li><a href="engine/internal/action.html#scripts.engine.internal.action.DelayedSkill.__init__">(DelayedSkill method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.action.DelayedSkill.__init__">[1]</a>
+</li>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.DelayedSkillData.__init__">(DelayedSkillData method)</a>
+</li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.Dimensions.__init__">(Dimensions method)</a>
 </li>
         <li><a href="nqp/elements/dungen_viewer.html#scripts.nqp.ui_elements.dungen_viewer.DungenViewer.__init__">(DungenViewer method)</a>, <a href="scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.dungen_viewer.DungenViewer.__init__">[1]</a>
@@ -503,6 +507,8 @@
 </li>
         <li><a href="nqp/actions/affliction.html#scripts.nqp.actions.affliction.Flaming._build_effects">(Flaming method)</a>
 </li>
+        <li><a href="nqp/actions/skill.html#scripts.nqp.actions.skill.Lightning._build_effects">(Lightning method)</a>
+</li>
         <li><a href="nqp/actions/skill.html#scripts.nqp.actions.skill.Lunge._build_effects">(Lunge method)</a>
 </li>
         <li><a href="nqp/actions/skill.html#scripts.nqp.actions.skill.Move._build_effects">(Move method)</a>
@@ -559,6 +565,8 @@
       <li><a href="engine/internal/action.html#scripts.engine.internal.action.Behaviour.act">act() (Behaviour method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.action.Behaviour.act">[1]</a>
 
       <ul>
+        <li><a href="engine/internal/action.html#scripts.engine.internal.action.DelayedSkill.act">(DelayedSkill method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.action.DelayedSkill.act">[1]</a>
+</li>
         <li><a href="nqp/actions/behaviour.html#scripts.nqp.actions.behaviour.FollowPlayer.act">(FollowPlayer method)</a>, <a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviour.FollowPlayer.act">[1]</a>
 </li>
         <li><a href="engine/internal/action.html#scripts.engine.internal.action.Projectile.act">(Projectile method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.action.Projectile.act">[1]</a>
@@ -579,9 +587,9 @@
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.RenderLayer.ACTOR">ACTOR (RenderLayer attribute)</a>
 
       <ul>
-        <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.ACTOR">(TargetTag attribute)</a>
-</li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileCategory.ACTOR">(TileCategory attribute)</a>
+</li>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileTag.ACTOR">(TileTag attribute)</a>
 </li>
       </ul></li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.UIElement.ACTOR_INFO">ACTOR_INFO (UIElement attribute)</a>
@@ -601,7 +609,11 @@
       <li><a href="scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.actors_data">actors_data (DungeonGenerator attribute)</a>
 </li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.component.Afflictions.add">add() (Afflictions method)</a>
+
+      <ul>
+        <li><a href="scripts.engine.core.html#scripts.engine.core.component.Knowledge.add">(Knowledge method)</a>
 </li>
+      </ul></li>
       <li><a href="engine/core/world.html#scripts.engine.core.world.add_component">add_component() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.add_component">[1]</a>
 </li>
       <li><a href="engine/world_objects/lighting.html#scripts.engine.world_objects.lighting.LightBox.add_dynamic_walls">add_dynamic_walls() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.add_dynamic_walls">[1]</a>
@@ -638,10 +650,10 @@
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionEventType.AFFECT_STAT">(InteractionEventType attribute)</a>
 </li>
       </ul></li>
-      <li><a href="tests.engine.html#tests.engine.test_effect.affect_terrain_amount">affect_terrain_amount() (in module tests.engine.test_effect)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="tests.engine.html#tests.engine.test_effect.affect_terrain_amount">affect_terrain_amount() (in module tests.engine.test_effect)</a>
+</li>
       <li><a href="tests.engine.html#tests.engine.test_effect.affect_terrain_negative_amount">affect_terrain_negative_amount() (in module tests.engine.test_effect)</a>
 </li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.effect.AffectCooldownEffect">AffectCooldownEffect (class in scripts.engine.core.effect)</a>
@@ -690,7 +702,7 @@
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.event.AlterTerrainEvent">AlterTerrainEvent (class in scripts.engine.internal.event)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.ANY">ANY (TargetTag attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileTag.ANY">ANY (TileTag attribute)</a>
 </li>
       <li><a href="engine/internal/action.html#scripts.engine.internal.action.Affliction.apply">apply() (Affliction method)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.action.Affliction.apply">[1]</a>
 
@@ -739,6 +751,8 @@
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.base_cooldown">base_cooldown (BasicAttack attribute)</a>
 
       <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.base_cooldown">(Lightning attribute)</a>
+</li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.base_cooldown">(Lunge attribute)</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.base_cooldown">(Move attribute)</a>
@@ -780,7 +794,7 @@
 </li>
       <li><a href="engine/world_objects/game_map.html#scripts.engine.world_objects.game_map.GameMap.block_sight_map">block_sight_map() (GameMap property)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap.block_sight_map">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.BLOCKED_MOVEMENT">BLOCKED_MOVEMENT (TargetTag attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileTag.BLOCKED_MOVEMENT">BLOCKED_MOVEMENT (TileTag attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TerrainData.blocks_movement">blocks_movement (TerrainData attribute)</a>
 </li>
@@ -826,6 +840,24 @@
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InputIntent.CANCEL">CANCEL (InputIntent attribute)</a>
 </li>
+      <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.cast_tags">cast_tags (BasicAttack attribute)</a>
+
+      <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.cast_tags">(Lightning attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.cast_tags">(Lunge attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.cast_tags">(Move attribute)</a>
+</li>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.action.Skill.cast_tags">(Skill attribute)</a>
+</li>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.SkillData.cast_tags">(SkillData attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Splash.cast_tags">(Splash attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.TarAndFeather.cast_tags">(TarAndFeather attribute)</a>
+</li>
+      </ul></li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.action.Affliction.category">category (Affliction attribute)</a>
 
       <ul>
@@ -878,14 +910,14 @@
 </li>
       <li><a href="engine/world_objects/lighting.html#scripts.engine.world_objects.lighting.Wall.clone_move">clone_move() (Wall method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.Wall.clone_move">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.PrimaryStat.CLOUT">CLOUT (PrimaryStat attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TraitData.clout">clout (TraitData attribute)</a>
 </li>
       <li><a href="engine/world_objects/combat_stats.html#scripts.engine.world_objects.combat_stats.CombatStats.clout">clout() (CombatStats property)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats.clout">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.BaseSecondaryStatData.clout_mod">clout_mod (BaseSecondaryStatData attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.DamageType.COLD">COLD (DamageType attribute)</a>
@@ -924,6 +956,8 @@
 </li>
       <li><a href="engine/core/world.html#scripts.engine.core.world.create_combat_stats">create_combat_stats() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.create_combat_stats">[1]</a>
 </li>
+      <li><a href="engine/core/world.html#scripts.engine.core.world.create_delayed_skill">create_delayed_skill() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.create_delayed_skill">[1]</a>
+</li>
       <li><a href="engine/core/world.html#scripts.engine.core.world.create_effect">create_effect() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.create_effect">[1]</a>
 </li>
       <li><a href="engine/core/dungen.html#scripts.engine.core.dungen.DungeonGenerator.create_entities">create_entities() (DungeonGenerator method)</a>, <a href="scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.create_entities">[1]</a>
@@ -942,8 +976,12 @@
 </li>
       <li><a href="engine/core/world.html#scripts.engine.core.world.create_terrain">create_terrain() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.create_terrain">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.creator">creator (ProjectileData attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.DelayedSkillData.creator">creator (DelayedSkillData attribute)</a>
+
+      <ul>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.creator">(ProjectileData attribute)</a>
 </li>
+      </ul></li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.HitType.CRIT">CRIT (HitType attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.HitTypeData.crit">crit (HitTypeData attribute)</a>
@@ -998,6 +1036,28 @@
 </li>
       <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.DefaultValueData">DefaultValueData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.DefaultValueData">[1]</a>
 </li>
+      <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.delayed_skill_data">delayed_skill_data (BasicAttack attribute)</a>
+
+      <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.delayed_skill_data">(Lightning attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.delayed_skill_data">(Lunge attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.delayed_skill_data">(Move attribute)</a>
+</li>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.action.Skill.delayed_skill_data">(Skill attribute)</a>
+</li>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.SkillData.delayed_skill_data">(SkillData attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Splash.delayed_skill_data">(Splash attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.TarAndFeather.delayed_skill_data">(TarAndFeather attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="engine/internal/action.html#scripts.engine.internal.action.DelayedSkill">DelayedSkill (class in scripts.engine.internal.action)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.action.DelayedSkill">[1]</a>
+</li>
+      <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.DelayedSkillData">DelayedSkillData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.DelayedSkillData">[1]</a>
+</li>
       <li><a href="engine/world_objects/lighting.html#scripts.engine.world_objects.lighting.LightBox.delete_dynamic_walls">delete_dynamic_walls() (LightBox method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox.delete_dynamic_walls">[1]</a>
 </li>
       <li><a href="engine/core/world.html#scripts.engine.core.world.delete_entity">delete_entity() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.delete_entity">[1]</a>
@@ -1012,8 +1072,6 @@
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.AfflictionData.description">(AfflictionData attribute)</a>
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.GodData.description">(GodData attribute)</a>
-</li>
-        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.description">(ProjectileData attribute)</a>
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.SkillData.description">(SkillData attribute)</a>
 </li>
@@ -1104,6 +1162,8 @@
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.direction">(ProjectileData attribute)</a>
 </li>
       </ul></li>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetingMethod.DIRECTION">DIRECTION (TargetingMethod attribute)</a>
+</li>
       <li><a href="engine/internal/debug.html#scripts.engine.internal.debug.disable_profiling">disable_profiling() (in module scripts.engine.internal.debug)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.debug.disable_profiling">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.Direction.DOWN">DOWN (Direction attribute)</a>
@@ -1141,7 +1201,11 @@
       <li><a href="engine/core/dungen.html#scripts.engine.core.dungen.DungeonGenerator">DungeonGenerator (class in scripts.engine.core.dungen)</a>, <a href="scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ApplyAfflictionEffectData.duration">duration (ApplyAfflictionEffectData attribute)</a>
+
+      <ul>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.DelayedSkillData.duration">(DelayedSkillData attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1544,8 +1608,6 @@
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType.INPUT">INPUT (EventType attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.InputEventType">InputEventType (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.InputEventType">[1]</a>
 </li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.InputIntent">InputIntent (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.InputIntent">[1]</a>
@@ -1554,6 +1616,8 @@
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.EventType.INTERACTION">INTERACTION (EventType attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="engine/core/system.html#scripts.engine.core.system.InteractionEventSubscriber">InteractionEventSubscriber (class in scripts.engine.core.system)</a>, <a href="scripts.engine.core.html#scripts.engine.core.system.InteractionEventSubscriber">[1]</a>
 </li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.InteractionEventType">InteractionEventType (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.InteractionEventType">[1]</a>
@@ -1562,6 +1626,24 @@
 </li>
       <li><a href="engine/core/utility.html#scripts.engine.core.utility.is_close">is_close() (in module scripts.engine.core.utility)</a>, <a href="scripts.engine.core.html#scripts.engine.core.utility.is_close">[1]</a>
 </li>
+      <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.is_delayed">is_delayed (BasicAttack attribute)</a>
+
+      <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.is_delayed">(Lightning attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.is_delayed">(Lunge attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.is_delayed">(Move attribute)</a>
+</li>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.action.Skill.is_delayed">(Skill attribute)</a>
+</li>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.SkillData.is_delayed">(SkillData attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Splash.is_delayed">(Splash attribute)</a>
+</li>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.TarAndFeather.is_delayed">(TarAndFeather attribute)</a>
+</li>
+      </ul></li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.is_dirty">is_dirty (DungeonGenerator attribute)</a>
 </li>
       <li><a href="engine/internal/debug.html#scripts.engine.internal.debug.is_fps_visible">is_fps_visible() (in module scripts.engine.internal.debug)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.debug.is_fps_visible">[1]</a>
@@ -1580,7 +1662,7 @@
 </li>
       <li><a href="engine/internal/debug.html#scripts.engine.internal.debug.is_profiling">is_profiling() (in module scripts.engine.internal.debug)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.debug.is_profiling">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.IS_VISIBLE">IS_VISIBLE (TargetTag attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileTag.IS_VISIBLE">IS_VISIBLE (TileTag attribute)</a>
 </li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.component.IsActive">IsActive (class in scripts.engine.core.component)</a>
 </li>
@@ -1627,11 +1709,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="engine/core/world.html#scripts.engine.core.world.learn_skill">learn_skill() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.learn_skill">[1]</a>
-
-      <ul>
-        <li><a href="scripts.engine.core.html#scripts.engine.core.component.Knowledge.learn_skill">(Knowledge method)</a>
 </li>
-      </ul></li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.Direction.LEFT">LEFT (Direction attribute)</a>
 
       <ul>
@@ -1650,9 +1728,11 @@
 </li>
       <li><a href="engine/world_objects/lighting.html#scripts.engine.world_objects.lighting.LightBox">LightBox (class in scripts.engine.world_objects.lighting)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.LightBox">[1]</a>
 </li>
+      <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.LightData">LightData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.LightData">[1]</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.LightData">LightData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.LightData">[1]</a>
+      <li><a href="nqp/actions/skill.html#scripts.nqp.actions.skill.Lightning">Lightning (class in scripts.nqp.actions.skill)</a>, <a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning">[1]</a>
 </li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.component.LightSource">LightSource (class in scripts.engine.core.component)</a>
 </li>
@@ -1928,8 +2008,6 @@
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MapData.name">(MapData attribute)</a>
 </li>
-        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.name">(ProjectileData attribute)</a>
-</li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.RoomConceptData.name">(RoomConceptData attribute)</a>
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.SkillData.name">(SkillData attribute)</a>
@@ -1939,10 +2017,10 @@
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TraitData.name">(TraitData attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameEventType.NEW_GAME">NEW_GAME (GameEventType attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameEventType.NEW_ROUND">NEW_ROUND (GameEventType attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.GameEventType.NEW_TURN">NEW_TURN (GameEventType attribute)</a>
@@ -1957,9 +2035,9 @@
 </li>
       <li><a href="engine/core/chronicle.html#scripts.engine.core.chronicle.next_turn">next_turn() (in module scripts.engine.core.chronicle)</a>, <a href="scripts.engine.core.html#scripts.engine.core.chronicle.next_turn">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.NO_BLOCKING_TILE">NO_BLOCKING_TILE (TargetTag attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileTag.NO_BLOCKING_TILE">NO_BLOCKING_TILE (TileTag attribute)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.NO_ENTITY">NO_ENTITY (TargetTag attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileTag.NO_ENTITY">NO_ENTITY (TileTag attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TraitGroup.NPC">NPC (TraitGroup attribute)</a>
 </li>
@@ -1981,11 +2059,11 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.OPEN_SPACE">OPEN_SPACE (TargetTag attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileTag.OPEN_SPACE">OPEN_SPACE (TileTag attribute)</a>
 </li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.component.Opinion">Opinion (class in scripts.engine.core.component)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.OTHER_ENTITY">OTHER_ENTITY (TargetTag attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileTag.OTHER_ENTITY">OTHER_ENTITY (TileTag attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -2090,6 +2168,8 @@
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.projectile_data">projectile_data (BasicAttack attribute)</a>
 
       <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.projectile_data">(Lightning attribute)</a>
+</li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.projectile_data">(Lunge attribute)</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.projectile_data">(Move attribute)</a>
@@ -2122,6 +2202,8 @@
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.range">range (BasicAttack attribute)</a>
 
       <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.range">(Lightning attribute)</a>
+</li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.range">(Lunge attribute)</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.range">(Move attribute)</a>
@@ -2226,6 +2308,8 @@
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.resource_cost">resource_cost (BasicAttack attribute)</a>
 
       <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.resource_cost">(Lightning attribute)</a>
+</li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.resource_cost">(Lunge attribute)</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.resource_cost">(Move attribute)</a>
@@ -2242,6 +2326,8 @@
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.resource_type">resource_type (BasicAttack attribute)</a>
 
       <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.resource_type">(Lightning attribute)</a>
+</li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.resource_type">(Lunge attribute)</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.resource_type">(Move attribute)</a>
@@ -2662,17 +2748,17 @@
         <li><a href="nqp/elements/title_screen.html#module-scripts.nqp.ui_elements.title_screen">module</a>, <a href="scripts.nqp.ui_elements.html#module-scripts.nqp.ui_elements.title_screen">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nqp/actions/behaviour.html#scripts.nqp.actions.behaviour.SearchAndAttack">SearchAndAttack (class in scripts.nqp.actions.behaviour)</a>, <a href="scripts.nqp.actions.html#scripts.nqp.actions.behaviour.SearchAndAttack">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.BaseStatData.secondary">secondary (BaseStatData attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.BaseSecondaryStatData.secondary_stat_type">secondary_stat_type (BaseSecondaryStatData attribute)</a>
 </li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.SecondaryStat">SecondaryStat (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.SecondaryStat">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag.SELF">SELF (TargetTag attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileTag.SELF">SELF (TileTag attribute)</a>
 </li>
       <li><a href="engine/world_objects/game_map.html#scripts.engine.world_objects.game_map.GameMap.serialise">serialise() (GameMap method)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap.serialise">[1]</a>
 
@@ -2814,11 +2900,17 @@
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InputEventType.SKILL_BAR_CLICK">SKILL_BAR_CLICK (InputEventType attribute)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.skill_instance">skill_instance (ProjectileData attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.DelayedSkillData.skill_instance">skill_instance (DelayedSkillData attribute)</a>
+
+      <ul>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.skill_instance">(ProjectileData attribute)</a>
 </li>
+      </ul></li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.AffectCooldownEffectData.skill_name">skill_name (AffectCooldownEffectData attribute)</a>
 
       <ul>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.DelayedSkillData.skill_name">(DelayedSkillData attribute)</a>
+</li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.skill_name">(ProjectileData attribute)</a>
 </li>
       </ul></li>
@@ -2840,15 +2932,21 @@
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ProjectileSpeed.SLOW">SLOW (ProjectileSpeed attribute)</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.speed">speed (ProjectileData attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.DelayedSkillData.speed">speed (DelayedSkillData attribute)</a>
+
+      <ul>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.speed">(ProjectileData attribute)</a>
 </li>
+      </ul></li>
       <li><a href="engine/core/world.html#scripts.engine.core.world.spend_time">spend_time() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.spend_time">[1]</a>
 </li>
       <li><a href="nqp/actions/skill.html#scripts.nqp.actions.skill.Splash">Splash (class in scripts.nqp.actions.skill)</a>, <a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Splash">[1]</a>
 </li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MapData.sprite_paths">sprite_paths (MapData attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.DelayedSkillData.sprite_paths">sprite_paths (DelayedSkillData attribute)</a>
 
       <ul>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MapData.sprite_paths">(MapData attribute)</a>
+</li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.sprite_paths">(ProjectileData attribute)</a>
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.RoomConceptData.sprite_paths">(RoomConceptData attribute)</a>
@@ -2913,14 +3011,12 @@
       <li><a href="nqp/actions/skill.html#scripts.nqp.actions.skill.TarAndFeather">TarAndFeather (class in scripts.nqp.actions.skill)</a>, <a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.TarAndFeather">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.Shape.TARGET">TARGET (Shape attribute)</a>
-
-      <ul>
-        <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetingMethod.TARGET">(TargetingMethod attribute)</a>
 </li>
-      </ul></li>
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.target_directions">target_directions (BasicAttack attribute)</a>
 
       <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.target_directions">(Lightning attribute)</a>
+</li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.target_directions">(Lunge attribute)</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.target_directions">(Move attribute)</a>
@@ -2949,6 +3045,8 @@
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.targeting_method">targeting_method (BasicAttack attribute)</a>
 
       <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.targeting_method">(Lightning attribute)</a>
+</li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.targeting_method">(Lunge attribute)</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.targeting_method">(Move attribute)</a>
@@ -2963,8 +3061,6 @@
 </li>
       </ul></li>
       <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.TargetingMethod">TargetingMethod (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetingMethod">[1]</a>
-</li>
-      <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.TargetTag">TargetTag (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetTag">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.RenderLayer.TERRAIN">TERRAIN (RenderLayer attribute)</a>
 </li>
@@ -3022,12 +3118,12 @@
 </li>
       <li><a href="tests.engine.html#tests.engine.test_component.TestPosition.test_position_detect_top_left">test_position_detect_top_left() (TestPosition method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="tests.engine.html#tests.engine.test_component.TestPosition.test_position_outmost">test_position_outmost() (TestPosition method)</a>
 </li>
       <li><a href="tests.engine.html#tests.engine.test_component.TestPosition.test_position_outmost_parameters">test_position_outmost_parameters (TestPosition attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="tests.engine.html#tests.engine.test_state.test_save_game">test_save_game() (in module tests.engine.test_state)</a>
 </li>
       <li><a href="tests.engine.html#tests.engine.test_state.test_set_state">test_set_state() (in module tests.engine.test_state)</a>
@@ -3081,7 +3177,11 @@
       <li><a href="engine/world_objects/tile.html#scripts.engine.world_objects.tile.Tile">Tile (class in scripts.engine.world_objects.tile)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.RenderLayer.TILE">TILE (RenderLayer attribute)</a>
+
+      <ul>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.TargetingMethod.TILE">(TargetingMethod attribute)</a>
 </li>
+      </ul></li>
       <li><a href="scripts.engine.core.html#scripts.engine.core.dungen.RoomConcept.tile_categories">tile_categories (RoomConcept attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.InputEventType.TILE_CLICK">TILE_CLICK (InputEventType attribute)</a>
@@ -3098,9 +3198,13 @@
 </li>
       <li><a href="engine/core/dungen.html#scripts.engine.core.dungen.DungeonGenerator.tiles_map">tiles_map() (DungeonGenerator property)</a>, <a href="scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.tiles_map">[1]</a>
 </li>
+      <li><a href="engine/internal/constant.html#scripts.engine.internal.constant.TileTag">TileTag (class in scripts.engine.internal.constant)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.constant.TileTag">[1]</a>
+</li>
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.time_cost">time_cost (BasicAttack attribute)</a>
 
       <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.time_cost">(Lightning attribute)</a>
+</li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.time_cost">(Lunge attribute)</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.time_cost">(Move attribute)</a>
@@ -3233,6 +3337,8 @@
       <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.BasicAttack.uses_projectile">uses_projectile (BasicAttack attribute)</a>
 
       <ul>
+        <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lightning.uses_projectile">(Lightning attribute)</a>
+</li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.uses_projectile">(Lunge attribute)</a>
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.uses_projectile">(Move attribute)</a>

@@ -481,6 +481,8 @@
 <div class="viewcode-block" id="Aesthetic"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Aesthetic">[docs]</a><span class="k">class</span> <span class="nc">Aesthetic</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    An entity's sprite.</span>
+
+<span class="sd">    N.B. translation to screen coordinates is handled by the camera</span>
 <span class="sd">    """</span>
 
 <div class="viewcode-block" id="Aesthetic.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Aesthetic.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -679,7 +681,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># dont set skills here, use learn skill</span>
 
         <span class="k">for</span> <span class="n">skill_class</span> <span class="ow">in</span> <span class="n">skills</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">learn_skill</span><span class="p">(</span><span class="n">skill_class</span><span class="p">,</span> <span class="n">_add_to_order</span><span class="p">,</span> <span class="n">_set_cooldown</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">skill_class</span><span class="p">,</span> <span class="n">_add_to_order</span><span class="p">,</span> <span class="n">_set_cooldown</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Knowledge.set_skill_cooldown"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.set_skill_cooldown">[docs]</a>    <span class="k">def</span> <span class="nf">set_skill_cooldown</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -687,7 +689,7 @@
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Knowledge.learn_skill"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.learn_skill">[docs]</a>    <span class="k">def</span> <span class="nf">learn_skill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">add_to_order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">set_cooldown</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Knowledge.add"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">add_to_order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">set_cooldown</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Learn a new skill.</span>
 <span class="sd">        """</span>

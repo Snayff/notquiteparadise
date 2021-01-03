@@ -274,11 +274,11 @@
     <span class="n">ResourceType</span><span class="p">,</span>
     <span class="n">ShapeType</span><span class="p">,</span>
     <span class="n">TargetingMethodType</span><span class="p">,</span>
-    <span class="n">TargetTag</span><span class="p">,</span>
-    <span class="n">TargetTagType</span><span class="p">,</span>
     <span class="n">TerrainCollision</span><span class="p">,</span>
+    <span class="n">TileTag</span><span class="p">,</span>
+    <span class="n">TileTagType</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ProjectileData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">DelayedSkillData</span><span class="p">,</span> <span class="n">ProjectileData</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -296,7 +296,7 @@
     <span class="n">f_name</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># friendly name, can include spaces, slashes etc.</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">icon_path</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">]</span>
+    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span>
     <span class="n">effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]</span>
     <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span>
     <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span>
@@ -324,17 +324,25 @@
     <span class="n">resource_cost</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">time_cost</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">base_cooldown</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span>
-    <span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span>
-    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span>  <span class="c1"># Tile, Direction, Auto</span>
+
+    <span class="c1"># targeting details</span>
+    <span class="n">cast_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span>
+    <span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span>  <span class="c1"># needed for Direction</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># needed for Tile, Auto</span>
+
+    <span class="c1"># delivery methods</span>
+    <span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span>  <span class="c1"># usable by for Tile, Direction, Auto</span>
     <span class="n">projectile_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileData</span><span class="p">]</span>
+    <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span>  <span class="c1"># usable by Tile, Auto  - Doesnt make sense for Direction to have a delayed cast.</span>
+    <span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span>
 
 <div class="viewcode-block" id="Skill.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Skill.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span> <span class="o">=</span> <span class="n">target_tile</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">projectile</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">:</span> <span class="n">EntityID</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span> <span class="o">=</span> <span class="n">target_tile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">projectile</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delayed_skill</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># vars needed to keep track of changes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ignore_entities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># to ensure entity not hit more than once</span></div>
@@ -363,6 +371,7 @@
         <span class="bp">cls</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">SKILLS</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">f_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">name</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">cast_tags</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cast_tags</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">target_tags</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">target_tags</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">description</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">icon_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">icon_path</span>
@@ -377,6 +386,8 @@
         <span class="bp">cls</span><span class="o">.</span><span class="n">shape_size</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape_size</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">uses_projectile</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uses_projectile</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">projectile_data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">projectile_data</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">is_delayed</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">is_delayed</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">delayed_skill_data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">delayed_skill_data</span>
 
 <div class="viewcode-block" id="Skill.apply"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Skill.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]]]:</span>
         <span class="sd">"""</span>
@@ -384,8 +395,6 @@
 <span class="sd">        times.</span>
 <span class="sd">        """</span>
         <span class="n">entity_names</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
-
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_affected_entities</span><span class="p">(</span>
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
         <span class="p">):</span>
@@ -396,16 +405,17 @@
         <span class="sd">"""</span>
 <span class="sd">        If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply</span>
 <span class="sd">        """</span>
-        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
-
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="si">}</span><span class="s2">' used '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span>
 
         <span class="c1"># animate the skill user</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_play_animation</span><span class="p">()</span>
 
-        <span class="c1"># create the projectile</span>
+        <span class="c1"># handle the delivery method of the skill</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uses_projectile</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_create_projectile</span><span class="p">()</span>
+            <span class="n">is_successful</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_delayed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_delayed_skill</span><span class="p">()</span>
             <span class="n">is_successful</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">is_successful</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -418,15 +428,13 @@
 <span class="sd">        """</span>
         <span class="n">projectile_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectile_data</span>
 
-        <span class="c1"># update projectile values</span>
+        <span class="c1"># update projectile instance values</span>
         <span class="n">projectile_data</span><span class="o">.</span><span class="n">creator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span>
         <span class="n">projectile_data</span><span class="o">.</span><span class="n">skill_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
         <span class="n">projectile_data</span><span class="o">.</span><span class="n">skill_instance</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="n">projectile_data</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
 
         <span class="c1"># create the projectile</span>
-        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
-
         <span class="n">projectile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_projectile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">projectile_data</span><span class="p">)</span>
 
         <span class="c1"># add projectile to ignore list</span>
@@ -435,12 +443,29 @@
         <span class="c1"># save the reference to the projectile entity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">projectile</span> <span class="o">=</span> <span class="n">projectile</span>
 
+    <span class="k">def</span> <span class="nf">_create_delayed_skill</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">delayed_skill_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delayed_skill_data</span>
+
+        <span class="c1"># update delayed skill instance values</span>
+        <span class="n">delayed_skill_data</span><span class="o">.</span><span class="n">creator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">delayed_skill_data</span><span class="o">.</span><span class="n">skill_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">delayed_skill_data</span><span class="o">.</span><span class="n">skill_instance</span> <span class="o">=</span> <span class="bp">self</span>
+
+        <span class="c1"># create the delayed skill</span>
+        <span class="n">delayed_skill</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_delayed_skill</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">delayed_skill_data</span>
+        <span class="p">)</span>
+
+        <span class="c1"># add to ignore list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">delayed_skill</span><span class="p">)</span>
+
+        <span class="c1"># save reference</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delayed_skill</span> <span class="o">=</span> <span class="n">delayed_skill</span>
+
     <span class="k">def</span> <span class="nf">_play_animation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Play the provided animation on the entity's aesthetic component</span>
 <span class="sd">        """</span>
-        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
-
         <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">):</span>
             <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
             <span class="n">animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_animation</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">)</span>
@@ -585,15 +610,15 @@
         <span class="n">target_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">current_tile</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">current_tile</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dir_y</span><span class="p">))</span>
 
         <span class="c1"># if we havent moved check for collision in current tile (it might be cast on top of enemy)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_travelled</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">current_tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_travelled</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">current_tile</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">):</span>
             <span class="n">should_activate</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"`</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">` collided with an entity on cast at (</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' collided with an entity on cast at (</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
 
         <span class="c1"># if we havent travelled max distance or determined we should activate then move</span>
         <span class="c1"># N.b. not an elif because we want the precheck above to happen in isolation</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_travelled</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">range</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">should_activate</span><span class="p">:</span>
             <span class="c1"># can we move</span>
-            <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">OPEN_SPACE</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">OPEN_SPACE</span><span class="p">):</span>
                 <span class="n">should_move</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="k">else</span><span class="p">:</span>
@@ -639,7 +664,7 @@
 <span class="sd">        """</span>
         <span class="n">should_activate</span> <span class="o">=</span> <span class="n">should_move</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="p">[</span><span class="n">TargetTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">NO_ENTITY</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">NO_ENTITY</span><span class="p">]):</span>
             <span class="n">collision_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">terrain_collision</span>
 
             <span class="k">if</span> <span class="n">collision_type</span> <span class="o">==</span> <span class="n">TerrainCollision</span><span class="o">.</span><span class="n">ACTIVATE</span><span class="p">:</span>
@@ -663,7 +688,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">new_dir</span>
 
         <span class="c1"># blocked by entity</span>
-        <span class="k">elif</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">TargetTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">):</span>
             <span class="n">should_activate</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="c1"># update skill instance to new target</span>
@@ -671,6 +696,30 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">skill_instance</span><span class="o">.</span><span class="n">target_tile</span> <span class="o">=</span> <span class="n">target_tile</span>
 
         <span class="k">return</span> <span class="n">should_activate</span><span class="p">,</span> <span class="n">should_move</span></div>
+
+
+<div class="viewcode-block" id="DelayedSkill"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.DelayedSkill">[docs]</a><span class="k">class</span> <span class="nc">DelayedSkill</span><span class="p">(</span><span class="n">Behaviour</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    After duration ends trigger skill centred on self.</span>
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="DelayedSkill.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.DelayedSkill.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attached_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">attached_entity</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="n">DelayedSkillData</span> <span class="o">=</span> <span class="n">DelayedSkillData</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DelayedSkill.act"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.DelayedSkill.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">duration</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">duration</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2"> will trigger in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="si">}</span><span class="s2"> turns."</span><span class="p">)</span>
+            <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">speed</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># apply skill, rather than using it, as the instance already exists and we are just using the effects</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">skill_instance</span><span class="p">)</span>
+
+        <span class="c1"># die after activating</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span></div></div>
 </pre></div>
 
           </article>

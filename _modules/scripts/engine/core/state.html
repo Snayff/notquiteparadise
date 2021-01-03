@@ -328,9 +328,10 @@
     <span class="kn">import</span> <span class="nn">scripts.engine.internal.library</span>
 
     <span class="c1"># register any Actions that exist within the engine</span>
-    <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Projectile</span><span class="p">,</span> <span class="n">register_action</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">DelayedSkill</span><span class="p">,</span> <span class="n">Projectile</span><span class="p">,</span> <span class="n">register_action</span>
 
-    <span class="n">register_action</span><span class="p">(</span><span class="n">Projectile</span><span class="p">)</span></div>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">Projectile</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">DelayedSkill</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="update_clock"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.state.update_clock">[docs]</a><span class="k">def</span> <span class="nf">update_clock</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
