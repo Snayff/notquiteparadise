@@ -24,7 +24,6 @@ from scripts.nqp import command
 from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
 
-
 __all__ = ["process_intent"]
 
 

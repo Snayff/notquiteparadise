@@ -19,9 +19,9 @@ from scripts.engine.internal.constant import (
     ResourceType,
     ShapeType,
     TargetingMethodType,
+    TerrainCollision,
     TileTag,
     TileTagType,
-    TerrainCollision,
 )
 from scripts.engine.internal.definition import DelayedSkillData, ProjectileData
 from scripts.engine.world_objects.tile import Tile
@@ -197,8 +197,9 @@ class Skill(Action):
         delayed_skill_data.skill_instance = self
 
         # create the delayed skill
-        delayed_skill = world.create_delayed_skill(self.user, (self.target_tile.x, self.target_tile.y),
-                                                   delayed_skill_data)
+        delayed_skill = world.create_delayed_skill(
+            self.user, (self.target_tile.x, self.target_tile.y), delayed_skill_data
+        )
 
         # add to ignore list
         self.ignore_entities.append(delayed_skill)
@@ -446,6 +447,7 @@ class DelayedSkill(Behaviour):
     """
     After duration ends trigger skill centred on self.
     """
+
     def __init__(self, attached_entity: EntityID):
         super().__init__(attached_entity)
 
@@ -463,6 +465,3 @@ class DelayedSkill(Behaviour):
 
         # die after activating
         world.kill_entity(self.entity)
-
-
-

@@ -73,7 +73,7 @@ def initialise_engine():
     import scripts.engine.internal.library
 
     # register any Actions that exist within the engine
-    from scripts.engine.internal.action import register_action, Projectile, DelayedSkill
+    from scripts.engine.internal.action import DelayedSkill, Projectile, register_action
 
     register_action(Projectile)
     register_action(DelayedSkill)

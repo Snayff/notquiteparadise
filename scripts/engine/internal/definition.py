@@ -29,8 +29,8 @@ from scripts.engine.internal.constant import (
     ShapeType,
     TargetingMethod,
     TargetingMethodType,
-    TileTagType,
     TerrainCollisionType,
+    TileTagType,
     TraitGroup,
     TraitGroupType,
     TravelMethod,
@@ -235,6 +235,7 @@ class DelayedSkillData:
     """
     Data class for a Delayed Skill
     """
+
     # this will be overwritten or will break, but need defaults to allow passing
     creator: EntityID = 0  # type: ignore
 

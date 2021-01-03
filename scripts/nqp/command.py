@@ -31,7 +31,7 @@ from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
 from scripts.nqp.actions.behaviour import FollowPlayer, SearchAndAttack, SkipTurn
-from scripts.nqp.actions.skill import BasicAttack, Lunge, Move, Splash, TarAndFeather, Lightning
+from scripts.nqp.actions.skill import BasicAttack, Lightning, Lunge, Move, Splash, TarAndFeather
 from scripts.nqp.processors.game import GameEventSubscriber
 from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.character_selector import CharacterSelector
