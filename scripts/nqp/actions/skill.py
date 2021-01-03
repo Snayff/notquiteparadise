@@ -272,7 +272,7 @@ class Splash(Skill):
         return [damage_effect]
 
 
-class TestDelayed(Skill):
+class Lightning(Skill):
     """
     Test the Delayed Skill functionality.
     """

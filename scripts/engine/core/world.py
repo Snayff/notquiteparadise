@@ -58,8 +58,8 @@ from scripts.engine.internal.constant import (
     ResourceType,
     SecondaryStatType,
     ShapeType,
-    TargetTag,
-    TargetTagType,
+    TileTag,
+    TileTagType,
     TILE_SIZE,
     TraitGroup,
     TravelMethod,
@@ -664,14 +664,14 @@ def get_reflected_direction(
     # work out position of adjacent walls
     adj_tile = get_tile((current_x, current_y - dir_y))
     if adj_tile:
-        collision_adj_y = tile_has_tag(active_entity, adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_y = tile_has_tag(active_entity, adj_tile, TileTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_y = True
 
     adj_tile = get_tile((current_x - dir_x, current_y))
     if adj_tile:
-        collision_adj_x = tile_has_tag(active_entity, adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_x = tile_has_tag(active_entity, adj_tile, TileTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_x = True
@@ -764,7 +764,7 @@ def _get_furthest_free_position(
 
         if tile:
             # did we hit something causing standard to stop
-            if tile_has_tag(active_entity, tile, TargetTag.BLOCKED_MOVEMENT):
+            if tile_has_tag(active_entity, tile, TileTag.BLOCKED_MOVEMENT):
                 # if we're ready to check for a target, do so
                 if check_for_target:
                     # we hit something, go back to last free tile
@@ -963,8 +963,8 @@ def get_cast_positions(
 
                 # check tile is open and in vision
                 tile = get_tile((x, y))
-                has_tags = tile_has_tags(entity, tile, [TargetTag.IS_VISIBLE, TargetTag.OPEN_SPACE])
-                has_self = tile_has_tag(entity, tile, TargetTag.SELF)
+                has_tags = tile_has_tags(entity, tile, [TileTag.IS_VISIBLE, TileTag.OPEN_SPACE])
+                has_self = tile_has_tag(entity, tile, TileTag.SELF)
                 if has_tags or has_self:
                     skill_dict[skill].append((x, y))
 
@@ -978,7 +978,7 @@ def get_cast_positions(
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
 
 
-def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> bool:
+def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
@@ -989,39 +989,39 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> boo
     if not _is_tile_in_bounds(tile, game_map):
         return False
 
-    if tag == TargetTag.OPEN_SPACE:
+    if tag == TileTag.OPEN_SPACE:
         # if nothing is blocking movement
         if not tile.blocks_movement and not _tile_has_entity_blocking_movement(tile):
             return True
-    elif tag == TargetTag.BLOCKED_MOVEMENT:
+    elif tag == TileTag.BLOCKED_MOVEMENT:
         # if anything is blocking
         if tile.blocks_movement or _tile_has_entity_blocking_movement(tile):
             return True
-    elif tag == TargetTag.SELF:
+    elif tag == TileTag.SELF:
         # if entity on tile is same as active entity
         if active_entity:
             assert isinstance(active_entity, EntityID)
             return _tile_has_specific_entity(tile, active_entity)
         else:
-            logging.warning("Tried to get TargetTag.SELF but gave no active_entity.")
-    elif tag == TargetTag.OTHER_ENTITY:
+            logging.warning("Tried to get TileTag.SELF but gave no active_entity.")
+    elif tag == TileTag.OTHER_ENTITY:
         # if entity on tile is not active entity
         if active_entity:
             assert isinstance(active_entity, EntityID)
             # check both possibilities. either the tile containing the active entity or not
             return _tile_has_other_entities(tile, active_entity)
         else:
-            logging.warning("Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.")
-    elif tag == TargetTag.NO_ENTITY:
+            logging.warning("Tried to get TileTag.OTHER_ENTITY but gave no active_entity.")
+    elif tag == TileTag.NO_ENTITY:
         # if the tile has no entity
         return not _tile_has_any_entity(tile)
-    elif tag == TargetTag.ANY:
+    elif tag == TileTag.ANY:
         # if the tile is anything at all
         return True
-    elif tag == TargetTag.IS_VISIBLE:
+    elif tag == TileTag.IS_VISIBLE:
         # if player can see the tile
         return _is_tile_visible_to_entity(tile, active_entity, game_map)
-    elif tag == TargetTag.NO_BLOCKING_TILE:
+    elif tag == TileTag.NO_BLOCKING_TILE:
         # if tile isnt blocking movement
         if _is_tile_in_bounds(tile, game_map):
             return not tile.blocks_movement
@@ -1030,7 +1030,7 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> boo
     return False
 
 
-def tile_has_tags(active_entity: EntityID, tile: Tile, tags: List[TargetTagType]) -> bool:
+def tile_has_tags(active_entity: EntityID, tile: Tile, tags: List[TileTagType]) -> bool:
     """
     Check a tile has all required tags
     """

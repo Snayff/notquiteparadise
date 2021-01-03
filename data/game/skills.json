@@ -8,7 +8,7 @@
         "range": 1,
         "resource_cost": 0,
         "resource_type": "stamina",
-        "targeting_method": "target",
+        "targeting_method": "tile",
         "target_directions": [
             "down",
             "left",
@@ -33,7 +33,7 @@
         "resource_cost": 10,
         "resource_type": "stamina",
         "range": 1,
-        "targeting_method": "target",
+        "targeting_method": "tile",
         "target_directions": [
             "down",
             "down_left",
@@ -45,8 +45,11 @@
             "up_right"
         ],
         "time_cost": 20,
+        "cast_tags": [
+            "actor"
+        ],
         "target_tags": [
-            "no_blocking_tile"
+            "actor"
         ],
         "shape": "target",
         "shape_size": 1,
@@ -61,7 +64,7 @@
         "name": "lunge",
         "resource_cost": 15,
         "resource_type": "stamina",
-        "targeting_method": "target",
+        "targeting_method": "direction",
         "uses_projectile": false,
         "projectile_data": null,
         "range": 2,
@@ -72,8 +75,11 @@
             "up"
         ],
         "time_cost": 30,
-        "target_tags": [
+        "cast_tags": [
             "no_blocking_tile"
+        ],
+        "target_tags": [
+            "any"
         ],
         "shape": "target",
         "shape_size": 1,
@@ -87,15 +93,22 @@
         "name": "tar and feather",
         "resource_cost": 15,
         "resource_type": "stamina",
-        "targeting_method": "target",
+        "targeting_method": "tile",
         "target_directions": [
             "down",
+            "down_left",
+            "down_right",
             "left",
             "right",
-            "up"
+            "up",
+            "up_left",
+            "up_right"
         ],
         "range": 5,
         "time_cost": 30,
+        "cast_tags": [
+            "no_blocking_tile"
+        ],
         "target_tags": [
             "no_blocking_tile"
         ],
@@ -125,7 +138,7 @@
         "name": "splash",
         "resource_cost": 10,
         "resource_type": "stamina",
-        "targeting_method": "target",
+        "targeting_method": "tile",
         "target_directions": [
             "down",
             "down_left",
@@ -137,8 +150,11 @@
             "up_right"
         ],
         "time_cost": 35,
-        "target_tags": [
+        "cast_tags": [
             "no_blocking_tile"
+        ],
+        "target_tags": [
+            "other_entity"
         ],
         "shape": "target",
         "shape_size": 1,
@@ -159,15 +175,15 @@
         },
         "is_delayed": false
     },
-    "TestDelayed": {
+    "Lightning": {
         "__dataclass__": "SkillData",
-        "name": "test delayed skill",
-        "description": "Throw water around",
+        "name": "Call Lightning",
+        "description": "Shocking.",
         "cooldown": 1,
         "icon_path": "",
         "resource_cost": 10,
         "resource_type": "stamina",
-        "targeting_method": "target",
+        "targeting_method": "tile",
         "target_directions": [
             "down",
             "down_left",
@@ -179,8 +195,11 @@
             "up_right"
         ],
         "time_cost": 35,
-        "target_tags": [
+        "cast_tags": [
             "no_blocking_tile"
+        ],
+        "target_tags": [
+            "any"
         ],
         "shape": "target",
         "shape_size": 1,
@@ -188,11 +207,7 @@
         "uses_projectile": false,
         "delayed_skill_data": {
             "__dataclass__": "DelayedSkillData",
-            "sprite_paths": {
-                "__dataclass__": "TraitSpritePathsData",
-                "idle": "skills/delayed_skill.png"
-            },
-            "duration": 1,
+            "duration": 5,
             "speed": "slow"
         },
         "is_delayed": true

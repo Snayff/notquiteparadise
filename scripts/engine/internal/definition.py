@@ -29,7 +29,7 @@ from scripts.engine.internal.constant import (
     ShapeType,
     TargetingMethod,
     TargetingMethodType,
-    TargetTagType,
+    TileTagType,
     TerrainCollisionType,
     TraitGroup,
     TraitGroupType,
@@ -206,7 +206,7 @@ class ProjectileData:
     skill_instance: Optional[Skill] = None
 
     # who are we targeting?
-    target_tags: List[TargetTagType] = field(default_factory=list)
+    target_tags: List[TileTagType] = field(default_factory=list)
 
     # where are we going?
     direction: Optional[DirectionType] = None
@@ -243,7 +243,7 @@ class DelayedSkillData:
 
     speed: ProjectileSpeedType = ProjectileSpeed.SLOW
     duration: int = 0
-    sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
+    sprite_paths: TraitSpritePathsData = TraitSpritePathsData(idle="skills/delayed_skill.png")
 
     def __post_init__(self):
         # map external str to internal int
@@ -369,7 +369,8 @@ class SkillData:
     icon_path: str = "none"
 
     # when do we use it?
-    target_tags: List[TargetTagType] = field(default_factory=list)
+    cast_tags: List[TileTagType] = field(default_factory=list)
+    target_tags: List[TileTagType] = field(default_factory=list)
 
     # what does it cost?
     resource_type: ResourceType = Resource.STAMINA
@@ -378,7 +379,7 @@ class SkillData:
     cooldown: int = 0
 
     # how does it travel from the user?
-    targeting_method: TargetingMethodType = TargetingMethod.TARGET
+    targeting_method: TargetingMethodType = TargetingMethod.TILE
     target_directions: List[DirectionType] = field(default_factory=list)
     range: int = 1
 
@@ -415,7 +416,7 @@ class AfflictionData:
     category: AfflictionCategoryType = AfflictionCategory.BANE
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
-    target_tags: List[TargetTagType] = field(default_factory=list)
+    target_tags: List[TileTagType] = field(default_factory=list)
     identity_tags: List[EffectTypeType] = field(default_factory=list)
     triggers: List[ReactionTriggerType] = field(default_factory=list)
 

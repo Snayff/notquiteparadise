@@ -19,8 +19,8 @@ from scripts.engine.internal.constant import (
     ResourceType,
     ShapeType,
     TargetingMethodType,
-    TargetTag,
-    TargetTagType,
+    TileTag,
+    TileTagType,
     TerrainCollision,
 )
 from scripts.engine.internal.definition import DelayedSkillData, ProjectileData
@@ -41,7 +41,7 @@ class Action(ABC):
     f_name: str  # friendly name, can include spaces, slashes etc.
     description: str
     icon_path: str
-    target_tags: List[TargetTagType]
+    target_tags: List[TileTagType]
     effects: List[Effect]
     shape: ShapeType
     shape_size: int
@@ -352,7 +352,7 @@ class Projectile(Behaviour):
         target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
 
         # if we havent moved check for collision in current tile (it might be cast on top of enemy)
-        if self.distance_travelled == 0 and world.tile_has_tag(entity, current_tile, TargetTag.OTHER_ENTITY):
+        if self.distance_travelled == 0 and world.tile_has_tag(entity, current_tile, TileTag.OTHER_ENTITY):
             should_activate = True
             logging.debug(f"'{world.get_name(entity)}' collided with an entity on cast at ({pos.x},{pos.y}).")
 
@@ -360,7 +360,7 @@ class Projectile(Behaviour):
         # N.b. not an elif because we want the precheck above to happen in isolation
         if self.distance_travelled < self.data.range and not should_activate:
             # can we move
-            if world.tile_has_tag(entity, target_tile, TargetTag.OPEN_SPACE):
+            if world.tile_has_tag(entity, target_tile, TileTag.OPEN_SPACE):
                 should_move = True
 
             else:
@@ -406,7 +406,7 @@ class Projectile(Behaviour):
         """
         should_activate = should_move = False
 
-        if world.tile_has_tags(self.entity, target_tile, [TargetTag.BLOCKED_MOVEMENT, TargetTag.NO_ENTITY]):
+        if world.tile_has_tags(self.entity, target_tile, [TileTag.BLOCKED_MOVEMENT, TileTag.NO_ENTITY]):
             collision_type = self.data.terrain_collision
 
             if collision_type == TerrainCollision.ACTIVATE:
@@ -430,7 +430,7 @@ class Projectile(Behaviour):
                 self.data.direction = new_dir
 
         # blocked by entity
-        elif world.tile_has_tag(self.entity, target_tile, TargetTag.OTHER_ENTITY):
+        elif world.tile_has_tag(self.entity, target_tile, TileTag.OTHER_ENTITY):
             should_activate = True
 
             # update skill instance to new target

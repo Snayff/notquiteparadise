@@ -152,7 +152,7 @@ def _process_game_map_intents(intent: InputIntentType):
                     if skill.targeting_method == TargetingMethod.AUTO:
                         # pass centre as it doesnt matter, the skill will pick the right direction
                         _process_skill_use(player, skill, current_tile, Direction.CENTRE)
-                    elif skill.targeting_method == TargetingMethod.TARGET:
+                    elif skill.targeting_method == TargetingMethod.TILE:
                         # trigger targeting overlay
                         state.set_new(GameState.TARGETING)
                         state.set_active_skill(skill_name)

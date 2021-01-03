@@ -18,7 +18,7 @@ from scripts.engine.core.component import (
     Resources,
 )
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import DamageTypeType, Direction, DirectionType, PrimaryStatType, TargetTag
+from scripts.engine.internal.constant import DamageTypeType, Direction, DirectionType, PrimaryStatType, TileTag
 from scripts.engine.internal.event import (
     AffectCooldownEvent,
     AffectStatEvent,
@@ -232,7 +232,7 @@ class MoveActorEffect(Effect):
             # check a tile was returned
             is_tile_blocking_movement = False
             if target_tile:
-                is_tile_blocking_movement = world.tile_has_tag(entity, target_tile, TargetTag.BLOCKED_MOVEMENT)
+                is_tile_blocking_movement = world.tile_has_tag(entity, target_tile, TileTag.BLOCKED_MOVEMENT)
 
             # check if tile is blocked
             if is_tile_blocking_movement:
