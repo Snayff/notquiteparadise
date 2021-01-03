@@ -277,7 +277,7 @@ class Lightning(Skill):
     Test the Delayed Skill functionality.
     """
 
-    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
         damage_effect = DamageEffect(
             origin=self.user,
             success_effects=[],

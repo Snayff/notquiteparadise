@@ -72,6 +72,7 @@ class Skill(Action):
     targeting_method: TargetingMethodType  # Tile, Direction, Auto
 
     # targeting details
+    cast_tags: List[TileTagType]
     target_directions: List[DirectionType]  # needed for Direction
     range: int  # needed for Tile, Auto
 
