@@ -98,6 +98,11 @@ class Camera:
         self._process_events()
 
     def _process_events(self):
+        """
+        For processing entirely local events.
+        Updates the current hovered tile based on mouse position and updates the TILE_INFO GUI element.
+        """
+
         mx, my = pygame.mouse.get_pos()
         mx /= self._desired_width / self._base_width
         my /= self._desired_height / self._base_height
@@ -121,18 +126,31 @@ class Camera:
         except IndexError:
             pass
 
+    def process_click(self):
+        """
+        Process a click. This is currently just used during targeting to trigger the cast event since the camera tracks what tiles are targetable.
+        TODO: Move targeting logic out of the camera.
+        """
 
-    def process_intent(self, intent):
-        if intent == InputIntent.LEFT_CLICKED:
-            if self.hovered_tile and self.hovered_tile.is_visible:
-                if state.get_current() == GameState.TARGETING:
-                    active_skill_name = state.get_active_skill()
-                    player = world.get_player()
-                    skill = world.get_known_skill(player, active_skill_name)
-                    if (skill.targeting_method == TargetingMethod.LINE_OF_SIGHT) and self.valid_line_of_sight:
-                        state.set_active_skill_target((self.hovered_tile.x, self.hovered_tile.y))
-                event = pygame.event.Event(EventType.INPUT, subtype=InputEvent.TILE_CLICK, tile_pos=(self.hovered_tile.x, self.hovered_tile.y))
-                pygame.event.post(event)
+        if self.hovered_tile and self.hovered_tile.is_visible:
+            if state.get_current() == GameState.TARGETING:
+                active_skill_name = state.get_active_skill()
+                player = world.get_player()
+                skill = world.get_known_skill(player, active_skill_name)
+
+                # set the skill target for the skill cast if the hovered tile is a valid target during line of sight targeting
+                if (skill.targeting_method == TargetingMethod.LINE_OF_SIGHT) and self.valid_line_of_sight:
+                    state.set_active_skill_target((self.hovered_tile.x, self.hovered_tile.y))
+
+                # cancel event triggering if the hovered target is invalid in the target mode
+                if (skill.targeting_method == TargetingMethod.TARGET):
+                    position = world.get_entitys_component(player, Position)
+                    dif = (position.x - self.hovered_tile.x, position.y - self.hovered_tile.y)
+                    if (dif not in skill.target_directions) or (not self.hovered_tile.is_visible) or (not world.tile_has_tags(player, self.hovered_tile, skill.target_tags)):
+                        return
+
+            event = pygame.event.Event(EventType.INPUT, subtype=InputEvent.TILE_CLICK, tile_pos=(self.hovered_tile.x, self.hovered_tile.y))
+            pygame.event.post(event)
 
     def _update_camera_position(self, time_delta: float):
         """
@@ -190,6 +208,7 @@ class Camera:
                 # regenerate possible targets if targeting mode was just entered
                 if self.possible_los_tiles == None:
                     self.possible_los_tiles = []
+                    state.set_active_skill_target(None)
                     for y in range(skill.range * 2 + 1):
                         for x in range(skill.range * 2 + 1):
                             test_pos = (position.x - skill.range + x, position.y - skill.range + y)
@@ -287,7 +306,7 @@ class Camera:
             # determine if the final path was valid based on skill range and previous calculations
             if (len(tile_path) - 1 <= skill.range) and valid:
                 valid_line_of_sight = True
-                
+
         return (valid_line_of_sight, tile_path)
 
     def is_in_camera_view(self, pos: Tuple[float, float]) -> bool:

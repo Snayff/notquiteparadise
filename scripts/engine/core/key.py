@@ -21,6 +21,7 @@ def convert_vector_to_intent(direction: Tuple[int, int]) -> Optional[InputIntent
         (-1, 1): InputIntent.UP_LEFT,
         (1, -1): InputIntent.DOWN_RIGHT,
         (-1, -1): InputIntent.DOWN_LEFT,
+        (0, 0): InputIntent.CENTRE,
     }
     if direction in direction_map:
         return direction_map[direction]

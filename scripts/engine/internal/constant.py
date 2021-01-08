@@ -170,6 +170,7 @@ class InputIntent(SimpleNamespace):
     UP_LEFT = InputIntentType("up_left")
     DOWN_RIGHT = InputIntentType("down_right")
     DOWN_LEFT = InputIntentType("down_left")
+    CENTRE = InputIntentType("centre")
     CONFIRM = InputIntentType("confirm")
     CANCEL = InputIntentType("cancel")
     EXIT = InputIntentType("exit")
