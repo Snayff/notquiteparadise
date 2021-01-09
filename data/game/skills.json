@@ -207,8 +207,7 @@
         "uses_projectile": false,
         "delayed_skill_data": {
             "__dataclass__": "DelayedSkillData",
-            "duration": 5,
-            "speed": "slow"
+            "duration": 3
         },
         "is_delayed": true
     }

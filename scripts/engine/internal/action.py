@@ -451,13 +451,28 @@ class DelayedSkill(Behaviour):
     def __init__(self, attached_entity: EntityID):
         super().__init__(attached_entity)
 
+        # N.B. both must be set after init
         self.data: DelayedSkillData = DelayedSkillData()
+        self.remaining_duration = 0
 
     def act(self):
-        if self.data.duration > 0:
-            self.data.duration -= 1
-            logging.debug(f"{world.get_name(self.entity)} will trigger in {self.data.duration} turns.")
-            chronicle.end_turn(self.entity, self.data.speed)
+        if self.remaining_duration == self.data.duration:
+            # get time left in round, to align first end of turn to round
+            chronicle.end_turn(self.entity, chronicle.get_time_left_in_round())
+
+            self.remaining_duration -= 1
+            logging.debug(f"{world.get_name(self.entity)} will trigger in {self.remaining_duration} rounds.")
+
+            return
+
+        elif self.remaining_duration > 0:
+            # with turn aligned to round now end turn with duration of round
+            from scripts.engine.internal import library
+            chronicle.end_turn(self.entity, library.GAME_CONFIG.default_values.time_per_round)
+
+            self.remaining_duration -= 1
+            logging.debug(f"{world.get_name(self.entity)} will trigger in {self.remaining_duration} rounds.")
+
             return
 
         # apply skill, rather than using it, as the instance already exists and we are just using the effects

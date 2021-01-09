@@ -350,9 +350,9 @@ def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], d
     behaviour = store.behaviour_registry["DelayedSkill"]
     thought = Thought(behaviour(entity))
     from scripts.engine.internal.action import DelayedSkill
-
     assert isinstance(thought.behaviour, DelayedSkill)
     thought.behaviour.data = data
+    thought.behaviour.remaining_duration = data.duration
     add_component(entity, thought)
 
     logging.debug(f"{delayed_skill_name}`s created at ({x},{y}) and will trigger in {data.duration} " f"turns.")
@@ -1303,8 +1303,12 @@ def apply_skill(skill: Skill) -> bool:
                     if not success:
                         success = result
         if success:
+            logging.debug(f"'{get_name(skill.user)}' successfully applied {skill.name} to ({skill.target_tile.x},"
+                          f"{skill.target_tile.y}).")
             return True
         else:
+            logging.debug(f"'{get_name(skill.user)}' unsuccessfully applied {skill.name} to ({skill.target_tile.x},"
+                          f"{skill.target_tile.y}).")
             return False
     else:
         logging.info(
