@@ -19,7 +19,8 @@ from scripts.engine.core.component import (
     Position,
     Reaction,
     Tracked,
-    Traits, WinCondition,
+    Traits,
+    WinCondition,
 )
 
 __all__ = [

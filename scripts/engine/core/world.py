@@ -310,6 +310,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     behaviour = store.behaviour_registry["Projectile"]
     thought = Thought(behaviour(entity))
     from scripts.engine.internal.action import Projectile
+
     assert isinstance(thought.behaviour, Projectile)
     thought.behaviour.data = data  # projectile is a  special case and requires the data set
     add_component(entity, thought)
@@ -349,6 +350,7 @@ def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], d
     behaviour = store.behaviour_registry["DelayedSkill"]
     thought = Thought(behaviour(entity))
     from scripts.engine.internal.action import DelayedSkill
+
     assert isinstance(thought.behaviour, DelayedSkill)
     thought.behaviour.data = data
     thought.behaviour.remaining_duration = data.duration
@@ -1036,7 +1038,7 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
             return False
     elif tag == TileTag.ACTOR:
         # if the tile contains an actor
-        for entity, (*_, ) in query.actors:
+        for entity, (*_,) in query.actors:
             return True
         return False
 
@@ -1273,8 +1275,9 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bo
         else:
             logging.info(f"'{name}' paid nothing as they have infinite {resource}.")
     except AttributeError:
-        logging.warning(f"pay_resource_cost: '{name}' tried to pay {cost} {resource} but Resources component not "
-                        f"found.")
+        logging.warning(
+            f"pay_resource_cost: '{name}' tried to pay {cost} {resource} but Resources component not " f"found."
+        )
 
     return False
 
@@ -1292,8 +1295,10 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
         result = skill_cast.use()
         return result
     else:
-        logging.info(f"Could not use skill, ({target_tile.x},{target_tile.y}) does not have required tags "
-                     f"({skill_cast.cast_tags}).")
+        logging.info(
+            f"Could not use skill, ({target_tile.x},{target_tile.y}) does not have required tags "
+            f"({skill_cast.cast_tags})."
+        )
 
     return False
 
@@ -1318,12 +1323,16 @@ def apply_skill(skill: Skill) -> bool:
                     if not success:
                         success = result
         if success:
-            logging.debug(f"'{get_name(skill.user)}' successfully applied {skill.name} to ({skill.target_tile.x},"
-                          f"{skill.target_tile.y}).")
+            logging.debug(
+                f"'{get_name(skill.user)}' successfully applied {skill.name} to ({skill.target_tile.x},"
+                f"{skill.target_tile.y})."
+            )
             return True
         else:
-            logging.debug(f"'{get_name(skill.user)}' unsuccessfully applied {skill.name} to ({skill.target_tile.x},"
-                          f"{skill.target_tile.y}).")
+            logging.debug(
+                f"'{get_name(skill.user)}' unsuccessfully applied {skill.name} to ({skill.target_tile.x},"
+                f"{skill.target_tile.y})."
+            )
             return False
     else:
         logging.info(
@@ -1363,7 +1372,7 @@ def apply_affliction(affliction: Affliction) -> bool:
         logging.info(
             f'Could not apply affliction "{affliction.name}", target tile does not have required '
             f"tags ({affliction.target_tags})."
-            )
+        )
 
     return False
 

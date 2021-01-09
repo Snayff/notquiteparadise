@@ -468,6 +468,7 @@ class DelayedSkill(Behaviour):
         elif self.remaining_duration > 0:
             # with turn aligned to round now end turn with duration of round
             from scripts.engine.internal import library
+
             chronicle.end_turn(self.entity, library.GAME_CONFIG.default_values.time_per_round)
 
             self.remaining_duration -= 1
