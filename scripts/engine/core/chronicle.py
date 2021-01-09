@@ -78,11 +78,12 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
     set_time_of_last_turn(get_time())
 
     # check if we need to set new round
-    if get_time_in_round() + time_progressed >= library.GAME_CONFIG.default_values.time_per_round:
+    time_per_round = library.GAME_CONFIG.default_values.time_per_round
+    if get_time_in_round() + time_progressed >= time_per_round:
         end_round()
 
         # add progressed time and minus time_in_round to keep the remaining time
-        set_time_in_round((get_time_in_round() + time_progressed) - library.GAME_CONFIG.default_values.time_per_round)
+        set_time_in_round((get_time_in_round() + time_progressed) - time_per_round)
 
     else:
         set_time_in_round(get_time_in_round() + time_progressed)
@@ -193,6 +194,13 @@ def get_time_of_last_turn() -> int:
     Get the time of the last turn
     """
     return store.time_of_last_turn
+
+
+def get_time_left_in_round() -> int:
+    """
+    Get the amount of time left in the current round
+    """
+    return library.GAME_CONFIG.default_values.time_per_round - get_time_in_round()
 
 
 def get_round() -> int:

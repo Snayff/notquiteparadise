@@ -242,14 +242,8 @@ class DelayedSkillData:
     skill_name: str = "none"
     skill_instance: Optional[Skill] = None
 
-    speed: ProjectileSpeedType = ProjectileSpeed.SLOW
-    duration: int = 0
+    duration: int = 0  # in rounds
     sprite_paths: TraitSpritePathsData = TraitSpritePathsData(idle="skills/delayed_skill.png")
-
-    def __post_init__(self):
-        # map external str to internal int
-        if isinstance(self.speed, str):
-            self.speed = getattr(ProjectileSpeed, self.speed.upper())
 
 
 @register_dataclass_with_json

@@ -291,7 +291,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
 
     projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
-    projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
+    projectile.append(Tracked(chronicle.get_time_of_last_turn()))  # allocate time to ensure they act next
     projectile.append(Position((x, y)))
     projectile.append(Resources(999, 999))  # TODO - remove need to have Resources
     projectile.append(Afflictions())  # TODO - remove need to have Afflictions
@@ -353,6 +353,7 @@ def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], d
 
     assert isinstance(thought.behaviour, DelayedSkill)
     thought.behaviour.data = data
+    thought.behaviour.remaining_duration = data.duration
     add_component(entity, thought)
 
     logging.debug(f"{delayed_skill_name}`s created at ({x},{y}) and will trigger in {data.duration} " f"turns.")
@@ -995,17 +996,22 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
         # if nothing is blocking movement
         if not tile.blocks_movement and not _tile_has_entity_blocking_movement(tile):
             return True
+        else:
+            return False
     elif tag == TileTag.BLOCKED_MOVEMENT:
         # if anything is blocking
         if tile.blocks_movement or _tile_has_entity_blocking_movement(tile):
             return True
+        else:
+            return False
     elif tag == TileTag.SELF:
         # if entity on tile is same as active entity
         if active_entity:
             assert isinstance(active_entity, EntityID)
             return _tile_has_specific_entity(tile, active_entity)
         else:
-            logging.warning("Tried to get TileTag.SELF but gave no active_entity.")
+            logging.warning("tile_has_tag: Tried to get TileTag.SELF but gave no active_entity.")
+            return False
     elif tag == TileTag.OTHER_ENTITY:
         # if entity on tile is not active entity
         if active_entity:
@@ -1013,7 +1019,8 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
             # check both possibilities. either the tile containing the active entity or not
             return _tile_has_other_entities(tile, active_entity)
         else:
-            logging.warning("Tried to get TileTag.OTHER_ENTITY but gave no active_entity.")
+            logging.warning("tile_has_tag: Tried to get TileTag.OTHER_ENTITY but gave no active_entity.")
+            return False
     elif tag == TileTag.NO_ENTITY:
         # if the tile has no entity
         return not _tile_has_any_entity(tile)
@@ -1027,8 +1034,16 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
         # if tile isnt blocking movement
         if _is_tile_in_bounds(tile, game_map):
             return not tile.blocks_movement
+        else:
+            return False
+    elif tag == TileTag.ACTOR:
+        # if the tile contains an actor
+        for entity, (*_,) in query.actors:
+            return True
+        return False
 
     # If we've hit here it must be false!
+    logging.warning(f"tile_has_tag: TileTag {tag} does not exist.")
     return False
 
 
@@ -1248,7 +1263,7 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bo
     resources = get_entitys_component(entity, Resources)
     name = get_name(entity)
 
-    if resources:
+    try:
         resource_value = getattr(resources, resource.lower())
 
         if resource_value != INFINITE:
@@ -1259,8 +1274,10 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bo
             return True
         else:
             logging.info(f"'{name}' paid nothing as they have infinite {resource}.")
-    else:
-        logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
+    except AttributeError:
+        logging.warning(
+            f"pay_resource_cost: '{name}' tried to pay {cost} {resource} but Resources component not " f"found."
+        )
 
     return False
 
@@ -1278,7 +1295,10 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
         result = skill_cast.use()
         return result
     else:
-        logging.info(f"Could not use skill, target tile does not have required tags ({skill_cast.cast_tags}).")
+        logging.info(
+            f"Could not use skill, ({target_tile.x},{target_tile.y}) does not have required tags "
+            f"({skill_cast.cast_tags})."
+        )
 
     return False
 
@@ -1303,8 +1323,16 @@ def apply_skill(skill: Skill) -> bool:
                     if not success:
                         success = result
         if success:
+            logging.debug(
+                f"'{get_name(skill.user)}' successfully applied {skill.name} to ({skill.target_tile.x},"
+                f"{skill.target_tile.y})."
+            )
             return True
         else:
+            logging.debug(
+                f"'{get_name(skill.user)}' unsuccessfully applied {skill.name} to ({skill.target_tile.x},"
+                f"{skill.target_tile.y})."
+            )
             return False
     else:
         logging.info(
@@ -1330,22 +1358,21 @@ def apply_affliction(affliction: Affliction) -> bool:
     """
     target = affliction.affected_entity
     position = get_entitys_component(target, Position)
-    if position:
-        target_tile = get_tile((position.x, position.y))
+    target_tile = get_tile((position.x, position.y))
 
-        # ensure they are the right target type
-        if tile_has_tags(affliction.origin, target_tile, affliction.target_tags):
-            for entity, effects in affliction.apply():
-                effect_queue = list(effects)
-                while effect_queue:
-                    effect = effect_queue.pop()
-                    effect_queue.extend(effect.evaluate()[1])
-            return True
-        else:
-            logging.info(
-                f'Could not apply affliction "{affliction.name}", target tile does not have required '
-                f"tags ({affliction.target_tags})."
-            )
+    # ensure they are the right target type
+    if tile_has_tags(affliction.origin, target_tile, affliction.target_tags):
+        for entity, effects in affliction.apply():
+            effect_queue = list(effects)
+            while effect_queue:
+                effect = effect_queue.pop()
+                effect_queue.extend(effect.evaluate()[1])
+        return True
+    else:
+        logging.info(
+            f'Could not apply affliction "{affliction.name}", target tile does not have required '
+            f"tags ({affliction.target_tags})."
+        )
 
     return False
 
@@ -1366,11 +1393,12 @@ def take_turn(entity: EntityID) -> bool:
     Process the entity's Thought component. If no component found then EndTurn event is fired.
     """
     logging.debug(f"'{get_name(entity)}' is beginning their turn.")
-    behaviour = get_entitys_component(entity, Thought)
-    if behaviour:
+
+    try:
+        behaviour = get_entitys_component(entity, Thought)
         behaviour.behaviour.act()
         return True
-    else:
+    except AttributeError:
         logging.critical(f"'{get_name(entity)}' has no behaviour to use.")
 
     return False
@@ -1384,13 +1412,13 @@ def apply_damage(entity: EntityID, damage: int) -> bool:
         logging.info(f"Damage was {damage} and therefore nothing was done.")
         return False
 
-    resource = get_entitys_component(entity, Resources)
-    if resource:
+    try:
+        resource = get_entitys_component(entity, Resources)
         resource.health -= damage
         logging.info(f"'{get_name(entity)}' takes {damage} and has {resource.health} health remaining.")
         return True
-    else:
-        logging.warning(f"'{get_name(entity)}' has no resource so couldnt apply damage.")
+    except AttributeError:
+        logging.warning(f"apply_damage: '{get_name(entity)}' has no resource so couldn`t apply damage.")
 
     return False
 
@@ -1399,12 +1427,13 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
     """
     Add time_spent to the entity's total time spent.
     """
-    tracked = get_entitys_component(entity, Tracked)
-    if tracked:
+
+    try:
+        tracked = get_entitys_component(entity, Tracked)
         tracked.time_spent += time_spent
         return True
-    else:
-        logging.warning(f"'{get_name(entity)}' has no tracked to spend time.")
+    except AttributeError:
+        logging.warning(f"spend_time: '{get_name(entity)}' has no tracked to spend time.")
 
     return False
 
