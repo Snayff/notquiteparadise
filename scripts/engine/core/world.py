@@ -291,7 +291,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
 
     projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
-    projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
+    projectile.append(Tracked(chronicle.get_time_of_last_turn()))  # allocate time to ensure they act next
     projectile.append(Position((x, y)))
     projectile.append(Resources(999, 999))  # TODO - remove need to have Resources
     projectile.append(Afflictions())  # TODO - remove need to have Afflictions
@@ -310,7 +310,6 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     behaviour = store.behaviour_registry["Projectile"]
     thought = Thought(behaviour(entity))
     from scripts.engine.internal.action import Projectile
-
     assert isinstance(thought.behaviour, Projectile)
     thought.behaviour.data = data  # projectile is a  special case and requires the data set
     add_component(entity, thought)
