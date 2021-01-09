@@ -1248,7 +1248,7 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bo
     resources = get_entitys_component(entity, Resources)
     name = get_name(entity)
 
-    if resources:
+    try:
         resource_value = getattr(resources, resource.lower())
 
         if resource_value != INFINITE:
@@ -1259,8 +1259,9 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bo
             return True
         else:
             logging.info(f"'{name}' paid nothing as they have infinite {resource}.")
-    else:
-        logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
+    except AttributeError:
+        logging.warning(f"pay_resource_cost: '{name}' tried to pay {cost} {resource} but Resources component not "
+                        f"found.")
 
     return False
 
@@ -1334,21 +1335,20 @@ def apply_affliction(affliction: Affliction) -> bool:
     """
     target = affliction.affected_entity
     position = get_entitys_component(target, Position)
-    if position:
-        target_tile = get_tile((position.x, position.y))
+    target_tile = get_tile((position.x, position.y))
 
-        # ensure they are the right target type
-        if tile_has_tags(affliction.origin, target_tile, affliction.target_tags):
-            for entity, effects in affliction.apply():
-                effect_queue = list(effects)
-                while effect_queue:
-                    effect = effect_queue.pop()
-                    effect_queue.extend(effect.evaluate()[1])
-            return True
-        else:
-            logging.info(
-                f'Could not apply affliction "{affliction.name}", target tile does not have required '
-                f"tags ({affliction.target_tags})."
+    # ensure they are the right target type
+    if tile_has_tags(affliction.origin, target_tile, affliction.target_tags):
+        for entity, effects in affliction.apply():
+            effect_queue = list(effects)
+            while effect_queue:
+                effect = effect_queue.pop()
+                effect_queue.extend(effect.evaluate()[1])
+        return True
+    else:
+        logging.info(
+            f'Could not apply affliction "{affliction.name}", target tile does not have required '
+            f"tags ({affliction.target_tags})."
             )
 
     return False
@@ -1370,11 +1370,12 @@ def take_turn(entity: EntityID) -> bool:
     Process the entity's Thought component. If no component found then EndTurn event is fired.
     """
     logging.debug(f"'{get_name(entity)}' is beginning their turn.")
-    behaviour = get_entitys_component(entity, Thought)
-    if behaviour:
+
+    try:
+        behaviour = get_entitys_component(entity, Thought)
         behaviour.behaviour.act()
         return True
-    else:
+    except AttributeError:
         logging.critical(f"'{get_name(entity)}' has no behaviour to use.")
 
     return False
@@ -1388,13 +1389,13 @@ def apply_damage(entity: EntityID, damage: int) -> bool:
         logging.info(f"Damage was {damage} and therefore nothing was done.")
         return False
 
-    resource = get_entitys_component(entity, Resources)
-    if resource:
+    try:
+        resource = get_entitys_component(entity, Resources)
         resource.health -= damage
         logging.info(f"'{get_name(entity)}' takes {damage} and has {resource.health} health remaining.")
         return True
-    else:
-        logging.warning(f"'{get_name(entity)}' has no resource so couldnt apply damage.")
+    except AttributeError:
+        logging.warning(f"apply_damage: '{get_name(entity)}' has no resource so couldn`t apply damage.")
 
     return False
 
@@ -1403,12 +1404,13 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
     """
     Add time_spent to the entity's total time spent.
     """
-    tracked = get_entitys_component(entity, Tracked)
-    if tracked:
+
+    try:
+        tracked = get_entitys_component(entity, Tracked)
         tracked.time_spent += time_spent
         return True
-    else:
-        logging.warning(f"'{get_name(entity)}' has no tracked to spend time.")
+    except AttributeError:
+        logging.warning(f"spend_time: '{get_name(entity)}' has no tracked to spend time.")
 
     return False
 
