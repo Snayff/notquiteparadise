@@ -994,17 +994,22 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
         # if nothing is blocking movement
         if not tile.blocks_movement and not _tile_has_entity_blocking_movement(tile):
             return True
+        else:
+            return False
     elif tag == TileTag.BLOCKED_MOVEMENT:
         # if anything is blocking
         if tile.blocks_movement or _tile_has_entity_blocking_movement(tile):
             return True
+        else:
+            return False
     elif tag == TileTag.SELF:
         # if entity on tile is same as active entity
         if active_entity:
             assert isinstance(active_entity, EntityID)
             return _tile_has_specific_entity(tile, active_entity)
         else:
-            logging.warning("Tried to get TileTag.SELF but gave no active_entity.")
+            logging.warning("tile_has_tag: Tried to get TileTag.SELF but gave no active_entity.")
+            return False
     elif tag == TileTag.OTHER_ENTITY:
         # if entity on tile is not active entity
         if active_entity:
@@ -1012,7 +1017,8 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
             # check both possibilities. either the tile containing the active entity or not
             return _tile_has_other_entities(tile, active_entity)
         else:
-            logging.warning("Tried to get TileTag.OTHER_ENTITY but gave no active_entity.")
+            logging.warning("tile_has_tag: Tried to get TileTag.OTHER_ENTITY but gave no active_entity.")
+            return False
     elif tag == TileTag.NO_ENTITY:
         # if the tile has no entity
         return not _tile_has_any_entity(tile)
@@ -1026,8 +1032,16 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
         # if tile isnt blocking movement
         if _is_tile_in_bounds(tile, game_map):
             return not tile.blocks_movement
+        else:
+            return False
+    elif tag == TileTag.ACTOR:
+        # if the tile contains an actor
+        for entity, (*_, ) in query.actors:
+            return True
+        return False
 
     # If we've hit here it must be false!
+    logging.warning(f"tile_has_tag: TileTag {tag} does not exist.")
     return False
 
 
@@ -1278,7 +1292,8 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
         result = skill_cast.use()
         return result
     else:
-        logging.info(f"Could not use skill, target tile does not have required tags ({skill_cast.cast_tags}).")
+        logging.info(f"Could not use skill, ({target_tile.x},{target_tile.y}) does not have required tags "
+                     f"({skill_cast.cast_tags}).")
 
     return False
 

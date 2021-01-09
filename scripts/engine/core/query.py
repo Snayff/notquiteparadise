@@ -19,7 +19,7 @@ from scripts.engine.core.component import (
     Position,
     Reaction,
     Tracked,
-    WinCondition,
+    Traits, WinCondition,
 )
 
 __all__ = [
@@ -72,8 +72,8 @@ reaction = get_components([Reaction]).compile()
 
 immunities = get_components([Immunities]).compile()
 
-################## MULTI QUERIES ##########################
 
+################## MULTI QUERIES ##########################
 
 position_and_light_source = get_components([Position, LightSource]).compile()
 
@@ -100,6 +100,13 @@ active_and_position_and_physicality = get_components([IsActive, Position, Physic
 active_and_position_and_fov_and_combat_stats_and_physicality = get_components(
     [IsActive, Position, FOV, HasCombatStats, Physicality]
 ).compile()
+
+
+################## TYPE OF ENTITY QUERIES ##########################
+# N.B. these are based on what components are used during the creation methods
+
+actors = get_components([Position, Physicality, Identity, HasCombatStats, Traits, FOV, Tracked, Immunities])
+
 
 ##################### FILTERS ###############################
 # .filter((DOT & StatusEffect) | (~DOT & Poison & ~Antidote))
