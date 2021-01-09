@@ -497,14 +497,8 @@
     <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
     <span class="n">skill_instance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Skill</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">speed</span><span class="p">:</span> <span class="n">ProjectileSpeedType</span> <span class="o">=</span> <span class="n">ProjectileSpeed</span><span class="o">.</span><span class="n">SLOW</span>
-    <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">TraitSpritePathsData</span> <span class="o">=</span> <span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="n">idle</span><span class="o">=</span><span class="s2">"skills/delayed_skill.png"</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># map external str to internal int</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ProjectileSpeed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># in rounds</span>
+    <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">TraitSpritePathsData</span> <span class="o">=</span> <span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="n">idle</span><span class="o">=</span><span class="s2">"skills/delayed_skill.png"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TerrainData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.TerrainData">[docs]</a><span class="nd">@register_dataclass_with_json</span>

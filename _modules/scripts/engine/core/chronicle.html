@@ -333,11 +333,12 @@
     <span class="n">set_time_of_last_turn</span><span class="p">(</span><span class="n">get_time</span><span class="p">())</span>
 
     <span class="c1"># check if we need to set new round</span>
-    <span class="k">if</span> <span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span> <span class="o">&gt;=</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span><span class="p">:</span>
+    <span class="n">time_per_round</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span>
+    <span class="k">if</span> <span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span> <span class="o">&gt;=</span> <span class="n">time_per_round</span><span class="p">:</span>
         <span class="n">end_round</span><span class="p">()</span>
 
         <span class="c1"># add progressed time and minus time_in_round to keep the remaining time</span>
-        <span class="n">set_time_in_round</span><span class="p">((</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span> <span class="o">-</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span><span class="p">)</span>
+        <span class="n">set_time_in_round</span><span class="p">((</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span> <span class="o">-</span> <span class="n">time_per_round</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">set_time_in_round</span><span class="p">(</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span>
@@ -448,6 +449,13 @@
 <span class="sd">    Get the time of the last turn</span>
 <span class="sd">    """</span>
     <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">time_of_last_turn</span></div>
+
+
+<div class="viewcode-block" id="get_time_left_in_round"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.get_time_left_in_round">[docs]</a><span class="k">def</span> <span class="nf">get_time_left_in_round</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Get the amount of time left in the current round</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span> <span class="o">-</span> <span class="n">get_time_in_round</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="get_round"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.chronicle.get_round">[docs]</a><span class="k">def</span> <span class="nf">get_round</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
