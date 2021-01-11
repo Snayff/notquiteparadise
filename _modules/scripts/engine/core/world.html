@@ -1293,8 +1293,14 @@
             <span class="k">return</span> <span class="kc">False</span>
     <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">:</span>
         <span class="c1"># if the tile contains an actor</span>
-        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="o">*</span><span class="n">_</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">actors</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">query_result</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">actors</span><span class="p">:</span>
+            <span class="c1"># this is a very dirty way to access the position of a query result</span>
+            <span class="c1"># I don't want to scan for the position component since it would severely bog down performance if many entities exist and this function is used frequently</span>
+            <span class="c1"># structuring the results as a dict may be beneficial</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">query_result</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="c1"># If we've hit here it must be false!</span>
