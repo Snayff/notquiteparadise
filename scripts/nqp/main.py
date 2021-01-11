@@ -6,19 +6,19 @@ import traceback
 
 import pygame
 import snecs
-from pygame.constants import USEREVENT
 from snecs.world import default_world
 
 import scripts.nqp.processors.input
-from scripts.engine.core import chronicle, state, system, world
+from scripts.engine.core import chronicle, state, world
+from scripts.engine.core.component import NQPComponent
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug
-from scripts.engine.internal.component import NQPComponent
-from scripts.engine.internal.constant import EventType, GameEvent, GameState, InputEvent, InteractionEvent
+from scripts.engine.internal.constant import GameState
 from scripts.engine.internal.debug import enable_profiling, initialise_logging, kill_logging
+from scripts.engine.internal.event import event_hub
 from scripts.nqp import processors
 from scripts.nqp.command import initialise_game
-from scripts.nqp.processors import display, game
+from scripts.nqp.processors import display
 from scripts.nqp.ui_elements.camera import camera
 
 
@@ -26,6 +26,9 @@ def main():
     """
     The entry for the game initialisation and game loop
     """
+    # init engine resources
+    state.initialise_engine()
+
     # initialise logging
     if debug.is_logging():
         initialise_logging()
@@ -79,8 +82,6 @@ def game_loop():
         # get info to support UI updates and handling events
         current_state = state.get_current()
         turn_holder = chronicle.get_turn_holder()
-        if current_state == GameState.GAME_MAP:
-            player = world.get_player()
 
         # process any deletions from last frame
         # this copies snecs.process_pending_deletions() but adds extra steps.
@@ -92,27 +93,21 @@ def game_loop():
             snecs.delete_entity_immediately(entity, default_world)
 
         # have enemy take turn
-        if current_state == GameState.GAME_MAP and turn_holder != player:
-            # just in case the turn holder has died but not been replaced as expected
-            try:
-                world.take_turn(turn_holder)
-            except KeyError:
-                chronicle.rebuild_turn_queue()
+        if current_state == GameState.GAME_MAP:
+            if turn_holder != world.get_player():
+                # just in case the turn holder has died but not been replaced as expected
+                try:
+                    world.take_turn(turn_holder)
+                except KeyError:
+                    chronicle.rebuild_turn_queue()
 
-        # update based on input events
+        # process pygame events
         for event in pygame.event.get():
-            # InputEvent doesnt cover key presses so filter out what we dont want instead
-            if event.type in (EventType.INPUT, pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
-                processors.input.process_input_event(event, current_state)
+            processors.input.process_input_event(event, current_state)
+            ui.process_ui_events(event)
 
-            if event.type == EventType.GAME:
-                processors.game.process_game_event(event, current_state)
-
-            if event.type == EventType.INTERACTION:
-                system.process_interaction_event(event)  # only happens in gamemap so doesnt need state
-
-            if event.type not in (EventType.INTERACTION, EventType.GAME):
-                ui.process_ui_events(event)
+        # process NQP events
+        event_hub.update()
 
         # allow everything to update in response to new state
         display.process_updates(time_delta, current_state)
@@ -120,13 +115,13 @@ def game_loop():
         ui.update(time_delta)
 
         try:
-            world.get_game_map()
             if current_state in [GameState.GAME_MAP, GameState.MENU, GameState.TARGETING]:
                 # show the new state
                 camera.update(time_delta)
                 camera.render(ui._window)
         except AttributeError:
             pass
+
         ui.draw()
 
 

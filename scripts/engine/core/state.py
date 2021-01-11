@@ -11,7 +11,20 @@ from scripts.engine.internal import library
 from scripts.engine.internal.constant import GameState, MAX_SAVES, SAVE_PATH, VERSION
 from scripts.engine.internal.data import store
 
-_SAVE = {}
+__all__ = [
+    "get_previous",
+    "get_internal_clock",
+    "get_active_skill",
+    "get_current",
+    "set_active_skill",
+    "update_clock",
+    "set_new",
+    "save_game",
+    "dump_save_game",
+    "load_game",
+]
+
+_save = {}
 
 ################### GET ##############################
 
@@ -50,24 +63,27 @@ def get_current() -> GameState:
     return store.current_game_state
 
 
-################### SET ##############################
-
-
-def set_active_skill(skill_name: str):
-    """
-    Set the active skill. Used for targeting mode.
-    """
-    store.active_skill = skill_name
-
-
-def set_active_skill_target(skill_target: Tuple[int, int]):
-    """
-    Set the active skill target. Used for targeting mode.
-    """
-    store.active_skill_target = skill_target
-
-
 ################### MANAGING STATE ###################
+
+
+def initialise_engine():
+    """
+    Initialise engine resources.
+
+    N.B. Must be called before using the rest of the engine.
+    """
+    # load modules that have module level instances the engine needs
+    import scripts.engine.core.system
+    import scripts.engine.core.ui
+    import scripts.engine.internal.data
+    import scripts.engine.internal.debug
+    import scripts.engine.internal.library
+
+    # register any Actions that exist within the engine
+    from scripts.engine.internal.action import DelayedSkill, Projectile, register_action
+
+    register_action(Projectile)
+    register_action(DelayedSkill)
 
 
 def update_clock() -> float:
@@ -91,14 +107,30 @@ def set_new(new_game_state: GameState):
     logging.info(log_string)
 
 
+def set_active_skill(skill_name: str):
+    """
+    Set the active skill. Used for targeting mode.
+    """
+    store.active_skill = skill_name
+
+def set_active_skill_target(skill_target: Tuple[int, int]):
+    """
+    Set the active skill target. Used for targeting mode.
+    """
+    store.active_skill_target = skill_target
+
+
+##################### SAVE AND LOAD #######################
+
+
 def save_game():
     """
     Serialise the game data to an internal container
     """
-    global _SAVE
+    global _save
 
     # clear existing save data
-    _SAVE = {}
+    _save = {}
 
     # get the info needed
     full_save_path = SAVE_PATH
@@ -133,16 +165,16 @@ def save_game():
         os.remove(str(full_save_path / save_name))
 
     # update save data
-    _SAVE[new_save_name] = save
+    _save[new_save_name] = save
 
 
 def dump_save_game():
     """
     Export the save game data, if it exists, to an external json file
     """
-    global _SAVE
+    global _save
 
-    for save_name, save_values in _SAVE.items():
+    for save_name, save_values in _save.items():
 
         # write to json
         str_path = str(SAVE_PATH / save_name) + ".json"
@@ -165,8 +197,8 @@ def load_game(filename: str):
         logging.warning(f"Loading data from a previous version, {save['version']}.")
 
     # deserialise data
-    new_world = world.deserialise(save["world"])
     store.deserialise(save["store"])
+    new_world = world.deserialise(save["world"])
 
     # set the data as the default world
     world.move_world(new_world)

@@ -2,13 +2,14 @@ from __future__ import annotations
 
 from snecs import Query
 
-from scripts.engine.internal.component import (
+from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
     Exists,
     FOV,
     HasCombatStats,
     Identity,
+    Immunities,
     IsActive,
     Knowledge,
     Lifespan,
@@ -18,6 +19,7 @@ from scripts.engine.internal.component import (
     Position,
     Reaction,
     Tracked,
+    Traits,
     WinCondition,
 )
 
@@ -31,6 +33,7 @@ __all__ = [
     "lifespan",
     "opinion",
     "reaction",
+    "immunities",
     "position_and_light_source",
     "position_and_reaction",
     "not_position",
@@ -68,6 +71,8 @@ opinion = get_components([Opinion]).compile()
 
 reaction = get_components([Reaction]).compile()
 
+immunities = get_components([Immunities]).compile()
+
 
 ################## MULTI QUERIES ##########################
 
@@ -96,6 +101,13 @@ active_and_position_and_physicality = get_components([IsActive, Position, Physic
 active_and_position_and_fov_and_combat_stats_and_physicality = get_components(
     [IsActive, Position, FOV, HasCombatStats, Physicality]
 ).compile()
+
+
+################## TYPE OF ENTITY QUERIES ##########################
+# N.B. these are based on what components are used during the creation methods
+
+actors = get_components([Position, Physicality, Identity, HasCombatStats, Traits, FOV, Tracked, Immunities])
+
 
 ##################### FILTERS ###############################
 # .filter((DOT & StatusEffect) | (~DOT & Poison & ~Antidote))

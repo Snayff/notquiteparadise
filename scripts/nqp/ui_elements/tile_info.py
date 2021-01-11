@@ -6,10 +6,10 @@ from typing import List, Tuple
 import pygame
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement
-from pygame_gui.elements import UIImage, UIPanel, UITextBox
+from pygame_gui.elements import UIImage, UITextBox
 
 from scripts.engine.core import query, world
-from scripts.engine.internal.component import Resources, Traits
+from scripts.engine.core.component import Resources, Traits
 from scripts.engine.internal.constant import GAP_SIZE, ICON_IN_TEXT_SIZE, RenderLayer
 from scripts.engine.widgets.panel import Panel
 

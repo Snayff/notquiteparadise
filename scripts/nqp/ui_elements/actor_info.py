@@ -9,12 +9,10 @@ from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import utility, world
+from scripts.engine.core.component import Aesthetic, Afflictions, Identity, Resources, Traits
 from scripts.engine.core.utility import get_class_members
-from scripts.engine.internal.component import Aesthetic, Afflictions, Identity, Resources, Traits
 from scripts.engine.internal.constant import (
     ASSET_PATH,
-    EventType,
-    GameEvent,
     GAP_SIZE,
     ICON_SIZE,
     INFINITE,
@@ -22,6 +20,7 @@ from scripts.engine.internal.constant import (
     SecondaryStat,
     UIElement,
 )
+from scripts.engine.internal.event import event_hub, ExitMenuEvent
 from scripts.engine.widgets.window import Window
 
 if TYPE_CHECKING:
@@ -84,8 +83,15 @@ class ActorInfo(Window):
         super().update(time_delta)
         new_y_portion = self.scrollbar.scroll_position / self.scrollbar.bottom_limit / (1 - self.scrollbar_size)
         if self.sections != []:
-            if self.section_base_positions[-1] + self.sections[-1].relative_rect.height > self.rect.height - self.section_base_positions[0]:
-                new_y = new_y_portion * (self.section_base_positions[-1] + self.sections[-1].relative_rect.height - (self.rect.height - self.section_base_positions[0]))
+            if (
+                self.section_base_positions[-1] + self.sections[-1].relative_rect.height
+                > self.rect.height - self.section_base_positions[0]
+            ):
+                new_y = new_y_portion * (
+                    self.section_base_positions[-1]
+                    + self.sections[-1].relative_rect.height
+                    - (self.rect.height - self.section_base_positions[0])
+                )
                 self._shift_children(new_y)
 
     def show(self):
@@ -199,8 +205,9 @@ class ActorInfo(Window):
         self.sections = []
 
     def process_close_button(self):
-        event = pygame.event.Event(EventType.GAME, subtype=GameEvent.EXIT_MENU, menu=UIElement.ACTOR_INFO)
-        pygame.event.post(event)
+
+        # post game event
+        event_hub.post(ExitMenuEvent(UIElement.ACTOR_INFO))
 
     ############## CREATE ########################
 

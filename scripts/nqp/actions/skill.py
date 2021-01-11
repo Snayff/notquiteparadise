@@ -6,17 +6,17 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import world
-from scripts.engine.internal import library
-from scripts.engine.internal.action import Skill
-from scripts.engine.internal.component import Aesthetic, Position
-from scripts.engine.internal.constant import DamageType, DirectionType, PrimaryStat, Shape
-from scripts.engine.internal.effect import (
+from scripts.engine.core.component import Aesthetic, Position
+from scripts.engine.core.effect import (
     AffectCooldownEffect,
     ApplyAfflictionEffect,
     DamageEffect,
     Effect,
     MoveActorEffect,
 )
+from scripts.engine.internal import library
+from scripts.engine.internal.action import Skill
+from scripts.engine.internal.constant import DamageType, DirectionType, PrimaryStat, Shape
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -39,7 +39,7 @@ class Move(Skill):
 
         super().__init__(user, tile, direction)
 
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[MoveActorEffect]:  # type:ignore
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[MoveActorEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -64,7 +64,7 @@ class BasicAttack(Skill):
     Basic attack for an entity
     """
 
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -104,7 +104,7 @@ class Lunge(Skill):
         super().__init__(user, _tile, direction)
         self.move_amount = 2
 
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the skill effects
         """
@@ -190,7 +190,7 @@ class TarAndFeather(Skill):
         self.reduced_modifier = 0.5
         self.cone_size = 1
 
-    def build_effects(self, hit_entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _build_effects(self, hit_entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the skill effects
         """
@@ -252,7 +252,7 @@ class Splash(Skill):
     Simple projectile attack
     """
 
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -269,4 +269,25 @@ class Splash(Skill):
             mod_amount=0.1,
         )
 
+        return [damage_effect]
+
+
+class Lightning(Skill):
+    """
+    Test the Delayed Skill functionality.
+    """
+
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
+        damage_effect = DamageEffect(
+            origin=self.user,
+            success_effects=[],
+            failure_effects=[],
+            target=entity,
+            stat_to_target=PrimaryStat.VIGOUR,
+            accuracy=library.GAME_CONFIG.base_values.accuracy + 20,
+            damage=int(library.GAME_CONFIG.base_values.damage * potency),
+            damage_type=DamageType.MUNDANE,
+            mod_stat=PrimaryStat.CLOUT,
+            mod_amount=0.1,
+        )
         return [damage_effect]

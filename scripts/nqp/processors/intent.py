@@ -6,10 +6,10 @@ from typing import Optional, Type
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, state, utility, world
+from scripts.engine.core.component import Knowledge, Position
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug, library
 from scripts.engine.internal.action import Skill
-from scripts.engine.internal.component import Knowledge, Position
 from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
@@ -21,19 +21,21 @@ from scripts.engine.internal.constant import (
 )
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import command
+from scripts.nqp.ui_elements.camera import camera
+from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
 
 __all__ = ["process_intent"]
 
-from scripts.nqp.ui_elements.actor_info import ActorInfo
-from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
-from scripts.nqp.ui_elements.camera import camera
 
-
-def process_intent(intent: InputIntentType, game_state: GameState):
+def process_intent(intent: InputIntentType, game_state: GameState = None):
     """
-    Process the intent in the context of the game state. Intents are game state sensitive.
+    Process the intent in the context of the game state. Intents are game state sensitive. If no game state  is
+    passed the current one will be obtained.
     """
     _process_stateless_intents(intent)
+
+    if not game_state:
+        game_state = state.get_current()
 
     if game_state == GameState.GAME_MAP:
         _process_game_map_intents(intent)
@@ -149,7 +151,7 @@ def _process_game_map_intents(intent: InputIntentType):
                     if skill.targeting_method == TargetingMethod.AUTO:
                         # pass centre as it doesnt matter, the skill will pick the right direction
                         _process_skill_use(player, skill, current_tile, Direction.CENTRE)
-                    elif skill.targeting_method in [TargetingMethod.TARGET, TargetingMethod.LINE_OF_SIGHT]:
+                    elif skill.targeting_method in [TargetingMethod.TILE, TargetingMethod.LINE_OF_SIGHT]:
                         # trigger targeting overlay
                         state.set_new(GameState.TARGETING)
                         state.set_active_skill(skill_name)
@@ -158,7 +160,6 @@ def _process_game_map_intents(intent: InputIntentType):
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:
         # show
         state.set_new(GameState.MENU)
-        actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
         ui.set_element_visibility(UIElement.ACTOR_INFO, True)
 
     elif intent == InputIntent.EXIT:
@@ -223,7 +224,7 @@ def _process_targeting_mode_intents(intent):
 
                 # resume previous state
                 state.set_new(state.get_previous())
-                #ui.update_targeting_overlay(False)
+                # ui.update_targeting_overlay(False)
 
 
 def _process_menu_intents(intent):
@@ -254,7 +255,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
         # update camera if position changes
         try:
             if (pos.x, pos.y) != start_pos:
-                #ui.get_element(UIElement.CAMERA).set_target((pos.x, pos.y))
+                # ui.get_element(UIElement.CAMERA).set_target((pos.x, pos.y))
                 camera.set_target((pos.x, pos.y))
         except KeyError:
             logging.warning("Process skill use: tried to call camera but not init`d.")

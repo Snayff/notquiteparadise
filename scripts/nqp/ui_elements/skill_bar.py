@@ -12,7 +12,7 @@ from pygame_gui.elements import UIButton
 from scripts.engine.internal.constant import (
     EventType,
     GAP_SIZE,
-    InputEvent,
+    InputEventType,
     InputIntent,
     RenderLayer,
     SKILL_BUTTON_SIZE,
@@ -33,22 +33,22 @@ class SkillBar(Panel):
     def __init__(self, rect: Rect, manager: UIManager):
         self.button_events = {
             "skill_0": pygame.event.Event(
-                EventType.INPUT, subtype=InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL0
+                EventType.INPUT, subtype=InputEventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL0
             ),
             "skill_1": pygame.event.Event(
-                EventType.INPUT, subtype=InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL1
+                EventType.INPUT, subtype=InputEventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL1
             ),
             "skill_2": pygame.event.Event(
-                EventType.INPUT, subtype=InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL2
+                EventType.INPUT, subtype=InputEventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL2
             ),
             "skill_3": pygame.event.Event(
-                EventType.INPUT, subtype=InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL3
+                EventType.INPUT, subtype=InputEventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL3
             ),
             "skill_4": pygame.event.Event(
-                EventType.INPUT, subtype=InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL4
+                EventType.INPUT, subtype=InputEventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL4
             ),
             "skill_5": pygame.event.Event(
-                EventType.INPUT, subtype=InputEvent.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL5
+                EventType.INPUT, subtype=InputEventType.SKILL_BAR_CLICK, skill_intent=InputIntent.SKILL5
             ),
         }
 

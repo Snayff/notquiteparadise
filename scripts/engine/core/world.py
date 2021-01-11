@@ -11,15 +11,14 @@ from snecs import Component, new_entity, Query
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, utility
-from scripts.engine.core.utility import build_sprites_from_paths
-from scripts.engine.internal import library
-from scripts.engine.internal.component import (
+from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
     Exists,
     FOV,
     HasCombatStats,
     Identity,
+    Immunities,
     IsActive,
     IsPlayer,
     Knowledge,
@@ -34,6 +33,17 @@ from scripts.engine.internal.component import (
     Tracked,
     Traits,
 )
+from scripts.engine.core.effect import (
+    AffectCooldownEffect,
+    AffectStatEffect,
+    AlterTerrainEffect,
+    ApplyAfflictionEffect,
+    DamageEffect,
+    Effect,
+    MoveActorEffect,
+)
+from scripts.engine.core.utility import build_sprites_from_paths
+from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
     Direction,
     DirectionType,
@@ -48,9 +58,9 @@ from scripts.engine.internal.constant import (
     ResourceType,
     SecondaryStatType,
     ShapeType,
-    TargetTag,
-    TargetTagType,
     TILE_SIZE,
+    TileTag,
+    TileTagType,
     TraitGroup,
     TravelMethod,
     TravelMethodType,
@@ -63,21 +73,14 @@ from scripts.engine.internal.definition import (
     AlterTerrainEffectData,
     ApplyAfflictionEffectData,
     DamageEffectData,
+    DelayedSkillData,
     EffectData,
     GodData,
     MoveActorEffectData,
     ProjectileData,
     TerrainData,
 )
-from scripts.engine.internal.effect import (
-    AffectCooldownEffect,
-    AffectStatEffect,
-    AlterTerrainEffect,
-    ApplyAfflictionEffect,
-    DamageEffect,
-    Effect,
-    MoveActorEffect,
-)
+from scripts.engine.internal.event import event_hub, MessageEvent
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
@@ -133,7 +136,7 @@ def create_god(god_data: GodData) -> EntityID:
     god.append((Resources(INFINITE, INFINITE)))
     entity = create_entity(god)
 
-    logging.debug(f"God, '{god_data.name}', created.")
+    logging.debug(f"God Entity, '{god_data.name}', created.")
 
     return entity
 
@@ -163,6 +166,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(Traits(actor_data.trait_names))
     components.append(FOV())
     components.append(Tracked(chronicle.get_time()))
+    components.append(Immunities())
 
     # set up light
     radius = 2  # TODO - pull radius and colour from external data
@@ -227,7 +231,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     stats = create_combat_stats(entity)
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
-    logging.debug(f"Entity, '{name}', created.")
+    logging.debug(f"Actor Entity, '{name}', created.")
 
     return entity
 
@@ -266,6 +270,8 @@ def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int], lifesp
     # create the entity
     entity = create_entity(components)
 
+    logging.debug(f"Terrain Entity, '{terrain_data.name}', created.")
+
     return entity
 
 
@@ -278,18 +284,17 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     x, y = tile_pos
 
     name = get_name(creating_entity)
-    projectile_name = f"{name}s {skill_name}`s projectile"
+    projectile_name = f"{name}`s {skill_name}`s projectile"
     desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
     sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
 
-    # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
-    projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
-    projectile.append(Position((x, y)))  # TODO - check position not blocked before spawning
-    projectile.append(Resources(999, 999))
-    projectile.append(Afflictions())
+    projectile.append(Tracked(chronicle.get_time_of_last_turn()))  # allocate time to ensure they act next
+    projectile.append(Position((x, y)))
+    projectile.append(Resources(999, 999))  # TODO - remove need to have Resources
+    projectile.append(Afflictions())  # TODO - remove need to have Afflictions
     projectile.append(IsActive())
 
     # set up light
@@ -301,14 +306,57 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     entity = create_entity(projectile)
 
+    # add post-creation components
     behaviour = store.behaviour_registry["Projectile"]
-    add_component(entity, Thought(behaviour(entity, data)))  # type: ignore  # this works for projectile special case
+    thought = Thought(behaviour(entity))
+    from scripts.engine.internal.action import Projectile
+
+    assert isinstance(thought.behaviour, Projectile)
+    thought.behaviour.data = data  # projectile is a  special case and requires the data set
+    add_component(entity, thought)
 
     move = store.skill_registry["Move"]
     known_skills = [move]
     add_component(entity, Knowledge(known_skills))
 
-    logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
+    logging.debug(f"{projectile_name}`s created at ({x},{y}) heading {data.direction}.")
+
+    return entity
+
+
+def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], data: DelayedSkillData) -> EntityID:
+    """
+    Create an entity with all of the components to be a delayed skill. Returns Entity ID.
+    """
+    skill_name = data.skill_name
+    delayed_skill: List[Component] = []
+    x, y = tile_pos
+
+    name = get_name(creating_entity)
+    delayed_skill_name = f"{name}`s {skill_name}`s delayed skill"
+    desc = f"{skill_name} incoming."
+    delayed_skill.append(Identity(delayed_skill_name, desc))
+
+    sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
+
+    delayed_skill.append(Aesthetic(sprites.idle, sprites, [data.sprite_paths], RenderLayer.TERRAIN, (x, y)))
+    delayed_skill.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
+    delayed_skill.append(Position((x, y)))
+    delayed_skill.append(IsActive())
+
+    entity = create_entity(delayed_skill)
+
+    # add post-creation components
+    behaviour = store.behaviour_registry["DelayedSkill"]
+    thought = Thought(behaviour(entity))
+    from scripts.engine.internal.action import DelayedSkill
+
+    assert isinstance(thought.behaviour, DelayedSkill)
+    thought.behaviour.data = data
+    thought.behaviour.remaining_duration = data.duration
+    add_component(entity, thought)
+
+    logging.debug(f"{delayed_skill_name}`s created at ({x},{y}) and will trigger in {data.duration} " f"turns.")
 
     return entity
 
@@ -489,7 +537,7 @@ def _create_alter_terrain_effect(
 
 def get_game_map() -> GameMap:
     """
-    Get current game_map
+    Get current game_map. Raises AttributeError if game_map doesnt exist.
     """
     if store.current_game_map:
         game_map = store.current_game_map
@@ -502,18 +550,18 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     """
     Get the tile at the specified location. Raises exception if out of bounds or doesnt exist.
     """
-    game_map = get_game_map()
-    x = tile_pos[0]
-    y = tile_pos[1]
+    game_map = store.current_game_map  # not using get_game_map for performance
+    assert isinstance(game_map, GameMap)
+    x, y = tile_pos
 
     try:
-        _tile = game_map.tile_map[x][y]
+        tile = game_map.tile_map[x][y]
 
     except IndexError:
         raise IndexError(f"Tried to get tile({x},{y}), which doesnt exist.")
 
-    if _is_tile_in_bounds(_tile):
-        return _tile
+    if _is_tile_in_bounds(tile, game_map):
+        return tile
     else:
         raise IndexError(f"Tried to get tile({x},{y}), which is out of bounds.")
 
@@ -524,7 +572,8 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
     position given.
     """
     start_x, start_y = start_pos
-    game_map = get_game_map()
+    game_map = store.current_game_map  # not using get_game_map for performance
+    assert isinstance(game_map, GameMap)
     tiles = []
 
     for coord in coords:
@@ -533,7 +582,7 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
 
         # make sure it is in bounds
         tile = get_tile((x, y))
-        if _is_tile_in_bounds(tile):
+        if _is_tile_in_bounds(tile, game_map):
             tiles.append(game_map.tile_map[x][y])
 
     return tiles
@@ -618,14 +667,14 @@ def get_reflected_direction(
     # work out position of adjacent walls
     adj_tile = get_tile((current_x, current_y - dir_y))
     if adj_tile:
-        collision_adj_y = tile_has_tag(active_entity, adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_y = tile_has_tag(active_entity, adj_tile, TileTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_y = True
 
     adj_tile = get_tile((current_x - dir_x, current_y))
     if adj_tile:
-        collision_adj_x = tile_has_tag(active_entity, adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_x = tile_has_tag(active_entity, adj_tile, TileTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_x = True
@@ -718,7 +767,7 @@ def _get_furthest_free_position(
 
         if tile:
             # did we hit something causing standard to stop
-            if tile_has_tag(active_entity, tile, TargetTag.BLOCKED_MOVEMENT):
+            if tile_has_tag(active_entity, tile, TileTag.BLOCKED_MOVEMENT):
                 # if we're ready to check for a target, do so
                 if check_for_target:
                     # we hit something, go back to last free tile
@@ -752,7 +801,7 @@ def get_player() -> EntityID:
     """
     for entity, (flag,) in get_components([IsPlayer]):
         return entity
-    raise ValueError
+    raise ValueError("Player not found.")
 
 
 def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
@@ -917,8 +966,8 @@ def get_cast_positions(
 
                 # check tile is open and in vision
                 tile = get_tile((x, y))
-                has_tags = tile_has_tags(entity, tile, [TargetTag.IS_VISIBLE, TargetTag.OPEN_SPACE])
-                has_self = tile_has_tag(entity, tile, TargetTag.SELF)
+                has_tags = tile_has_tags(entity, tile, [TileTag.IS_VISIBLE, TileTag.OPEN_SPACE])
+                has_self = tile_has_tag(entity, tile, TileTag.SELF)
                 if has_tags or has_self:
                     skill_dict[skill].append((x, y))
 
@@ -932,56 +981,73 @@ def get_cast_positions(
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
 
 
-def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TargetTagType) -> bool:
+def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
+    game_map = store.current_game_map  # not using get_game_map for performance
+    assert isinstance(game_map, GameMap)
+
     # before we even check tags, lets confirm it is in bounds
-    if not _is_tile_in_bounds(tile):
+    if not _is_tile_in_bounds(tile, game_map):
         return False
 
-    if tag == TargetTag.OPEN_SPACE:
+    if tag == TileTag.OPEN_SPACE:
         # if nothing is blocking movement
-        if not _is_tile_blocking_movement(tile) and not _tile_has_entity_blocking_movement(tile):
+        if not tile.blocks_movement and not _tile_has_entity_blocking_movement(tile):
             return True
-    elif tag == TargetTag.BLOCKED_MOVEMENT:
+        else:
+            return False
+    elif tag == TileTag.BLOCKED_MOVEMENT:
         # if anything is blocking
-        if _is_tile_blocking_movement(tile) or _tile_has_entity_blocking_movement(tile):
+        if tile.blocks_movement or _tile_has_entity_blocking_movement(tile):
             return True
-    elif tag == TargetTag.SELF:
+        else:
+            return False
+    elif tag == TileTag.SELF:
         # if entity on tile is same as active entity
         if active_entity:
             assert isinstance(active_entity, EntityID)
             return _tile_has_specific_entity(tile, active_entity)
         else:
-            logging.warning("Tried to get TargetTag.SELF but gave no active_entity.")
-    elif tag == TargetTag.OTHER_ENTITY:
+            logging.warning("tile_has_tag: Tried to get TileTag.SELF but gave no active_entity.")
+            return False
+    elif tag == TileTag.OTHER_ENTITY:
         # if entity on tile is not active entity
         if active_entity:
             assert isinstance(active_entity, EntityID)
             # check both possibilities. either the tile containing the active entity or not
             return _tile_has_other_entities(tile, active_entity)
         else:
-            logging.warning("Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.")
-    elif tag == TargetTag.NO_ENTITY:
+            logging.warning("tile_has_tag: Tried to get TileTag.OTHER_ENTITY but gave no active_entity.")
+            return False
+    elif tag == TileTag.NO_ENTITY:
         # if the tile has no entity
         return not _tile_has_any_entity(tile)
-    elif tag == TargetTag.ANY:
+    elif tag == TileTag.ANY:
         # if the tile is anything at all
         return True
-    elif tag == TargetTag.IS_VISIBLE:
+    elif tag == TileTag.IS_VISIBLE:
         # if player can see the tile
-        return _is_tile_visible_to_entity(tile, active_entity)
-    elif tag == TargetTag.NO_BLOCKING_TILE:
+        return _is_tile_visible_to_entity(tile, active_entity, game_map)
+    elif tag == TileTag.NO_BLOCKING_TILE:
         # if tile isnt blocking movement
-        if _is_tile_in_bounds(tile):
-            return not _is_tile_blocking_movement(tile)
+        if _is_tile_in_bounds(tile, game_map):
+            return not tile.blocks_movement
+        else:
+            return False
+    elif tag == TileTag.ACTOR:
+        # if the tile contains an actor
+        for entity, (*_,) in query.actors:
+            return True
+        return False
 
     # If we've hit here it must be false!
+    logging.warning(f"tile_has_tag: TileTag {tag} does not exist.")
     return False
 
 
-def tile_has_tags(active_entity: EntityID, tile: Tile, tags: List[TargetTagType]) -> bool:
+def tile_has_tags(active_entity: EntityID, tile: Tile, tags: List[TileTagType]) -> bool:
     """
     Check a tile has all required tags
     """
@@ -1008,12 +1074,11 @@ def _is_tile_blocking_sight(tile: Tile) -> bool:
     return False
 
 
-def _is_tile_visible_to_entity(tile: Tile, entity: EntityID) -> bool:
+def _is_tile_visible_to_entity(tile: Tile, entity: EntityID, game_map: GameMap) -> bool:
     """
     Check if the specified tile is visible to the entity
     """
     fov_map = get_entitys_component(entity, FOV).map
-    game_map = get_game_map()
     light_map = game_map.light_map
 
     # combine maps
@@ -1022,23 +1087,11 @@ def _is_tile_visible_to_entity(tile: Tile, entity: EntityID) -> bool:
     return bool(visible_map[tile.x, tile.y])
 
 
-def _is_tile_in_bounds(tile: Tile) -> bool:
+def _is_tile_in_bounds(tile: Tile, game_map: GameMap) -> bool:
     """
     Check if specified tile is in the map.
     """
-    game_map = get_game_map()
-
-    if (0 <= tile.x < game_map.width) and (0 <= tile.y < game_map.height):
-        return True
-    else:
-        return False
-
-
-def _is_tile_blocking_movement(tile: Tile) -> bool:
-    """
-    Check if the specified tile is blocking movement
-    """
-    return tile.blocks_movement
+    return (0 <= tile.x < game_map.width) and (0 <= tile.y < game_map.height)
 
 
 def _tile_has_any_entity(tile: Tile) -> bool:
@@ -1069,6 +1122,7 @@ def _tile_has_specific_entity(tile: Tile, active_entity: EntityID) -> bool:
 def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
     x = tile.x
     y = tile.y
+
     # Any entities that block movement?
     for entity, (position, physicality) in get_components([Position, Physicality]):
         assert isinstance(position, Position)
@@ -1144,7 +1198,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not can_afford:
         # is it the player that can't afford it?
         if entity == player:
-            store.log_message("I cannot afford to do that.")
+            event_hub.post(MessageEvent("I cannot afford to do that."))
         else:
             logging.warning(
                 f"can_use_skill: '{get_name(entity)}' tried to use {skill_name}, which they can`t" f"afford."
@@ -1154,7 +1208,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not not_on_cooldown:
         # is it the player that's can't afford it?
         if entity == player:
-            store.log_message("I'm not ready to do that, yet.")
+            event_hub.post(MessageEvent("I'm not ready to do that, yet."))
         else:
             if cooldown == INFINITE:
                 cooldown_msg = "unknown"
@@ -1169,6 +1223,36 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     return False
 
 
+def entity_has_immunity(entity: EntityID, name: str) -> bool:
+    """
+    Check if an entity has immunity to the named Action.
+    """
+    try:
+        immunity = get_entitys_component(entity, Immunities)
+        if name in immunity.active:
+            return True
+        else:
+            return False
+
+    except AttributeError:
+        logging.info(f"entity_has_immunity: `{get_name(entity)}`, ({entity}), does not have Immunities Component.")
+        return False
+
+
+def add_immunity(entity: EntityID, immunity_name: str, duration: int):
+    """
+    Add an immunity to an Entity's Immunities Component. If entity has no Immunities Component one will be added.
+    """
+    try:
+        immunity = get_entitys_component(entity, Immunities)
+        immunity.active[immunity_name] = duration
+
+    except AttributeError:
+        add_component(entity, Immunities({immunity_name: duration}))
+
+    logging.debug(f"'{get_name(entity)}' is now immune to {immunity_name} for {duration} rounds.")
+
+
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
 
 
@@ -1179,7 +1263,7 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bo
     resources = get_entitys_component(entity, Resources)
     name = get_name(entity)
 
-    if resources:
+    try:
         resource_value = getattr(resources, resource.lower())
 
         if resource_value != INFINITE:
@@ -1190,8 +1274,10 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bo
             return True
         else:
             logging.info(f"'{name}' paid nothing as they have infinite {resource}.")
-    else:
-        logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
+    except AttributeError:
+        logging.warning(
+            f"pay_resource_cost: '{name}' tried to pay {cost} {resource} but Resources component not " f"found."
+        )
 
     return False
 
@@ -1201,15 +1287,18 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
     Use the specified skill on the target tile, usually creating a projectile. Returns True is successful if
     criteria to use skill was met, False if not.
     """
-    # N.B. we init so that any overrides of the Skill.init are applied
+    # we init so that any overrides of the Skill.init are applied
     skill_cast = skill(user, target_tile, direction)
 
     # ensure they are the right target type
-    if tile_has_tags(user, skill_cast.target_tile, skill_cast.target_tags):
+    if tile_has_tags(user, skill_cast.target_tile, skill_cast.cast_tags):
         result = skill_cast.use()
         return result
     else:
-        logging.info(f"Could not use skill, target tile does not have required tags ({skill.target_tags}).")
+        logging.info(
+            f"Could not use skill, ({target_tile.x},{target_tile.y}) does not have required tags "
+            f"({skill_cast.cast_tags})."
+        )
 
     return False
 
@@ -1234,12 +1323,20 @@ def apply_skill(skill: Skill) -> bool:
                     if not success:
                         success = result
         if success:
+            logging.debug(
+                f"'{get_name(skill.user)}' successfully applied {skill.name} to ({skill.target_tile.x},"
+                f"{skill.target_tile.y})."
+            )
             return True
         else:
+            logging.debug(
+                f"'{get_name(skill.user)}' unsuccessfully applied {skill.name} to ({skill.target_tile.x},"
+                f"{skill.target_tile.y})."
+            )
             return False
     else:
         logging.info(
-            f'Could not apply skill "{skill.__class__.__name__}", target tile does not have required '
+            f"Could not apply skill '{skill.__class__.__name__}', target tile does not have required "
             f"tags ({skill.target_tags})."
         )
 
@@ -1261,22 +1358,21 @@ def apply_affliction(affliction: Affliction) -> bool:
     """
     target = affliction.affected_entity
     position = get_entitys_component(target, Position)
-    if position:
-        target_tile = get_tile((position.x, position.y))
+    target_tile = get_tile((position.x, position.y))
 
-        # ensure they are the right target type
-        if tile_has_tags(affliction.origin, target_tile, affliction.target_tags):
-            for entity, effects in affliction.apply():
-                effect_queue = list(effects)
-                while effect_queue:
-                    effect = effect_queue.pop()
-                    effect_queue.extend(effect.evaluate()[1])
-            return True
-        else:
-            logging.info(
-                f'Could not apply affliction "{affliction.name}", target tile does not have required '
-                f"tags ({affliction.target_tags})."
-            )
+    # ensure they are the right target type
+    if tile_has_tags(affliction.origin, target_tile, affliction.target_tags):
+        for entity, effects in affliction.apply():
+            effect_queue = list(effects)
+            while effect_queue:
+                effect = effect_queue.pop()
+                effect_queue.extend(effect.evaluate()[1])
+        return True
+    else:
+        logging.info(
+            f'Could not apply affliction "{affliction.name}", target tile does not have required '
+            f"tags ({affliction.target_tags})."
+        )
 
     return False
 
@@ -1297,11 +1393,12 @@ def take_turn(entity: EntityID) -> bool:
     Process the entity's Thought component. If no component found then EndTurn event is fired.
     """
     logging.debug(f"'{get_name(entity)}' is beginning their turn.")
-    behaviour = get_entitys_component(entity, Thought)
-    if behaviour:
+
+    try:
+        behaviour = get_entitys_component(entity, Thought)
         behaviour.behaviour.act()
         return True
-    else:
+    except AttributeError:
         logging.critical(f"'{get_name(entity)}' has no behaviour to use.")
 
     return False
@@ -1309,19 +1406,19 @@ def take_turn(entity: EntityID) -> bool:
 
 def apply_damage(entity: EntityID, damage: int) -> bool:
     """
-    Remove damage from entity's health. Return remaining health.
+    Remove damage from entity's health. Return True is damage was applied.
     """
     if damage <= 0:
         logging.info(f"Damage was {damage} and therefore nothing was done.")
         return False
 
-    resource = get_entitys_component(entity, Resources)
-    if resource:
+    try:
+        resource = get_entitys_component(entity, Resources)
         resource.health -= damage
         logging.info(f"'{get_name(entity)}' takes {damage} and has {resource.health} health remaining.")
         return True
-    else:
-        logging.warning(f"'{get_name(entity)}' has no resource so couldnt apply damage.")
+    except AttributeError:
+        logging.warning(f"apply_damage: '{get_name(entity)}' has no resource so couldn`t apply damage.")
 
     return False
 
@@ -1330,12 +1427,13 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
     """
     Add time_spent to the entity's total time spent.
     """
-    tracked = get_entitys_component(entity, Tracked)
-    if tracked:
+
+    try:
+        tracked = get_entitys_component(entity, Tracked)
         tracked.time_spent += time_spent
         return True
-    else:
-        logging.warning(f"'{get_name(entity)}' has no tracked to spend time.")
+    except AttributeError:
+        logging.warning(f"spend_time: '{get_name(entity)}' has no tracked to spend time.")
 
     return False
 
@@ -1374,7 +1472,7 @@ def kill_entity(entity: EntityID):
 
     else:
         # placeholder for player death
-        store.log_message("I should have died just then.")
+        event_hub.post(MessageEvent("I should have died just then."))
 
 
 def delete_entity(entity: EntityID):
@@ -1420,11 +1518,12 @@ def learn_skill(entity: EntityID, skill_name: str):
     Add the skill name to the entity's knowledge component.
     """
     if not entity_has_component(entity, Knowledge):
-        add_component(entity, Knowledge([]))
+        logging.warning(f"{get_name(entity)} has no Knowledge component and cannot learn {skill_name}.")
+        return
+
     knowledge = get_entitys_component(entity, Knowledge)
-    if knowledge:
-        skill_class = store.skill_registry[skill_name]
-        knowledge.learn_skill(skill_class)
+    skill_class = store.skill_registry[skill_name]
+    knowledge.add(skill_class)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################

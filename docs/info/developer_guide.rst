@@ -15,10 +15,11 @@ The following tools are used as standard to ensure a consistent and reliable cod
 
 When you submit a pull request the CI, Github Actions, will run  pytext and mypy automatically. Out of courtesy, black and isort, which change your code, are ready for you to use but are not applied directly.
 
-Naming conventions
+Style Guide
 ----------------------
 
-Below are the naming conventions followed in Not Quite Paradise:
+Naming
+^^^^^^^^^^^^
 * If only one of a class should exist the creation function is called "init_[object]", otherwise "create_[object]".
 * Where the object is taken as an argument the function name should default to "create_[object_type]".
 * If checking a bool use IsA or HasA.
@@ -30,7 +31,17 @@ Below are the naming conventions followed in Not Quite Paradise:
 1. Identifiers (entity, skill, etc.)
 2. Affected items (position, tiles, etc.)
 3. Qualifiers
+
+Structure
+^^^^^^^^^^^^
 * Externally held data should be defined in a dataclass in definitions.py.
+
+Reporting
+^^^^^^^^^^^
+* Functions that change state should confirm when they have done so, via the log.
+* Logging statements should include their containing function as a prefix when used to log an error. e.g. `logging.debug(f"my_function: An error statement")`
+
+
 
 
 Contributing

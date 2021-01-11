@@ -11,9 +11,18 @@ from pygame.surface import Surface
 
 from scripts.engine.core import query, utility, world, state
 from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
+from scripts.engine.core.component import Aesthetic, Position
 from scripts.engine.internal import library
-from scripts.engine.internal.component import Aesthetic, Position
-from scripts.engine.internal.constant import TILE_SIZE, Height, InputIntent, InputEvent, EventType, UIElement, GameState, TargetingMethod
+from scripts.engine.internal.constant import (
+    TILE_SIZE,
+    Height,
+    InputIntent,
+    InputEventType,
+    EventType,
+    UIElement,
+    GameState,
+    TargetingMethod
+)
 from scripts.engine.core.ui import ui
 from scripts.nqp.ui_elements.tile_info import TileInfo
 from scripts.nqp import command
@@ -41,17 +50,6 @@ class Camera:
         self.show_all = False
 
         self.move_edge_size = 4
-
-        rect = pygame.Rect(0, 0, self._base_width, self._base_height)
-
-        # store this now so we can refer to it later
-        #game_map = world.get_game_map()
-        #self.map_width = game_map.width
-        #self.map_height = game_map.height
-
-        # determine how many tiles to show; max rows and cols in game map or max we can show based on size
-        #self.rows = min(rect.width // TILE_SIZE, game_map.height - 1)
-        #self.columns = min(rect.height // TILE_SIZE, game_map.width - 1)
 
         # duration of the animation - only used when animating the camera move
         self.move_duration = 0.0
@@ -143,13 +141,13 @@ class Camera:
                     state.set_active_skill_target((self.hovered_tile.x, self.hovered_tile.y))
 
                 # cancel event triggering if the hovered target is invalid in the target mode
-                if (skill.targeting_method == TargetingMethod.TARGET):
+                if (skill.targeting_method == TargetingMethod.TILE):
                     position = world.get_entitys_component(player, Position)
                     dif = (position.x - self.hovered_tile.x, position.y - self.hovered_tile.y)
                     if (dif not in skill.target_directions) or (not self.hovered_tile.is_visible) or (not world.tile_has_tags(player, self.hovered_tile, skill.target_tags)):
                         return
 
-            event = pygame.event.Event(EventType.INPUT, subtype=InputEvent.TILE_CLICK, tile_pos=(self.hovered_tile.x, self.hovered_tile.y))
+            event = pygame.event.Event(EventType.INPUT, subtype=InputEventType.TILE_CLICK, tile_pos=(self.hovered_tile.x, self.hovered_tile.y))
             pygame.event.post(event)
 
     def _update_camera_position(self, time_delta: float):
@@ -194,7 +192,7 @@ class Camera:
             skill = world.get_known_skill(player, active_skill_name)
 
             # if this is a directional attack
-            if skill.targeting_method == TargetingMethod.TARGET:
+            if skill.targeting_method == TargetingMethod.TILE:
                 for direction in skill.target_directions:
                     target_x = position.x + direction[0]
                     target_y = position.y + direction[1]

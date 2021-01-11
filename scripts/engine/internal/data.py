@@ -13,6 +13,8 @@ from scripts.engine.internal.constant import GameState
 if TYPE_CHECKING:
     from typing import Any, Dict, Optional, Type
 
+    from scripts.engine.world_objects.game_map import GameMap
+
 __all__ = ["store"]
 
 
@@ -32,8 +34,6 @@ class Store:
         self.active_skill_target = None
 
         # used in world
-        from scripts.engine.world_objects.game_map import GameMap
-
         self.current_game_map: Optional[GameMap] = None
 
         # used in chronicle
@@ -44,8 +44,6 @@ class Store:
         self.round_time: int = 0  # tracker of time progressed in current round
         self.turn_holder: EntityID = -1  # current acting entity
         self.previous_turn_holder: EntityID = -1  # current acting entity
-
-        self.message_log: List[str] = []
 
         ################### NOT SERIALISED #######################################
 
@@ -86,13 +84,9 @@ class Store:
         try:
             self.current_game_state = serialised["current_game_state"]
             self.previous_game_state = serialised["previous_game_state"]
-            if serialised["current_game_map"]:
-                from scripts.engine.world_objects.game_map import GameMap
+            from scripts.engine.world_objects.game_map import GameMap
 
-                game_map = GameMap.deserialise(serialised["current_game_map"])
-            else:
-                game_map = None
-            self.current_game_map = game_map
+            self.current_game_map = GameMap.deserialise(serialised["current_game_map"])
             self.turn_queue = serialised["turn_queue"]
             self.round = serialised["round"]
             self.time = serialised["time"]
@@ -101,12 +95,6 @@ class Store:
             self.turn_holder = serialised["turn_holder"]
         except KeyError as e:
             logging.warning(f"Store.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
-
-    def log_message(self, message: str):
-        """
-        Add a message to the log.
-        """
-        self.message_log.append(message)
 
 
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail

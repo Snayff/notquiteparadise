@@ -11,7 +11,7 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.141.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.145.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 DEBUG_START = False  # Whether to start directly in debug map
 
 MAX_SKILLS = 6
@@ -48,7 +48,7 @@ InputIntentType = NewType("InputIntentType", str)
 PrimaryStatType = NewType("PrimaryStatType", str)
 SecondaryStatType = NewType("SecondaryStatType", str)
 ResourceType = NewType("ResourceType", str)
-TargetTagType = NewType("TargetTagType", str)
+TileTagType = NewType("TileTagType", str)
 DamageTypeType = NewType("DamageTypeType", str)
 HitTypeType = NewType("HitTypeType", str)
 EffectTypeType = NewType("EffectTypeType", str)
@@ -77,7 +77,7 @@ class EventType(IntEnum):
     INTERACTION = auto()
 
 
-class InputEvent(IntEnum):
+class InputEventType(IntEnum):
     """
     Custom pygame event names triggered by input. These need to be interpreted into intents.
     """
@@ -86,33 +86,35 @@ class InputEvent(IntEnum):
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
 
 
-class GameEvent(IntEnum):
+class GameEventType(IntEnum):
     """
     Custom pygame event names triggered by the game
     """
 
-    EXIT_MENU = pygame.USEREVENT + 100
-    NEW_GAME = pygame.USEREVENT + 101
-    LOAD_GAME = pygame.USEREVENT + 102
-    EXIT_GAME = pygame.USEREVENT + 103
-    WIN_CONDITION_MET = pygame.USEREVENT + 104
-    START_GAME = pygame.USEREVENT + 105
-    NEW_TURN = pygame.USEREVENT + 106
-    END_TURN = pygame.USEREVENT + 107
-    NEW_ROUND = pygame.USEREVENT + 108
-    END_ROUND = pygame.USEREVENT + 109
+    EXIT_MENU = auto()
+    NEW_GAME = auto()
+    LOAD_GAME = auto()
+    EXIT_GAME = auto()
+    WIN_CONDITION_MET = auto()
+    START_GAME = auto()
+    NEW_TURN = auto()
+    END_TURN = auto()
+    NEW_ROUND = auto()
+    END_ROUND = auto()
+    MESSAGE = auto()
 
 
-class InteractionEvent(IntEnum):
+class InteractionEventType(IntEnum):
     """
     Custom pygame events to trigger interactions. Think of these as categories for Reaction Triggers.
     """
 
-    MOVE = pygame.USEREVENT + 200
-    DAMAGE = pygame.USEREVENT + 201
-    AFFECT_STAT = pygame.USEREVENT + 202
-    AFFECT_COOLDOWN = pygame.USEREVENT + 203
-    AFFLICTION = pygame.USEREVENT + 204
+    MOVE = auto()
+    DAMAGE = auto()
+    AFFECT_STAT = auto()
+    AFFECT_COOLDOWN = auto()
+    AFFLICTION = auto()
+    ALTER_TERRAIN = auto()
 
 
 class RenderLayer(IntEnum):
@@ -282,20 +284,20 @@ class EffectType(SimpleNamespace):
     ALTER_TERRAIN = EffectTypeType("alter_terrain")
 
 
-class TargetTag(SimpleNamespace):
+class TileTag(SimpleNamespace):
     """
-    Types of target
+    Tags identifying a situation on a Tile.
     """
 
-    SELF = TargetTagType("self")
-    OTHER_ENTITY = TargetTagType("other_entity")
-    NO_ENTITY = TargetTagType("no_entity")
-    ANY = TargetTagType("any")
-    OPEN_SPACE = TargetTagType("open_space")
-    BLOCKED_MOVEMENT = TargetTagType("blocked_movement")
-    IS_VISIBLE = TargetTagType("is_visible")
-    NO_BLOCKING_TILE = TargetTagType("no_blocking_tile")
-    ACTOR = TargetTagType("actor")
+    SELF = TileTagType("self")
+    OTHER_ENTITY = TileTagType("other_entity")
+    NO_ENTITY = TileTagType("no_entity")
+    ANY = TileTagType("any")
+    OPEN_SPACE = TileTagType("open_space")
+    BLOCKED_MOVEMENT = TileTagType("blocked_movement")
+    IS_VISIBLE = TileTagType("is_visible")
+    NO_BLOCKING_TILE = TileTagType("no_blocking_tile")
+    ACTOR = TileTagType("actor")
 
 
 class DamageType(SimpleNamespace):
@@ -346,7 +348,7 @@ class TargetingMethod(SimpleNamespace):
     """
 
     AUTO = TargetingMethodType("auto")
-    TARGET = TargetingMethodType("target")
+    TILE = TargetingMethodType("tile") # should be called TILE
     LINE_OF_SIGHT = TargetingMethodType("line")
 
 

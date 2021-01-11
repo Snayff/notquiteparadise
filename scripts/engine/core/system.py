@@ -2,16 +2,15 @@ from __future__ import annotations
 
 import logging
 
-import numpy as np
 import pygame
 import tcod
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, world
-from scripts.engine.internal import library
-from scripts.engine.internal.component import (
+from scripts.engine.core.component import (
     Afflictions,
     FOV,
+    Immunities,
     IsActive,
     Knowledge,
     Lifespan,
@@ -26,13 +25,23 @@ from scripts.engine.internal.constant import (
     EventType,
     FOV_ALGORITHM,
     FOV_LIGHT_WALLS,
-    GameEvent,
     INFINITE,
-    InteractionEvent,
     MAX_ACTIVATION_DISTANCE,
     ReactionTrigger,
     ReactionTriggerType,
 )
+from scripts.engine.internal.definition import EffectData, ReactionData
+from scripts.engine.internal.event import (
+    AffectCooldownEvent,
+    AffectStatEvent,
+    AfflictionEvent,
+    DamageEvent,
+    event_hub,
+    MoveEvent,
+    Subscriber,
+    WinConditionMetEvent,
+)
+from scripts.engine.world_objects.tile import Tile
 
 __all__ = [
     "process_activations",
@@ -42,11 +51,8 @@ __all__ = [
     "reduce_skill_cooldowns",
     "reduce_affliction_durations",
     "reduce_lifespan_durations",
-    "process_interaction_event",
+    "reduce_immunity_durations",
 ]
-
-from scripts.engine.internal.definition import EffectData, ReactionData
-from scripts.engine.world_objects.tile import Tile
 
 ########################### GENERAL ################################
 
@@ -218,6 +224,7 @@ def reduce_affliction_durations():
             # handle expiry
             if affliction.duration <= 0:
                 world.remove_affliction(entity, affliction)
+                logging.debug(f"Removed {affliction.f_name} from '{world.get_name(entity)}'.")
 
 
 def reduce_lifespan_durations():
@@ -233,49 +240,72 @@ def reduce_lifespan_durations():
 
         # handle expiry
         if lifespan.duration <= 0:
-            logging.debug(f"{world.get_name(entity)}`s lifespan has expired. ")
             world.kill_entity(entity)
+            logging.debug(f"'{world.get_name(entity)}'s lifespan has expired and they have been killed.")
+
+
+def reduce_immunity_durations():
+    """
+    Reduce all immunity durations
+    """
+    for entity, (immunities,) in query.immunities:
+        assert isinstance(immunities, Immunities)
+        _active = immunities.active.copy()
+        for immunity_name, duration in _active.items():
+
+            if duration != INFINITE:
+                # reduce duration if not infinite
+                immunities.active[immunity_name] -= 1
+                duration -= 1
+
+            # handle expiry
+            if duration <= 0:
+                immunities.active.pop(immunity_name)
+                logging.debug(f"Removed {immunity_name} from '{world.get_name(entity)}'s " f"list of immunities.")
 
 
 ########################### GENERIC REACTION HANDLING ##############################
 
 
-def process_interaction_event(event: pygame.event):
+class InteractionEventSubscriber(Subscriber):
     """
-    Passes an interaction event to the relevant functions.
+    Handle interaction events.
     """
-    if event.subtype == InteractionEvent.MOVE:
-        # print(f"Caught MOVE: {event.origin}, {event.target}, {event.direction}, {event.new_pos}")
-        _handle_proximity_reaction_trigger(event)
-        _process_win_condition(event)
 
-        _handle_reaction_trigger(event.origin, ReactionTrigger.MOVE)
-        _handle_reaction_trigger(event.target, ReactionTrigger.MOVED)
+    def __init__(self):
+        super().__init__("interaction_subscriber")
+        self.subscribe(EventType.INTERACTION)
 
-    elif event.subtype == InteractionEvent.DAMAGE:
-        # print(f"Caught DAMAGE: {event.origin}, {event.target}, {event.amount}, {event.damage_type},
-        # {event.remaining_hp}")
-        _handle_reaction_trigger(event.origin, ReactionTrigger.DEAL_DAMAGE)
-        _handle_reaction_trigger(event.target, ReactionTrigger.TAKE_DAMAGE)
+    def process_event(self, event):
+        if isinstance(event, MoveEvent):
+            _handle_proximity_reaction_trigger(event)
+            _process_win_condition(event)
 
-        if event.remaining_hp <= 0:
-            _handle_reaction_trigger(event.origin, ReactionTrigger.KILL)
-            _handle_reaction_trigger(event.target, ReactionTrigger.DIE)
+            _handle_reaction_trigger(event.origin, ReactionTrigger.MOVE)
+            _handle_reaction_trigger(event.target, ReactionTrigger.MOVED)
 
-    elif event.subtype == InteractionEvent.AFFECT_STAT:
-        # print(f"Caught AFFECT_STAT: {event.origin}, {event.target}, {event.stat}, {event.amount}")
-        _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_STAT)
-        _handle_reaction_trigger(event.target, ReactionTrigger.STAT_AFFECTED)
+        elif isinstance(event, DamageEvent):
+            _handle_reaction_trigger(event.origin, ReactionTrigger.DEAL_DAMAGE)
+            _handle_reaction_trigger(event.target, ReactionTrigger.TAKE_DAMAGE)
 
-    elif event.subtype == InteractionEvent.AFFECT_COOLDOWN:
-        # print(f"Caught AFFECT_COOLDOWN: {event.origin}, {event.target}, {event.amount}")
-        _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_COOLDOWN)
-        _handle_reaction_trigger(event.target, ReactionTrigger.COOLDOWN_AFFECTED)
+            if event.remaining_hp <= 0:
+                _handle_reaction_trigger(event.origin, ReactionTrigger.KILL)
+                _handle_reaction_trigger(event.target, ReactionTrigger.DIE)
 
-    elif event.subtype == InteractionEvent.AFFLICTION:
-        # print(f"Caught AFFLICTION: {event.origin}, {event.target}, {event.name}")
-        _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFLICTION)
-        _handle_reaction_trigger(event.target, ReactionTrigger.AFFLICTED)
+        elif isinstance(event, AffectStatEvent):
+            _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_STAT)
+            _handle_reaction_trigger(event.target, ReactionTrigger.STAT_AFFECTED)
+
+        elif isinstance(event, AffectCooldownEvent):
+            _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_COOLDOWN)
+            _handle_reaction_trigger(event.target, ReactionTrigger.COOLDOWN_AFFECTED)
+
+        elif isinstance(event, AfflictionEvent):
+            _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFLICTION)
+            _handle_reaction_trigger(event.target, ReactionTrigger.AFFLICTED)
+
+
+interaction_subscriber = InteractionEventSubscriber()
 
 
 def _process_opinions(causing_entity: EntityID, reaction_trigger: ReactionTriggerType):
@@ -292,7 +322,7 @@ def _process_opinions(causing_entity: EntityID, reaction_trigger: ReactionTrigge
 
             logging.debug(
                 f"{world.get_name(entity)}`s opinion of {world.get_name(causing_entity)} is now "
-                f" {opinion.opinions[causing_entity]}."
+                f"{opinion.opinions[causing_entity]} due to {reaction_trigger}."
             )
 
 
@@ -426,6 +456,6 @@ def _process_win_condition(event: pygame.event):
     for entity, (position, _) in query.position_and_win_condition:
         assert isinstance(position, Position)
         if player_pos.x == position.x and player_pos.y == position.y:
-            event = pygame.event.Event(EventType.GAME, subtype=GameEvent.WIN_CONDITION_MET)
-            pygame.event.post(event)
+            # post game event
+            event_hub.post(WinConditionMetEvent())
             break

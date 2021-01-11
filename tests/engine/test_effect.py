@@ -2,13 +2,13 @@ import pytest
 import snecs
 from snecs.typedefs import EntityID
 
-from scripts.engine.core import query, world
+from scripts.engine.core import query, state, world
 from scripts.engine.internal import library
-from scripts.engine.internal.component import Afflictions, Knowledge, Position, Resources
+from scripts.engine.core.component import Afflictions, Knowledge, Position, Resources
 from scripts.engine.internal.constant import DamageType, Direction, PrimaryStat
 from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData
-from scripts.engine.internal.effect import (
+from scripts.engine.core.effect import (
     AffectCooldownEffect,
     AffectStatEffect,
     AlterTerrainEffect,
@@ -17,14 +17,15 @@ from scripts.engine.internal.effect import (
     MoveActorEffect,
 )
 from scripts.engine.world_objects.game_map import GameMap
-
+from scripts.nqp.command import register_actions
 
 ##############################################################
 #
 # !IMPORTANT! Using pytest-benchmark causes the damage effect test to hang indefinitely and the others to fail
 #
 ###############################################################
-from scripts.nqp.command import register_actions
+
+
 
 # register all actions with engine
 register_actions()

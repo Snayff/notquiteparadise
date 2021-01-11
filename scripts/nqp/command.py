@@ -10,10 +10,10 @@ import snecs
 from snecs import Component
 
 from scripts.engine.core import chronicle, state, system, utility, world
+from scripts.engine.core.component import Aesthetic, Position, WinCondition
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import library
 from scripts.engine.internal.action import register_action
-from scripts.engine.internal.component import Aesthetic, Position, WinCondition
 from scripts.engine.internal.constant import (
     ASSET_PATH,
     DEBUG_START,
@@ -30,15 +30,23 @@ from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
-from scripts.nqp.actions.behaviour import FollowPlayer, Projectile, SearchAndAttack, SkipTurn
-from scripts.nqp.actions.skill import BasicAttack, Lunge, Move, Splash, TarAndFeather
+from scripts.nqp.actions.behaviour import FollowPlayer, SearchAndAttack, SkipTurn
+from scripts.nqp.actions.skill import BasicAttack, Lightning, Lunge, Move, Splash, TarAndFeather
+from scripts.nqp.processors.game import GameEventSubscriber
+from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.character_selector import CharacterSelector
-from scripts.nqp.ui_elements.message_log import MessageLog
 from scripts.nqp.ui_elements.skill_bar import SkillBar
 from scripts.nqp.ui_elements.title_screen import TitleScreen
-from scripts.nqp.ui_elements.camera import camera
 
-__all__ = ["initialise_game", "goto_character_select", "load_game", "exit_game", "win_game", "register_actions"]
+__all__ = [
+    "initialise_game",
+    "goto_character_select",
+    "load_game",
+    "exit_game",
+    "win_game",
+    "register_actions",
+    "get_element_rect",
+]
 
 
 def initialise_game():
@@ -46,6 +54,7 @@ def initialise_game():
     Init the game`s required info
     """
     register_actions()
+    init_subscribers()
 
     if DEBUG_START:
         _start_debug_game()
@@ -94,8 +103,7 @@ def _start_debug_game():
     god_data = library.GODS["the_small_gods"]
     world.create_god(god_data)
 
-    # show the in game screens
-
+    # update draw position for all entities
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
         assert isinstance(aesthetic, Aesthetic)
         assert isinstance(position, Position)
@@ -109,11 +117,10 @@ def _start_debug_game():
     system.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
-    pos = world.get_entitys_component(player, Position)
-    camera.set_target((pos.x, pos.y), True)
+    camera.set_target((player_pos.x, player_pos.y), True)
 
     # create terrain next to the player
-    world.create_terrain(library.TERRAIN["bog"], (pos.x + 1, pos.y))
+    world.create_terrain(library.TERRAIN["bog"], (player_pos.x + 1, player_pos.y))
 
     # loading finished, give player control
     state.set_new(GameState.GAME_MAP)
@@ -140,9 +147,11 @@ def start_game(player_data: ActorData):
     # init the player
     player = world.get_player()
 
+    # allocate player skills
+    world.learn_skill(player, "Lightning")
+
     # create win condition and place next to player
     player_pos = world.get_entitys_component(player, Position)
-
     win_x = player_pos.x + 1
     win_y = player_pos.y
     components: List[Component] = []
@@ -161,9 +170,9 @@ def start_game(player_data: ActorData):
     world.create_god(god_data)
 
     # show the in game screens
-    message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
-    ui.register_element(UIElement.MESSAGE_LOG, message_log)
-    ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+    # message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
+    # ui.register_element(UIElement.MESSAGE_LOG, message_log)
+    # ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
 
     skill_bar = SkillBar(get_element_rect(UIElement.SKILL_BAR), ui.get_gui_manager())
     ui.register_element(UIElement.SKILL_BAR, skill_bar)
@@ -207,10 +216,11 @@ def load_game():
         state.load_game(save)
         break
 
-    message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
-    ui.register_element(UIElement.MESSAGE_LOG, message_log)
-    ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+    # move camera to player
+    player_pos = world.get_entitys_component(world.get_player(), Position)
+    camera.set_target((player_pos.x, player_pos.y), True)
 
+    # show UI
     skill_bar = SkillBar(get_element_rect(UIElement.SKILL_BAR), ui.get_gui_manager())
     ui.register_element(UIElement.SKILL_BAR, skill_bar)
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
@@ -239,6 +249,7 @@ def win_game():
     # quit to main menu after a few seconds
     timer = Timer(2.0, goto_to_title)
     timer.start()
+
 
 ############### NAVIGATION  #####################
 
@@ -282,7 +293,6 @@ def register_actions():
     register_action(Flaming)
 
     # behaviour
-    register_action(Projectile)
     register_action(SkipTurn)
     register_action(FollowPlayer)
     register_action(SearchAndAttack)
@@ -293,6 +303,16 @@ def register_actions():
     register_action(Lunge)
     register_action(TarAndFeather)
     register_action(Splash)
+    register_action(Lightning)
+
+
+def init_subscribers():
+    """
+    Initialise event subscribers.
+
+    N.B. When init'd they are held in reference by the event hub and do not need to be referred to directly.
+    """
+    game_subscriber = GameEventSubscriber()
 
 
 ##################### UI ######################

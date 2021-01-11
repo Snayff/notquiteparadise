@@ -5,7 +5,9 @@ Core
     :caption: Core
 
     chronicle
+    component
     dungen
+    effect
     key
     query
     state

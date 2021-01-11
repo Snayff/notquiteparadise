@@ -4,15 +4,12 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Tuple, TYPE_CHECKING
 
-import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import query, utility, world
-from scripts.engine.internal import library
-from scripts.engine.internal.component import (
+from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
-    HasCombatStats,
     Identity,
     Knowledge,
     Lifespan,
@@ -20,14 +17,16 @@ from scripts.engine.internal.component import (
     Position,
     Resources,
 )
-from scripts.engine.internal.constant import (
-    DamageTypeType,
-    Direction,
-    DirectionType,
-    EventType,
-    InteractionEvent,
-    PrimaryStatType,
-    TargetTag,
+from scripts.engine.internal import library
+from scripts.engine.internal.constant import DamageTypeType, Direction, DirectionType, PrimaryStatType, TileTag
+from scripts.engine.internal.event import (
+    AffectCooldownEvent,
+    AffectStatEvent,
+    AfflictionEvent,
+    AlterTerrainEvent,
+    DamageEvent,
+    event_hub,
+    MoveEvent,
 )
 
 if TYPE_CHECKING:
@@ -128,16 +127,14 @@ class DamageEffect(Effect):
             defenders_resources = world.get_entitys_component(self.target, Resources)
 
             # post interaction event
-            event = pygame.event.Event(
-                EventType.INTERACTION,
-                subtype=InteractionEvent.DAMAGE,
+            event = DamageEvent(
                 origin=self.origin,
                 target=self.target,
                 amount=damage,
                 damage_type=self.damage_type,
                 remaining_hp=defenders_resources.health,
             )
-            pygame.event.post(event)
+            event_hub.post(event)
 
             # check if target is dead
             if damage >= defenders_resources.health:
@@ -191,18 +188,16 @@ class MoveActorEffect(Effect):
 
                 # update position
                 if _position:
+                    logging.debug(
+                        f"->'{world.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x}," f"{new_y})."
+                    )
                     _position.set(new_x, new_y)
 
                     # post interaction event
-                    event = pygame.event.Event(
-                        EventType.INTERACTION,
-                        subtype=InteractionEvent.MOVE,
-                        origin=self.origin,
-                        target=self.target,
-                        direction=self.direction,
-                        new_pos=(new_x, new_y),
+                    event = MoveEvent(
+                        origin=self.origin, target=self.target, direction=self.direction, new_pos=(new_x, new_y)
                     )
-                    pygame.event.post(event)
+                    event_hub.post(event)
 
                     success = True
 
@@ -237,7 +232,7 @@ class MoveActorEffect(Effect):
             # check a tile was returned
             is_tile_blocking_movement = False
             if target_tile:
-                is_tile_blocking_movement = world.tile_has_tag(entity, target_tile, TargetTag.BLOCKED_MOVEMENT)
+                is_tile_blocking_movement = world.tile_has_tag(entity, target_tile, TileTag.BLOCKED_MOVEMENT)
 
             # check if tile is blocked
             if is_tile_blocking_movement:
@@ -254,7 +249,7 @@ class MoveActorEffect(Effect):
                         # blocked by entity
                         blockers_name = world.get_name(other_entity)
                         logging.debug(
-                            f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
+                            f"'{name}' tried to move {direction_name} to ({target_x},{target_y}) but was blocked"
                             f" by '{blockers_name}'. "
                         )
                         break
@@ -294,15 +289,13 @@ class AffectStatEffect(Effect):
             afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
 
             # post interaction event
-            event = pygame.event.Event(
-                EventType.INTERACTION,
-                subtype=InteractionEvent.AFFECT_STAT,
+            event = AffectStatEvent(
                 origin=self.origin,
                 target=self.target,
-                stat=self.stat_to_target,
+                stat_to_target=self.stat_to_target,
                 amount=self.affect_amount,
             )
-            pygame.event.post(event)
+            event_hub.post(event)
 
             success = True
 
@@ -332,24 +325,37 @@ class ApplyAfflictionEffect(Effect):
         Applies an affliction to an entity
         """
         logging.debug("Evaluating Apply Affliction Effect...")
+        affliction_name = self.affliction_name
+        origin = self.origin
+        target = self.target
+        duration = self.duration
 
-        affliction_instance = world.create_affliction(self.affliction_name, self.origin, self.target, self.duration)
+        affliction_instance = world.create_affliction(affliction_name, origin, target, duration)
+
+        # check for immunities
+        if world.entity_has_immunity(target, affliction_name):
+            logging.debug(
+                f"'{world.get_name(self.origin)}' failed to apply {affliction_name} to  "
+                f"'{world.get_name(self.target)}' as they are immune."
+            )
+            return False, self.failure_effects
 
         # add the affliction to the afflictions component
-        if world.entity_has_component(self.target, Afflictions):
-            afflictions = world.get_entitys_component(self.target, Afflictions)
+        if world.entity_has_component(target, Afflictions):
+            afflictions = world.get_entitys_component(target, Afflictions)
             afflictions.add(affliction_instance)
             world.apply_affliction(affliction_instance)
 
+            # add immunities to prevent further applications for the duration
+            world.add_immunity(target, affliction_name, duration + 2)
+
             # post interaction event
-            event = pygame.event.Event(
-                EventType.INTERACTION,
-                subtype=InteractionEvent.AFFLICTION,
-                origin=self.origin,
-                target=self.target,
-                name=self.affliction_name,
+            event = AfflictionEvent(
+                origin=origin,
+                target=target,
+                affliction_name=affliction_name,
             )
-            pygame.event.post(event)
+            event_hub.post(event)
 
             return True, self.success_effects
 
@@ -385,14 +391,12 @@ class AffectCooldownEffect(Effect):
             knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.affect_amount)
 
             # post interaction event
-            event = pygame.event.Event(
-                EventType.INTERACTION,
-                subtype=InteractionEvent.AFFECT_COOLDOWN,
+            event = AffectCooldownEvent(
                 origin=self.origin,
                 target=self.target,
                 amount=self.affect_amount,
             )
-            pygame.event.post(event)
+            event_hub.post(event)
 
             logging.debug(
                 f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to "
@@ -454,10 +458,15 @@ class AlterTerrainEffect(Effect):
         # can we create the terrain?
         if not duplicate:
             # create target
-
             terrain_data = library.TERRAIN[terrain_name]
             world.create_terrain(terrain_data, (target_pos.x, target_pos.y), self.affect_amount)
             result = True
+
+            # post interaction event
+            event = AlterTerrainEvent(
+                origin=self.origin, target=self.target, terrain_name=self.terrain_name, duration=self.affect_amount
+            )
+            event_hub.post(event)
 
         return result
 
@@ -474,5 +483,13 @@ class AlterTerrainEffect(Effect):
             if identity.name == terrain_name and position.x == target_pos.x and position.y == target_pos.y:
                 lifespan.duration -= self.affect_amount
                 result = True
+                break
+
+        if result:
+            # post interaction event
+            event = AlterTerrainEvent(
+                origin=self.origin, target=self.target, terrain_name=self.terrain_name, duration=self.affect_amount
+            )
+            event_hub.post(event)
 
         return result

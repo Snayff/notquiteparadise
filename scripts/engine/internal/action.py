@@ -7,19 +7,23 @@ from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-from scripts.engine.internal.component import Aesthetic, Position
+from scripts.engine.core import chronicle, world
+from scripts.engine.core.component import Aesthetic, Position
+from scripts.engine.core.effect import Effect
 from scripts.engine.internal.constant import (
     AfflictionCategoryType,
     DirectionType,
     EffectTypeType,
+    ProjectileExpiry,
     ReactionTriggerType,
     ResourceType,
     ShapeType,
     TargetingMethodType,
-    TargetTagType,
+    TerrainCollision,
+    TileTag,
+    TileTagType,
 )
-from scripts.engine.internal.definition import ProjectileData
-from scripts.engine.internal.effect import Effect
+from scripts.engine.internal.definition import DelayedSkillData, ProjectileData
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -37,13 +41,13 @@ class Action(ABC):
     f_name: str  # friendly name, can include spaces, slashes etc.
     description: str
     icon_path: str
-    target_tags: List[TargetTagType]
+    target_tags: List[TileTagType]
     effects: List[Effect]
     shape: ShapeType
     shape_size: int
 
     @abstractmethod
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the effects of this skill applying to a single entity. Must be overridden in subclass.
         """
@@ -65,23 +69,31 @@ class Skill(Action):
     resource_cost: int
     time_cost: int
     base_cooldown: int
-    targeting_method: TargetingMethodType
-    target_directions: List[DirectionType]
-    range: int
-    uses_projectile: bool
+    targeting_method: TargetingMethodType  # Tile, Direction, Auto
+
+    # targeting details
+    cast_tags: List[TileTagType]
+    target_directions: List[DirectionType]  # needed for Direction
+    range: int  # needed for Tile, Auto
+
+    # delivery methods
+    uses_projectile: bool  # usable by for Tile, Direction, Auto
     projectile_data: Optional[ProjectileData]
+    is_delayed: bool  # usable by Tile, Auto  - Doesnt make sense for Direction to have a delayed cast.
+    delayed_skill_data: Optional[DelayedSkillData]
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
-        self.user = user
-        self.target_tile = target_tile
-        self.direction = direction
-        self.projectile = None
+        self.user: EntityID = user
+        self.target_tile: Tile = target_tile
+        self.direction: DirectionType = direction
+        self.projectile: Optional[EntityID] = None
+        self.delayed_skill: Optional[EntityID] = None
 
         # vars needed to keep track of changes
         self.ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
 
     @abstractmethod
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the effects of this skill applying to a single entity. Must be overridden in subclass.
         """
@@ -104,6 +116,7 @@ class Skill(Action):
         cls.data = library.SKILLS[cls.__name__]
         cls.name = cls.__name__
         cls.f_name = cls.data.name
+        cls.cast_tags = cls.data.cast_tags
         cls.target_tags = cls.data.target_tags
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
@@ -118,6 +131,8 @@ class Skill(Action):
         cls.shape_size = cls.data.shape_size
         cls.uses_projectile = cls.data.uses_projectile
         cls.projectile_data = cls.data.projectile_data
+        cls.is_delayed = cls.data.is_delayed
+        cls.delayed_skill_data = cls.data.delayed_skill_data
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
@@ -125,28 +140,27 @@ class Skill(Action):
         times.
         """
         entity_names = []
-        from scripts.engine.core import world
-
         for entity in world.get_affected_entities(
             (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
         ):
-            yield entity, self.build_effects(entity)
+            yield entity, self._build_effects(entity)
             entity_names.append(world.get_name(entity))
 
     def use(self) -> bool:
         """
         If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
         """
-        from scripts.engine.core import world
-
         logging.debug(f"'{world.get_name(self.user)}' used '{self.__class__.__name__}'.")
 
         # animate the skill user
         self._play_animation()
 
-        # create the projectile
+        # handle the delivery method of the skill
         if self.uses_projectile:
             self._create_projectile()
+            is_successful = True
+        elif self.is_delayed:
+            self._create_delayed_skill()
             is_successful = True
         else:
             is_successful = world.apply_skill(self)
@@ -159,15 +173,13 @@ class Skill(Action):
         """
         projectile_data = self.projectile_data
 
-        # update projectile values
+        # update projectile instance values
         projectile_data.creator = self.user
         projectile_data.skill_name = self.name
         projectile_data.skill_instance = self
         projectile_data.direction = self.direction
 
         # create the projectile
-        from scripts.engine.core import world
-
         projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
 
         # add projectile to ignore list
@@ -176,12 +188,29 @@ class Skill(Action):
         # save the reference to the projectile entity
         self.projectile = projectile
 
+    def _create_delayed_skill(self):
+        delayed_skill_data = self.delayed_skill_data
+
+        # update delayed skill instance values
+        delayed_skill_data.creator = self.user
+        delayed_skill_data.skill_name = self.name
+        delayed_skill_data.skill_instance = self
+
+        # create the delayed skill
+        delayed_skill = world.create_delayed_skill(
+            self.user, (self.target_tile.x, self.target_tile.y), delayed_skill_data
+        )
+
+        # add to ignore list
+        self.ignore_entities.append(delayed_skill)
+
+        # save reference
+        self.delayed_skill = delayed_skill
+
     def _play_animation(self):
         """
         Play the provided animation on the entity's aesthetic component
         """
-        from scripts.engine.core import world
-
         if world.entity_has_component(self.user, Aesthetic):
             aesthetic = world.get_entitys_component(self.user, Aesthetic)
             animation = self.get_animation(aesthetic)
@@ -211,7 +240,7 @@ class Affliction(Action):
         self.duration = duration
 
     @abstractmethod
-    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the effects of this skill applying to a single entity. Must be overridden in subclass.
         """
@@ -252,14 +281,14 @@ class Affliction(Action):
                 for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
                     if entity not in entities:
                         entities.add(entity)
-                        yield entity, self.build_effects(entity)
+                        yield entity, self._build_effects(entity)
                         entity_names.append(world.get_name(entity))
 
     def trigger(self):
         """
         Trigger the affliction on the affected entity
         """
-        yield self.affected_entity, self.build_effects(self.affected_entity)
+        yield self.affected_entity, self._build_effects(self.affected_entity)
 
 
 class Behaviour(ABC):
@@ -297,3 +326,158 @@ def register_action(cls: Type[Union[Action, Behaviour]]):
         store.affliction_registry[cls.__name__] = cls
     elif issubclass(cls, Behaviour):
         store.behaviour_registry[cls.__name__] = cls
+
+
+######################### ACTION SUBCLASSES ##########################
+
+
+class Projectile(Behaviour):
+    """
+    Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
+    """
+
+    def __init__(self, attached_entity: EntityID):
+        super().__init__(attached_entity)
+
+        self.data: ProjectileData = ProjectileData()
+        self.distance_travelled = 0
+
+    def act(self):
+        # flags
+        should_activate = False
+        should_move = False
+
+        # get info we definitely need
+        entity = self.entity
+        pos = world.get_entitys_component(entity, Position)
+        current_tile = world.get_tile((pos.x, pos.y))
+        dir_x, dir_y = self.data.direction[0], self.data.direction[1]
+        target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
+
+        # if we havent moved check for collision in current tile (it might be cast on top of enemy)
+        if self.distance_travelled == 0 and world.tile_has_tag(entity, current_tile, TileTag.OTHER_ENTITY):
+            should_activate = True
+            logging.debug(f"'{world.get_name(entity)}' collided with an entity on cast at ({pos.x},{pos.y}).")
+
+        # if we havent travelled max distance or determined we should activate then move
+        # N.b. not an elif because we want the precheck above to happen in isolation
+        if self.distance_travelled < self.data.range and not should_activate:
+            # can we move
+            if world.tile_has_tag(entity, target_tile, TileTag.OPEN_SPACE):
+                should_move = True
+
+            else:
+                should_activate, should_move = self._handle_collision(current_tile, target_tile)
+
+        elif self.distance_travelled >= self.data.range:
+            # we have reached the limit, process expiry and then die
+            if self.data.expiry_type == ProjectileExpiry.ACTIVATE:
+                should_activate = True
+
+                # update skill instance to point to current position, for when it is applied
+                self.data.skill_instance.target_tile = current_tile
+
+            else:
+                # at max range and not activating so kill attached entity
+                world.kill_entity(entity)
+
+        if should_activate:
+            logging.debug(f"'{world.get_name(entity)}' is going to activate at ({pos.x},{pos.y}).")
+
+            # apply skill, rather than using it, as the instance already exists and we are just using the effects
+            world.apply_skill(self.data.skill_instance)
+
+            # die after activating
+            world.kill_entity(entity)
+
+        elif should_move:
+            logging.debug(
+                f"'{world.get_name(entity)}' has {self.data.range - self.distance_travelled} range left and"
+                f" is going to move from ({pos.x},{pos.y}) to "
+                f"({pos.x + dir_x},{pos.y + dir_y})."
+            )
+
+            move = world.get_known_skill(entity, "Move")
+            world.use_skill(entity, move, current_tile, self.data.direction)
+
+            self.distance_travelled += 1
+            chronicle.end_turn(entity, self.data.speed)
+
+    def _handle_collision(self, current_tile: Tile, target_tile: Tile) -> Tuple[bool, bool]:
+        """
+        Handle collisions, returning should_activate, should_move and updating target tile and direction if needed
+        """
+        should_activate = should_move = False
+
+        if world.tile_has_tags(self.entity, target_tile, [TileTag.BLOCKED_MOVEMENT, TileTag.NO_ENTITY]):
+            collision_type = self.data.terrain_collision
+
+            if collision_type == TerrainCollision.ACTIVATE:
+                should_activate = True
+
+                # update skill instance to new target
+                assert isinstance(self.data.skill_instance, Skill)
+                self.data.skill_instance.target_tile = target_tile
+
+            elif collision_type == TerrainCollision.FIZZLE:
+                # get rid of projectile
+                world.kill_entity(self.entity)
+
+            elif collision_type == TerrainCollision.REFLECT:
+                should_move = True
+
+                # change direction and move
+                new_dir = world.get_reflected_direction(
+                    self.entity, (current_tile.x, current_tile.y), (target_tile.x, target_tile.y)
+                )
+                self.data.direction = new_dir
+
+        # blocked by entity
+        elif world.tile_has_tag(self.entity, target_tile, TileTag.OTHER_ENTITY):
+            should_activate = True
+
+            # update skill instance to new target
+            assert isinstance(self.data.skill_instance, Skill)
+            self.data.skill_instance.target_tile = target_tile
+
+        return should_activate, should_move
+
+
+class DelayedSkill(Behaviour):
+    """
+    After duration ends trigger skill centred on self.
+    """
+
+    def __init__(self, attached_entity: EntityID):
+        super().__init__(attached_entity)
+
+        # N.B. both must be set after init
+        self.data: DelayedSkillData = DelayedSkillData()
+        self.remaining_duration = 0
+
+    def act(self):
+        if self.remaining_duration == self.data.duration:
+            # get time left in round, to align first end of turn to round
+            chronicle.end_turn(self.entity, chronicle.get_time_left_in_round())
+
+            self.remaining_duration -= 1
+            logging.debug(f"{world.get_name(self.entity)} will trigger in {self.remaining_duration} rounds.")
+
+            return
+
+        elif self.remaining_duration > 0:
+            # with turn aligned to round now end turn with duration of round
+            from scripts.engine.internal import library
+
+            chronicle.end_turn(self.entity, library.GAME_CONFIG.default_values.time_per_round)
+
+            self.remaining_duration -= 1
+            logging.debug(f"{world.get_name(self.entity)} will trigger in {self.remaining_duration} rounds.")
+
+            return
+
+        # apply skill, rather than using it, as the instance already exists and we are just using the effects
+        world.apply_skill(self.data.skill_instance)
+
+        # die after activating
+        world.kill_entity(self.entity)
