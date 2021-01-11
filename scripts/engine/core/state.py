@@ -49,7 +49,7 @@ def get_active_skill() -> str:
     """
     return store.active_skill
 
-def get_active_skill_target() -> Tuple[int, int]:
+def get_active_skill_target():
     """
     Get the active skill target. Used for targeting mode.
     """
@@ -113,7 +113,7 @@ def set_active_skill(skill_name: str):
     """
     store.active_skill = skill_name
 
-def set_active_skill_target(skill_target: Tuple[int, int]):
+def set_active_skill_target(skill_target):
     """
     Set the active skill target. Used for targeting mode.
     """
