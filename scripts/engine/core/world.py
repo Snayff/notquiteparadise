@@ -1038,8 +1038,14 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
             return False
     elif tag == TileTag.ACTOR:
         # if the tile contains an actor
-        for entity, (*_,) in query.actors:
-            return True
+        for query_result in query.actors:
+            # this is a very dirty way to access the position of a query result
+            # I don't want to scan for the position component since it would severely bog down performance if many entities exist and this function is used frequently
+            # structuring the results as a dict may be beneficial
+            position = query_result[1][0]
+            assert isinstance(position, Position)
+            if (position.x, position.y) == (tile.x, tile.y):
+                return True
         return False
 
     # If we've hit here it must be false!

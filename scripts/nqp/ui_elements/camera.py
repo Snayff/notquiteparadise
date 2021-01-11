@@ -295,7 +295,7 @@ class Camera:
                 tile = world.get_tile(closest[0])
 
                 # check if tile step meets targeting criteria
-                if (not tile.is_visible) or (not world.tile_has_tags(player, tile, skill.target_tags)):
+                if (not tile.is_visible) or (not world.tile_has_tags(player, tile, skill.cast_tags)):
                     valid = False
 
                 current_pos = closest[0].copy()
