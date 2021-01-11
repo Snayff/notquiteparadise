@@ -172,6 +172,7 @@ class InputIntent(SimpleNamespace):
     UP_LEFT = InputIntentType("up_left")
     DOWN_RIGHT = InputIntentType("down_right")
     DOWN_LEFT = InputIntentType("down_left")
+    CENTRE = InputIntentType("centre")
     CONFIRM = InputIntentType("confirm")
     CANCEL = InputIntentType("cancel")
     EXIT = InputIntentType("exit")
@@ -347,8 +348,8 @@ class TargetingMethod(SimpleNamespace):
     """
 
     AUTO = TargetingMethodType("auto")
-    TILE = TargetingMethodType("tile")
-    DIRECTION = TargetingMethodType("direction")
+    TILE = TargetingMethodType("tile") # should be called TILE
+    LINE_OF_SIGHT = TargetingMethodType("line")
 
 
 class Shape(SimpleNamespace):
