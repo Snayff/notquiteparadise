@@ -259,6 +259,7 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
@@ -302,6 +303,12 @@
 <span class="sd">    Get the active skill. Used for targeting mode.</span>
 <span class="sd">    """</span>
     <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">active_skill</span></div>
+
+<div class="viewcode-block" id="get_active_skill_target"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.state.get_active_skill_target">[docs]</a><span class="k">def</span> <span class="nf">get_active_skill_target</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Get the active skill target. Used for targeting mode.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">active_skill_target</span></div>
 
 
 <div class="viewcode-block" id="get_current"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.state.get_current">[docs]</a><span class="k">def</span> <span class="nf">get_current</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GameState</span><span class="p">:</span>
@@ -360,6 +367,12 @@
 <span class="sd">    Set the active skill. Used for targeting mode.</span>
 <span class="sd">    """</span>
     <span class="n">store</span><span class="o">.</span><span class="n">active_skill</span> <span class="o">=</span> <span class="n">skill_name</span></div>
+
+<div class="viewcode-block" id="set_active_skill_target"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.state.set_active_skill_target">[docs]</a><span class="k">def</span> <span class="nf">set_active_skill_target</span><span class="p">(</span><span class="n">skill_target</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Set the active skill target. Used for targeting mode.</span>
+<span class="sd">    """</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">active_skill_target</span> <span class="o">=</span> <span class="n">skill_target</span></div>
 
 
 <span class="c1">##################### SAVE AND LOAD #######################</span>

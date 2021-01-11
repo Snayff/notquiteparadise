@@ -427,6 +427,7 @@
     <span class="n">UP_LEFT</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">"up_left"</span><span class="p">)</span>
     <span class="n">DOWN_RIGHT</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">"down_right"</span><span class="p">)</span>
     <span class="n">DOWN_LEFT</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">"down_left"</span><span class="p">)</span>
+    <span class="n">CENTRE</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">"centre"</span><span class="p">)</span>
     <span class="n">CONFIRM</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">"confirm"</span><span class="p">)</span>
     <span class="n">CANCEL</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">"cancel"</span><span class="p">)</span>
     <span class="n">EXIT</span> <span class="o">=</span> <span class="n">InputIntentType</span><span class="p">(</span><span class="s2">"exit"</span><span class="p">)</span>
@@ -602,8 +603,8 @@
 <span class="sd">    """</span>
 
     <span class="n">AUTO</span> <span class="o">=</span> <span class="n">TargetingMethodType</span><span class="p">(</span><span class="s2">"auto"</span><span class="p">)</span>
-    <span class="n">TILE</span> <span class="o">=</span> <span class="n">TargetingMethodType</span><span class="p">(</span><span class="s2">"tile"</span><span class="p">)</span>
-    <span class="n">DIRECTION</span> <span class="o">=</span> <span class="n">TargetingMethodType</span><span class="p">(</span><span class="s2">"direction"</span><span class="p">)</span></div>
+    <span class="n">TILE</span> <span class="o">=</span> <span class="n">TargetingMethodType</span><span class="p">(</span><span class="s2">"tile"</span><span class="p">)</span> <span class="c1"># should be called TILE</span>
+    <span class="n">LINE_OF_SIGHT</span> <span class="o">=</span> <span class="n">TargetingMethodType</span><span class="p">(</span><span class="s2">"line"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Shape"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.constant.Shape">[docs]</a><span class="k">class</span> <span class="nc">Shape</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
