@@ -49,7 +49,7 @@ def get_active_skill() -> str:
     """
     return store.active_skill
 
-def get_active_skill_target() -> Tuple[int, int]:
+def get_active_skill_target():
     """
     Get the active skill target. Used for targeting mode.
     """
@@ -107,7 +107,7 @@ def set_new(new_game_state: GameState):
     logging.info(log_string)
 
 
-def set_active_skill(skill_name: str):
+def set_active_skill(skill_name):
     """
     Set the active skill. Used for targeting mode.
     """
