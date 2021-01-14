@@ -31,7 +31,8 @@ class Store:
         self.current_game_state: GameState = GameState.LOADING
         self.previous_game_state: GameState = GameState.LOADING
         self.active_skill = None
-        self.active_skill_target = None
+        self.active_skill_target = [0, 0]
+        self.skill_target_valid = False
 
         # used in world
         self.current_game_map: Optional[GameMap] = None
