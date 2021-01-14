@@ -140,7 +140,7 @@ class CharacterSelector(Panel):
                 homeland.append(key)
 
         # bundle trait lists with group name
-        all_traits = [(people, TraitGroup.PEOPLE), (savvy, TraitGroup.SAVVY), (homeland, TraitGroup.SAVVY)]
+        all_traits = [(homeland, TraitGroup.SAVVY), (people, TraitGroup.PEOPLE), (savvy, TraitGroup.SAVVY)]
 
         # create drop downs
         count = 0

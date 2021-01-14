@@ -130,6 +130,7 @@ class Camera:
         TODO: Move targeting logic out of the camera.
         """
 
+        state.set_skill_target_valid(False)
         if self.hovered_tile and self.hovered_tile.is_visible:
             if state.get_current() == GameState.TARGETING:
                 active_skill_name = state.get_active_skill()
@@ -139,6 +140,7 @@ class Camera:
                 # set the skill target for the skill cast if the hovered tile is a valid target during line of sight targeting
                 if (skill.targeting_method == TargetingMethod.LINE_OF_SIGHT) and self.valid_line_of_sight:
                     state.set_active_skill_target((self.hovered_tile.x, self.hovered_tile.y))
+                    state.set_skill_target_valid(True)
 
                 # cancel event triggering if the hovered target is invalid in the target mode
                 if (skill.targeting_method == TargetingMethod.TILE):
@@ -206,7 +208,7 @@ class Camera:
                 # regenerate possible targets if targeting mode was just entered
                 if self.possible_los_tiles == None:
                     self.possible_los_tiles = []
-                    state.set_active_skill_target(None)
+                    state.set_skill_target_valid(False)
                     for y in range(skill.range * 2 + 1):
                         for x in range(skill.range * 2 + 1):
                             test_pos = (position.x - skill.range + x, position.y - skill.range + y)
@@ -290,15 +292,15 @@ class Camera:
                     check_pos = [current_pos[0] + direction[0], current_pos[1] + direction[1]]
                     math_check_pos = [current_pos[0] + directions_for_math[i][0], current_pos[1] + directions_for_math[i][1]]
                     dis = math.sqrt((math_check_pos[0] - target_pos[0]) ** 2 + (math_check_pos[1] - target_pos[1]) ** 2)
-                    if dis < closest[1]:
+                    if dis < closest[1]: # type: ignore
                         closest = [check_pos.copy(), dis]
-                tile = world.get_tile(closest[0])
+                tile = world.get_tile(closest[0]) # type: ignore
 
                 # check if tile step meets targeting criteria
                 if (not tile.is_visible) or (not world.tile_has_tags(player, tile, skill.cast_tags)):
                     valid = False
 
-                current_pos = closest[0].copy()
+                current_pos = closest[0].copy() # type: ignore
                 tile_path.append(current_pos.copy())
 
             # determine if the final path was valid based on skill range and previous calculations
