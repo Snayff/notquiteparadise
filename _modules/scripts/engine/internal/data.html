@@ -286,7 +286,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_game_state</span><span class="p">:</span> <span class="n">GameState</span> <span class="o">=</span> <span class="n">GameState</span><span class="o">.</span><span class="n">LOADING</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">previous_game_state</span><span class="p">:</span> <span class="n">GameState</span> <span class="o">=</span> <span class="n">GameState</span><span class="o">.</span><span class="n">LOADING</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">active_skill</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">active_skill_target</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_skill_target</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_target_valid</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># used in world</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_game_map</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GameMap</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
