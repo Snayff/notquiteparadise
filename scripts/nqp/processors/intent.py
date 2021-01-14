@@ -214,7 +214,7 @@ def _process_targeting_mode_intents(intent):
             outermost = position.get_outermost(direction)
             tile = world.get_tile((outermost[0] + direction[0], outermost[1] + direction[1]))
             if skill.targeting_method == TargetingMethod.LINE_OF_SIGHT:
-                if state.get_active_skill_target() == None:
+                if not state.get_skill_target_valid():
                     tile = None
                 else:
                     tile = world.get_tile(state.get_active_skill_target())
