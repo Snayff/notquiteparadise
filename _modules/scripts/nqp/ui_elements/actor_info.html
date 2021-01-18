@@ -415,17 +415,20 @@
 
                 <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"image"</span><span class="p">,</span> <span class="n">section_break_image</span><span class="p">))</span>
 
-            <span class="c1">#  get traits</span>
-            <span class="n">traits</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Traits</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">traits</span><span class="p">:</span>
-                <span class="n">names</span> <span class="o">=</span> <span class="s2">""</span>
-                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">traits</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
-                    <span class="c1"># if more than one trait add a separator</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">names</span> <span class="o">+=</span> <span class="s2">", "</span>
-                    <span class="n">names</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
-                <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"text"</span><span class="p">,</span> <span class="n">names</span><span class="p">))</span>
-                <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"image"</span><span class="p">,</span> <span class="n">section_break_image</span><span class="p">))</span>
+            <span class="c1">#  get traits (skip for projectiles)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">traits</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Traits</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">traits</span><span class="p">:</span>
+                    <span class="n">names</span> <span class="o">=</span> <span class="s2">""</span>
+                    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">traits</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+                        <span class="c1"># if more than one trait add a separator</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">names</span> <span class="o">+=</span> <span class="s2">", "</span>
+                        <span class="n">names</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"text"</span><span class="p">,</span> <span class="n">names</span><span class="p">))</span>
+                    <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"image"</span><span class="p">,</span> <span class="n">section_break_image</span><span class="p">))</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
 
             <span class="c1"># get afflictions</span>
             <span class="n">afflictions</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>
