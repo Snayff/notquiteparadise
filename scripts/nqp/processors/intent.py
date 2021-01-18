@@ -21,6 +21,7 @@ from scripts.engine.internal.constant import (
 )
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import command
+from scripts.nqp.processors.targeting import targeting
 from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.dungen_viewer import DungenViewer
 
@@ -166,7 +167,7 @@ def _process_game_map_intents(intent: InputIntentType):
         command.exit_game()
 
     elif intent == InputIntent.LEFT_CLICKED:
-        camera.process_click()
+        targeting.process_click()
 
 
 def _process_targeting_mode_intents(intent):
@@ -193,7 +194,7 @@ def _process_targeting_mode_intents(intent):
         state.set_new(state.get_previous())
 
     elif intent == InputIntent.LEFT_CLICKED:
-        camera.process_click()
+        targeting.process_click()
 
     ## Select new skill
     elif intent in possible_skill_intents:
