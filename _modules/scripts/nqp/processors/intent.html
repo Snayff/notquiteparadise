@@ -276,6 +276,7 @@
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">command</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.processors.targeting</span> <span class="kn">import</span> <span class="n">targeting</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.dungen_viewer</span> <span class="kn">import</span> <span class="n">DungenViewer</span>
 
@@ -421,7 +422,7 @@
         <span class="n">command</span><span class="o">.</span><span class="n">exit_game</span><span class="p">()</span>
 
     <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">LEFT_CLICKED</span><span class="p">:</span>
-        <span class="n">camera</span><span class="o">.</span><span class="n">process_click</span><span class="p">()</span></div>
+        <span class="n">targeting</span><span class="o">.</span><span class="n">process_click</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="_process_targeting_mode_intents"><a class="viewcode-back" href="../../../../nqp/processors/intent.html#scripts.nqp.processors.intent._process_targeting_mode_intents">[docs]</a><span class="k">def</span> <span class="nf">_process_targeting_mode_intents</span><span class="p">(</span><span class="n">intent</span><span class="p">):</span>
@@ -448,7 +449,7 @@
         <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_previous</span><span class="p">())</span>
 
     <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">InputIntent</span><span class="o">.</span><span class="n">LEFT_CLICKED</span><span class="p">:</span>
-        <span class="n">camera</span><span class="o">.</span><span class="n">process_click</span><span class="p">()</span>
+        <span class="n">targeting</span><span class="o">.</span><span class="n">process_click</span><span class="p">()</span>
 
     <span class="c1">## Select new skill</span>
     <span class="k">elif</span> <span class="n">intent</span> <span class="ow">in</span> <span class="n">possible_skill_intents</span><span class="p">:</span>

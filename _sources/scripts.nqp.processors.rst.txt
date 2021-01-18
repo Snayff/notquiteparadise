@@ -36,6 +36,14 @@ scripts.nqp.processors.intent module
    :undoc-members:
    :show-inheritance:
 
+scripts.nqp.processors.targeting module
+---------------------------------------
+
+.. automodule:: scripts.nqp.processors.targeting
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

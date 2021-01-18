@@ -251,6 +251,8 @@
         </li>
         <li class="md-nav__item"><a href="#module-scripts.nqp.processors.intent" class="md-nav__link">scripts.nqp.processors.intent module</a>
         </li>
+        <li class="md-nav__item"><a href="#module-scripts.nqp.processors.targeting" class="md-nav__link">scripts.nqp.processors.targeting module</a>
+        </li>
         <li class="md-nav__item"><a href="#module-scripts.nqp.processors" class="md-nav__link">Module contents</a>
         </li></ul>
             </nav>
@@ -318,6 +320,40 @@ called in one way then no intent is generated and the event will directly go to 
 <code class="sig-name descname">process_intent</code><span class="sig-paren">(</span><em class="sig-param">intent: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">game_state: Optional[scripts.engine.internal.constant.GameState] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/intent.html#process_intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent.process_intent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the intent in the context of the game state. Intents are game state sensitive. If no game state  is
 passed the current one will be obtained.</p>
+</dd></dl>
+
+
+<span id="scripts-nqp-processors-targeting-module"></span><h2 id="module-scripts.nqp.processors.targeting">scripts.nqp.processors.targeting module<a class="headerlink" href="#module-scripts.nqp.processors.targeting" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.nqp.processors.targeting.Targeting">
+<em class="property">class </em><code class="sig-name descname">Targeting</code><a class="reference internal" href="_modules/scripts/nqp/processors/targeting.html#Targeting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.targeting.Targeting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="scripts.nqp.processors.targeting.Targeting.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/targeting.html#Targeting.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.targeting.Targeting.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.nqp.processors.targeting.Targeting.check_valid_line_of_sight">
+<code class="sig-name descname">check_valid_line_of_sight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span> → Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span>List<span class="p">]</span><a class="reference internal" href="_modules/scripts/nqp/processors/targeting.html#Targeting.check_valid_line_of_sight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.targeting.Targeting.check_valid_line_of_sight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a tile is in the line of sight from the player and returns the visible path to the target tile.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.nqp.processors.targeting.Targeting.process_click">
+<code class="sig-name descname">process_click</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/targeting.html#Targeting.process_click"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.targeting.Targeting.process_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a click. This is currently just used during targeting to trigger the cast event since the camera tracks what tiles are targetable.
+TODO: Move targeting logic out of the camera.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.nqp.processors.targeting.Targeting.process_events">
+<code class="sig-name descname">process_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">camera</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/targeting.html#Targeting.process_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.targeting.Targeting.process_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>For processing local events based on camera data.
+Updates the current hovered tile based on mouse position and updates the TILE_INFO GUI element.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.nqp.processors.targeting.Targeting.render">
+<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">camera</span></em>, <em class="sig-param"><span class="n">target_surf</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://www.pygame.org/docs/ref/surface.html#pygame.Surface" title="(in pygame v2.0.1.dev1)">pygame.Surface</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/targeting.html#Targeting.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.targeting.Targeting.render" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 </dd></dl>
 
 
