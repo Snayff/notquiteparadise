@@ -80,16 +80,19 @@ class TileInfo(Panel):
                         current_info.append(f"Health: {resources.health}")
                         current_info.append(f"Stamina: {resources.stamina}")
 
-                    #  get traits
-                    traits = world.get_entitys_component(entity, Traits)
-                    if traits:
-                        names = ""
-                        for name in traits.names:
-                            # if more than one trait add a separator
-                            if len(names) > 1:
-                                names += ", "
-                            names += f"{name}"
-                        current_info.append(names)
+                    #  get traits (handle projectile exception)
+                    try:
+                        traits = world.get_entitys_component(entity, Traits)
+                        if traits:
+                            names = ""
+                            for name in traits.names:
+                                # if more than one trait add a separator
+                                if len(names) > 1:
+                                    names += ", "
+                                names += f"{name}"
+                            current_info.append(names)
+                    except:
+                        pass
 
                     # add collected info to main info
                     info.append(current_info)

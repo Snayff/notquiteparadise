@@ -160,17 +160,20 @@ class ActorInfo(Window):
 
                 info.append(("image", section_break_image))
 
-            #  get traits
-            traits = world.get_entitys_component(entity, Traits)
-            if traits:
-                names = ""
-                for name in traits.names:
-                    # if more than one trait add a separator
-                    if len(names) > 1:
-                        names += ", "
-                    names += f"{name}"
-                info.append(("text", names))
-                info.append(("image", section_break_image))
+            #  get traits (skip for projectiles)
+            try:
+                traits = world.get_entitys_component(entity, Traits)
+                if traits:
+                    names = ""
+                    for name in traits.names:
+                        # if more than one trait add a separator
+                        if len(names) > 1:
+                            names += ", "
+                        names += f"{name}"
+                    info.append(("text", names))
+                    info.append(("image", section_break_image))
+            except:
+                pass
 
             # get afflictions
             afflictions = world.get_entitys_component(entity, Afflictions)
