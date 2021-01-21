@@ -335,7 +335,7 @@
     <span class="n">ProjectileData</span><span class="p">,</span>
     <span class="n">TerrainData</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.event</span> <span class="kn">import</span> <span class="n">event_hub</span><span class="p">,</span> <span class="n">MessageEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.event</span> <span class="kn">import</span> <span class="n">event_hub</span><span class="p">,</span> <span class="n">MessageEvent</span><span class="p">,</span> <span class="n">LoseConditionMetEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects</span> <span class="kn">import</span> <span class="n">lighting</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.combat_stats</span> <span class="kn">import</span> <span class="n">CombatStats</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
@@ -1733,7 +1733,8 @@
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># placeholder for player death</span>
-        <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="s2">"I should have died just then."</span><span class="p">))</span></div>
+        <span class="c1">#event_hub.post(MessageEvent("I should have died just then."))</span>
+        <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">LoseConditionMetEvent</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="delete_entity"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.world.delete_entity">[docs]</a><span class="k">def</span> <span class="nf">delete_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">):</span>

@@ -270,6 +270,7 @@
     <span class="n">StartGameEvent</span><span class="p">,</span>
     <span class="n">Subscriber</span><span class="p">,</span>
     <span class="n">WinConditionMetEvent</span><span class="p">,</span>
+    <span class="n">LoseConditionMetEvent</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">command</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors.intent</span> <span class="kn">import</span> <span class="n">process_intent</span>
@@ -308,6 +309,9 @@
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">WinConditionMetEvent</span><span class="p">):</span>
             <span class="n">command</span><span class="o">.</span><span class="n">win_game</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">LoseConditionMetEvent</span><span class="p">):</span>
+            <span class="n">command</span><span class="o">.</span><span class="n">lose_game</span><span class="p">()</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">NewTurnEvent</span><span class="p">):</span>
             <span class="k">pass</span>

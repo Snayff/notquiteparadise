@@ -282,6 +282,7 @@
     <span class="s2">"StartGameEvent"</span><span class="p">,</span>
     <span class="s2">"LoadGameEvent"</span><span class="p">,</span>
     <span class="s2">"WinConditionMetEvent"</span><span class="p">,</span>
+    <span class="s2">"LoseConditionMetEvent"</span><span class="p">,</span>
     <span class="s2">"MessageEvent"</span><span class="p">,</span>
 <span class="p">]</span>
 
@@ -460,6 +461,10 @@
 
 <div class="viewcode-block" id="WinConditionMetEvent"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.WinConditionMetEvent">[docs]</a><span class="k">class</span> <span class="nc">WinConditionMetEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
 <div class="viewcode-block" id="WinConditionMetEvent.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.WinConditionMetEvent.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="LoseConditionMetEvent"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.LoseConditionMetEvent">[docs]</a><span class="k">class</span> <span class="nc">LoseConditionMetEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+<div class="viewcode-block" id="LoseConditionMetEvent.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.LoseConditionMetEvent.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">)</span></div></div>
 
 
