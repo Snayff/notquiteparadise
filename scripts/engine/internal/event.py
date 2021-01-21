@@ -27,6 +27,7 @@ __all__ = [
     "StartGameEvent",
     "LoadGameEvent",
     "WinConditionMetEvent",
+    "LoseConditionMetEvent",
     "MessageEvent",
 ]
 
@@ -204,6 +205,10 @@ class ExitGameEvent(Event):
 
 
 class WinConditionMetEvent(Event):
+    def __init__(self):
+        super().__init__(EventType.GAME)
+
+class LoseConditionMetEvent(Event):
     def __init__(self):
         super().__init__(EventType.GAME)
 
