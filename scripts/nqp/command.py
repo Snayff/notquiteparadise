@@ -250,6 +250,13 @@ def win_game():
     timer = Timer(2.0, goto_to_title)
     timer.start()
 
+def lose_game():
+    state.set_new(GameState.MENU)
+    ui.create_screen_message("You hath died. Huzzah?")
+
+    # quit to main menu after a few seconds
+    timer = Timer(2.0, goto_to_title)
+    timer.start()
 
 ############### NAVIGATION  #####################
 

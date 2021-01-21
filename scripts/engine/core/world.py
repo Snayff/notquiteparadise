@@ -80,7 +80,7 @@ from scripts.engine.internal.definition import (
     ProjectileData,
     TerrainData,
 )
-from scripts.engine.internal.event import event_hub, MessageEvent
+from scripts.engine.internal.event import event_hub, MessageEvent, LoseConditionMetEvent
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
@@ -1478,7 +1478,8 @@ def kill_entity(entity: EntityID):
 
     else:
         # placeholder for player death
-        event_hub.post(MessageEvent("I should have died just then."))
+        #event_hub.post(MessageEvent("I should have died just then."))
+        event_hub.post(LoseConditionMetEvent())
 
 
 def delete_entity(entity: EntityID):

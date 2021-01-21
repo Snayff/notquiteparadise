@@ -15,6 +15,7 @@ from scripts.engine.internal.event import (
     StartGameEvent,
     Subscriber,
     WinConditionMetEvent,
+    LoseConditionMetEvent,
 )
 from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent
@@ -53,6 +54,9 @@ class GameEventSubscriber(Subscriber):
 
         elif isinstance(event, WinConditionMetEvent):
             command.win_game()
+
+        elif isinstance(event, LoseConditionMetEvent):
+            command.lose_game()
 
         elif isinstance(event, NewTurnEvent):
             pass
