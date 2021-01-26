@@ -10,7 +10,7 @@ import snecs
 from snecs import Component
 
 from scripts.engine.core import chronicle, state, system, utility, world
-from scripts.engine.core.component import Aesthetic, Position, WinCondition
+from scripts.engine.core.component import Aesthetic, Position, WinCondition, MapCondition
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import library
 from scripts.engine.internal.action import register_action
@@ -162,6 +162,17 @@ def start_game(player_data: ActorData):
     components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
     world.create_entity(components)
 
+    # create map change condition and place next to player
+    win_x = player_pos.x + 2
+    win_y = player_pos.y
+    components: List[Component] = []
+    components.append(Position((win_x, win_y)))  # lets hope this doesnt spawn in a wall
+    components.append(MapCondition())
+    traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/map_flag.png"))]
+    sprites = utility.build_sprites_from_paths(traits_paths)
+    components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
+    world.create_entity(components)
+
     # tell places about the player
     chronicle.set_turn_holder(player)
 
@@ -257,6 +268,39 @@ def lose_game():
     # quit to main menu after a few seconds
     timer = Timer(2.0, goto_to_title)
     timer.start()
+
+def change_map():
+    # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
+    # extremely scuffed and for testing. copied a bunch of stuff from start_game()
+    
+    # get player data
+    player_data = ActorData(
+        key="player",
+        possible_names=["player"],
+        description="Player desc",
+        position_offsets=[(0, 0)],
+        trait_names=["shoom", "soft_tops", "dandy"],
+        height=Height.MIDDLING,
+    )
+
+    # init and save map
+    game_map = GameMap("cave", 10)
+    store.current_game_map = game_map
+
+    # populate the map
+    game_map.generate_new_map(player_data)
+
+    # init the player
+    player = world.get_player()
+
+    # entities load with a blank fov, update them now
+    system.process_light_map()
+    system.process_fov()
+    system.process_tile_visibility()
+
+    # point the camera at the player, now that FOV is updated
+    pos = world.get_entitys_component(player, Position)
+    camera.set_target((pos.x, pos.y), True)
 
 ############### NAVIGATION  #####################
 
