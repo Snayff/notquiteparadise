@@ -706,6 +706,27 @@ full-World serialization feature.</p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
+<dt id="scripts.engine.core.component.MapCondition">
+<em class="property">class </em><code class="sig-name descname">MapCondition</code><a class="reference internal" href="_modules/scripts/engine/core/component.html#MapCondition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.component.MapCondition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.core.component.NQPComponent" title="scripts.engine.core.component.NQPComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.component.NQPComponent</span></code></a></p>
+<p>A flag to show that an entity will take the player to the next map</p>
+<dl class="py method">
+<dt id="scripts.engine.core.component.MapCondition.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/component.html#MapCondition.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.component.MapCondition.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize a serialized instance of this component.</p>
+<p>Will get the output of <cite>serialize</cite> as an argument.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.component.MapCondition.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/component.html#MapCondition.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.component.MapCondition.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize an instance of this component into a simpler type.</p>
+<p>Override this in all your Component classes to make use of snecs’
+full-World serialization feature.</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
 <dt id="scripts.engine.core.component.NQPComponent">
 <em class="property">class </em><code class="sig-name descname">NQPComponent</code><a class="reference internal" href="_modules/scripts/engine/core/component.html#NQPComponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.component.NQPComponent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://snecs.slavfox.space/api/#snecs-component-registeredcomponent" title="(in snecs v1.2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></a></p>

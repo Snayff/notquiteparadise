@@ -288,6 +288,7 @@
     <span class="s2">"IsActive"</span><span class="p">,</span>
     <span class="s2">"HasCombatStats"</span><span class="p">,</span>
     <span class="s2">"WinCondition"</span><span class="p">,</span>
+    <span class="s2">"MapCondition"</span><span class="p">,</span>
     <span class="s2">"Position"</span><span class="p">,</span>
     <span class="s2">"Aesthetic"</span><span class="p">,</span>
     <span class="s2">"Tracked"</span><span class="p">,</span>
@@ -397,6 +398,20 @@
 <div class="viewcode-block" id="WinCondition.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.WinCondition.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">WinCondition</span><span class="p">()</span></div></div>
+
+<div class="viewcode-block" id="MapCondition"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.MapCondition">[docs]</a><span class="k">class</span> <span class="nc">MapCondition</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    A flag to show that an entity will take the player to the next map</span>
+<span class="sd">    """</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+
+<div class="viewcode-block" id="MapCondition.serialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.MapCondition.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="MapCondition.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.MapCondition.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">MapCondition</span><span class="p">()</span></div></div>
 
 
 <span class="c1">#################### OTHERS #########################</span>
