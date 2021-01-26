@@ -33,6 +33,7 @@ __all__ = [
     "IsActive",
     "HasCombatStats",
     "WinCondition",
+    "MapCondition",
     "Position",
     "Aesthetic",
     "Tracked",
@@ -142,6 +143,20 @@ class WinCondition(NQPComponent):
     @classmethod
     def deserialize(cls, serialised):
         return WinCondition()
+
+class MapCondition(NQPComponent):
+    """
+    A flag to show that an entity will take the player to the next map
+    """
+
+    __slots__ = ()
+
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return MapCondition()
 
 
 #################### OTHERS #########################

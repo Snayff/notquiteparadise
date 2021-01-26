@@ -21,6 +21,7 @@ from scripts.engine.core.component import (
     Tracked,
     Traits,
     WinCondition,
+    MapCondition,
 )
 
 __all__ = [
@@ -42,6 +43,7 @@ __all__ = [
     "position_and_aesthetic",
     "position_and_identity_and_aesthetic",
     "position_and_win_condition",
+    "position_and_map_condition",
     "active_and_tracked",
     "light_source_and_aesthetic",
     "position_and_identity_and_lifespan",
@@ -83,6 +85,8 @@ position_and_physicality = get_components([Position, Physicality]).compile()
 position_and_aesthetic = get_components([Position, Aesthetic]).compile()
 
 position_and_win_condition = get_components([Position, WinCondition]).compile()
+
+position_and_map_condition = get_components([Position, MapCondition]).compile()
 
 position_and_reaction = get_components([Position, Reaction]).compile()
 
