@@ -348,6 +348,13 @@
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
             <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation_info</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span></div>
 
+    <span class="c1">######################## UTIL ##########################################</span>
+<div class="viewcode-block" id="GameMap.get_open_space"><a class="viewcode-back" href="../../../../scripts.engine.world_objects.html#scripts.engine.world_objects.game_map.GameMap.get_open_space">[docs]</a>    <span class="k">def</span> <span class="nf">get_open_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Returns a random open space from the tile map.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">air_tile_positions</span><span class="p">)</span></div>
+
     <span class="c1">################### DATA MANAGEMENT ####################################</span>
 
     <span class="k">def</span> <span class="nf">_refresh_internals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

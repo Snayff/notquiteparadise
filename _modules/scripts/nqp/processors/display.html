@@ -332,7 +332,11 @@
         <span class="n">aesthetic</span><span class="p">:</span> <span class="n">Aesthetic</span>
 
         <span class="c1"># update lights in the light box</span>
-        <span class="n">light</span> <span class="o">=</span> <span class="n">light_box</span><span class="o">.</span><span class="n">get_light</span><span class="p">(</span><span class="n">light_source</span><span class="o">.</span><span class="n">light_id</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">light</span> <span class="o">=</span> <span class="n">light_box</span><span class="o">.</span><span class="n">get_light</span><span class="p">(</span><span class="n">light_source</span><span class="o">.</span><span class="n">light_id</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">light_source</span><span class="o">.</span><span class="n">light_id</span><span class="p">,</span> <span class="n">light_box</span><span class="p">,</span> <span class="n">light_box</span><span class="o">.</span><span class="n">lights</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">()</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span> <span class="o">*</span> <span class="n">TILE_SIZE</span> <span class="o">+</span> <span class="p">(</span><span class="n">TILE_SIZE</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">*</span> <span class="n">TILE_SIZE</span> <span class="o">+</span> <span class="p">(</span><span class="n">TILE_SIZE</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">light</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span></div>
