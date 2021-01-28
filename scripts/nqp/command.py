@@ -166,7 +166,7 @@ def start_game(player_data: ActorData):
     # create map change condition and place next to player
     win_x = player_pos.x + 2
     win_y = player_pos.y
-    components: List[Component] = []
+    components = []
     components.append(Position((win_x, win_y)))  # lets hope this doesnt spawn in a wall
     components.append(MapCondition())
     traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/map_flag.png"))]
