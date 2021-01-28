@@ -93,6 +93,13 @@ class GameMap:
         with open(path, "w") as fp:
             fp.write(json.dumps(self.generation_info, indent=4))
 
+    ######################## UTIL ##########################################
+    def get_open_space(self):
+        """
+        Returns a random open space from the tile map.
+        """
+        return random.choice(self.air_tile_positions)
+
     ################### DATA MANAGEMENT ####################################
 
     def _refresh_internals(self):

@@ -811,10 +811,14 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
     """
     if entity_has_component(entity, component):
         return snecs.entity_component(entity, component)
-    else:
+    elif entity_has_component(entity, Identity):
         name = get_name(entity)
         raise AttributeError(
             f"get_entitys_component:'{name}'({entity}) tried to get {component.__name__}, " f"but it was not found."
+        )
+    else:
+        raise AttributeError(
+            f"get_entitys_component:'unknown'({entity}) tried to get {component.__name__}, " f"but it was not found."
         )
 
 
