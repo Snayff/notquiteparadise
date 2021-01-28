@@ -77,7 +77,11 @@ def _process_lighting():
         aesthetic: Aesthetic
 
         # update lights in the light box
-        light = light_box.get_light(light_source.light_id)
+        try:
+            light = light_box.get_light(light_source.light_id)
+        except KeyError:
+            print(light_source.light_id, light_box, light_box.lights)
+            raise KeyError()
         x = aesthetic.draw_x * TILE_SIZE + (TILE_SIZE / 2)
         y = aesthetic.draw_y * TILE_SIZE + (TILE_SIZE / 2)
         light.position = [x, y]

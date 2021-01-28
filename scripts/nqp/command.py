@@ -8,9 +8,10 @@ from typing import List
 import pygame
 import snecs
 from snecs import Component
+from snecs.world import default_world
 
 from scripts.engine.core import chronicle, state, system, utility, world
-from scripts.engine.core.component import Aesthetic, Position, WinCondition, MapCondition
+from scripts.engine.core.component import Aesthetic, Position, WinCondition, MapCondition, Exists, IsPlayer, Identity, LightSource
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import library
 from scripts.engine.internal.action import register_action
@@ -165,7 +166,7 @@ def start_game(player_data: ActorData):
     # create map change condition and place next to player
     win_x = player_pos.x + 2
     win_y = player_pos.y
-    components: List[Component] = []
+    components = []
     components.append(Position((win_x, win_y)))  # lets hope this doesnt spawn in a wall
     components.append(MapCondition())
     traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/map_flag.png"))]
@@ -272,26 +273,40 @@ def lose_game():
 def change_map():
     # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
     # extremely scuffed and for testing. copied a bunch of stuff from start_game()
-    
-    # get player data
-    player_data = ActorData(
-        key="player",
-        possible_names=["player"],
-        description="Player desc",
-        position_offsets=[(0, 0)],
-        trait_names=["shoom", "soft_tops", "dandy"],
-        height=Height.MIDDLING,
-    )
+
+    # entities must be forcefully deleted or components will delete lights from the new lightbox once the delete in main runs
+    for entity, (_,) in list(world.get_components([Exists])):
+        if not world.entity_has_component(entity, IsPlayer) and world.entity_has_component(entity, Identity):
+            snecs.delete_entity_immediately(entity, default_world)
 
     # init and save map
     game_map = GameMap("cave", 10)
     store.current_game_map = game_map
 
-    # populate the map
-    game_map.generate_new_map(player_data)
+    # regenerate lights for transferred entities
+    for entity, (light_source, position) in list(world.get_components([LightSource, Position])):
+        # set up light
+        radius = 2  # TODO - pull radius and colour from external data
+        colour = (255, 255, 255)
+        alpha = 200
+        light_source.light_id = world.create_light([position.x, position.y], radius, colour, alpha)
 
-    # init the player
+    # populate the map
+    game_map.generate_new_map(None)
+
+    # get the player
     player = world.get_player()
+
+    # transfer player to new spawn
+    player_position = world.get_entitys_component(player, Position)
+    new_pos = tuple(game_map.get_open_space())
+    player_position.set(*new_pos)
+
+    # visually update player position
+    aesthetic = world.get_entitys_component(player, Aesthetic)
+    if aesthetic:
+        aesthetic.target_draw_x, aesthetic.target_draw_y = new_pos
+        aesthetic.current_sprite = aesthetic.sprites.move
 
     # entities load with a blank fov, update them now
     system.process_light_map()
