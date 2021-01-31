@@ -290,11 +290,10 @@ class AffectStatEffect(Effect):
         """
         logging.debug("Evaluating Affect Stat Effect...")
         success = False
-        afflictions = world.get_entitys_component(self.target, Afflictions)
+        stats = world.get_entitys_component(self.target, CombatStats)
 
-        # if not already applied
-        if self.cause_name not in afflictions.stat_modifiers:
-            afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
+        # if successfully  applied
+        if stats.amend_mod_value(self.stat_to_target, self.cause_name, self.affect_amount):
 
             # post interaction event
             event = AffectStatEvent(

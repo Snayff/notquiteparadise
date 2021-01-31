@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import sys
 from dataclasses import asdict
 from typing import TYPE_CHECKING, Union
@@ -12,7 +13,7 @@ from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
     EffectType,
     HeightType,
-    PrimaryStatType,
+    PrimaryStat, PrimaryStatType,
     ReactionTrigger,
     ReactionTriggerType,
     RenderLayer, SecondaryStat, SecondaryStatType,
@@ -720,11 +721,11 @@ class CombatStats(NQPComponent):
         self._bustle: int = bustle
         self._exactitude: int = exactitude
 
-        self._vigour_mod: int = 0
-        self._clout_mod: int = 0
-        self._skullduggery_mod: int = 0
-        self._bustle_mod: int = 0
-        self._exactitude_mod: int = 0
+        self._vigour_mod: Dict[str, int] = {}
+        self._clout_mod: Dict[str, int] = {}
+        self._skullduggery_mod: Dict[str, int] = {}
+        self._bustle_mod: Dict[str, int] = {}
+        self._exactitude_mod: Dict[str, int] = {}
 
         self._max_health: int = library.BASE_STATS_SECONDARY[SecondaryStat.MAX_HEALTH].base_value
         self._max_stamina: int = library.BASE_STATS_SECONDARY[SecondaryStat.MAX_STAMINA].base_value
@@ -736,16 +737,15 @@ class CombatStats(NQPComponent):
         self._resist_mundane: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_MUNDANE].base_value
         self._rush: int = library.BASE_STATS_SECONDARY[SecondaryStat.RUSH].base_value
 
-        self._max_health_mod: int = 0
-        self._max_stamina_mod: int = 0
-        self._accuracy_mod: int = 0
-        self._resist_burn_mod: int = 0
-        self._resist_cold_mod: int = 0
-        self._resist_chemical_mod: int = 0
-        self._resist_astral_mod: int = 0
-        self._resist_mundane_mod: int = 0
-        self._rush_mod: int = 0
-
+        self._max_health_mod: Dict[str, int] = {}
+        self._max_stamina_mod: Dict[str, int] = {}
+        self._accuracy_mod: Dict[str, int] = {}
+        self._resist_burn_mod: Dict[str, int] = {}
+        self._resist_cold_mod: Dict[str, int] = {}
+        self._resist_chemical_mod: Dict[str, int] = {}
+        self._resist_astral_mod: Dict[str, int] = {}
+        self._resist_mundane_mod: Dict[str, int] = {}
+        self._rush_mod: Dict[str, int] = {}
 
     def amend_base_value(self, stat: Union[PrimaryStatType, SecondaryStatType], amount: int):
         """
@@ -754,12 +754,32 @@ class CombatStats(NQPComponent):
         stat_to_amend = getattr(self, "_" + stat)
         stat_to_amend += amount
 
-    def amend_mod_value(self, stat: Union[PrimaryStatType, SecondaryStatType], amount: int):
+    def amend_mod_value(self, stat: Union[PrimaryStatType, SecondaryStatType], cause: str, amount: int) -> bool:
         """
-        Amend the modifier of a stat
+        Amend the modifier of a stat. Returns True if successfully amended, else False.
         """
         mod_to_amend = getattr(self, "_" + stat + "_mod")
-        mod_to_amend += amount
+
+        if cause in mod_to_amend:
+            logging.info(f"Stat not modified as {cause} has already been applied.")
+            return False
+        else:
+            mod_to_amend[cause] = amount
+            return True
+
+    def remove_mod(self, stat: Union[PrimaryStatType, SecondaryStatType], cause: str) -> bool:
+        """
+        Remove a modifier from a stat. Returns True if successfully removed, else False.
+        """
+        mod_to_amend = getattr(self, "_" + stat + "_mod")
+
+        if cause in mod_to_amend:
+            del mod_to_amend[cause]
+            return True
+        else:
+            logging.info(f"Modifier not removed as {cause} does not exist in modifier list.")
+            return False
+
 
     def _get_secondary_stat(self, stat: SecondaryStatType) -> int:
         """
@@ -773,45 +793,53 @@ class CombatStats(NQPComponent):
         value += self.skullduggery * stat_data.skullduggery_mod
         value += self.bustle * stat_data.bustle_mod
         value += self.exactitude * stat_data.exactitude_mod
-        value += getattr(self, "_" + stat.lower() + "_mod")
+        value += self._get_mod_value(stat)
 
         return value
 
+    def _get_mod_value(self, stat: Union[PrimaryStatType, SecondaryStatType]) -> int:
+        mod = getattr(self, "_" + stat + "_mod")
+
+        value = 0
+        for modifier in mod.values():
+            value += modifier
+
+        return value
 
     @property
     def vigour(self) -> int:
         """
         Influences healthiness. Never below 1.
         """
-        return self._vigour + self._vigour_mod
+        return self._vigour + self._get_mod_value(PrimaryStat.VIGOUR)
 
     @property
     def clout(self) -> int:
         """
         Influences forceful things. Never below 1.
         """
-        return self._clout + self._clout_mod
+        return self._clout + self._get_mod_value(PrimaryStat.CLOUT)
 
     @property
     def skullduggery(self) -> int:
         """
         Influences sneaky things. Never below 1.
         """
-        return self._skullduggery + self._skullduggery_mod
+        return self._skullduggery + self._get_mod_value(PrimaryStat.SKULLDUGGERY)
 
     @property
     def bustle(self) -> int:
         """
         Influences speedy things. Never below 1.
         """
-        return self._bustle + self._bustle_mod
+        return self._bustle + self._get_mod_value(PrimaryStat.BUSTLE)
 
     @property
     def exactitude(self) -> int:
         """
         Influences preciseness. Never below 1.
         """
-        return self._exactitude + self._exactitude_mod
+        return self._exactitude + self._get_mod_value(PrimaryStat.EXACTITUDE)
 
     @property
     def max_health(self) -> int:
