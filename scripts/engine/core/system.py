@@ -160,7 +160,7 @@ def process_fov():
                 updated_block_sight_map[x, y] = 0
 
         # update entities fov map
-        stats = world.create_combat_stats(entity)
+        stats = world.create_combat_stats(entity) # TODO replace with sight component
         fov.map = tcod.map.compute_fov(
             updated_block_sight_map, (pos.x, pos.y), stats.sight_range, FOV_LIGHT_WALLS, FOV_ALGORITHM
         )

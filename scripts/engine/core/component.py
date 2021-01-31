@@ -32,7 +32,7 @@ __all__ = [
     "Exists",
     "IsPlayer",
     "IsActive",
-    "HasCombatStats",
+    "CombatStats",
     "WinCondition",
     "MapCondition",
     "Position",
@@ -114,21 +114,6 @@ class IsActive(NQPComponent):
     @classmethod
     def deserialize(cls, serialised):
         return IsActive()
-
-
-class HasCombatStats(NQPComponent):
-    """
-    A flag to show if an entity has stats used for combat.
-    """
-
-    __slots__ = ()
-
-    def serialize(self):
-        return True
-
-    @classmethod
-    def deserialize(cls, serialised):
-        return HasCombatStats()
 
 
 class WinCondition(NQPComponent):

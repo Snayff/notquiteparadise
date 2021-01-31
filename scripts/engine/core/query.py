@@ -5,7 +5,7 @@ from snecs import Query
 from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
-    Exists,
+    CombatStats, Exists,
     FOV,
     HasCombatStats,
     Identity,
@@ -103,14 +103,14 @@ light_source_and_aesthetic = get_components([LightSource, Aesthetic]).compile()
 active_and_position_and_physicality = get_components([IsActive, Position, Physicality]).compile()
 
 active_and_position_and_fov_and_combat_stats_and_physicality = get_components(
-    [IsActive, Position, FOV, HasCombatStats, Physicality]
+    [IsActive, Position, FOV, CombatStats, Physicality]
 ).compile()
 
 
 ################## TYPE OF ENTITY QUERIES ##########################
 # N.B. these are based on what components are used during the creation methods
 
-actors = get_components([Position, Physicality, Identity, HasCombatStats, Traits, FOV, Tracked, Immunities])
+actors = get_components([Position, Physicality, Identity, CombatStats, Traits, FOV, Tracked, Immunities])
 
 
 ##################### FILTERS ###############################

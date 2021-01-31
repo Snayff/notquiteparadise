@@ -4,7 +4,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine.core import query, state, world
 from scripts.engine.internal import library
-from scripts.engine.core.component import Afflictions, Knowledge, Position, Resources
+from scripts.engine.core.component import Afflictions, CombatStats, Knowledge, Position, Resources
 from scripts.engine.internal.constant import DamageType, Direction, PrimaryStat
 from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData
@@ -206,10 +206,10 @@ def test_affect_stat_effect(
         affect_amount=affect_amount,
     )
 
-    stats = world.create_combat_stats(entity)
+    stats = world.get_entitys_component(entity, CombatStats)
     start_stat = getattr(stats, stat_to_target)
     success = effect.evaluate()[0]
-    stats = world.create_combat_stats(entity)
+    stats = world.get_entitys_component(entity, CombatStats)
     end_stat = getattr(stats, stat_to_target)
 
     if success:

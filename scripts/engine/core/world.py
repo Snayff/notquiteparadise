@@ -161,12 +161,24 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         components.append(IsPlayer())
     components.append(Position(*occupied_tiles))
     components.append(Identity(name, actor_data.description))
-    components.append(HasCombatStats())
     components.append(Physicality(True, actor_data.height))
     components.append(Traits(actor_data.trait_names))
     components.append(FOV())
     components.append(Tracked(chronicle.get_time()))
     components.append(Immunities())
+
+    # combat stats
+    base_stats = {}
+    for stat in [PrimaryStat.VIGOUR, PrimaryStat.CLOUT, PrimaryStat.SKULLDUGGERY, PrimaryStat.BUSTLE,
+                PrimaryStat.EXACTITUDE]:
+        value = 0
+        # loop traits and get base values for stats
+        for name in actor_data.trait_names:
+            data = library.TRAITS[name]
+            value += getattr(data, stat)
+        base_stats[stat] = value
+    stats = CombatStats(**base_stats)
+    components.append(stats)  # type: ignore
 
     # set up light
     radius = 2  # TODO - pull radius and colour from external data
@@ -228,7 +240,6 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         add_component(entity, Thought(behaviour(entity)))
 
     # give full resources N.B. Can only be added once entity is created
-    stats = create_combat_stats(entity)
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
     logging.debug(f"Actor Entity, '{name}', created.")

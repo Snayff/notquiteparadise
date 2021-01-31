@@ -229,8 +229,6 @@ class SecondaryStat(SimpleNamespace):
 
     MAX_HEALTH = SecondaryStatType("max_health")
     MAX_STAMINA = SecondaryStatType("max_stamina")
-    HEALTH = SecondaryStatType("health")
-    STAMINA = SecondaryStatType("stamina")
     ACCURACY = SecondaryStatType("accuracy")
     RESIST_BURN = SecondaryStatType("resist_burn")
     RESIST_CHEMICAL = SecondaryStatType("resist_chemical")
