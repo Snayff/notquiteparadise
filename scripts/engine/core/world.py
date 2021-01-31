@@ -350,13 +350,11 @@ def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], d
     behaviour = store.behaviour_registry["DelayedSkill"]
     thought = Thought(behaviour(entity))
     from scripts.engine.internal.action import DelayedSkill
-
     assert isinstance(thought.behaviour, DelayedSkill)
     thought.behaviour.data = data
-    thought.behaviour.remaining_duration = data.duration
     add_component(entity, thought)
 
-    logging.debug(f"{delayed_skill_name}`s created at ({x},{y}) and will trigger in {data.duration} " f"turns.")
+    logging.debug(f"{delayed_skill_name}`s created at ({x},{y}) and will trigger in {data.duration} rounds.")
 
     return entity
 
@@ -851,6 +849,7 @@ def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
             data = library.TRAITS[name]
             value += getattr(data, stat)
 
+    # TODO: create system to add or remove mod made by affliction
     if entity_has_component(entity, Afflictions):
         afflictions = get_entitys_component(entity, Afflictions)
         for modifier in afflictions.stat_modifiers.values():

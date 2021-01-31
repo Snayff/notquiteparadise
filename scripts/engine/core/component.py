@@ -2,19 +2,20 @@ from __future__ import annotations
 
 import sys
 from dataclasses import asdict
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 import numpy as np
 from snecs import RegisteredComponent
 from snecs.typedefs import EntityID
 
+from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
     EffectType,
     HeightType,
     PrimaryStatType,
     ReactionTrigger,
     ReactionTriggerType,
-    RenderLayer,
+    RenderLayer, SecondaryStat, SecondaryStatType,
 )
 from scripts.engine.internal.definition import EffectData, ReactionData
 
@@ -144,6 +145,7 @@ class WinCondition(NQPComponent):
     def deserialize(cls, serialised):
         return WinCondition()
 
+
 class MapCondition(NQPComponent):
     """
     A flag to show that an entity will take the player to the next map
@@ -160,7 +162,6 @@ class MapCondition(NQPComponent):
 
 
 #################### OTHERS #########################
-
 
 class Position(NQPComponent):
     """
@@ -721,3 +722,177 @@ class Immunities(NQPComponent):
     def deserialize(cls, serialised):
 
         return Immunities(serialised["active"])
+
+
+class CombatStats(NQPComponent):
+    def __init__(self, vigour: int, clout: int, skullduggery: int, bustle: int, exactitude: int):
+        """
+        Set primary stats. Secondary stats pulled from library.
+        """
+        self._vigour: int = vigour
+        self._clout: int = clout
+        self._skullduggery: int = skullduggery
+        self._bustle: int = bustle
+        self._exactitude: int = exactitude
+
+        self._vigour_mod: int = 0
+        self._clout_mod: int = 0
+        self._skullduggery_mod: int = 0
+        self._bustle_mod: int = 0
+        self._exactitude_mod: int = 0
+
+        self._max_health: int = library.BASE_STATS_SECONDARY[SecondaryStat.MAX_HEALTH].base_value
+        self._max_stamina: int = library.BASE_STATS_SECONDARY[SecondaryStat.MAX_STAMINA].base_value
+        self._accuracy: int = library.BASE_STATS_SECONDARY[SecondaryStat.ACCURACY].base_value
+        self._resist_burn: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_BURN].base_value
+        self._resist_cold: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_COLD].base_value
+        self._resist_chemical: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_CHEMICAL].base_value
+        self._resist_astral: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_ASTRAL].base_value
+        self._resist_mundane: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_MUNDANE].base_value
+        self._rush: int = library.BASE_STATS_SECONDARY[SecondaryStat.RUSH].base_value
+
+        self._max_health_mod: int = 0
+        self._max_stamina_mod: int = 0
+        self._accuracy_mod: int = 0
+        self._resist_burn_mod: int = 0
+        self._resist_cold_mod: int = 0
+        self._resist_chemical_mod: int = 0
+        self._resist_astral_mod: int = 0
+        self._resist_mundane_mod: int = 0
+        self._rush_mod: int = 0
+
+
+    def amend_base_value(self, stat: Union[PrimaryStatType, SecondaryStatType], amount: int):
+        """
+        Amend the base value of a stat
+        """
+        stat_to_amend = getattr(self, "_" + stat)
+        stat_to_amend += amount
+
+    def amend_mod_value(self, stat: Union[PrimaryStatType, SecondaryStatType], amount: int):
+        """
+        Amend the modifier of a stat
+        """
+        mod_to_amend = getattr(self, "_" + stat + "_mod")
+        mod_to_amend += amount
+
+    def _get_secondary_stat(self, stat: SecondaryStatType) -> int:
+        """
+        Get the value of the secondary stat
+        """
+        stat_data = library.BASE_STATS_SECONDARY[stat]
+
+        value = getattr(self, "_" + stat.lower())
+        value += self.vigour * stat_data.vigour_mod
+        value += self.clout * stat_data.clout_mod
+        value += self.skullduggery * stat_data.skullduggery_mod
+        value += self.bustle * stat_data.bustle_mod
+        value += self.exactitude * stat_data.exactitude_mod
+        value += getattr(self, "_" + stat.lower() + "_mod")
+
+        return value
+
+
+    @property
+    def vigour(self) -> int:
+        """
+        Influences healthiness. Never below 1.
+        """
+        return self._vigour + self._vigour_mod
+
+    @property
+    def clout(self) -> int:
+        """
+        Influences forceful things. Never below 1.
+        """
+        return self._clout + self._clout_mod
+
+    @property
+    def skullduggery(self) -> int:
+        """
+        Influences sneaky things. Never below 1.
+        """
+        return self._skullduggery + self._skullduggery_mod
+
+    @property
+    def bustle(self) -> int:
+        """
+        Influences speedy things. Never below 1.
+        """
+        return self._bustle + self._bustle_mod
+
+    @property
+    def exactitude(self) -> int:
+        """
+        Influences preciseness. Never below 1.
+        """
+        return self._exactitude + self._exactitude_mod
+
+    @property
+    def max_health(self) -> int:
+        """
+        Total damage an entity can take before death.
+        """
+        return self._get_secondary_stat(SecondaryStat.MAX_HEALTH)
+
+    @property
+    def max_stamina(self) -> int:
+        """
+        An entities energy to take actions.
+
+        """
+        return self._get_secondary_stat(SecondaryStat.MAX_STAMINA)
+
+    @property
+    def accuracy(self) -> int:
+        """
+        An entities likelihood to hit.
+        """
+        return self._get_secondary_stat(SecondaryStat.ACCURACY)
+
+    @property
+    def resist_burn(self) -> int:
+        """
+        An entities resistance to burn damage.
+
+        """
+        return self._get_secondary_stat(SecondaryStat.RESIST_BURN)
+
+    @property
+    def resist_cold(self) -> int:
+        """
+        An entities resistance to cold damage.
+
+        """
+        return self._get_secondary_stat(SecondaryStat.RESIST_COLD)
+
+    @property
+    def resist_chemical(self) -> int:
+        """
+        An entities resistance to chemical damage.
+        """
+        return self._get_secondary_stat(SecondaryStat.RESIST_CHEMICAL)
+
+    @property
+    def resist_astral(self) -> int:
+        """
+        An entities resistance to astral damage.
+        """
+        return self._get_secondary_stat(SecondaryStat.RESIST_ASTRAL)
+
+    @property
+    def resist_mundane(self) -> int:
+        """
+        An entities resistance to mundane damage.
+        """
+        return self._get_secondary_stat(SecondaryStat.RESIST_MUNDANE)
+
+    @property
+    def rush(self) -> int:
+        """
+        How quickly an entity does things. Reduce time cost of actions.
+        """
+        return self._get_secondary_stat(SecondaryStat.RUSH)
+
+
+
