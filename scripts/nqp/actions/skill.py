@@ -7,13 +7,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine.core import world
 from scripts.engine.core.component import Aesthetic, Position
-from scripts.engine.core.effect import (
-    AffectCooldownEffect,
-    ApplyAfflictionEffect,
-    DamageEffect,
-    Effect,
-    MoveSelfEffect,
-)
+from scripts.engine.core.effect import AffectCooldownEffect, ApplyAfflictionEffect, DamageEffect, Effect, MoveSelfEffect
 from scripts.engine.internal import library
 from scripts.engine.internal.action import Skill
 from scripts.engine.internal.constant import DamageType, DirectionType, PrimaryStat, Shape

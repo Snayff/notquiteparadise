@@ -247,7 +247,6 @@ class MoveOtherEffect(Effect):
         self.direction = direction
         self.move_amount = move_amount
 
-
     def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
         Resolve the move effect and return the conditional effects based on if the target moved the full amount.

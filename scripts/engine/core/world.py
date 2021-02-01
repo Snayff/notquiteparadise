@@ -1272,11 +1272,7 @@ def direction_is_blocked(entity: EntityID, dir_x: int, dir_y: int) -> bool:
             for other_entity, (pos, physicality) in query.position_and_physicality:
                 assert isinstance(pos, Position)
                 assert isinstance(physicality, Physicality)
-                if (
-                    other_entity != entity
-                    and physicality.blocks_movement
-                    and (target_x, target_y) in pos.coordinates
-                ):
+                if other_entity != entity and physicality.blocks_movement and (target_x, target_y) in pos.coordinates:
                     # blocked by entity
                     blockers_name = get_name(other_entity)
                     name = get_name(entity)
