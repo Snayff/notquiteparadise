@@ -420,11 +420,13 @@
 </li>
         <li><a href="nqp/actions/skill.html#scripts.nqp.actions.skill.Move.__init__">(Move method)</a>, <a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.__init__">[1]</a>
 </li>
-        <li><a href="scripts.engine.core.html#scripts.engine.core.effect.MoveActorEffect.__init__">(MoveActorEffect method)</a>
-</li>
-        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveActorEffectData.__init__">(MoveActorEffectData method)</a>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveEffectData.__init__">(MoveEffectData method)</a>
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.event.MoveEvent.__init__">(MoveEvent method)</a>
+</li>
+        <li><a href="scripts.engine.core.html#scripts.engine.core.effect.MoveOtherEffect.__init__">(MoveOtherEffect method)</a>
+</li>
+        <li><a href="scripts.engine.core.html#scripts.engine.core.effect.MoveSelfEffect.__init__">(MoveSelfEffect method)</a>
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.event.NewGameEvent.__init__">(NewGameEvent method)</a>
 </li>
@@ -1139,8 +1141,6 @@
       </ul></li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.extend_json.deserialise_dataclasses">deserialise_dataclasses() (in module scripts.engine.internal.extend_json)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.engine.core.html#scripts.engine.core.component.Aesthetic.deserialize">deserialize() (Aesthetic class method)</a>
 
       <ul>
@@ -1189,6 +1189,8 @@
         <li><a href="scripts.engine.core.html#scripts.engine.core.component.WinCondition.deserialize">(WinCondition class method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scripts.engine.core.html#scripts.engine.core.dungen.RoomConcept.design">design (RoomConcept attribute)</a>
 
       <ul>
@@ -1218,7 +1220,7 @@
 </li>
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.direction">(Move attribute)</a>
 </li>
-        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveActorEffectData.direction">(MoveActorEffectData attribute)</a>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveEffectData.direction">(MoveEffectData attribute)</a>
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.ProjectileData.direction">(ProjectileData attribute)</a>
 </li>
@@ -1227,6 +1229,8 @@
         <li><a href="scripts.nqp.actions.html#scripts.nqp.actions.skill.TarAndFeather.direction">(TarAndFeather attribute)</a>
 </li>
       </ul></li>
+      <li><a href="engine/core/world.html#scripts.engine.core.world.direction_is_blocked">direction_is_blocked() (in module scripts.engine.core.world)</a>, <a href="scripts.engine.core.html#scripts.engine.core.world.direction_is_blocked">[1]</a>
+</li>
       <li><a href="engine/internal/debug.html#scripts.engine.internal.debug.disable_profiling">disable_profiling() (in module scripts.engine.internal.debug)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.debug.disable_profiling">[1]</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.Direction.DOWN">DOWN (Direction attribute)</a>
@@ -1290,7 +1294,7 @@
 </li>
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.EffectData.effect_type">(EffectData attribute)</a>
 </li>
-        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveActorEffectData.effect_type">(MoveActorEffectData attribute)</a>
+        <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveEffectData.effect_type">(MoveEffectData attribute)</a>
 </li>
       </ul></li>
       <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.EffectData">EffectData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.EffectData">[1]</a>
@@ -1366,7 +1370,9 @@
 </li>
         <li><a href="scripts.engine.core.html#scripts.engine.core.effect.Effect.evaluate">(Effect method)</a>
 </li>
-        <li><a href="scripts.engine.core.html#scripts.engine.core.effect.MoveActorEffect.evaluate">(MoveActorEffect method)</a>
+        <li><a href="scripts.engine.core.html#scripts.engine.core.effect.MoveOtherEffect.evaluate">(MoveOtherEffect method)</a>
+</li>
+        <li><a href="scripts.engine.core.html#scripts.engine.core.effect.MoveSelfEffect.evaluate">(MoveSelfEffect method)</a>
 </li>
       </ul></li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.event.Event">Event (class in scripts.engine.internal.event)</a>
@@ -2108,17 +2114,19 @@
         <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.TraitSpritesData.move">(TraitSpritesData attribute)</a>
 </li>
       </ul></li>
-      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveActorEffectData.move_amount">move_amount (MoveActorEffectData attribute)</a>
+      <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveEffectData.move_amount">move_amount (MoveEffectData attribute)</a>
 </li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.definition.BaseValueData.move_cost">move_cost (BaseValueData attribute)</a>
 </li>
-      <li><a href="scripts.engine.core.html#scripts.engine.core.effect.MoveActorEffect">MoveActorEffect (class in scripts.engine.core.effect)</a>
-</li>
-      <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.MoveActorEffectData">MoveActorEffectData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveActorEffectData">[1]</a>
-</li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.constant.ReactionTrigger.MOVED">MOVED (ReactionTrigger attribute)</a>
 </li>
+      <li><a href="engine/internal/definition.html#scripts.engine.internal.definition.MoveEffectData">MoveEffectData (class in scripts.engine.internal.definition)</a>, <a href="scripts.engine.internal.html#scripts.engine.internal.definition.MoveEffectData">[1]</a>
+</li>
       <li><a href="scripts.engine.internal.html#scripts.engine.internal.event.MoveEvent">MoveEvent (class in scripts.engine.internal.event)</a>
+</li>
+      <li><a href="scripts.engine.core.html#scripts.engine.core.effect.MoveOtherEffect">MoveOtherEffect (class in scripts.engine.core.effect)</a>
+</li>
+      <li><a href="scripts.engine.core.html#scripts.engine.core.effect.MoveSelfEffect">MoveSelfEffect (class in scripts.engine.core.effect)</a>
 </li>
       <li><a href="engine/world_objects/lighting.html#scripts.engine.world_objects.lighting.mult_colour">mult_colour() (in module scripts.engine.world_objects.lighting)</a>, <a href="scripts.engine.world_objects.html#scripts.engine.world_objects.lighting.mult_colour">[1]</a>
 </li>
@@ -3339,13 +3347,15 @@
 </li>
       <li><a href="tests.engine.html#tests.engine.test_utility.test_is_close">test_is_close() (in module tests.engine.test_utility)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="tests.engine.html#tests.engine.test_utility.test_is_not_close">test_is_not_close() (in module tests.engine.test_utility)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="tests.engine.html#tests.engine.test_state.test_load_game">test_load_game() (in module tests.engine.test_state)</a>
 </li>
-      <li><a href="tests.engine.html#tests.engine.test_effect.test_move_actor_effect">test_move_actor_effect() (in module tests.engine.test_effect)</a>
+      <li><a href="tests.engine.html#tests.engine.test_effect.test_move_other_effect">test_move_other_effect() (in module tests.engine.test_effect)</a>
+</li>
+      <li><a href="tests.engine.html#tests.engine.test_effect.test_move_self_effect">test_move_self_effect() (in module tests.engine.test_effect)</a>
 </li>
       <li><a href="tests.engine.html#tests.engine.test_component.TestPosition.test_position_centers">test_position_centers() (TestPosition method)</a>
 </li>

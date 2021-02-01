@@ -265,17 +265,15 @@
 
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">EffectType</span><span class="p">,</span>
     <span class="n">HeightType</span><span class="p">,</span>
     <span class="n">PrimaryStat</span><span class="p">,</span>
     <span class="n">PrimaryStatType</span><span class="p">,</span>
-    <span class="n">ReactionTrigger</span><span class="p">,</span>
     <span class="n">ReactionTriggerType</span><span class="p">,</span>
     <span class="n">RenderLayer</span><span class="p">,</span>
     <span class="n">SecondaryStat</span><span class="p">,</span>
     <span class="n">SecondaryStatType</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">ReactionData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ReactionData</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
@@ -309,6 +307,7 @@
     <span class="s2">"Reaction"</span><span class="p">,</span>
     <span class="s2">"Lifespan"</span><span class="p">,</span>
     <span class="s2">"Immunities"</span><span class="p">,</span>
+    <span class="s2">"Sight"</span><span class="p">,</span>
 <span class="p">]</span>
 
 

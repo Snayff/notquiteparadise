@@ -290,7 +290,8 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"Effect"</span><span class="p">,</span>
     <span class="s2">"DamageEffect"</span><span class="p">,</span>
-    <span class="s2">"MoveActorEffect"</span><span class="p">,</span>
+    <span class="s2">"MoveSelfEffect"</span><span class="p">,</span>
+    <span class="s2">"MoveOtherEffect"</span><span class="p">,</span>
     <span class="s2">"AffectStatEffect"</span><span class="p">,</span>
     <span class="s2">"ApplyAfflictionEffect"</span><span class="p">,</span>
     <span class="s2">"AffectCooldownEffect"</span><span class="p">,</span>
@@ -408,8 +409,8 @@
             <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_effects</span></div></div>
 
 
-<div class="viewcode-block" id="MoveActorEffect"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.effect.MoveActorEffect">[docs]</a><span class="k">class</span> <span class="nc">MoveActorEffect</span><span class="p">(</span><span class="n">Effect</span><span class="p">):</span>
-<div class="viewcode-block" id="MoveActorEffect.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.effect.MoveActorEffect.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="MoveSelfEffect"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.effect.MoveSelfEffect">[docs]</a><span class="k">class</span> <span class="nc">MoveSelfEffect</span><span class="p">(</span><span class="n">Effect</span><span class="p">):</span>
+<div class="viewcode-block" id="MoveSelfEffect.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.effect.MoveSelfEffect.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span>
         <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span>
@@ -424,28 +425,36 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">move_amount</span> <span class="o">=</span> <span class="n">move_amount</span></div>
 
-<div class="viewcode-block" id="MoveActorEffect.evaluate"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.effect.MoveActorEffect.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]]:</span>
+<div class="viewcode-block" id="MoveSelfEffect.evaluate"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.effect.MoveSelfEffect.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]]:</span>
         <span class="sd">"""</span>
 <span class="sd">        Resolve the move effect and return the conditional effects based on if the target moved the full amount.</span>
 <span class="sd">        """</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Evaluating Move Actor Effect..."</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Evaluating Move Self Effect..."</span><span class="p">)</span>
 
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
         <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pos</span><span class="p">:</span>
+
+        <span class="c1"># confirm targeting self</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">!=</span> <span class="n">entity</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to move </span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2"> as they are not the originator."</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_effects</span>
+
+        <span class="c1"># check target has position</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to move </span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2"> as they have no Position."</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_effects</span>
 
         <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
 
         <span class="c1"># loop each target tile in turn</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_amount</span><span class="p">):</span>
             <span class="n">new_x</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dir_x</span>
             <span class="n">new_y</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dir_y</span>
-            <span class="n">collides</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_collision</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">)</span>
-            <span class="n">success</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">collides</span>
+            <span class="n">blocked</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">direction_is_blocked</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">)</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">blocked</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">collides</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">blocked</span><span class="p">:</span>
                 <span class="c1"># named _position as typing was inferring from position above</span>
                 <span class="n">_position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
 
@@ -473,52 +482,83 @@
         <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_effects</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_effects</span></div>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_effects</span></div></div>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_check_collision</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">dir_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="MoveOtherEffect"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.effect.MoveOtherEffect">[docs]</a><span class="k">class</span> <span class="nc">MoveOtherEffect</span><span class="p">(</span><span class="n">Effect</span><span class="p">):</span>
+<div class="viewcode-block" id="MoveOtherEffect.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.effect.MoveOtherEffect.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span>
+        <span class="n">success_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">],</span>
+        <span class="n">failure_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">],</span>
+        <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="p">,</span>
+        <span class="n">move_amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">success_effects</span><span class="p">,</span> <span class="n">failure_effects</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">move_amount</span> <span class="o">=</span> <span class="n">move_amount</span></div>
+
+<div class="viewcode-block" id="MoveOtherEffect.evaluate"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.effect.MoveOtherEffect.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]]:</span>
         <span class="sd">"""</span>
-<span class="sd">        Checks if the entity will collide with something when trying to move in the provided direction. Returns True</span>
-<span class="sd">        if blocked.</span>
+<span class="sd">        Resolve the move effect and return the conditional effects based on if the target moved the full amount.</span>
 <span class="sd">        """</span>
-        <span class="n">collides</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Evaluating Move Other Effect..."</span><span class="p">)</span>
 
-        <span class="n">name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">direction_name</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">value_to_member</span><span class="p">((</span><span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">),</span> <span class="n">Direction</span><span class="p">)</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
 
-        <span class="k">for</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="n">position</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="n">target_x</span> <span class="o">=</span> <span class="n">coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dir_x</span>
-            <span class="n">target_y</span> <span class="o">=</span> <span class="n">coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dir_y</span>
-            <span class="n">target_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">))</span>
+        <span class="c1"># confirm not targeting self</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">==</span> <span class="n">entity</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to move </span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2"> as they are the originator."</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_effects</span>
 
-            <span class="c1"># check a tile was returned</span>
-            <span class="n">is_tile_blocking_movement</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">if</span> <span class="n">target_tile</span><span class="p">:</span>
-                <span class="n">is_tile_blocking_movement</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">)</span>
+        <span class="c1"># check target has position</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to move </span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2"> as they have no Position."</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_effects</span>
 
-            <span class="c1"># check if tile is blocked</span>
-            <span class="k">if</span> <span class="n">is_tile_blocking_movement</span><span class="p">:</span>
-                <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
 
-                <span class="k">for</span> <span class="n">other_entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">physicality</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_physicality</span><span class="p">:</span>
-                    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-                    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">physicality</span><span class="p">,</span> <span class="n">Physicality</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span>
-                        <span class="n">other_entity</span> <span class="o">!=</span> <span class="n">entity</span>
-                        <span class="ow">and</span> <span class="n">physicality</span><span class="o">.</span><span class="n">blocks_movement</span>
-                        <span class="ow">and</span> <span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pos</span><span class="o">.</span><span class="n">coordinates</span>
-                    <span class="p">):</span>
-                        <span class="c1"># blocked by entity</span>
-                        <span class="n">blockers_name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">other_entity</span><span class="p">)</span>
-                        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' tried to move </span><span class="si">{</span><span class="n">direction_name</span><span class="si">}</span><span class="s2"> to (</span><span class="si">{</span><span class="n">target_x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">target_y</span><span class="si">}</span><span class="s2">) but was blocked"</span>
-                            <span class="sa">f</span><span class="s2">" by '</span><span class="si">{</span><span class="n">blockers_name</span><span class="si">}</span><span class="s2">'. "</span>
-                        <span class="p">)</span>
-                        <span class="k">break</span>
-                <span class="n">collides</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># loop each target tile in turn</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_amount</span><span class="p">):</span>
+            <span class="n">new_x</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dir_x</span>
+            <span class="n">new_y</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dir_y</span>
+            <span class="n">blocked</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">direction_is_blocked</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">)</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">blocked</span>
 
-        <span class="k">return</span> <span class="n">collides</span></div>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">blocked</span><span class="p">:</span>
+                <span class="c1"># named _position as typing was inferring from position above</span>
+                <span class="n">_position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+
+                <span class="c1"># update position</span>
+                <span class="k">if</span> <span class="n">_position</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">"-&gt;'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span><span class="si">}</span><span class="s2">' moved from (</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">) to (</span><span class="si">{</span><span class="n">new_x</span><span class="si">}</span><span class="s2">,"</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">new_y</span><span class="si">}</span><span class="s2">)."</span>
+                    <span class="p">)</span>
+                    <span class="n">_position</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">)</span>
+
+                    <span class="c1"># post interaction event</span>
+                    <span class="n">event</span> <span class="o">=</span> <span class="n">MoveEvent</span><span class="p">(</span>
+                        <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="n">new_pos</span><span class="o">=</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+                    <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="c1"># animate change</span>
+                <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">aesthetic</span><span class="p">:</span>
+                    <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">)</span>
+                    <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">sprites</span><span class="o">.</span><span class="n">move</span>
+
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_effects</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_effects</span></div></div>
 
 
 <div class="viewcode-block" id="AffectStatEffect"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.effect.AffectStatEffect">[docs]</a><span class="k">class</span> <span class="nc">AffectStatEffect</span><span class="p">(</span><span class="n">Effect</span><span class="p">):</span>

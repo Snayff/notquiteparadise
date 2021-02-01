@@ -252,7 +252,9 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <h1 id="modules-tests-engine-test-effect--page-root">Source code for tests.engine.test_effect</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">pytest</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
 <span class="kn">import</span> <span class="nn">snecs</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
@@ -268,7 +270,7 @@
     <span class="n">AlterTerrainEffect</span><span class="p">,</span>
     <span class="n">ApplyAfflictionEffect</span><span class="p">,</span>
     <span class="n">DamageEffect</span><span class="p">,</span>
-    <span class="n">MoveActorEffect</span><span class="p">,</span>
+    <span class="n">MoveOtherEffect</span><span class="p">,</span> <span class="n">MoveSelfEffect</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.command</span> <span class="kn">import</span> <span class="n">register_actions</span>
@@ -285,7 +287,7 @@
 <span class="n">register_actions</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">_create_scenario</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_create_scenario</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="n">EntityID</span><span class="p">]:</span>
 
     <span class="c1"># new world</span>
     <span class="n">empty_world</span> <span class="o">=</span> <span class="n">snecs</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
@@ -302,8 +304,13 @@
         <span class="n">trait_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"shoom"</span><span class="p">,</span> <span class="s2">"soft_tops"</span><span class="p">,</span> <span class="s2">"dandy"</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="n">game_map</span><span class="o">.</span><span class="n">generate_new_map</span><span class="p">(</span><span class="n">actor_data</span><span class="p">)</span>
+    
+    <span class="c1"># add second entity</span>
+    <span class="n">entity1</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity1</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">entity2</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">entity1</span><span class="p">,</span> <span class="n">entity2</span>
 
 
 <span class="n">test_damage_effect_parameters</span> <span class="o">=</span> <span class="p">[</span>
@@ -359,7 +366,7 @@
         <span class="n">mod_amount</span><span class="p">,</span>
         <span class="n">potency</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="n">entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
+    <span class="n">entity</span><span class="p">,</span> <span class="n">other_entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
 
     <span class="n">effect</span> <span class="o">=</span> <span class="n">DamageEffect</span><span class="p">(</span>
         <span class="n">origin</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
@@ -388,37 +395,93 @@
         <span class="k">assert</span> <span class="n">start_hp</span> <span class="o">==</span> <span class="n">end_hp</span></div>
 
 
-<span class="n">test_move_actor_effect_parameters</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
-    <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
-    <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
-    <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
-    <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
-    <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span>
+<span class="n">test_move_effect_parameters</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span> <span class="s2">"other"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span> <span class="s2">"other"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span> <span class="s2">"other"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span> <span class="s2">"other"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span> <span class="s2">"other"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span> <span class="s2">"other"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">),</span>
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="test_move_actor_effect"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_effect.test_move_actor_effect">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">([</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">],</span> <span class="n">test_move_actor_effect_parameters</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">test_move_actor_effect</span><span class="p">(</span>
-        <span class="n">x</span><span class="p">,</span>
-        <span class="n">y</span>
+<div class="viewcode-block" id="test_move_self_effect"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_effect.test_move_self_effect">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">([</span><span class="s2">"direction"</span><span class="p">,</span> <span class="s2">"self_or_other"</span><span class="p">],</span> <span class="n">test_move_effect_parameters</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_move_self_effect</span><span class="p">(</span>
+        <span class="n">direction</span><span class="p">,</span>
+        <span class="n">self_or_other</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="n">entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
-    <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># type:ignore</span>
+    <span class="n">entity</span><span class="p">,</span> <span class="n">other_entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
 
-    <span class="n">effect</span> <span class="o">=</span> <span class="n">MoveActorEffect</span><span class="p">(</span>
-        <span class="n">origin</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
-        <span class="n">target</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
+    <span class="k">if</span> <span class="n">self_or_other</span> <span class="o">==</span> <span class="s2">"self"</span><span class="p">:</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">entity</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">other_entity</span>
+
+    <span class="n">effect</span> <span class="o">=</span> <span class="n">MoveSelfEffect</span><span class="p">(</span>
+        <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
         <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
         <span class="n">success_effects</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">failure_effects</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">move_amount</span><span class="o">=</span><span class="mi">1</span>
     <span class="p">)</span>
 
-    <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="n">start_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
     <span class="n">success</span> <span class="o">=</span> <span class="n">effect</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">end_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="c1"># check didnt move other</span>
+    <span class="k">if</span> <span class="n">self_or_other</span> <span class="o">==</span> <span class="s2">"other"</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">success</span>
+
+    <span class="c1"># assess results</span>
+    <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">end_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">end_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">end_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">end_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+        
+        
+
+<div class="viewcode-block" id="test_move_other_effect"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_effect.test_move_other_effect">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">([</span><span class="s2">"direction"</span><span class="p">,</span> <span class="s2">"self_or_other"</span><span class="p">],</span> <span class="n">test_move_effect_parameters</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_move_other_effect</span><span class="p">(</span>
+        <span class="n">direction</span><span class="p">,</span>
+        <span class="n">self_or_other</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">entity</span><span class="p">,</span> <span class="n">other_entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">self_or_other</span> <span class="o">==</span> <span class="s2">"self"</span><span class="p">:</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">entity</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">other_entity</span>
+
+    <span class="n">effect</span> <span class="o">=</span> <span class="n">MoveOtherEffect</span><span class="p">(</span>
+        <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+        <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
+        <span class="n">success_effects</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">failure_effects</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">move_amount</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
+
+    <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">start_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">success</span> <span class="o">=</span> <span class="n">effect</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">end_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="c1"># check didnt move self</span>
+    <span class="k">if</span> <span class="n">self_or_other</span> <span class="o">==</span> <span class="s2">"self"</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">success</span>
 
     <span class="c1"># assess results</span>
     <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
@@ -448,7 +511,7 @@
         <span class="n">stat_to_target</span><span class="p">,</span>
         <span class="n">affect_amount</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="n">entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
+    <span class="n">entity</span><span class="p">,</span> <span class="n">other_entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
 
     <span class="n">effect</span> <span class="o">=</span> <span class="n">AffectStatEffect</span><span class="p">(</span>
         <span class="n">origin</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
@@ -485,7 +548,7 @@
 <div class="viewcode-block" id="test_apply_affliction_effect"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_effect.test_apply_affliction_effect">[docs]</a><span class="k">def</span> <span class="nf">test_apply_affliction_effect</span><span class="p">(</span>
         <span class="n">affliction_name</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="n">entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
+    <span class="n">entity</span><span class="p">,</span> <span class="n">other_entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
 
     <span class="n">effect</span> <span class="o">=</span> <span class="n">ApplyAfflictionEffect</span><span class="p">(</span>
         <span class="n">origin</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
@@ -528,7 +591,7 @@
         <span class="n">skill_name</span><span class="p">,</span>
         <span class="n">affect_cooldown_amount</span>
 <span class="p">):</span>
-    <span class="n">entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
+    <span class="n">entity</span><span class="p">,</span> <span class="n">other_entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
 
     <span class="c1"># assign skill</span>
     <span class="n">world</span><span class="o">.</span><span class="n">learn_skill</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">)</span>
@@ -573,7 +636,7 @@
         <span class="n">terrain_name</span><span class="p">,</span>
         <span class="n">affect_terrain_amount</span>
 <span class="p">):</span>
-    <span class="n">entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
+    <span class="n">entity</span><span class="p">,</span> <span class="n">other_entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
 
     <span class="n">effect</span> <span class="o">=</span> <span class="n">AlterTerrainEffect</span><span class="p">(</span>
         <span class="n">origin</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
@@ -610,7 +673,7 @@
         <span class="n">terrain_name</span><span class="p">,</span>
         <span class="n">affect_terrain_negative_amount</span>
 <span class="p">):</span>
-    <span class="n">entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
+    <span class="n">entity</span><span class="p">,</span> <span class="n">other_entity</span> <span class="o">=</span> <span class="n">_create_scenario</span><span class="p">()</span>
 
     <span class="c1"># create terrain on the spot</span>
     <span class="n">base_duration</span> <span class="o">=</span> <span class="mi">10</span>
