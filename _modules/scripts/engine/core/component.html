@@ -53,7 +53,6 @@
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   
@@ -255,21 +254,26 @@
   <h1 id="modules-scripts-engine-core-component--page-root">Source code for scripts.engine.core.component</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">RegisteredComponent</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
+<span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">EffectType</span><span class="p">,</span>
     <span class="n">HeightType</span><span class="p">,</span>
+    <span class="n">PrimaryStat</span><span class="p">,</span>
     <span class="n">PrimaryStatType</span><span class="p">,</span>
     <span class="n">ReactionTrigger</span><span class="p">,</span>
     <span class="n">ReactionTriggerType</span><span class="p">,</span>
     <span class="n">RenderLayer</span><span class="p">,</span>
+    <span class="n">SecondaryStat</span><span class="p">,</span>
+    <span class="n">SecondaryStatType</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">ReactionData</span>
 
@@ -286,7 +290,7 @@
     <span class="s2">"Exists"</span><span class="p">,</span>
     <span class="s2">"IsPlayer"</span><span class="p">,</span>
     <span class="s2">"IsActive"</span><span class="p">,</span>
-    <span class="s2">"HasCombatStats"</span><span class="p">,</span>
+    <span class="s2">"CombatStats"</span><span class="p">,</span>
     <span class="s2">"WinCondition"</span><span class="p">,</span>
     <span class="s2">"MapCondition"</span><span class="p">,</span>
     <span class="s2">"Position"</span><span class="p">,</span>
@@ -370,21 +374,6 @@
         <span class="k">return</span> <span class="n">IsActive</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="HasCombatStats"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.HasCombatStats">[docs]</a><span class="k">class</span> <span class="nc">HasCombatStats</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    A flag to show if an entity has stats used for combat.</span>
-<span class="sd">    """</span>
-
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
-
-<div class="viewcode-block" id="HasCombatStats.serialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.HasCombatStats.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
-
-<div class="viewcode-block" id="HasCombatStats.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.HasCombatStats.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">HasCombatStats</span><span class="p">()</span></div></div>
-
-
 <div class="viewcode-block" id="WinCondition"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.WinCondition">[docs]</a><span class="k">class</span> <span class="nc">WinCondition</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    A flag to show that an entity is a win objective</span>
@@ -398,6 +387,7 @@
 <div class="viewcode-block" id="WinCondition.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.WinCondition.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">WinCondition</span><span class="p">()</span></div></div>
+
 
 <div class="viewcode-block" id="MapCondition"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.MapCondition">[docs]</a><span class="k">class</span> <span class="nc">MapCondition</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
     <span class="sd">"""</span>
@@ -458,7 +448,7 @@
         <span class="c1"># From all the nearest coordinates find the one nearest to the center of the entity</span>
         <span class="n">arg_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">transformed</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">transformed</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arg_max</span>
-        <span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># type: ignore</span>
         <span class="k">return</span> <span class="n">coordinates</span><span class="p">[</span><span class="n">arg_max</span><span class="p">[</span><span class="n">arg_min</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordinates</span><span class="p">[</span><span class="n">arg_max</span><span class="p">[</span><span class="n">arg_min</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span></div>
 
     <span class="nd">@property</span>
@@ -740,16 +730,10 @@
 <span class="sd">    An entity's Boons and Banes. held in .active as a list of Affliction.</span>
 <span class="sd">    """</span>
 
-<div class="viewcode-block" id="Afflictions.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Afflictions.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">active</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Affliction</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">stat_modifiers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
+<div class="viewcode-block" id="Afflictions.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Afflictions.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">active</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Affliction</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">active</span> <span class="o">=</span> <span class="n">active</span> <span class="ow">or</span> <span class="p">[]</span>
-        <span class="n">stat_modifiers</span> <span class="o">=</span> <span class="n">stat_modifiers</span> <span class="ow">or</span> <span class="p">{}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Affliction</span><span class="p">]</span> <span class="o">=</span> <span class="n">active</span>  <span class="c1"># TODO - should this be a dict for easier querying?</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">stat_modifiers</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Affliction</span><span class="p">]</span> <span class="o">=</span> <span class="n">active</span>  <span class="c1"># TODO - should this be a dict for easier querying?</span></div>
 
 <div class="viewcode-block" id="Afflictions.serialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Afflictions.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">active</span> <span class="o">=</span> <span class="p">{}</span>
@@ -760,7 +744,7 @@
                 <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"active"</span><span class="p">:</span> <span class="n">active</span><span class="p">,</span> <span class="s2">"stat_modifiers"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="p">}</span>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"active"</span><span class="p">:</span> <span class="n">active</span><span class="p">}</span>
 
         <span class="k">return</span> <span class="n">_dict</span></div>
 
@@ -777,17 +761,13 @@
             <span class="n">affliction</span> <span class="o">=</span> <span class="n">_affliction</span><span class="p">(</span><span class="n">value_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">value_tuple</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
             <span class="n">active_instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">Afflictions</span><span class="p">(</span><span class="n">active_instances</span><span class="p">,</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"stat_modifiers"</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">Afflictions</span><span class="p">(</span><span class="n">active_instances</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Afflictions.add"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Afflictions.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Afflictions.remove"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Afflictions.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
-            <span class="c1"># if it is affect_stat remove the affect</span>
-            <span class="k">if</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">AFFECT_STAT</span> <span class="ow">in</span> <span class="n">affliction</span><span class="o">.</span><span class="n">identity_tags</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">stat_modifiers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-
             <span class="c1"># remove from active list</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span></div></div>
 
@@ -976,6 +956,298 @@
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
 
         <span class="k">return</span> <span class="n">Immunities</span><span class="p">(</span><span class="n">serialised</span><span class="p">[</span><span class="s2">"active"</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="CombatStats"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.CombatStats">[docs]</a><span class="k">class</span> <span class="nc">CombatStats</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    An entities stats used for combat.</span>
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="CombatStats.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.CombatStats.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vigour</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">clout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">skullduggery</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bustle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">exactitude</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Set primary stats. Secondary stats pulled from library.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vigour</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">vigour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">clout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_skullduggery</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">skullduggery</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bustle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">bustle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exactitude</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">exactitude</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vigour_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># cause, amount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clout_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_skullduggery_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bustle_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exactitude_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_health</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_SECONDARY</span><span class="p">[</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">MAX_HEALTH</span><span class="p">]</span><span class="o">.</span><span class="n">base_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_stamina</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_SECONDARY</span><span class="p">[</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">MAX_STAMINA</span><span class="p">]</span><span class="o">.</span><span class="n">base_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_accuracy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_SECONDARY</span><span class="p">[</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">ACCURACY</span><span class="p">]</span><span class="o">.</span><span class="n">base_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resist_burn</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_SECONDARY</span><span class="p">[</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RESIST_BURN</span><span class="p">]</span><span class="o">.</span><span class="n">base_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resist_cold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_SECONDARY</span><span class="p">[</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RESIST_COLD</span><span class="p">]</span><span class="o">.</span><span class="n">base_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resist_chemical</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_SECONDARY</span><span class="p">[</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RESIST_CHEMICAL</span><span class="p">]</span><span class="o">.</span><span class="n">base_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resist_astral</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_SECONDARY</span><span class="p">[</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RESIST_ASTRAL</span><span class="p">]</span><span class="o">.</span><span class="n">base_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resist_mundane</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_SECONDARY</span><span class="p">[</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RESIST_MUNDANE</span><span class="p">]</span><span class="o">.</span><span class="n">base_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rush</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_SECONDARY</span><span class="p">[</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RUSH</span><span class="p">]</span><span class="o">.</span><span class="n">base_value</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_health_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># cause, amount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_stamina_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_accuracy_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resist_burn_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resist_cold_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resist_chemical_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resist_astral_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resist_mundane_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rush_mod</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="CombatStats.serialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.CombatStats.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"vigour"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vigour</span><span class="p">,</span>
+            <span class="s2">"clout"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clout</span><span class="p">,</span>
+            <span class="s2">"skullduggery"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_skullduggery</span><span class="p">,</span>
+            <span class="s2">"bustle"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bustle</span><span class="p">,</span>
+            <span class="s2">"exactitude"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exactitude</span><span class="p">,</span>
+            <span class="s2">"vigour_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vigour_mod</span><span class="p">,</span>
+            <span class="s2">"clout_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clout_mod</span><span class="p">,</span>
+            <span class="s2">"skullduggery_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_skullduggery_mod</span><span class="p">,</span>
+            <span class="s2">"bustle_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bustle_mod</span><span class="p">,</span>
+            <span class="s2">"exactitude_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exactitude_mod</span><span class="p">,</span>
+            <span class="s2">"max_health"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_health</span><span class="p">,</span>
+            <span class="s2">"max_stamina"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_stamina</span><span class="p">,</span>
+            <span class="s2">"accuracy"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_accuracy</span><span class="p">,</span>
+            <span class="s2">"resist_burn"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resist_burn</span><span class="p">,</span>
+            <span class="s2">"resist_cold"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resist_cold</span><span class="p">,</span>
+            <span class="s2">"resist_chemical"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resist_chemical</span><span class="p">,</span>
+            <span class="s2">"resist_astral"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resist_astral</span><span class="p">,</span>
+            <span class="s2">"resist_mundane"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resist_mundane</span><span class="p">,</span>
+            <span class="s2">"rush"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rush</span><span class="p">,</span>
+            <span class="s2">"max_health_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_health_mod</span><span class="p">,</span>
+            <span class="s2">"max_stamina_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_stamina_mod</span><span class="p">,</span>
+            <span class="s2">"accuracy_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_accuracy_mod</span><span class="p">,</span>
+            <span class="s2">"resist_burn_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resist_burn_mod</span><span class="p">,</span>
+            <span class="s2">"resist_cold_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resist_cold_mod</span><span class="p">,</span>
+            <span class="s2">"resist_chemical_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resist_chemical_mod</span><span class="p">,</span>
+            <span class="s2">"resist_astral_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resist_astral_mod</span><span class="p">,</span>
+            <span class="s2">"resist_mundane_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resist_mundane_mod</span><span class="p">,</span>
+            <span class="s2">"rush_mod"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rush_mod</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">_dict</span></div>
+
+<div class="viewcode-block" id="CombatStats.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.CombatStats.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">CombatStats</span><span class="p">(</span>
+            <span class="n">serialised</span><span class="p">[</span><span class="s2">"vigour"</span><span class="p">],</span>
+            <span class="n">serialised</span><span class="p">[</span><span class="s2">"clout"</span><span class="p">],</span>
+            <span class="n">serialised</span><span class="p">[</span><span class="s2">"skullduggery"</span><span class="p">],</span>
+            <span class="n">serialised</span><span class="p">[</span><span class="s2">"bustle"</span><span class="p">],</span>
+            <span class="n">serialised</span><span class="p">[</span><span class="s2">"exactitude"</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="n">stats</span><span class="o">.</span><span class="n">_vigour_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"vigour_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_clout_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"clout_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_skullduggery_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"skullduggery_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_bustle_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"bustle_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_exactitude_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"exactitude_mod"</span><span class="p">]</span>
+
+        <span class="n">stats</span><span class="o">.</span><span class="n">_max_health</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"max_health"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_max_stamina</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"max_stamina"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_accuracy</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"accuracy"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_resist_burn</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"resist_burn"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_resist_cold</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"resist_cold"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_resist_chemical</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"resist_chemical"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_resist_astral</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"resist_astral"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_resist_mundane</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"resist_mundane"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_rush</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"rush"</span><span class="p">]</span>
+
+        <span class="n">stats</span><span class="o">.</span><span class="n">_max_health_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"max_health_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_max_stamina_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"max_stamina_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_accuracy_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"accuracy_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_resist_burn_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"resist_burn_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_resist_cold_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"resist_cold_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_resist_chemical_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"resist_chemical_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_resist_astral_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"resist_astral_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_resist_mundane_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"resist_mundane_mod"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">_rush_mod</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"rush_mod"</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">stats</span></div>
+
+<div class="viewcode-block" id="CombatStats.amend_base_value"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.CombatStats.amend_base_value">[docs]</a>    <span class="k">def</span> <span class="nf">amend_base_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">SecondaryStatType</span><span class="p">],</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Amend the base value of a stat</span>
+<span class="sd">        """</span>
+        <span class="n">stat_to_amend</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">stat</span><span class="p">)</span>
+        <span class="n">stat_to_amend</span> <span class="o">+=</span> <span class="n">amount</span></div>
+
+<div class="viewcode-block" id="CombatStats.add_mod"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.CombatStats.add_mod">[docs]</a>    <span class="k">def</span> <span class="nf">add_mod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">SecondaryStatType</span><span class="p">],</span> <span class="n">cause</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Amend the modifier of a stat. Returns True if successfully amended, else False.</span>
+<span class="sd">        """</span>
+        <span class="n">mod_to_amend</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">stat</span> <span class="o">+</span> <span class="s2">"_mod"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cause</span> <span class="ow">in</span> <span class="n">mod_to_amend</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Stat not modified as </span><span class="si">{</span><span class="n">cause</span><span class="si">}</span><span class="s2"> has already been applied."</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mod_to_amend</span><span class="p">[</span><span class="n">cause</span><span class="p">]</span> <span class="o">=</span> <span class="n">amount</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CombatStats.remove_mod"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.CombatStats.remove_mod">[docs]</a>    <span class="k">def</span> <span class="nf">remove_mod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cause</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Remove a modifier from a stat. Returns True if successfully removed, else False.</span>
+<span class="sd">        """</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span>
+
+        <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_class_members</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">cause</span> <span class="ow">in</span> <span class="n">stat</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">stat</span><span class="p">[</span><span class="n">cause</span><span class="p">]</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Modifier not removed as </span><span class="si">{</span><span class="n">cause</span><span class="si">}</span><span class="s2"> does not exist in modifier list."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_secondary_stat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">:</span> <span class="n">SecondaryStatType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Get the value of the secondary stat</span>
+<span class="sd">        """</span>
+        <span class="n">stat_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BASE_STATS_SECONDARY</span><span class="p">[</span><span class="n">stat</span><span class="p">]</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">stat</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="n">value</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vigour</span> <span class="o">*</span> <span class="n">stat_data</span><span class="o">.</span><span class="n">vigour_mod</span>
+        <span class="n">value</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clout</span> <span class="o">*</span> <span class="n">stat_data</span><span class="o">.</span><span class="n">clout_mod</span>
+        <span class="n">value</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skullduggery</span> <span class="o">*</span> <span class="n">stat_data</span><span class="o">.</span><span class="n">skullduggery_mod</span>
+        <span class="n">value</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bustle</span> <span class="o">*</span> <span class="n">stat_data</span><span class="o">.</span><span class="n">bustle_mod</span>
+        <span class="n">value</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exactitude</span> <span class="o">*</span> <span class="n">stat_data</span><span class="o">.</span><span class="n">exactitude_mod</span>
+        <span class="n">value</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_mod_value</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_get_mod_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">SecondaryStatType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">stat</span> <span class="o">+</span> <span class="s2">"_mod"</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">modifier</span> <span class="ow">in</span> <span class="n">mod</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">value</span> <span class="o">+=</span> <span class="n">modifier</span>
+
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vigour</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Influences healthiness. Never below 1.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vigour</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_mod_value</span><span class="p">(</span><span class="n">PrimaryStat</span><span class="o">.</span><span class="n">VIGOUR</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">clout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Influences forceful things. Never below 1.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clout</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_mod_value</span><span class="p">(</span><span class="n">PrimaryStat</span><span class="o">.</span><span class="n">CLOUT</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">skullduggery</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Influences sneaky things. Never below 1.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_skullduggery</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_mod_value</span><span class="p">(</span><span class="n">PrimaryStat</span><span class="o">.</span><span class="n">SKULLDUGGERY</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bustle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Influences speedy things. Never below 1.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bustle</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_mod_value</span><span class="p">(</span><span class="n">PrimaryStat</span><span class="o">.</span><span class="n">BUSTLE</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">exactitude</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Influences preciseness. Never below 1.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exactitude</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_mod_value</span><span class="p">(</span><span class="n">PrimaryStat</span><span class="o">.</span><span class="n">EXACTITUDE</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">max_health</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Total damage an entity can take before death.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_secondary_stat</span><span class="p">(</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">MAX_HEALTH</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">max_stamina</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        An entities energy to take actions.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_secondary_stat</span><span class="p">(</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">MAX_STAMINA</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">accuracy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        An entities likelihood to hit.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_secondary_stat</span><span class="p">(</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">ACCURACY</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resist_burn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        An entities resistance to burn damage.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_secondary_stat</span><span class="p">(</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RESIST_BURN</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resist_cold</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        An entities resistance to cold damage.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_secondary_stat</span><span class="p">(</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RESIST_COLD</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resist_chemical</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        An entities resistance to chemical damage.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_secondary_stat</span><span class="p">(</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RESIST_CHEMICAL</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resist_astral</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        An entities resistance to astral damage.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_secondary_stat</span><span class="p">(</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RESIST_ASTRAL</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resist_mundane</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        An entities resistance to mundane damage.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_secondary_stat</span><span class="p">(</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RESIST_MUNDANE</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rush</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        How quickly an entity does things. Reduce time cost of actions.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_secondary_stat</span><span class="p">(</span><span class="n">SecondaryStat</span><span class="o">.</span><span class="n">RUSH</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Sight"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Sight">[docs]</a><span class="k">class</span> <span class="nc">Sight</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    An entity's ability to see.</span>
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="Sight.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Sight.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sight_range</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sight_range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">sight_range</span></div>
+
+<div class="viewcode-block" id="Sight.serialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Sight.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"sight_range"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sight_range</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">_dict</span></div>
+
+<div class="viewcode-block" id="Sight.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Sight.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Sight</span><span class="p">(</span><span class="o">**</span><span class="n">serialised</span><span class="p">)</span></div></div>
 </pre></div>
 
           </article>
@@ -1000,7 +1272,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

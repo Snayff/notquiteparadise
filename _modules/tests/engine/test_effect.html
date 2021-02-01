@@ -53,7 +53,6 @@
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   
@@ -259,7 +258,7 @@
 
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Resources</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">CombatStats</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Resources</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">DamageType</span><span class="p">,</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">PrimaryStat</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span>
@@ -461,13 +460,13 @@
         <span class="n">affect_amount</span><span class="o">=</span><span class="n">affect_amount</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_combat_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">CombatStats</span><span class="p">)</span>
     <span class="n">start_stat</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">stat_to_target</span><span class="p">)</span>
     <span class="n">success</span> <span class="o">=</span> <span class="n">effect</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_combat_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
     <span class="n">end_stat</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">stat_to_target</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+        <span class="c1"># N.B. should never be less than 1</span>
         <span class="k">assert</span> <span class="nb">max</span><span class="p">(</span><span class="n">start_stat</span> <span class="o">+</span> <span class="n">affect_amount</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">end_stat</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">start_stat</span> <span class="o">==</span> <span class="n">end_stat</span></div>
@@ -690,7 +689,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

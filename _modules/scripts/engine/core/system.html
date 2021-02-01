@@ -53,7 +53,6 @@
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   
@@ -273,6 +272,7 @@
     <span class="n">Physicality</span><span class="p">,</span>
     <span class="n">Position</span><span class="p">,</span>
     <span class="n">Reaction</span><span class="p">,</span>
+    <span class="n">Sight</span><span class="p">,</span>
     <span class="n">Tracked</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
@@ -290,12 +290,12 @@
     <span class="n">AffectCooldownEvent</span><span class="p">,</span>
     <span class="n">AffectStatEvent</span><span class="p">,</span>
     <span class="n">AfflictionEvent</span><span class="p">,</span>
+    <span class="n">ChangeMapEvent</span><span class="p">,</span>
     <span class="n">DamageEvent</span><span class="p">,</span>
     <span class="n">event_hub</span><span class="p">,</span>
     <span class="n">MoveEvent</span><span class="p">,</span>
     <span class="n">Subscriber</span><span class="p">,</span>
     <span class="n">WinConditionMetEvent</span><span class="p">,</span>
-    <span class="n">ChangeMapEvent</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
@@ -388,13 +388,7 @@
     <span class="c1"># create transparency layer</span>
     <span class="n">block_sight_map</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">block_sight_map</span>
 
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span>
-        <span class="n">is_active</span><span class="p">,</span>
-        <span class="n">pos</span><span class="p">,</span>
-        <span class="n">fov</span><span class="p">,</span>
-        <span class="n">stats</span><span class="p">,</span>
-        <span class="n">physicality</span><span class="p">,</span>
-    <span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">active_and_position_and_fov_and_combat_stats_and_physicality</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">is_active</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">physicality</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">stats</span><span class="p">,</span> <span class="n">traits</span><span class="p">,</span> <span class="n">fov</span><span class="p">,</span> <span class="n">tracked</span><span class="p">,</span> <span class="n">immunities</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">active_actors</span><span class="p">:</span>
 
         <span class="c1"># get all entities blocking sight</span>
         <span class="n">updated_block_sight_map</span> <span class="o">=</span> <span class="n">block_sight_map</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -415,9 +409,9 @@
                 <span class="n">updated_block_sight_map</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># update entities fov map</span>
-        <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_combat_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="n">sight_range</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Sight</span><span class="p">)</span><span class="o">.</span><span class="n">sight_range</span>
         <span class="n">fov</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">compute_fov</span><span class="p">(</span>
-            <span class="n">updated_block_sight_map</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">sight_range</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">FOV_ALGORITHM</span>
+            <span class="n">updated_block_sight_map</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">sight_range</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">FOV_ALGORITHM</span>
         <span class="p">)</span></div>
 
 
@@ -717,6 +711,7 @@
             <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">WinConditionMetEvent</span><span class="p">())</span>
             <span class="k">break</span>
 
+
 <span class="k">def</span> <span class="nf">_process_map_condition</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Checking if the map change condition has been met. Post event if it is.</span>
@@ -759,7 +754,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

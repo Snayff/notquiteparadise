@@ -53,7 +53,6 @@
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="prev" title="Input" href="input.html" />
@@ -327,28 +326,28 @@
 <span id="intent"></span><h1 id="nqp-processors-intent--page-root">Intent<a class="headerlink" href="#nqp-processors-intent--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="scripts.nqp.processors.intent._get_pressed_direction">
-<code class="sig-name descname">_get_pressed_direction</code><span class="sig-paren">(</span><em class="sig-param">intent: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span> → NewType.&lt;locals&gt;.new_type<a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#_get_pressed_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent._get_pressed_direction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_get_pressed_direction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span></em><span class="sig-paren">)</span> → DirectionType<a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#_get_pressed_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent._get_pressed_direction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value of the directions pressed. Returns as (x, y). Values are ints between -1 and 1.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.nqp.processors.intent._get_pressed_skills_name">
-<code class="sig-name descname">_get_pressed_skills_name</code><span class="sig-paren">(</span><em class="sig-param">intent: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span> → Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#_get_pressed_skills_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent._get_pressed_skills_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_get_pressed_skills_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span></em><span class="sig-paren">)</span> → Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#_get_pressed_skills_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent._get_pressed_skills_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the pressed skill number. Returns value of skill number pressed. If not found returns None.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.nqp.processors.intent._process_game_map_intents">
-<code class="sig-name descname">_process_game_map_intents</code><span class="sig-paren">(</span><em class="sig-param">intent: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#_process_game_map_intents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent._process_game_map_intents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_process_game_map_intents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#_process_game_map_intents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent._process_game_map_intents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process intents for the player turn game state.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.nqp.processors.intent._process_skill_use">
-<code class="sig-name descname">_process_skill_use</code><span class="sig-paren">(</span><em class="sig-param">player: int, skill: Type[scripts.engine.internal.action.Skill], target_tile: scripts.engine.world_objects.tile.Tile, direction: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#_process_skill_use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent._process_skill_use" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_process_skill_use</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">player</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">skill</span><span class="p">:</span> <span class="n">Type<span class="p">[</span><a class="reference internal" href="../../scripts.engine.internal.html#scripts.engine.internal.action.Skill" title="scripts.engine.internal.action.Skill">scripts.engine.internal.action.Skill</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target_tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../../scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em>, <em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#_process_skill_use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent._process_skill_use" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the use of specified skill. Wrapper for actions needed to handle a full skill use. Assumed
 ‘can_use_skill’ already completed.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.nqp.processors.intent._process_stateless_intents">
-<code class="sig-name descname">_process_stateless_intents</code><span class="sig-paren">(</span><em class="sig-param">intent: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#_process_stateless_intents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent._process_stateless_intents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_process_stateless_intents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#_process_stateless_intents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent._process_stateless_intents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process intents that don’t rely on game state.</p>
 </dd></dl>
 <dl class="py function">
@@ -358,7 +357,7 @@
 </dd></dl>
 <dl class="py function">
 <dt id="scripts.nqp.processors.intent.process_intent">
-<code class="sig-name descname">process_intent</code><span class="sig-paren">(</span><em class="sig-param">intent: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">game_state: Optional[scripts.engine.internal.constant.GameState] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#process_intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent.process_intent" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">process_intent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span></em>, <em class="sig-param"><span class="n">game_state</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="../../scripts.engine.internal.html#scripts.engine.internal.constant.GameState" title="scripts.engine.internal.constant.GameState">scripts.engine.internal.constant.GameState</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/nqp/processors/intent.html#process_intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent.process_intent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the intent in the context of the game state. Intents are game state sensitive. If no game state  is
 passed the current one will be obtained.</p>
 </dd></dl>
@@ -400,7 +399,7 @@ passed the current one will be obtained.</p>
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

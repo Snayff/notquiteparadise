@@ -53,7 +53,6 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
   
@@ -317,7 +316,7 @@ called in one way then no intent is generated and the event will directly go to 
 <span id="scripts-nqp-processors-intent-module"></span><h2 id="module-scripts.nqp.processors.intent">scripts.nqp.processors.intent module<a class="headerlink" href="#module-scripts.nqp.processors.intent" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="scripts.nqp.processors.intent.process_intent">
-<code class="sig-name descname">process_intent</code><span class="sig-paren">(</span><em class="sig-param">intent: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">game_state: Optional[scripts.engine.internal.constant.GameState] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/intent.html#process_intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent.process_intent" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">process_intent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">intent</span><span class="p">:</span> <span class="n">InputIntentType</span></em>, <em class="sig-param"><span class="n">game_state</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.constant.GameState" title="scripts.engine.internal.constant.GameState">scripts.engine.internal.constant.GameState</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/processors/intent.html#process_intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.processors.intent.process_intent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the intent in the context of the game state. Intents are game state sensitive. If no game state  is
 passed the current one will be obtained.</p>
 </dd></dl>
@@ -384,7 +383,7 @@ Updates the current hovered tile based on mouse position and updates the TILE_IN
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

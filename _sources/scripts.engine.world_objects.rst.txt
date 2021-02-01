@@ -4,14 +4,6 @@ scripts.engine.world\_objects package
 Submodules
 ----------
 
-scripts.engine.world\_objects.combat\_stats module
---------------------------------------------------
-
-.. automodule:: scripts.engine.world_objects.combat_stats
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 scripts.engine.world\_objects.game\_map module
 ----------------------------------------------
 

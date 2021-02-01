@@ -53,7 +53,6 @@
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Constant" href="constant.html" />
@@ -438,7 +437,7 @@ will use Actions.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="scripts.engine.internal.action.Skill">
-<em class="property">class </em><code class="sig-name descname">Skill</code><span class="sig-paren">(</span><em class="sig-param">user: int</em>, <em class="sig-param">target_tile: scripts.engine.world_objects.tile.Tile</em>, <em class="sig-param">direction: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/action.html#Skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target_tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../../scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em>, <em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/action.html#Skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../scripts.engine.internal.html#scripts.engine.internal.action.Action" title="scripts.engine.internal.action.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.action.Action</span></code></a></p>
 <p>A subclass of Skill represents a skill and holds all the data that is
 not dependent on the individual cast - stuff like shape, base accuracy, etc.</p>
@@ -447,7 +446,7 @@ and additionally holds only the data that is tied to the individual use - stuff 
 the user and target.</p>
 <dl class="py method">
 <dt id="scripts.engine.internal.action.Skill.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">user: int</em>, <em class="sig-param">target_tile: scripts.engine.world_objects.tile.Tile</em>, <em class="sig-param">direction: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/action.html#Skill.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target_tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../../scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em>, <em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/action.html#Skill.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 <dl class="py method">
@@ -523,7 +522,7 @@ by the engine.</p>
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

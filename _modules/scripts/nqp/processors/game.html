@@ -53,7 +53,6 @@
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   
@@ -259,19 +258,19 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">UIElement</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.event</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ChangeMapEvent</span><span class="p">,</span>
     <span class="n">EndRoundEvent</span><span class="p">,</span>
     <span class="n">EndTurnEvent</span><span class="p">,</span>
     <span class="n">ExitGameEvent</span><span class="p">,</span>
     <span class="n">ExitMenuEvent</span><span class="p">,</span>
     <span class="n">LoadGameEvent</span><span class="p">,</span>
+    <span class="n">LoseConditionMetEvent</span><span class="p">,</span>
     <span class="n">NewGameEvent</span><span class="p">,</span>
     <span class="n">NewRoundEvent</span><span class="p">,</span>
     <span class="n">NewTurnEvent</span><span class="p">,</span>
     <span class="n">StartGameEvent</span><span class="p">,</span>
     <span class="n">Subscriber</span><span class="p">,</span>
     <span class="n">WinConditionMetEvent</span><span class="p">,</span>
-    <span class="n">LoseConditionMetEvent</span><span class="p">,</span>
-    <span class="n">ChangeMapEvent</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">command</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors.intent</span> <span class="kn">import</span> <span class="n">process_intent</span>
@@ -384,7 +383,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>
