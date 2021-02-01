@@ -190,7 +190,7 @@ class Position(NQPComponent):
         # From all the nearest coordinates find the one nearest to the center of the entity
         arg_min = np.argmin(
             np.sqrt((center[0] - transformed[i[0]][0]) ** 2 + (center[1] - transformed[i[0]][1]) ** 2) for i in arg_max
-        )
+        )  # type: ignore
         return coordinates[arg_max[arg_min][0]][0], coordinates[arg_max[arg_min][0]][1]
 
     @property

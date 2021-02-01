@@ -621,7 +621,7 @@ def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Di
     return dir_x, dir_y  # type: ignore
 
 
-def get_entity_blocking_movement_map() -> np.array:
+def get_entity_blocking_movement_map() -> np.ndarray:
     """
     Return a Numpy array of bools, True for blocking and False for open
     """
@@ -1045,7 +1045,7 @@ def _is_tile_visible_to_entity(tile: Tile, entity: EntityID, game_map: GameMap) 
     light_map = game_map.light_map
 
     # combine maps
-    visible_map = fov_map & light_map
+    visible_map = fov_map & light_map  # type: ignore
 
     return bool(visible_map[tile.x, tile.y])
 
