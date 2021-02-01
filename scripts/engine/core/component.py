@@ -763,16 +763,16 @@ class CombatStats(NQPComponent):
             "resist_cold": self._resist_cold,
             "resist_chemical": self._resist_chemical,
             "resist_astral": self._resist_astral,
-            "resists_mundane": self._resist_mundane,
+            "resist_mundane": self._resist_mundane,
             "rush": self._rush,
 
             "max_health_mod": self._max_health_mod,
-            "mac_stamina_mod": self._max_stamina_mod,
+            "max_stamina_mod": self._max_stamina_mod,
             "accuracy_mod": self._accuracy_mod,
             "resist_burn_mod": self._resist_burn_mod,
             "resist_cold_mod": self._resist_cold_mod,
             "resist_chemical_mod": self._resist_chemical_mod,
-            "resists_astral_mod:": self._resist_astral_mod,
+            "resist_astral_mod": self._resist_astral_mod,
             "resist_mundane_mod": self._resist_mundane_mod,
             "rush_mod": self._rush_mod,
         }
@@ -875,42 +875,42 @@ class CombatStats(NQPComponent):
         """
         Influences healthiness. Never below 1.
         """
-        return self._vigour + self._get_mod_value(PrimaryStat.VIGOUR)
+        return max(1, self._vigour + self._get_mod_value(PrimaryStat.VIGOUR))
 
     @property
     def clout(self) -> int:
         """
         Influences forceful things. Never below 1.
         """
-        return self._clout + self._get_mod_value(PrimaryStat.CLOUT)
+        return max(1, self._clout + self._get_mod_value(PrimaryStat.CLOUT))
 
     @property
     def skullduggery(self) -> int:
         """
         Influences sneaky things. Never below 1.
         """
-        return self._skullduggery + self._get_mod_value(PrimaryStat.SKULLDUGGERY)
+        return max(1, self._skullduggery + self._get_mod_value(PrimaryStat.SKULLDUGGERY))
 
     @property
     def bustle(self) -> int:
         """
         Influences speedy things. Never below 1.
         """
-        return self._bustle + self._get_mod_value(PrimaryStat.BUSTLE)
+        return max(1, self._bustle + self._get_mod_value(PrimaryStat.BUSTLE))
 
     @property
     def exactitude(self) -> int:
         """
         Influences preciseness. Never below 1.
         """
-        return self._exactitude + self._get_mod_value(PrimaryStat.EXACTITUDE)
+        return max(1, self._exactitude + self._get_mod_value(PrimaryStat.EXACTITUDE))
 
     @property
     def max_health(self) -> int:
         """
         Total damage an entity can take before death.
         """
-        return self._get_secondary_stat(SecondaryStat.MAX_HEALTH)
+        return max(1, self._get_secondary_stat(SecondaryStat.MAX_HEALTH))
 
     @property
     def max_stamina(self) -> int:
@@ -918,14 +918,14 @@ class CombatStats(NQPComponent):
         An entities energy to take actions.
 
         """
-        return self._get_secondary_stat(SecondaryStat.MAX_STAMINA)
+        return max(1, self._get_secondary_stat(SecondaryStat.MAX_STAMINA))
 
     @property
     def accuracy(self) -> int:
         """
         An entities likelihood to hit.
         """
-        return self._get_secondary_stat(SecondaryStat.ACCURACY)
+        return max(1, self._get_secondary_stat(SecondaryStat.ACCURACY))
 
     @property
     def resist_burn(self) -> int:
@@ -933,7 +933,7 @@ class CombatStats(NQPComponent):
         An entities resistance to burn damage.
 
         """
-        return self._get_secondary_stat(SecondaryStat.RESIST_BURN)
+        return max(1, self._get_secondary_stat(SecondaryStat.RESIST_BURN))
 
     @property
     def resist_cold(self) -> int:
@@ -941,35 +941,35 @@ class CombatStats(NQPComponent):
         An entities resistance to cold damage.
 
         """
-        return self._get_secondary_stat(SecondaryStat.RESIST_COLD)
+        return max(1, self._get_secondary_stat(SecondaryStat.RESIST_COLD))
 
     @property
     def resist_chemical(self) -> int:
         """
         An entities resistance to chemical damage.
         """
-        return self._get_secondary_stat(SecondaryStat.RESIST_CHEMICAL)
+        return max(1, self._get_secondary_stat(SecondaryStat.RESIST_CHEMICAL))
 
     @property
     def resist_astral(self) -> int:
         """
         An entities resistance to astral damage.
         """
-        return self._get_secondary_stat(SecondaryStat.RESIST_ASTRAL)
+        return max(1, self._get_secondary_stat(SecondaryStat.RESIST_ASTRAL))
 
     @property
     def resist_mundane(self) -> int:
         """
         An entities resistance to mundane damage.
         """
-        return self._get_secondary_stat(SecondaryStat.RESIST_MUNDANE)
+        return max(1, self._get_secondary_stat(SecondaryStat.RESIST_MUNDANE))
 
     @property
     def rush(self) -> int:
         """
         How quickly an entity does things. Reduce time cost of actions.
         """
-        return self._get_secondary_stat(SecondaryStat.RUSH)
+        return max(1, self._get_secondary_stat(SecondaryStat.RUSH))
 
 
 class Sight(NQPComponent):

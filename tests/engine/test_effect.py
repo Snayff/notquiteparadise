@@ -209,10 +209,10 @@ def test_affect_stat_effect(
     stats = world.get_entitys_component(entity, CombatStats)
     start_stat = getattr(stats, stat_to_target)
     success = effect.evaluate()[0]
-    stats = world.get_entitys_component(entity, CombatStats)
     end_stat = getattr(stats, stat_to_target)
 
     if success:
+        # N.B. should never be less than 1
         assert max(start_stat + affect_amount, 1) == end_stat
     else:
         assert start_stat == end_stat

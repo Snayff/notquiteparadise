@@ -165,22 +165,22 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
 
     # combat stats
     base_stats = {}
-    for stat in [PrimaryStat.VIGOUR, PrimaryStat.CLOUT, PrimaryStat.SKULLDUGGERY, PrimaryStat.BUSTLE,
+    for primary_stat in [PrimaryStat.VIGOUR, PrimaryStat.CLOUT, PrimaryStat.SKULLDUGGERY, PrimaryStat.BUSTLE,
                 PrimaryStat.EXACTITUDE]:
         # apply primary base value
-        value = library.BASE_STATS_PRIMARY[stat].base_value
+        value = library.BASE_STATS_PRIMARY[primary_stat].base_value
 
         # loop traits and get values for stats
         for name in actor_data.trait_names:
             data = library.TRAITS[name]
-            value += getattr(data, stat)
-        base_stats[stat] = value
-    stats = CombatStats(**base_stats)
+            value += getattr(data, primary_stat)
+        base_stats[primary_stat] = value
+    stats = CombatStats(**base_stats)  # type: ignore
     # apply base values to secondary
-    for stat in [SecondaryStat.MAX_HEALTH, SecondaryStat.MAX_STAMINA, SecondaryStat.ACCURACY,
+    for secondary_stat in [SecondaryStat.MAX_HEALTH, SecondaryStat.MAX_STAMINA, SecondaryStat.ACCURACY,
                 SecondaryStat.RESIST_BURN, SecondaryStat.RESIST_CHEMICAL, SecondaryStat.RESIST_ASTRAL,
                 SecondaryStat.RESIST_COLD, SecondaryStat.RESIST_MUNDANE, SecondaryStat.RUSH]:
-        stats.amend_base_value(stat, library.BASE_STATS_SECONDARY[stat].base_value)
+        stats.amend_base_value(secondary_stat, library.BASE_STATS_SECONDARY[secondary_stat].base_value)
     components.append(stats)  # type: ignore
 
     # sight range
