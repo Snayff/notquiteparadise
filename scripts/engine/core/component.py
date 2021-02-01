@@ -11,17 +11,15 @@ from snecs.typedefs import EntityID
 
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
-    EffectType,
     HeightType,
     PrimaryStat,
     PrimaryStatType,
-    ReactionTrigger,
     ReactionTriggerType,
     RenderLayer,
     SecondaryStat,
     SecondaryStatType,
 )
-from scripts.engine.internal.definition import EffectData, ReactionData
+from scripts.engine.internal.definition import ReactionData
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Tuple, Type
@@ -55,6 +53,7 @@ __all__ = [
     "Reaction",
     "Lifespan",
     "Immunities",
+    "Sight",
 ]
 
 

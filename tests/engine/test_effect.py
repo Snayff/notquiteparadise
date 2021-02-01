@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import pytest
 import snecs
 from snecs.typedefs import EntityID
@@ -14,7 +16,7 @@ from scripts.engine.core.effect import (
     AlterTerrainEffect,
     ApplyAfflictionEffect,
     DamageEffect,
-    MoveActorEffect,
+    MoveOtherEffect, MoveSelfEffect,
 )
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.command import register_actions
@@ -31,7 +33,7 @@ from scripts.nqp.command import register_actions
 register_actions()
 
 
-def _create_scenario() -> EntityID:
+def _create_scenario() -> Tuple[EntityID, EntityID]:
 
     # new world
     empty_world = snecs.World()
@@ -48,8 +50,13 @@ def _create_scenario() -> EntityID:
         trait_names=["shoom", "soft_tops", "dandy"],
     )
     game_map.generate_new_map(actor_data)
+    
+    # add second entity
+    entity1 = world.get_player()
+    pos = world.get_entitys_component(entity1, Position)
+    entity2 = world.create_actor(actor_data, (pos.x + 1, pos.y))
 
-    return world.get_player()
+    return entity1, entity2
 
 
 test_damage_effect_parameters = [
@@ -105,7 +112,7 @@ def test_damage_effect(
         mod_amount,
         potency,
 ):
-    entity = _create_scenario()
+    entity, other_entity = _create_scenario()
 
     effect = DamageEffect(
         origin=entity,
@@ -134,37 +141,93 @@ def test_damage_effect(
         assert start_hp == end_hp
 
 
-test_move_actor_effect_parameters = [
-    Direction.UP,
-    Direction.UP_RIGHT,
-    Direction.UP_LEFT,
-    Direction.DOWN,
-    Direction.DOWN_RIGHT,
-    Direction.DOWN_LEFT
+test_move_effect_parameters = [
+    (Direction.UP, "other"),
+    (Direction.UP_RIGHT, "other"),
+    (Direction.UP_LEFT, "other"),
+    (Direction.DOWN, "other"),
+    (Direction.DOWN_RIGHT, "other"),
+    (Direction.DOWN_LEFT, "other"),
+    (Direction.UP, "self"),
+    (Direction.UP_RIGHT, "self"),
+    (Direction.UP_LEFT, "self"),
+    (Direction.DOWN, "self"),
+    (Direction.DOWN_RIGHT, "self"),
+    (Direction.DOWN_LEFT, "self"),
 ]
 
 
-@pytest.mark.parametrize(["x", "y"], test_move_actor_effect_parameters)
-def test_move_actor_effect(
-        x,
-        y
+@pytest.mark.parametrize(["direction", "self_or_other"], test_move_effect_parameters)
+def test_move_self_effect(
+        direction,
+        self_or_other,
 ):
-    entity = _create_scenario()
-    direction = (x, y)  # type:ignore
+    entity, other_entity = _create_scenario()
 
-    effect = MoveActorEffect(
-        origin=entity,
-        target=entity,
+    if self_or_other == "self":
+        origin = entity
+        target = entity
+    else:
+        origin = entity
+        target = other_entity
+
+    effect = MoveSelfEffect(
+        origin=origin,
+        target=target,
         direction=direction,
         success_effects=[],
         failure_effects=[],
         move_amount=1
     )
 
-    position = world.get_entitys_component(entity, Position)
+    position = world.get_entitys_component(target, Position)
     start_pos = (position.x, position.y)
     success = effect.evaluate()[0]
     end_pos = (position.x, position.y)
+
+    # check didnt move other
+    if self_or_other == "other":
+        assert not success
+
+    # assess results
+    if success:
+        assert start_pos[0] != end_pos[0] or start_pos[1] != end_pos[1]
+    else:
+        assert start_pos[0] == end_pos[0] or start_pos[1] == end_pos[1]
+        
+        
+
+@pytest.mark.parametrize(["direction", "self_or_other"], test_move_effect_parameters)
+def test_move_other_effect(
+        direction,
+        self_or_other,
+):
+    entity, other_entity = _create_scenario()
+
+    if self_or_other == "self":
+        origin = entity
+        target = entity
+    else:
+        origin = entity
+        target = other_entity
+
+    effect = MoveOtherEffect(
+        origin=origin,
+        target=target,
+        direction=direction,
+        success_effects=[],
+        failure_effects=[],
+        move_amount=1
+    )
+
+    position = world.get_entitys_component(target, Position)
+    start_pos = (position.x, position.y)
+    success = effect.evaluate()[0]
+    end_pos = (position.x, position.y)
+
+    # check didnt move self
+    if self_or_other == "self":
+        assert not success
 
     # assess results
     if success:
@@ -194,7 +257,7 @@ def test_affect_stat_effect(
         stat_to_target,
         affect_amount,
 ):
-    entity = _create_scenario()
+    entity, other_entity = _create_scenario()
 
     effect = AffectStatEffect(
         origin=entity,
@@ -231,7 +294,7 @@ def affliction_name(request):
 def test_apply_affliction_effect(
         affliction_name,
 ):
-    entity = _create_scenario()
+    entity, other_entity = _create_scenario()
 
     effect = ApplyAfflictionEffect(
         origin=entity,
@@ -274,7 +337,7 @@ def test_affect_cooldown_effect(
         skill_name,
         affect_cooldown_amount
 ):
-    entity = _create_scenario()
+    entity, other_entity = _create_scenario()
 
     # assign skill
     world.learn_skill(entity, skill_name)
@@ -319,7 +382,7 @@ def test_alter_terrain_effect_create(
         terrain_name,
         affect_terrain_amount
 ):
-    entity = _create_scenario()
+    entity, other_entity = _create_scenario()
 
     effect = AlterTerrainEffect(
         origin=entity,
@@ -356,7 +419,7 @@ def test_alter_terrain_effect_reduce_duration(
         terrain_name,
         affect_terrain_negative_amount
 ):
-    entity = _create_scenario()
+    entity, other_entity = _create_scenario()
 
     # create terrain on the spot
     base_duration = 10

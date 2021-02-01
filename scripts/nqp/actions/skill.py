@@ -7,13 +7,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine.core import world
 from scripts.engine.core.component import Aesthetic, Position
-from scripts.engine.core.effect import (
-    AffectCooldownEffect,
-    ApplyAfflictionEffect,
-    DamageEffect,
-    Effect,
-    MoveActorEffect,
-)
+from scripts.engine.core.effect import AffectCooldownEffect, ApplyAfflictionEffect, DamageEffect, Effect, MoveSelfEffect
 from scripts.engine.internal import library
 from scripts.engine.internal.action import Skill
 from scripts.engine.internal.constant import DamageType, DirectionType, PrimaryStat, Shape
@@ -39,11 +33,11 @@ class Move(Skill):
 
         super().__init__(user, tile, direction)
 
-    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[MoveActorEffect]:  # type:ignore
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[MoveSelfEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
-        move_effect = MoveActorEffect(
+        move_effect = MoveSelfEffect(
             origin=self.user,
             target=entity,
             success_effects=[],
@@ -116,11 +110,11 @@ class Lunge(Skill):
 
         return [move_effect]
 
-    def _build_move_effect(self, entity: EntityID, success_effects: List[Effect]) -> MoveActorEffect:
+    def _build_move_effect(self, entity: EntityID, success_effects: List[Effect]) -> MoveSelfEffect:
         """
         Return the move effect for the lunge
         """
-        move_effect = MoveActorEffect(
+        move_effect = MoveSelfEffect(
             origin=self.user,
             target=entity,
             success_effects=success_effects,

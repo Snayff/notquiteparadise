@@ -471,7 +471,7 @@ class DamageEffectData(EffectData):
 
 @register_dataclass_with_json
 @dataclass()
-class MoveActorEffectData(EffectData):
+class MoveEffectData(EffectData):
     """
     The data for a apply affliction effect.
     Also used to hold and map data from json.

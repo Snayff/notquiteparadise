@@ -36,7 +36,8 @@ if TYPE_CHECKING:
 __all__ = [
     "Effect",
     "DamageEffect",
-    "MoveActorEffect",
+    "MoveSelfEffect",
+    "MoveOtherEffect",
     "AffectStatEffect",
     "ApplyAfflictionEffect",
     "AffectCooldownEffect",
@@ -154,7 +155,7 @@ class DamageEffect(Effect):
             return False, self.failure_effects
 
 
-class MoveActorEffect(Effect):
+class MoveSelfEffect(Effect):
     def __init__(
         self,
         origin: EntityID,
@@ -174,24 +175,32 @@ class MoveActorEffect(Effect):
         """
         Resolve the move effect and return the conditional effects based on if the target moved the full amount.
         """
-        logging.debug("Evaluating Move Actor Effect...")
+        logging.debug("Evaluating Move Self Effect...")
 
+        entity = self.target
         success = False
-        pos = world.get_entitys_component(self.target, Position)
-        if not pos:
+
+        # confirm targeting self
+        if self.origin != entity:
+            logging.debug(f"Failed to move {world.get_name(entity)} as they are not the originator.")
+            return False, self.failure_effects
+
+        # check target has position
+        if not world.entity_has_component(entity, Position):
+            logging.debug(f"Failed to move {world.get_name(entity)} as they have no Position.")
             return False, self.failure_effects
 
         dir_x, dir_y = self.direction
-        entity = self.target
+        pos = world.get_entitys_component(entity, Position)
 
         # loop each target tile in turn
         for _ in range(0, self.move_amount):
             new_x = pos.x + dir_x
             new_y = pos.y + dir_y
-            collides = self._check_collision(entity, dir_x, dir_y)
-            success = not collides
+            blocked = world.direction_is_blocked(entity, dir_x, dir_y)
+            success = not blocked
 
-            if not collides:
+            if not blocked:
                 # named _position as typing was inferring from position above
                 _position = world.get_entitys_component(entity, Position)
 
@@ -221,50 +230,81 @@ class MoveActorEffect(Effect):
         else:
             return False, self.failure_effects
 
-    @staticmethod
-    def _check_collision(entity: EntityID, dir_x: int, dir_y: int) -> bool:
+
+class MoveOtherEffect(Effect):
+    def __init__(
+        self,
+        origin: EntityID,
+        target: EntityID,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+        direction: DirectionType,
+        move_amount: int,
+    ):
+
+        super().__init__(origin, target, success_effects, failure_effects)
+
+        self.direction = direction
+        self.move_amount = move_amount
+
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
-        Checks if the entity will collide with something when trying to move in the provided direction. Returns True
-        if blocked.
+        Resolve the move effect and return the conditional effects based on if the target moved the full amount.
         """
-        collides = False
+        logging.debug("Evaluating Move Other Effect...")
 
-        name = world.get_name(entity)
-        direction_name = utility.value_to_member((dir_x, dir_y), Direction)
-        position = world.get_entitys_component(entity, Position)
+        success = False
+        entity = self.target
 
-        for coordinate in position.coordinates:
-            target_x = coordinate[0] + dir_x
-            target_y = coordinate[1] + dir_y
-            target_tile = world.get_tile((target_x, target_y))
+        # confirm not targeting self
+        if self.origin == entity:
+            logging.debug(f"Failed to move {world.get_name(entity)} as they are the originator.")
+            return False, self.failure_effects
 
-            # check a tile was returned
-            is_tile_blocking_movement = False
-            if target_tile:
-                is_tile_blocking_movement = world.tile_has_tag(entity, target_tile, TileTag.BLOCKED_MOVEMENT)
+        # check target has position
+        if not world.entity_has_component(entity, Position):
+            logging.debug(f"Failed to move {world.get_name(entity)} as they have no Position.")
+            return False, self.failure_effects
 
-            # check if tile is blocked
-            if is_tile_blocking_movement:
-                from scripts.engine.core import query
+        pos = world.get_entitys_component(entity, Position)
+        dir_x, dir_y = self.direction
 
-                for other_entity, (pos, physicality) in query.position_and_physicality:
-                    assert isinstance(pos, Position)
-                    assert isinstance(physicality, Physicality)
-                    if (
-                        other_entity != entity
-                        and physicality.blocks_movement
-                        and (target_x, target_y) in pos.coordinates
-                    ):
-                        # blocked by entity
-                        blockers_name = world.get_name(other_entity)
-                        logging.debug(
-                            f"'{name}' tried to move {direction_name} to ({target_x},{target_y}) but was blocked"
-                            f" by '{blockers_name}'. "
-                        )
-                        break
-                collides = True
+        # loop each target tile in turn
+        for _ in range(0, self.move_amount):
+            new_x = pos.x + dir_x
+            new_y = pos.y + dir_y
+            blocked = world.direction_is_blocked(entity, dir_x, dir_y)
+            success = not blocked
 
-        return collides
+            if not blocked:
+                # named _position as typing was inferring from position above
+                _position = world.get_entitys_component(entity, Position)
+
+                # update position
+                if _position:
+                    logging.debug(
+                        f"->'{world.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x}," f"{new_y})."
+                    )
+                    _position.set(new_x, new_y)
+
+                    # post interaction event
+                    event = MoveEvent(
+                        origin=self.origin, target=self.target, direction=self.direction, new_pos=(new_x, new_y)
+                    )
+                    event_hub.post(event)
+
+                    success = True
+
+                # animate change
+                aesthetic = world.get_entitys_component(entity, Aesthetic)
+                if aesthetic:
+                    aesthetic.target_draw_x, aesthetic.target_draw_y = (new_x, new_y)
+                    aesthetic.current_sprite = aesthetic.sprites.move
+
+        if success:
+            return True, self.success_effects
+        else:
+            return False, self.failure_effects
 
 
 class AffectStatEffect(Effect):

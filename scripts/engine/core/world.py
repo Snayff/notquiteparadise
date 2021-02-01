@@ -41,7 +41,8 @@ from scripts.engine.core.effect import (
     ApplyAfflictionEffect,
     DamageEffect,
     Effect,
-    MoveActorEffect,
+    MoveOtherEffect,
+    MoveSelfEffect,
 )
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
@@ -76,7 +77,7 @@ from scripts.engine.internal.definition import (
     DelayedSkillData,
     EffectData,
     GodData,
-    MoveActorEffectData,
+    MoveEffectData,
     ProjectileData,
     TerrainData,
 )
@@ -453,8 +454,8 @@ def create_effect(origin: EntityID, target: EntityID, data: EffectData) -> Effec
         return _create_damage_effect(origin, target, data)
 
     elif effect_type == EffectType.MOVE:
-        assert isinstance(data, MoveActorEffectData)
-        return _create_move_actor_effect(origin, target, data)
+        assert isinstance(data, MoveEffectData)
+        return _create_move_self_effect(origin, target, data)
 
     elif effect_type == EffectType.AFFECT_STAT:
         assert isinstance(data, AffectStatEffectData)
@@ -504,8 +505,21 @@ def _create_damage_effect(origin: EntityID, target: EntityID, data: DamageEffect
     return effect
 
 
-def _create_move_actor_effect(origin: EntityID, target: EntityID, data: MoveActorEffectData) -> MoveActorEffect:
-    effect = MoveActorEffect(
+def _create_move_self_effect(origin: EntityID, target: EntityID, data: MoveEffectData) -> MoveSelfEffect:
+    effect = MoveSelfEffect(
+        origin=origin,
+        target=target,
+        direction=data.direction,
+        success_effects=data.success_effects,
+        failure_effects=data.failure_effects,
+        move_amount=data.move_amount,
+    )
+
+    return effect
+
+
+def _create_move_other_effect(origin: EntityID, target: EntityID, data: MoveEffectData) -> MoveOtherEffect:
+    effect = MoveOtherEffect(
         origin=origin,
         target=target,
         direction=data.direction,
@@ -1233,6 +1247,45 @@ def add_immunity(entity: EntityID, immunity_name: str, duration: int):
     logging.debug(f"'{get_name(entity)}' is now immune to {immunity_name} for {duration} rounds.")
 
 
+def direction_is_blocked(entity: EntityID, dir_x: int, dir_y: int) -> bool:
+    """
+    Checks if the entity will collide with something when trying to move in the provided direction. Returns True
+    if blocked.
+    """
+    collides = False
+    direction_name = utility.value_to_member((dir_x, dir_y), Direction)
+    position = get_entitys_component(entity, Position)
+
+    for coordinate in position.coordinates:
+        target_x = coordinate[0] + dir_x
+        target_y = coordinate[1] + dir_y
+        target_tile = get_tile((target_x, target_y))
+
+        # check a tile was returned
+        is_tile_blocking_movement = False
+        if target_tile:
+            is_tile_blocking_movement = tile_has_tag(entity, target_tile, TileTag.BLOCKED_MOVEMENT)
+
+        # check if tile is blocked
+        if is_tile_blocking_movement:
+            # find out who is blocking
+            for other_entity, (pos, physicality) in query.position_and_physicality:
+                assert isinstance(pos, Position)
+                assert isinstance(physicality, Physicality)
+                if other_entity != entity and physicality.blocks_movement and (target_x, target_y) in pos.coordinates:
+                    # blocked by entity
+                    blockers_name = get_name(other_entity)
+                    name = get_name(entity)
+                    logging.debug(
+                        f"'{name}' tried to move {direction_name} to ({target_x},{target_y}) but was blocked"
+                        f" by '{blockers_name}'. "
+                    )
+                    break
+            collides = True
+
+    return collides
+
+
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
 
 
@@ -1527,11 +1580,12 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
 
     # apply to hit modifier to damage
     if hit_type == HitType.CRIT:
-        modified_damage = mitigated_damage * hit_types_data.crit.modifier
+        hit_mod = hit_types_data.crit.modifier
     elif hit_type == HitType.HIT:
-        modified_damage = mitigated_damage * hit_types_data.hit.modifier
+        hit_mod = hit_types_data.hit.modifier
     else:
-        modified_damage = mitigated_damage * hit_types_data.graze.modifier
+        hit_mod = hit_types_data.graze.modifier
+    modified_damage = mitigated_damage * hit_mod
 
     # round down the dmg
     int_modified_damage = int(modified_damage)
@@ -1543,8 +1597,10 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
 
     # log the info
     logging.debug(
-        f"-> Initial:{base_damage} + {damage_mod_amount}, Mitigated: {format(mitigated_damage, '.2f')},  Modified by"
-        f"Hit Type:{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
+        f"-> Base Damage:{base_damage}, +Damage Mod:{damage_mod_amount} ({base_damage + damage_mod_amount}), "
+        f"-Resistance:{resist_value} ({format(mitigated_damage, '.2f')}), "
+        f"*Hit Mod:{hit_mod} ({format(modified_damage, '.2f')}), "
+        f"Result (rounded): {int_modified_damage}"
     )
 
     return int_modified_damage
