@@ -209,9 +209,11 @@ class WinConditionMetEvent(Event):
     def __init__(self):
         super().__init__(EventType.GAME)
 
+
 class LoseConditionMetEvent(Event):
     def __init__(self):
         super().__init__(EventType.GAME)
+
 
 class ChangeMapEvent(Event):
     def __init__(self):

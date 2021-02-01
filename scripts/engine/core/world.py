@@ -14,7 +14,8 @@ from scripts.engine.core import chronicle, query, utility
 from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
-    CombatStats, Exists,
+    CombatStats,
+    Exists,
     FOV,
     Identity,
     Immunities,
@@ -28,7 +29,8 @@ from scripts.engine.core.component import (
     Position,
     Reaction,
     Resources,
-    Sight, Thought,
+    Sight,
+    Thought,
     Tracked,
     Traits,
 )
@@ -54,7 +56,8 @@ from scripts.engine.internal.constant import (
     PrimaryStat,
     RenderLayer,
     ResourceType,
-    SecondaryStat, ShapeType,
+    SecondaryStat,
+    ShapeType,
     TILE_SIZE,
     TileTag,
     TileTagType,
@@ -77,7 +80,7 @@ from scripts.engine.internal.definition import (
     ProjectileData,
     TerrainData,
 )
-from scripts.engine.internal.event import event_hub, MessageEvent, LoseConditionMetEvent
+from scripts.engine.internal.event import event_hub, LoseConditionMetEvent, MessageEvent
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
@@ -165,8 +168,13 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
 
     # combat stats
     base_stats = {}
-    for primary_stat in [PrimaryStat.VIGOUR, PrimaryStat.CLOUT, PrimaryStat.SKULLDUGGERY, PrimaryStat.BUSTLE,
-                PrimaryStat.EXACTITUDE]:
+    for primary_stat in [
+        PrimaryStat.VIGOUR,
+        PrimaryStat.CLOUT,
+        PrimaryStat.SKULLDUGGERY,
+        PrimaryStat.BUSTLE,
+        PrimaryStat.EXACTITUDE,
+    ]:
         # apply primary base value
         value = library.BASE_STATS_PRIMARY[primary_stat].base_value
 
@@ -177,9 +185,17 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         base_stats[primary_stat] = value
     stats = CombatStats(**base_stats)  # type: ignore
     # apply base values to secondary
-    for secondary_stat in [SecondaryStat.MAX_HEALTH, SecondaryStat.MAX_STAMINA, SecondaryStat.ACCURACY,
-                SecondaryStat.RESIST_BURN, SecondaryStat.RESIST_CHEMICAL, SecondaryStat.RESIST_ASTRAL,
-                SecondaryStat.RESIST_COLD, SecondaryStat.RESIST_MUNDANE, SecondaryStat.RUSH]:
+    for secondary_stat in [
+        SecondaryStat.MAX_HEALTH,
+        SecondaryStat.MAX_STAMINA,
+        SecondaryStat.ACCURACY,
+        SecondaryStat.RESIST_BURN,
+        SecondaryStat.RESIST_CHEMICAL,
+        SecondaryStat.RESIST_ASTRAL,
+        SecondaryStat.RESIST_COLD,
+        SecondaryStat.RESIST_MUNDANE,
+        SecondaryStat.RUSH,
+    ]:
         stats.amend_base_value(secondary_stat, library.BASE_STATS_SECONDARY[secondary_stat].base_value)
     components.append(stats)  # type: ignore
 
@@ -372,6 +388,7 @@ def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], d
     behaviour = store.behaviour_registry["DelayedSkill"]
     thought = Thought(behaviour(entity))
     from scripts.engine.internal.action import DelayedSkill
+
     assert isinstance(thought.behaviour, DelayedSkill)
     thought.behaviour.data = data
     add_component(entity, thought)

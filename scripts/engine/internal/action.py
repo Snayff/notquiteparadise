@@ -460,6 +460,7 @@ class DelayedSkill(Behaviour):
             # get time left in round, to align first end of turn to round
             time_left_in_round = chronicle.get_time_left_in_round()
             from scripts.engine.internal import library
+
             time_per_round = library.GAME_CONFIG.default_values.time_per_round
 
             # align to round time and add number of rounds as a delay
@@ -472,7 +473,6 @@ class DelayedSkill(Behaviour):
             logging.debug(f"{world.get_name(self.entity)} will trigger in {self.data.duration} rounds.")
 
             return
-
 
         # apply skill, rather than using it, as the instance already exists and we are just using the effects
         world.apply_skill(self.data.skill_instance)

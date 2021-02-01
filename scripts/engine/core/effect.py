@@ -10,7 +10,8 @@ from scripts.engine.core import query, utility, world
 from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
-    CombatStats, Identity,
+    CombatStats,
+    Identity,
     Knowledge,
     Lifespan,
     Physicality,

@@ -13,10 +13,13 @@ from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
     EffectType,
     HeightType,
-    PrimaryStat, PrimaryStatType,
+    PrimaryStat,
+    PrimaryStatType,
     ReactionTrigger,
     ReactionTriggerType,
-    RenderLayer, SecondaryStat, SecondaryStatType,
+    RenderLayer,
+    SecondaryStat,
+    SecondaryStatType,
 )
 from scripts.engine.internal.definition import EffectData, ReactionData
 
@@ -148,6 +151,7 @@ class MapCondition(NQPComponent):
 
 
 #################### OTHERS #########################
+
 
 class Position(NQPComponent):
     """
@@ -477,7 +481,6 @@ class Afflictions(NQPComponent):
 
         self.active: List[Affliction] = active  # TODO - should this be a dict for easier querying?
 
-
     def serialize(self):
         active = {}
         for affliction in self.active:
@@ -705,6 +708,7 @@ class CombatStats(NQPComponent):
     """
     An entities stats used for combat.
     """
+
     def __init__(self, vigour: int, clout: int, skullduggery: int, bustle: int, exactitude: int):
         """
         Set primary stats. Secondary stats pulled from library.
@@ -749,13 +753,11 @@ class CombatStats(NQPComponent):
             "skullduggery": self._skullduggery,
             "bustle": self._bustle,
             "exactitude": self._exactitude,
-
             "vigour_mod": self._vigour_mod,
             "clout_mod": self._clout_mod,
             "skullduggery_mod": self._skullduggery_mod,
             "bustle_mod": self._bustle_mod,
             "exactitude_mod": self._exactitude_mod,
-
             "max_health": self._max_health,
             "max_stamina": self._max_stamina,
             "accuracy": self._accuracy,
@@ -765,7 +767,6 @@ class CombatStats(NQPComponent):
             "resist_astral": self._resist_astral,
             "resist_mundane": self._resist_mundane,
             "rush": self._rush,
-
             "max_health_mod": self._max_health_mod,
             "max_stamina_mod": self._max_stamina_mod,
             "accuracy_mod": self._accuracy_mod,
@@ -780,8 +781,13 @@ class CombatStats(NQPComponent):
 
     @classmethod
     def deserialize(cls, serialised):
-        stats = CombatStats(serialised["vigour"], serialised["clout"], serialised["skullduggery"], serialised[
-            "bustle"], serialised["exactitude"])
+        stats = CombatStats(
+            serialised["vigour"],
+            serialised["clout"],
+            serialised["skullduggery"],
+            serialised["bustle"],
+            serialised["exactitude"],
+        )
 
         stats._vigour_mod = serialised["vigour_mod"]
         stats._clout_mod = serialised["clout_mod"]
@@ -808,7 +814,7 @@ class CombatStats(NQPComponent):
         stats._resist_astral_mod = serialised["resist_astral_mod"]
         stats._resist_mundane_mod = serialised["resist_mundane_mod"]
         stats._rush_mod = serialised["rush_mod"]
-        
+
         return stats
 
     def amend_base_value(self, stat: Union[PrimaryStatType, SecondaryStatType], amount: int):
@@ -836,6 +842,7 @@ class CombatStats(NQPComponent):
         Remove a modifier from a stat. Returns True if successfully removed, else False.
         """
         from scripts.engine.core import utility
+
         for stat in utility.get_class_members(self.__class__):
             if cause in stat:
                 assert isinstance(stat, dict)
@@ -976,6 +983,7 @@ class Sight(NQPComponent):
     """
     An entity's ability to see.
     """
+
     def __init__(self, sight_range: int):
         self.sight_range: int = sight_range
 
@@ -986,4 +994,3 @@ class Sight(NQPComponent):
     @classmethod
     def deserialize(cls, serialised):
         return Sight(**serialised)
-

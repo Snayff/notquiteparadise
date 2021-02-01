@@ -14,6 +14,7 @@ from scripts.engine.core.component import (
     Knowledge,
     Lifespan,
     LightSource,
+    MapCondition,
     Opinion,
     Physicality,
     Position,
@@ -21,7 +22,6 @@ from scripts.engine.core.component import (
     Tracked,
     Traits,
     WinCondition,
-    MapCondition,
 )
 
 __all__ = [
@@ -103,14 +103,13 @@ light_source_and_aesthetic = get_components([LightSource, Aesthetic]).compile()
 active_and_position_and_physicality = get_components([IsActive, Position, Physicality]).compile()
 
 
-
-
 ################## TYPE OF ENTITY QUERIES ##########################
 # N.B. these are based on what components are used during the creation methods
 
 actors = get_components([Position, Physicality, Identity, CombatStats, Traits, FOV, Tracked, Immunities])
-active_actors = get_components([IsActive, Position, Physicality, Identity, CombatStats, Traits, FOV, Tracked,
-                            Immunities]).compile()
+active_actors = get_components(
+    [IsActive, Position, Physicality, Identity, CombatStats, Traits, FOV, Tracked, Immunities]
+).compile()
 
 ##################### FILTERS ###############################
 # .filter((DOT & StatusEffect) | (~DOT & Poison & ~Antidote))

@@ -4,19 +4,19 @@ from scripts.engine.core import chronicle, system
 from scripts.engine.core.ui import ui
 from scripts.engine.internal.constant import EventType, InputIntent, UIElement
 from scripts.engine.internal.event import (
+    ChangeMapEvent,
     EndRoundEvent,
     EndTurnEvent,
     ExitGameEvent,
     ExitMenuEvent,
     LoadGameEvent,
+    LoseConditionMetEvent,
     NewGameEvent,
     NewRoundEvent,
     NewTurnEvent,
     StartGameEvent,
     Subscriber,
     WinConditionMetEvent,
-    LoseConditionMetEvent,
-    ChangeMapEvent,
 )
 from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent
