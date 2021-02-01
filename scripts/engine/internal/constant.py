@@ -235,7 +235,6 @@ class SecondaryStat(SimpleNamespace):
     RESIST_ASTRAL = SecondaryStatType("resist_astral")
     RESIST_COLD = SecondaryStatType("resist_cold")
     RESIST_MUNDANE = SecondaryStatType("resist_mundane")
-    SIGHT_RANGE = SecondaryStatType("sight_range")
     RUSH = SecondaryStatType("rush")
 
 

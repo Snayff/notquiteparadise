@@ -54,7 +54,7 @@ from scripts.engine.internal.constant import (
     PrimaryStat,
     RenderLayer,
     ResourceType,
-    ShapeType,
+    SecondaryStat, ShapeType,
     TILE_SIZE,
     TileTag,
     TileTagType,
@@ -167,13 +167,20 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     base_stats = {}
     for stat in [PrimaryStat.VIGOUR, PrimaryStat.CLOUT, PrimaryStat.SKULLDUGGERY, PrimaryStat.BUSTLE,
                 PrimaryStat.EXACTITUDE]:
-        value = 0
-        # loop traits and get base values for stats
+        # apply primary base value
+        value = library.BASE_STATS_PRIMARY[stat].base_value
+
+        # loop traits and get values for stats
         for name in actor_data.trait_names:
             data = library.TRAITS[name]
             value += getattr(data, stat)
         base_stats[stat] = value
     stats = CombatStats(**base_stats)
+    # apply base values to secondary
+    for stat in [SecondaryStat.MAX_HEALTH, SecondaryStat.MAX_STAMINA, SecondaryStat.ACCURACY,
+                SecondaryStat.RESIST_BURN, SecondaryStat.RESIST_CHEMICAL, SecondaryStat.RESIST_ASTRAL,
+                SecondaryStat.RESIST_COLD, SecondaryStat.RESIST_MUNDANE, SecondaryStat.RUSH]:
+        stats.amend_base_value(stat, library.BASE_STATS_SECONDARY[stat].base_value)
     components.append(stats)  # type: ignore
 
     # sight range
@@ -1519,8 +1526,8 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
 
     # log the info
     logging.debug(
-        f"-> Initial:{base_damage}, Mitigated: {format(mitigated_damage, '.2f')},  Modified"
-        f":{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
+        f"-> Initial:{base_damage} + {damage_mod_amount}, Mitigated: {format(mitigated_damage, '.2f')},  Modified by"
+        f"Hit Type:{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
     )
 
     return int_modified_damage
