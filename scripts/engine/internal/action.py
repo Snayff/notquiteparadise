@@ -276,13 +276,13 @@ class Affliction(Action):
         entity_names = []
         entities = set()
         position = world.get_entitys_component(self.affected_entity, Position)
-        if position:
-            for coordinate in position.coordinates:
-                for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
-                    if entity not in entities:
-                        entities.add(entity)
-                        yield entity, self._build_effects(entity)
-                        entity_names.append(world.get_name(entity))
+
+        for coordinate in position.coordinates:
+            for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
+                if entity not in entities:
+                    entities.add(entity)
+                    yield entity, self._build_effects(entity)
+                    entity_names.append(world.get_name(entity))
 
     def trigger(self):
         """

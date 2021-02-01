@@ -14,9 +14,8 @@ from scripts.engine.core import chronicle, query, utility
 from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
-    Exists,
+    CombatStats, Exists,
     FOV,
-    HasCombatStats,
     Identity,
     Immunities,
     IsActive,
@@ -53,10 +52,8 @@ from scripts.engine.internal.constant import (
     HitTypeType,
     INFINITE,
     PrimaryStat,
-    PrimaryStatType,
     RenderLayer,
     ResourceType,
-    SecondaryStatType,
     ShapeType,
     TILE_SIZE,
     TileTag,
@@ -82,7 +79,6 @@ from scripts.engine.internal.definition import (
 )
 from scripts.engine.internal.event import event_hub, MessageEvent, LoseConditionMetEvent
 from scripts.engine.world_objects import lighting
-from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
 
@@ -376,14 +372,6 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
     """
     affliction = store.affliction_registry[name](creator, target, duration)
     return affliction
-
-
-def create_combat_stats(entity: EntityID) -> CombatStats:
-    """
-    Create and return a stat object  for an entity.
-    """
-    stats = CombatStats(entity)
-    return stats
 
 
 def create_light(pos: Tuple[int, int], radius: int, colour: Tuple[int, int, int], alpha: int) -> str:
@@ -808,7 +796,7 @@ def get_player() -> EntityID:
     """
     Get the player.
     """
-    for entity, (flag,) in get_components([IsPlayer]):
+    for entity, (_,) in get_components([IsPlayer]):
         return entity
     raise ValueError("Player not found.")
 
@@ -842,67 +830,6 @@ def get_name(entity: EntityID) -> str:
         name = "not found"
 
     return name
-
-
-def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
-    """
-    Get an entity's primary stat.
-    """
-    stat = primary_stat
-    value = 0
-
-    stat_data = library.BASE_STATS_PRIMARY[stat]
-    value += stat_data.base_value
-
-    if entity_has_component(entity, Traits):
-        trait = get_entitys_component(entity, Traits)
-        for name in trait.names:
-            data = library.TRAITS[name]
-            value += getattr(data, stat)
-
-    # TODO: create system to add or remove mod made by affliction
-    if entity_has_component(entity, Afflictions):
-        afflictions = get_entitys_component(entity, Afflictions)
-        for modifier in afflictions.stat_modifiers.values():
-            if modifier[0] == stat:
-                value += modifier[1]
-
-    # ensure no dodgy numbers, like floats or negative
-    value = max(1, int(value))
-
-    return value
-
-
-def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> int:
-    """
-    Get an entity's secondary stat.
-    """
-    # FIXME - this doesnt work for sight range
-    stat = secondary_stat
-    value = 0
-
-    # base values
-    stat_data = library.BASE_STATS_SECONDARY[stat]
-    value += stat_data.base_value
-
-    # values from primary stats
-    value += get_primary_stat(entity, PrimaryStat.VIGOUR) * stat_data.vigour_mod
-    value += get_primary_stat(entity, PrimaryStat.CLOUT) * stat_data.clout_mod
-    value += get_primary_stat(entity, PrimaryStat.SKULLDUGGERY) * stat_data.skullduggery_mod
-    value += get_primary_stat(entity, PrimaryStat.BUSTLE) * stat_data.bustle_mod
-    value += get_primary_stat(entity, PrimaryStat.EXACTITUDE) * stat_data.exactitude_mod
-
-    # afflictions
-    if entity_has_component(entity, Afflictions):
-        afflictions = get_entitys_component(entity, Afflictions)
-        for modifier in afflictions.stat_modifiers.values():
-            if modifier[0] == stat:
-                value += modifier[1]
-
-    # ensure no dodgy numbers, like floats or negative
-    value = max(1, int(value))
-
-    return value
 
 
 def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
@@ -1054,7 +981,8 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
         # if the tile contains an actor
         for query_result in query.actors:
             # this is a very dirty way to access the position of a query result
-            # I don't want to scan for the position component since it would severely bog down performance if many entities exist and this function is used frequently
+            # I don't want to scan for the position component since it would severely bog down performance if many
+            # entities exist and this function is used frequently
             # structuring the results as a dict may be beneficial
             position = query_result[1][0]
             assert isinstance(position, Position)
@@ -1491,8 +1419,6 @@ def kill_entity(entity: EntityID):
             turn_queue.pop(entity)
 
     else:
-        # placeholder for player death
-        #event_hub.post(MessageEvent("I should have died just then."))
         event_hub.post(LoseConditionMetEvent())
 
 
@@ -1532,6 +1458,11 @@ def remove_affliction(entity: EntityID, affliction: Affliction):
     afflictions = get_entitys_component(entity, Afflictions)
     if afflictions:
         afflictions.remove(affliction)
+
+        # remove stat modification
+        if EffectType.AFFECT_STAT in affliction.identity_tags and entity_has_component(entity, CombatStats):
+            stats = get_entitys_component(entity, CombatStats)
+            stats.remove_mod(affliction.name)
 
 
 def learn_skill(entity: EntityID, skill_name: str):

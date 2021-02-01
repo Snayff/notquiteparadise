@@ -293,7 +293,7 @@ class AffectStatEffect(Effect):
         stats = world.get_entitys_component(self.target, CombatStats)
 
         # if successfully  applied
-        if stats.amend_mod_value(self.stat_to_target, self.cause_name, self.affect_amount):
+        if stats.add_mod(self.stat_to_target, self.cause_name, self.affect_amount):
 
             # post interaction event
             event = AffectStatEvent(

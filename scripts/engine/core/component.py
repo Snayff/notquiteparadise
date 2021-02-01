@@ -472,16 +472,11 @@ class Afflictions(NQPComponent):
     An entity's Boons and Banes. held in .active as a list of Affliction.
     """
 
-    def __init__(
-        self,
-        active: Optional[List[Affliction]] = None,
-        stat_modifiers: Optional[Dict[str, Tuple[PrimaryStatType, int]]] = None,
-    ):
+    def __init__(self, active: Optional[List[Affliction]] = None):
         active = active or []
-        stat_modifiers = stat_modifiers or {}
 
         self.active: List[Affliction] = active  # TODO - should this be a dict for easier querying?
-        self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = stat_modifiers
+
 
     def serialize(self):
         active = {}
@@ -492,7 +487,7 @@ class Afflictions(NQPComponent):
                 affliction.duration,
             )
 
-        _dict = {"active": active, "stat_modifiers": self.stat_modifiers}
+        _dict = {"active": active}
 
         return _dict
 
@@ -509,17 +504,13 @@ class Afflictions(NQPComponent):
             affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])
             active_instances.append(affliction)
 
-        return Afflictions(active_instances, serialised["stat_modifiers"])
+        return Afflictions(active_instances)
 
     def add(self, affliction: Affliction):
         self.active.append(affliction)
 
     def remove(self, affliction: Affliction):
         if affliction in self.active:
-            # if it is affect_stat remove the affect
-            if EffectType.AFFECT_STAT in affliction.identity_tags:
-                self.stat_modifiers.pop(affliction.__class__.__name__)
-
             # remove from active list
             self.active.remove(affliction)
 
@@ -711,6 +702,9 @@ class Immunities(NQPComponent):
 
 
 class CombatStats(NQPComponent):
+    """
+    An entities stats used for combat.
+    """
     def __init__(self, vigour: int, clout: int, skullduggery: int, bustle: int, exactitude: int):
         """
         Set primary stats. Secondary stats pulled from library.
@@ -721,7 +715,7 @@ class CombatStats(NQPComponent):
         self._bustle: int = bustle
         self._exactitude: int = exactitude
 
-        self._vigour_mod: Dict[str, int] = {}
+        self._vigour_mod: Dict[str, int] = {}  # cause, amount
         self._clout_mod: Dict[str, int] = {}
         self._skullduggery_mod: Dict[str, int] = {}
         self._bustle_mod: Dict[str, int] = {}
@@ -737,7 +731,7 @@ class CombatStats(NQPComponent):
         self._resist_mundane: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_MUNDANE].base_value
         self._rush: int = library.BASE_STATS_SECONDARY[SecondaryStat.RUSH].base_value
 
-        self._max_health_mod: Dict[str, int] = {}
+        self._max_health_mod: Dict[str, int] = {}  # cause, amount
         self._max_stamina_mod: Dict[str, int] = {}
         self._accuracy_mod: Dict[str, int] = {}
         self._resist_burn_mod: Dict[str, int] = {}
@@ -747,6 +741,76 @@ class CombatStats(NQPComponent):
         self._resist_mundane_mod: Dict[str, int] = {}
         self._rush_mod: Dict[str, int] = {}
 
+    def serialize(self):
+
+        _dict = {
+            "vigour": self._vigour,
+            "clout": self._clout,
+            "skullduggery": self._skullduggery,
+            "bustle": self._bustle,
+            "exactitude": self._exactitude,
+
+            "vigour_mod": self._vigour_mod,
+            "clout_mod": self._clout_mod,
+            "skullduggery_mod": self._skullduggery_mod,
+            "bustle_mod": self._bustle_mod,
+            "exactitude_mod": self._exactitude_mod,
+
+            "max_health": self._max_health,
+            "max_stamina": self._max_stamina,
+            "accuracy": self._accuracy,
+            "resist_burn": self._resist_burn,
+            "resist_cold": self._resist_cold,
+            "resist_chemical": self._resist_chemical,
+            "resist_astral": self._resist_astral,
+            "resists_mundane": self._resist_mundane,
+            "rush": self._rush,
+
+            "max_health_mod": self._max_health_mod,
+            "mac_stamina_mod": self._max_stamina_mod,
+            "accuracy_mod": self._accuracy_mod,
+            "resist_burn_mod": self._resist_burn_mod,
+            "resist_cold_mod": self._resist_cold_mod,
+            "resist_chemical_mod": self._resist_chemical_mod,
+            "resists_astral_mod:": self._resist_astral_mod,
+            "resist_mundane_mod": self._resist_mundane_mod,
+            "rush_mod": self._rush_mod,
+        }
+        return _dict
+
+    @classmethod
+    def deserialize(cls, serialised):
+        stats = CombatStats(serialised["vigour"], serialised["clout"], serialised["skullduggery"], serialised[
+            "bustle"], serialised["exactitude"])
+
+        stats._vigour_mod = serialised["vigour_mod"]
+        stats._clout_mod = serialised["clout_mod"]
+        stats._skullduggery_mod = serialised["skullduggery_mod"]
+        stats._bustle_mod = serialised["bustle_mod"]
+        stats._exactitude_mod = serialised["exactitude_mod"]
+
+        stats._max_health = serialised["max_health"]
+        stats._max_stamina = serialised["max_stamina"]
+        stats._accuracy = serialised["accuracy"]
+        stats._resist_burn = serialised["resist_burn"]
+        stats._resist_cold = serialised["resist_cold"]
+        stats._resist_chemical = serialised["resist_chemical"]
+        stats._resist_astral = serialised["resist_astral"]
+        stats._resist_mundane = serialised["resist_mundane"]
+        stats._rush = serialised["rush"]
+
+        stats._max_health_mod = serialised["max_health_mod"]
+        stats._max_stamina_mod = serialised["max_stamina_mod"]
+        stats._accuracy_mod = serialised["accuracy_mod"]
+        stats._resist_burn_mod = serialised["resist_burn_mod"]
+        stats._resist_cold_mod = serialised["resist_cold_mod"]
+        stats._resist_chemical_mod = serialised["resist_chemical_mod"]
+        stats._resist_astral_mod = serialised["resist_astral_mod"]
+        stats._resist_mundane_mod = serialised["resist_mundane_mod"]
+        stats._rush_mod = serialised["rush_mod"]
+        
+        return stats
+
     def amend_base_value(self, stat: Union[PrimaryStatType, SecondaryStatType], amount: int):
         """
         Amend the base value of a stat
@@ -754,7 +818,7 @@ class CombatStats(NQPComponent):
         stat_to_amend = getattr(self, "_" + stat)
         stat_to_amend += amount
 
-    def amend_mod_value(self, stat: Union[PrimaryStatType, SecondaryStatType], cause: str, amount: int) -> bool:
+    def add_mod(self, stat: Union[PrimaryStatType, SecondaryStatType], cause: str, amount: int) -> bool:
         """
         Amend the modifier of a stat. Returns True if successfully amended, else False.
         """
@@ -767,19 +831,19 @@ class CombatStats(NQPComponent):
             mod_to_amend[cause] = amount
             return True
 
-    def remove_mod(self, stat: Union[PrimaryStatType, SecondaryStatType], cause: str) -> bool:
+    def remove_mod(self, cause: str) -> bool:
         """
         Remove a modifier from a stat. Returns True if successfully removed, else False.
         """
-        mod_to_amend = getattr(self, "_" + stat + "_mod")
+        from scripts.engine.core import utility
+        for stat in utility.get_class_members(self.__class__):
+            if cause in stat:
+                assert isinstance(stat, dict)
+                del stat[cause]
+                return True
 
-        if cause in mod_to_amend:
-            del mod_to_amend[cause]
-            return True
-        else:
-            logging.info(f"Modifier not removed as {cause} does not exist in modifier list.")
-            return False
-
+        logging.info(f"Modifier not removed as {cause} does not exist in modifier list.")
+        return False
 
     def _get_secondary_stat(self, stat: SecondaryStatType) -> int:
         """
