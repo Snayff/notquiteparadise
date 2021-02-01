@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Optional, Tuple
 
 import pygame
 import tcod
@@ -8,7 +9,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, world
 from scripts.engine.core.component import (
-    Afflictions,
+    Aesthetic, Afflictions,
     FOV,
     Immunities,
     IsActive,
@@ -29,7 +30,7 @@ from scripts.engine.internal.constant import (
     INFINITE,
     MAX_ACTIVATION_DISTANCE,
     ReactionTrigger,
-    ReactionTriggerType,
+    ReactionTriggerType, SpriteCategory, SpriteCategoryType,
 )
 from scripts.engine.internal.definition import EffectData, ReactionData
 from scripts.engine.internal.event import (
@@ -38,7 +39,7 @@ from scripts.engine.internal.event import (
     AfflictionEvent,
     ChangeMapEvent,
     DamageEvent,
-    event_hub,
+    UseSkillEvent, event_hub,
     MoveEvent,
     Subscriber,
     WinConditionMetEvent,
@@ -273,13 +274,25 @@ class InteractionEventSubscriber(Subscriber):
         self.subscribe(EventType.INTERACTION)
 
     def process_event(self, event):
-        if isinstance(event, MoveEvent):
+
+        if isinstance(event, UseSkillEvent):
+            # hacky way to prevent Move causing attack animation to play
+            if event.skill_name != "Move":
+                _set_sprite(event.origin, SpriteCategory.ATTACK)
+
+        elif isinstance(event, MoveEvent):
             _handle_proximity_reaction_trigger(event)
             _process_win_condition(event)
             _process_map_condition(event)
 
             _handle_reaction_trigger(event.origin, ReactionTrigger.MOVE)
             _handle_reaction_trigger(event.target, ReactionTrigger.MOVED)
+
+            # is it a move other or a move self?
+            if event.target == event.origin:
+                _set_sprite(event.target, SpriteCategory.MOVE, event.new_pos)
+            else:
+                _set_sprite(event.target, SpriteCategory.HIT)
 
         elif isinstance(event, DamageEvent):
             _handle_reaction_trigger(event.origin, ReactionTrigger.DEAL_DAMAGE)
@@ -289,17 +302,28 @@ class InteractionEventSubscriber(Subscriber):
                 _handle_reaction_trigger(event.origin, ReactionTrigger.KILL)
                 _handle_reaction_trigger(event.target, ReactionTrigger.DIE)
 
+                _set_sprite(event.target, SpriteCategory.DEAD)
+
+            else:
+                _set_sprite(event.target, SpriteCategory.HIT)
+
         elif isinstance(event, AffectStatEvent):
             _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_STAT)
             _handle_reaction_trigger(event.target, ReactionTrigger.STAT_AFFECTED)
+
+            _set_sprite(event.target, SpriteCategory.HIT)
 
         elif isinstance(event, AffectCooldownEvent):
             _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFECT_COOLDOWN)
             _handle_reaction_trigger(event.target, ReactionTrigger.COOLDOWN_AFFECTED)
 
+            _set_sprite(event.target, SpriteCategory.HIT)
+
         elif isinstance(event, AfflictionEvent):
             _handle_reaction_trigger(event.origin, ReactionTrigger.CAUSED_AFFLICTION)
             _handle_reaction_trigger(event.target, ReactionTrigger.AFFLICTED)
+
+            _set_sprite(event.target, SpriteCategory.HIT)
 
 
 interaction_subscriber = InteractionEventSubscriber()
@@ -418,6 +442,21 @@ def _apply_reaction(observer: EntityID, triggering_entity: EntityID, target_tile
         skill = store.skill_registry[data.reaction]
         world.use_skill(observer, skill, target_tile, Direction.CENTRE)
 
+
+def _set_sprite(entity: EntityID, sprite_category: SpriteCategoryType, new_pos: Optional[Tuple[int, int]] = None):
+    """
+    Sets an entities sprite
+    """
+    if world.entity_has_component(entity, Aesthetic):
+        aesthetic = world.get_entitys_component(entity, Aesthetic)
+        animation = getattr(aesthetic.sprites, sprite_category)
+        if animation:
+            aesthetic.set_current_sprite(sprite_category)
+        else:
+            logging.warning(f"{world.get_name(entity)} doesn`t have {sprite_category} sprite so left as idle.")
+
+        if new_pos:
+            aesthetic.target_draw_x, aesthetic.target_draw_y = new_pos
 
 ############### NON-GENERIC REACTION HANDLING ##########################
 

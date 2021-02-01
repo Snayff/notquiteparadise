@@ -248,7 +248,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     sprites = build_sprites_from_paths(traits_paths)
 
     # N.B. translation to screen coordinates is handled by the camera
-    components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (x, y)))
+    components.append(Aesthetic(sprites, traits_paths, RenderLayer.ACTOR, (x, y)))
 
     # add skills to entity
     components.append(Knowledge(known_skills, skill_order))
@@ -295,7 +295,7 @@ def create_terrain(terrain_data: TerrainData, spawn_pos: Tuple[int, int], lifesp
 
     # add aesthetic N.B. translation to screen coordinates is handled by the camera
     sprites = build_sprites_from_paths([terrain_data.sprite_paths], (TILE_SIZE, TILE_SIZE))
-    components.append(Aesthetic(sprites.idle, sprites, [terrain_data.sprite_paths], RenderLayer.TERRAIN, (x, y)))
+    components.append(Aesthetic(sprites, [terrain_data.sprite_paths], RenderLayer.TERRAIN, (x, y)))
 
     # add reactions
     components.append(Reaction(terrain_data.reactions))
@@ -329,7 +329,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
 
-    projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
+    projectile.append(Aesthetic(sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn()))  # allocate time to ensure they act next
     projectile.append(Position((x, y)))
     projectile.append(Resources(999, 999))  # TODO - remove need to have Resources
@@ -378,7 +378,7 @@ def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], d
 
     sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
 
-    delayed_skill.append(Aesthetic(sprites.idle, sprites, [data.sprite_paths], RenderLayer.TERRAIN, (x, y)))
+    delayed_skill.append(Aesthetic(sprites, [data.sprite_paths], RenderLayer.TERRAIN, (x, y)))
     delayed_skill.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
     delayed_skill.append(Position((x, y)))
     delayed_skill.append(IsActive())

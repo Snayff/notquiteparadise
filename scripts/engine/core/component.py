@@ -17,7 +17,7 @@ from scripts.engine.internal.constant import (
     ReactionTriggerType,
     RenderLayer,
     SecondaryStat,
-    SecondaryStatType,
+    SecondaryStatType, SpriteCategory, SpriteCategoryType,
 )
 from scripts.engine.internal.definition import ReactionData
 
@@ -237,15 +237,15 @@ class Aesthetic(NQPComponent):
 
     def __init__(
         self,
-        current_sprite: pygame.Surface,
         sprites: TraitSpritesData,
         sprite_paths: List[TraitSpritePathsData],
         render_layer: RenderLayer,
         draw_pos: Tuple[float, float],
     ):
         self._sprite_paths: List[TraitSpritePathsData] = sprite_paths
-        self.current_sprite: pygame.Surface = current_sprite
         self.sprites: TraitSpritesData = sprites
+        self.current_sprite: pygame.Surface = self.sprites.idle
+        self.current_sprite_category: SpriteCategoryType = getattr(self.sprites, SpriteCategory.IDLE)
         self.render_layer = render_layer
 
         draw_x, draw_y = draw_pos
@@ -289,7 +289,23 @@ class Aesthetic(NQPComponent):
 
         sprites = utility.build_sprites_from_paths(sprite_paths)
 
-        return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
+        return Aesthetic(sprites, sprite_paths, render_layer, (x, y))
+
+    def set_current_sprite(self, sprite_category: SpriteCategoryType):
+        """
+        Set the current sprite. Set current sprite duration to 0.
+        """
+        sprite = getattr(self.sprites, sprite_category)
+        self.current_sprite = sprite
+        self.current_sprite_category = sprite_category
+        self.current_sprite_duration = 0
+
+    def set_draw_to_target(self):
+        """
+        Set draw_x and draw_y to their target values
+        """
+        self.draw_x = self.target_draw_x
+        self.draw_y = self.target_draw_y
 
 
 class Tracked(NQPComponent):

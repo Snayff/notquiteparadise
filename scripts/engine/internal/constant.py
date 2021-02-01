@@ -11,7 +11,7 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.155.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.157.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 DEBUG_START = False  # Whether to start directly in debug map
 
 MAX_SKILLS = 6
@@ -64,10 +64,10 @@ TraitGroupType = NewType("TraitGroupType", str)
 ReactionTriggerType = NewType("ReactionTriggerType", str)
 TileCategoryType = NewType("TileCategoryType", str)
 HeightType = NewType("HeightType", int)
+SpriteCategoryType = NewType("SpriteCategoryType", str)
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
-
 
 class EventType(IntEnum):
     """ The types of possible customer pygame events. """
@@ -424,3 +424,14 @@ class Height(SimpleNamespace):
     MIDDLING = HeightType(3)
     LOFTY = HeightType(4)
     MAX = HeightType(5)
+
+
+class SpriteCategory(SimpleNamespace):
+    ICON = SpriteCategoryType("icon")
+    IDLE = SpriteCategoryType("idle")
+    ATTACK = SpriteCategoryType("attack")
+    HIT = SpriteCategoryType("hit")
+    DEAD = SpriteCategoryType("dead")
+    MOVE = SpriteCategoryType("move")
+    
+    

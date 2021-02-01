@@ -219,12 +219,6 @@ class MoveSelfEffect(Effect):
 
                     success = True
 
-                # animate change
-                aesthetic = world.get_entitys_component(entity, Aesthetic)
-                if aesthetic:
-                    aesthetic.target_draw_x, aesthetic.target_draw_y = (new_x, new_y)
-                    aesthetic.current_sprite = aesthetic.sprites.move
-
         if success:
             return True, self.success_effects
         else:
@@ -294,12 +288,6 @@ class MoveOtherEffect(Effect):
                     event_hub.post(event)
 
                     success = True
-
-                # animate change
-                aesthetic = world.get_entitys_component(entity, Aesthetic)
-                if aesthetic:
-                    aesthetic.target_draw_x, aesthetic.target_draw_y = (new_x, new_y)
-                    aesthetic.current_sprite = aesthetic.sprites.move
 
         if success:
             return True, self.success_effects

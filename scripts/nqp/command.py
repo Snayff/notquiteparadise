@@ -169,7 +169,7 @@ def start_game(player_data: ActorData):
     components.append(WinCondition())
     traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/win_flag.png"))]
     sprites = utility.build_sprites_from_paths(traits_paths)
-    components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
+    components.append(Aesthetic(sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
     world.create_entity(components)
 
     # create map change condition and place next to player
@@ -180,7 +180,7 @@ def start_game(player_data: ActorData):
     components.append(MapCondition())
     traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/map_flag.png"))]
     sprites = utility.build_sprites_from_paths(traits_paths)
-    components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
+    components.append(Aesthetic(sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
     world.create_entity(components)
 
     # tell places about the player

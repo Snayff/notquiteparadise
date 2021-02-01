@@ -24,6 +24,7 @@ from scripts.engine.internal.constant import (
     TileTagType,
 )
 from scripts.engine.internal.definition import DelayedSkillData, ProjectileData
+from scripts.engine.internal.event import UseSkillEvent, event_hub
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -99,13 +100,6 @@ class Skill(Action):
         """
         pass
 
-    def get_animation(self, aesthetic: Aesthetic):
-        """
-        Return the animation to play when executing the skill. Defaults to attack sprite. Override in subclass if
-        another is needed.
-        """
-        return aesthetic.sprites.attack
-
     @classmethod
     def _init_properties(cls):
         """
@@ -152,9 +146,6 @@ class Skill(Action):
         """
         logging.debug(f"'{world.get_name(self.user)}' used '{self.__class__.__name__}'.")
 
-        # animate the skill user
-        self._play_animation()
-
         # handle the delivery method of the skill
         if self.uses_projectile:
             self._create_projectile()
@@ -164,6 +155,15 @@ class Skill(Action):
             is_successful = True
         else:
             is_successful = world.apply_skill(self)
+
+        if is_successful:
+            # post interaction event
+            event = UseSkillEvent(
+                origin=self.user,
+                skill_name=self.__class__.__name__
+            )
+            event_hub.post(event)
+
 
         return is_successful
 
@@ -206,17 +206,6 @@ class Skill(Action):
 
         # save reference
         self.delayed_skill = delayed_skill
-
-    def _play_animation(self):
-        """
-        Play the provided animation on the entity's aesthetic component
-        """
-        if world.entity_has_component(self.user, Aesthetic):
-            aesthetic = world.get_entitys_component(self.user, Aesthetic)
-            animation = self.get_animation(aesthetic)
-            if animation:
-                aesthetic.current_sprite = animation
-                aesthetic.current_sprite_duration = 0
 
 
 class Affliction(Action):

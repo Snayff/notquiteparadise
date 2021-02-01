@@ -5,7 +5,7 @@ import pytweening
 from scripts.engine.core import query, utility, world
 from scripts.engine.core.component import Aesthetic, LightSource
 from scripts.engine.core.utility import is_close
-from scripts.engine.internal.constant import GameState, TILE_SIZE
+from scripts.engine.internal.constant import GameState, SpriteCategory, TILE_SIZE
 
 __all__ = ["process_updates"]
 
@@ -24,10 +24,14 @@ def _process_aesthetic_update(time_delta: float):
     Update aesthetics, such as entity animations and draw positions.
     """
     # move entities screen position towards target
-    for entity, (aesthetic,) in query.aesthetic:
+    for entity, (_, aesthetic,) in query.active_and_aesthetic:
         assert isinstance(aesthetic, Aesthetic)
 
-        max_duration = 0.5
+        # ignore idle
+        if aesthetic.current_sprite_category == SpriteCategory.IDLE:
+            continue
+
+        max_duration = 0.3
 
         # increment time
         aesthetic.current_sprite_duration += time_delta
@@ -35,32 +39,16 @@ def _process_aesthetic_update(time_delta: float):
         # Have we exceeded animation duration?
         time_exceeded = aesthetic.current_sprite_duration > max_duration
 
-        # do we need to show moving to a new position?
+        # if moving, do we need to show moving to a new position?
         if aesthetic.draw_x != aesthetic.target_draw_x or aesthetic.draw_y != aesthetic.target_draw_y:
+            lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration))
+            aesthetic.draw_x = utility.lerp(aesthetic.draw_x, aesthetic.target_draw_x, lerp_amount)
+            aesthetic.draw_y = utility.lerp(aesthetic.draw_y, aesthetic.target_draw_y, lerp_amount)
 
-            # time for animation exceeded or animation very close to end
-            if time_exceeded or is_close(
-                (aesthetic.draw_x, aesthetic.draw_y), (aesthetic.target_draw_x, aesthetic.target_draw_y)
-            ):
-
-                # set to target
-                aesthetic.draw_x = aesthetic.target_draw_x
-                aesthetic.draw_y = aesthetic.target_draw_y
-
-                # reset to idle
-                aesthetic.current_sprite = aesthetic.sprites.idle
-                aesthetic.current_sprite_duration = 0
-
-            # keep moving:
-            else:
-                lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))
-                aesthetic.draw_x = utility.lerp(aesthetic.draw_x, aesthetic.target_draw_x, lerp_amount)
-                aesthetic.draw_y = utility.lerp(aesthetic.draw_y, aesthetic.target_draw_y, lerp_amount)
-
-        # arrived at destination
-        else:
-            aesthetic.current_sprite = aesthetic.sprites.idle
-            aesthetic.current_sprite_duration = 0
+        # time for animation exceeded
+        if time_exceeded:
+            aesthetic.set_draw_to_target()
+            aesthetic.set_current_sprite(SpriteCategory.IDLE)
 
 
 def _process_lighting():
