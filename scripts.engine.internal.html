@@ -441,12 +441,6 @@ times.</p>
 <dt id="scripts.engine.internal.action.Skill.delayed_skill_data">
 <code class="sig-name descname">delayed_skill_data</code><em class="property">: Optional<span class="p">[</span>DelayedSkillData<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.internal.action.Skill.delayed_skill_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-<dl class="py method">
-<dt id="scripts.engine.internal.action.Skill.get_animation">
-<code class="sig-name descname">get_animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aesthetic</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.component.Aesthetic" title="scripts.engine.core.component.Aesthetic">scripts.engine.core.component.Aesthetic</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/action.html#Skill.get_animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.action.Skill.get_animation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the animation to play when executing the skill. Defaults to attack sprite. Override in subclass if
-another is needed.</p>
-</dd></dl>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.action.Skill.is_delayed">
 <code class="sig-name descname">is_delayed</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#scripts.engine.internal.action.Skill.is_delayed" title="Permalink to this definition">¶</a></dt>
@@ -1149,6 +1143,35 @@ N.B. does not use base move_cost</p>
 <dl class="py attribute">
 <dt id="scripts.engine.internal.constant.Shape.TARGET">
 <code class="sig-name descname">TARGET</code><em class="property"> = 'target'</em><a class="headerlink" href="#scripts.engine.internal.constant.Shape.TARGET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.constant.SpriteCategory">
+<em class="property">class </em><code class="sig-name descname">SpriteCategory</code><a class="reference internal" href="_modules/scripts/engine/internal/constant.html#SpriteCategory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.constant.SpriteCategory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/types.html#types.SimpleNamespace" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">types.SimpleNamespace</span></code></a></p>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.SpriteCategory.ATTACK">
+<code class="sig-name descname">ATTACK</code><em class="property"> = 'attack'</em><a class="headerlink" href="#scripts.engine.internal.constant.SpriteCategory.ATTACK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.SpriteCategory.DEAD">
+<code class="sig-name descname">DEAD</code><em class="property"> = 'dead'</em><a class="headerlink" href="#scripts.engine.internal.constant.SpriteCategory.DEAD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.SpriteCategory.HIT">
+<code class="sig-name descname">HIT</code><em class="property"> = 'hit'</em><a class="headerlink" href="#scripts.engine.internal.constant.SpriteCategory.HIT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.SpriteCategory.ICON">
+<code class="sig-name descname">ICON</code><em class="property"> = 'icon'</em><a class="headerlink" href="#scripts.engine.internal.constant.SpriteCategory.ICON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.SpriteCategory.IDLE">
+<code class="sig-name descname">IDLE</code><em class="property"> = 'idle'</em><a class="headerlink" href="#scripts.engine.internal.constant.SpriteCategory.IDLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.internal.constant.SpriteCategory.MOVE">
+<code class="sig-name descname">MOVE</code><em class="property"> = 'move'</em><a class="headerlink" href="#scripts.engine.internal.constant.SpriteCategory.MOVE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">
@@ -2776,6 +2799,17 @@ Also used to hold and map data from json.</p>
 <dt id="scripts.engine.internal.event.Subscriber.unsubscribe">
 <code class="sig-name descname">unsubscribe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#scripts.engine.internal.constant.EventType" title="scripts.engine.internal.constant.EventType">scripts.engine.internal.constant.EventType</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#Subscriber.unsubscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.Subscriber.unsubscribe" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.engine.internal.event.UseSkillEvent">
+<em class="property">class </em><code class="sig-name descname">UseSkillEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.internal.event.Event" title="scripts.engine.internal.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.event.Event</span></code></a></p>
+<p>Base class for events</p>
+<dl class="py method">
+<dt id="scripts.engine.internal.event.UseSkillEvent.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/internal/event.html#UseSkillEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.event.UseSkillEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for events</p>
+</dd></dl>
 </dd></dl>
 <dl class="py class">
 <dt id="scripts.engine.internal.event.WinConditionMetEvent">

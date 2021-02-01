@@ -753,11 +753,11 @@ N.B. ignores provided tile.</p>
 <em class="property">class </em><code class="sig-name descname">Move</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target_tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em>, <em class="sig-param"><span class="n">direction</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/skill.html#Move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.skill.Move" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="scripts.engine.internal.html#scripts.engine.internal.action.Skill" title="scripts.engine.internal.action.Skill"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.internal.action.Skill</span></code></a></p>
 <p>Basic move for an entity.</p>
-<p>Only Move needs an init as it overrides the target tile</p>
+<p>Move needs an init as it overrides the target tile</p>
 <dl class="py method">
 <dt id="scripts.nqp.actions.skill.Move.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">target_tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em>, <em class="sig-param"><span class="n">direction</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/skill.html#Move.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.skill.Move.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Only Move needs an init as it overrides the target tile</p>
+<dd><p>Move needs an init as it overrides the target tile</p>
 </dd></dl>
 <dl class="py attribute">
 <dt id="scripts.nqp.actions.skill.Move.base_cooldown">
@@ -791,12 +791,6 @@ N.B. ignores provided tile.</p>
 <dt id="scripts.nqp.actions.skill.Move.f_name">
 <code class="sig-name descname">f_name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.skill.Move.f_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-<dl class="py method">
-<dt id="scripts.nqp.actions.skill.Move.get_animation">
-<code class="sig-name descname">get_animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aesthetic</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.component.Aesthetic" title="scripts.engine.core.component.Aesthetic">scripts.engine.core.component.Aesthetic</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/skill.html#Move.get_animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.skill.Move.get_animation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the animation to play when executing the skill. Defaults to attack sprite. Override in subclass if
-another is needed.</p>
-</dd></dl>
 <dl class="py attribute">
 <dt id="scripts.nqp.actions.skill.Move.icon_path">
 <code class="sig-name descname">icon_path</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.skill.Move.icon_path" title="Permalink to this definition">¶</a></dt>

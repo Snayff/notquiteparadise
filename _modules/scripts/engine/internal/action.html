@@ -278,6 +278,7 @@
     <span class="n">TileTagType</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">DelayedSkillData</span><span class="p">,</span> <span class="n">ProjectileData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.event</span> <span class="kn">import</span> <span class="n">event_hub</span><span class="p">,</span> <span class="n">UseSkillEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -353,13 +354,6 @@
 <span class="sd">        """</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="Skill.get_animation"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Skill.get_animation">[docs]</a>    <span class="k">def</span> <span class="nf">get_animation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aesthetic</span><span class="p">:</span> <span class="n">Aesthetic</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        Return the animation to play when executing the skill. Defaults to attack sprite. Override in subclass if</span>
-<span class="sd">        another is needed.</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">sprites</span><span class="o">.</span><span class="n">attack</span></div>
-
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_init_properties</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -406,9 +400,6 @@
 <span class="sd">        """</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="si">}</span><span class="s2">' used '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span>
 
-        <span class="c1"># animate the skill user</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_play_animation</span><span class="p">()</span>
-
         <span class="c1"># handle the delivery method of the skill</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uses_projectile</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_create_projectile</span><span class="p">()</span>
@@ -418,6 +409,11 @@
             <span class="n">is_successful</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">is_successful</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">is_successful</span><span class="p">:</span>
+            <span class="c1"># post interaction event</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">UseSkillEvent</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">skill_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">is_successful</span></div>
 
@@ -459,18 +455,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ignore_entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">delayed_skill</span><span class="p">)</span>
 
         <span class="c1"># save reference</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delayed_skill</span> <span class="o">=</span> <span class="n">delayed_skill</span>
-
-    <span class="k">def</span> <span class="nf">_play_animation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        Play the provided animation on the entity's aesthetic component</span>
-<span class="sd">        """</span>
-        <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">):</span>
-            <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
-            <span class="n">animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_animation</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">animation</span><span class="p">:</span>
-                <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span> <span class="o">=</span> <span class="n">animation</span>
-                <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delayed_skill</span> <span class="o">=</span> <span class="n">delayed_skill</span></div>
 
 
 <div class="viewcode-block" id="Affliction"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Affliction">[docs]</a><span class="k">class</span> <span class="nc">Affliction</span><span class="p">(</span><span class="n">Action</span><span class="p">):</span>

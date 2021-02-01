@@ -272,6 +272,8 @@
     <span class="n">RenderLayer</span><span class="p">,</span>
     <span class="n">SecondaryStat</span><span class="p">,</span>
     <span class="n">SecondaryStatType</span><span class="p">,</span>
+    <span class="n">SpriteCategory</span><span class="p">,</span>
+    <span class="n">SpriteCategoryType</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ReactionData</span>
 
@@ -491,15 +493,15 @@
 
 <div class="viewcode-block" id="Aesthetic.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Aesthetic.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">current_sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span>
         <span class="n">sprites</span><span class="p">:</span> <span class="n">TraitSpritesData</span><span class="p">,</span>
         <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TraitSpritePathsData</span><span class="p">],</span>
         <span class="n">render_layer</span><span class="p">:</span> <span class="n">RenderLayer</span><span class="p">,</span>
         <span class="n">draw_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sprite_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TraitSpritePathsData</span><span class="p">]</span> <span class="o">=</span> <span class="n">sprite_paths</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="n">current_sprite</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sprites</span><span class="p">:</span> <span class="n">TraitSpritesData</span> <span class="o">=</span> <span class="n">sprites</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sprite_category</span><span class="p">:</span> <span class="n">SpriteCategoryType</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sprites</span><span class="p">,</span> <span class="n">SpriteCategory</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">render_layer</span> <span class="o">=</span> <span class="n">render_layer</span>
 
         <span class="n">draw_x</span><span class="p">,</span> <span class="n">draw_y</span> <span class="o">=</span> <span class="n">draw_pos</span>
@@ -543,7 +545,23 @@
 
         <span class="n">sprites</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">build_sprites_from_paths</span><span class="p">(</span><span class="n">sprite_paths</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span><span class="p">,</span> <span class="n">sprites</span><span class="p">,</span> <span class="n">sprite_paths</span><span class="p">,</span> <span class="n">render_layer</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span></div></div>
+        <span class="k">return</span> <span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="p">,</span> <span class="n">sprite_paths</span><span class="p">,</span> <span class="n">render_layer</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Aesthetic.set_current_sprite"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Aesthetic.set_current_sprite">[docs]</a>    <span class="k">def</span> <span class="nf">set_current_sprite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sprite_category</span><span class="p">:</span> <span class="n">SpriteCategoryType</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Set the current sprite. Set current sprite duration to 0.</span>
+<span class="sd">        """</span>
+        <span class="n">sprite</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sprites</span><span class="p">,</span> <span class="n">sprite_category</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sprite</span> <span class="o">=</span> <span class="n">sprite</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sprite_category</span> <span class="o">=</span> <span class="n">sprite_category</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Aesthetic.set_draw_to_target"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Aesthetic.set_draw_to_target">[docs]</a>    <span class="k">def</span> <span class="nf">set_draw_to_target</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Set draw_x and draw_y to their target values</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_draw_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_draw_y</span></div></div>
 
 
 <div class="viewcode-block" id="Tracked"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Tracked">[docs]</a><span class="k">class</span> <span class="nc">Tracked</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>

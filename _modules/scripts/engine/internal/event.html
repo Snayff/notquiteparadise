@@ -427,6 +427,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">duration</span></div></div>
 
 
+<div class="viewcode-block" id="UseSkillEvent"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.UseSkillEvent">[docs]</a><span class="k">class</span> <span class="nc">UseSkillEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+<div class="viewcode-block" id="UseSkillEvent.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.UseSkillEvent.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">INTERACTION</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">:</span> <span class="n">EntityID</span> <span class="o">=</span> <span class="n">origin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_name</span> <span class="o">=</span> <span class="n">skill_name</span></div></div>
+
+
 <span class="c1">######################### GAME EVENTS #########################</span>
 
 

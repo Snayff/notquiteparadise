@@ -259,7 +259,7 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">LightSource</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">is_close</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">TILE_SIZE</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">SpriteCategory</span><span class="p">,</span> <span class="n">TILE_SIZE</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"process_updates"</span><span class="p">]</span>
 
@@ -278,10 +278,17 @@
 <span class="sd">    Update aesthetics, such as entity animations and draw positions.</span>
 <span class="sd">    """</span>
     <span class="c1"># move entities screen position towards target</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">aesthetic</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span>
+        <span class="n">_</span><span class="p">,</span>
+        <span class="n">aesthetic</span><span class="p">,</span>
+    <span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">active_and_aesthetic</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
 
-        <span class="n">max_duration</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="c1"># ignore idle</span>
+        <span class="k">if</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_category</span> <span class="o">==</span> <span class="n">SpriteCategory</span><span class="o">.</span><span class="n">IDLE</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">max_duration</span> <span class="o">=</span> <span class="mf">0.3</span>
 
         <span class="c1"># increment time</span>
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">+=</span> <span class="n">time_delta</span>
@@ -289,32 +296,16 @@
         <span class="c1"># Have we exceeded animation duration?</span>
         <span class="n">time_exceeded</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">&gt;</span> <span class="n">max_duration</span>
 
-        <span class="c1"># do we need to show moving to a new position?</span>
+        <span class="c1"># if moving, do we need to show moving to a new position?</span>
         <span class="k">if</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span> <span class="o">!=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span> <span class="ow">or</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">!=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span><span class="p">:</span>
+            <span class="n">lerp_amount</span> <span class="o">=</span> <span class="n">pytweening</span><span class="o">.</span><span class="n">easeOutCubic</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_duration</span><span class="p">))</span>
+            <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">lerp</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span><span class="p">,</span> <span class="n">lerp_amount</span><span class="p">)</span>
+            <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">lerp</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span><span class="p">,</span> <span class="n">lerp_amount</span><span class="p">)</span>
 
-            <span class="c1"># time for animation exceeded or animation very close to end</span>
-            <span class="k">if</span> <span class="n">time_exceeded</span> <span class="ow">or</span> <span class="n">is_close</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span><span class="p">),</span> <span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span><span class="p">)</span>
-            <span class="p">):</span>
-
-                <span class="c1"># set to target</span>
-                <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span>
-                <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span>
-
-                <span class="c1"># reset to idle</span>
-                <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span>
-                <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">=</span> <span class="mi">0</span>
-
-            <span class="c1"># keep moving:</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">lerp_amount</span> <span class="o">=</span> <span class="n">pytweening</span><span class="o">.</span><span class="n">easeOutCubic</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
-                <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">lerp</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span><span class="p">,</span> <span class="n">lerp_amount</span><span class="p">)</span>
-                <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">lerp</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span><span class="p">,</span> <span class="n">lerp_amount</span><span class="p">)</span>
-
-        <span class="c1"># arrived at destination</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">sprites</span><span class="o">.</span><span class="n">idle</span>
-            <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="c1"># time for animation exceeded</span>
+        <span class="k">if</span> <span class="n">time_exceeded</span><span class="p">:</span>
+            <span class="n">aesthetic</span><span class="o">.</span><span class="n">set_draw_to_target</span><span class="p">()</span>
+            <span class="n">aesthetic</span><span class="o">.</span><span class="n">set_current_sprite</span><span class="p">(</span><span class="n">SpriteCategory</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="_process_lighting"><a class="viewcode-back" href="../../../../nqp/processors/display.html#scripts.nqp.processors.display._process_lighting">[docs]</a><span class="k">def</span> <span class="nf">_process_lighting</span><span class="p">():</span>
