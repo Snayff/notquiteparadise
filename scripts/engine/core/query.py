@@ -92,6 +92,8 @@ position_and_reaction = get_components([Position, Reaction]).compile()
 
 active_and_tracked = get_components([IsActive, Tracked]).compile()
 
+active_and_aesthetic = get_components([IsActive, Aesthetic]).compile()
+
 position_and_identity_and_lifespan = get_components([Position, Identity, Lifespan]).compile()
 
 position_and_identity_and_aesthetic = get_components([Position, Identity, Aesthetic]).compile()

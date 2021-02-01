@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import world
-from scripts.engine.core.component import Aesthetic, Position
+from scripts.engine.core.component import Position
 from scripts.engine.core.effect import AffectCooldownEffect, ApplyAfflictionEffect, DamageEffect, Effect, MoveSelfEffect
 from scripts.engine.internal import library
 from scripts.engine.internal.action import Skill
@@ -24,7 +24,7 @@ class Move(Skill):
 
     def __init__(self, user: EntityID, target_tile: Tile, direction):
         """
-        Only Move needs an init as it overrides the target tile
+        Move needs an init as it overrides the target tile
         """
 
         # override target
@@ -47,10 +47,6 @@ class Move(Skill):
         )
 
         return [move_effect]
-
-    def get_animation(self, aesthetic: Aesthetic):
-        # this special case is handled in the MoveActorEffect
-        return None
 
 
 class BasicAttack(Skill):

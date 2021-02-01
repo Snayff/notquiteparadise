@@ -173,6 +173,14 @@ class AlterTerrainEvent(Event):
         self.duration: int = duration
 
 
+class UseSkillEvent(Event):
+    def __init__(self, origin: EntityID, skill_name: str):
+        super().__init__(EventType.INTERACTION)
+
+        self.origin: EntityID = origin
+        self.skill_name = skill_name
+
+
 ######################### GAME EVENTS #########################
 
 
