@@ -17,7 +17,9 @@ from scripts.engine.internal.constant import (
     ReactionTriggerType,
     RenderLayer,
     SecondaryStat,
-    SecondaryStatType, SpriteCategory, SpriteCategoryType,
+    SecondaryStatType,
+    SpriteCategory,
+    SpriteCategoryType,
 )
 from scripts.engine.internal.definition import ReactionData
 

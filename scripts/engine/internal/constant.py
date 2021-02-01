@@ -69,6 +69,7 @@ SpriteCategoryType = NewType("SpriteCategoryType", str)
 
 #################### INTERNAL, NON-SERIALISED ###########################################
 
+
 class EventType(IntEnum):
     """ The types of possible customer pygame events. """
 
@@ -433,5 +434,3 @@ class SpriteCategory(SimpleNamespace):
     HIT = SpriteCategoryType("hit")
     DEAD = SpriteCategoryType("dead")
     MOVE = SpriteCategoryType("move")
-    
-    

@@ -24,7 +24,7 @@ from scripts.engine.internal.constant import (
     TileTagType,
 )
 from scripts.engine.internal.definition import DelayedSkillData, ProjectileData
-from scripts.engine.internal.event import UseSkillEvent, event_hub
+from scripts.engine.internal.event import event_hub, UseSkillEvent
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -158,12 +158,8 @@ class Skill(Action):
 
         if is_successful:
             # post interaction event
-            event = UseSkillEvent(
-                origin=self.user,
-                skill_name=self.__class__.__name__
-            )
+            event = UseSkillEvent(origin=self.user, skill_name=self.__class__.__name__)
             event_hub.post(event)
-
 
         return is_successful
 

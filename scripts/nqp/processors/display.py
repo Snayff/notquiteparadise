@@ -24,7 +24,10 @@ def _process_aesthetic_update(time_delta: float):
     Update aesthetics, such as entity animations and draw positions.
     """
     # move entities screen position towards target
-    for entity, (_, aesthetic,) in query.active_and_aesthetic:
+    for entity, (
+        _,
+        aesthetic,
+    ) in query.active_and_aesthetic:
         assert isinstance(aesthetic, Aesthetic)
 
         # ignore idle

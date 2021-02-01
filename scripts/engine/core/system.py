@@ -9,7 +9,8 @@ from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, query, world
 from scripts.engine.core.component import (
-    Aesthetic, Afflictions,
+    Aesthetic,
+    Afflictions,
     FOV,
     Immunities,
     IsActive,
@@ -30,7 +31,9 @@ from scripts.engine.internal.constant import (
     INFINITE,
     MAX_ACTIVATION_DISTANCE,
     ReactionTrigger,
-    ReactionTriggerType, SpriteCategory, SpriteCategoryType,
+    ReactionTriggerType,
+    SpriteCategory,
+    SpriteCategoryType,
 )
 from scripts.engine.internal.definition import EffectData, ReactionData
 from scripts.engine.internal.event import (
@@ -39,9 +42,10 @@ from scripts.engine.internal.event import (
     AfflictionEvent,
     ChangeMapEvent,
     DamageEvent,
-    UseSkillEvent, event_hub,
+    event_hub,
     MoveEvent,
     Subscriber,
+    UseSkillEvent,
     WinConditionMetEvent,
 )
 from scripts.engine.world_objects.tile import Tile
@@ -457,6 +461,7 @@ def _set_sprite(entity: EntityID, sprite_category: SpriteCategoryType, new_pos: 
 
         if new_pos:
             aesthetic.target_draw_x, aesthetic.target_draw_y = new_pos
+
 
 ############### NON-GENERIC REACTION HANDLING ##########################
 
