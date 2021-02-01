@@ -276,13 +276,13 @@ class Affliction(Action):
         entity_names = []
         entities = set()
         position = world.get_entitys_component(self.affected_entity, Position)
-        if position:
-            for coordinate in position.coordinates:
-                for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
-                    if entity not in entities:
-                        entities.add(entity)
-                        yield entity, self._build_effects(entity)
-                        entity_names.append(world.get_name(entity))
+
+        for coordinate in position.coordinates:
+            for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
+                if entity not in entities:
+                    entities.add(entity)
+                    yield entity, self._build_effects(entity)
+                    entity_names.append(world.get_name(entity))
 
     def trigger(self):
         """
@@ -453,26 +453,24 @@ class DelayedSkill(Behaviour):
 
         # N.B. both must be set after init
         self.data: DelayedSkillData = DelayedSkillData()
-        self.remaining_duration = 0
+        self.delayed: bool = False
 
     def act(self):
-        if self.remaining_duration == self.data.duration:
+        if not self.delayed:
             # get time left in round, to align first end of turn to round
-            chronicle.end_turn(self.entity, chronicle.get_time_left_in_round())
-
-            self.remaining_duration -= 1
-            logging.debug(f"{world.get_name(self.entity)} will trigger in {self.remaining_duration} rounds.")
-
-            return
-
-        elif self.remaining_duration > 0:
-            # with turn aligned to round now end turn with duration of round
+            time_left_in_round = chronicle.get_time_left_in_round()
             from scripts.engine.internal import library
 
-            chronicle.end_turn(self.entity, library.GAME_CONFIG.default_values.time_per_round)
+            time_per_round = library.GAME_CONFIG.default_values.time_per_round
 
-            self.remaining_duration -= 1
-            logging.debug(f"{world.get_name(self.entity)} will trigger in {self.remaining_duration} rounds.")
+            # align to round time and add number of rounds as a delay
+            time_delay = (time_per_round * self.data.duration) + time_left_in_round
+            chronicle.end_turn(self.entity, time_delay)
+
+            # set flag
+            self.delayed = True
+
+            logging.debug(f"{world.get_name(self.entity)} will trigger in {self.data.duration} rounds.")
 
             return
 

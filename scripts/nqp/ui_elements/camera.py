@@ -1,6 +1,6 @@
 import logging
-from typing import Iterable, List, Optional, Tuple
 import os
+from typing import Iterable, List, Optional, Tuple
 
 import pygame
 import pygame_gui
@@ -8,25 +8,24 @@ import pytweening
 from pygame.rect import Rect
 from pygame.surface import Surface
 
-from scripts.engine.core import query, utility, world, state
-from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
+from scripts.engine.core import query, state, utility, world
 from scripts.engine.core.component import Aesthetic, Position
+from scripts.engine.core.ui import ui
+from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
-    TILE_SIZE,
-    Height,
-    InputIntent,
-    InputEventType,
     EventType,
-    UIElement,
     GameState,
-    TargetingMethod
+    Height,
+    InputEventType,
+    InputIntent,
+    TargetingMethod,
+    TILE_SIZE,
+    UIElement,
 )
-from scripts.engine.core.ui import ui
-from scripts.nqp.ui_elements.tile_info import TileInfo
 from scripts.nqp import command
 from scripts.nqp.processors.targeting import targeting
-
+from scripts.nqp.ui_elements.tile_info import TileInfo
 
 __all__ = ["camera"]
 
@@ -183,8 +182,12 @@ class Camera:
                 if self.is_in_camera_view(position):
                     tile = world.get_tile(position)
                     if tile.is_visible or self.show_all:
-                        #self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
-                        map_surf.blit(aesthetic.current_sprite, self.get_render_pos((draw_position[0] * TILE_SIZE, draw_position[1] * TILE_SIZE)), src_area)
+                        # self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
+                        map_surf.blit(
+                            aesthetic.current_sprite,
+                            self.get_render_pos((draw_position[0] * TILE_SIZE, draw_position[1] * TILE_SIZE)),
+                            src_area,
+                        )
 
     def _draw_lighting(self, map_surf: pygame.Surface):
         light_box = world.get_game_map().light_box
@@ -219,6 +222,7 @@ class Camera:
         else:
             self.target_x = pos[0] - int((self._base_width / TILE_SIZE) / 2)
             self.target_y = pos[1] - int((self._base_height / TILE_SIZE) / 2)
+
 
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
     camera = Camera()

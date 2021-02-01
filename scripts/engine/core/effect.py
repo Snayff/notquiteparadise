@@ -10,6 +10,7 @@ from scripts.engine.core import query, utility, world
 from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
+    CombatStats,
     Identity,
     Knowledge,
     Lifespan,
@@ -104,13 +105,21 @@ class DamageEffect(Effect):
             logging.info(f"Damage given to DamageEffect is {self.damage} and was therefore not executed.")
             return False, self.failure_effects
 
-        if not world.entity_has_component(self.target, Resources):
+        elif not world.entity_has_component(self.target, Resources):
             logging.info(f"Target doesnt have resources so damage cannot be applied.")
             return False, self.failure_effects
 
+        elif not world.entity_has_component(self.target, CombatStats):
+            logging.warning(f"Target doesnt have combatstats so damage cannot be calculated.")
+            return False, self.failure_effects
+
+        elif not world.entity_has_component(self.origin, CombatStats):
+            logging.warning(f"Attacker doesnt have combatstats so damage cannot be calculated.")
+            return False, self.failure_effects
+
         # get combat stats
-        defenders_stats = world.create_combat_stats(self.target)
-        attackers_stats = world.create_combat_stats(self.origin)
+        defenders_stats = world.get_entitys_component(self.target, CombatStats)
+        attackers_stats = world.get_entitys_component(self.origin, CombatStats)
 
         # get hit type
         stat_to_target_value = getattr(defenders_stats, self.stat_to_target.lower())
@@ -282,11 +291,10 @@ class AffectStatEffect(Effect):
         """
         logging.debug("Evaluating Affect Stat Effect...")
         success = False
-        afflictions = world.get_entitys_component(self.target, Afflictions)
+        stats = world.get_entitys_component(self.target, CombatStats)
 
-        # if not already applied
-        if self.cause_name not in afflictions.stat_modifiers:
-            afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
+        # if successfully  applied
+        if stats.add_mod(self.stat_to_target, self.cause_name, self.affect_amount):
 
             # post interaction event
             event = AffectStatEvent(

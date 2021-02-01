@@ -11,7 +11,16 @@ from snecs import Component
 from snecs.world import default_world
 
 from scripts.engine.core import chronicle, state, system, utility, world
-from scripts.engine.core.component import Aesthetic, Position, WinCondition, MapCondition, Exists, IsPlayer, Identity, LightSource
+from scripts.engine.core.component import (
+    Aesthetic,
+    Exists,
+    Identity,
+    IsPlayer,
+    LightSource,
+    MapCondition,
+    Position,
+    WinCondition,
+)
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import library
 from scripts.engine.internal.action import register_action
@@ -262,6 +271,7 @@ def win_game():
     timer = Timer(2.0, goto_to_title)
     timer.start()
 
+
 def lose_game():
     state.set_new(GameState.MENU)
     ui.create_screen_message("You hath died. Huzzah?")
@@ -269,6 +279,7 @@ def lose_game():
     # quit to main menu after a few seconds
     timer = Timer(2.0, goto_to_title)
     timer.start()
+
 
 def change_map():
     # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
@@ -316,6 +327,7 @@ def change_map():
     # point the camera at the player, now that FOV is updated
     pos = world.get_entitys_component(player, Position)
     camera.set_target((pos.x, pos.y), True)
+
 
 ############### NAVIGATION  #####################
 

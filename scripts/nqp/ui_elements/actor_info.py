@@ -9,7 +9,7 @@ from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import utility, world
-from scripts.engine.core.component import Aesthetic, Afflictions, Identity, Resources, Traits
+from scripts.engine.core.component import Aesthetic, Afflictions, CombatStats, Identity, Resources, Traits
 from scripts.engine.core.utility import get_class_members
 from scripts.engine.internal.constant import (
     ASSET_PATH,
@@ -129,7 +129,7 @@ class ActorInfo(Window):
                 info.append(("image", section_break_image))
 
             # get stats
-            stats = world.create_combat_stats(entity)
+            stats = world.get_entitys_component(entity, CombatStats)
             if stats:
                 primary_stats = utility.get_class_members(PrimaryStat)
                 for name in primary_stats:
@@ -146,7 +146,6 @@ class ActorInfo(Window):
 
                 secondary_stats = get_class_members(SecondaryStat)
                 for name in secondary_stats:
-                    # FIXME - HEALTH and STAMINA not found
                     try:
                         stat_value = getattr(stats, name.lower())
 

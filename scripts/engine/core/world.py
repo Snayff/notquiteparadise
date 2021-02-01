@@ -14,9 +14,9 @@ from scripts.engine.core import chronicle, query, utility
 from scripts.engine.core.component import (
     Aesthetic,
     Afflictions,
+    CombatStats,
     Exists,
     FOV,
-    HasCombatStats,
     Identity,
     Immunities,
     IsActive,
@@ -29,6 +29,7 @@ from scripts.engine.core.component import (
     Position,
     Reaction,
     Resources,
+    Sight,
     Thought,
     Tracked,
     Traits,
@@ -53,10 +54,9 @@ from scripts.engine.internal.constant import (
     HitTypeType,
     INFINITE,
     PrimaryStat,
-    PrimaryStatType,
     RenderLayer,
     ResourceType,
-    SecondaryStatType,
+    SecondaryStat,
     ShapeType,
     TILE_SIZE,
     TileTag,
@@ -80,9 +80,8 @@ from scripts.engine.internal.definition import (
     ProjectileData,
     TerrainData,
 )
-from scripts.engine.internal.event import event_hub, MessageEvent, LoseConditionMetEvent
+from scripts.engine.internal.event import event_hub, LoseConditionMetEvent, MessageEvent
 from scripts.engine.world_objects import lighting
-from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
 
@@ -161,12 +160,52 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         components.append(IsPlayer())
     components.append(Position(*occupied_tiles))
     components.append(Identity(name, actor_data.description))
-    components.append(HasCombatStats())
     components.append(Physicality(True, actor_data.height))
     components.append(Traits(actor_data.trait_names))
     components.append(FOV())
     components.append(Tracked(chronicle.get_time()))
     components.append(Immunities())
+
+    # combat stats
+    base_stats = {}
+    for primary_stat in [
+        PrimaryStat.VIGOUR,
+        PrimaryStat.CLOUT,
+        PrimaryStat.SKULLDUGGERY,
+        PrimaryStat.BUSTLE,
+        PrimaryStat.EXACTITUDE,
+    ]:
+        # apply primary base value
+        value = library.BASE_STATS_PRIMARY[primary_stat].base_value
+
+        # loop traits and get values for stats
+        for name in actor_data.trait_names:
+            data = library.TRAITS[name]
+            value += getattr(data, primary_stat)
+        base_stats[primary_stat] = value
+    stats = CombatStats(**base_stats)  # type: ignore
+    # apply base values to secondary
+    for secondary_stat in [
+        SecondaryStat.MAX_HEALTH,
+        SecondaryStat.MAX_STAMINA,
+        SecondaryStat.ACCURACY,
+        SecondaryStat.RESIST_BURN,
+        SecondaryStat.RESIST_CHEMICAL,
+        SecondaryStat.RESIST_ASTRAL,
+        SecondaryStat.RESIST_COLD,
+        SecondaryStat.RESIST_MUNDANE,
+        SecondaryStat.RUSH,
+    ]:
+        stats.amend_base_value(secondary_stat, library.BASE_STATS_SECONDARY[secondary_stat].base_value)
+    components.append(stats)  # type: ignore
+
+    # sight range
+    sight_range = 0
+    for name in actor_data.trait_names:
+        data = library.TRAITS[name]
+        if data.sight_range > sight_range:
+            sight_range = data.sight_range
+    components.append(Sight(sight_range))
 
     # set up light
     radius = 2  # TODO - pull radius and colour from external data
@@ -228,7 +267,6 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         add_component(entity, Thought(behaviour(entity)))
 
     # give full resources N.B. Can only be added once entity is created
-    stats = create_combat_stats(entity)
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
     logging.debug(f"Actor Entity, '{name}', created.")
@@ -353,10 +391,9 @@ def create_delayed_skill(creating_entity: EntityID, tile_pos: Tuple[int, int], d
 
     assert isinstance(thought.behaviour, DelayedSkill)
     thought.behaviour.data = data
-    thought.behaviour.remaining_duration = data.duration
     add_component(entity, thought)
 
-    logging.debug(f"{delayed_skill_name}`s created at ({x},{y}) and will trigger in {data.duration} " f"turns.")
+    logging.debug(f"{delayed_skill_name}`s created at ({x},{y}) and will trigger in {data.duration} rounds.")
 
     return entity
 
@@ -367,14 +404,6 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
     """
     affliction = store.affliction_registry[name](creator, target, duration)
     return affliction
-
-
-def create_combat_stats(entity: EntityID) -> CombatStats:
-    """
-    Create and return a stat object  for an entity.
-    """
-    stats = CombatStats(entity)
-    return stats
 
 
 def create_light(pos: Tuple[int, int], radius: int, colour: Tuple[int, int, int], alpha: int) -> str:
@@ -609,7 +638,7 @@ def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Di
     return dir_x, dir_y  # type: ignore
 
 
-def get_entity_blocking_movement_map() -> np.array:
+def get_entity_blocking_movement_map() -> np.ndarray:
     """
     Return a Numpy array of bools, True for blocking and False for open
     """
@@ -799,7 +828,7 @@ def get_player() -> EntityID:
     """
     Get the player.
     """
-    for entity, (flag,) in get_components([IsPlayer]):
+    for entity, (_,) in get_components([IsPlayer]):
         return entity
     raise ValueError("Player not found.")
 
@@ -833,66 +862,6 @@ def get_name(entity: EntityID) -> str:
         name = "not found"
 
     return name
-
-
-def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
-    """
-    Get an entity's primary stat.
-    """
-    stat = primary_stat
-    value = 0
-
-    stat_data = library.BASE_STATS_PRIMARY[stat]
-    value += stat_data.base_value
-
-    if entity_has_component(entity, Traits):
-        trait = get_entitys_component(entity, Traits)
-        for name in trait.names:
-            data = library.TRAITS[name]
-            value += getattr(data, stat)
-
-    if entity_has_component(entity, Afflictions):
-        afflictions = get_entitys_component(entity, Afflictions)
-        for modifier in afflictions.stat_modifiers.values():
-            if modifier[0] == stat:
-                value += modifier[1]
-
-    # ensure no dodgy numbers, like floats or negative
-    value = max(1, int(value))
-
-    return value
-
-
-def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> int:
-    """
-    Get an entity's secondary stat.
-    """
-    # FIXME - this doesnt work for sight range
-    stat = secondary_stat
-    value = 0
-
-    # base values
-    stat_data = library.BASE_STATS_SECONDARY[stat]
-    value += stat_data.base_value
-
-    # values from primary stats
-    value += get_primary_stat(entity, PrimaryStat.VIGOUR) * stat_data.vigour_mod
-    value += get_primary_stat(entity, PrimaryStat.CLOUT) * stat_data.clout_mod
-    value += get_primary_stat(entity, PrimaryStat.SKULLDUGGERY) * stat_data.skullduggery_mod
-    value += get_primary_stat(entity, PrimaryStat.BUSTLE) * stat_data.bustle_mod
-    value += get_primary_stat(entity, PrimaryStat.EXACTITUDE) * stat_data.exactitude_mod
-
-    # afflictions
-    if entity_has_component(entity, Afflictions):
-        afflictions = get_entitys_component(entity, Afflictions)
-        for modifier in afflictions.stat_modifiers.values():
-            if modifier[0] == stat:
-                value += modifier[1]
-
-    # ensure no dodgy numbers, like floats or negative
-    value = max(1, int(value))
-
-    return value
 
 
 def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
@@ -1044,7 +1013,8 @@ def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
         # if the tile contains an actor
         for query_result in query.actors:
             # this is a very dirty way to access the position of a query result
-            # I don't want to scan for the position component since it would severely bog down performance if many entities exist and this function is used frequently
+            # I don't want to scan for the position component since it would severely bog down performance if many
+            # entities exist and this function is used frequently
             # structuring the results as a dict may be beneficial
             position = query_result[1][0]
             assert isinstance(position, Position)
@@ -1092,7 +1062,7 @@ def _is_tile_visible_to_entity(tile: Tile, entity: EntityID, game_map: GameMap) 
     light_map = game_map.light_map
 
     # combine maps
-    visible_map = fov_map & light_map
+    visible_map = fov_map & light_map  # type: ignore
 
     return bool(visible_map[tile.x, tile.y])
 
@@ -1481,8 +1451,6 @@ def kill_entity(entity: EntityID):
             turn_queue.pop(entity)
 
     else:
-        # placeholder for player death
-        #event_hub.post(MessageEvent("I should have died just then."))
         event_hub.post(LoseConditionMetEvent())
 
 
@@ -1522,6 +1490,11 @@ def remove_affliction(entity: EntityID, affliction: Affliction):
     afflictions = get_entitys_component(entity, Afflictions)
     if afflictions:
         afflictions.remove(affliction)
+
+        # remove stat modification
+        if EffectType.AFFECT_STAT in affliction.identity_tags and entity_has_component(entity, CombatStats):
+            stats = get_entitys_component(entity, CombatStats)
+            stats.remove_mod(affliction.name)
 
 
 def learn_skill(entity: EntityID, skill_name: str):
@@ -1570,8 +1543,8 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
 
     # log the info
     logging.debug(
-        f"-> Initial:{base_damage}, Mitigated: {format(mitigated_damage, '.2f')},  Modified"
-        f":{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
+        f"-> Initial:{base_damage} + {damage_mod_amount}, Mitigated: {format(mitigated_damage, '.2f')},  Modified by"
+        f"Hit Type:{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
     )
 
     return int_modified_damage

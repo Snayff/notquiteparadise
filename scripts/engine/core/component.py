@@ -1,20 +1,25 @@
 from __future__ import annotations
 
+import logging
 import sys
 from dataclasses import asdict
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 import numpy as np
 from snecs import RegisteredComponent
 from snecs.typedefs import EntityID
 
+from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
     EffectType,
     HeightType,
+    PrimaryStat,
     PrimaryStatType,
     ReactionTrigger,
     ReactionTriggerType,
     RenderLayer,
+    SecondaryStat,
+    SecondaryStatType,
 )
 from scripts.engine.internal.definition import EffectData, ReactionData
 
@@ -31,7 +36,7 @@ __all__ = [
     "Exists",
     "IsPlayer",
     "IsActive",
-    "HasCombatStats",
+    "CombatStats",
     "WinCondition",
     "MapCondition",
     "Position",
@@ -115,21 +120,6 @@ class IsActive(NQPComponent):
         return IsActive()
 
 
-class HasCombatStats(NQPComponent):
-    """
-    A flag to show if an entity has stats used for combat.
-    """
-
-    __slots__ = ()
-
-    def serialize(self):
-        return True
-
-    @classmethod
-    def deserialize(cls, serialised):
-        return HasCombatStats()
-
-
 class WinCondition(NQPComponent):
     """
     A flag to show that an entity is a win objective
@@ -143,6 +133,7 @@ class WinCondition(NQPComponent):
     @classmethod
     def deserialize(cls, serialised):
         return WinCondition()
+
 
 class MapCondition(NQPComponent):
     """
@@ -203,7 +194,7 @@ class Position(NQPComponent):
         # From all the nearest coordinates find the one nearest to the center of the entity
         arg_min = np.argmin(
             np.sqrt((center[0] - transformed[i[0]][0]) ** 2 + (center[1] - transformed[i[0]][1]) ** 2) for i in arg_max
-        )
+        )  # type: ignore
         return coordinates[arg_max[arg_min][0]][0], coordinates[arg_max[arg_min][0]][1]
 
     @property
@@ -485,16 +476,10 @@ class Afflictions(NQPComponent):
     An entity's Boons and Banes. held in .active as a list of Affliction.
     """
 
-    def __init__(
-        self,
-        active: Optional[List[Affliction]] = None,
-        stat_modifiers: Optional[Dict[str, Tuple[PrimaryStatType, int]]] = None,
-    ):
+    def __init__(self, active: Optional[List[Affliction]] = None):
         active = active or []
-        stat_modifiers = stat_modifiers or {}
 
         self.active: List[Affliction] = active  # TODO - should this be a dict for easier querying?
-        self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = stat_modifiers
 
     def serialize(self):
         active = {}
@@ -505,7 +490,7 @@ class Afflictions(NQPComponent):
                 affliction.duration,
             )
 
-        _dict = {"active": active, "stat_modifiers": self.stat_modifiers}
+        _dict = {"active": active}
 
         return _dict
 
@@ -522,17 +507,13 @@ class Afflictions(NQPComponent):
             affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])
             active_instances.append(affliction)
 
-        return Afflictions(active_instances, serialised["stat_modifiers"])
+        return Afflictions(active_instances)
 
     def add(self, affliction: Affliction):
         self.active.append(affliction)
 
     def remove(self, affliction: Affliction):
         if affliction in self.active:
-            # if it is affect_stat remove the affect
-            if EffectType.AFFECT_STAT in affliction.identity_tags:
-                self.stat_modifiers.pop(affliction.__class__.__name__)
-
             # remove from active list
             self.active.remove(affliction)
 
@@ -721,3 +702,295 @@ class Immunities(NQPComponent):
     def deserialize(cls, serialised):
 
         return Immunities(serialised["active"])
+
+
+class CombatStats(NQPComponent):
+    """
+    An entities stats used for combat.
+    """
+
+    def __init__(self, vigour: int, clout: int, skullduggery: int, bustle: int, exactitude: int):
+        """
+        Set primary stats. Secondary stats pulled from library.
+        """
+        self._vigour: int = vigour
+        self._clout: int = clout
+        self._skullduggery: int = skullduggery
+        self._bustle: int = bustle
+        self._exactitude: int = exactitude
+
+        self._vigour_mod: Dict[str, int] = {}  # cause, amount
+        self._clout_mod: Dict[str, int] = {}
+        self._skullduggery_mod: Dict[str, int] = {}
+        self._bustle_mod: Dict[str, int] = {}
+        self._exactitude_mod: Dict[str, int] = {}
+
+        self._max_health: int = library.BASE_STATS_SECONDARY[SecondaryStat.MAX_HEALTH].base_value
+        self._max_stamina: int = library.BASE_STATS_SECONDARY[SecondaryStat.MAX_STAMINA].base_value
+        self._accuracy: int = library.BASE_STATS_SECONDARY[SecondaryStat.ACCURACY].base_value
+        self._resist_burn: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_BURN].base_value
+        self._resist_cold: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_COLD].base_value
+        self._resist_chemical: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_CHEMICAL].base_value
+        self._resist_astral: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_ASTRAL].base_value
+        self._resist_mundane: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_MUNDANE].base_value
+        self._rush: int = library.BASE_STATS_SECONDARY[SecondaryStat.RUSH].base_value
+
+        self._max_health_mod: Dict[str, int] = {}  # cause, amount
+        self._max_stamina_mod: Dict[str, int] = {}
+        self._accuracy_mod: Dict[str, int] = {}
+        self._resist_burn_mod: Dict[str, int] = {}
+        self._resist_cold_mod: Dict[str, int] = {}
+        self._resist_chemical_mod: Dict[str, int] = {}
+        self._resist_astral_mod: Dict[str, int] = {}
+        self._resist_mundane_mod: Dict[str, int] = {}
+        self._rush_mod: Dict[str, int] = {}
+
+    def serialize(self):
+
+        _dict = {
+            "vigour": self._vigour,
+            "clout": self._clout,
+            "skullduggery": self._skullduggery,
+            "bustle": self._bustle,
+            "exactitude": self._exactitude,
+            "vigour_mod": self._vigour_mod,
+            "clout_mod": self._clout_mod,
+            "skullduggery_mod": self._skullduggery_mod,
+            "bustle_mod": self._bustle_mod,
+            "exactitude_mod": self._exactitude_mod,
+            "max_health": self._max_health,
+            "max_stamina": self._max_stamina,
+            "accuracy": self._accuracy,
+            "resist_burn": self._resist_burn,
+            "resist_cold": self._resist_cold,
+            "resist_chemical": self._resist_chemical,
+            "resist_astral": self._resist_astral,
+            "resist_mundane": self._resist_mundane,
+            "rush": self._rush,
+            "max_health_mod": self._max_health_mod,
+            "max_stamina_mod": self._max_stamina_mod,
+            "accuracy_mod": self._accuracy_mod,
+            "resist_burn_mod": self._resist_burn_mod,
+            "resist_cold_mod": self._resist_cold_mod,
+            "resist_chemical_mod": self._resist_chemical_mod,
+            "resist_astral_mod": self._resist_astral_mod,
+            "resist_mundane_mod": self._resist_mundane_mod,
+            "rush_mod": self._rush_mod,
+        }
+        return _dict
+
+    @classmethod
+    def deserialize(cls, serialised):
+        stats = CombatStats(
+            serialised["vigour"],
+            serialised["clout"],
+            serialised["skullduggery"],
+            serialised["bustle"],
+            serialised["exactitude"],
+        )
+
+        stats._vigour_mod = serialised["vigour_mod"]
+        stats._clout_mod = serialised["clout_mod"]
+        stats._skullduggery_mod = serialised["skullduggery_mod"]
+        stats._bustle_mod = serialised["bustle_mod"]
+        stats._exactitude_mod = serialised["exactitude_mod"]
+
+        stats._max_health = serialised["max_health"]
+        stats._max_stamina = serialised["max_stamina"]
+        stats._accuracy = serialised["accuracy"]
+        stats._resist_burn = serialised["resist_burn"]
+        stats._resist_cold = serialised["resist_cold"]
+        stats._resist_chemical = serialised["resist_chemical"]
+        stats._resist_astral = serialised["resist_astral"]
+        stats._resist_mundane = serialised["resist_mundane"]
+        stats._rush = serialised["rush"]
+
+        stats._max_health_mod = serialised["max_health_mod"]
+        stats._max_stamina_mod = serialised["max_stamina_mod"]
+        stats._accuracy_mod = serialised["accuracy_mod"]
+        stats._resist_burn_mod = serialised["resist_burn_mod"]
+        stats._resist_cold_mod = serialised["resist_cold_mod"]
+        stats._resist_chemical_mod = serialised["resist_chemical_mod"]
+        stats._resist_astral_mod = serialised["resist_astral_mod"]
+        stats._resist_mundane_mod = serialised["resist_mundane_mod"]
+        stats._rush_mod = serialised["rush_mod"]
+
+        return stats
+
+    def amend_base_value(self, stat: Union[PrimaryStatType, SecondaryStatType], amount: int):
+        """
+        Amend the base value of a stat
+        """
+        stat_to_amend = getattr(self, "_" + stat)
+        stat_to_amend += amount
+
+    def add_mod(self, stat: Union[PrimaryStatType, SecondaryStatType], cause: str, amount: int) -> bool:
+        """
+        Amend the modifier of a stat. Returns True if successfully amended, else False.
+        """
+        mod_to_amend = getattr(self, "_" + stat + "_mod")
+
+        if cause in mod_to_amend:
+            logging.info(f"Stat not modified as {cause} has already been applied.")
+            return False
+        else:
+            mod_to_amend[cause] = amount
+            return True
+
+    def remove_mod(self, cause: str) -> bool:
+        """
+        Remove a modifier from a stat. Returns True if successfully removed, else False.
+        """
+        from scripts.engine.core import utility
+
+        for stat in utility.get_class_members(self.__class__):
+            if cause in stat:
+                assert isinstance(stat, dict)
+                del stat[cause]
+                return True
+
+        logging.info(f"Modifier not removed as {cause} does not exist in modifier list.")
+        return False
+
+    def _get_secondary_stat(self, stat: SecondaryStatType) -> int:
+        """
+        Get the value of the secondary stat
+        """
+        stat_data = library.BASE_STATS_SECONDARY[stat]
+
+        value = getattr(self, "_" + stat.lower())
+        value += self.vigour * stat_data.vigour_mod
+        value += self.clout * stat_data.clout_mod
+        value += self.skullduggery * stat_data.skullduggery_mod
+        value += self.bustle * stat_data.bustle_mod
+        value += self.exactitude * stat_data.exactitude_mod
+        value += self._get_mod_value(stat)
+
+        return value
+
+    def _get_mod_value(self, stat: Union[PrimaryStatType, SecondaryStatType]) -> int:
+        mod = getattr(self, "_" + stat + "_mod")
+
+        value = 0
+        for modifier in mod.values():
+            value += modifier
+
+        return value
+
+    @property
+    def vigour(self) -> int:
+        """
+        Influences healthiness. Never below 1.
+        """
+        return max(1, self._vigour + self._get_mod_value(PrimaryStat.VIGOUR))
+
+    @property
+    def clout(self) -> int:
+        """
+        Influences forceful things. Never below 1.
+        """
+        return max(1, self._clout + self._get_mod_value(PrimaryStat.CLOUT))
+
+    @property
+    def skullduggery(self) -> int:
+        """
+        Influences sneaky things. Never below 1.
+        """
+        return max(1, self._skullduggery + self._get_mod_value(PrimaryStat.SKULLDUGGERY))
+
+    @property
+    def bustle(self) -> int:
+        """
+        Influences speedy things. Never below 1.
+        """
+        return max(1, self._bustle + self._get_mod_value(PrimaryStat.BUSTLE))
+
+    @property
+    def exactitude(self) -> int:
+        """
+        Influences preciseness. Never below 1.
+        """
+        return max(1, self._exactitude + self._get_mod_value(PrimaryStat.EXACTITUDE))
+
+    @property
+    def max_health(self) -> int:
+        """
+        Total damage an entity can take before death.
+        """
+        return max(1, self._get_secondary_stat(SecondaryStat.MAX_HEALTH))
+
+    @property
+    def max_stamina(self) -> int:
+        """
+        An entities energy to take actions.
+
+        """
+        return max(1, self._get_secondary_stat(SecondaryStat.MAX_STAMINA))
+
+    @property
+    def accuracy(self) -> int:
+        """
+        An entities likelihood to hit.
+        """
+        return max(1, self._get_secondary_stat(SecondaryStat.ACCURACY))
+
+    @property
+    def resist_burn(self) -> int:
+        """
+        An entities resistance to burn damage.
+
+        """
+        return max(1, self._get_secondary_stat(SecondaryStat.RESIST_BURN))
+
+    @property
+    def resist_cold(self) -> int:
+        """
+        An entities resistance to cold damage.
+
+        """
+        return max(1, self._get_secondary_stat(SecondaryStat.RESIST_COLD))
+
+    @property
+    def resist_chemical(self) -> int:
+        """
+        An entities resistance to chemical damage.
+        """
+        return max(1, self._get_secondary_stat(SecondaryStat.RESIST_CHEMICAL))
+
+    @property
+    def resist_astral(self) -> int:
+        """
+        An entities resistance to astral damage.
+        """
+        return max(1, self._get_secondary_stat(SecondaryStat.RESIST_ASTRAL))
+
+    @property
+    def resist_mundane(self) -> int:
+        """
+        An entities resistance to mundane damage.
+        """
+        return max(1, self._get_secondary_stat(SecondaryStat.RESIST_MUNDANE))
+
+    @property
+    def rush(self) -> int:
+        """
+        How quickly an entity does things. Reduce time cost of actions.
+        """
+        return max(1, self._get_secondary_stat(SecondaryStat.RUSH))
+
+
+class Sight(NQPComponent):
+    """
+    An entity's ability to see.
+    """
+
+    def __init__(self, sight_range: int):
+        self.sight_range: int = sight_range
+
+    def serialize(self):
+        _dict = {"sight_range": self.sight_range}
+        return _dict
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Sight(**serialised)

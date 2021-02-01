@@ -11,7 +11,7 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.147.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.155.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 DEBUG_START = False  # Whether to start directly in debug map
 
 MAX_SKILLS = 6
@@ -229,15 +229,12 @@ class SecondaryStat(SimpleNamespace):
 
     MAX_HEALTH = SecondaryStatType("max_health")
     MAX_STAMINA = SecondaryStatType("max_stamina")
-    HEALTH = SecondaryStatType("health")
-    STAMINA = SecondaryStatType("stamina")
     ACCURACY = SecondaryStatType("accuracy")
     RESIST_BURN = SecondaryStatType("resist_burn")
     RESIST_CHEMICAL = SecondaryStatType("resist_chemical")
     RESIST_ASTRAL = SecondaryStatType("resist_astral")
     RESIST_COLD = SecondaryStatType("resist_cold")
     RESIST_MUNDANE = SecondaryStatType("resist_mundane")
-    SIGHT_RANGE = SecondaryStatType("sight_range")
     RUSH = SecondaryStatType("rush")
 
 

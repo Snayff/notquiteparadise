@@ -18,6 +18,7 @@ from scripts.engine.core.component import (
     Physicality,
     Position,
     Reaction,
+    Sight,
     Tracked,
 )
 from scripts.engine.internal.constant import (
@@ -35,12 +36,12 @@ from scripts.engine.internal.event import (
     AffectCooldownEvent,
     AffectStatEvent,
     AfflictionEvent,
+    ChangeMapEvent,
     DamageEvent,
     event_hub,
     MoveEvent,
     Subscriber,
     WinConditionMetEvent,
-    ChangeMapEvent,
 )
 from scripts.engine.world_objects.tile import Tile
 
@@ -133,13 +134,7 @@ def process_fov():
     # create transparency layer
     block_sight_map = game_map.block_sight_map
 
-    for entity, (
-        is_active,
-        pos,
-        fov,
-        stats,
-        physicality,
-    ) in query.active_and_position_and_fov_and_combat_stats_and_physicality:
+    for entity, (is_active, pos, physicality, identity, stats, traits, fov, tracked, immunities) in query.active_actors:
 
         # get all entities blocking sight
         updated_block_sight_map = block_sight_map.copy()
@@ -160,9 +155,9 @@ def process_fov():
                 updated_block_sight_map[x, y] = 0
 
         # update entities fov map
-        stats = world.create_combat_stats(entity)
+        sight_range = world.get_entitys_component(entity, Sight).sight_range
         fov.map = tcod.map.compute_fov(
-            updated_block_sight_map, (pos.x, pos.y), stats.sight_range, FOV_LIGHT_WALLS, FOV_ALGORITHM
+            updated_block_sight_map, (pos.x, pos.y), sight_range, FOV_LIGHT_WALLS, FOV_ALGORITHM
         )
 
 
@@ -461,6 +456,7 @@ def _process_win_condition(event: pygame.event):
             # post game event
             event_hub.post(WinConditionMetEvent())
             break
+
 
 def _process_map_condition(event: pygame.event):
     """
