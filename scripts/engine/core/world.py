@@ -28,7 +28,7 @@ from scripts.engine.core.component import (
     Position,
     Reaction,
     Resources,
-    Thought,
+    Sight, Thought,
     Tracked,
     Traits,
 )
@@ -175,6 +175,14 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         base_stats[stat] = value
     stats = CombatStats(**base_stats)
     components.append(stats)  # type: ignore
+
+    # sight range
+    sight_range = 0
+    for name in actor_data.trait_names:
+        data = library.TRAITS[name]
+        if data.sight_range > sight_range:
+            sight_range = data.sight_range
+    components.append(Sight(sight_range))
 
     # set up light
     radius = 2  # TODO - pull radius and colour from external data

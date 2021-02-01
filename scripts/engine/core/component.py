@@ -972,4 +972,18 @@ class CombatStats(NQPComponent):
         return self._get_secondary_stat(SecondaryStat.RUSH)
 
 
+class Sight(NQPComponent):
+    """
+    An entity's ability to see.
+    """
+    def __init__(self, sight_range: int):
+        self.sight_range: int = sight_range
+
+    def serialize(self):
+        _dict = {"sight_range": self.sight_range}
+        return _dict
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Sight(**serialised)
 
