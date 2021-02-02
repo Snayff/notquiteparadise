@@ -127,13 +127,6 @@ class TileInfo(Panel):
         # loop each image provided and use as header for each group of info
         # FIXME - hovering projectile breaks it due to not havign a surface (missing icon_path?)
         for image in images:
-            #  create image
-            _image = pygame.transform.scale(image, (ICON_IN_TEXT_SIZE, ICON_IN_TEXT_SIZE))
-            ui_image = UIImage(
-                relative_rect=image_rect, image_surface=_image, manager=self.ui_manager, container=self.get_container()
-            )
-            sections.append(ui_image)
-            ui_image = None  # clear to prevent any carry over
 
             # collect text for the section
             text = ""
@@ -148,14 +141,19 @@ class TileInfo(Panel):
                 manager=self.ui_manager,
                 wrap_to_height=True,
                 layer_starting_height=1,
-                container=self.get_container(),
+                container=self,
             )
             sections.append(ui_text)
+            ui_text = None  # clear to prevent any carry over
+
+            #  create image
+            _image = pygame.transform.scale(image, (ICON_IN_TEXT_SIZE, ICON_IN_TEXT_SIZE))
+            ui_image = UIImage(relative_rect=image_rect, image_surface=_image, manager=self.ui_manager, container=self)
+            sections.append(ui_image)
+            ui_image = None  # clear to prevent any carry over
 
             # update position
             current_y += ICON_IN_TEXT_SIZE + GAP_SIZE
-
-            ui_text = None  # clear to prevent any carry over
 
             # increment section
             section_number += 1

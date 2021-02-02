@@ -1,190 +1,136 @@
- {
-     "defaults": {
-         "colours": {
-             "normal_bg":"#021166",
-             "hovered_bg":"#021166",
-             "disabled_bg":"#c21515",
-             "selected_bg":"#021166",
-             "dark_bg":"#0f0f0e",
-
-             "normal_text":"#ffffff",
-             "hovered_text":"#c28015",
-             "selected_text":"#c28015",
-             "disabled_text":"#c21515",
-
-             "link_text": "#7f11ad",
-             "link_hover": "#2020FF",
-             "link_selected": "#551A8B",
-
-             "text_shadow": "#000000",
-
-             "normal_border": "#c28015",
-             "hovered_border": "#c28015",
-             "disabled_border": "#c21515",
-             "selected_border": "#c28015",
-             "active_border": "#faaf3e"
-         }
-     },
-     "panel": {
-         "colours": {
-             "normal_border": "#000000",
-             "dark_bg":"#000000"
-         },
-         "misc": {
-             "shadow_width": 0,
-             "border_width": 0
-         }
-     },
-     "text_box": {
-         "misc": {
-             "shape": "rectangle",
-             "shape_corner_radius": "0",
-             "border_width": "1",
-             "shadow_width": "2",
-             "padding": "10,10"
-         }
-     },
-     "#drop_down_text_prototype": {
+{
+    "defaults": {
+        "colours": {
+            "normal_bg": "#372C47",
+            "hovered_bg": "#372C47",
+            "disabled_bg": "#c21515",
+            "selected_bg": "#372C47",
+            "active_bg": "#6B4A6B",
+            "dark_bg": "#484A45",
+            
+            "normal_text": "#ffffff",
+            "hovered_text": "#EBCA71",
+            "selected_text": "#EBCA71",
+            "disabled_text": "#c21515",
+            "active_text": "#EBCA71",
+            
+            "link_text": "#7f11ad",
+            "link_hover": "#2020FF",
+            "link_selected": "#551A8B",
+            
+            "text_shadow": "#000000",
+            
+            "normal_border": "#372C47",
+            "hovered_border": "#6B4A6B",
+            "disabled_border": "#c21515",
+            "selected_border": "#EBCA71",
+            "active_border": "#6B4A6B"
+        }
+    },
+    
+    
+    "window": {
+        "misc":{
+            "title_bar_height": "12"
+        }
+    },
+    
+    "panel": {
+        "misc": {
+            "border_width": "0",
+            "shadow_width": "0"
+        }
+    },
+    "character_selector": {
+        "colours": {
+            "dark_bg": "#0C0D0C"
+        }
+    },
+    "skill_bar": {
+        "colours": {
+            "dark_bg": "#000000"
+        }
+    },
+    "title_screen":  {
+        "colours": {
+            "dark_bg": "#0C0D0C"
+        }
+    },
+    
+    
+    
+    "text_box": {
+        "misc": {
+            "shape": "rectangle",
+            "shape_corner_radius": "0",
+            "border_width": "0",
+            "shadow_width": "2",
+            "padding": "10, 10"
+        }
+    },
+    
+    
+    "drop_down_menu": {
         "font": {
-                "name": "barlow",
-                "size": "18",
-                "regular_path": "assets/fonts/Barlow-Light.otf"
+            "name": "barlow",
+            "size": "18",
+            "regular_path": "assets/fonts/Barlow-Light.otf"
         },
         "misc": {
-             "shape": "rounded_rectangle",
-             "shape_corner_radius": 50
-         }
+            "shape": "rectangle",
+            "shape_corner_radius": "0",
+            "shadow_width": "0",
+            "border_width": "1"
+        }
     },
     "drop_down_menu.button": {
-        "prototype": "#drop_down_text_prototype"
+        "prototype": "drop_down_menu"
+    },
+    "drop_down_menu.#drop_down_options_list": {
+        "prototype": "drop_down_menu"
     },
     "drop_down_menu.#drop_down_options_list.button": {
-        "prototype": "#drop_down_text_prototype"
+        "prototype": "drop_down_menu"
     },
+    
+    
     "button": {
-         "font": {
-             "name": "barlow",
-             "size": "14",
-             "regular_path": "assets/fonts/Barlow-Light.otf"
-         },
-         "misc": {
-             "tool_tip_delay": "1.5",
-             "shadow_width": 0
-         }
-     },
-     "skill_0": {
-         "images": {
-             "normal_image": {
-                 "path": "assets/skills/basic_attack.png"
-             },
-             "hovered_image": {
-                 "path": "assets/skills/basic_attack.png"
-             }
-         },
-         "misc": {
-             "text_horiz_alignment": "left",
-             "text_vert_alignment": "bottom"
-         }
-     },
-     "skill_1": {
-         "images": {
-             "normal_image": {
-                 "path": "assets/skills/lunge.png"
-             },
-             "hovered_image": {
-                 "path": "assets/skills/lunge.png"
-             }
-         },
-         "misc": {
-             "text_horiz_alignment": "left",
-             "text_vert_alignment": "bottom"
-         }
-     },
-     "skill_2": {
-         "images": {
-             "normal_image": {
-                 "path": "assets/skills/basic_attack.png"
-             },
-             "hovered_image": {
-                 "path": "assets/skills/basic_attack.png"
-             }
-         },
-         "misc": {
-             "text_horiz_alignment": "left",
-             "text_vert_alignment": "bottom"
-         }
-     },
-     "skill_3": {
-         "images": {
-             "normal_image": {
-                 "path": "assets/skills/basic_attack.png"
-             },
-             "hovered_image": {
-                 "path": "assets/skills/basic_attack.png"
-             }
-         },
-         "misc": {
-             "text_horiz_alignment": "left",
-             "text_vert_alignment": "bottom"
-         }
-     },
-     "skill_4": {
-         "images": {
-             "normal_image": {
-                 "path": "assets/skills/basic_attack.png"
-             },
-             "hovered_image": {
-                 "path": "assets/skills/basic_attack.png"
-             }
-         },
-         "misc": {
-             "text_horiz_alignment": "left",
-             "text_vert_alignment": "bottom"
-         }
-     },
-     "skill_5": {
-         "images": {
-             "normal_image": {
-                 "path": "assets/skills/basic_attack.png"
-             },
-             "hovered_image": {
-                 "path": "assets/skills/basic_attack.png"
-             }
-         },
-         "misc": {
-             "text_horiz_alignment": "left",
-             "text_vert_alignment": "bottom"
-         }
-     },
-     "#grid.button": {
-         "colours":
-         {
-             "normal_bg": "#FFFFFF00",
-             "hovered_bg": "#FFFFFF00",
-             "selected_bg": "#FFFFFF00",
-             "active_bg": "#FFFFFF00",
-
-             "normal_border": "#FFFFFF00",
-             "selected_border":  "#FFFFFF00",
-             "active_border":  "#FFFFFF00",
-             "hovered_border": "#e28479F0"
-         },
-         "misc": {
-             "border_width": "2"
-         }
-     },
-     "screen_message": {
-         "misc": {
-             "padding": "1, 1"
-         }
-     },
-     "#camera": {
-         "colours": {
-             "normal_bg": "#000000",
-             "hovered_bg": "#000000",
-             "selected_bg": "#000000",
-             "active_bg": "#000000",
-             "dark_bg":"#000000"
-         }
-     }
- }
+        "font": {
+            "name": "barlow",
+            "size": "14",
+            "regular_path": "assets/fonts/Barlow-Light.otf"
+        },
+        "misc": {
+            "tool_tip_delay": "1.5",
+            "shadow_width": "0",
+            "border_width": "2",
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "3"
+        }
+    },
+    "skill_bar.button": {
+        "prototype": "button",
+        "font": {
+            "name": "barlow",
+            "size": "10",
+            "regular_path": "assets/fonts/Barlow-Light.otf"
+        },
+        "misc": {
+            "text_horiz_alignment": "left",
+            "text_vert_alignment": "bottom"
+        }
+    },
+    
+    
+    "screen_message": {
+        "misc": {
+            "padding": "1, 1"
+        }
+    },
+    
+    "vertical_scroll_bar": {
+        "colours": {
+            "dark_bg": "#0C0D0C"
+        }
+    }
+}
