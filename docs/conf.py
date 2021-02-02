@@ -26,7 +26,7 @@ copyright = '2019-2020, Josh Snaith'
 author = 'Josh Snaith (Snayff)'
 
 # The short X.Y version
-version = "0.157.0"
+version = "0.157.1"
 
 
 # -- General configuration ---------------------------------------------------
