@@ -27,8 +27,8 @@
             "dark_bg": "#000000"
         },
         "misc": {
-            "shadow_width": 0,
-            "border_width": 0
+            "shadow_width": "0",
+            "border_width": "0"
         }
     },
     "text_box": {
@@ -37,10 +37,26 @@
             "shape_corner_radius": "0",
             "border_width": "1",
             "shadow_width": "2",
-            "padding": "10,10"
+            "padding": "10, 10"
         }
     },
-    "#drop_down_text_prototype": {
+    
+    
+    "drop_down_menu": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "5",
+            "shadow_width": "1"
+        }
+    },
+    "drop_down_menu.button": {
+        "font": {
+            "name": "barlow",
+            "size": "18",
+            "regular_path": "assets/fonts/Barlow-Light.otf"
+        }
+    },
+    "drop_down_menu.#drop_down_options_list": {
         "font": {
             "name": "barlow",
             "size": "18",
@@ -48,15 +64,20 @@
         },
         "misc": {
             "shape": "rounded_rectangle",
-            "shape_corner_radius": 50
+            "shape_corner_radius": "5",
+            "shadow_width": "1"
         }
     },
-    "drop_down_menu.button": {
-        "prototype": "#drop_down_text_prototype"
-    },
     "drop_down_menu.#drop_down_options_list.button": {
-        "prototype": "#drop_down_text_prototype"
+        "font": {
+            "name": "barlow",
+            "size": "18",
+            "regular_path": "assets/fonts/Barlow-Light.otf"
+        }
     },
+    
+    
+    
     "button": {
         "font": {
             "name": "barlow",
@@ -65,46 +86,26 @@
         },
         "misc": {
             "tool_tip_delay": "1.5",
-            "shadow_width": 0
+            "shadow_width": "0"
         }
     },
-    "#skill_button": {
+    "skill_bar.button": {
+        "prototype": "button",
+        "font": {
+            "name": "barlow",
+            "size": "10",
+            "regular_path": "assets/fonts/Barlow-Light.otf"
+        },
         "misc": {
             "text_horiz_alignment": "left",
             "text_vert_alignment": "bottom"
         }
     },
-    "skill_bar.button": {
-        "prototype": "#skill_button"
-    },
     
-    "#grid.button": {
-        "colours": {
-            "normal_bg": "#FFFFFF00",
-            "hovered_bg": "#FFFFFF00",
-            "selected_bg": "#FFFFFF00",
-            "active_bg": "#FFFFFF00",
-            "normal_border": "#FFFFFF00",
-            "selected_border": "#FFFFFF00",
-            "active_border": "#FFFFFF00",
-            "hovered_border": "#e28479F0"
-        },
-        "misc": {
-            "border_width": "2"
-        }
-    },
+    
     "screen_message": {
         "misc": {
             "padding": "1, 1"
-        }
-    },
-    "#camera": {
-        "colours": {
-            "normal_bg": "#000000",
-            "hovered_bg": "#000000",
-            "selected_bg": "#000000",
-            "active_bg": "#000000",
-            "dark_bg": "#000000"
         }
     }
 }
