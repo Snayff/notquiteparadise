@@ -419,8 +419,9 @@ class RoomConcept:
 ############################ GENERATE MAP ############################
 
 
-def generate(map_name: str, rng: random.Random,
-        player_data: Optional[ActorData] = None) -> Tuple[List[List[Tile]], str]:
+def generate(
+    map_name: str, rng: random.Random, player_data: Optional[ActorData] = None
+) -> Tuple[List[List[Tile]], str]:
     """
     Generate the map using the specified details.
     """
