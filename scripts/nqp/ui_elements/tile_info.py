@@ -128,7 +128,6 @@ class TileInfo(Panel):
         # FIXME - hovering projectile breaks it due to not havign a surface (missing icon_path?)
         for image in images:
 
-
             # collect text for the section
             text = ""
             for line in info[section_number]:
@@ -149,9 +148,7 @@ class TileInfo(Panel):
 
             #  create image
             _image = pygame.transform.scale(image, (ICON_IN_TEXT_SIZE, ICON_IN_TEXT_SIZE))
-            ui_image = UIImage(
-                relative_rect=image_rect, image_surface=_image, manager=self.ui_manager, container=self
-            )
+            ui_image = UIImage(relative_rect=image_rect, image_surface=_image, manager=self.ui_manager, container=self)
             sections.append(ui_image)
             ui_image = None  # clear to prevent any carry over
 

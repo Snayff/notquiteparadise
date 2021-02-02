@@ -15,7 +15,8 @@ from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
     EventType,
     GAP_SIZE,
-    ICON_SIZE, InputEventType,
+    ICON_SIZE,
+    InputEventType,
     InputIntent,
     RenderLayer,
     SKILL_BUTTON_SIZE,
@@ -147,14 +148,12 @@ class SkillBar(Panel):
                 else:
                     icon = blank_icon
 
-
                 self._set_skill_image(button, icon)
 
         except ValueError:
             # no player, load blank images
             for button in self.buttons:
                 self._set_skill_image(button, blank_icon)
-
 
     @staticmethod
     def _set_skill_image(button: UIButton, surface: pygame.Surface):
