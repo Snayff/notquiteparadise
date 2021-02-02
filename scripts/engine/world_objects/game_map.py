@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import random
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 from pygame.constants import BLEND_RGBA_MULT
@@ -79,7 +79,7 @@ class GameMap:
 
     ################## MAP GEN #############################################
 
-    def generate_new_map(self, player_data: ActorData):
+    def generate_new_map(self, player_data: Optional[ActorData] = None):
         """
         Generate the map for the current game map. Creates tiles. Saves the values directly to the GameMap.
         """

@@ -419,7 +419,9 @@ class RoomConcept:
 ############################ GENERATE MAP ############################
 
 
-def generate(map_name: str, rng: random.Random, player_data: ActorData) -> Tuple[List[List[Tile]], str]:
+def generate(
+    map_name: str, rng: random.Random, player_data: Optional[ActorData] = None
+) -> Tuple[List[List[Tile]], str]:
     """
     Generate the map using the specified details.
     """
@@ -556,7 +558,7 @@ def _generate_entities_in_steps(dungen: DungeonGenerator, player_data: Optional[
     rooms = dungen.placed_rooms
     dungen.rng.shuffle(rooms)
 
-    # we might not have player data if we are viewing generations
+    # we might not have player data if we are viewing the generated maps
     if player_data:
         # put player in first room
         player_room = rooms[0]
