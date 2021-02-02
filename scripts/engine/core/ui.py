@@ -84,16 +84,8 @@ class UI:
         """
         Draw the UI.
         """
-        main_surface = self._main_surface
-
-        # clear previous frame
-        # main_surface.fill((0, 0, 0))
-
         # draw everything
         self._draw_debug()
-
-        # update the display
-        # self._window.blit(pygame.transform.scale(main_surface, self._window.get_size()), (0, 0))
 
         self._gui.draw_ui(self._window)
 

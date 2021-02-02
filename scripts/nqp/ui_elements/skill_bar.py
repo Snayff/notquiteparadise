@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import logging
+import os
 from typing import TYPE_CHECKING
 
 import pygame
@@ -9,13 +11,16 @@ from pygame.rect import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton
 
+from scripts.engine.core import utility, world
+from scripts.engine.core.component import Knowledge
+from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
     EventType,
     GAP_SIZE,
-    InputEventType,
+    ICON_SIZE, InputEventType,
     InputIntent,
     RenderLayer,
-    SKILL_BUTTON_SIZE,
+    SKILL_BUTTON_SIZE, UI_PATH,
 )
 from scripts.engine.widgets.panel import Panel
 
@@ -70,6 +75,7 @@ class SkillBar(Panel):
         )
 
         self._init_buttons()
+        self.refresh_skills()
 
         # confirm init complete
         logging.debug(f"SkillBar initialised.")
@@ -124,3 +130,40 @@ class SkillBar(Panel):
             self.buttons.append(button)
 
             count += 1
+
+    def refresh_skills(self):
+        """
+        Reload the player skills and assign the correct images. All buttons set to blank if player doesnt exist.
+        """
+        blank_icon = pygame.Surface((ICON_SIZE, ICON_SIZE), pygame.SRCALPHA, 32)
+        blank_icon = blank_icon.convert_alpha()
+
+        try:
+            player = world.get_player()
+            knowledge = world.get_entitys_component(player, Knowledge)
+            amount_known_skills = len(knowledge.skill_order)
+
+            for count, button in enumerate(self.buttons):
+                if count <= amount_known_skills - 1:
+                    icon = utility.get_image(library.SKILLS[knowledge.skill_order[count]].icon_path)
+                else:
+                    icon = blank_icon
+
+
+                self._set_skill_image(button, icon)
+
+        except ValueError:
+            # no player, load blank images
+            for button in self.buttons:
+                self._set_skill_image(button, blank_icon)
+
+
+    @staticmethod
+    def _set_skill_image(button: UIButton, surface: pygame.Surface):
+        """
+        Set the image for the skill
+        """
+        button.normal_image = surface
+        button.hovered_image = surface
+        button.selected_image = surface
+        button.rebuild()

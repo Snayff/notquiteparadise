@@ -11,7 +11,7 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.157.1"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.158.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 DEBUG_START = False  # Whether to start directly in debug map
 
 MAX_SKILLS = 6
@@ -39,6 +39,7 @@ DATA_PATH = ROOT_PATH / "data/"
 ASSET_PATH = ROOT_PATH / "assets/"
 IMAGE_NOT_FOUND_PATH = ASSET_PATH / "debug/image_not_found.png"
 SAVE_PATH = DATA_PATH / "saves/"
+UI_PATH = DATA_PATH / "ui/"
 
 ######################## NEW TYPES ######################################
 # NewType guarantees you don't accidentally pass in a normal str instead of a value explicitly defined as a member of
