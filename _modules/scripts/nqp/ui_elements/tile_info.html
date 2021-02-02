@@ -381,13 +381,6 @@
         <span class="c1"># loop each image provided and use as header for each group of info</span>
         <span class="c1"># FIXME - hovering projectile breaks it due to not havign a surface (missing icon_path?)</span>
         <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
-            <span class="c1">#  create image</span>
-            <span class="n">_image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">ICON_IN_TEXT_SIZE</span><span class="p">,</span> <span class="n">ICON_IN_TEXT_SIZE</span><span class="p">))</span>
-            <span class="n">ui_image</span> <span class="o">=</span> <span class="n">UIImage</span><span class="p">(</span>
-                <span class="n">relative_rect</span><span class="o">=</span><span class="n">image_rect</span><span class="p">,</span> <span class="n">image_surface</span><span class="o">=</span><span class="n">_image</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">()</span>
-            <span class="p">)</span>
-            <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_image</span><span class="p">)</span>
-            <span class="n">ui_image</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># clear to prevent any carry over</span>
 
             <span class="c1"># collect text for the section</span>
             <span class="n">text</span> <span class="o">=</span> <span class="s2">""</span>
@@ -402,14 +395,19 @@
                 <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
                 <span class="n">wrap_to_height</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">layer_starting_height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+                <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_text</span><span class="p">)</span>
+            <span class="n">ui_text</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># clear to prevent any carry over</span>
+
+            <span class="c1">#  create image</span>
+            <span class="n">_image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">ICON_IN_TEXT_SIZE</span><span class="p">,</span> <span class="n">ICON_IN_TEXT_SIZE</span><span class="p">))</span>
+            <span class="n">ui_image</span> <span class="o">=</span> <span class="n">UIImage</span><span class="p">(</span><span class="n">relative_rect</span><span class="o">=</span><span class="n">image_rect</span><span class="p">,</span> <span class="n">image_surface</span><span class="o">=</span><span class="n">_image</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ui_image</span><span class="p">)</span>
+            <span class="n">ui_image</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># clear to prevent any carry over</span>
 
             <span class="c1"># update position</span>
             <span class="n">current_y</span> <span class="o">+=</span> <span class="n">ICON_IN_TEXT_SIZE</span> <span class="o">+</span> <span class="n">GAP_SIZE</span>
-
-            <span class="n">ui_text</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># clear to prevent any carry over</span>
 
             <span class="c1"># increment section</span>
             <span class="n">section_number</span> <span class="o">+=</span> <span class="mi">1</span>

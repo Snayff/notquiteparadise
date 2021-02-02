@@ -263,9 +263,13 @@
 <span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UIManager</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span>
 
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Knowledge</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">EventType</span><span class="p">,</span>
     <span class="n">GAP_SIZE</span><span class="p">,</span>
+    <span class="n">ICON_SIZE</span><span class="p">,</span>
     <span class="n">InputEventType</span><span class="p">,</span>
     <span class="n">InputIntent</span><span class="p">,</span>
     <span class="n">RenderLayer</span><span class="p">,</span>
@@ -324,6 +328,7 @@
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_buttons</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refresh_skills</span><span class="p">()</span>
 
         <span class="c1"># confirm init complete</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"SkillBar initialised."</span><span class="p">)</span></div>
@@ -377,7 +382,42 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">button</span><span class="p">)</span>
 
-            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span></div>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="SkillBar.refresh_skills"><a class="viewcode-back" href="../../../../scripts.nqp.ui_elements.html#scripts.nqp.ui_elements.skill_bar.SkillBar.refresh_skills">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_skills</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Reload the player skills and assign the correct images. All buttons set to blank if player doesnt exist.</span>
+<span class="sd">        """</span>
+        <span class="n">blank_icon</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">ICON_SIZE</span><span class="p">,</span> <span class="n">ICON_SIZE</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">SRCALPHA</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="n">blank_icon</span> <span class="o">=</span> <span class="n">blank_icon</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+            <span class="n">knowledge</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
+            <span class="n">amount_known_skills</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">knowledge</span><span class="o">.</span><span class="n">skill_order</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">button</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">&lt;=</span> <span class="n">amount_known_skills</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">icon</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">SKILLS</span><span class="p">[</span><span class="n">knowledge</span><span class="o">.</span><span class="n">skill_order</span><span class="p">[</span><span class="n">count</span><span class="p">]]</span><span class="o">.</span><span class="n">icon_path</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">icon</span> <span class="o">=</span> <span class="n">blank_icon</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_skill_image</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="n">icon</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># no player, load blank images</span>
+            <span class="k">for</span> <span class="n">button</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_skill_image</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="n">blank_icon</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_set_skill_image</span><span class="p">(</span><span class="n">button</span><span class="p">:</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Set the image for the skill</span>
+<span class="sd">        """</span>
+        <span class="n">button</span><span class="o">.</span><span class="n">normal_image</span> <span class="o">=</span> <span class="n">surface</span>
+        <span class="n">button</span><span class="o">.</span><span class="n">hovered_image</span> <span class="o">=</span> <span class="n">surface</span>
+        <span class="n">button</span><span class="o">.</span><span class="n">selected_image</span> <span class="o">=</span> <span class="n">surface</span>
+        <span class="n">button</span><span class="o">.</span><span class="n">rebuild</span><span class="p">()</span></div>
 </pre></div>
 
           </article>
