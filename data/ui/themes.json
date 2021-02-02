@@ -1,41 +1,69 @@
 {
     "defaults": {
         "colours": {
-            "normal_bg": "#021166",
-            "hovered_bg": "#021166",
+            "normal_bg": "#372C47",
+            "hovered_bg": "#372C47",
             "disabled_bg": "#c21515",
-            "selected_bg": "#021166",
-            "dark_bg": "#0f0f0e",
+            "selected_bg": "#372C47",
+            "active_bg": "#6B4A6B",
+            "dark_bg": "#484A45",
+            
             "normal_text": "#ffffff",
-            "hovered_text": "#c28015",
-            "selected_text": "#c28015",
+            "hovered_text": "#EBCA71",
+            "selected_text": "#EBCA71",
             "disabled_text": "#c21515",
+            "active_text": "#EBCA71",
+            
             "link_text": "#7f11ad",
             "link_hover": "#2020FF",
             "link_selected": "#551A8B",
+            
             "text_shadow": "#000000",
-            "normal_border": "#c28015",
-            "hovered_border": "#c28015",
+            
+            "normal_border": "#372C47",
+            "hovered_border": "#6B4A6B",
             "disabled_border": "#c21515",
-            "selected_border": "#c28015",
-            "active_border": "#faaf3e"
+            "selected_border": "#EBCA71",
+            "active_border": "#6B4A6B"
         }
     },
+    
+    
+    "window": {
+        "misc":{
+            "title_bar_height": "12"
+        }
+    },
+    
     "panel": {
-        "colours": {
-            "normal_border": "#000000",
-            "dark_bg": "#000000"
-        },
         "misc": {
-            "shadow_width": "0",
-            "border_width": "0"
+            "border_width": "0",
+            "shadow_width": "0"
         }
     },
+    "character_selector": {
+        "colours": {
+            "dark_bg": "#0C0D0C"
+        }
+    },
+    "skill_bar": {
+        "colours": {
+            "dark_bg": "#000000"
+        }
+    },
+    "title_screen":  {
+        "colours": {
+            "dark_bg": "#0C0D0C"
+        }
+    },
+    
+    
+    
     "text_box": {
         "misc": {
             "shape": "rectangle",
             "shape_corner_radius": "0",
-            "border_width": "1",
+            "border_width": "0",
             "shadow_width": "2",
             "padding": "10, 10"
         }
@@ -43,39 +71,27 @@
     
     
     "drop_down_menu": {
-        "misc": {
-            "shape": "rounded_rectangle",
-            "shape_corner_radius": "5",
-            "shadow_width": "1"
-        }
-    },
-    "drop_down_menu.button": {
-        "font": {
-            "name": "barlow",
-            "size": "18",
-            "regular_path": "assets/fonts/Barlow-Light.otf"
-        }
-    },
-    "drop_down_menu.#drop_down_options_list": {
         "font": {
             "name": "barlow",
             "size": "18",
             "regular_path": "assets/fonts/Barlow-Light.otf"
         },
         "misc": {
-            "shape": "rounded_rectangle",
-            "shape_corner_radius": "5",
-            "shadow_width": "1"
+            "shape": "rectangle",
+            "shape_corner_radius": "0",
+            "shadow_width": "0",
+            "border_width": "1"
         }
+    },
+    "drop_down_menu.button": {
+        "prototype": "drop_down_menu"
+    },
+    "drop_down_menu.#drop_down_options_list": {
+        "prototype": "drop_down_menu"
     },
     "drop_down_menu.#drop_down_options_list.button": {
-        "font": {
-            "name": "barlow",
-            "size": "18",
-            "regular_path": "assets/fonts/Barlow-Light.otf"
-        }
+        "prototype": "drop_down_menu"
     },
-    
     
     
     "button": {
@@ -86,7 +102,10 @@
         },
         "misc": {
             "tool_tip_delay": "1.5",
-            "shadow_width": "0"
+            "shadow_width": "0",
+            "border_width": "2",
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "3"
         }
     },
     "skill_bar.button": {
@@ -106,6 +125,12 @@
     "screen_message": {
         "misc": {
             "padding": "1, 1"
+        }
+    },
+    
+    "vertical_scroll_bar": {
+        "colours": {
+            "dark_bg": "#0C0D0C"
         }
     }
 }

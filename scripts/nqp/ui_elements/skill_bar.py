@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import json
 import logging
-import os
 from typing import TYPE_CHECKING
 
 import pygame
@@ -20,7 +18,7 @@ from scripts.engine.internal.constant import (
     ICON_SIZE, InputEventType,
     InputIntent,
     RenderLayer,
-    SKILL_BUTTON_SIZE, UI_PATH,
+    SKILL_BUTTON_SIZE,
 )
 from scripts.engine.widgets.panel import Panel
 
