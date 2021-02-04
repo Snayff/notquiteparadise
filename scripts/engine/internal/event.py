@@ -60,6 +60,15 @@ class EventHub:
         """
         self.subscribers[event_type].remove(subscriber)
 
+    def peek(self, event):
+        """
+        Check if an event exists in the queue.
+        """
+        for e in self.events:
+            if isinstance(e, event): #type: ignore
+                return True
+        return False
+
     def update(self):
         """
         Notify subscribers of their registered event.
