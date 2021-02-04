@@ -19,6 +19,7 @@ from scripts.engine.internal.constant import (
     TargetingMethod,
     UIElement,
 )
+from scripts.engine.internal.event import EndTurnEvent, event_hub
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import command
 from scripts.nqp.processors.targeting import targeting
@@ -135,7 +136,9 @@ def _process_game_map_intents(intent: InputIntentType):
         target_tile = world.get_tile((position.x, position.y))
         move = world.get_known_skill(player, "Move")
         if direction in move.target_directions:
-            _process_skill_use(player, move, target_tile, direction)
+            # ensure it's actually the player's turn by checking the event queue for an unprocessed end turn event
+            if not event_hub.peek(EndTurnEvent):
+                _process_skill_use(player, move, target_tile, direction)
 
     ## Use a skill
     elif intent in possible_skill_intents and position:
