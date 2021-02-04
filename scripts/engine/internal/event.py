@@ -60,7 +60,7 @@ class EventHub:
         """
         self.subscribers[event_type].remove(subscriber)
 
-    def peek(self, event: Event):
+    def peek(self, event: Event): #type: ignore
         """
         Check if an event exists in the queue.
         """
