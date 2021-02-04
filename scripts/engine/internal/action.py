@@ -339,8 +339,10 @@ class Projectile(Behaviour):
         dir_x, dir_y = self.data.direction[0], self.data.direction[1]
         target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
 
-        # if we havent moved check for collision in current tile (it might be cast on top of enemy)
-        if self.distance_travelled == 0 and world.tile_has_tag(entity, current_tile, TileTag.OTHER_ENTITY):
+        # check if already on top of an entity before moving in case something move into the projectile or the projectile was created on top of an entity
+        player_pos = world.get_entitys_component(world.get_player(), Position)
+        if world.tile_has_tag(entity, current_tile, TileTag.OTHER_ENTITY):
+            self.data.skill_instance.target_tile = current_tile
             should_activate = True
             logging.debug(f"'{world.get_name(entity)}' collided with an entity on cast at ({pos.x},{pos.y}).")
 
