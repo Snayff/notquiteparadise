@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 import pygame
 from pygame.math import Vector2
 from pygame.rect import Rect
+from pygame_gui.core import ObjectID
 from pygame_gui.elements import UITextBox
 
 from scripts.engine.internal.constant import RenderLayer
@@ -35,7 +36,7 @@ class MessageLog(Panel):
             rect,
             RenderLayer.UI_BASE,
             manager,
-            object_id="message_log",
+            object_id=ObjectID("#message_log", "@menu_window"),
             anchors={"left": "left", "right": "right", "top": "bottom", "bottom": "bottom"},
         )
 
@@ -75,7 +76,7 @@ class MessageLog(Panel):
         <font face=’verdana’ color=’#000000’ size=3.5></font> - To set the font, colour and size of encased text.
         """
         col = "#ffffff"
-        self.text += f"<font face=barlow color={col} size={self.text_size}>{message}</font> <br>"
+        self.text += f"<font face=cozette color={col} size={self.text_size}>{message}</font> <br>"
 
         if self.text_box:
             self.text_box.kill()

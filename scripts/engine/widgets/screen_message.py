@@ -23,7 +23,7 @@ class ScreenMessage(UITextBox):
             manager=manager,
             wrap_to_height=True,
             layer_starting_height=100,
-            object_id="screen_message",
+            object_id="#screen_message",
         )
 
         self.view_time = 2  # time in seconds

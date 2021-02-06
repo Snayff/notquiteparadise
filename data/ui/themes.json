@@ -29,11 +29,31 @@
     },
     
     
+    "@menu_screen": {
+        "colours": {
+            "dark_bg": "#0C0D0C"
+        },
+        "font": {
+            "name": "barlow",
+            "size": "16"
+        }
+    },
+    "@gui": {
+        "colours": {
+            "dark_bg": "#000000"
+        }
+    },
+    "@menu_window": {
+    
+    },
+    
+    
     "window": {
         "misc":{
             "title_bar_height": "12"
         }
     },
+    
     
     "panel": {
         "misc": {
@@ -41,25 +61,13 @@
             "shadow_width": "0"
         }
     },
-    "character_selector": {
-        "colours": {
-            "dark_bg": "#0C0D0C"
-        }
-    },
-    "skill_bar": {
-        "colours": {
-            "dark_bg": "#000000"
-        }
-    },
-    "title_screen":  {
-        "colours": {
-            "dark_bg": "#0C0D0C"
-        }
-    },
-    
     
     
     "text_box": {
+        "font": {
+            "name": "cozette",
+            "size": "12"
+        },
         "misc": {
             "shape": "rectangle",
             "shape_corner_radius": "0",
@@ -71,11 +79,6 @@
     
     
     "drop_down_menu": {
-        "font": {
-            "name": "barlow",
-            "size": "18",
-            "regular_path": "assets/fonts/Barlow-Light.otf"
-        },
         "misc": {
             "shape": "rectangle",
             "shape_corner_radius": "0",
@@ -84,7 +87,11 @@
         }
     },
     "drop_down_menu.button": {
-        "prototype": "drop_down_menu"
+        "prototype": "drop_down_menu",
+        "font": {
+            "name": "cozette",
+            "size": "16"
+        }
     },
     "drop_down_menu.#drop_down_options_list": {
         "prototype": "drop_down_menu"
@@ -96,9 +103,8 @@
     
     "button": {
         "font": {
-            "name": "barlow",
-            "size": "14",
-            "regular_path": "assets/fonts/Barlow-Light.otf"
+            "name": "cozette",
+            "size": "16"
         },
         "misc": {
             "tool_tip_delay": "1.5",
@@ -108,13 +114,8 @@
             "shape_corner_radius": "3"
         }
     },
-    "skill_bar.button": {
+    "#skill_bar.button": {
         "prototype": "button",
-        "font": {
-            "name": "barlow",
-            "size": "10",
-            "regular_path": "assets/fonts/Barlow-Light.otf"
-        },
         "misc": {
             "text_horiz_alignment": "left",
             "text_vert_alignment": "bottom"
@@ -122,7 +123,7 @@
     },
     
     
-    "screen_message": {
+    "#screen_message": {
         "misc": {
             "padding": "1, 1"
         }

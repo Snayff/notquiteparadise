@@ -1,31 +1,18 @@
 import logging
 import os
-from typing import Iterable, List, Optional, Tuple
+from typing import Tuple
 
 import pygame
-import pygame_gui
 import pytweening
 from pygame.rect import Rect
 from pygame.surface import Surface
 
-from scripts.engine.core import query, state, utility, world
+from scripts.engine.core import utility, world
 from scripts.engine.core.component import Aesthetic, Position
-from scripts.engine.core.ui import ui
-from scripts.engine.core.utility import clamp, convert_tile_string_to_xy
+from scripts.engine.core.utility import clamp
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import (
-    EventType,
-    GameState,
-    Height,
-    InputEventType,
-    InputIntent,
-    TargetingMethod,
-    TILE_SIZE,
-    UIElement,
-)
-from scripts.nqp import command
+from scripts.engine.internal.constant import Height, TILE_SIZE
 from scripts.nqp.processors.targeting import targeting
-from scripts.nqp.ui_elements.tile_info import TileInfo
 
 __all__ = ["camera"]
 

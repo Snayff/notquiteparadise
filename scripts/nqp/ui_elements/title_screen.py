@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 import pygame
 import pygame_gui
 from pygame import Rect
+from pygame_gui.core import ObjectID
 from pygame_gui.elements import UIButton
 
 from scripts.engine.internal.constant import RenderLayer
@@ -36,7 +37,7 @@ class TitleScreen(Panel):
         self.buttons: List[UIButton] = []
 
         # complete base class init
-        super().__init__(rect, RenderLayer.BOTTOM, manager, object_id="title_screen")
+        super().__init__(rect, RenderLayer.BOTTOM, manager, object_id=ObjectID("#title_screen", "@menu_screen"))
 
         self._init_buttons()
 

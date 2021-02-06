@@ -5,7 +5,7 @@ from typing import List, Tuple
 
 import pygame
 from pygame_gui import UIManager
-from pygame_gui.core import UIElement
+from pygame_gui.core import ObjectID, UIElement
 from pygame_gui.elements import UIImage, UITextBox
 
 from scripts.engine.core import query, world
@@ -33,7 +33,7 @@ class TileInfo(Panel):
             rect,
             RenderLayer.UI_BASE,
             manager,
-            object_id="tile_info",
+            object_id=ObjectID("#tile_info", "@popup"),
             anchors={"left": "right", "right": "right", "top": "bottom", "bottom": "bottom"},
         )
 
@@ -131,7 +131,7 @@ class TileInfo(Panel):
             # collect text for the section
             text = ""
             for line in info[section_number]:
-                text += f"<font face=barlow size={self.text_size}>{line}</font> <br>"
+                text += f"<font face=cozette size={self.text_size}>{line}</font> <br>"
 
             # create textbox
             rect = pygame.Rect((x, current_y), (width, text_height))
