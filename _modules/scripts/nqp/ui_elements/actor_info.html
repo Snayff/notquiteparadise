@@ -258,6 +258,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">ObjectID</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">UIElement</span> <span class="k">as</span> <span class="n">PygameUiElement</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIImage</span><span class="p">,</span> <span class="n">UITextBox</span><span class="p">,</span> <span class="n">UIVerticalScrollBar</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
@@ -296,7 +297,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">section_base_positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># complete base class init</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">"actor_info"</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">ObjectID</span><span class="p">(</span><span class="s2">"#actor_info"</span><span class="p">,</span> <span class="s2">"@menu_window"</span><span class="p">))</span>
 
         <span class="c1"># setup scroll bar</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span> <span class="o">=</span> <span class="mi">50</span>

@@ -260,6 +260,7 @@
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">from</span> <span class="nn">pygame.math</span> <span class="kn">import</span> <span class="n">Vector2</span>
 <span class="kn">from</span> <span class="nn">pygame.rect</span> <span class="kn">import</span> <span class="n">Rect</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">ObjectID</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UITextBox</span>
 
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">RenderLayer</span>
@@ -289,7 +290,7 @@
             <span class="n">rect</span><span class="p">,</span>
             <span class="n">RenderLayer</span><span class="o">.</span><span class="n">UI_BASE</span><span class="p">,</span>
             <span class="n">manager</span><span class="p">,</span>
-            <span class="n">object_id</span><span class="o">=</span><span class="s2">"message_log"</span><span class="p">,</span>
+            <span class="n">object_id</span><span class="o">=</span><span class="n">ObjectID</span><span class="p">(</span><span class="s2">"#message_log"</span><span class="p">,</span> <span class="s2">"@menu_window"</span><span class="p">),</span>
             <span class="n">anchors</span><span class="o">=</span><span class="p">{</span><span class="s2">"left"</span><span class="p">:</span> <span class="s2">"left"</span><span class="p">,</span> <span class="s2">"right"</span><span class="p">:</span> <span class="s2">"right"</span><span class="p">,</span> <span class="s2">"top"</span><span class="p">:</span> <span class="s2">"bottom"</span><span class="p">,</span> <span class="s2">"bottom"</span><span class="p">:</span> <span class="s2">"bottom"</span><span class="p">},</span>
         <span class="p">)</span>
 
@@ -329,7 +330,7 @@
 <span class="sd">        &lt;font face=’verdana’ color=’#000000’ size=3.5&gt;&lt;/font&gt; - To set the font, colour and size of encased text.</span>
 <span class="sd">        """</span>
         <span class="n">col</span> <span class="o">=</span> <span class="s2">"#ffffff"</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"&lt;font face=barlow color=</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text_size</span><span class="si">}</span><span class="s2">&gt;</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&lt;/font&gt; &lt;br&gt;"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"&lt;font face=cozette color=</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text_size</span><span class="si">}</span><span class="s2">&gt;</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&lt;/font&gt; &lt;br&gt;"</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
