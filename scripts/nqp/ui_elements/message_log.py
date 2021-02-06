@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 import pygame
 from pygame.math import Vector2
 from pygame.rect import Rect
+from pygame_gui.core import ObjectID
 from pygame_gui.elements import UITextBox
 
 from scripts.engine.internal.constant import RenderLayer
@@ -35,7 +36,7 @@ class MessageLog(Panel):
             rect,
             RenderLayer.UI_BASE,
             manager,
-            object_id="message_log",
+            object_id=ObjectID("#message_log", "@menu_window"),
             anchors={"left": "left", "right": "right", "top": "bottom", "bottom": "bottom"},
         )
 

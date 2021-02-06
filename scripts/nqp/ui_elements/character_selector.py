@@ -7,6 +7,7 @@ import pygame
 import pygame_gui
 from pygame import Rect
 from pygame_gui import UIManager
+from pygame_gui.core import ObjectID
 from pygame_gui.elements import UIButton, UIDropDownMenu, UIImage, UITextBox
 
 from scripts.engine.core.utility import build_sprites_from_paths
@@ -41,7 +42,7 @@ class CharacterSelector(Panel):
         self.ui_image: Optional[UIImage] = None
 
         # complete base class init
-        super().__init__(rect, RenderLayer.BOTTOM, manager, object_id="character_selector")
+        super().__init__(rect, RenderLayer.BOTTOM, manager, object_id=ObjectID("#character_selector", "@menu_screen"))
 
         self._init_buttons()
         self._init_drop_downs()

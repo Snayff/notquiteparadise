@@ -7,6 +7,7 @@ import pygame
 import pygame_gui
 from pygame.rect import Rect
 from pygame_gui import UIManager
+from pygame_gui.core import ObjectID
 from pygame_gui.elements import UIButton
 
 from scripts.engine.core import utility, world
@@ -69,7 +70,7 @@ class SkillBar(Panel):
             rect,
             RenderLayer.UI_BASE,
             manager,
-            object_id="skill_bar",
+            object_id=ObjectID("#skill_bar", "@gui"),
             anchors={"left": "left", "right": "right", "top": "bottom", "bottom": "bottom"},
         )
 

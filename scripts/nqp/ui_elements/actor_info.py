@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 import pygame
-from pygame_gui.core import UIElement as PygameUiElement
+from pygame_gui.core import ObjectID, UIElement as PygameUiElement
 from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar
 from snecs.typedefs import EntityID
 
@@ -42,7 +42,7 @@ class ActorInfo(Window):
         self.section_base_positions: List[int] = []
 
         # complete base class init
-        super().__init__(rect, manager, object_id="actor_info")
+        super().__init__(rect, manager, object_id=ObjectID("#actor_info", "@menu_window"))
 
         # setup scroll bar
         self.scrollbar_width = 50

@@ -29,11 +29,27 @@
     },
     
     
+    "@menu_screen": {
+        "colours": {
+            "dark_bg": "#0C0D0C"
+        }
+    },
+    "@gui": {
+        "colours": {
+            "dark_bg": "#000000"
+        }
+    },
+    "@menu_window": {
+        
+    },
+    
+    
     "window": {
         "misc":{
             "title_bar_height": "12"
         }
     },
+    
     
     "panel": {
         "misc": {
@@ -41,22 +57,6 @@
             "shadow_width": "0"
         }
     },
-    "character_selector": {
-        "colours": {
-            "dark_bg": "#0C0D0C"
-        }
-    },
-    "skill_bar": {
-        "colours": {
-            "dark_bg": "#000000"
-        }
-    },
-    "title_screen":  {
-        "colours": {
-            "dark_bg": "#0C0D0C"
-        }
-    },
-    
     
     
     "text_box": {
@@ -108,7 +108,7 @@
             "shape_corner_radius": "3"
         }
     },
-    "skill_bar.button": {
+    "#skill_bar.button": {
         "prototype": "button",
         "font": {
             "name": "barlow",
@@ -122,7 +122,7 @@
     },
     
     
-    "screen_message": {
+    "#screen_message": {
         "misc": {
             "padding": "1, 1"
         }
