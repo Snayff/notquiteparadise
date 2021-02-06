@@ -65,7 +65,7 @@ class EventHub:
         Check if an event exists in the queue.
         """
         for e in self.events:
-            if isinstance(e, event): #type: ignore
+            if isinstance(e, event):  # type: ignore
                 return True
         return False
 

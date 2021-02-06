@@ -4,7 +4,8 @@ import logging
 from typing import TYPE_CHECKING
 
 import pygame
-from pygame_gui.core import ObjectID, UIElement as PygameUiElement
+from pygame_gui.core import ObjectID
+from pygame_gui.core import UIElement as PygameUiElement
 from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar
 from snecs.typedefs import EntityID
 

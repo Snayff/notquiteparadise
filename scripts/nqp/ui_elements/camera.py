@@ -11,10 +11,7 @@ from scripts.engine.core import utility, world
 from scripts.engine.core.component import Aesthetic, Position
 from scripts.engine.core.utility import clamp
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import (
-    Height,
-    TILE_SIZE,
-)
+from scripts.engine.internal.constant import Height, TILE_SIZE
 from scripts.nqp.processors.targeting import targeting
 
 __all__ = ["camera"]
