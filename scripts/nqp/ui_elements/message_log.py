@@ -76,7 +76,7 @@ class MessageLog(Panel):
         <font face=’verdana’ color=’#000000’ size=3.5></font> - To set the font, colour and size of encased text.
         """
         col = "#ffffff"
-        self.text += f"<font face=barlow color={col} size={self.text_size}>{message}</font> <br>"
+        self.text += f"<font face=cozette color={col} size={self.text_size}>{message}</font> <br>"
 
         if self.text_box:
             self.text_box.kill()

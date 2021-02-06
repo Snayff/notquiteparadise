@@ -193,7 +193,7 @@ class CharacterSelector(Panel):
             trait = library.TRAITS[drop_down.selected_option]
             sprite_paths.append(trait.sprite_paths)
             info[trait.name] = [
-                f"<font face=barlow color={col} size={text_size}>"
+                f"<font face=cozette color={col} size={text_size}>"
                 # f"{trait.name} <br>",
                 f"{trait.description} <br>",
                 f"<br>",

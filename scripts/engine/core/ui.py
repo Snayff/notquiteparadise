@@ -134,10 +134,12 @@ class UI:
 
     def _load_fonts(self):
         self._gui.add_font_paths("barlow", str(ASSET_PATH / "fonts/Barlow-Light.otf"))
-        self.debug_font = pygame.font.Font(str(ASSET_PATH / "fonts/Kenney Future Narrow.ttf"), 6)
+        self._gui.add_font_paths("cozette", str(ASSET_PATH / "fonts/cozette_bitmap.ttf"))
+        self.debug_font = pygame.font.Font(str(ASSET_PATH / "fonts/Barlow-Light.otf"), 6)
 
         fonts = [
             {"name": "barlow", "point_size": 12, "style": "regular"},
+            {"name": "cozette", "point_size": 12, "style": "regular"},
         ]
 
         self._gui.preload_fonts(fonts)
@@ -159,7 +161,7 @@ class UI:
         """
         Create a message on the screen.
         """
-        text = f"<font face=barlow color={colour} size={size}>{message}</font>"
+        text = f"<font face=cozette color={colour} size={size}>{message}</font>"
         rect = pygame.Rect((self.base_width / 4, self.base_height / 4), (self.base_width / 2, -1))
         ScreenMessage(rect, text, self.get_gui_manager())
 

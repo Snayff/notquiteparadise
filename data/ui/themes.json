@@ -32,6 +32,10 @@
     "@menu_screen": {
         "colours": {
             "dark_bg": "#0C0D0C"
+        },
+        "font": {
+            "name": "barlow",
+            "size": "16"
         }
     },
     "@gui": {
@@ -40,7 +44,7 @@
         }
     },
     "@menu_window": {
-        
+    
     },
     
     
@@ -60,6 +64,10 @@
     
     
     "text_box": {
+        "font": {
+            "name": "cozette",
+            "size": "12"
+        },
         "misc": {
             "shape": "rectangle",
             "shape_corner_radius": "0",
@@ -71,11 +79,6 @@
     
     
     "drop_down_menu": {
-        "font": {
-            "name": "barlow",
-            "size": "18",
-            "regular_path": "assets/fonts/Barlow-Light.otf"
-        },
         "misc": {
             "shape": "rectangle",
             "shape_corner_radius": "0",
@@ -84,7 +87,11 @@
         }
     },
     "drop_down_menu.button": {
-        "prototype": "drop_down_menu"
+        "prototype": "drop_down_menu",
+        "font": {
+            "name": "cozette",
+            "size": "16"
+        }
     },
     "drop_down_menu.#drop_down_options_list": {
         "prototype": "drop_down_menu"
@@ -96,9 +103,8 @@
     
     "button": {
         "font": {
-            "name": "barlow",
-            "size": "14",
-            "regular_path": "assets/fonts/Barlow-Light.otf"
+            "name": "cozette",
+            "size": "16"
         },
         "misc": {
             "tool_tip_delay": "1.5",
@@ -110,11 +116,6 @@
     },
     "#skill_bar.button": {
         "prototype": "button",
-        "font": {
-            "name": "barlow",
-            "size": "10",
-            "regular_path": "assets/fonts/Barlow-Light.otf"
-        },
         "misc": {
             "text_horiz_alignment": "left",
             "text_vert_alignment": "bottom"

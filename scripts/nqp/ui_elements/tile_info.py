@@ -131,7 +131,7 @@ class TileInfo(Panel):
             # collect text for the section
             text = ""
             for line in info[section_number]:
-                text += f"<font face=barlow size={self.text_size}>{line}</font> <br>"
+                text += f"<font face=cozette size={self.text_size}>{line}</font> <br>"
 
             # create textbox
             rect = pygame.Rect((x, current_y), (width, text_height))
