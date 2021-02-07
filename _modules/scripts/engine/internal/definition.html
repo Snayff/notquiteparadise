@@ -278,6 +278,7 @@
     <span class="n">RenderLayer</span><span class="p">,</span>
     <span class="n">Resource</span><span class="p">,</span>
     <span class="n">ResourceType</span><span class="p">,</span>
+    <span class="n">SecondaryStat</span><span class="p">,</span>
     <span class="n">SecondaryStatType</span><span class="p">,</span>
     <span class="n">Shape</span><span class="p">,</span>
     <span class="n">ShapeType</span><span class="p">,</span>
@@ -381,39 +382,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sprite_paths</span><span class="o">.</span><span class="n">render_order</span> <span class="o">=</span> <span class="n">trait_render_order</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseStatData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.BaseStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<div class="viewcode-block" id="SecondaryStatModData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.SecondaryStatModData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">BaseStatData</span><span class="p">:</span>
-    <span class="sd">"""</span>
-<span class="sd">    Data class to contain primary and secondary stats</span>
-<span class="sd">    """</span>
-
-    <span class="n">primary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BasePrimaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
-    <span class="n">secondary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BaseSecondaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="BasePrimaryStatData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.BasePrimaryStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">BasePrimaryStatData</span><span class="p">:</span>
-    <span class="sd">"""</span>
-<span class="sd">    Data class for primary  stats</span>
-<span class="sd">    """</span>
-
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
-    <span class="n">primary_stat_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">base_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
-
-
-<div class="viewcode-block" id="BaseSecondaryStatData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.BaseSecondaryStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">BaseSecondaryStatData</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">SecondaryStatModData</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Data class for secondary stats</span>
 <span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
-    <span class="n">secondary_stat_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SecondaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">base_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
+    <span class="n">secondary_stat_type</span><span class="p">:</span> <span class="n">SecondaryStatType</span> <span class="o">=</span> <span class="n">SecondaryStat</span><span class="o">.</span><span class="n">MAX_HEALTH</span>
     <span class="n">vigour_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">clout_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">skullduggery_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -663,9 +640,6 @@
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
     <span class="n">icon_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>
     <span class="n">category</span><span class="p">:</span> <span class="n">AfflictionCategoryType</span> <span class="o">=</span> <span class="n">AfflictionCategory</span><span class="o">.</span><span class="n">BANE</span>
-    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
-    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">identity_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EffectTypeType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">triggers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ReactionTriggerType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
 
@@ -800,54 +774,67 @@
 <div class="viewcode-block" id="Dimensions"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.Dimensions">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Dimensions</span><span class="p">:</span>
-    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span></div>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="VideoConfigData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.VideoConfigData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">VideoConfigData</span><span class="p">:</span>
-    <span class="n">base_window</span><span class="p">:</span> <span class="n">Dimensions</span>
-    <span class="n">desired_window</span><span class="p">:</span> <span class="n">Dimensions</span>
-    <span class="n">fps_limit</span><span class="p">:</span> <span class="nb">int</span></div>
+    <span class="n">base_window</span><span class="p">:</span> <span class="n">Dimensions</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Dimensions</span><span class="p">)</span>
+    <span class="n">desired_window</span><span class="p">:</span> <span class="n">Dimensions</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Dimensions</span><span class="p">)</span>
+    <span class="n">fps_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span></div>
 
 
 <div class="viewcode-block" id="HitInfoData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.HitInfoData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">HitInfoData</span><span class="p">:</span>
-    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">modifier</span><span class="p">:</span> <span class="nb">float</span></div>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">modifier</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
 
 <div class="viewcode-block" id="HitTypeData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.HitTypeData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">HitTypeData</span><span class="p">:</span>
-    <span class="n">graze</span><span class="p">:</span> <span class="n">HitInfoData</span>
-    <span class="n">hit</span><span class="p">:</span> <span class="n">HitInfoData</span>
-    <span class="n">crit</span><span class="p">:</span> <span class="n">HitInfoData</span></div>
+    <span class="n">graze</span><span class="p">:</span> <span class="n">HitInfoData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">HitInfoData</span><span class="p">)</span>
+    <span class="n">hit</span><span class="p">:</span> <span class="n">HitInfoData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">HitInfoData</span><span class="p">)</span>
+    <span class="n">crit</span><span class="p">:</span> <span class="n">HitInfoData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">HitInfoData</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BaseValueData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.BaseValueData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">BaseValueData</span><span class="p">:</span>
-    <span class="n">move_cost</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">accuracy</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">damage</span><span class="p">:</span> <span class="nb">int</span></div>
+    <span class="n">move_cost</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">accuracy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">damage</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">bustle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">clout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">exactitude</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">skullduggery</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">vigour</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_health</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_stamina</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">resist_astral</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">resist_burn</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">resist_chemical</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">resist_cold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">resist_mundane</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">rush</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="DefaultValueData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.DefaultValueData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">DefaultValueData</span><span class="p">:</span>
-    <span class="n">time_per_round</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">reduced_effectiveness_multi_tile_modifier</span><span class="p">:</span> <span class="nb">float</span></div>
+    <span class="n">time_per_round</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">reduced_effectiveness_multi_tile_modifier</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
 
 <div class="viewcode-block" id="GameConfigData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.GameConfigData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">GameConfigData</span><span class="p">:</span>
-    <span class="n">hit_types</span><span class="p">:</span> <span class="n">HitTypeData</span>
-    <span class="n">base_values</span><span class="p">:</span> <span class="n">BaseValueData</span>
-    <span class="n">default_values</span><span class="p">:</span> <span class="n">DefaultValueData</span></div>
+    <span class="n">hit_types</span><span class="p">:</span> <span class="n">HitTypeData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">HitTypeData</span><span class="p">)</span>
+    <span class="n">base_values</span><span class="p">:</span> <span class="n">BaseValueData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">BaseValueData</span><span class="p">)</span>
+    <span class="n">default_values</span><span class="p">:</span> <span class="n">DefaultValueData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">DefaultValueData</span><span class="p">)</span></div>
 </pre></div>
 
           </article>

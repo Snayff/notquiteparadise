@@ -292,14 +292,18 @@
 <span class="sd">    Action taken during the game. A container for Effects.</span>
 <span class="sd">    """</span>
 
+    <span class="c1"># details to be overwritten by external data</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># name of the class</span>
-    <span class="n">f_name</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># friendly name, can include spaces, slashes etc.</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">icon_path</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="c1"># details to be overwritten in subclass</span>
     <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span>
-    <span class="n">effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]</span>
     <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span>
     <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="c1"># set by instance</span>
+    <span class="n">effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]</span>
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]:</span>
@@ -319,19 +323,19 @@
 <span class="sd">    the user and target.</span>
 <span class="sd">    """</span>
 
-    <span class="c1"># to be overwritten in subclass, including being set by external data</span>
+    <span class="c1"># core data, to be overwritten by external data</span>
     <span class="n">resource_type</span><span class="p">:</span> <span class="n">ResourceType</span>
     <span class="n">resource_cost</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">time_cost</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">base_cooldown</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span>  <span class="c1"># Tile, Direction, Auto</span>
 
-    <span class="c1"># targeting details</span>
+    <span class="c1"># targeting details, to be overwritten in subclass</span>
+    <span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span>  <span class="c1"># Tile, Direction, Auto</span>
     <span class="n">cast_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span>
     <span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span>  <span class="c1"># needed for Direction</span>
     <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># needed for Tile, Auto</span>
 
-    <span class="c1"># delivery methods</span>
+    <span class="c1"># delivery methods, to be overwritten in subclass</span>
     <span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span>  <span class="c1"># usable by for Tile, Direction, Auto</span>
     <span class="n">projectile_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileData</span><span class="p">]</span>
     <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span>  <span class="c1"># usable by Tile, Auto  - Doesnt make sense for Direction to have a delayed cast.</span>
@@ -363,24 +367,12 @@
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">SKILLS</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">f_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">name</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">cast_tags</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cast_tags</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">target_tags</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">target_tags</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">description</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">base_cooldown</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cooldown</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">time_cost</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">time_cost</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">icon_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">icon_path</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">resource_type</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resource_type</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">resource_cost</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resource_cost</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">range</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">time_cost</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">time_cost</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">base_cooldown</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cooldown</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">targeting_method</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">targeting_method</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">target_directions</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">target_directions</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">shape_size</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape_size</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">uses_projectile</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uses_projectile</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">projectile_data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">projectile_data</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">is_delayed</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">is_delayed</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">delayed_skill_data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">delayed_skill_data</span>
 
 <div class="viewcode-block" id="Skill.apply"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Skill.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]]]:</span>
         <span class="sd">"""</span>
@@ -494,13 +486,9 @@
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">AFFLICTIONS</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">f_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">name</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">description</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">icon_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">icon_path</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">category</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">category</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">shape_size</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape_size</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">target_tags</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">target_tags</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">identity_tags</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">identity_tags</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">triggers</span>
 

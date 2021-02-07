@@ -524,15 +524,18 @@
     <span class="p">)</span>
 
     <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">CombatStats</span><span class="p">)</span>
-    <span class="n">start_stat</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">stat_to_target</span><span class="p">)</span>
+    <span class="n">start_mod</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">_get_mod_value</span><span class="p">(</span><span class="n">stat_to_target</span><span class="p">)</span>  <span class="c1"># get mod amount</span>
     <span class="n">success</span> <span class="o">=</span> <span class="n">effect</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">end_stat</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">stat_to_target</span><span class="p">)</span>
+    <span class="n">end_mod</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">_get_mod_value</span><span class="p">(</span><span class="n">stat_to_target</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">start_mod</span> <span class="o">+</span> <span class="n">affect_amount</span> <span class="o">==</span> <span class="n">end_mod</span>
+
         <span class="c1"># N.B. should never be less than 1</span>
-        <span class="k">assert</span> <span class="nb">max</span><span class="p">(</span><span class="n">start_stat</span> <span class="o">+</span> <span class="n">affect_amount</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">end_stat</span>
+        <span class="k">assert</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">stat_to_target</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="n">start_stat</span> <span class="o">==</span> <span class="n">end_stat</span></div>
+        <span class="c1"># no change</span>
+        <span class="k">assert</span> <span class="n">start_mod</span> <span class="o">==</span> <span class="n">end_mod</span></div>
 
 
 <span class="n">_affliction_names</span> <span class="o">=</span> <span class="p">[]</span>

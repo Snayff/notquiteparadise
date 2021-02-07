@@ -261,13 +261,19 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core.effect</span> <span class="kn">import</span> <span class="n">AffectStatEffect</span><span class="p">,</span> <span class="n">DamageEffect</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Affliction</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">DamageType</span><span class="p">,</span> <span class="n">PrimaryStat</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">DamageType</span><span class="p">,</span> <span class="n">PrimaryStat</span><span class="p">,</span> <span class="n">Shape</span><span class="p">,</span> <span class="n">ShapeType</span><span class="p">,</span> <span class="n">TileTag</span><span class="p">,</span> <span class="n">TileTagType</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
 
 <div class="viewcode-block" id="BoggedDown"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.affliction.BoggedDown">[docs]</a><span class="k">class</span> <span class="nc">BoggedDown</span><span class="p">(</span><span class="n">Affliction</span><span class="p">):</span>
+
+    <span class="c1"># targeting</span>
+    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">]</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
 <div class="viewcode-block" id="BoggedDown._build_effects"><a class="viewcode-back" href="../../../../nqp/actions/affliction.html#scripts.nqp.actions.affliction.BoggedDown._build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AffectStatEffect</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
 
         <span class="n">affect_stat_effect</span> <span class="o">=</span> <span class="n">AffectStatEffect</span><span class="p">(</span>
@@ -284,6 +290,12 @@
 
 
 <div class="viewcode-block" id="Flaming"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.affliction.Flaming">[docs]</a><span class="k">class</span> <span class="nc">Flaming</span><span class="p">(</span><span class="n">Affliction</span><span class="p">):</span>
+
+    <span class="c1"># targeting</span>
+    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">]</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
 <div class="viewcode-block" id="Flaming._build_effects"><a class="viewcode-back" href="../../../../nqp/actions/affliction.html#scripts.nqp.actions.affliction.Flaming._build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DamageEffect</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
         <span class="sd">"""</span>
 <span class="sd">        Build the effects of this skill applying to a single entity.</span>

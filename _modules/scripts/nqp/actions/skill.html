@@ -264,7 +264,23 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.core.effect</span> <span class="kn">import</span> <span class="n">AffectCooldownEffect</span><span class="p">,</span> <span class="n">ApplyAfflictionEffect</span><span class="p">,</span> <span class="n">DamageEffect</span><span class="p">,</span> <span class="n">Effect</span><span class="p">,</span> <span class="n">MoveSelfEffect</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Skill</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">DamageType</span><span class="p">,</span> <span class="n">DirectionType</span><span class="p">,</span> <span class="n">PrimaryStat</span><span class="p">,</span> <span class="n">Shape</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DamageType</span><span class="p">,</span>
+    <span class="n">Direction</span><span class="p">,</span>
+    <span class="n">DirectionType</span><span class="p">,</span>
+    <span class="n">PrimaryStat</span><span class="p">,</span>
+    <span class="n">ProjectileExpiry</span><span class="p">,</span>
+    <span class="n">ProjectileSpeed</span><span class="p">,</span>
+    <span class="n">Shape</span><span class="p">,</span>
+    <span class="n">ShapeType</span><span class="p">,</span>
+    <span class="n">TargetingMethod</span><span class="p">,</span>
+    <span class="n">TargetingMethodType</span><span class="p">,</span>
+    <span class="n">TerrainCollision</span><span class="p">,</span>
+    <span class="n">TileTag</span><span class="p">,</span>
+    <span class="n">TileTagType</span><span class="p">,</span>
+    <span class="n">TravelMethod</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">DelayedSkillData</span><span class="p">,</span> <span class="n">ProjectileData</span><span class="p">,</span> <span class="n">TraitSpritePathsData</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -275,6 +291,23 @@
     <span class="sd">"""</span>
 <span class="sd">    Basic move for an entity.</span>
 <span class="sd">    """</span>
+
+    <span class="c1"># casting</span>
+    <span class="n">cast_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">NO_BLOCKING_TILE</span><span class="p">]</span>
+
+    <span class="c1"># targeting</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">SELF</span><span class="p">]</span>
+    <span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span> <span class="o">=</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">DIRECTION</span>
+    <span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">]</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># delivery</span>
+    <span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">projectile_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Move.__init__"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.skill.Move.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -308,6 +341,32 @@
 <span class="sd">    Basic attack for an entity</span>
 <span class="sd">    """</span>
 
+    <span class="c1"># casting</span>
+    <span class="n">cast_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">]</span>
+
+    <span class="c1"># targeting</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">]</span>
+    <span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span> <span class="o">=</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">TILE</span>
+    <span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># delivery</span>
+    <span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">projectile_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
 <div class="viewcode-block" id="BasicAttack._build_effects"><a class="viewcode-back" href="../../../../nqp/actions/skill.html#scripts.nqp.actions.skill.BasicAttack._build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DamageEffect</span><span class="p">]:</span>  <span class="c1"># type:ignore</span>
         <span class="sd">"""</span>
 <span class="sd">        Build the effects of this skill applying to a single entity.</span>
@@ -333,7 +392,31 @@
 <span class="sd">    Lunge skill for an entity</span>
 <span class="sd">    """</span>
 
-    <span class="c1"># FIXME - only applying damage when moving 2 spaces, anything less fails to apply.</span>
+    <span class="c1"># casting</span>
+    <span class="n">cast_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">]</span>
+
+    <span class="c1"># targeting</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">]</span>
+    <span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span> <span class="o">=</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">DIRECTION</span>
+    <span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># delivery</span>
+    <span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">projectile_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Lunge.__init__"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.skill.Lunge.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -427,6 +510,39 @@
 <span class="sd">    TarAndFeather skill for an entity</span>
 <span class="sd">    """</span>
 
+    <span class="c1"># casting</span>
+    <span class="n">cast_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">NO_BLOCKING_TILE</span><span class="p">]</span>
+
+    <span class="c1"># targeting</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">]</span>
+    <span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span> <span class="o">=</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">TILE</span>
+    <span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># delivery</span>
+    <span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">projectile_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileData</span><span class="p">]</span> <span class="o">=</span> <span class="n">ProjectileData</span><span class="p">(</span>
+        <span class="n">sprite_paths</span><span class="o">=</span><span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="n">idle</span><span class="o">=</span><span class="s2">"skills/projectile.png"</span><span class="p">,</span> <span class="n">move</span><span class="o">=</span><span class="s2">"skills/projectile.png"</span><span class="p">),</span>
+        <span class="n">speed</span><span class="o">=</span><span class="n">ProjectileSpeed</span><span class="o">.</span><span class="n">AVERAGE</span><span class="p">,</span>
+        <span class="n">travel_method</span><span class="o">=</span><span class="n">TravelMethod</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">,</span>
+        <span class="nb">range</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">terrain_collision</span><span class="o">=</span><span class="n">TerrainCollision</span><span class="o">.</span><span class="n">FIZZLE</span><span class="p">,</span>
+        <span class="n">expiry_type</span><span class="o">=</span><span class="n">ProjectileExpiry</span><span class="o">.</span><span class="n">FIZZLE</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
 <div class="viewcode-block" id="TarAndFeather.__init__"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.skill.TarAndFeather.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">affliction_name</span> <span class="o">=</span> <span class="s2">"flaming"</span>
@@ -496,6 +612,39 @@
 <span class="sd">    Simple projectile attack</span>
 <span class="sd">    """</span>
 
+    <span class="c1"># casting</span>
+    <span class="n">cast_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">NO_BLOCKING_TILE</span><span class="p">]</span>
+
+    <span class="c1"># targeting</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">]</span>
+    <span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span> <span class="o">=</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">TILE</span>
+    <span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># delivery</span>
+    <span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">projectile_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileData</span><span class="p">]</span> <span class="o">=</span> <span class="n">ProjectileData</span><span class="p">(</span>
+        <span class="n">sprite_paths</span><span class="o">=</span><span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="n">idle</span><span class="o">=</span><span class="s2">"skills/projectile.png"</span><span class="p">,</span> <span class="n">move</span><span class="o">=</span><span class="s2">"skills/projectile.png"</span><span class="p">),</span>
+        <span class="n">speed</span><span class="o">=</span><span class="n">ProjectileSpeed</span><span class="o">.</span><span class="n">SLOW</span><span class="p">,</span>
+        <span class="n">travel_method</span><span class="o">=</span><span class="n">TravelMethod</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">,</span>
+        <span class="nb">range</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">terrain_collision</span><span class="o">=</span><span class="n">TerrainCollision</span><span class="o">.</span><span class="n">FIZZLE</span><span class="p">,</span>
+        <span class="n">expiry_type</span><span class="o">=</span><span class="n">ProjectileExpiry</span><span class="o">.</span><span class="n">FIZZLE</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
 <div class="viewcode-block" id="Splash._build_effects"><a class="viewcode-back" href="../../../../nqp/actions/skill.html#scripts.nqp.actions.skill.Splash._build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DamageEffect</span><span class="p">]:</span>  <span class="c1"># type:ignore</span>
         <span class="sd">"""</span>
 <span class="sd">        Build the effects of this skill applying to a single entity.</span>
@@ -520,6 +669,32 @@
     <span class="sd">"""</span>
 <span class="sd">    Test the Delayed Skill functionality.</span>
 <span class="sd">    """</span>
+
+    <span class="c1"># casting</span>
+    <span class="n">cast_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">NO_BLOCKING_TILE</span><span class="p">]</span>
+
+    <span class="c1"># targeting</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">ANY</span><span class="p">]</span>
+    <span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span> <span class="o">=</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">TILE</span>
+    <span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
+        <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># delivery</span>
+    <span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">projectile_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span> <span class="o">=</span> <span class="n">DelayedSkillData</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Lightning._build_effects"><a class="viewcode-back" href="../../../../nqp/actions/skill.html#scripts.nqp.actions.skill.Lightning._build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DamageEffect</span><span class="p">]:</span>  <span class="c1"># type:ignore</span>
         <span class="n">damage_effect</span> <span class="o">=</span> <span class="n">DamageEffect</span><span class="p">(</span>

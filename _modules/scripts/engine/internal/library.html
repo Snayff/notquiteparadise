@@ -266,8 +266,6 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ActorData</span><span class="p">,</span>
     <span class="n">AfflictionData</span><span class="p">,</span>
-    <span class="n">BasePrimaryStatData</span><span class="p">,</span>
-    <span class="n">BaseSecondaryStatData</span><span class="p">,</span>
     <span class="n">BaseValueData</span><span class="p">,</span>
     <span class="n">DefaultValueData</span><span class="p">,</span>
     <span class="n">Dimensions</span><span class="p">,</span>
@@ -277,6 +275,7 @@
     <span class="n">HitTypeData</span><span class="p">,</span>
     <span class="n">MapData</span><span class="p">,</span>
     <span class="n">RoomConceptData</span><span class="p">,</span>
+    <span class="n">SecondaryStatModData</span><span class="p">,</span>
     <span class="n">SkillData</span><span class="p">,</span>
     <span class="n">TerrainData</span><span class="p">,</span>
     <span class="n">TraitData</span><span class="p">,</span>
@@ -292,8 +291,7 @@
     <span class="s2">"TRAITS"</span><span class="p">,</span>
     <span class="s2">"AFFLICTIONS"</span><span class="p">,</span>
     <span class="s2">"TERRAIN"</span><span class="p">,</span>
-    <span class="s2">"BASE_STATS_PRIMARY"</span><span class="p">,</span>
-    <span class="s2">"BASE_STATS_SECONDARY"</span><span class="p">,</span>
+    <span class="s2">"SECONDARY_STAT_MODS"</span><span class="p">,</span>
     <span class="s2">"GODS"</span><span class="p">,</span>
     <span class="s2">"SKILLS"</span><span class="p">,</span>
     <span class="s2">"MAPS"</span><span class="p">,</span>
@@ -316,20 +314,17 @@
 <span class="n">TRAITS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TraitData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">AFFLICTIONS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AfflictionData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">TERRAIN</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TerrainData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">BASE_STATS_PRIMARY</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BasePrimaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">BASE_STATS_SECONDARY</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BaseSecondaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">SECONDARY_STAT_MODS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SecondaryStatModData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">GODS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">GodData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">SKILLS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SkillData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">MAPS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MapData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">ROOMS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RoomConceptData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">ACTORS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ActorData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">INPUT_CONFIG</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">VIDEO_CONFIG</span><span class="p">:</span> <span class="n">VideoConfigData</span> <span class="o">=</span> <span class="n">VideoConfigData</span><span class="p">(</span><span class="n">Dimensions</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Dimensions</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">60</span><span class="p">)</span>  <span class="c1"># load empty object</span>
-<span class="n">GAME_CONFIG</span><span class="p">:</span> <span class="n">GameConfigData</span> <span class="o">=</span> <span class="n">GameConfigData</span><span class="p">(</span>
-    <span class="n">HitTypeData</span><span class="p">(</span><span class="n">HitInfoData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">HitInfoData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">HitInfoData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)),</span>
-    <span class="n">BaseValueData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-    <span class="n">DefaultValueData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
-<span class="p">)</span>  <span class="c1"># load empty object</span>
+
+<span class="c1"># load with defaults, overidden by refresh</span>
+<span class="n">VIDEO_CONFIG</span><span class="p">:</span> <span class="n">VideoConfigData</span> <span class="o">=</span> <span class="n">VideoConfigData</span><span class="p">()</span>
+<span class="n">GAME_CONFIG</span><span class="p">:</span> <span class="n">GameConfigData</span> <span class="o">=</span> <span class="n">GameConfigData</span><span class="p">()</span>
 
 <span class="c1"># build default list for input - needed in case json doesnt include all required values</span>
 <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="n">InputIntent</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -352,8 +347,7 @@
     <span class="n">_load_traits_data</span><span class="p">()</span>
     <span class="n">_load_affliction_data</span><span class="p">()</span>
     <span class="n">_load_terrain_data</span><span class="p">()</span>
-    <span class="n">_load_base_stat_primary_data</span><span class="p">()</span>
-    <span class="n">_load_base_stat_secondary_data</span><span class="p">()</span>
+    <span class="n">_load_secondary_stat_mod_data</span><span class="p">()</span>
     <span class="n">_load_gods_data</span><span class="p">()</span>
     <span class="n">_load_skills_data</span><span class="p">()</span>
     <span class="n">_load_map_data</span><span class="p">()</span>
@@ -394,20 +388,12 @@
     <span class="n">TRAITS</span> <span class="o">=</span> <span class="n">data</span>
 
 
-<span class="k">def</span> <span class="nf">_load_base_stat_primary_data</span><span class="p">():</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">DATA_PATH</span> <span class="o">/</span> <span class="s2">"game/base_stats_primary.json"</span><span class="p">))</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_load_secondary_stat_mod_data</span><span class="p">():</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">DATA_PATH</span> <span class="o">/</span> <span class="s2">"game/secondary_stat_mods.json"</span><span class="p">))</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="n">deserialise_dataclasses</span><span class="p">)</span>
 
-    <span class="k">global</span> <span class="n">BASE_STATS_PRIMARY</span>
-    <span class="n">BASE_STATS_PRIMARY</span> <span class="o">=</span> <span class="n">data</span>
-
-
-<span class="k">def</span> <span class="nf">_load_base_stat_secondary_data</span><span class="p">():</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">DATA_PATH</span> <span class="o">/</span> <span class="s2">"game/base_stats_secondary.json"</span><span class="p">))</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="n">deserialise_dataclasses</span><span class="p">)</span>
-
-    <span class="k">global</span> <span class="n">BASE_STATS_SECONDARY</span>
-    <span class="n">BASE_STATS_SECONDARY</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="k">global</span> <span class="n">SECONDARY_STAT_MODS</span>
+    <span class="n">SECONDARY_STAT_MODS</span> <span class="o">=</span> <span class="n">data</span>
 
 
 <span class="k">def</span> <span class="nf">_load_gods_data</span><span class="p">():</span>

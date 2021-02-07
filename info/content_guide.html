@@ -1,0 +1,829 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>Content Guide &#8212; NotQuiteParadise  documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/material.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Engine API" href="../engine/_engine.html" />
+    <link rel="prev" title="Developer Guide" href="developer_guide.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=deep-purple data-md-color-accent=deep-orange>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#info/content_guide" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="NotQuiteParadise  documentation"
+           class="md-header-nav__button md-logo">
+          
+            <i class="md-icon">&#xe869</i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">Not Quite Paradise</span>
+          <span class="md-header-nav__topic"> Content Guide </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/Snayff/notquiteparadise" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Not Quite Paradise
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">NotQuiteParadise  documentation</a></li>
+          <li class="md-tabs__item"><a href="_info.html" class="md-tabs__link">Info</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="NotQuiteParadise documentation" class="md-nav__button md-logo">
+      
+        <i class="md-icon">&#xe869</i>
+      
+    </a>
+    <a href="../index.html"
+       title="NotQuiteParadise documentation">Not Quite Paradise</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/Snayff/notquiteparadise" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Not Quite Paradise
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="_info.html" class="md-nav__link">Info</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="developer_guide.html" class="md-nav__link">Developer Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> Content Guide </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">Content Guide</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#info-content-guide--page-root" class="md-nav__link">Content Guide</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#playable-traits" class="md-nav__link">Playable Traits</a>
+        </li>
+        <li class="md-nav__item"><a href="#actors-npcs" class="md-nav__link">Actors (NPCs)</a>
+        </li>
+        <li class="md-nav__item"><a href="#terrain" class="md-nav__link">Terrain</a>
+        </li>
+        <li class="md-nav__item"><a href="#map-a-game-level" class="md-nav__link">Map (a game level)</a>
+        </li>
+        <li class="md-nav__item"><a href="#god" class="md-nav__link">God</a>
+        </li>
+        <li class="md-nav__item"><a href="#action" class="md-nav__link">Action</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#affliction" class="md-nav__link">Affliction</a>
+        </li>
+        <li class="md-nav__item"><a href="#skill" class="md-nav__link">Skill</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/info/content_guide.rst.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="#playable-traits" class="md-nav__link">Playable Traits</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#actors-npcs" class="md-nav__link">Actors (NPCs)</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#terrain" class="md-nav__link">Terrain</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#map-a-game-level" class="md-nav__link">Map (a game level)</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#god" class="md-nav__link">God</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#action" class="md-nav__link">Action</a>
+      
+    
+    </li></ul>
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../engine/_engine.html" class="md-nav__link">Engine API</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../nqp/_nqp.html" class="md-nav__link">NQP Documentation</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#info-content-guide--page-root" class="md-nav__link">Content Guide</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#playable-traits" class="md-nav__link">Playable Traits</a>
+        </li>
+        <li class="md-nav__item"><a href="#actors-npcs" class="md-nav__link">Actors (NPCs)</a>
+        </li>
+        <li class="md-nav__item"><a href="#terrain" class="md-nav__link">Terrain</a>
+        </li>
+        <li class="md-nav__item"><a href="#map-a-game-level" class="md-nav__link">Map (a game level)</a>
+        </li>
+        <li class="md-nav__item"><a href="#god" class="md-nav__link">God</a>
+        </li>
+        <li class="md-nav__item"><a href="#action" class="md-nav__link">Action</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#affliction" class="md-nav__link">Affliction</a>
+        </li>
+        <li class="md-nav__item"><a href="#skill" class="md-nav__link">Skill</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/info/content_guide.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  
+<h1 id="info-content-guide--page-root">Content Guide<a class="headerlink" href="#info-content-guide--page-root" title="Permalink to this headline">¶</a></h1>
+<p>Almost all data is held in the external json files, certainly as much as is possible without limiting gameplay diversity. This is a guide on how to add new content to the game, broken down by content type.</p>
+
+<h2 id="playable-traits">Playable Traits<a class="headerlink" href="#playable-traits" title="Permalink to this headline">¶</a></h2>
+<p>Create a new entry in the traits.json and ensure the <cite>group</cite> is not set to “npc”. That’s it!</p>
+<p>One thing to note is that the <cite>known_skills</cite> must match the class name of a <cite>Skill</cite> registered with the engine. See the Action section for more details.</p>
+<p>Example:
+.. code-block:: json</p>
+<blockquote>
+<div><dl>
+<dt>“dandy”: {</dt><dd><blockquote>
+<div><p>“__dataclass__”: “TraitData”,
+“group”:”savvy”,
+“bustle”: 2,
+“clout”: 2,
+“description”: “Lounging around the taverns of the world they can always be found one word away from an indignant splutter and a grasp for their sword.”,
+“exactitude”: -1,
+“name”: “irascible dandy”,
+“sight_range”: 5,
+“known_skills”: [</p>
+<blockquote>
+<div><p>“Lunge”,
+“TarAndFeather”</p>
+</div></blockquote>
+<p>],
+“permanent_afflictions”: [</p>
+<blockquote>
+<div><p>“none”</p>
+</div></blockquote>
+<p>],
+“skullduggery”: 1,
+“sprite_paths”: {</p>
+<blockquote>
+<div><p>“__dataclass__”: “TraitSpritePathsData”,
+“idle”: “actor/savvy/dandy_idle.png”,
+“attack”: “actor/savvy/dandy_attack.png”,
+“hit”: “actor/savvy/dandy_hit.png”,
+“dead”: “actor/savvy/dandy_dead.png”,
+“icon”: “actor/savvy/dandy_icon.png”,
+“move”: “actor/savvy/dandy_move.png”</p>
+</div></blockquote>
+<p>},
+“vigour”: -1</p>
+</div></blockquote>
+<p>},</p>
+</dd>
+</dl>
+</div></blockquote>
+
+
+<h2 id="actors-npcs">Actors (NPCs)<a class="headerlink" href="#actors-npcs" title="Permalink to this headline">¶</a></h2>
+<p>Create a new entry in traits.json and specify <cite>group</cite> as “npc”. Next, create an entry in actors.json and set the <cite>trait_names</cite> to include the key of the trait you just created. The <cite>behaviour_name</cite> must exactly match a <cite>Behaviour</cite> class registered with the engine. See the Action section for more information.</p>
+<p>Trait example:
+.. code-block:: json</p>
+<blockquote>
+<div><dl>
+<dt>“dandy”: {</dt><dd><blockquote>
+<div><p>“__dataclass__”: “TraitData”,
+“group”:”savvy”,
+“bustle”: 2,
+“clout”: 2,
+“description”: “Lounging around the taverns of the world they can always be found one word away from an indignant splutter and a grasp for their sword.”,
+“exactitude”: -1,
+“name”: “irascible dandy”,
+“sight_range”: 5,
+“known_skills”: [</p>
+<blockquote>
+<div><p>“Lunge”,
+“TarAndFeather”</p>
+</div></blockquote>
+<p>],
+“permanent_afflictions”: [</p>
+<blockquote>
+<div><p>“none”</p>
+</div></blockquote>
+<p>],
+“skullduggery”: 1,
+“sprite_paths”: {</p>
+<blockquote>
+<div><p>“__dataclass__”: “TraitSpritePathsData”,
+“idle”: “actor/savvy/dandy_idle.png”,
+“attack”: “actor/savvy/dandy_attack.png”,
+“hit”: “actor/savvy/dandy_hit.png”,
+“dead”: “actor/savvy/dandy_dead.png”,
+“icon”: “actor/savvy/dandy_icon.png”,
+“move”: “actor/savvy/dandy_move.png”</p>
+</div></blockquote>
+<p>},
+“vigour”: -1</p>
+</div></blockquote>
+<p>},</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Actor example:
+.. code-block:: json</p>
+<blockquote>
+<div><dl>
+<dt>“training_dummy”: {</dt><dd><blockquote>
+<div><p>“__dataclass__”: “ActorData”,
+“key”: “training_dummy”,
+“possible_names”: [</p>
+<blockquote>
+<div><p>“sally dummy”,
+“steve dummy”</p>
+</div></blockquote>
+<p>],
+“description”: “It just looks so darn punchable.”,
+“position_offsets”: [</p>
+<blockquote>
+<div><p>[0, 0]</p>
+</div></blockquote>
+<p>],
+“trait_names”: [</p>
+<blockquote>
+<div><p>“dummy”</p>
+</div></blockquote>
+<p>],
+“behaviour_name”: “SkipTurn”,
+“height”: “diminutive”</p>
+</div></blockquote>
+<p>},</p>
+</dd>
+</dl>
+</div></blockquote>
+
+
+<h2 id="terrain">Terrain<a class="headerlink" href="#terrain" title="Permalink to this headline">¶</a></h2>
+<p>Create a new entry in terrain.json.
+Example:
+.. code-block:: json</p>
+<blockquote>
+<div><dl>
+<dt>“bog”: {</dt><dd><p>“__dataclass__”: “TerrainData”,
+“blocks_movement”: false,
+“height”: “min”,
+“description”: “This is a bog. It slows entities down.”,
+“name”: “bog”,
+“sprite_paths”: {</p>
+<blockquote>
+<div><p>“__dataclass__”: “TraitSpritePathsData”,
+“idle”: “terrain/bog.png”</p>
+</div></blockquote>
+<p>},
+“position_offsets”: [</p>
+<blockquote>
+<div><p>[0, 0]</p>
+</div></blockquote>
+<p>],
+“light”: null,
+“reactions”: {</p>
+<blockquote>
+<div><dl>
+<dt>“proximity”: {</dt><dd><p>“__dataclass__”: “ReactionData”,
+“required_opinion”: null,
+“reaction”: {</p>
+<blockquote>
+<div><p>“__dataclass__”: “ApplyAfflictionEffectData”,
+“affliction_name”: “BoggedDown”,
+“duration”: 3</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+
+
+<h2 id="map-a-game-level">Map (a game level)<a class="headerlink" href="#map-a-game-level" title="Permalink to this headline">¶</a></h2>
+<p>Create the rooms you want to include in the map within rooms.json. Next, create an entry for the map in maps.json.
+Room example:
+.. code-block:: json</p>
+<blockquote>
+<div><dl>
+<dt>“combat”: {</dt><dd><p>“name”: “Combat Room”,
+“key”: “combat”,
+“__dataclass__”: “RoomConceptData”,
+“design”: “square”,
+“min_actors”: 1,
+“max_actors”: 3,
+“min_width”: 8,
+“min_height”: 8,
+“max_width”: 10,
+“max_height”: 10,
+“chance_of_spawning_wall”: 0.45,
+“max_neighbouring_walls_in_room”: 4,
+“sprite_paths”: {</p>
+<blockquote>
+<div><p>“floor”: “world/floor.png”,
+“wall”: “world/wall.png”</p>
+</div></blockquote>
+<p>},
+“actors”: {</p>
+<blockquote>
+<div><p>“training_dummy”: 0.2,
+“crocturion”: 0.8</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>Map example:
+.. code-block:: json</p>
+<blockquote>
+<div><dl>
+<dt>“cave”: {</dt><dd><p>“name”: “cave”,
+“key”: “cave”,
+“__dataclass__”: “MapData”,
+“min_rooms”: 10,
+“max_rooms”: 30,
+“max_tunnel_length”: 20,
+“min_path_distance_for_shortcut”: 5,
+“width”: 40,
+“height”: 40,
+“rooms”: {</p>
+<blockquote>
+<div><p>“combat”: 0.2,
+“empty”: 0.1</p>
+</div></blockquote>
+<p>},
+“sprite_paths”: {</p>
+<blockquote>
+<div><p>“wall”: “world/wall.png”,
+“floor”: “world/floor.png”</p>
+</div></blockquote>
+<p>},
+“max_room_entrances”: 2,
+“extra_entrance_chance”: 10,
+“chance_of_tunnel_winding”: 10</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+
+
+<h2 id="god">God<a class="headerlink" href="#god" title="Permalink to this headline">¶</a></h2>
+<p>Create an entry in gods.json. The attitudes and reactions blocks can contain any number of entries.
+Example:
+.. code-block:: json</p>
+<blockquote>
+<div><dl>
+<dt>“the_small_gods”: {</dt><dd><p>“__dataclass__”: “GodData”,
+“name”: “the_small_gods”,
+“description”: “Hordes of small gods banded together to ensure they were finally taken seriously.”,
+“attitudes”: {</p>
+<blockquote>
+<div><p>“deal_damage”:  -5</p>
+</div></blockquote>
+<p>},
+“reactions”: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“deal_damage”: {</dt><dd><p>“__dataclass__”: “ReactionData”,
+“required_opinion”: -80,
+“reaction”: “BasicAttack”,
+“chance”: 10</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+
+
+<h2 id="action">Action<a class="headerlink" href="#action" title="Permalink to this headline">¶</a></h2>
+<p>As a type of Action, things are a little more involved here. In addition to the json entry there must also be a python class registered with the engine using <cite>register_action</cite> from scripts.engine.internal.action. The key in the json must also match the class name exactly.</p>
+
+<h3 id="affliction">Affliction<a class="headerlink" href="#affliction" title="Permalink to this headline">¶</a></h3>
+<p>Example json:
+.. code-block:: json</p>
+<blockquote>
+<div><dl>
+<dt>“BoggedDown”: {</dt><dd><p>“__dataclass__”: “AfflictionData”,
+“category”: “bane”,
+“description”: “It weakens mundane defence and makes you a little bit slower.”,
+“icon_path”: “skills/root.png”,
+“name”: “bogged down”,
+“identity_tags”: [</p>
+<blockquote>
+<div><p>“affect_stat”</p>
+</div></blockquote>
+<p>],
+“triggers”: [</p>
+<blockquote>
+<div><p>“movement”</p>
+</div></blockquote>
+<p>]</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>Example class:
+.. code-block:: python</p>
+<blockquote>
+<div><dl>
+<dt>class BoggedDown(Affliction):</dt><dd><p>“””
+A demo of being stuck in the mud - it`ll ground you
+“””</p>
+<p># targeting
+target_tags: List[TileTagType] = [TileTag.OTHER_ENTITY]
+shape: ShapeType = Shape.TARGET
+shape_size: int = 1</p>
+<p>def _build_effects(self, entity: EntityID, potency: float = 1.0) -&gt; List[AffectStatEffect]:  # type: ignore</p>
+<blockquote>
+<div><dl class="simple">
+<dt>affect_stat_effect = AffectStatEffect(</dt><dd><p>origin=self.origin,
+cause_name=self.name,
+success_effects=[],
+failure_effects=[],
+target=self.affected_entity,
+stat_to_target=PrimaryStat.BUSTLE,
+affect_amount=2,</p>
+</dd>
+</dl>
+<p>)</p>
+<p>return [affect_stat_effect]</p>
+</div></blockquote>
+</dd>
+</dl>
+</div></blockquote>
+
+
+<h3 id="skill">Skill<a class="headerlink" href="#skill" title="Permalink to this headline">¶</a></h3>
+<p>Example json:
+.. code-block:: json</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“Lightning”: {</dt><dd><p>“__dataclass__”: “SkillData”,
+“name”: “Call Lightning”,
+“description”: “Shocking.”,
+“cooldown”: 1,
+“icon_path”: “”,
+“resource_cost”: 10,
+“resource_type”: “stamina”,
+“time_cost”: 35</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>Example class:
+.. code-block:: python</p>
+<blockquote>
+<div><p>class Lightning(Skill):
+“””
+A demo of lightning - it`s shocking!
+“””
+# casting
+cast_tags: List[TileTagType] = [TileTag.NO_BLOCKING_TILE]</p>
+<p># targeting
+range: int = 3
+target_tags: List[TileTagType] = [TileTag.ANY]
+targeting_method: TargetingMethodType = TargetingMethod.TILE
+target_directions: List[DirectionType] = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT,</p>
+<blockquote>
+<div><p>Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT]</p>
+</div></blockquote>
+<p>shape: ShapeType = Shape.TARGET
+shape_size: int = 1</p>
+<p># delivery
+uses_projectile: bool = False
+projectile_data: Optional[ProjectileData] = None
+is_delayed: bool = True
+delayed_skill_data: Optional[DelayedSkillData] = DelayedSkillData(</p>
+<blockquote>
+<div><p>duration=3</p>
+</div></blockquote>
+<p>)</p>
+<dl>
+<dt>def _build_effects(self, entity: EntityID, potency: float = 1.0) -&gt; List[DamageEffect]:</dt><dd><dl class="simple">
+<dt>damage_effect = DamageEffect(</dt><dd><p>origin=self.user,
+success_effects=[],
+failure_effects=[],
+target=entity,
+stat_to_target=PrimaryStat.VIGOUR,
+accuracy=library.GAME_CONFIG.base_values.accuracy + 20,
+damage=int(library.GAME_CONFIG.base_values.damage * potency),
+damage_type=DamageType.MUNDANE,
+mod_stat=PrimaryStat.CLOUT,
+mod_amount=0.1,</p>
+</dd>
+</dl>
+<p>)
+return [damage_effect]</p>
+</dd>
+</dl>
+</div></blockquote>
+
+
+
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="developer_guide.html" title="Developer Guide"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> Developer Guide </span>
+              </div>
+            </a>
+          
+          
+            <a href="../engine/_engine.html" title="Engine API"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> Engine API </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2019-2020, Josh Snaith.
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>
