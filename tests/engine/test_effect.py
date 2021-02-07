@@ -270,15 +270,18 @@ def test_affect_stat_effect(
     )
 
     stats = world.get_entitys_component(entity, CombatStats)
-    start_stat = getattr(stats, stat_to_target)
+    start_mod = stats._get_mod_value(stat_to_target)  # get mod amount
     success = effect.evaluate()[0]
-    end_stat = getattr(stats, stat_to_target)
+    end_mod = stats._get_mod_value(stat_to_target)
 
     if success:
+        assert start_mod + affect_amount == end_mod
+
         # N.B. should never be less than 1
-        assert max(start_stat + affect_amount, 1) == end_stat
+        assert getattr(stats, stat_to_target) >= 1
     else:
-        assert start_stat == end_stat
+        # no change
+        assert start_mod == end_mod
 
 
 _affliction_names = []

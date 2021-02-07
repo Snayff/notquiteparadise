@@ -444,7 +444,7 @@ class Knowledge(NQPComponent):
 
         # TODO - make vars private if we should use methods
         self.skill_order: List[str] = skill_order
-        self.cooldowns: Dict[str, int] = cooldowns  # TODO - can this be folded into skills?
+        self.cooldowns: Dict[str, int] = cooldowns
         self.skill_names: List[str] = []  # TODO - do we even need this anymore?
         self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
 
