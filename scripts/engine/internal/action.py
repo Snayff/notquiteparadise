@@ -39,7 +39,6 @@ class Action(ABC):
     """
 
     name: str  # name of the class
-    f_name: str  # friendly name, can include spaces, slashes etc.
     description: str
     icon_path: str
     target_tags: List[TileTagType]
@@ -109,7 +108,6 @@ class Skill(Action):
 
         cls.data = library.SKILLS[cls.__name__]
         cls.name = cls.__name__
-        cls.f_name = cls.data.name
         cls.cast_tags = cls.data.cast_tags
         cls.target_tags = cls.data.target_tags
         cls.description = cls.data.description
@@ -240,7 +238,6 @@ class Affliction(Action):
 
         cls.data = library.AFFLICTIONS[cls.__name__]
         cls.name = cls.__name__
-        cls.f_name = cls.data.name
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.category = cls.data.category
