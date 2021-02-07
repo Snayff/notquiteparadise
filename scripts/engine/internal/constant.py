@@ -11,7 +11,7 @@ import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.158.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.162.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 DEBUG_START = False  # Whether to start directly in debug map
 
 MAX_SKILLS = 6
@@ -348,7 +348,7 @@ class TargetingMethod(SimpleNamespace):
 
     AUTO = TargetingMethodType("auto")
     TILE = TargetingMethodType("tile")
-    LINE_OF_SIGHT = TargetingMethodType("line")
+    DIRECTION = TargetingMethodType("direction")
 
 
 class Shape(SimpleNamespace):

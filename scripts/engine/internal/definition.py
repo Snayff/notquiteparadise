@@ -24,6 +24,7 @@ from scripts.engine.internal.constant import (
     RenderLayer,
     Resource,
     ResourceType,
+    SecondaryStat,
     SecondaryStatType,
     Shape,
     ShapeType,
@@ -129,37 +130,13 @@ class TraitData:
 
 @register_dataclass_with_json
 @dataclass
-class BaseStatData:
-    """
-    Data class to contain primary and secondary stats
-    """
-
-    primary: Dict[str, BasePrimaryStatData] = field(default_factory=dict)
-    secondary: Dict[str, BaseSecondaryStatData] = field(default_factory=dict)
-
-
-@register_dataclass_with_json
-@dataclass
-class BasePrimaryStatData:
-    """
-    Data class for primary  stats
-    """
-
-    name: str = field(default="none")
-    primary_stat_type: Optional[PrimaryStatType] = None
-    base_value: int = 0
-
-
-@register_dataclass_with_json
-@dataclass
-class BaseSecondaryStatData:
+class SecondaryStatModData:
     """
     Data class for secondary stats
     """
 
-    name: str = field(default="none")
-    secondary_stat_type: Optional[SecondaryStatType] = None
-    base_value: int = 0
+    name: str = "none"
+    secondary_stat_type: SecondaryStatType = SecondaryStat.MAX_HEALTH
     vigour_mod: int = 0
     clout_mod: int = 0
     skullduggery_mod: int = 0
@@ -409,9 +386,6 @@ class AfflictionData:
     description: str = "none"
     icon_path: str = "none"
     category: AfflictionCategoryType = AfflictionCategory.BANE
-    shape: ShapeType = Shape.TARGET
-    shape_size: int = 1
-    target_tags: List[TileTagType] = field(default_factory=list)
     identity_tags: List[EffectTypeType] = field(default_factory=list)
     triggers: List[ReactionTriggerType] = field(default_factory=list)
 
@@ -546,51 +520,64 @@ class AlterTerrainEffectData(EffectData):
 @register_dataclass_with_json
 @dataclass
 class Dimensions:
-    height: int
-    width: int
+    height: int = 0
+    width: int = 0
 
 
 @register_dataclass_with_json
 @dataclass
 class VideoConfigData:
-    base_window: Dimensions
-    desired_window: Dimensions
-    fps_limit: int
+    base_window: Dimensions = field(default_factory=Dimensions)
+    desired_window: Dimensions = field(default_factory=Dimensions)
+    fps_limit: int = 60
 
 
 @register_dataclass_with_json
 @dataclass
 class HitInfoData:
-    value: int
-    modifier: float
+    value: int = 0
+    modifier: float = 0.0
 
 
 @register_dataclass_with_json
 @dataclass
 class HitTypeData:
-    graze: HitInfoData
-    hit: HitInfoData
-    crit: HitInfoData
+    graze: HitInfoData = field(default_factory=HitInfoData)
+    hit: HitInfoData = field(default_factory=HitInfoData)
+    crit: HitInfoData = field(default_factory=HitInfoData)
 
 
 @register_dataclass_with_json
 @dataclass
 class BaseValueData:
-    move_cost: int
-    accuracy: int
-    damage: int
+    move_cost: int = 0
+    accuracy: int = 0
+    damage: int = 0
+    bustle: int = 0
+    clout: int = 0
+    exactitude: int = 0
+    skullduggery: int = 0
+    vigour: int = 0
+    max_health: int = 0
+    max_stamina: int = 0
+    resist_astral: int = 0
+    resist_burn: int = 0
+    resist_chemical: int = 0
+    resist_cold: int = 0
+    resist_mundane: int = 0
+    rush: int = 0
 
 
 @register_dataclass_with_json
 @dataclass
 class DefaultValueData:
-    time_per_round: int
-    reduced_effectiveness_multi_tile_modifier: float
+    time_per_round: int = 0
+    reduced_effectiveness_multi_tile_modifier: float = 0.0
 
 
 @register_dataclass_with_json
 @dataclass
 class GameConfigData:
-    hit_types: HitTypeData
-    base_values: BaseValueData
-    default_values: DefaultValueData
+    hit_types: HitTypeData = field(default_factory=HitTypeData)
+    base_values: BaseValueData = field(default_factory=BaseValueData)
+    default_values: DefaultValueData = field(default_factory=DefaultValueData)

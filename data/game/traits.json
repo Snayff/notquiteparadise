@@ -140,7 +140,7 @@
         "group":"npc",
         "bustle": 1,
         "clout": 1,
-        "description": "It just looks so darn punchable.",
+        "description": "",
         "exactitude": 1,
         "name": "dummy",
         "sight_range": 1,
@@ -167,12 +167,11 @@
         "group":"npc",
         "bustle": 1,
         "clout": 1,
-        "description": "Crocodilic",
+        "description": "",
         "exactitude": 1,
         "name": "crocturion",
         "sight_range": 1,
         "known_skills": [
-            "Move",
             "BasicAttack",
             "Splash"
         ],

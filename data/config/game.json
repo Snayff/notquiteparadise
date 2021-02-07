@@ -22,8 +22,20 @@
         "__dataclass__": "BaseValueData",
         "move_cost": 20,
         "accuracy": 100,
-        "damage": 5
-        },
+        "damage": 5,
+        "bustle": 5,
+        "clout": 5,
+        "exactitude": 5,
+        "skullduggery": 5,
+        "max_health": 200,
+        "max_stamina": 500,
+        "resist_astral": 5,
+        "resist_burn": 5,
+        "resist_chemical": 5,
+        "resist_cold": 5,
+        "resist_mundane": 5,
+        "rush": 100
+    },
     "default_values": {
         "__dataclass__": "DefaultValueData",
         "time_per_round": 20,

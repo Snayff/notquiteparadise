@@ -225,7 +225,7 @@ def reduce_affliction_durations():
             # handle expiry
             if affliction.duration <= 0:
                 world.remove_affliction(entity, affliction)
-                logging.debug(f"Removed {affliction.f_name} from '{world.get_name(entity)}'.")
+                logging.debug(f"Removed {affliction.name} from '{world.get_name(entity)}'.")
 
 
 def reduce_lifespan_durations():

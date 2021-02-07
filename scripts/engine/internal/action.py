@@ -38,14 +38,18 @@ class Action(ABC):
     Action taken during the game. A container for Effects.
     """
 
+    # details to be overwritten by external data
     name: str  # name of the class
-    f_name: str  # friendly name, can include spaces, slashes etc.
     description: str
     icon_path: str
+
+    # details to be overwritten in subclass
     target_tags: List[TileTagType]
-    effects: List[Effect]
     shape: ShapeType
     shape_size: int
+
+    # set by instance
+    effects: List[Effect]
 
     @abstractmethod
     def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
@@ -65,19 +69,19 @@ class Skill(Action):
     the user and target.
     """
 
-    # to be overwritten in subclass, including being set by external data
+    # core data, to be overwritten by external data
     resource_type: ResourceType
     resource_cost: int
     time_cost: int
     base_cooldown: int
-    targeting_method: TargetingMethodType  # Tile, Direction, Auto
 
-    # targeting details
+    # targeting details, to be overwritten in subclass
+    targeting_method: TargetingMethodType  # Tile, Direction, Auto
     cast_tags: List[TileTagType]
     target_directions: List[DirectionType]  # needed for Direction
     range: int  # needed for Tile, Auto
 
-    # delivery methods
+    # delivery methods, to be overwritten in subclass
     uses_projectile: bool  # usable by for Tile, Direction, Auto
     projectile_data: Optional[ProjectileData]
     is_delayed: bool  # usable by Tile, Auto  - Doesnt make sense for Direction to have a delayed cast.
@@ -109,24 +113,12 @@ class Skill(Action):
 
         cls.data = library.SKILLS[cls.__name__]
         cls.name = cls.__name__
-        cls.f_name = cls.data.name
-        cls.cast_tags = cls.data.cast_tags
-        cls.target_tags = cls.data.target_tags
         cls.description = cls.data.description
+        cls.base_cooldown = cls.data.cooldown
+        cls.time_cost = cls.data.time_cost
         cls.icon_path = cls.data.icon_path
         cls.resource_type = cls.data.resource_type
         cls.resource_cost = cls.data.resource_cost
-        cls.range = cls.data.range
-        cls.time_cost = cls.data.time_cost
-        cls.base_cooldown = cls.data.cooldown
-        cls.targeting_method = cls.data.targeting_method
-        cls.target_directions = cls.data.target_directions
-        cls.shape = cls.data.shape
-        cls.shape_size = cls.data.shape_size
-        cls.uses_projectile = cls.data.uses_projectile
-        cls.projectile_data = cls.data.projectile_data
-        cls.is_delayed = cls.data.is_delayed
-        cls.delayed_skill_data = cls.data.delayed_skill_data
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
@@ -240,13 +232,9 @@ class Affliction(Action):
 
         cls.data = library.AFFLICTIONS[cls.__name__]
         cls.name = cls.__name__
-        cls.f_name = cls.data.name
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.category = cls.data.category
-        cls.shape = cls.data.shape
-        cls.shape_size = cls.data.shape_size
-        cls.target_tags = cls.data.target_tags
         cls.identity_tags = cls.data.identity_tags
         cls.triggers = cls.data.triggers
 

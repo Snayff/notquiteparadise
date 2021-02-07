@@ -169,6 +169,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
 
     # combat stats
     base_stats = {}
+    base_values = library.GAME_CONFIG.base_values
     for primary_stat in [
         PrimaryStat.VIGOUR,
         PrimaryStat.CLOUT,
@@ -177,7 +178,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         PrimaryStat.EXACTITUDE,
     ]:
         # apply primary base value
-        value = library.BASE_STATS_PRIMARY[primary_stat].base_value
+        value = getattr(base_values, primary_stat)
 
         # loop traits and get values for stats
         for name in actor_data.trait_names:
@@ -185,6 +186,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
             value += getattr(data, primary_stat)
         base_stats[primary_stat] = value
     stats = CombatStats(**base_stats)  # type: ignore
+
     # apply base values to secondary
     for secondary_stat in [
         SecondaryStat.MAX_HEALTH,
@@ -197,7 +199,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
         SecondaryStat.RESIST_MUNDANE,
         SecondaryStat.RUSH,
     ]:
-        stats.amend_base_value(secondary_stat, library.BASE_STATS_SECONDARY[secondary_stat].base_value)
+        stats.amend_base_value(secondary_stat, getattr(library.GAME_CONFIG.base_values, secondary_stat))
     components.append(stats)  # type: ignore
 
     # sight range
