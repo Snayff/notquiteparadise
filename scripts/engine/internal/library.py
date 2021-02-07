@@ -12,7 +12,6 @@ from scripts.engine.internal.constant import DATA_PATH, InputIntent
 from scripts.engine.internal.definition import (
     ActorData,
     AfflictionData,
-    SecondaryStatModData,
     BaseValueData,
     DefaultValueData,
     Dimensions,
@@ -22,6 +21,7 @@ from scripts.engine.internal.definition import (
     HitTypeData,
     MapData,
     RoomConceptData,
+    SecondaryStatModData,
     SkillData,
     TerrainData,
     TraitData,

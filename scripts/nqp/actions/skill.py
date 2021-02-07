@@ -10,11 +10,22 @@ from scripts.engine.core.component import Position
 from scripts.engine.core.effect import AffectCooldownEffect, ApplyAfflictionEffect, DamageEffect, Effect, MoveSelfEffect
 from scripts.engine.internal import library
 from scripts.engine.internal.action import Skill
-from scripts.engine.internal.constant import DamageType, Direction, DirectionType, PrimaryStat, ProjectileExpiry, \
-    ProjectileSpeed, Shape, \
-    ShapeType, \
-    TargetingMethod, \
-    TargetingMethodType, TerrainCollision, TileTag, TileTagType, TravelMethod
+from scripts.engine.internal.constant import (
+    DamageType,
+    Direction,
+    DirectionType,
+    PrimaryStat,
+    ProjectileExpiry,
+    ProjectileSpeed,
+    Shape,
+    ShapeType,
+    TargetingMethod,
+    TargetingMethodType,
+    TerrainCollision,
+    TileTag,
+    TileTagType,
+    TravelMethod,
+)
 from scripts.engine.internal.definition import DelayedSkillData, ProjectileData, TraitSpritePathsData
 from scripts.engine.world_objects.tile import Tile
 
@@ -26,6 +37,7 @@ class Move(Skill):
     """
     Basic move for an entity.
     """
+
     # casting
     cast_tags: List[TileTagType] = [TileTag.NO_BLOCKING_TILE]
 
@@ -42,7 +54,7 @@ class Move(Skill):
     projectile_data: Optional[ProjectileData] = None
     is_delayed: bool = False
     delayed_skill_data: Optional[DelayedSkillData] = None
-    
+
     def __init__(self, user: EntityID, target_tile: Tile, direction):
         """
         Move needs an init as it overrides the target tile
@@ -82,8 +94,16 @@ class BasicAttack(Skill):
     range: int = 1
     target_tags: List[TileTagType] = [TileTag.ACTOR]
     targeting_method: TargetingMethodType = TargetingMethod.TILE
-    target_directions: List[DirectionType] = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT,
-        Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT]
+    target_directions: List[DirectionType] = [
+        Direction.UP,
+        Direction.DOWN,
+        Direction.LEFT,
+        Direction.RIGHT,
+        Direction.UP_LEFT,
+        Direction.UP_RIGHT,
+        Direction.DOWN_LEFT,
+        Direction.DOWN_RIGHT,
+    ]
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
 
@@ -92,7 +112,6 @@ class BasicAttack(Skill):
     projectile_data: Optional[ProjectileData] = None
     is_delayed: bool = False
     delayed_skill_data: Optional[DelayedSkillData] = None
-
 
     def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
         """
@@ -118,24 +137,32 @@ class Lunge(Skill):
     """
     Lunge skill for an entity
     """
+
     # casting
     cast_tags: List[TileTagType] = [TileTag.ACTOR]
-    
+
     # targeting
     range: int = 1
     target_tags: List[TileTagType] = [TileTag.ACTOR]
     targeting_method: TargetingMethodType = TargetingMethod.DIRECTION
-    target_directions: List[DirectionType] = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT,
-        Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT]
+    target_directions: List[DirectionType] = [
+        Direction.UP,
+        Direction.DOWN,
+        Direction.LEFT,
+        Direction.RIGHT,
+        Direction.UP_LEFT,
+        Direction.UP_RIGHT,
+        Direction.DOWN_LEFT,
+        Direction.DOWN_RIGHT,
+    ]
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
-    
+
     # delivery
     uses_projectile: bool = False
     projectile_data: Optional[ProjectileData] = None
     is_delayed: bool = False
     delayed_skill_data: Optional[DelayedSkillData] = None
-
 
     def __init__(self, user: EntityID, tile: Tile, direction: DirectionType):
         """
@@ -236,8 +263,16 @@ class TarAndFeather(Skill):
     range: int = 5
     target_tags: List[TileTagType] = [TileTag.ACTOR]
     targeting_method: TargetingMethodType = TargetingMethod.TILE
-    target_directions: List[DirectionType] = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT,
-        Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT]
+    target_directions: List[DirectionType] = [
+        Direction.UP,
+        Direction.DOWN,
+        Direction.LEFT,
+        Direction.RIGHT,
+        Direction.UP_LEFT,
+        Direction.UP_RIGHT,
+        Direction.DOWN_LEFT,
+        Direction.DOWN_RIGHT,
+    ]
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
 
@@ -249,11 +284,10 @@ class TarAndFeather(Skill):
         travel_method=TravelMethod.STANDARD,
         range=5,
         terrain_collision=TerrainCollision.FIZZLE,
-        expiry_type=ProjectileExpiry.FIZZLE
-        )
+        expiry_type=ProjectileExpiry.FIZZLE,
+    )
     is_delayed: bool = False
     delayed_skill_data: Optional[DelayedSkillData] = None
-    
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         super().__init__(user, target_tile, direction)
@@ -331,8 +365,16 @@ class Splash(Skill):
     range: int = 3
     target_tags: List[TileTagType] = [TileTag.OTHER_ENTITY]
     targeting_method: TargetingMethodType = TargetingMethod.TILE
-    target_directions: List[DirectionType] = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT,
-        Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT]
+    target_directions: List[DirectionType] = [
+        Direction.UP,
+        Direction.DOWN,
+        Direction.LEFT,
+        Direction.RIGHT,
+        Direction.UP_LEFT,
+        Direction.UP_RIGHT,
+        Direction.DOWN_LEFT,
+        Direction.DOWN_RIGHT,
+    ]
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
 
@@ -344,7 +386,7 @@ class Splash(Skill):
         travel_method=TravelMethod.STANDARD,
         range=3,
         terrain_collision=TerrainCollision.FIZZLE,
-        expiry_type=ProjectileExpiry.FIZZLE
+        expiry_type=ProjectileExpiry.FIZZLE,
     )
     is_delayed: bool = False
     delayed_skill_data: Optional[DelayedSkillData] = None
@@ -373,6 +415,7 @@ class Lightning(Skill):
     """
     Test the Delayed Skill functionality.
     """
+
     # casting
     cast_tags: List[TileTagType] = [TileTag.NO_BLOCKING_TILE]
 
@@ -380,8 +423,16 @@ class Lightning(Skill):
     range: int = 3
     target_tags: List[TileTagType] = [TileTag.ANY]
     targeting_method: TargetingMethodType = TargetingMethod.TILE
-    target_directions: List[DirectionType] = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT,
-        Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT]
+    target_directions: List[DirectionType] = [
+        Direction.UP,
+        Direction.DOWN,
+        Direction.LEFT,
+        Direction.RIGHT,
+        Direction.UP_LEFT,
+        Direction.UP_RIGHT,
+        Direction.DOWN_LEFT,
+        Direction.DOWN_RIGHT,
+    ]
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
 
@@ -389,9 +440,7 @@ class Lightning(Skill):
     uses_projectile: bool = False
     projectile_data: Optional[ProjectileData] = None
     is_delayed: bool = True
-    delayed_skill_data: Optional[DelayedSkillData] = DelayedSkillData(
-        duration=3
-    )
+    delayed_skill_data: Optional[DelayedSkillData] = DelayedSkillData(duration=3)
 
     def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
         damage_effect = DamageEffect(
