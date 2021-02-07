@@ -1,4 +1,19 @@
 {
+    "dummy_load_barlow": {
+        "font": {
+            "name": "barlow",
+            "size": "16",
+            "regular_path": "assets/fonts/Barlow-Light.otf"
+        }
+    },
+    "dummy_load_cozette": {
+        "font": {
+            "name": "cozette",
+            "size": "16",
+            "regular_path": "assets/fonts/cozette_bitmap.ttf"
+        }
+    },
+    
     "defaults": {
         "colours": {
             "normal_bg": "#372C47",
