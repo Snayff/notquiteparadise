@@ -1,7 +1,6 @@
 {
     "accuracy": {
-        "__dataclass__": "BaseSecondaryStatData",
-        "base_value": 5,
+        "__dataclass__": "SecondaryStatModData",
         "bustle_mod": 0,
         "clout_mod": 0,
         "exactitude_mod": 2,
@@ -11,8 +10,7 @@
         "vigour_mod": 0
     },
     "max_health": {
-        "__dataclass__": "BaseSecondaryStatData",
-        "base_value": 200,
+        "__dataclass__": "SecondaryStatModData",
         "bustle_mod": 0,
         "clout_mod": 0,
         "exactitude_mod": 0,
@@ -22,8 +20,7 @@
         "vigour_mod": 2
     },
     "max_stamina": {
-        "__dataclass__": "BaseSecondaryStatData",
-        "base_value": 500,
+        "__dataclass__": "SecondaryStatModData",
         "bustle_mod": 0,
         "clout_mod": 0,
         "exactitude_mod": 0,
@@ -33,8 +30,7 @@
         "vigour_mod": 0
     },
     "resist_astral": {
-        "__dataclass__": "BaseSecondaryStatData",
-        "base_value": 5,
+        "__dataclass__": "SecondaryStatModData",
         "bustle_mod": 0,
         "clout_mod": 0,
         "exactitude_mod": 0,
@@ -44,8 +40,7 @@
         "vigour_mod": 0
     },
     "resist_burn": {
-        "__dataclass__": "BaseSecondaryStatData",
-        "base_value": 5,
+        "__dataclass__": "SecondaryStatModData",
         "bustle_mod": 0,
         "clout_mod": 0,
         "exactitude_mod": 0,
@@ -55,8 +50,7 @@
         "vigour_mod": 0
     },
     "resist_chemical": {
-        "__dataclass__": "BaseSecondaryStatData",
-        "base_value": 5,
+        "__dataclass__": "SecondaryStatModData",
         "bustle_mod": 0,
         "clout_mod": 0,
         "exactitude_mod": 0,
@@ -66,8 +60,7 @@
         "vigour_mod": 0
     },
     "resist_cold": {
-        "__dataclass__": "BaseSecondaryStatData",
-        "base_value": 5,
+        "__dataclass__": "SecondaryStatModData",
         "bustle_mod": 0,
         "clout_mod": 0,
         "exactitude_mod": 0,
@@ -77,8 +70,7 @@
         "vigour_mod": 0
     },
     "resist_mundane": {
-        "__dataclass__": "BaseSecondaryStatData",
-        "base_value": 5,
+        "__dataclass__": "SecondaryStatModData",
         "bustle_mod": 0,
         "clout_mod": 0,
         "exactitude_mod": 0,
@@ -88,8 +80,7 @@
         "vigour_mod": 0
     },
     "rush": {
-        "__dataclass__": "BaseSecondaryStatData",
-        "base_value": 100,
+        "__dataclass__": "SecondaryStatModData",
         "bustle_mod": 5,
         "clout_mod": -2,
         "exactitude_mod": 0,

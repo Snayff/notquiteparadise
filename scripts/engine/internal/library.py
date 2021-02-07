@@ -12,8 +12,7 @@ from scripts.engine.internal.constant import DATA_PATH, InputIntent
 from scripts.engine.internal.definition import (
     ActorData,
     AfflictionData,
-    BasePrimaryStatData,
-    BaseSecondaryStatData,
+    SecondaryStatModData,
     BaseValueData,
     DefaultValueData,
     Dimensions,
@@ -38,8 +37,7 @@ __all__ = [
     "TRAITS",
     "AFFLICTIONS",
     "TERRAIN",
-    "BASE_STATS_PRIMARY",
-    "BASE_STATS_SECONDARY",
+    "SECONDARY_STAT_MODS",
     "GODS",
     "SKILLS",
     "MAPS",
@@ -62,20 +60,17 @@ __all__ = [
 TRAITS: Dict[str, TraitData] = {}
 AFFLICTIONS: Dict[str, AfflictionData] = {}
 TERRAIN: Dict[str, TerrainData] = {}
-BASE_STATS_PRIMARY: Dict[str, BasePrimaryStatData] = {}
-BASE_STATS_SECONDARY: Dict[str, BaseSecondaryStatData] = {}
+SECONDARY_STAT_MODS: Dict[str, SecondaryStatModData] = {}
 GODS: Dict[str, GodData] = {}
 SKILLS: Dict[str, SkillData] = {}
 MAPS: Dict[str, MapData] = {}
 ROOMS: Dict[str, RoomConceptData] = {}
 ACTORS: Dict[str, ActorData] = {}
 INPUT_CONFIG: Dict[str, List[str]] = {}
-VIDEO_CONFIG: VideoConfigData = VideoConfigData(Dimensions(1, 1), Dimensions(1, 1), 60)  # load empty object
-GAME_CONFIG: GameConfigData = GameConfigData(
-    HitTypeData(HitInfoData(0, 0.0), HitInfoData(0, 0.0), HitInfoData(0, 0.0)),
-    BaseValueData(0, 0, 0),
-    DefaultValueData(0, 0.0),
-)  # load empty object
+
+# load with defaults, overidden by refresh
+VIDEO_CONFIG: VideoConfigData = VideoConfigData()
+GAME_CONFIG: GameConfigData = GameConfigData()
 
 # build default list for input - needed in case json doesnt include all required values
 for member in InputIntent.__dict__.keys():
@@ -98,8 +93,7 @@ def refresh_library():
     _load_traits_data()
     _load_affliction_data()
     _load_terrain_data()
-    _load_base_stat_primary_data()
-    _load_base_stat_secondary_data()
+    _load_secondary_stat_mod_data()
     _load_gods_data()
     _load_skills_data()
     _load_map_data()
@@ -140,20 +134,12 @@ def _load_traits_data():
     TRAITS = data
 
 
-def _load_base_stat_primary_data():
-    with open(str(DATA_PATH / "game/base_stats_primary.json")) as file:
+def _load_secondary_stat_mod_data():
+    with open(str(DATA_PATH / "game/secondary_stat_mods.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
 
-    global BASE_STATS_PRIMARY
-    BASE_STATS_PRIMARY = data
-
-
-def _load_base_stat_secondary_data():
-    with open(str(DATA_PATH / "game/base_stats_secondary.json")) as file:
-        data = json.load(file, object_hook=deserialise_dataclasses)
-
-    global BASE_STATS_SECONDARY
-    BASE_STATS_SECONDARY = data
+    global SECONDARY_STAT_MODS
+    SECONDARY_STAT_MODS = data
 
 
 def _load_gods_data():

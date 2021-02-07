@@ -742,15 +742,15 @@ class CombatStats(NQPComponent):
         self._bustle_mod: Dict[str, int] = {}
         self._exactitude_mod: Dict[str, int] = {}
 
-        self._max_health: int = library.BASE_STATS_SECONDARY[SecondaryStat.MAX_HEALTH].base_value
-        self._max_stamina: int = library.BASE_STATS_SECONDARY[SecondaryStat.MAX_STAMINA].base_value
-        self._accuracy: int = library.BASE_STATS_SECONDARY[SecondaryStat.ACCURACY].base_value
-        self._resist_burn: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_BURN].base_value
-        self._resist_cold: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_COLD].base_value
-        self._resist_chemical: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_CHEMICAL].base_value
-        self._resist_astral: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_ASTRAL].base_value
-        self._resist_mundane: int = library.BASE_STATS_SECONDARY[SecondaryStat.RESIST_MUNDANE].base_value
-        self._rush: int = library.BASE_STATS_SECONDARY[SecondaryStat.RUSH].base_value
+        self._max_health: int = 0
+        self._max_stamina: int = 0
+        self._accuracy: int = 0
+        self._resist_burn: int = 0
+        self._resist_cold: int = 0
+        self._resist_chemical: int = 0
+        self._resist_astral: int = 0
+        self._resist_mundane: int = 0
+        self._rush: int = 0
 
         self._max_health_mod: Dict[str, int] = {}  # cause, amount
         self._max_stamina_mod: Dict[str, int] = {}
@@ -838,8 +838,8 @@ class CombatStats(NQPComponent):
         """
         Amend the base value of a stat
         """
-        stat_to_amend = getattr(self, "_" + stat)
-        stat_to_amend += amount
+        current_value = getattr(self, "_" + stat)
+        setattr(self, "_" + stat, current_value + amount)
 
     def add_mod(self, stat: Union[PrimaryStatType, SecondaryStatType], cause: str, amount: int) -> bool:
         """
@@ -873,7 +873,7 @@ class CombatStats(NQPComponent):
         """
         Get the value of the secondary stat
         """
-        stat_data = library.BASE_STATS_SECONDARY[stat]
+        stat_data = library.SECONDARY_STAT_MODS[stat]
 
         value = getattr(self, "_" + stat.lower())
         value += self.vigour * stat_data.vigour_mod
