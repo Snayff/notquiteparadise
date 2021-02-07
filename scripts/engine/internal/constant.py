@@ -348,7 +348,7 @@ class TargetingMethod(SimpleNamespace):
 
     AUTO = TargetingMethodType("auto")
     TILE = TargetingMethodType("tile")
-    LINE_OF_SIGHT = TargetingMethodType("line")
+    DIRECTION = TargetingMethodType("direction")
 
 
 class Shape(SimpleNamespace):

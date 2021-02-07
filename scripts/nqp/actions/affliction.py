@@ -7,13 +7,19 @@ from snecs.typedefs import EntityID
 from scripts.engine.core.effect import AffectStatEffect, DamageEffect
 from scripts.engine.internal import library
 from scripts.engine.internal.action import Affliction
-from scripts.engine.internal.constant import DamageType, PrimaryStat
+from scripts.engine.internal.constant import DamageType, PrimaryStat, Shape, ShapeType, TileTag, TileTagType
 
 if TYPE_CHECKING:
     from typing import List
 
 
 class BoggedDown(Affliction):
+
+    # targeting
+    target_tags: List[TileTagType] = [TileTag.OTHER_ENTITY]
+    shape: ShapeType = Shape.TARGET
+    shape_size: int = 1
+
     def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[AffectStatEffect]:  # type: ignore
 
         affect_stat_effect = AffectStatEffect(
@@ -30,6 +36,12 @@ class BoggedDown(Affliction):
 
 
 class Flaming(Affliction):
+
+    # targeting
+    target_tags: List[TileTagType] = [TileTag.OTHER_ENTITY]
+    shape: ShapeType = Shape.TARGET
+    shape_size: int = 1
+
     def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type: ignore
         """
         Build the effects of this skill applying to a single entity.

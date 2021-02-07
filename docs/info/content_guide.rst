@@ -209,30 +209,53 @@ As a type of Action, things are a little more involved here. In addition to the 
 
 Affliction
 ^^^^^^^^^^^^^^^^^^^^
-Example:
+Example json:
 .. code-block:: json
-    "Flaming": {
+    "BoggedDown": {
         "__dataclass__": "AfflictionData",
         "category": "bane",
-        "description": "It does damage.",
-        "icon_path": "skills/torch.png",
-        "name": "flaming",
-        "shape": "target",
-        "shape_size": 1,
-        "target_tags": [
-            "other_entity"
-        ],
+        "description": "It weakens mundane defence and makes you a little bit slower.",
+        "icon_path": "skills/root.png",
+        "name": "bogged down",
         "identity_tags": [
-            "damage"
+            "affect_stat"
         ],
         "triggers": [
             "movement"
         ]
     }
 
+Example class:
+.. code-block:: python
+    class BoggedDown(Affliction):
+        """
+        A demo of being stuck in the mud - it`ll ground you
+        """
+
+        # targeting
+        target_tags: List[TileTagType] = [TileTag.OTHER_ENTITY]
+        shape: ShapeType = Shape.TARGET
+        shape_size: int = 1
+
+        def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[AffectStatEffect]:  # type: ignore
+
+            affect_stat_effect = AffectStatEffect(
+                origin=self.origin,
+                cause_name=self.name,
+                success_effects=[],
+                failure_effects=[],
+                target=self.affected_entity,
+                stat_to_target=PrimaryStat.BUSTLE,
+                affect_amount=2,
+            )
+
+            return [affect_stat_effect]
+
+
+
 Skill
 ^^^^^^^^^^^^^^^^^^^^^
-Example:
+Example json:
 .. code-block:: json
     "Lightning": {
         "__dataclass__": "SkillData",
@@ -242,31 +265,47 @@ Example:
         "icon_path": "",
         "resource_cost": 10,
         "resource_type": "stamina",
-        "targeting_method": "tile",
-        "target_directions": [
-            "down",
-            "down_left",
-            "down_right",
-            "left",
-            "right",
-            "up",
-            "up_left",
-            "up_right"
-        ],
-        "time_cost": 35,
-        "cast_tags": [
-            "no_blocking_tile"
-        ],
-        "target_tags": [
-            "any"
-        ],
-        "shape": "target",
-        "shape_size": 1,
-        "range": 3,
-        "uses_projectile": false,
-        "delayed_skill_data": {
-            "__dataclass__": "DelayedSkillData",
-            "duration": 3
-        },
-        "is_delayed": true
+        "time_cost": 35
     }
+
+
+Example class:
+.. code-block:: python
+    class Lightning(Skill):
+    """
+    A demo of lightning - it`s shocking!
+    """
+    # casting
+    cast_tags: List[TileTagType] = [TileTag.NO_BLOCKING_TILE]
+
+    # targeting
+    range: int = 3
+    target_tags: List[TileTagType] = [TileTag.ANY]
+    targeting_method: TargetingMethodType = TargetingMethod.TILE
+    target_directions: List[DirectionType] = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT,
+        Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT]
+    shape: ShapeType = Shape.TARGET
+    shape_size: int = 1
+
+    # delivery
+    uses_projectile: bool = False
+    projectile_data: Optional[ProjectileData] = None
+    is_delayed: bool = True
+    delayed_skill_data: Optional[DelayedSkillData] = DelayedSkillData(
+        duration=3
+    )
+
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:
+        damage_effect = DamageEffect(
+            origin=self.user,
+            success_effects=[],
+            failure_effects=[],
+            target=entity,
+            stat_to_target=PrimaryStat.VIGOUR,
+            accuracy=library.GAME_CONFIG.base_values.accuracy + 20,
+            damage=int(library.GAME_CONFIG.base_values.damage * potency),
+            damage_type=DamageType.MUNDANE,
+            mod_stat=PrimaryStat.CLOUT,
+            mod_amount=0.1,
+        )
+        return [damage_effect]

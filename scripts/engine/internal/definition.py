@@ -385,9 +385,6 @@ class AfflictionData:
     description: str = "none"
     icon_path: str = "none"
     category: AfflictionCategoryType = AfflictionCategory.BANE
-    shape: ShapeType = Shape.TARGET
-    shape_size: int = 1
-    target_tags: List[TileTagType] = field(default_factory=list)
     identity_tags: List[EffectTypeType] = field(default_factory=list)
     triggers: List[ReactionTriggerType] = field(default_factory=list)
 

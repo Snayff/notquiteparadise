@@ -76,7 +76,7 @@ class Targeting:
                 skill = world.get_known_skill(player, active_skill_name)
 
                 # set the skill target for the skill cast if the hovered tile is a valid target during line of sight targeting
-                if (skill.targeting_method == TargetingMethod.LINE_OF_SIGHT) and self.valid_line_of_sight:
+                if (skill.targeting_method == TargetingMethod.DIRECTION) and self.valid_line_of_sight:
                     state.set_active_skill_target((self.hovered_tile.x, self.hovered_tile.y))
                     state.set_skill_target_valid(True)
 
@@ -120,7 +120,7 @@ class Targeting:
                         pygame.draw.rect(target_surf, (60, 70, 120), option_r, 1)
 
             # if this is a line of sight attack
-            elif skill.targeting_method == TargetingMethod.LINE_OF_SIGHT:
+            elif skill.targeting_method == TargetingMethod.DIRECTION:
                 # regenerate possible targets if targeting mode was just entered
                 if self.possible_los_tiles == None:
                     self.possible_los_tiles = []
