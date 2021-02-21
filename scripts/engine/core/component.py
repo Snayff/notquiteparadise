@@ -447,6 +447,7 @@ class Knowledge(NQPComponent):
         self.cooldowns: Dict[str, int] = cooldowns
         self.skill_names: List[str] = []  # TODO - do we even need this anymore?
         self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
+        #self.skill_blessings: Dict[str, Blessing] = {}
 
         for skill_class in skills:
             self.add(skill_class, _add_to_order, _set_cooldown)

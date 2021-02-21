@@ -10,6 +10,7 @@ from snecs.typedefs import EntityID
 from scripts.engine.core import chronicle, world
 from scripts.engine.core.component import Aesthetic, Position
 from scripts.engine.core.effect import Effect
+from scripts.engine.core.blessing import Blessing
 from scripts.engine.internal.constant import (
     AfflictionCategoryType,
     DirectionType,
@@ -87,6 +88,8 @@ class Skill(Action):
     is_delayed: bool  # usable by Tile, Auto  - Doesnt make sense for Direction to have a delayed cast.
     delayed_skill_data: Optional[DelayedSkillData]
 
+    blessings: List[Blessings]
+
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         self.user: EntityID = user
         self.target_tile: Tile = target_tile
@@ -96,6 +99,8 @@ class Skill(Action):
 
         # vars needed to keep track of changes
         self.ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
+
+        self.innactive_effects: List[str] = []
 
     @abstractmethod
     def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
@@ -129,8 +134,21 @@ class Skill(Action):
         for entity in world.get_affected_entities(
             (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
         ):
-            yield entity, self._build_effects(entity)
+            yield entity, [effect for effect in self._build_effects(entity) if effect.__class__.__name__ not in self.innactive_effects]
             entity_names.append(world.get_name(entity))
+
+    def add_blessing(self):#blessing: Blessing):
+        """
+        Applies a blessing to the skill instance.
+        """
+        blessing.roll_level()
+        for b in self.blessings:
+            used_effects = set(list(b.remove_effects) + list(b.add_effects) + list(b.modify_effects_set))
+        mod_effects = set(list(blessing.remove_effects) + list(blessing.add_effects) + list(blessing.modify_effects_set))
+        print(used_effects, mod_effects)
+        if used_effects.intersection(mod_effects):
+            print('INTERSECTION')
+        #self.blessings.append(blessing)
 
     def use(self) -> bool:
         """
@@ -294,6 +312,9 @@ def register_action(cls: Type[Union[Action, Behaviour]]):
     if issubclass(cls, Skill):
         cls._init_properties()
         store.skill_registry[cls.__name__] = cls
+    elif issubclass(cls, Blessing):
+        cls._init_properties()
+        store.blessing_registry[cls.__name__] = cls
     elif issubclass(cls, Affliction):
         cls._init_properties()
         store.affliction_registry[cls.__name__] = cls

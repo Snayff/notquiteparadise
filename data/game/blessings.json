@@ -1,0 +1,53 @@
+{
+  "MoveFast": {
+    "name": "Move Fast???",
+    "description": "move farther per movement I guess?",
+    "removable": true,
+    "base_effects": {
+      "remove_effects": [],
+      "add_effects": [],
+      "modify_effects_set": [],
+      "modify_effects_tweak_flat": [
+        {
+          "effect_id": "MoveSelfEffect",
+          "values": {
+            "move_amount": 1
+          }
+        }
+      ],
+      "modify_effects_tweak_percent": []
+    },
+    "levels": {
+      "Common": {
+        "rarity": 0.7,
+        "effects": {}
+      },
+      "Rare": {
+        "rarity": 0.25,
+        "effects": {
+          "modify_effects_tweak_flat": [
+            {
+              "effect_id": "MoveSelfEffect",
+              "values": {
+                "move_amount": 2
+              }
+            }
+          ]
+        }
+      },
+      "Common": {
+        "rarity": 0.05,
+        "effects": {
+          "modify_effects_tweak_flat": [
+            {
+              "effect_id": "MoveSelfEffect",
+              "values": {
+                "move_amount": 3
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
