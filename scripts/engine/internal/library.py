@@ -96,6 +96,7 @@ def refresh_library():
     _load_secondary_stat_mod_data()
     _load_gods_data()
     _load_skills_data()
+    _load_blessings_data()
     _load_map_data()
     _load_room_data()
     _load_npc_data()
@@ -156,6 +157,12 @@ def _load_skills_data():
 
     SKILLS = data
 
+def _load_blessings_data():
+    with open(str(DATA_PATH / "game/blessings.json")) as file:
+        data = json.load(file, object_hook=deserialise_dataclasses)
+    global BLESSINGS
+
+    BLESSINGS = data
 
 def _load_map_data():
     with open(str(DATA_PATH / "game/maps.json")) as file:
