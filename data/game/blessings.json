@@ -3,6 +3,7 @@
     "name": "Move Fast???",
     "description": "move farther per movement I guess?",
     "removable": true,
+    "conflicts": [],
     "base_effects": {
       "remove_effects": [],
       "add_effects": [],
@@ -47,6 +48,44 @@
             }
           ]
         }
+      }
+    }
+  },
+  "NoMove": {
+    "name": "Stuck lol",
+    "description": "no moving >:(",
+    "removable": true,
+    "conflicts": ["AttackMove"],
+    "base_effects": {
+      "remove_effects": ["MoveSelfEffect"],
+      "add_effects": [],
+      "modify_effects_set": [],
+      "modify_effects_tweak_flat": [],
+      "modify_effects_tweak_percent": []
+    },
+    "levels": {
+      "Common": {
+        "rarity": 1,
+        "effects": {}
+      }
+    }
+  },
+  "AttackMove": {
+    "name": "AddEffectTest",
+    "description": "vroom",
+    "removable": true,
+    "conflicts": ["NoMove"],
+    "base_effects": {
+      "remove_effects": ["MoveSelfEffect"],
+      "add_effects": [{"effect_id": "MoveSelfEffect", "args": {"direction": [1, 0], "move_amount": 1}}],
+      "modify_effects_set": [],
+      "modify_effects_tweak_flat": [],
+      "modify_effects_tweak_percent": []
+    },
+    "levels": {
+      "Common": {
+        "rarity": 1,
+        "effects": {}
       }
     }
   }

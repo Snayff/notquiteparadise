@@ -447,7 +447,7 @@ class Knowledge(NQPComponent):
         self.cooldowns: Dict[str, int] = cooldowns
         self.skill_names: List[str] = []  # TODO - do we even need this anymore?
         self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
-        #self.skill_blessings: Dict[str, Blessing] = {}
+        self.skill_blessings: Dict[str, Blessing] = {}
 
         for skill_class in skills:
             self.add(skill_class, _add_to_order, _set_cooldown)
@@ -468,6 +468,49 @@ class Knowledge(NQPComponent):
             self.skill_order.append(skill.__name__)
         if set_cooldown:
             self.cooldowns[skill.__name__] = 0
+
+    def add_blessing(self, skill: Type[Skill], blessing: Blessing) -> bool:
+        """
+        Add a new blessing.
+        """
+
+        # generate blessing level (this will probably be moved somewhere else later)
+        blessing.roll_level()
+
+        # create blessing list for the target skill if it doesn't exist yet
+        if skill.__name__ not in self.skill_blessings:
+            self.skill_blessings[skill.__name__] = []
+
+        # use sets to check for and prevent collisions (modifying the same effect, specified conflicts, duplicates, etc.)
+        used_effects = set()
+        blessing_names = set()
+        for b in self.skill_blessings[skill.__name__]:
+            used_effects = used_effects.union(b.involved_effects)
+            blessing_names = blessing_names.union({b.__class__.__name__})
+
+        if used_effects.intersection(blessing.involved_effects):
+            return False
+        elif blessing.__class__.__name__ in blessing_names:
+            return False
+        elif set(blessing.conflicts).intersection(blessing_names):
+            return False
+        else:
+            # finally add the blessing if it passed all of the other cases
+            self.skill_blessings[skill.__name__].append(blessing)
+
+        return True
+
+    def remove_blessing(self, skill: Type[Skill], remove_blessing: Type[Blessing]) -> bool:
+        """
+        Attempt to remove a blessing.
+        """
+        if remove_blessing.removable:
+            if skill.__name__ in self.skill_blessings:
+                for blessing in self.skill_blessings[skill.__name__]:
+                    if blessing.__class__.__name__ == remove_blessing.__name__:
+                        self.skill_blessings[skill.__name__].remove(blessing)
+                        return True
+        return False
 
     def serialize(self):
         _dict = {"skill_names": self.skill_names, "cooldowns": self.cooldowns, "skill_order": self.skill_order}

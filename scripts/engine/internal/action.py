@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, world
-from scripts.engine.core.component import Aesthetic, Position
+from scripts.engine.core.component import Aesthetic, Position, Knowledge
 from scripts.engine.core.effect import Effect
 from scripts.engine.core.blessing import Blessing
 from scripts.engine.internal.constant import (
@@ -102,12 +102,17 @@ class Skill(Action):
 
         self.innactive_effects: List[str] = []
 
-    @abstractmethod
-    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+    def _post_build_effects(self, entity: EntityID, potency: float = 1.0, skill_stack: List[Effect] = []) -> List[Effect]:
         """
-        Build the effects of this skill applying to a single entity. Must be overridden in subclass.
+        Build the effects of this skill applying to a single entity. This function will be used to apply any dynamic tweaks to the effects stack after the subclass generates its stack.
         """
-        pass
+        skill_blessings = world.get_entitys_component(self.user, Knowledge).skill_blessings
+        relevant_blessings = []
+        if self.__class__.__name__ in skill_blessings:
+            relevant_blessings = skill_blessings[self.__class__.__name__]
+        for blessing in relevant_blessings:
+            blessing.apply(skill_stack, self.user, entity)
+        return skill_stack
 
     @classmethod
     def _init_properties(cls):
@@ -136,19 +141,6 @@ class Skill(Action):
         ):
             yield entity, [effect for effect in self._build_effects(entity) if effect.__class__.__name__ not in self.innactive_effects]
             entity_names.append(world.get_name(entity))
-
-    def add_blessing(self):#blessing: Blessing):
-        """
-        Applies a blessing to the skill instance.
-        """
-        blessing.roll_level()
-        for b in self.blessings:
-            used_effects = set(list(b.remove_effects) + list(b.add_effects) + list(b.modify_effects_set))
-        mod_effects = set(list(blessing.remove_effects) + list(blessing.add_effects) + list(blessing.modify_effects_set))
-        print(used_effects, mod_effects)
-        if used_effects.intersection(mod_effects):
-            print('INTERSECTION')
-        #self.blessings.append(blessing)
 
     def use(self) -> bool:
         """

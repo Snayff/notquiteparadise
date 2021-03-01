@@ -79,7 +79,7 @@ class Move(Skill):
             move_amount=1,
         )
 
-        return [move_effect]
+        return self._post_build_effects(entity, potency, [move_effect])
 
 
 class BasicAttack(Skill):
@@ -130,7 +130,7 @@ class BasicAttack(Skill):
             mod_amount=0.1,
         )
 
-        return [damage_effect]
+        return self._post_build_effects(entity, potency, [damage_effect])
 
 
 class Lunge(Skill):

@@ -43,7 +43,7 @@ from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
 from scripts.nqp.actions.behaviour import FollowPlayer, SearchAndAttack, SkipTurn
 from scripts.nqp.actions.skill import BasicAttack, Lightning, Lunge, Move, Splash, TarAndFeather
-from scripts.nqp.actions.blessing import MoveFast
+from scripts.nqp.actions.blessing import MoveFast, NoMove, AttackMove
 from scripts.nqp.processors.game import GameEventSubscriber
 from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.character_selector import CharacterSelector
@@ -162,8 +162,11 @@ def start_game(player_data: ActorData):
     # allocate player skills
     world.learn_skill(player, "Lightning")
 
+    # blessing test cases
     knowledge = world.get_entitys_component(player, Knowledge)
-    #knowledge.skills['Move'].add_blessing()
+    #knowledge.add_blessing(Move, NoMove(player))
+    knowledge.add_blessing(BasicAttack, AttackMove(player))
+    knowledge.remove_blessing(BasicAttack, AttackMove)
 
     # create win condition and place next to player
     player_pos = world.get_entitys_component(player, Position)
@@ -390,6 +393,8 @@ def register_actions():
 
     # blessings
     register_action(MoveFast)
+    register_action(NoMove)
+    register_action(AttackMove)
 
 
 def init_subscribers():
