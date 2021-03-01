@@ -20,6 +20,14 @@ scripts.nqp.actions.behaviour module
    :undoc-members:
    :show-inheritance:
 
+scripts.nqp.actions.blessing module
+-----------------------------------
+
+.. automodule:: scripts.nqp.actions.blessing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.nqp.actions.skill module
 --------------------------------
 

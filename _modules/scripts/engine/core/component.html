@@ -701,6 +701,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">cooldowns</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># TODO - do we even need this anymore?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># dont set skills here, use learn skill</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Blessing</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">for</span> <span class="n">skill_class</span> <span class="ow">in</span> <span class="n">skills</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">skill_class</span><span class="p">,</span> <span class="n">_add_to_order</span><span class="p">,</span> <span class="n">_set_cooldown</span><span class="p">)</span></div>
@@ -721,6 +722,49 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">skill_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">set_cooldown</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Knowledge.add_blessing"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.add_blessing">[docs]</a>    <span class="k">def</span> <span class="nf">add_blessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">blessing</span><span class="p">:</span> <span class="n">Blessing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Add a new blessing.</span>
+<span class="sd">        """</span>
+
+        <span class="c1"># generate blessing level (this will probably be moved somewhere else later)</span>
+        <span class="n">blessing</span><span class="o">.</span><span class="n">roll_level</span><span class="p">()</span>
+
+        <span class="c1"># create blessing list for the target skill if it doesn't exist yet</span>
+        <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># use sets to check for and prevent collisions (modifying the same effect, specified conflicts, duplicates, etc.)</span>
+        <span class="n">used_effects</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">blessing_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]:</span>
+            <span class="n">used_effects</span> <span class="o">=</span> <span class="n">used_effects</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">involved_effects</span><span class="p">)</span>
+            <span class="n">blessing_names</span> <span class="o">=</span> <span class="n">blessing_names</span><span class="o">.</span><span class="n">union</span><span class="p">({</span><span class="n">b</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">})</span>
+
+        <span class="k">if</span> <span class="n">used_effects</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">blessing</span><span class="o">.</span><span class="n">involved_effects</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">blessing</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">blessing_names</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="nb">set</span><span class="p">(</span><span class="n">blessing</span><span class="o">.</span><span class="n">conflicts</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">blessing_names</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># finally add the blessing if it passed all of the other cases</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blessing</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Knowledge.remove_blessing"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.remove_blessing">[docs]</a>    <span class="k">def</span> <span class="nf">remove_blessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">remove_blessing</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Blessing</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Attempt to remove a blessing.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">remove_blessing</span><span class="o">.</span><span class="n">removable</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">blessing</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">blessing</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">remove_blessing</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">blessing</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Knowledge.serialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"skill_names"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="p">,</span> <span class="s2">"cooldowns"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">,</span> <span class="s2">"skill_order"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_order</span><span class="p">}</span>

@@ -4,6 +4,14 @@ scripts.engine.core package
 Submodules
 ----------
 
+scripts.engine.core.blessing module
+-----------------------------------
+
+.. automodule:: scripts.engine.core.blessing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.engine.core.chronicle module
 ------------------------------------
 

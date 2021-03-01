@@ -246,6 +246,8 @@
         </li>
         <li class="md-nav__item"><a href="#module-scripts.nqp.actions.behaviour" class="md-nav__link">scripts.nqp.actions.behaviour module</a>
         </li>
+        <li class="md-nav__item"><a href="#module-scripts.nqp.actions.blessing" class="md-nav__link">scripts.nqp.actions.blessing module</a>
+        </li>
         <li class="md-nav__item"><a href="#module-scripts.nqp.actions.skill" class="md-nav__link">scripts.nqp.actions.skill module</a>
         </li>
         <li class="md-nav__item"><a href="#module-scripts.nqp.actions" class="md-nav__link">Module contents</a>
@@ -342,6 +344,137 @@
 <code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/behaviour.html#SkipTurn.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.behaviour.SkipTurn.act" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform the behaviour</p>
 </dd></dl>
+</dd></dl>
+
+
+<span id="scripts-nqp-actions-blessing-module"></span><h2 id="module-scripts.nqp.actions.blessing">scripts.nqp.actions.blessing module<a class="headerlink" href="#module-scripts.nqp.actions.blessing" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.nqp.actions.blessing.AttackMove">
+<em class="property">class </em><code class="sig-name descname">AttackMove</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">owner</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/blessing.html#AttackMove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.blessing.Blessing" title="scripts.engine.core.blessing.Blessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.blessing.Blessing</span></code></a></p>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.AttackMove.add_effects">
+<code class="sig-name descname">add_effects</code><em class="property">: List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove.add_effects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt id="scripts.nqp.actions.blessing.AttackMove.apply">
+<code class="sig-name descname">apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.effect.Effect" title="scripts.engine.core.effect.Effect">scripts.engine.core.effect.Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">owner</span></em>, <em class="sig-param"><span class="n">target</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/blessing.html#AttackMove.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the core function of the blessing. It takes the effect stack and modifies it with the blessing.</p>
+</dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.AttackMove.description">
+<code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.AttackMove.level">
+<code class="sig-name descname">level</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove.level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.AttackMove.modify_effects_set">
+<code class="sig-name descname">modify_effects_set</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove.modify_effects_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.AttackMove.modify_effects_tweak_flat">
+<code class="sig-name descname">modify_effects_tweak_flat</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove.modify_effects_tweak_flat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.AttackMove.modify_effects_tweak_percent">
+<code class="sig-name descname">modify_effects_tweak_percent</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove.modify_effects_tweak_percent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.AttackMove.name">
+<code class="sig-name descname">name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.AttackMove.removable">
+<code class="sig-name descname">removable</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove.removable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.AttackMove.remove_effects">
+<code class="sig-name descname">remove_effects</code><em class="property">: List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.AttackMove.remove_effects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.nqp.actions.blessing.MoveFast">
+<em class="property">class </em><code class="sig-name descname">MoveFast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">owner</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/blessing.html#MoveFast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.blessing.MoveFast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.blessing.Blessing" title="scripts.engine.core.blessing.Blessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.blessing.Blessing</span></code></a></p>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.MoveFast.add_effects">
+<code class="sig-name descname">add_effects</code><em class="property">: List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.MoveFast.add_effects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.MoveFast.description">
+<code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.MoveFast.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.MoveFast.level">
+<code class="sig-name descname">level</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.MoveFast.level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.MoveFast.modify_effects_set">
+<code class="sig-name descname">modify_effects_set</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.MoveFast.modify_effects_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.MoveFast.modify_effects_tweak_flat">
+<code class="sig-name descname">modify_effects_tweak_flat</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.MoveFast.modify_effects_tweak_flat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.MoveFast.modify_effects_tweak_percent">
+<code class="sig-name descname">modify_effects_tweak_percent</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.MoveFast.modify_effects_tweak_percent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.MoveFast.name">
+<code class="sig-name descname">name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.MoveFast.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.MoveFast.removable">
+<code class="sig-name descname">removable</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.MoveFast.removable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.MoveFast.remove_effects">
+<code class="sig-name descname">remove_effects</code><em class="property">: List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.MoveFast.remove_effects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="scripts.nqp.actions.blessing.NoMove">
+<em class="property">class </em><code class="sig-name descname">NoMove</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">owner</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/nqp/actions/blessing.html#NoMove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.nqp.actions.blessing.NoMove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.blessing.Blessing" title="scripts.engine.core.blessing.Blessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.core.blessing.Blessing</span></code></a></p>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.NoMove.add_effects">
+<code class="sig-name descname">add_effects</code><em class="property">: List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.NoMove.add_effects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.NoMove.description">
+<code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.NoMove.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.NoMove.level">
+<code class="sig-name descname">level</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.NoMove.level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.NoMove.modify_effects_set">
+<code class="sig-name descname">modify_effects_set</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.NoMove.modify_effects_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.NoMove.modify_effects_tweak_flat">
+<code class="sig-name descname">modify_effects_tweak_flat</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.NoMove.modify_effects_tweak_flat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.NoMove.modify_effects_tweak_percent">
+<code class="sig-name descname">modify_effects_tweak_percent</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.NoMove.modify_effects_tweak_percent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.NoMove.name">
+<code class="sig-name descname">name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.NoMove.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.NoMove.removable">
+<code class="sig-name descname">removable</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#scripts.nqp.actions.blessing.NoMove.removable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.nqp.actions.blessing.NoMove.remove_effects">
+<code class="sig-name descname">remove_effects</code><em class="property">: List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></em><a class="headerlink" href="#scripts.nqp.actions.blessing.NoMove.remove_effects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 </dd></dl>
 
 

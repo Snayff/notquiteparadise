@@ -242,6 +242,8 @@
               <ul class="md-nav__list">
         <li class="md-nav__item"><a href="#submodules" class="md-nav__link">Submodules</a>
         </li>
+        <li class="md-nav__item"><a href="#module-scripts.engine.core.blessing" class="md-nav__link">scripts.engine.core.blessing module</a>
+        </li>
         <li class="md-nav__item"><a href="#module-scripts.engine.core.chronicle" class="md-nav__link">scripts.engine.core.chronicle module</a>
         </li>
         <li class="md-nav__item"><a href="#module-scripts.engine.core.component" class="md-nav__link">scripts.engine.core.component module</a>
@@ -286,6 +288,80 @@
 <h1 id="scripts-engine-core--page-root">scripts.engine.core package<a class="headerlink" href="#scripts-engine-core--page-root" title="Permalink to this headline">¶</a></h1>
 
 <h2 id="submodules">Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+
+
+<span id="scripts-engine-core-blessing-module"></span><h2 id="module-scripts.engine.core.blessing">scripts.engine.core.blessing module<a class="headerlink" href="#module-scripts.engine.core.blessing" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.core.blessing.Blessing">
+<em class="property">class </em><code class="sig-name descname">Blessing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">owner</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/blessing.html#Blessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.blessing.Blessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>The base class for blessings. Blessings modify skills through the effects applied.</p>
+<dl class="py method">
+<dt id="scripts.engine.core.blessing.Blessing.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">owner</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/blessing.html#Blessing.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.core.blessing.Blessing.add_effects">
+<code class="sig-name descname">add_effects</code><em class="property">: List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></em><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.add_effects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.blessing.Blessing.apply">
+<code class="sig-name descname">apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">effects</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#scripts.engine.core.effect.Effect" title="scripts.engine.core.effect.Effect">scripts.engine.core.effect.Effect</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">owner</span></em>, <em class="sig-param"><span class="n">target</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/blessing.html#Blessing.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the core function of the blessing. It takes the effect stack and modifies it with the blessing.</p>
+</dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.core.blessing.Blessing.custom_args">
+<code class="sig-name descname">custom_args</code><em class="property"> = {}</em><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.custom_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.core.blessing.Blessing.description">
+<code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.blessing.Blessing.involved_effects">
+<em class="property">property </em><code class="sig-name descname">involved_effects</code><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.involved_effects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the set of effects involved in the blessing.</p>
+</dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.core.blessing.Blessing.level">
+<code class="sig-name descname">level</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.core.blessing.Blessing.modify_effects_set">
+<code class="sig-name descname">modify_effects_set</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.modify_effects_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.core.blessing.Blessing.modify_effects_tweak_flat">
+<code class="sig-name descname">modify_effects_tweak_flat</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.modify_effects_tweak_flat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.core.blessing.Blessing.modify_effects_tweak_percent">
+<code class="sig-name descname">modify_effects_tweak_percent</code><em class="property">: List<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.modify_effects_tweak_percent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.core.blessing.Blessing.name">
+<code class="sig-name descname">name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.core.blessing.Blessing.removable">
+<code class="sig-name descname">removable</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.removable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt id="scripts.engine.core.blessing.Blessing.remove_effects">
+<code class="sig-name descname">remove_effects</code><em class="property">: List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></em><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.remove_effects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.blessing.Blessing.roll_level">
+<code class="sig-name descname">roll_level</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/blessing.html#Blessing.roll_level"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.roll_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the level selection algorithm and updates attributes with the applied level.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.blessing.Blessing.set_level">
+<code class="sig-name descname">set_level</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">level</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/blessing.html#Blessing.set_level"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.blessing.Blessing.set_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refreshes the class attributes with the data for the specific blessing level.</p>
+</dd></dl>
+</dd></dl>
 
 
 <span id="scripts-engine-core-chronicle-module"></span><h2 id="module-scripts.engine.core.chronicle">scripts.engine.core.chronicle module<a class="headerlink" href="#module-scripts.engine.core.chronicle" title="Permalink to this headline">¶</a></h2>
@@ -726,12 +802,22 @@ full-World serialization feature.</p>
 <dd><p>Learn a new skill.</p>
 </dd></dl>
 <dl class="py method">
+<dt id="scripts.engine.core.component.Knowledge.add_blessing">
+<code class="sig-name descname">add_blessing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>Skill<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">blessing</span><span class="p">:</span> <span class="n">Blessing</span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/core/component.html#Knowledge.add_blessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.component.Knowledge.add_blessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new blessing.</p>
+</dd></dl>
+<dl class="py method">
 <dt id="scripts.engine.core.component.Knowledge.deserialize">
 <em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/core/component.html#Knowledge.deserialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.component.Knowledge.deserialize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deserialize a serialized instance of this component.</p>
 <p>Will get the output of <cite>serialize</cite> as an argument.</p>
 <p>Override this in all your Component classes to make use of snecs’
 full-World serialization feature.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="scripts.engine.core.component.Knowledge.remove_blessing">
+<code class="sig-name descname">remove_blessing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>Skill<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">remove_blessing</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>Blessing<span class="p">]</span></span></em><span class="sig-paren">)</span> → <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="_modules/scripts/engine/core/component.html#Knowledge.remove_blessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.component.Knowledge.remove_blessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to remove a blessing.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="scripts.engine.core.component.Knowledge.serialize">

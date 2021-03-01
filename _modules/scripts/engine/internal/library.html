@@ -350,6 +350,7 @@
     <span class="n">_load_secondary_stat_mod_data</span><span class="p">()</span>
     <span class="n">_load_gods_data</span><span class="p">()</span>
     <span class="n">_load_skills_data</span><span class="p">()</span>
+    <span class="n">_load_blessings_data</span><span class="p">()</span>
     <span class="n">_load_map_data</span><span class="p">()</span>
     <span class="n">_load_room_data</span><span class="p">()</span>
     <span class="n">_load_npc_data</span><span class="p">()</span>
@@ -410,6 +411,12 @@
 
     <span class="n">SKILLS</span> <span class="o">=</span> <span class="n">data</span>
 
+<span class="k">def</span> <span class="nf">_load_blessings_data</span><span class="p">():</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">DATA_PATH</span> <span class="o">/</span> <span class="s2">"game/blessings.json"</span><span class="p">))</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="n">deserialise_dataclasses</span><span class="p">)</span>
+    <span class="k">global</span> <span class="n">BLESSINGS</span>
+
+    <span class="n">BLESSINGS</span> <span class="o">=</span> <span class="n">data</span>
 
 <span class="k">def</span> <span class="nf">_load_map_data</span><span class="p">():</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">DATA_PATH</span> <span class="o">/</span> <span class="s2">"game/maps.json"</span><span class="p">))</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>

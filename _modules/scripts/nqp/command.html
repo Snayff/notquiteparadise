@@ -274,6 +274,7 @@
     <span class="n">MapCondition</span><span class="p">,</span>
     <span class="n">Position</span><span class="p">,</span>
     <span class="n">WinCondition</span><span class="p">,</span>
+    <span class="n">Knowledge</span><span class="p">,</span> <span class="c1"># for demonstration purposes</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
@@ -296,6 +297,7 @@
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.affliction</span> <span class="kn">import</span> <span class="n">BoggedDown</span><span class="p">,</span> <span class="n">Flaming</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.behaviour</span> <span class="kn">import</span> <span class="n">FollowPlayer</span><span class="p">,</span> <span class="n">SearchAndAttack</span><span class="p">,</span> <span class="n">SkipTurn</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.skill</span> <span class="kn">import</span> <span class="n">BasicAttack</span><span class="p">,</span> <span class="n">Lightning</span><span class="p">,</span> <span class="n">Lunge</span><span class="p">,</span> <span class="n">Move</span><span class="p">,</span> <span class="n">Splash</span><span class="p">,</span> <span class="n">TarAndFeather</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.actions.blessing</span> <span class="kn">import</span> <span class="n">MoveFast</span><span class="p">,</span> <span class="n">NoMove</span><span class="p">,</span> <span class="n">AttackMove</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors.game</span> <span class="kn">import</span> <span class="n">GameEventSubscriber</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.character_selector</span> <span class="kn">import</span> <span class="n">CharacterSelector</span>
@@ -413,6 +415,12 @@
 
     <span class="c1"># allocate player skills</span>
     <span class="n">world</span><span class="o">.</span><span class="n">learn_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="s2">"Lightning"</span><span class="p">)</span>
+
+    <span class="c1"># blessing test cases</span>
+    <span class="n">knowledge</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
+    <span class="c1">#knowledge.add_blessing(Move, NoMove(player))</span>
+    <span class="n">knowledge</span><span class="o">.</span><span class="n">add_blessing</span><span class="p">(</span><span class="n">BasicAttack</span><span class="p">,</span> <span class="n">AttackMove</span><span class="p">(</span><span class="n">player</span><span class="p">))</span>
+    <span class="n">knowledge</span><span class="o">.</span><span class="n">remove_blessing</span><span class="p">(</span><span class="n">BasicAttack</span><span class="p">,</span> <span class="n">AttackMove</span><span class="p">)</span>
 
     <span class="c1"># create win condition and place next to player</span>
     <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
@@ -635,7 +643,12 @@
     <span class="n">register_action</span><span class="p">(</span><span class="n">Lunge</span><span class="p">)</span>
     <span class="n">register_action</span><span class="p">(</span><span class="n">TarAndFeather</span><span class="p">)</span>
     <span class="n">register_action</span><span class="p">(</span><span class="n">Splash</span><span class="p">)</span>
-    <span class="n">register_action</span><span class="p">(</span><span class="n">Lightning</span><span class="p">)</span></div>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">Lightning</span><span class="p">)</span>
+
+    <span class="c1"># blessings</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">MoveFast</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">NoMove</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">AttackMove</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="init_subscribers"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.init_subscribers">[docs]</a><span class="k">def</span> <span class="nf">init_subscribers</span><span class="p">():</span>
