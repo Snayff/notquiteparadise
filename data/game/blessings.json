@@ -4,6 +4,7 @@
     "description": "move farther per movement I guess?",
     "removable": true,
     "conflicts": [],
+    "skill_types": ["self"],
     "base_effects": {
       "remove_effects": [],
       "add_effects": [],
@@ -56,6 +57,7 @@
     "description": "no moving >:(",
     "removable": true,
     "conflicts": ["AttackMove"],
+    "skill_types": ["all"],
     "base_effects": {
       "remove_effects": ["MoveSelfEffect"],
       "add_effects": [],
@@ -75,6 +77,7 @@
     "description": "vroom",
     "removable": true,
     "conflicts": ["NoMove"],
+    "skill_types": ["all"],
     "base_effects": {
       "remove_effects": ["MoveSelfEffect"],
       "add_effects": [{"effect_id": "MoveSelfEffect", "args": {"direction": [1, 0], "move_amount": 1}}],

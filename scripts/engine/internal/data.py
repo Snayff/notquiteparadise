@@ -7,7 +7,7 @@ from typing import List, TYPE_CHECKING
 import pygame
 from snecs.typedefs import EntityID
 
-from scripts.engine.core.blessing import Blessing
+from scripts.engine.internal.skill_modifier import SkillModifier
 from scripts.engine.internal.action import Affliction, Behaviour, Skill
 from scripts.engine.internal.constant import GameState
 
@@ -56,7 +56,7 @@ class Store:
         self.skill_registry: Dict[str, Type[Skill]] = {}
         self.affliction_registry: Dict[str, Type[Affliction]] = {}
         self.behaviour_registry: Dict[str, Type[Behaviour]] = {}
-        self.blessing_registry: Dict[str, Type[Blessing]] = {}
+        self.blessing_registry: Dict[str, Type[SkillModifier]] = {}
 
     def serialise(self) -> Dict[str, Any]:
         """

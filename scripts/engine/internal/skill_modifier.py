@@ -7,7 +7,7 @@ from scripts.engine.core.effect import Effect
 
 EFFECTS = {k : getattr(scripts.engine.core.effect, k) for k in dir(scripts.engine.core.effect)}
 
-class Blessing(ABC):
+class SkillModifier(ABC):
     """
     The base class for blessings. Blessings modify skills through the effects applied.
     """
@@ -46,6 +46,7 @@ class Blessing(ABC):
         cls.level = 'Base' # assume common exists for now
         cls.removable = cls.data['removable']
         cls.conflicts = cls.data['conflicts']
+        cls.skill_types = cls.data['skill_types']
 
         cls.remove_effects = cls.data['base_effects']['remove_effects']
         cls.add_effects = cls.data['base_effects']['add_effects']

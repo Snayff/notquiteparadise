@@ -10,7 +10,6 @@ from snecs.typedefs import EntityID
 from scripts.engine.core import chronicle, world
 from scripts.engine.core.component import Aesthetic, Position, Knowledge
 from scripts.engine.core.effect import Effect
-from scripts.engine.core.blessing import Blessing
 from scripts.engine.internal.constant import (
     AfflictionCategoryType,
     DirectionType,
@@ -24,6 +23,7 @@ from scripts.engine.internal.constant import (
     TileTag,
     TileTagType,
 )
+from scripts.engine.internal.skill_modifier import SkillModifier
 from scripts.engine.internal.definition import DelayedSkillData, ProjectileData
 from scripts.engine.internal.event import event_hub, UseSkillEvent
 from scripts.engine.world_objects.tile import Tile
@@ -88,7 +88,7 @@ class Skill(Action):
     is_delayed: bool  # usable by Tile, Auto  - Doesnt make sense for Direction to have a delayed cast.
     delayed_skill_data: Optional[DelayedSkillData]
 
-    blessings: List[Blessings]
+    blessings: List[SkillModifier]
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         self.user: EntityID = user
@@ -129,6 +129,7 @@ class Skill(Action):
         cls.icon_path = cls.data.icon_path
         cls.resource_type = cls.data.resource_type
         cls.resource_cost = cls.data.resource_cost
+        cls.types = cls.data.types
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
@@ -304,7 +305,7 @@ def register_action(cls: Type[Union[Action, Behaviour]]):
     if issubclass(cls, Skill):
         cls._init_properties()
         store.skill_registry[cls.__name__] = cls
-    elif issubclass(cls, Blessing):
+    elif issubclass(cls, SkillModifier):
         cls._init_properties()
         store.blessing_registry[cls.__name__] = cls
     elif issubclass(cls, Affliction):
