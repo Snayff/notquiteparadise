@@ -24,7 +24,7 @@ from scripts.engine.internal.constant import (
 from scripts.engine.internal.definition import ReactionData
 
 if TYPE_CHECKING:
-    from typing import Dict, List, Optional, Tuple, Type
+    from typing import Dict, List, Optional, Tuple, Type, Set
 
     import pygame
 
@@ -448,7 +448,7 @@ class Knowledge(NQPComponent):
         self.cooldowns: Dict[str, int] = cooldowns
         self.skill_names: List[str] = []  # TODO - do we even need this anymore?
         self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
-        self.skill_blessings: Dict[str, SkillModifier] = {}
+        self.skill_blessings: Dict[str, List[SkillModifier]] = {}
 
         for skill_class in skills:
             self.add(skill_class, _add_to_order, _set_cooldown)
@@ -483,8 +483,8 @@ class Knowledge(NQPComponent):
             self.skill_blessings[skill.__name__] = []
 
         # use sets to check for and prevent collisions (modifying the same effect, specified conflicts, duplicates, etc.)
-        used_effects = set()
-        blessing_names = set()
+        used_effects: Set[str] = set()
+        blessing_names: Set[str] = set()
         for b in self.skill_blessings[skill.__name__]:
             used_effects = used_effects.union(b.involved_effects)
             blessing_names = blessing_names.union({b.__class__.__name__})

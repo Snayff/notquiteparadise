@@ -66,7 +66,7 @@ class Move(Skill):
 
         super().__init__(user, tile, direction)
 
-    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[MoveSelfEffect]:  # type:ignore
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -113,7 +113,7 @@ class BasicAttack(Skill):
     is_delayed: bool = False
     delayed_skill_data: Optional[DelayedSkillData] = None
 
-    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
