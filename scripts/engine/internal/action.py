@@ -88,7 +88,9 @@ class Skill(Action):
     is_delayed: bool  # usable by Tile, Auto  - Doesnt make sense for Direction to have a delayed cast.
     delayed_skill_data: Optional[DelayedSkillData]
 
+    # blessing related attributes
     blessings: List[SkillModifier]
+    types: List[str]
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         self.user: EntityID = user
@@ -107,7 +109,7 @@ class Skill(Action):
         Build the effects of this skill applying to a single entity. This function will be used to apply any dynamic tweaks to the effects stack after the subclass generates its stack.
         """
         skill_blessings = world.get_entitys_component(self.user, Knowledge).skill_blessings
-        relevant_blessings = []
+        relevant_blessings: List[SkillModifier] = []
         if self.__class__.__name__ in skill_blessings:
             relevant_blessings = skill_blessings[self.__class__.__name__]
         for blessing in relevant_blessings:

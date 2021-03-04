@@ -17,10 +17,12 @@ class SkillModifier(ABC):
 
     level: str
     removable: bool
+    conflicts: List[str]
+    skill_types: List[str]
 
     # remove/add are applied when the blessing is applied
     remove_effects: List[str]
-    add_effects: List[str]
+    add_effects: List[Dict[str, Any]]
 
     # modifications are applied when the effects are built
     modify_effects_set: List[Dict[str, Any]]
@@ -28,7 +30,7 @@ class SkillModifier(ABC):
     modify_effects_tweak_percent: List[Dict[str, Any]]
 
     # custom args (set by child if JSON doesn't cover the argument needs)
-    custom_args = {}
+    custom_args: Dict[str, Any] = {}
 
     def __init__(self, owner):
         self.owner = owner
@@ -131,10 +133,10 @@ class SkillModifier(ABC):
                 effects.remove(effect)
 
         # add effects to the stack
-        for effect in self.add_effects:
+        for add_effect in self.add_effects:
             # build the effect creation arguments from the config
             args = {'origin': owner, 'target': target, 'success_effects': [], 'failure_effects': []}
-            args.update(effect['args'])
-            if effect['effect_id'] in self.custom_args:
+            args.update(add_effect['args'])
+            if add_effect['effect_id'] in self.custom_args:
                 args.update(self.custom_args)
-            effects.append(EFFECTS[effect['effect_id']](**args))
+            effects.append(EFFECTS[add_effect['effect_id']](**args))
