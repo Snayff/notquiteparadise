@@ -30,6 +30,7 @@ if TYPE_CHECKING:
 
     from scripts.engine.internal.action import Affliction, Behaviour, Skill
     from scripts.engine.internal.definition import TraitSpritePathsData, TraitSpritesData
+    from scripts.engine.internal.skill_modifier import SkillModifier
 
 
 __all__ = [
@@ -447,7 +448,7 @@ class Knowledge(NQPComponent):
         self.cooldowns: Dict[str, int] = cooldowns
         self.skill_names: List[str] = []  # TODO - do we even need this anymore?
         self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
-        self.skill_blessings: Dict[str, Blessing] = {}
+        self.skill_blessings: Dict[str, SkillModifier] = {}
 
         for skill_class in skills:
             self.add(skill_class, _add_to_order, _set_cooldown)
@@ -469,7 +470,7 @@ class Knowledge(NQPComponent):
         if set_cooldown:
             self.cooldowns[skill.__name__] = 0
 
-    def add_blessing(self, skill: Type[Skill], blessing: Blessing) -> bool:
+    def add_blessing(self, skill: Type[Skill], blessing: SkillModifier) -> bool:
         """
         Add a new blessing.
         """
@@ -494,13 +495,15 @@ class Knowledge(NQPComponent):
             return False
         elif set(blessing.conflicts).intersection(blessing_names):
             return False
+        elif not set(blessing.skill_types).intersection(set(skill.types)):
+            return False
         else:
             # finally add the blessing if it passed all of the other cases
             self.skill_blessings[skill.__name__].append(blessing)
 
         return True
 
-    def remove_blessing(self, skill: Type[Skill], remove_blessing: Type[Blessing]) -> bool:
+    def remove_blessing(self, skill: Type[Skill], remove_blessing: Type[SkillModifier]) -> bool:
         """
         Attempt to remove a blessing.
         """

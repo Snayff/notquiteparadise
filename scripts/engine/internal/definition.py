@@ -365,6 +365,9 @@ class SkillData:
     is_delayed: bool = False
     delayed_skill_data: Optional[DelayedSkillData] = None
 
+    # list of types for the skill (used for tracking compatibility with things like blessings)
+    types: List[str] = field(default_factory=list)
+
     def __post_init__(self):
         # convert directions to their constant values
         _mapped_directions = []
