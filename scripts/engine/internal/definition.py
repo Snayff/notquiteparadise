@@ -123,7 +123,6 @@ class TraitData:
 
     def __post_init__(self):
         # update sprite path render order
-        # FIXME - this should be handled prior to coming to the dataclass
         trait_render_order = {"npc": 0, "people": 1, "homeland": 2, "savvy": 3}
         self.sprite_paths.render_order = trait_render_order.get(self.group)
 
@@ -553,7 +552,6 @@ class HitTypeData:
 @register_dataclass_with_json
 @dataclass
 class BaseValueData:
-    move_cost: int = 0
     accuracy: int = 0
     damage: int = 0
     bustle: int = 0
@@ -574,6 +572,7 @@ class BaseValueData:
 @register_dataclass_with_json
 @dataclass
 class DefaultValueData:
+    move_cost: int = 0
     time_per_round: int = 0
     reduced_effectiveness_multi_tile_modifier: float = 0.0
 

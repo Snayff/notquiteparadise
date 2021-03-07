@@ -18,7 +18,7 @@ class SkipTurn(Behaviour):
     def act(self):
         name = world.get_name(self.entity)
         logging.debug(f"'{name}' skipped their turn.")
-        chronicle.end_turn(self.entity, library.GAME_CONFIG.base_values.move_cost)
+        chronicle.end_turn(self.entity, library.GAME_CONFIG.default_values.move_cost)
 
 
 class FollowPlayer(Behaviour):
@@ -49,7 +49,7 @@ class FollowPlayer(Behaviour):
         else:
             logging.debug(f"'{name}' tried to move to ({pos.x},{pos.y}), but couldn`t.")
 
-        chronicle.end_turn(entity, library.GAME_CONFIG.base_values.move_cost)
+        chronicle.end_turn(entity, library.GAME_CONFIG.default_values.move_cost)
 
 
 class SearchAndAttack(Behaviour):

@@ -20,7 +20,6 @@
     },
     "base_values": {
         "__dataclass__": "BaseValueData",
-        "move_cost": 20,
         "accuracy": 100,
         "damage": 5,
         "bustle": 5,
@@ -38,6 +37,7 @@
     },
     "default_values": {
         "__dataclass__": "DefaultValueData",
+        "move_cost": 20,
         "time_per_round": 20,
         "reduced_effectiveness_multi_tile_modifier": 0.25
     }

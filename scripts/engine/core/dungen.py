@@ -794,7 +794,6 @@ def _add_entrances(dungen: DungeonGenerator, room: RoomConcept):
     """
     Loop the outer edge of the room for two adjoining floors and break through to link the locations.
     """
-    # FIXME - not actually joining to floor spaces so just creating random floors
 
     entrances = 0
     attempts = 0

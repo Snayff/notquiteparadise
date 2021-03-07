@@ -2,7 +2,6 @@ Core
 ============================================
 
 ..  toctree::
-    :caption: Core
 
     chronicle
     component

@@ -211,7 +211,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(Sight(sight_range))
 
     # set up light
-    radius = 2  # TODO - pull radius and colour from external data
+    radius = 2
     colour = (255, 255, 255)
     alpha = 200
     light_id = create_light(spawn_pos, radius, colour, alpha)
@@ -334,12 +334,12 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     projectile.append(Aesthetic(sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn()))  # allocate time to ensure they act next
     projectile.append(Position((x, y)))
-    projectile.append(Resources(999, 999))  # TODO - remove need to have Resources
-    projectile.append(Afflictions())  # TODO - remove need to have Afflictions
+    projectile.append(Resources(999, 999))
+    projectile.append(Afflictions())
     projectile.append(IsActive())
 
     # set up light
-    radius = 1  # TODO - pull radius and colour from external data
+    radius = 1
     colour = (68, 174, 235)
     alpha = 240
     light_id = create_light((x, y), radius, colour, alpha)
@@ -1476,7 +1476,7 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
 def choose_target(entity: EntityID) -> Optional[EntityID]:
     """
     Choose an appropriate target for the entity.
-    FIXME - CURRENTLY JUST RETURNS PLAYER
+    N.B. CURRENTLY JUST RETURNS PLAYER
     """
     return get_player()
 
