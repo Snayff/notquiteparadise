@@ -2,6 +2,7 @@ import os
 
 import pytest
 
+import scripts.engine.core.entity
 from scripts.engine.core import state
 from scripts.engine.internal.constant import GameState, Height, SAVE_PATH
 
@@ -54,25 +55,25 @@ def _init_world():
     game_map.generate_new_map(player_data)
 
     # init the player
-    player = world.get_player()
+    player = scripts.engine.core.entity.get_player()
 
     # tell places about the player
-    from scripts.engine.core import chronicle
-    chronicle.set_turn_holder(player)
+    from scripts.engine.core import hourglass
+    hourglass.set_turn_holder(player)
 
     # create actor near to player
     from scripts.engine.core.component import Position
-    player_pos = world.get_entitys_component(player, Position)
+    player_pos = scripts.engine.core.entity.get_entitys_component(player, Position)
     from scripts.engine.internal import library
     actor_data = library.ACTORS["crocturion"]
-    world.create_actor(actor_data, (player_pos.x, player_pos.y - 2))
+    scripts.engine.core.entity.create_actor(actor_data, (player_pos.x, player_pos.y - 2))
 
     # create god
     god_data = library.GODS["the_small_gods"]
-    world.create_god(god_data)
+    scripts.engine.core.entity.create_god(god_data)
 
     # create terrain next to the player
-    world.create_terrain(library.TERRAIN["bog"], (player_pos.x + 1, player_pos.y))
+    scripts.engine.core.entity.create_terrain(library.TERRAIN["bog"], (player_pos.x + 1, player_pos.y))
 
 
 def test_save_game(benchmark):

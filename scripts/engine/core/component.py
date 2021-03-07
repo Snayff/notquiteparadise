@@ -9,6 +9,7 @@ import numpy as np
 from snecs import RegisteredComponent
 from snecs.typedefs import EntityID
 
+import scripts.engine.core.entity
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
     HeightType,
@@ -24,7 +25,7 @@ from scripts.engine.internal.constant import (
 from scripts.engine.internal.definition import ReactionData
 
 if TYPE_CHECKING:
-    from typing import Dict, List, Optional, Tuple, Type, Set
+    from typing import Dict, List, Optional, Set, Tuple, Type
 
     import pygame
 
@@ -656,7 +657,7 @@ class LightSource(NQPComponent):
 
         from scripts.engine.core import world
 
-        light_id = world.create_light(pos, radius, colour, alpha)
+        light_id = scripts.engine.core.entity.create_light(pos, radius, colour, alpha)
 
         return LightSource(light_id, radius)
 

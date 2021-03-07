@@ -6,6 +6,7 @@ from typing import Dict, Iterator, List, Literal, TYPE_CHECKING
 
 import tcod
 
+import scripts.engine.core.entity
 from scripts.engine.core import utility, world
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import Direction, Height, MAP_BORDER_SIZE, TileCategory, TileCategoryType
@@ -295,9 +296,9 @@ class DungeonGenerator:
 
                 # create actor
                 if actor_key != "player":
-                    actor = world.create_actor(actor_data, (pos[0], pos[1]))
+                    actor = scripts.engine.core.entity.create_actor(actor_data, (pos[0], pos[1]))
                 else:
-                    actor = world.create_actor(actor_data, (pos[0], pos[1]), True)
+                    actor = scripts.engine.core.entity.create_actor(actor_data, (pos[0], pos[1]), True)
 
     def set_tile_category(self, x: int, y: int, category: TileCategoryType):
         """

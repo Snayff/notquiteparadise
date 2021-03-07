@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
+import scripts.engine.core.entity
 from scripts.engine.core import query, world
 from scripts.engine.core.component import Tracked
 from scripts.engine.internal import library
@@ -39,7 +40,7 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     # did we actually allocate to anyone?
     if not new_queue:
         # add player to queue
-        new_queue[world.get_player()] = get_time()
+        new_queue[scripts.engine.core.entity.get_player()] = get_time()
 
     set_turn_queue(new_queue)
 
@@ -65,7 +66,7 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
     turn_holder = get_turn_holder()
 
     # whats the difference between current time and when they last acted?
-    tracked = world.get_entitys_component(turn_holder, Tracked)
+    tracked = scripts.engine.core.entity.get_entitys_component(turn_holder, Tracked)
     if tracked:
         next_entity_time = tracked.time_spent
     else:
@@ -92,7 +93,7 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
     event_hub.post(NewTurnEvent())
 
     # log new turn holder
-    name = world.get_name(turn_holder)
+    name = scripts.engine.core.entity.get_name(turn_holder)
     logging.debug(f"-> Current time is {get_time()}. We are {get_time_in_round()} TU`s into round {get_round()}.")
     logging.debug(f"-> '{name}' is now the turn holder.")
 
@@ -104,13 +105,13 @@ def end_turn(entity: EntityID, time_spent: int):
     N.B. If entity given is NOT the turn holder then nothing happens.
     """
     if entity == get_turn_holder():
-        world.spend_time(entity, time_spent)
+        scripts.engine.core.entity.spend_time(entity, time_spent)
 
         # post game event
         event_hub.post(EndTurnEvent())
 
     else:
-        logging.warning(f"Tried to end {world.get_name(entity)}'s turn but they're not turn holder.")
+        logging.warning(f"Tried to end {scripts.engine.core.entity.get_name(entity)}'s turn but they're not turn holder.")
 
 
 def next_round():
@@ -212,7 +213,7 @@ def get_round() -> int:
 def _get_pretty_queue() -> List[Tuple[str, int]]:
     queue = []
     for entity, time in get_turn_queue().items():
-        name = world.get_name(entity)
+        name = scripts.engine.core.entity.get_name(entity)
         queue.append((name, time))
     return queue
 

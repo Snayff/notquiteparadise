@@ -8,8 +8,9 @@ import pygame
 import snecs
 from snecs.world import default_world
 
+import scripts.engine.core.entity
 import scripts.nqp.processors.input
-from scripts.engine.core import chronicle, state, world
+from scripts.engine.core import hourglass, state, world
 from scripts.engine.core.component import NQPComponent
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug
@@ -81,12 +82,12 @@ def game_loop():
 
         # get info to support UI updates and handling events
         current_state = state.get_current()
-        turn_holder = chronicle.get_turn_holder()
+        turn_holder = hourglass.get_turn_holder()
 
         # process any deletions from last frame
         # this copies snecs.process_pending_deletions() but adds extra steps.
         for entity in list(default_world._entities_to_delete):
-            components = dict(world.get_entitys_components(entity))
+            components = dict(scripts.engine.core.entity.get_entitys_components(entity))
             for component in components.values():
                 assert isinstance(component, NQPComponent)
                 component.on_delete()
@@ -94,12 +95,12 @@ def game_loop():
 
         # have enemy take turn
         if current_state == GameState.GAME_MAP:
-            if turn_holder != world.get_player():
+            if turn_holder != scripts.engine.core.entity.get_player():
                 # just in case the turn holder has died but not been replaced as expected
                 try:
-                    world.take_turn(turn_holder)
+                    scripts.engine.core.entity.take_turn(turn_holder)
                 except KeyError:
-                    chronicle.rebuild_turn_queue()
+                    hourglass.rebuild_turn_queue()
 
         # process pygame events
         for event in pygame.event.get():

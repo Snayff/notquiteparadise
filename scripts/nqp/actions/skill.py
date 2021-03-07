@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
+import scripts.engine.core.entity
 from scripts.engine.core import world
 from scripts.engine.core.component import Position
 from scripts.engine.core.effect import AffectCooldownEffect, ApplyAfflictionEffect, DamageEffect, Effect, MoveSelfEffect
@@ -61,7 +62,7 @@ class Move(Skill):
         """
 
         # override target
-        position = world.get_entitys_component(user, Position)
+        position = scripts.engine.core.entity.get_entitys_component(user, Position)
         tile = world.get_tile((position.x, position.y))
 
         super().__init__(user, tile, direction)
@@ -169,7 +170,7 @@ class Lunge(Skill):
         Set the target tile as the current tile since we need to move.
         N.B. ignores provided tile.
         """
-        position = world.get_entitys_component(user, Position)
+        position = scripts.engine.core.entity.get_entitys_component(user, Position)
         if position:
             _tile = world.get_tile((position.x, position.y))
         else:
@@ -230,7 +231,7 @@ class Lunge(Skill):
         """
         increment = (self.direction[0] * (self.move_amount + 1), self.direction[1] * (self.move_amount + 1))
         target_tile_pos = (self.target_tile.x + increment[0], self.target_tile.y + increment[1])
-        entities = world.get_entities_on_tile(world.get_tile(target_tile_pos))
+        entities = scripts.engine.core.entity.get_entities_on_tile(world.get_tile(target_tile_pos))
 
         if not entities:
             return None
@@ -301,12 +302,12 @@ class TarAndFeather(Skill):
         Build the skill effects
         """
         # get position
-        position = world.get_entitys_component(hit_entity, Position)
+        position = scripts.engine.core.entity.get_entitys_component(hit_entity, Position)
         if not position:
             return []
 
         # the cone should start where the hit occurred and in the direction of the projectile.
-        entities_in_cone = world.get_affected_entities(
+        entities_in_cone = scripts.engine.core.entity.get_affected_entities(
             (position.x, position.y), Shape.CONE, self.cone_size, self.direction
         )
         # we should also ignore the hit entity and the projectile from the extra effects
