@@ -2,7 +2,6 @@ Internal
 ============================================
 
 ..  toctree::
-    :caption: Internal
 
     action
     constant

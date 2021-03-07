@@ -2,7 +2,6 @@ Processors
 ============================================
 
 ..  toctree::
-    :caption: Processors
 
     display
     game
