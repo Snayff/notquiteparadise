@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from scripts.engine.core import chronicle, system
+import scripts.engine.core.matter
+from scripts.engine.core import hourglass, system
 from scripts.engine.core.ui import ui
 from scripts.engine.internal.constant import EventType, InputIntent, UIElement
 from scripts.engine.internal.event import (
@@ -87,12 +88,12 @@ def _process_end_turn():
     # if player is current turn holder then save the game
     from scripts.engine.core import world
 
-    if chronicle.get_turn_holder() == world.get_player():
+    if hourglass.get_turn_holder() == scripts.engine.core.matter.get_player():
         from scripts.engine.core import state
 
         state.save_game()
 
-    chronicle.next_turn()
+    hourglass.next_turn()
 
 
 def _process_end_round():
@@ -104,4 +105,4 @@ def _process_end_round():
     system.reduce_lifespan_durations()
     system.reduce_immunity_durations()
 
-    chronicle.next_round()
+    hourglass.next_round()

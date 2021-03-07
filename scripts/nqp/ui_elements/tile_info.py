@@ -8,6 +8,7 @@ from pygame_gui import UIManager
 from pygame_gui.core import ObjectID, UIElement
 from pygame_gui.elements import UIImage, UITextBox
 
+import scripts.engine.core.matter
 from scripts.engine.core import query, world
 from scripts.engine.core.component import Resources, Traits
 from scripts.engine.internal.constant import GAP_SIZE, ICON_IN_TEXT_SIZE, RenderLayer
@@ -75,14 +76,14 @@ class TileInfo(Panel):
 
                     ## is it an entity with more useful info?
                     # get resources
-                    resources = world.get_entitys_component(entity, Resources)
+                    resources = scripts.engine.core.matter.get_entitys_component(entity, Resources)
                     if resources:
                         current_info.append(f"Health: {resources.health}")
                         current_info.append(f"Stamina: {resources.stamina}")
 
                     #  get traits (handle projectile exception)
                     try:
-                        traits = world.get_entitys_component(entity, Traits)
+                        traits = scripts.engine.core.matter.get_entitys_component(entity, Traits)
                         if traits:
                             names = ""
                             for name in traits.names:

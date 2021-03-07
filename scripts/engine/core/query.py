@@ -51,65 +51,65 @@ __all__ = [
 ]
 
 
-get_components = Query  # import directly from snecs to avoid issues with importing from world
+_get_components = Query  # import directly from snecs to avoid issues with importing from world
 
 ################### SINGLE QUERIES #######################
 
-tracked = get_components([Tracked]).compile()
+tracked = _get_components([Tracked]).compile()
 
-aesthetic = get_components([Aesthetic]).compile()
+aesthetic = _get_components([Aesthetic]).compile()
 
-knowledge = get_components([Knowledge]).compile()
+knowledge = _get_components([Knowledge]).compile()
 
-afflictions = get_components([Afflictions]).compile()
+afflictions = _get_components([Afflictions]).compile()
 
-position = get_components([Position]).compile()
+position = _get_components([Position]).compile()
 
-active = get_components([IsActive]).compile()
+active = _get_components([IsActive]).compile()
 
-lifespan = get_components([Lifespan]).compile()
+lifespan = _get_components([Lifespan]).compile()
 
-opinion = get_components([Opinion]).compile()
+opinion = _get_components([Opinion]).compile()
 
-reaction = get_components([Reaction]).compile()
+reaction = _get_components([Reaction]).compile()
 
-immunities = get_components([Immunities]).compile()
+immunities = _get_components([Immunities]).compile()
 
 
 ################## MULTI QUERIES ##########################
 
-position_and_light_source = get_components([Position, LightSource]).compile()
+position_and_light_source = _get_components([Position, LightSource]).compile()
 
-position_and_physicality = get_components([Position, Physicality]).compile()
+position_and_physicality = _get_components([Position, Physicality]).compile()
 
-position_and_aesthetic = get_components([Position, Aesthetic]).compile()
+position_and_aesthetic = _get_components([Position, Aesthetic]).compile()
 
-position_and_win_condition = get_components([Position, WinCondition]).compile()
+position_and_win_condition = _get_components([Position, WinCondition]).compile()
 
-position_and_map_condition = get_components([Position, MapCondition]).compile()
+position_and_map_condition = _get_components([Position, MapCondition]).compile()
 
-position_and_reaction = get_components([Position, Reaction]).compile()
+position_and_reaction = _get_components([Position, Reaction]).compile()
 
-active_and_tracked = get_components([IsActive, Tracked]).compile()
+active_and_tracked = _get_components([IsActive, Tracked]).compile()
 
-active_and_aesthetic = get_components([IsActive, Aesthetic]).compile()
+active_and_aesthetic = _get_components([IsActive, Aesthetic]).compile()
 
-position_and_identity_and_lifespan = get_components([Position, Identity, Lifespan]).compile()
+position_and_identity_and_lifespan = _get_components([Position, Identity, Lifespan]).compile()
 
-position_and_identity_and_aesthetic = get_components([Position, Identity, Aesthetic]).compile()
+position_and_identity_and_aesthetic = _get_components([Position, Identity, Aesthetic]).compile()
 
-active_and_light_source_and_position = get_components([IsActive, LightSource, Position]).compile()
+active_and_light_source_and_position = _get_components([IsActive, LightSource, Position]).compile()
 
-light_source_and_aesthetic = get_components([LightSource, Aesthetic]).compile()
+light_source_and_aesthetic = _get_components([LightSource, Aesthetic]).compile()
 
-active_and_position_and_physicality = get_components([IsActive, Position, Physicality]).compile()
+active_and_position_and_physicality = _get_components([IsActive, Position, Physicality]).compile()
 
 
 ################## TYPE OF ENTITY QUERIES ##########################
 # N.B. these are based on what components are used during the creation methods
 
-actors = get_components([Position, Physicality, Identity, CombatStats, Traits, FOV, Tracked, Immunities])
-active_actors = get_components(
+actors = _get_components([Position, Physicality, Identity, CombatStats, Traits, FOV, Tracked, Immunities])
+active_actors = _get_components(
     [IsActive, Position, Physicality, Identity, CombatStats, Traits, FOV, Tracked, Immunities]
 ).compile()
 
@@ -118,4 +118,4 @@ active_actors = get_components(
 # would be "return HPComponents where (if entity has DamageOverTimeComponent it also must have
 # StatusEffectComponent, otherwise it has PoisonComponent and not AntidoteComponent)
 
-not_position = get_components([Exists]).filter(~Position).compile()
+not_position = _get_components([Exists]).filter(~Position).compile()

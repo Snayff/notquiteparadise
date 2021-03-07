@@ -24,14 +24,12 @@ from scripts.engine.internal.constant import (
 from scripts.engine.internal.definition import ReactionData
 
 if TYPE_CHECKING:
-    from typing import Dict, List, Optional, Tuple, Type, Set
+    from typing import Dict, List, Optional, Set, Tuple, Type
 
     import pygame
 
-    from scripts.engine.internal.action import Affliction, Behaviour, Skill
+    from scripts.engine.internal.action import Affliction, Behaviour, Skill, SkillModifier
     from scripts.engine.internal.definition import TraitSpritePathsData, TraitSpritesData
-    from scripts.engine.internal.skill_modifier import SkillModifier
-
 
 __all__ = [
     "Exists",
@@ -57,6 +55,7 @@ __all__ = [
     "Lifespan",
     "Immunities",
     "Sight",
+    "NQPComponent",
 ]
 
 
@@ -655,9 +654,9 @@ class LightSource(NQPComponent):
         colour = serialised["colour"]
         alpha = serialised["alpha"]
 
-        from scripts.engine.core import world
+        from scripts.engine.core import matter
 
-        light_id = world.create_light(pos, radius, colour, alpha)
+        light_id = matter.create_light(pos, radius, colour, alpha)
 
         return LightSource(light_id, radius)
 

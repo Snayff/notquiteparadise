@@ -12,13 +12,8 @@ from scripts.engine.internal.constant import DATA_PATH, InputIntent
 from scripts.engine.internal.definition import (
     ActorData,
     AfflictionData,
-    BaseValueData,
-    DefaultValueData,
-    Dimensions,
     GameConfigData,
     GodData,
-    HitInfoData,
-    HitTypeData,
     MapData,
     RoomConceptData,
     SecondaryStatModData,
@@ -63,6 +58,7 @@ TERRAIN: Dict[str, TerrainData] = {}
 SECONDARY_STAT_MODS: Dict[str, SecondaryStatModData] = {}
 GODS: Dict[str, GodData] = {}
 SKILLS: Dict[str, SkillData] = {}
+BLESSINGS: Dict[str, Dict] = {}
 MAPS: Dict[str, MapData] = {}
 ROOMS: Dict[str, RoomConceptData] = {}
 ACTORS: Dict[str, ActorData] = {}
@@ -157,12 +153,14 @@ def _load_skills_data():
 
     SKILLS = data
 
+
 def _load_blessings_data():
     with open(str(DATA_PATH / "game/blessings.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global BLESSINGS
 
     BLESSINGS = data
+
 
 def _load_map_data():
     with open(str(DATA_PATH / "game/maps.json")) as file:

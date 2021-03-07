@@ -6,20 +6,11 @@ from typing import Tuple, TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-from scripts.engine.core import query, utility, world
-from scripts.engine.core.component import (
-    Aesthetic,
-    Afflictions,
-    CombatStats,
-    Identity,
-    Knowledge,
-    Lifespan,
-    Physicality,
-    Position,
-    Resources,
-)
+import scripts.engine.core.matter
+from scripts.engine.core import query, world
+from scripts.engine.core.component import Afflictions, CombatStats, Identity, Knowledge, Lifespan, Position, Resources
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import DamageTypeType, Direction, DirectionType, PrimaryStatType, TileTag
+from scripts.engine.internal.constant import DamageTypeType, DirectionType, PrimaryStatType
 from scripts.engine.internal.event import (
     AffectCooldownEvent,
     AffectStatEvent,
@@ -106,35 +97,37 @@ class DamageEffect(Effect):
             logging.info(f"Damage given to DamageEffect is {self.damage} and was therefore not executed.")
             return False, self.failure_effects
 
-        elif not world.entity_has_component(self.target, Resources):
+        elif not scripts.engine.core.matter.entity_has_component(self.target, Resources):
             logging.info(f"Target doesnt have resources so damage cannot be applied.")
             return False, self.failure_effects
 
-        elif not world.entity_has_component(self.target, CombatStats):
+        elif not scripts.engine.core.matter.entity_has_component(self.target, CombatStats):
             logging.warning(f"Target doesnt have combatstats so damage cannot be calculated.")
             return False, self.failure_effects
 
-        elif not world.entity_has_component(self.origin, CombatStats):
+        elif not scripts.engine.core.matter.entity_has_component(self.origin, CombatStats):
             logging.warning(f"Attacker doesnt have combatstats so damage cannot be calculated.")
             return False, self.failure_effects
 
         # get combat stats
-        defenders_stats = world.get_entitys_component(self.target, CombatStats)
-        attackers_stats = world.get_entitys_component(self.origin, CombatStats)
+        defenders_stats = scripts.engine.core.matter.get_entitys_component(self.target, CombatStats)
+        attackers_stats = scripts.engine.core.matter.get_entitys_component(self.origin, CombatStats)
 
         # get hit type
         stat_to_target_value = getattr(defenders_stats, self.stat_to_target.lower())
-        to_hit_score = world.calculate_to_hit_score(attackers_stats.accuracy, self.accuracy, stat_to_target_value)
-        hit_type = world.get_hit_type(to_hit_score)
+        to_hit_score = scripts.engine.core.matter.calculate_to_hit_score(
+            attackers_stats.accuracy, self.accuracy, stat_to_target_value
+        )
+        hit_type = scripts.engine.core.matter.get_hit_type(to_hit_score)
 
         # calculate damage
         resist_value = getattr(defenders_stats, "resist_" + self.damage_type.lower())
         mod_value = getattr(attackers_stats, self.mod_stat.lower())
-        damage = world.calculate_damage(self.damage, mod_value, resist_value, hit_type)
+        damage = scripts.engine.core.matter.calculate_damage(self.damage, mod_value, resist_value, hit_type)
 
         # apply the damage
-        if world.apply_damage(self.target, damage):
-            defenders_resources = world.get_entitys_component(self.target, Resources)
+        if scripts.engine.core.matter.apply_damage(self.target, damage):
+            defenders_resources = scripts.engine.core.matter.get_entitys_component(self.target, Resources)
 
             # post interaction event
             event = DamageEvent(
@@ -148,7 +141,7 @@ class DamageEffect(Effect):
 
             # check if target is dead
             if damage >= defenders_resources.health:
-                world.kill_entity(self.target)
+                scripts.engine.core.matter.kill_entity(self.target)
 
             return True, self.success_effects
         else:
@@ -182,32 +175,35 @@ class MoveSelfEffect(Effect):
 
         # confirm targeting self
         if self.origin != entity:
-            logging.debug(f"Failed to move {world.get_name(entity)} as they are not the originator.")
+            logging.debug(
+                f"Failed to move {scripts.engine.core.matter.get_name(entity)} as they are not the originator."
+            )
             return False, self.failure_effects
 
         # check target has position
-        if not world.entity_has_component(entity, Position):
-            logging.debug(f"Failed to move {world.get_name(entity)} as they have no Position.")
+        if not scripts.engine.core.matter.entity_has_component(entity, Position):
+            logging.debug(f"Failed to move {scripts.engine.core.matter.get_name(entity)} as they have no Position.")
             return False, self.failure_effects
 
         dir_x, dir_y = self.direction
-        pos = world.get_entitys_component(entity, Position)
+        pos = scripts.engine.core.matter.get_entitys_component(entity, Position)
 
         # loop each target tile in turn
         for _ in range(0, self.move_amount):
             new_x = pos.x + dir_x
             new_y = pos.y + dir_y
-            blocked = world.direction_is_blocked(entity, dir_x, dir_y)
+            blocked = world.is_direction_blocked(entity, dir_x, dir_y)
             success = not blocked
 
             if not blocked:
                 # named _position as typing was inferring from position above
-                _position = world.get_entitys_component(entity, Position)
+                _position = scripts.engine.core.matter.get_entitys_component(entity, Position)
 
                 # update position
                 if _position:
                     logging.debug(
-                        f"->'{world.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x}," f"{new_y})."
+                        f"->'{scripts.engine.core.matter.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x},"
+                        f"{new_y})."
                     )
                     _position.set(new_x, new_y)
 
@@ -252,32 +248,33 @@ class MoveOtherEffect(Effect):
 
         # confirm not targeting self
         if self.origin == entity:
-            logging.debug(f"Failed to move {world.get_name(entity)} as they are the originator.")
+            logging.debug(f"Failed to move {scripts.engine.core.matter.get_name(entity)} as they are the originator.")
             return False, self.failure_effects
 
         # check target has position
-        if not world.entity_has_component(entity, Position):
-            logging.debug(f"Failed to move {world.get_name(entity)} as they have no Position.")
+        if not scripts.engine.core.matter.entity_has_component(entity, Position):
+            logging.debug(f"Failed to move {scripts.engine.core.matter.get_name(entity)} as they have no Position.")
             return False, self.failure_effects
 
-        pos = world.get_entitys_component(entity, Position)
+        pos = scripts.engine.core.matter.get_entitys_component(entity, Position)
         dir_x, dir_y = self.direction
 
         # loop each target tile in turn
         for _ in range(0, self.move_amount):
             new_x = pos.x + dir_x
             new_y = pos.y + dir_y
-            blocked = world.direction_is_blocked(entity, dir_x, dir_y)
+            blocked = world.is_direction_blocked(entity, dir_x, dir_y)
             success = not blocked
 
             if not blocked:
                 # named _position as typing was inferring from position above
-                _position = world.get_entitys_component(entity, Position)
+                _position = scripts.engine.core.matter.get_entitys_component(entity, Position)
 
                 # update position
                 if _position:
                     logging.debug(
-                        f"->'{world.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x}," f"{new_y})."
+                        f"->'{scripts.engine.core.matter.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x},"
+                        f"{new_y})."
                     )
                     _position.set(new_x, new_y)
 
@@ -319,7 +316,7 @@ class AffectStatEffect(Effect):
         """
         logging.debug("Evaluating Affect Stat Effect...")
         success = False
-        stats = world.get_entitys_component(self.target, CombatStats)
+        stats = scripts.engine.core.matter.get_entitys_component(self.target, CombatStats)
 
         # if successfully  applied
         if stats.add_mod(self.stat_to_target, self.cause_name, self.affect_amount):
@@ -366,24 +363,24 @@ class ApplyAfflictionEffect(Effect):
         target = self.target
         duration = self.duration
 
-        affliction_instance = world.create_affliction(affliction_name, origin, target, duration)
+        affliction_instance = scripts.engine.core.matter.create_affliction(affliction_name, origin, target, duration)
 
         # check for immunities
-        if world.entity_has_immunity(target, affliction_name):
+        if scripts.engine.core.matter.entity_has_immunity(target, affliction_name):
             logging.debug(
-                f"'{world.get_name(self.origin)}' failed to apply {affliction_name} to  "
-                f"'{world.get_name(self.target)}' as they are immune."
+                f"'{scripts.engine.core.matter.get_name(self.origin)}' failed to apply {affliction_name} to  "
+                f"'{scripts.engine.core.matter.get_name(self.target)}' as they are immune."
             )
             return False, self.failure_effects
 
         # add the affliction to the afflictions component
-        if world.entity_has_component(target, Afflictions):
-            afflictions = world.get_entitys_component(target, Afflictions)
+        if scripts.engine.core.matter.entity_has_component(target, Afflictions):
+            afflictions = scripts.engine.core.matter.get_entitys_component(target, Afflictions)
             afflictions.add(affliction_instance)
-            world.apply_affliction(affliction_instance)
+            scripts.engine.core.matter.apply_affliction(affliction_instance)
 
             # add immunities to prevent further applications for the duration
-            world.add_immunity(target, affliction_name, duration + 2)
+            scripts.engine.core.matter.add_immunity(target, affliction_name, duration + 2)
 
             # post interaction event
             event = AfflictionEvent(
@@ -420,7 +417,7 @@ class AffectCooldownEffect(Effect):
         """
         logging.debug("Evaluating Reduce Skill Cooldown Effect...")
 
-        knowledge = world.get_entitys_component(self.target, Knowledge)
+        knowledge = scripts.engine.core.matter.get_entitys_component(self.target, Knowledge)
 
         if knowledge:
             current_cooldown = knowledge.cooldowns[self.skill_name]
@@ -480,7 +477,7 @@ class AlterTerrainEffect(Effect):
         result = False
         duplicate = False
         terrain_name = self.terrain_name
-        target_pos = world.get_entitys_component(self.target, Position)
+        target_pos = scripts.engine.core.matter.get_entitys_component(self.target, Position)
 
         # check target location doesnt already have the given terrain
         for entity, (position, identity, lifespan) in query.position_and_identity_and_lifespan:
@@ -495,7 +492,7 @@ class AlterTerrainEffect(Effect):
         if not duplicate:
             # create target
             terrain_data = library.TERRAIN[terrain_name]
-            world.create_terrain(terrain_data, (target_pos.x, target_pos.y), self.affect_amount)
+            scripts.engine.core.matter.create_terrain(terrain_data, (target_pos.x, target_pos.y), self.affect_amount)
             result = True
 
             # post interaction event
@@ -509,7 +506,7 @@ class AlterTerrainEffect(Effect):
     def _reduce_terrain_duration(self) -> bool:
         result = False
         terrain_name = self.terrain_name
-        target_pos = world.get_entitys_component(self.target, Position)
+        target_pos = scripts.engine.core.matter.get_entitys_component(self.target, Position)
 
         # check there is a terrain at target to reduce duration of
         for entity, (position, identity, lifespan) in query.position_and_identity_and_lifespan:
