@@ -28,10 +28,8 @@ if TYPE_CHECKING:
 
     import pygame
 
-    from scripts.engine.internal.action import Affliction, Behaviour, Skill
+    from scripts.engine.internal.action import Affliction, Behaviour, Skill, SkillModifier
     from scripts.engine.internal.definition import TraitSpritePathsData, TraitSpritesData
-    from scripts.engine.internal.skill_modifier import SkillModifier
-
 
 __all__ = [
     "Exists",

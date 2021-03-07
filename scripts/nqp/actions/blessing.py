@@ -1,7 +1,7 @@
 from typing import List
 
 from scripts.engine.core.effect import Effect
-from scripts.engine.internal.skill_modifier import SkillModifier
+from scripts.engine.internal.action import SkillModifier
 
 """
 Use Blessing.custom_args to set custom effect initialization for a blessing if
