@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine.core import chronicle, world
-from scripts.engine.core.component import Aesthetic, Position
+from scripts.engine.core.component import Aesthetic, Position, Knowledge
 from scripts.engine.core.effect import Effect
 from scripts.engine.internal.constant import (
     AfflictionCategoryType,
@@ -23,6 +23,7 @@ from scripts.engine.internal.constant import (
     TileTag,
     TileTagType,
 )
+from scripts.engine.internal.skill_modifier import SkillModifier
 from scripts.engine.internal.definition import DelayedSkillData, ProjectileData
 from scripts.engine.internal.event import event_hub, UseSkillEvent
 from scripts.engine.world_objects.tile import Tile
@@ -87,6 +88,10 @@ class Skill(Action):
     is_delayed: bool  # usable by Tile, Auto  - Doesnt make sense for Direction to have a delayed cast.
     delayed_skill_data: Optional[DelayedSkillData]
 
+    # blessing related attributes
+    blessings: List[SkillModifier]
+    types: List[str]
+
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         self.user: EntityID = user
         self.target_tile: Tile = target_tile
@@ -97,12 +102,19 @@ class Skill(Action):
         # vars needed to keep track of changes
         self.ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
 
-    @abstractmethod
-    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+        self.innactive_effects: List[str] = []
+
+    def _post_build_effects(self, entity: EntityID, potency: float = 1.0, skill_stack: List[Effect] = []) -> List[Effect]:
         """
-        Build the effects of this skill applying to a single entity. Must be overridden in subclass.
+        Build the effects of this skill applying to a single entity. This function will be used to apply any dynamic tweaks to the effects stack after the subclass generates its stack.
         """
-        pass
+        skill_blessings = world.get_entitys_component(self.user, Knowledge).skill_blessings
+        relevant_blessings: List[SkillModifier] = []
+        if self.__class__.__name__ in skill_blessings:
+            relevant_blessings = skill_blessings[self.__class__.__name__]
+        for blessing in relevant_blessings:
+            blessing.apply(skill_stack, self.user, entity)
+        return skill_stack
 
     @classmethod
     def _init_properties(cls):
@@ -119,6 +131,7 @@ class Skill(Action):
         cls.icon_path = cls.data.icon_path
         cls.resource_type = cls.data.resource_type
         cls.resource_cost = cls.data.resource_cost
+        cls.types = cls.data.types
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
@@ -129,7 +142,7 @@ class Skill(Action):
         for entity in world.get_affected_entities(
             (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
         ):
-            yield entity, self._build_effects(entity)
+            yield entity, [effect for effect in self._build_effects(entity) if effect.__class__.__name__ not in self.innactive_effects]
             entity_names.append(world.get_name(entity))
 
     def use(self) -> bool:
@@ -294,6 +307,9 @@ def register_action(cls: Type[Union[Action, Behaviour]]):
     if issubclass(cls, Skill):
         cls._init_properties()
         store.skill_registry[cls.__name__] = cls
+    elif issubclass(cls, SkillModifier):
+        cls._init_properties()
+        store.blessing_registry[cls.__name__] = cls
     elif issubclass(cls, Affliction):
         cls._init_properties()
         store.affliction_registry[cls.__name__] = cls
