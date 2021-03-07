@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import random
 
-import scripts.engine.core.entity
+import scripts.engine.core.matter
 from scripts.engine.core import hourglass, world
 from scripts.engine.core.component import Knowledge, Position
 from scripts.engine.internal import library
@@ -17,7 +17,7 @@ class SkipTurn(Behaviour):
     """
 
     def act(self):
-        name = scripts.engine.core.entity.get_name(self.entity)
+        name = scripts.engine.core.matter.get_name(self.entity)
         logging.debug(f"'{name}' skipped their turn.")
         hourglass.end_turn(self.entity, library.GAME_CONFIG.default_values.move_cost)
 
@@ -31,21 +31,21 @@ class FollowPlayer(Behaviour):
         entity = self.entity
 
         # get position info
-        pos = scripts.engine.core.entity.get_entitys_component(entity, Position)
-        player = scripts.engine.core.entity.get_player()
-        player_pos = scripts.engine.core.entity.get_entitys_component(player, Position)
+        pos = scripts.engine.core.matter.get_entitys_component(entity, Position)
+        player = scripts.engine.core.matter.get_player()
+        player_pos = scripts.engine.core.matter.get_entitys_component(player, Position)
 
         # get move direction
         move_dir = world.get_a_star_direction((pos.x, pos.y), (player_pos.x, player_pos.y))
 
         # get info for skill
-        move = scripts.engine.core.entity.get_known_skill(entity, "Move")
+        move = scripts.engine.core.matter.get_known_skill(entity, "Move")
         target_tile = world.get_tile((pos.x, pos.y))
-        name = scripts.engine.core.entity.get_name(entity)
+        name = scripts.engine.core.matter.get_name(entity)
 
         # attempt to use skill
-        if scripts.engine.core.entity.can_use_skill(entity, "Move"):
-            scripts.engine.core.entity.use_skill(entity, move, target_tile, move_dir)
+        if scripts.engine.core.matter.can_use_skill(entity, "Move"):
+            scripts.engine.core.matter.use_skill(entity, move, target_tile, move_dir)
             logging.debug(f"'{name}' moved to ({pos.x},{pos.y}).")
         else:
             logging.debug(f"'{name}' tried to move to ({pos.x},{pos.y}), but couldn`t.")
@@ -60,21 +60,21 @@ class SearchAndAttack(Behaviour):
 
     def act(self):
         entity = self.entity
-        pos = scripts.engine.core.entity.get_entitys_component(entity, Position)
-        target = scripts.engine.core.entity.choose_target(entity)
+        pos = scripts.engine.core.matter.get_entitys_component(entity, Position)
+        target = scripts.engine.core.matter.choose_target(entity)
 
         # if we have no target move in random direction
         if not target:
             self._move_randomly()
             return  # exit
 
-        target_pos = scripts.engine.core.entity.get_entitys_component(target, Position)
+        target_pos = scripts.engine.core.matter.get_entitys_component(target, Position)
 
         # what skills are ready to use?
         possible_skills = []
-        knowledge = scripts.engine.core.entity.get_entitys_component(entity, Knowledge)
+        knowledge = scripts.engine.core.matter.get_entitys_component(entity, Knowledge)
         for skill in knowledge.skills.values():
-            if scripts.engine.core.entity.can_use_skill(entity, skill.name) and skill.name != "Move":
+            if scripts.engine.core.matter.can_use_skill(entity, skill.name) and skill.name != "Move":
                 possible_skills.append(skill)
 
         # where can we cast from?
@@ -96,10 +96,10 @@ class SearchAndAttack(Behaviour):
             skill_to_cast = random.choice(skills_can_cast)
 
             # cast whatever skill has been chosen
-            scripts.engine.core.entity.use_skill(entity, skill_to_cast, target_tile, skill_dir)
+            scripts.engine.core.matter.use_skill(entity, skill_to_cast, target_tile, skill_dir)
 
             logging.debug(
-                f"'{scripts.engine.core.entity.get_name(entity)}' cast {skill_to_cast.name} from ({pos.x},"
+                f"'{scripts.engine.core.matter.get_name(entity)}' cast {skill_to_cast.name} from ({pos.x},"
                 f"{pos.y}) towards ({pos.x + skill_dir[0]},{pos.y + skill_dir[1]}), with range "
                 f"{skill_to_cast.range}."
             )
@@ -110,7 +110,7 @@ class SearchAndAttack(Behaviour):
         # we cant cast, find nearest cast_position
         else:
             # add all possible positions to pathfinder
-            pathfinder = scripts.engine.core.entity.create_pathfinder()
+            pathfinder = scripts.engine.core.matter.create_pathfinder()
             for cast_positions in skill_cast_positions.values():
                 for cast_pos in cast_positions:
                     pathfinder.add_root(cast_pos)
@@ -131,10 +131,10 @@ class SearchAndAttack(Behaviour):
                 skill_to_cast = knowledge.skills["Move"]
 
                 # cast whatever skill has been chosen
-                scripts.engine.core.entity.use_skill(entity, skill_to_cast, target_tile, skill_dir)
+                scripts.engine.core.matter.use_skill(entity, skill_to_cast, target_tile, skill_dir)
 
                 logging.debug(
-                    f"'{scripts.engine.core.entity.get_name(entity)}' moved towards a cast position, from ({pos.x},"
+                    f"'{scripts.engine.core.matter.get_name(entity)}' moved towards a cast position, from ({pos.x},"
                     f"{pos.y}) to ({pos.x + skill_dir[0]},{pos.y + skill_dir[1]})."
                 )
 
@@ -149,8 +149,8 @@ class SearchAndAttack(Behaviour):
         Move self in random direction. End turn, whether moved or not.
         """
         entity = self.entity
-        pos = scripts.engine.core.entity.get_entitys_component(entity, Position)
-        knowledge = scripts.engine.core.entity.get_entitys_component(entity, Knowledge)
+        pos = scripts.engine.core.matter.get_entitys_component(entity, Position)
+        knowledge = scripts.engine.core.matter.get_entitys_component(entity, Knowledge)
         move = knowledge.skills["Move"]
         cardinals = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
 
@@ -170,10 +170,10 @@ class SearchAndAttack(Behaviour):
             move_dir = random.choice(poss_directions)
             target_tile = world.get_tile((pos.x, pos.y))  # target tile for Move is current pos
 
-            scripts.engine.core.entity.use_skill(entity, move, target_tile, move_dir)
+            scripts.engine.core.matter.use_skill(entity, move, target_tile, move_dir)
 
             logging.debug(
-                f"'{scripts.engine.core.entity.get_name(entity)}' couldnt see a target so moved randomly from ({pos.x},"
+                f"'{scripts.engine.core.matter.get_name(entity)}' couldnt see a target so moved randomly from ({pos.x},"
                 f"{pos.y}) to ({pos.x + move_dir[0]},{pos.y + move_dir[1]})."
             )
 

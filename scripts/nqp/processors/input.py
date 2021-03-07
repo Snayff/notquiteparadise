@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pygame
 
-import scripts.engine.core.entity
+import scripts.engine.core.matter
 from scripts.engine.core import hourglass, key, query, world
 from scripts.engine.core.component import Position
 from scripts.engine.core.ui import ui
@@ -30,13 +30,13 @@ def process_input_event(event: pygame.event, game_state: GameState):
 
             if game_state == GameState.TARGETING:
                 # Activate skill on mouse click while in targeting mode
-                player = scripts.engine.core.entity.get_player()
-                position = scripts.engine.core.entity.get_entitys_component(player, Position)
+                player = scripts.engine.core.matter.get_player()
+                position = scripts.engine.core.matter.get_entitys_component(player, Position)
                 event_x, event_y = event.tile_pos
                 direction = (max(-1, min(1, event_x - position.x)), max(-1, min(1, position.y - event_y)))
                 intent = key.convert_vector_to_intent(direction)
 
-            elif game_state == GameState.GAME_MAP and hourglass.get_turn_holder() == scripts.engine.core.entity\
+            elif game_state == GameState.GAME_MAP and hourglass.get_turn_holder() == scripts.engine.core.matter\
                     .get_player():
                 # Activate Actor Info Menu
                 x, y = event.tile_pos

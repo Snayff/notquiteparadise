@@ -10,7 +10,7 @@ import snecs
 from snecs import Component
 from snecs.world import default_world
 
-import scripts.engine.core.entity
+import scripts.engine.core.matter
 from scripts.engine.core import hourglass, state, system, utility, world
 from scripts.engine.core.component import Knowledge  # for demonstration purposes
 from scripts.engine.core.component import (
@@ -103,22 +103,22 @@ def _start_debug_game():
     logging.info(game_map.generation_info)
 
     # init the player
-    player = scripts.engine.core.entity.get_player()
+    player = scripts.engine.core.matter.get_player()
 
     # tell places about the player
     hourglass.set_turn_holder(player)
 
     # create actor near to player
-    player_pos = scripts.engine.core.entity.get_entitys_component(player, Position)
+    player_pos = scripts.engine.core.matter.get_entitys_component(player, Position)
     actor_data = library.ACTORS["crocturion"]
-    scripts.engine.core.entity.create_actor(actor_data, (player_pos.x, player_pos.y - 2))
+    scripts.engine.core.matter.create_actor(actor_data, (player_pos.x, player_pos.y - 2))
 
     # create god
     god_data = library.GODS["the_small_gods"]
-    scripts.engine.core.entity.create_god(god_data)
+    scripts.engine.core.matter.create_god(god_data)
 
     # update draw position for all entities
-    for entity, (aesthetic, position) in scripts.engine.core.entity.get_components([Aesthetic, Position]):
+    for entity, (aesthetic, position) in scripts.engine.core.matter.get_components([Aesthetic, Position]):
         assert isinstance(aesthetic, Aesthetic)
         assert isinstance(position, Position)
         aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
@@ -134,7 +134,7 @@ def _start_debug_game():
     camera.set_target((player_pos.x, player_pos.y), True)
 
     # create terrain next to the player
-    scripts.engine.core.entity.create_terrain(library.TERRAIN["bog"], (player_pos.x + 1, player_pos.y))
+    scripts.engine.core.matter.create_terrain(library.TERRAIN["bog"], (player_pos.x + 1, player_pos.y))
 
     # loading finished, give player control
     state.set_new(GameState.GAME_MAP)
@@ -159,19 +159,19 @@ def start_game(player_data: ActorData):
     game_map.generate_new_map(player_data)
 
     # init the player
-    player = scripts.engine.core.entity.get_player()
+    player = scripts.engine.core.matter.get_player()
 
     # allocate player skills
-    scripts.engine.core.entity.learn_skill(player, "Lightning")
+    scripts.engine.core.matter.learn_skill(player, "Lightning")
 
     # blessing test cases
-    knowledge = scripts.engine.core.entity.get_entitys_component(player, Knowledge)
+    knowledge = scripts.engine.core.matter.get_entitys_component(player, Knowledge)
     #knowledge.add_blessing(Move, NoMove(player))
     knowledge.add_blessing(BasicAttack, AttackMove(player))
     knowledge.remove_blessing(BasicAttack, AttackMove)
 
     # create win condition and place next to player
-    player_pos = scripts.engine.core.entity.get_entitys_component(player, Position)
+    player_pos = scripts.engine.core.matter.get_entitys_component(player, Position)
     win_x = player_pos.x + 1
     win_y = player_pos.y
     components: List[Component] = []
@@ -180,7 +180,7 @@ def start_game(player_data: ActorData):
     traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/win_flag.png"))]
     sprites = utility.build_sprites_from_paths(traits_paths)
     components.append(Aesthetic(sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
-    scripts.engine.core.entity.create_entity(components)
+    scripts.engine.core.matter.create_entity(components)
 
     # create map change condition and place next to player
     win_x = player_pos.x + 2
@@ -191,14 +191,14 @@ def start_game(player_data: ActorData):
     traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/map_flag.png"))]
     sprites = utility.build_sprites_from_paths(traits_paths)
     components.append(Aesthetic(sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
-    scripts.engine.core.entity.create_entity(components)
+    scripts.engine.core.matter.create_entity(components)
 
     # tell places about the player
     hourglass.set_turn_holder(player)
 
     # create a god
     god_data = library.GODS["the_small_gods"]
-    scripts.engine.core.entity.create_god(god_data)
+    scripts.engine.core.matter.create_god(god_data)
 
     # show the in game screens
     # message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())
@@ -214,7 +214,7 @@ def start_game(player_data: ActorData):
 
     # FIXME - entities load before camera so they cant get their screen position.
     #  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.
-    for entity, (aesthetic, position) in scripts.engine.core.entity.get_components([Aesthetic, Position]):
+    for entity, (aesthetic, position) in scripts.engine.core.matter.get_components([Aesthetic, Position]):
         assert isinstance(aesthetic, Aesthetic)
         assert isinstance(position, Position)
         aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
@@ -227,7 +227,7 @@ def start_game(player_data: ActorData):
     system.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
-    pos = scripts.engine.core.entity.get_entitys_component(player, Position)
+    pos = scripts.engine.core.matter.get_entitys_component(player, Position)
     camera.set_target((pos.x, pos.y), True)
 
     # loading finished, give player control
@@ -248,7 +248,7 @@ def load_game():
         break
 
     # move camera to player
-    player_pos = scripts.engine.core.entity.get_entitys_component(scripts.engine.core.entity.get_player(), Position)
+    player_pos = scripts.engine.core.matter.get_entitys_component(scripts.engine.core.matter.get_player(), Position)
     camera.set_target((player_pos.x, player_pos.y), True)
 
     # show UI
@@ -296,8 +296,8 @@ def change_map():
     # extremely scuffed and for testing. copied a bunch of stuff from start_game()
 
     # entities must be forcefully deleted or components will delete lights from the new lightbox once the delete in main runs
-    for entity, (_,) in list(scripts.engine.core.entity.get_components([Exists])):
-        if not scripts.engine.core.entity.entity_has_component(entity, IsPlayer) and scripts.engine.core.entity\
+    for entity, (_,) in list(scripts.engine.core.matter.get_components([Exists])):
+        if not scripts.engine.core.matter.entity_has_component(entity, IsPlayer) and scripts.engine.core.matter\
                 .entity_has_component(entity, Identity):
             snecs.delete_entity_immediately(entity, default_world)
 
@@ -306,26 +306,26 @@ def change_map():
     store.current_game_map = game_map
 
     # regenerate lights for transferred entities
-    for entity, (light_source, position) in list(scripts.engine.core.entity.get_components([LightSource, Position])):
+    for entity, (light_source, position) in list(scripts.engine.core.matter.get_components([LightSource, Position])):
         # set up light
         radius = 2  # TODO - pull radius and colour from external data
         colour = (255, 255, 255)
         alpha = 200
-        light_source.light_id = scripts.engine.core.entity.create_light([position.x, position.y], radius, colour, alpha)
+        light_source.light_id = scripts.engine.core.matter.create_light([position.x, position.y], radius, colour, alpha)
 
     # populate the map
     game_map.generate_new_map(None)
 
     # get the player
-    player = scripts.engine.core.entity.get_player()
+    player = scripts.engine.core.matter.get_player()
 
     # transfer player to new spawn
-    player_position = scripts.engine.core.entity.get_entitys_component(player, Position)
+    player_position = scripts.engine.core.matter.get_entitys_component(player, Position)
     new_pos = tuple(game_map.get_open_space())
     player_position.set(*new_pos)
 
     # visually update player position
-    aesthetic = scripts.engine.core.entity.get_entitys_component(player, Aesthetic)
+    aesthetic = scripts.engine.core.matter.get_entitys_component(player, Aesthetic)
     if aesthetic:
         aesthetic.target_draw_x, aesthetic.target_draw_y = new_pos
         aesthetic.current_sprite = aesthetic.sprites.move
@@ -336,7 +336,7 @@ def change_map():
     system.process_tile_visibility()
 
     # point the camera at the player, now that FOV is updated
-    pos = scripts.engine.core.entity.get_entitys_component(player, Position)
+    pos = scripts.engine.core.matter.get_entitys_component(player, Position)
     camera.set_target((pos.x, pos.y), True)
 
 

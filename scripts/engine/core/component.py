@@ -9,7 +9,6 @@ import numpy as np
 from snecs import RegisteredComponent
 from snecs.typedefs import EntityID
 
-import scripts.engine.core.entity
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import (
     HeightType,
@@ -655,9 +654,8 @@ class LightSource(NQPComponent):
         colour = serialised["colour"]
         alpha = serialised["alpha"]
 
-        from scripts.engine.core import world
-
-        light_id = scripts.engine.core.entity.create_light(pos, radius, colour, alpha)
+        from scripts.engine.core import matter
+        light_id = matter.create_light(pos, radius, colour, alpha)
 
         return LightSource(light_id, radius)
 

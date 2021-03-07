@@ -5,7 +5,7 @@ from typing import Optional, Type
 
 from snecs.typedefs import EntityID
 
-import scripts.engine.core.entity
+import scripts.engine.core.matter
 from scripts.engine.core import hourglass, state, utility, world
 from scripts.engine.core.component import Knowledge, Position
 from scripts.engine.core.ui import ui
@@ -118,8 +118,8 @@ def _process_game_map_intents(intent: InputIntentType):
     """
     Process intents for the player turn game state.
     """
-    player = scripts.engine.core.entity.get_player()
-    position = scripts.engine.core.entity.get_entitys_component(player, Position)
+    player = scripts.engine.core.matter.get_player()
+    position = scripts.engine.core.matter.get_entitys_component(player, Position)
 
     possible_move_intents = [InputIntent.DOWN, InputIntent.UP, InputIntent.LEFT, InputIntent.RIGHT]
     possible_skill_intents = [
@@ -135,7 +135,7 @@ def _process_game_map_intents(intent: InputIntentType):
     if intent in possible_move_intents and position:
         direction = _get_pressed_direction(intent)
         target_tile = world.get_tile((position.x, position.y))
-        move = scripts.engine.core.entity.get_known_skill(player, "Move")
+        move = scripts.engine.core.matter.get_known_skill(player, "Move")
         if direction in move.target_directions:
             # ensure it's actually the player's turn by checking the event queue for an unprocessed end turn event
             if not event_hub.peek(EndTurnEvent):
@@ -148,8 +148,8 @@ def _process_game_map_intents(intent: InputIntentType):
 
         if skill_name:
             # is skill ready to use
-            if scripts.engine.core.entity.can_use_skill(player, skill_name):
-                skill = scripts.engine.core.entity.get_known_skill(player, skill_name)
+            if scripts.engine.core.matter.can_use_skill(player, skill_name):
+                skill = scripts.engine.core.matter.get_known_skill(player, skill_name)
 
                 if skill:
                     # if auto targeting use the skill
@@ -178,10 +178,10 @@ def _process_targeting_mode_intents(intent):
     """
     Process intents for the player turn game state.
     """
-    player = scripts.engine.core.entity.get_player()
-    position = scripts.engine.core.entity.get_entitys_component(player, Position)
+    player = scripts.engine.core.matter.get_player()
+    position = scripts.engine.core.matter.get_entitys_component(player, Position)
     active_skill_name = state.get_active_skill()
-    skill = scripts.engine.core.entity.get_known_skill(player, active_skill_name)
+    skill = scripts.engine.core.matter.get_known_skill(player, active_skill_name)
 
     possible_skill_intents = [
         InputIntent.SKILL0,
@@ -209,7 +209,7 @@ def _process_targeting_mode_intents(intent):
             # if skill pressed doesn't match skill already being targeted
             if pressed_skill_name != active_skill_name:
                 # reactivate targeting mode with the new skill
-                if scripts.engine.core.entity.can_use_skill(player, pressed_skill_name):
+                if scripts.engine.core.matter.can_use_skill(player, pressed_skill_name):
                     state.set_active_skill(pressed_skill_name)
 
     ## Use skill
@@ -249,12 +249,12 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
     'can_use_skill' already completed.
     """
     # get players starting position for camera updates
-    pos = scripts.engine.core.entity.get_entitys_component(player, Position)
+    pos = scripts.engine.core.matter.get_entitys_component(player, Position)
     start_pos = pos.x, pos.y
 
-    if scripts.engine.core.entity.use_skill(player, skill, target_tile, direction):
-        scripts.engine.core.entity.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
-        scripts.engine.core.entity.set_skill_on_cooldown(player, skill.__class__.__name__, skill.base_cooldown)
+    if scripts.engine.core.matter.use_skill(player, skill, target_tile, direction):
+        scripts.engine.core.matter.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
+        scripts.engine.core.matter.set_skill_on_cooldown(player, skill.__class__.__name__, skill.base_cooldown)
         hourglass.end_turn(player, skill.time_cost)
 
         # update camera if position changes
@@ -297,11 +297,11 @@ def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
     """
     Get the pressed skill number. Returns value of skill number pressed. If not found returns None.
     """
-    player = scripts.engine.core.entity.get_player()
+    player = scripts.engine.core.matter.get_player()
     skill_name = None
 
     if player:
-        skills = scripts.engine.core.entity.get_entitys_component(player, Knowledge)
+        skills = scripts.engine.core.matter.get_entitys_component(player, Knowledge)
 
         if skills:
             skill_order = skills.skill_order

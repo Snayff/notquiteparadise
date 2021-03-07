@@ -4,7 +4,7 @@ import pytest
 import snecs
 from snecs.typedefs import EntityID
 
-import scripts.engine.core.entity
+import scripts.engine.core.matter
 from scripts.engine.core import query, state, world
 from scripts.engine.core.component import Afflictions, CombatStats, Knowledge, Position, Resources
 from scripts.engine.core.effect import (
@@ -54,9 +54,9 @@ def _create_scenario() -> Tuple[EntityID, EntityID]:
     game_map.generate_new_map(actor_data)
     
     # add second entity
-    entity1 = scripts.engine.core.entity.get_player()
-    pos = scripts.engine.core.entity.get_entitys_component(entity1, Position)
-    entity2 = scripts.engine.core.entity.create_actor(actor_data, (pos.x + 1, pos.y))
+    entity1 = scripts.engine.core.matter.get_player()
+    pos = scripts.engine.core.matter.get_entitys_component(entity1, Position)
+    entity2 = scripts.engine.core.matter.create_actor(actor_data, (pos.x + 1, pos.y))
 
     return entity1, entity2
 
@@ -130,9 +130,9 @@ def test_damage_effect(
         potency=potency
     )
 
-    start_hp = scripts.engine.core.entity.get_entitys_component(entity, Resources).health
+    start_hp = scripts.engine.core.matter.get_entitys_component(entity, Resources).health
     effect.evaluate()
-    end_hp = scripts.engine.core.entity.get_entitys_component(entity, Resources).health
+    end_hp = scripts.engine.core.matter.get_entitys_component(entity, Resources).health
 
     # assess results
     # We are just testing damage can be applied, not the damage formula and as such this is simplified, otherwise
@@ -182,7 +182,7 @@ def test_move_self_effect(
         move_amount=1
     )
 
-    position = scripts.engine.core.entity.get_entitys_component(target, Position)
+    position = scripts.engine.core.matter.get_entitys_component(target, Position)
     start_pos = (position.x, position.y)
     success = effect.evaluate()[0]
     end_pos = (position.x, position.y)
@@ -222,7 +222,7 @@ def test_move_other_effect(
         move_amount=1
     )
 
-    position = scripts.engine.core.entity.get_entitys_component(target, Position)
+    position = scripts.engine.core.matter.get_entitys_component(target, Position)
     start_pos = (position.x, position.y)
     success = effect.evaluate()[0]
     end_pos = (position.x, position.y)
@@ -271,7 +271,7 @@ def test_affect_stat_effect(
         affect_amount=affect_amount,
     )
 
-    stats = scripts.engine.core.entity.get_entitys_component(entity, CombatStats)
+    stats = scripts.engine.core.matter.get_entitys_component(entity, CombatStats)
     start_mod = stats._get_mod_value(stat_to_target)  # get mod amount
     success = effect.evaluate()[0]
     end_mod = stats._get_mod_value(stat_to_target)
@@ -311,7 +311,7 @@ def test_apply_affliction_effect(
     )
 
     success = effect.evaluate()[0]
-    end_afflictions = scripts.engine.core.entity.get_entitys_component(entity, Afflictions)
+    end_afflictions = scripts.engine.core.matter.get_entitys_component(entity, Afflictions)
 
     names = []
     for affliction in end_afflictions.active:
@@ -345,7 +345,7 @@ def test_affect_cooldown_effect(
     entity, other_entity = _create_scenario()
 
     # assign skill
-    scripts.engine.core.entity.learn_skill(entity, skill_name)
+    scripts.engine.core.matter.learn_skill(entity, skill_name)
 
     effect = AffectCooldownEffect(
         origin=entity,
@@ -357,7 +357,7 @@ def test_affect_cooldown_effect(
     )
 
     cooldown = 99
-    knowledge = scripts.engine.core.entity.get_entitys_component(entity, Knowledge)
+    knowledge = scripts.engine.core.matter.get_entitys_component(entity, Knowledge)
     knowledge.set_skill_cooldown(skill_name, cooldown)
     success = effect.evaluate()[0]
     end_cooldown = knowledge.cooldowns[skill_name]
@@ -399,7 +399,7 @@ def test_alter_terrain_effect_create(
     )
 
     success = effect.evaluate()[0]
-    target_pos = scripts.engine.core.entity.get_entitys_component(entity, Position)
+    target_pos = scripts.engine.core.matter.get_entitys_component(entity, Position)
 
     if success:
         confirmed = False
@@ -448,7 +448,7 @@ def test_alter_terrain_effect_reduce_duration(
     )
 
     success = effect.evaluate()[0]
-    target_pos = scripts.engine.core.entity.get_entitys_component(entity, Position)
+    target_pos = scripts.engine.core.matter.get_entitys_component(entity, Position)
 
     if success and (base_duration > affect_terrain_negative_amount):
         # test case: reduced duration but still exists

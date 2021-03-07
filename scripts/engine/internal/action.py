@@ -8,9 +8,7 @@ from typing import Any, Dict, List, Set, TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-import scripts.engine
-import scripts.engine.core.entity
-from scripts.engine.core import hourglass, world
+from scripts.engine.core import hourglass, matter, world
 from scripts.engine.core.component import Aesthetic, Knowledge, Position
 from scripts.engine.core.effect import Effect
 from scripts.engine.internal.constant import (
@@ -33,9 +31,13 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Iterator, List, Optional, Tuple, Type, TYPE_CHECKING, Union
 
+
 __all__ = ["Skill", "Affliction", "Behaviour", "SkillModifier", "register_action"]
 
+
 # used by skill modifiers
+import scripts.engine.core.effect
+
 _EFFECTS = {k: getattr(scripts.engine.core.effect, k) for k in dir(scripts.engine.core.effect)}
 
 
@@ -117,7 +119,7 @@ class Skill(Action):
         # handle mutable default
         if skill_stack is None:
             skill_stack = []
-        skill_blessings = scripts.engine.core.entity.get_entitys_component(self.user, Knowledge).skill_blessings
+        skill_blessings = matter.get_entitys_component(self.user, Knowledge).skill_blessings
         relevant_blessings: List[SkillModifier] = []
         if self.__class__.__name__ in skill_blessings:
             relevant_blessings = skill_blessings[self.__class__.__name__]
@@ -148,17 +150,17 @@ class Skill(Action):
         times.
         """
         entity_names = []
-        for entity in scripts.engine.core.entity.get_affected_entities(
+        for entity in matter.get_affected_entities(
             (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
         ):
             yield entity, [effect for effect in self._build_effects(entity) if effect.__class__.__name__ not in self.inactive_effects]
-            entity_names.append(scripts.engine.core.entity.get_name(entity))
+            entity_names.append(matter.get_name(entity))
 
     def use(self) -> bool:
         """
         If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
         """
-        logging.debug(f"'{scripts.engine.core.entity.get_name(self.user)}' used '{self.__class__.__name__}'.")
+        logging.debug(f"'{matter.get_name(self.user)}' used '{self.__class__.__name__}'.")
 
         # handle the delivery method of the skill
         if self.uses_projectile:
@@ -168,7 +170,7 @@ class Skill(Action):
             self._create_delayed_skill()
             is_successful = True
         else:
-            is_successful = scripts.engine.core.entity.apply_skill(self)
+            is_successful = matter.apply_skill(self)
 
         if is_successful:
             # post interaction event
@@ -190,7 +192,7 @@ class Skill(Action):
         projectile_data.direction = self.direction
 
         # create the projectile
-        projectile = scripts.engine.core.entity.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
+        projectile = matter.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
 
         # add projectile to ignore list
         self.ignore_entities.append(projectile)
@@ -207,7 +209,7 @@ class Skill(Action):
         delayed_skill_data.skill_instance = self
 
         # create the delayed skill
-        delayed_skill = scripts.engine.core.entity.create_delayed_skill(
+        delayed_skill = matter.create_delayed_skill(
             self.user, (self.target_tile.x, self.target_tile.y), delayed_skill_data
         )
 
@@ -277,14 +279,14 @@ class Affliction(Action):
 
         entity_names = []
         entities = set()
-        position = scripts.engine.core.entity.get_entitys_component(self.affected_entity, Position)
+        position = matter.get_entitys_component(self.affected_entity, Position)
 
         for coordinate in position.coordinates:
-            for entity in scripts.engine.core.entity.get_affected_entities(coordinate, self.shape, self.shape_size):
+            for entity in matter.get_affected_entities(coordinate, self.shape, self.shape_size):
                 if entity not in entities:
                     entities.add(entity)
                     yield entity, self._build_effects(entity)
-                    entity_names.append(scripts.engine.core.entity.get_name(entity))
+                    entity_names.append(matter.get_name(entity))
 
     def trigger(self):
         """
@@ -489,17 +491,17 @@ class Projectile(Behaviour):
 
         # get info we definitely need
         entity = self.entity
-        pos = scripts.engine.core.entity.get_entitys_component(entity, Position)
+        pos = matter.get_entitys_component(entity, Position)
         current_tile = world.get_tile((pos.x, pos.y))
         dir_x, dir_y = self.data.direction[0], self.data.direction[1]
         target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
 
         # check if already on top of an entity before moving in case something move into the projectile or the projectile was created on top of an entity
-        player_pos = scripts.engine.core.entity.get_entitys_component(scripts.engine.core.entity.get_player(), Position)
+        player_pos = matter.get_entitys_component(matter.get_player(), Position)
         if world.tile_has_tag(entity, current_tile, TileTag.OTHER_ENTITY):
             self.data.skill_instance.target_tile = current_tile
             should_activate = True
-            logging.debug(f"'{scripts.engine.core.entity.get_name(entity)}' collided with an entity on cast at ({pos.x},{pos.y}).")
+            logging.debug(f"'{matter.get_name(entity)}' collided with an entity on cast at ({pos.x},{pos.y}).")
 
         # if we havent travelled max distance or determined we should activate then move
         # N.b. not an elif because we want the precheck above to happen in isolation
@@ -521,26 +523,26 @@ class Projectile(Behaviour):
 
             else:
                 # at max range and not activating so kill attached entity
-                scripts.engine.core.entity.kill_entity(entity)
+                matter.kill_entity(entity)
 
         if should_activate:
-            logging.debug(f"'{scripts.engine.core.entity.get_name(entity)}' is going to activate at ({pos.x},{pos.y}).")
+            logging.debug(f"'{matter.get_name(entity)}' is going to activate at ({pos.x},{pos.y}).")
 
             # apply skill, rather than using it, as the instance already exists and we are just using the effects
-            scripts.engine.core.entity.apply_skill(self.data.skill_instance)
+            matter.apply_skill(self.data.skill_instance)
 
             # die after activating
-            scripts.engine.core.entity.kill_entity(entity)
+            matter.kill_entity(entity)
 
         elif should_move:
             logging.debug(
-                f"'{scripts.engine.core.entity.get_name(entity)}' has {self.data.range - self.distance_travelled} range left and"
+                f"'{matter.get_name(entity)}' has {self.data.range - self.distance_travelled} range left and"
                 f" is going to move from ({pos.x},{pos.y}) to "
                 f"({pos.x + dir_x},{pos.y + dir_y})."
             )
 
-            move = scripts.engine.core.entity.get_known_skill(entity, "Move")
-            scripts.engine.core.entity.use_skill(entity, move, current_tile, self.data.direction)
+            move = matter.get_known_skill(entity, "Move")
+            matter.use_skill(entity, move, current_tile, self.data.direction)
 
             self.distance_travelled += 1
             hourglass.end_turn(entity, self.data.speed)
@@ -563,7 +565,7 @@ class Projectile(Behaviour):
 
             elif collision_type == TerrainCollision.FIZZLE:
                 # get rid of projectile
-                scripts.engine.core.entity.kill_entity(self.entity)
+                matter.kill_entity(self.entity)
 
             elif collision_type == TerrainCollision.REFLECT:
                 should_move = True
@@ -612,14 +614,14 @@ class DelayedSkill(Behaviour):
             # set flag
             self.delayed = True
 
-            logging.debug(f"{scripts.engine.core.entity.get_name(self.entity)} will trigger in {self.data.duration} rounds.")
+            logging.debug(f"{matter.get_name(self.entity)} will trigger in {self.data.duration} rounds.")
 
             return
 
         # apply skill, rather than using it, as the instance already exists and we are just using the effects
-        scripts.engine.core.entity.apply_skill(self.data.skill_instance)
+        matter.apply_skill(self.data.skill_instance)
 
         # die after activating
-        scripts.engine.core.entity.kill_entity(self.entity)
+        matter.kill_entity(self.entity)
 
 

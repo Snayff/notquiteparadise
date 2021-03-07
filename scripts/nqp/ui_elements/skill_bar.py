@@ -10,7 +10,7 @@ from pygame_gui import UIManager
 from pygame_gui.core import ObjectID
 from pygame_gui.elements import UIButton
 
-import scripts.engine.core.entity
+import scripts.engine.core.matter
 from scripts.engine.core import utility, world
 from scripts.engine.core.component import Knowledge
 from scripts.engine.internal import library
@@ -140,8 +140,8 @@ class SkillBar(Panel):
         blank_icon = blank_icon.convert_alpha()
 
         try:
-            player = scripts.engine.core.entity.get_player()
-            knowledge = scripts.engine.core.entity.get_entitys_component(player, Knowledge)
+            player = scripts.engine.core.matter.get_player()
+            knowledge = scripts.engine.core.matter.get_entitys_component(player, Knowledge)
             amount_known_skills = len(knowledge.skill_order)
 
             for count, button in enumerate(self.buttons):

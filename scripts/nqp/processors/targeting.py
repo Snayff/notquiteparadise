@@ -6,7 +6,7 @@ import pygame
 from pygame.rect import Rect
 from pygame.surface import Surface
 
-import scripts.engine.core.entity
+import scripts.engine.core.matter
 from scripts.engine.core import query, state, utility, world
 from scripts.engine.core.component import Aesthetic, Position
 from scripts.engine.core.ui import ui
@@ -73,8 +73,8 @@ class Targeting:
         if self.hovered_tile and self.hovered_tile.is_visible:
             if state.get_current() == GameState.TARGETING:
                 active_skill_name = state.get_active_skill()
-                player = scripts.engine.core.entity.get_player()
-                skill = scripts.engine.core.entity.get_known_skill(player, active_skill_name)
+                player = scripts.engine.core.matter.get_player()
+                skill = scripts.engine.core.matter.get_known_skill(player, active_skill_name)
 
                 # set the skill target for the skill cast if the hovered tile is a valid target during line of sight targeting
                 if (skill.targeting_method == TargetingMethod.DIRECTION) and self.valid_line_of_sight:
@@ -83,7 +83,7 @@ class Targeting:
 
                 # cancel event triggering if the hovered target is invalid in the target mode
                 if skill.targeting_method == TargetingMethod.TILE:
-                    position = scripts.engine.core.entity.get_entitys_component(player, Position)
+                    position = scripts.engine.core.matter.get_entitys_component(player, Position)
                     dif = (position.x - self.hovered_tile.x, position.y - self.hovered_tile.y)
                     if (
                         (dif not in skill.target_directions)
@@ -100,10 +100,10 @@ class Targeting:
     def render(self, camera, target_surf: pygame.Surface):
         # targeting mode related indicator rendering
         if state.get_current() == GameState.TARGETING:
-            player = scripts.engine.core.entity.get_player()
-            position = scripts.engine.core.entity.get_entitys_component(player, Position)
+            player = scripts.engine.core.matter.get_player()
+            position = scripts.engine.core.matter.get_entitys_component(player, Position)
             active_skill_name = state.get_active_skill()
-            skill = scripts.engine.core.entity.get_known_skill(player, active_skill_name)
+            skill = scripts.engine.core.matter.get_known_skill(player, active_skill_name)
 
             # if this is a directional attack
             if skill.targeting_method == TargetingMethod.TILE:
@@ -178,10 +178,10 @@ class Targeting:
         Checks if a tile is in the line of sight from the player and returns the visible path to the target tile.
         """
         # get base info and init
-        player = scripts.engine.core.entity.get_player()
-        position = scripts.engine.core.entity.get_entitys_component(player, Position)
+        player = scripts.engine.core.matter.get_player()
+        position = scripts.engine.core.matter.get_entitys_component(player, Position)
         active_skill_name = state.get_active_skill()
-        skill = scripts.engine.core.entity.get_known_skill(player, active_skill_name)
+        skill = scripts.engine.core.matter.get_known_skill(player, active_skill_name)
         valid_line_of_sight = False
         target_tile = world.get_tile(pos)
         tile_path = []

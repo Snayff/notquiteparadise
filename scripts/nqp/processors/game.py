@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import scripts.engine.core.entity
+import scripts.engine.core.matter
 from scripts.engine.core import hourglass, system
 from scripts.engine.core.ui import ui
 from scripts.engine.internal.constant import EventType, InputIntent, UIElement
@@ -88,7 +88,7 @@ def _process_end_turn():
     # if player is current turn holder then save the game
     from scripts.engine.core import world
 
-    if hourglass.get_turn_holder() == scripts.engine.core.entity.get_player():
+    if hourglass.get_turn_holder() == scripts.engine.core.matter.get_player():
         from scripts.engine.core import state
 
         state.save_game()

@@ -7,7 +7,7 @@ import pygame
 import tcod
 from snecs.typedefs import EntityID
 
-import scripts.engine.core.entity
+import scripts.engine.core.matter
 from scripts.engine.core import hourglass, query, world
 from scripts.engine.core.component import (
     Aesthetic,
@@ -71,31 +71,31 @@ def process_activations():
     """
     # all entities with no position must be active
     for entity, (_,) in query.not_position:
-        if not scripts.engine.core.entity.entity_has_component(entity, IsActive):
-            scripts.engine.core.entity.add_component(entity, IsActive())
+        if not scripts.engine.core.matter.entity_has_component(entity, IsActive):
+            scripts.engine.core.matter.add_component(entity, IsActive())
 
     # check entities in range of player
-    player = scripts.engine.core.entity.get_player()
-    player_pos: Position = scripts.engine.core.entity.get_entitys_component(player, Position)
+    player = scripts.engine.core.matter.get_player()
+    player_pos: Position = scripts.engine.core.matter.get_entitys_component(player, Position)
     for entity, (pos,) in query.position:
         # check if they're close enough that we care
         distance_x = abs(player_pos.x - pos.x)
         distance_y = abs(player_pos.y - pos.y)
         if max(distance_x, distance_y) < MAX_ACTIVATION_DISTANCE:
             # they're close, now check they arent already active
-            if not scripts.engine.core.entity.entity_has_component(entity, IsActive):
-                scripts.engine.core.entity.add_component(entity, IsActive())
+            if not scripts.engine.core.matter.entity_has_component(entity, IsActive):
+                scripts.engine.core.matter.add_component(entity, IsActive())
 
                 # update tracked to current time (otherwise they will be behind and act repeatedly)
-                if scripts.engine.core.entity.entity_has_component(entity, Tracked):
-                    tracked = scripts.engine.core.entity.get_entitys_component(entity, Tracked)
+                if scripts.engine.core.matter.entity_has_component(entity, Tracked):
+                    tracked = scripts.engine.core.matter.get_entitys_component(entity, Tracked)
 
                     tracked.time_spent = hourglass.get_time() + 1
 
         else:
             # not close enough, remove active
-            if scripts.engine.core.entity.entity_has_component(entity, IsActive):
-                scripts.engine.core.entity.remove_component(entity, IsActive)
+            if scripts.engine.core.matter.entity_has_component(entity, IsActive):
+                scripts.engine.core.matter.remove_component(entity, IsActive)
 
 
 ########################## VISION ##################################
@@ -161,7 +161,7 @@ def process_fov():
                 updated_block_sight_map[x, y] = 0
 
         # update entities fov map
-        sight_range = scripts.engine.core.entity.get_entitys_component(entity, Sight).sight_range
+        sight_range = scripts.engine.core.matter.get_entitys_component(entity, Sight).sight_range
         fov.map = tcod.map.compute_fov(
             updated_block_sight_map, (pos.x, pos.y), sight_range, FOV_LIGHT_WALLS, FOV_ALGORITHM
         )
@@ -172,8 +172,8 @@ def process_tile_visibility():
     Update tile visibility based on player fov
     """
     # get player info
-    player = scripts.engine.core.entity.get_player()
-    fov_map = scripts.engine.core.entity.get_entitys_component(player, FOV).map
+    player = scripts.engine.core.matter.get_player()
+    fov_map = scripts.engine.core.matter.get_entitys_component(player, FOV).map
 
     # get game map details
     game_map = world.get_game_map()
@@ -225,8 +225,8 @@ def reduce_affliction_durations():
 
             # handle expiry
             if affliction.duration <= 0:
-                scripts.engine.core.entity.remove_affliction(entity, affliction)
-                logging.debug(f"Removed {affliction.name} from '{scripts.engine.core.entity.get_name(entity)}'.")
+                scripts.engine.core.matter.remove_affliction(entity, affliction)
+                logging.debug(f"Removed {affliction.name} from '{scripts.engine.core.matter.get_name(entity)}'.")
 
 
 def reduce_lifespan_durations():
@@ -242,8 +242,8 @@ def reduce_lifespan_durations():
 
         # handle expiry
         if lifespan.duration <= 0:
-            scripts.engine.core.entity.kill_entity(entity)
-            logging.debug(f"'{scripts.engine.core.entity.get_name(entity)}'s lifespan has expired and they have been killed.")
+            scripts.engine.core.matter.kill_entity(entity)
+            logging.debug(f"'{scripts.engine.core.matter.get_name(entity)}'s lifespan has expired and they have been killed.")
 
 
 def reduce_immunity_durations():
@@ -263,6 +263,6 @@ def reduce_immunity_durations():
             # handle expiry
             if duration <= 0:
                 immunities.active.pop(immunity_name)
-                logging.debug(f"Removed {immunity_name} from '{scripts.engine.core.entity.get_name(entity)}'s " f"list of immunities.")
+                logging.debug(f"Removed {immunity_name} from '{scripts.engine.core.matter.get_name(entity)}'s " f"list of immunities.")
 
 
