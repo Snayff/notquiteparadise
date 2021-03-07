@@ -404,6 +404,7 @@ def create_light(pos: Tuple[int, int], radius: int, colour: Tuple[int, int, int]
     """
     light_img = utility.get_image("world/light_mask.png", ((radius * 2) * TILE_SIZE, (radius * 2) * TILE_SIZE))
     from scripts.engine.core.world import get_game_map
+
     light_box = get_game_map().light_box
     light = lighting.Light([pos[0] * TILE_SIZE, pos[1] * TILE_SIZE], radius * TILE_SIZE, light_img)
     light.set_alpha(alpha)
@@ -418,10 +419,12 @@ def create_pathfinder() -> tcod.path.Pathfinder:
     Create an empty pathfinder using the current game map
     """
     from scripts.engine.core.world import get_game_map
+
     game_map = get_game_map()
 
     # combine entity blocking and tile blocking maps
     from scripts.engine.core.world import get_entity_blocking_movement_map
+
     cost_map = game_map.block_movement_map | get_entity_blocking_movement_map()
 
     # create graph to represent the map and a pathfinder to navigate
@@ -569,6 +572,7 @@ def _create_alter_terrain_effect(
 
 ############################# GET - RETURN AN EXISTING SOMETHING  #############################
 
+
 def get_player() -> EntityID:
     """
     Get the player.
@@ -681,6 +685,7 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
 
 ############################# QUERIES #############################
 
+
 def entity_has_immunity(entity: EntityID, name: str) -> bool:
     """
     Check if an entity has immunity to the named Action.
@@ -769,6 +774,7 @@ def _can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> boo
 
 ############################# AMEND STATE #############################
 
+
 def add_immunity(entity: EntityID, immunity_name: str, duration: int):
     """
     Add an immunity to an Entity's Immunities Component. If entity has no Immunities Component one will be added.
@@ -819,6 +825,7 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
 
     # ensure they are the right target type
     from scripts.engine.core.world import tile_has_tags
+
     if tile_has_tags(user, skill_cast.target_tile, skill_cast.cast_tags):
         result = skill_cast.use()
         return result
@@ -839,6 +846,7 @@ def apply_skill(skill: Skill) -> bool:
 
     # ensure they are the right target type
     from scripts.engine.core.world import tile_has_tags
+
     if tile_has_tags(skill.user, skill.target_tile, skill.target_tags):
         for entity, effects in skill.apply():
             if entity not in skill.ignore_entities:
@@ -888,10 +896,12 @@ def apply_affliction(affliction: Affliction) -> bool:
     target = affliction.affected_entity
     position = get_entitys_component(target, Position)
     from scripts.engine.core.world import get_tile
+
     target_tile = get_tile((position.x, position.y))
 
     # ensure they are the right target type
     from scripts.engine.core.world import tile_has_tags
+
     if tile_has_tags(affliction.origin, target_tile, affliction.target_tags):
         for entity, effects in affliction.apply():
             effect_queue = list(effects)
@@ -1060,6 +1070,7 @@ def learn_skill(entity: EntityID, skill_name: str):
 
 ############################# CALCULATIONS #############################
 
+
 def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int, hit_type: HitTypeType) -> int:
     """
     Work out the damage to be dealt.
@@ -1118,4 +1129,3 @@ def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_
     logging.debug(log_string)
 
     return mitigated_to_hit_score
-

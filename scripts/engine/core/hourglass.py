@@ -111,7 +111,9 @@ def end_turn(entity: EntityID, time_spent: int):
         event_hub.post(EndTurnEvent())
 
     else:
-        logging.warning(f"Tried to end {scripts.engine.core.matter.get_name(entity)}'s turn but they're not turn holder.")
+        logging.warning(
+            f"Tried to end {scripts.engine.core.matter.get_name(entity)}'s turn but they're not turn holder."
+        )
 
 
 def next_round():

@@ -166,7 +166,7 @@ def start_game(player_data: ActorData):
 
     # blessing test cases
     knowledge = scripts.engine.core.matter.get_entitys_component(player, Knowledge)
-    #knowledge.add_blessing(Move, NoMove(player))
+    # knowledge.add_blessing(Move, NoMove(player))
     knowledge.add_blessing(BasicAttack, AttackMove(player))
     knowledge.remove_blessing(BasicAttack, AttackMove)
 
@@ -297,8 +297,9 @@ def change_map():
 
     # entities must be forcefully deleted or components will delete lights from the new lightbox once the delete in main runs
     for entity, (_,) in list(scripts.engine.core.matter.get_components([Exists])):
-        if not scripts.engine.core.matter.entity_has_component(entity, IsPlayer) and scripts.engine.core.matter\
-                .entity_has_component(entity, Identity):
+        if not scripts.engine.core.matter.entity_has_component(
+            entity, IsPlayer
+        ) and scripts.engine.core.matter.entity_has_component(entity, Identity):
             snecs.delete_entity_immediately(entity, default_world)
 
     # init and save map

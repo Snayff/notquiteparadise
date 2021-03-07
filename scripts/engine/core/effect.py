@@ -115,7 +115,9 @@ class DamageEffect(Effect):
 
         # get hit type
         stat_to_target_value = getattr(defenders_stats, self.stat_to_target.lower())
-        to_hit_score = scripts.engine.core.matter.calculate_to_hit_score(attackers_stats.accuracy, self.accuracy, stat_to_target_value)
+        to_hit_score = scripts.engine.core.matter.calculate_to_hit_score(
+            attackers_stats.accuracy, self.accuracy, stat_to_target_value
+        )
         hit_type = scripts.engine.core.matter.get_hit_type(to_hit_score)
 
         # calculate damage
@@ -173,7 +175,9 @@ class MoveSelfEffect(Effect):
 
         # confirm targeting self
         if self.origin != entity:
-            logging.debug(f"Failed to move {scripts.engine.core.matter.get_name(entity)} as they are not the originator.")
+            logging.debug(
+                f"Failed to move {scripts.engine.core.matter.get_name(entity)} as they are not the originator."
+            )
             return False, self.failure_effects
 
         # check target has position
@@ -198,7 +202,8 @@ class MoveSelfEffect(Effect):
                 # update position
                 if _position:
                     logging.debug(
-                        f"->'{scripts.engine.core.matter.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x}," f"{new_y})."
+                        f"->'{scripts.engine.core.matter.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x},"
+                        f"{new_y})."
                     )
                     _position.set(new_x, new_y)
 
@@ -268,7 +273,8 @@ class MoveOtherEffect(Effect):
                 # update position
                 if _position:
                     logging.debug(
-                        f"->'{scripts.engine.core.matter.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x}," f"{new_y})."
+                        f"->'{scripts.engine.core.matter.get_name(self.target)}' moved from ({pos.x},{pos.y}) to ({new_x},"
+                        f"{new_y})."
                     )
                     _position.set(new_x, new_y)
 

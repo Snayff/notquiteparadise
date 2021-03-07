@@ -243,7 +243,9 @@ def reduce_lifespan_durations():
         # handle expiry
         if lifespan.duration <= 0:
             scripts.engine.core.matter.kill_entity(entity)
-            logging.debug(f"'{scripts.engine.core.matter.get_name(entity)}'s lifespan has expired and they have been killed.")
+            logging.debug(
+                f"'{scripts.engine.core.matter.get_name(entity)}'s lifespan has expired and they have been killed."
+            )
 
 
 def reduce_immunity_durations():
@@ -263,6 +265,7 @@ def reduce_immunity_durations():
             # handle expiry
             if duration <= 0:
                 immunities.active.pop(immunity_name)
-                logging.debug(f"Removed {immunity_name} from '{scripts.engine.core.matter.get_name(entity)}'s " f"list of immunities.")
-
-
+                logging.debug(
+                    f"Removed {immunity_name} from '{scripts.engine.core.matter.get_name(entity)}'s "
+                    f"list of immunities."
+                )

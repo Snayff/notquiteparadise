@@ -225,7 +225,9 @@ def _set_sprite(entity: EntityID, sprite_category: SpriteCategoryType, new_pos: 
         if animation:
             aesthetic.set_current_sprite(sprite_category)
         else:
-            logging.warning(f"{scripts.engine.core.matter.get_name(entity)} doesn`t have {sprite_category} sprite so left as idle.")
+            logging.warning(
+                f"{scripts.engine.core.matter.get_name(entity)} doesn`t have {sprite_category} sprite so left as idle."
+            )
 
         if new_pos:
             aesthetic.target_draw_x, aesthetic.target_draw_y = new_pos

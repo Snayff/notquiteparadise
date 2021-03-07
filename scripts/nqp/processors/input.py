@@ -36,8 +36,10 @@ def process_input_event(event: pygame.event, game_state: GameState):
                 direction = (max(-1, min(1, event_x - position.x)), max(-1, min(1, position.y - event_y)))
                 intent = key.convert_vector_to_intent(direction)
 
-            elif game_state == GameState.GAME_MAP and hourglass.get_turn_holder() == scripts.engine.core.matter\
-                    .get_player():
+            elif (
+                game_state == GameState.GAME_MAP
+                and hourglass.get_turn_holder() == scripts.engine.core.matter.get_player()
+            ):
                 # Activate Actor Info Menu
                 x, y = event.tile_pos
                 # get entity on tile

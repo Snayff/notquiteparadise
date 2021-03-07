@@ -55,7 +55,7 @@ __all__ = [
     "Lifespan",
     "Immunities",
     "Sight",
-    "NQPComponent"
+    "NQPComponent",
 ]
 
 
@@ -655,6 +655,7 @@ class LightSource(NQPComponent):
         alpha = serialised["alpha"]
 
         from scripts.engine.core import matter
+
         light_id = matter.create_light(pos, radius, colour, alpha)
 
         return LightSource(light_id, radius)

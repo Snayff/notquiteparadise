@@ -39,11 +39,13 @@ move_world = snecs.ecs.move_world
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 
+
 def get_game_map() -> GameMap:
     """
     Get current game_map. Raises AttributeError if game_map doesnt exist.
     """
     from scripts.engine.internal.data import store
+
     if store.current_game_map:
         game_map = store.current_game_map
     else:
@@ -56,6 +58,7 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     Get the tile at the specified location. Raises exception if out of bounds or doesnt exist.
     """
     from scripts.engine.internal.data import store
+
     game_map = store.current_game_map  # not using get_game_map for performance
     assert isinstance(game_map, GameMap)
     x, y = tile_pos
@@ -79,6 +82,7 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
     """
     start_x, start_y = start_pos
     from scripts.engine.internal.data import store
+
     game_map = store.current_game_map  # not using get_game_map for performance
     assert isinstance(game_map, GameMap)
     tiles = []
@@ -137,6 +141,7 @@ def get_a_star_path(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> 
     Get a list of coords that dictates the path between 2 entities.
     """
     from scripts.engine.core.matter import create_pathfinder
+
     pathfinder = create_pathfinder()
 
     # add points
@@ -322,11 +327,13 @@ def get_cast_positions(
 
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
 
+
 def tile_has_tag(active_entity: EntityID, tile: Tile, tag: TileTagType) -> bool:
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
     from scripts.engine.internal.data import store
+
     game_map = store.current_game_map  # not using get_game_map for performance
     assert isinstance(game_map, GameMap)
 
@@ -428,6 +435,7 @@ def _is_tile_visible_to_entity(tile: Tile, entity: EntityID, game_map: GameMap) 
     Check if the specified tile is visible to the entity
     """
     from scripts.engine.core.matter import get_entitys_component
+
     fov_map = get_entitys_component(entity, FOV).map
     light_map = game_map.light_map
 
@@ -449,6 +457,7 @@ def _tile_has_any_entity(tile: Tile) -> bool:
     Check if the specified tile  has an entity on it
     """
     from scripts.engine.core.matter import get_entities_on_tile
+
     return len(get_entities_on_tile(tile)) > 0
 
 
@@ -457,6 +466,7 @@ def _tile_has_other_entities(tile: Tile, active_entity: EntityID) -> bool:
     Check if the specified tile has other entities apart from the provided active entity
     """
     from scripts.engine.core.matter import get_entities_on_tile
+
     entities_on_tile = get_entities_on_tile(tile)
     active_entity_is_on_tile = active_entity in entities_on_tile
     return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or (
@@ -469,6 +479,7 @@ def _tile_has_specific_entity(tile: Tile, active_entity: EntityID) -> bool:
     Check if the specified tile  has the specified entity on it
     """
     from scripts.engine.core.matter import get_entities_on_tile
+
     return active_entity in get_entities_on_tile(tile)
 
 
@@ -478,6 +489,7 @@ def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
 
     # Any entities that block movement?
     from scripts.engine.core.matter import get_components
+
     for entity, (position, physicality) in get_components([Position, Physicality]):
         assert isinstance(position, Position)
         assert isinstance(physicality, Physicality)
@@ -492,8 +504,10 @@ def _tile_has_entity_blocking_sight(tile: Tile, active_entity: EntityID) -> bool
     y = tile.y
 
     from scripts.engine.core.matter import entity_has_component
+
     if entity_has_component(active_entity, Physicality):
         from scripts.engine.core.matter import get_entitys_component
+
         viewer_height = get_entitys_component(active_entity, Physicality).height
     else:
         # viewer has no height, assume everything blocks
@@ -501,6 +515,7 @@ def _tile_has_entity_blocking_sight(tile: Tile, active_entity: EntityID) -> bool
 
     # Any entities that block sight?
     from scripts.engine.core.matter import get_components
+
     for entity, (position, physicality) in get_components([Position, Physicality]):
         assert isinstance(position, Position)
         assert isinstance(physicality, Physicality)
@@ -518,6 +533,7 @@ def is_direction_blocked(entity: EntityID, dir_x: int, dir_y: int) -> bool:
     collides = False
     direction_name = utility.value_to_member((dir_x, dir_y), Direction)
     from scripts.engine.core.matter import get_entitys_component
+
     position = get_entitys_component(entity, Position)
 
     for coordinate in position.coordinates:
@@ -539,6 +555,7 @@ def is_direction_blocked(entity: EntityID, dir_x: int, dir_y: int) -> bool:
                 if other_entity != entity and physicality.blocks_movement and (target_x, target_y) in pos.coordinates:
                     # blocked by entity
                     from scripts.engine.core.matter import get_name
+
                     blockers_name = get_name(other_entity)
                     name = get_name(entity)
                     logging.debug(
@@ -549,4 +566,3 @@ def is_direction_blocked(entity: EntityID, dir_x: int, dir_y: int) -> bool:
             collides = True
 
     return collides
-

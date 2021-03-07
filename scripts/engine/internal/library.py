@@ -153,12 +153,14 @@ def _load_skills_data():
 
     SKILLS = data
 
+
 def _load_blessings_data():
     with open(str(DATA_PATH / "game/blessings.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global BLESSINGS
 
     BLESSINGS = data
+
 
 def _load_map_data():
     with open(str(DATA_PATH / "game/maps.json")) as file:

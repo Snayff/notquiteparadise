@@ -111,8 +111,7 @@ class Skill(Action):
 
         self.inactive_effects: List[str] = []
 
-    def _post_build_effects(self, entity: EntityID, potency: float = 1.0,
-            skill_stack=None) -> List[Effect]:
+    def _post_build_effects(self, entity: EntityID, potency: float = 1.0, skill_stack=None) -> List[Effect]:
         """
         Build the effects of this skill applying to a single entity. This function will be used to apply any dynamic tweaks to the effects stack after the subclass generates its stack.
         """
@@ -153,7 +152,11 @@ class Skill(Action):
         for entity in matter.get_affected_entities(
             (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
         ):
-            yield entity, [effect for effect in self._build_effects(entity) if effect.__class__.__name__ not in self.inactive_effects]
+            yield entity, [
+                effect
+                for effect in self._build_effects(entity)
+                if effect.__class__.__name__ not in self.inactive_effects
+            ]
             entity_names.append(matter.get_name(entity))
 
     def use(self) -> bool:
@@ -349,24 +352,24 @@ class SkillModifier(ABC):
 
         cls.data = library.BLESSINGS[cls.__name__]
         cls.name = cls.__name__
-        cls.description = cls.data['description']
-        cls.level = 'Base' # assume common exists for now
-        cls.removable = cls.data['removable']
-        cls.conflicts = cls.data['conflicts']
-        cls.skill_types = cls.data['skill_types']
+        cls.description = cls.data["description"]
+        cls.level = "Base"  # assume common exists for now
+        cls.removable = cls.data["removable"]
+        cls.conflicts = cls.data["conflicts"]
+        cls.skill_types = cls.data["skill_types"]
 
-        cls.remove_effects = cls.data['base_effects']['remove_effects']
-        cls.add_effects = cls.data['base_effects']['add_effects']
-        cls.modify_effects_set = cls.data['base_effects']['modify_effects_set']
-        cls.modify_effects_tweak_flat = cls.data['base_effects']['modify_effects_tweak_flat']
-        cls.modify_effects_tweak_percent = cls.data['base_effects']['modify_effects_tweak_percent']
+        cls.remove_effects = cls.data["base_effects"]["remove_effects"]
+        cls.add_effects = cls.data["base_effects"]["add_effects"]
+        cls.modify_effects_set = cls.data["base_effects"]["modify_effects_set"]
+        cls.modify_effects_tweak_flat = cls.data["base_effects"]["modify_effects_tweak_flat"]
+        cls.modify_effects_tweak_percent = cls.data["base_effects"]["modify_effects_tweak_percent"]
 
     @property
     def involved_effects(self) -> Set[str]:
         """
         Get the set of effects involved in the blessing.
         """
-        return set([v['effect_id'] for v in self.add_effects + self.modify_effects_set] + self.remove_effects)
+        return set([v["effect_id"] for v in self.add_effects + self.modify_effects_set] + self.remove_effects)
 
     def roll_level(self):
         """
@@ -376,9 +379,9 @@ class SkillModifier(ABC):
         level_chances = []
         total = 0
 
-        for level in self.data['levels']:
+        for level in self.data["levels"]:
             levels.append(level)
-            total += self.data['levels'][level]['rarity']
+            total += self.data["levels"][level]["rarity"]
             level_chances.append(total)
 
         random_float = random.random()
@@ -393,16 +396,18 @@ class SkillModifier(ABC):
         Refreshes the class attributes with the data for the specific blessing level.
         """
         self.level = level
-        if 'remove_effects' in self.data['levels'][self.level]['effects']:
-            self.remove_effects = self.data['levels'][self.level]['effects']['remove_effects']
-        if 'add_effects' in self.data['levels'][self.level]['effects']:
-            self.add_effects = self.data['levels'][self.level]['effects']['add_effects']
-        if 'modify_effects_set' in self.data['levels'][self.level]['effects']:
-            self.modify_effects_set = self.data['levels'][self.level]['effects']['modify_effects_set']
-        if 'modify_effects_tweak_flat' in self.data['levels'][self.level]['effects']:
-            self.modify_effects_tweak_flat = self.data['levels'][self.level]['effects']['modify_effects_tweak_flat']
-        if 'modify_effects_tweak_percent' in self.data['levels'][self.level]['effects']:
-            self.modify_effects_tweak_percent = self.data['levels'][self.level]['effects']['modify_effects_tweak_percent']
+        if "remove_effects" in self.data["levels"][self.level]["effects"]:
+            self.remove_effects = self.data["levels"][self.level]["effects"]["remove_effects"]
+        if "add_effects" in self.data["levels"][self.level]["effects"]:
+            self.add_effects = self.data["levels"][self.level]["effects"]["add_effects"]
+        if "modify_effects_set" in self.data["levels"][self.level]["effects"]:
+            self.modify_effects_set = self.data["levels"][self.level]["effects"]["modify_effects_set"]
+        if "modify_effects_tweak_flat" in self.data["levels"][self.level]["effects"]:
+            self.modify_effects_tweak_flat = self.data["levels"][self.level]["effects"]["modify_effects_tweak_flat"]
+        if "modify_effects_tweak_percent" in self.data["levels"][self.level]["effects"]:
+            self.modify_effects_tweak_percent = self.data["levels"][self.level]["effects"][
+                "modify_effects_tweak_percent"
+            ]
 
     def apply(self, effects: List[Effect], owner, target):
         """
@@ -415,23 +420,23 @@ class SkillModifier(ABC):
 
             # flat config change
             for mod in self.modify_effects_tweak_flat:
-                if mod['effect_id'] == effect_name:
-                    for value in mod['values']:
+                if mod["effect_id"] == effect_name:
+                    for value in mod["values"]:
                         current_value = getattr(effect, value)
-                        setattr(effect, value, current_value + mod['values'][value])
+                        setattr(effect, value, current_value + mod["values"][value])
 
             # set config change
             for mod in self.modify_effects_set:
-                if mod['effect_id'] == effect_name:
-                    for value in mod['values']:
-                        setattr(effect, value, mod['values'][value])
+                if mod["effect_id"] == effect_name:
+                    for value in mod["values"]:
+                        setattr(effect, value, mod["values"][value])
 
             # percent config change
             for mod in self.modify_effects_tweak_percent:
-                if mod['effect_id'] == effect_name:
-                    for value in mod['values']:
+                if mod["effect_id"] == effect_name:
+                    for value in mod["values"]:
                         current_value = getattr(effect, value)
-                        setattr(effect, value, current_value * mod['values'][value])
+                        setattr(effect, value, current_value * mod["values"][value])
 
             # remove effects from the stack if applicable
             if effect_name in self.remove_effects:
@@ -440,11 +445,11 @@ class SkillModifier(ABC):
         # add effects to the stack
         for add_effect in self.add_effects:
             # build the effect creation arguments from the config
-            args = {'origin': owner, 'target': target, 'success_effects': [], 'failure_effects': []}
-            args.update(add_effect['args'])
-            if add_effect['effect_id'] in self.custom_args:
+            args = {"origin": owner, "target": target, "success_effects": [], "failure_effects": []}
+            args.update(add_effect["args"])
+            if add_effect["effect_id"] in self.custom_args:
                 args.update(self.custom_args)
-            effects.append(_EFFECTS[add_effect['effect_id']](**args))
+            effects.append(_EFFECTS[add_effect["effect_id"]](**args))
 
 
 def register_action(cls: Type[Union[Action, Behaviour, SkillModifier]]):
@@ -623,5 +628,3 @@ class DelayedSkill(Behaviour):
 
         # die after activating
         matter.kill_entity(self.entity)
-
-
