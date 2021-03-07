@@ -57,6 +57,7 @@ __all__ = [
     "Lifespan",
     "Immunities",
     "Sight",
+    "NQPComponent"
 ]
 
 

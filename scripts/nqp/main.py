@@ -10,7 +10,7 @@ from snecs.world import default_world
 
 import scripts.nqp.processors.input
 from scripts.engine.core import chronicle, state, world
-from scripts.engine.core.component import Exists, NQPComponent
+from scripts.engine.core.component import NQPComponent
 from scripts.engine.core.ui import ui
 from scripts.engine.internal import debug
 from scripts.engine.internal.constant import GameState

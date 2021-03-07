@@ -39,6 +39,7 @@ from scripts.engine.internal.constant import (
 )
 from scripts.engine.internal.data import store
 from scripts.engine.internal.definition import ActorData, TraitSpritePathsData
+from scripts.engine.internal.interaction import InteractionEventSubscriber
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
 from scripts.nqp.actions.behaviour import FollowPlayer, SearchAndAttack, SkipTurn
@@ -404,6 +405,7 @@ def init_subscribers():
     N.B. When init'd they are held in reference by the event hub and do not need to be referred to directly.
     """
     game_subscriber = GameEventSubscriber()
+    interaction_subscriber = InteractionEventSubscriber()
 
 
 ##################### UI ######################
