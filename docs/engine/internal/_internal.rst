@@ -10,4 +10,5 @@ Internal
     definition
     event
     extend_json
+    interaction
     library

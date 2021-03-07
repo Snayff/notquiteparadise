@@ -6,6 +6,7 @@ import logging
 import os
 from typing import Tuple
 
+import scripts.engine.core.matter
 from scripts.engine.core import utility, world
 from scripts.engine.internal import library
 from scripts.engine.internal.constant import GameState, MAX_SAVES, SAVE_PATH, VERSION
@@ -162,8 +163,8 @@ def save_game():
     save["store"] = store.serialise()
 
     # prep filename
-    player = world.get_player()
-    name = world.get_name(player)
+    player = scripts.engine.core.matter.get_player()
+    name = scripts.engine.core.matter.get_name(player)
     name = name.replace(" ", "_")  # clean name
     date_and_time = datetime.datetime.utcnow().strftime("%Y%m%d@%H%M%S")
     save_name_prefix = f"{name}"

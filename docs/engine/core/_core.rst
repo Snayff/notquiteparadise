@@ -3,10 +3,11 @@ Core
 
 ..  toctree::
 
-    chronicle
     component
     dungen
     effect
+    entity
+    hourglass
     key
     query
     state

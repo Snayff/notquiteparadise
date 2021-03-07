@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import logging
 import os
+import random
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import Any, Dict, List, Set, TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-from scripts.engine.core import chronicle, world
-from scripts.engine.core.component import Aesthetic, Position, Knowledge
+from scripts.engine.core import hourglass, matter, world
+from scripts.engine.core.component import Aesthetic, Knowledge, Position
 from scripts.engine.core.effect import Effect
 from scripts.engine.internal.constant import (
     AfflictionCategoryType,
@@ -23,7 +24,6 @@ from scripts.engine.internal.constant import (
     TileTag,
     TileTagType,
 )
-from scripts.engine.internal.skill_modifier import SkillModifier
 from scripts.engine.internal.definition import DelayedSkillData, ProjectileData
 from scripts.engine.internal.event import event_hub, UseSkillEvent
 from scripts.engine.world_objects.tile import Tile
@@ -31,7 +31,14 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Iterator, List, Optional, Tuple, Type, TYPE_CHECKING, Union
 
-__all__ = ["Skill", "Affliction", "Behaviour", "register_action"]
+
+__all__ = ["Skill", "Affliction", "Behaviour", "SkillModifier", "register_action"]
+
+
+# used by skill modifiers
+import scripts.engine.core.effect
+
+_EFFECTS = {k: getattr(scripts.engine.core.effect, k) for k in dir(scripts.engine.core.effect)}
 
 
 class Action(ABC):
@@ -102,13 +109,16 @@ class Skill(Action):
         # vars needed to keep track of changes
         self.ignore_entities: List[EntityID] = []  # to ensure entity not hit more than once
 
-        self.innactive_effects: List[str] = []
+        self.inactive_effects: List[str] = []
 
-    def _post_build_effects(self, entity: EntityID, potency: float = 1.0, skill_stack: List[Effect] = []) -> List[Effect]:
+    def _post_build_effects(self, entity: EntityID, potency: float = 1.0, skill_stack=None) -> List[Effect]:
         """
         Build the effects of this skill applying to a single entity. This function will be used to apply any dynamic tweaks to the effects stack after the subclass generates its stack.
         """
-        skill_blessings = world.get_entitys_component(self.user, Knowledge).skill_blessings
+        # handle mutable default
+        if skill_stack is None:
+            skill_stack = []
+        skill_blessings = matter.get_entitys_component(self.user, Knowledge).skill_blessings
         relevant_blessings: List[SkillModifier] = []
         if self.__class__.__name__ in skill_blessings:
             relevant_blessings = skill_blessings[self.__class__.__name__]
@@ -139,17 +149,21 @@ class Skill(Action):
         times.
         """
         entity_names = []
-        for entity in world.get_affected_entities(
+        for entity in matter.get_affected_entities(
             (self.target_tile.x, self.target_tile.y), self.shape, self.shape_size, self.direction
         ):
-            yield entity, [effect for effect in self._build_effects(entity) if effect.__class__.__name__ not in self.innactive_effects]
-            entity_names.append(world.get_name(entity))
+            yield entity, [
+                effect
+                for effect in self._build_effects(entity)
+                if effect.__class__.__name__ not in self.inactive_effects
+            ]
+            entity_names.append(matter.get_name(entity))
 
     def use(self) -> bool:
         """
         If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
         """
-        logging.debug(f"'{world.get_name(self.user)}' used '{self.__class__.__name__}'.")
+        logging.debug(f"'{matter.get_name(self.user)}' used '{self.__class__.__name__}'.")
 
         # handle the delivery method of the skill
         if self.uses_projectile:
@@ -159,7 +173,7 @@ class Skill(Action):
             self._create_delayed_skill()
             is_successful = True
         else:
-            is_successful = world.apply_skill(self)
+            is_successful = matter.apply_skill(self)
 
         if is_successful:
             # post interaction event
@@ -181,7 +195,7 @@ class Skill(Action):
         projectile_data.direction = self.direction
 
         # create the projectile
-        projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
+        projectile = matter.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
 
         # add projectile to ignore list
         self.ignore_entities.append(projectile)
@@ -198,7 +212,7 @@ class Skill(Action):
         delayed_skill_data.skill_instance = self
 
         # create the delayed skill
-        delayed_skill = world.create_delayed_skill(
+        delayed_skill = matter.create_delayed_skill(
             self.user, (self.target_tile.x, self.target_tile.y), delayed_skill_data
         )
 
@@ -207,6 +221,13 @@ class Skill(Action):
 
         # save reference
         self.delayed_skill = delayed_skill
+
+    @abstractmethod
+    def _build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
+        """
+        Build the effects of this skill applying to a single entity. Must be overridden in subclass.
+        """
+        pass
 
 
 class Affliction(Action):
@@ -261,14 +282,14 @@ class Affliction(Action):
 
         entity_names = []
         entities = set()
-        position = world.get_entitys_component(self.affected_entity, Position)
+        position = matter.get_entitys_component(self.affected_entity, Position)
 
         for coordinate in position.coordinates:
-            for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
+            for entity in matter.get_affected_entities(coordinate, self.shape, self.shape_size):
                 if entity not in entities:
                     entities.add(entity)
                     yield entity, self._build_effects(entity)
-                    entity_names.append(world.get_name(entity))
+                    entity_names.append(matter.get_name(entity))
 
     def trigger(self):
         """
@@ -294,7 +315,144 @@ class Behaviour(ABC):
         pass
 
 
-def register_action(cls: Type[Union[Action, Behaviour]]):
+class SkillModifier(ABC):
+    """
+    The base class for blessings. Blessings modify skills through the effects applied.
+    """
+
+    name: str
+    description: str
+
+    level: str
+    removable: bool
+    conflicts: List[str]
+    skill_types: List[str]
+
+    # remove/add are applied when the blessing is applied
+    remove_effects: List[str]
+    add_effects: List[Dict[str, Any]]
+
+    # modifications are applied when the effects are built
+    modify_effects_set: List[Dict[str, Any]]
+    modify_effects_tweak_flat: List[Dict[str, Any]]
+    modify_effects_tweak_percent: List[Dict[str, Any]]
+
+    # custom args (set by child if JSON doesn't cover the argument needs)
+    custom_args: Dict[str, Any] = {}
+
+    def __init__(self, owner):
+        self.owner = owner
+
+    @classmethod
+    def _init_properties(cls):
+        """
+        Sets the class properties of the blessing from the class key
+        """
+        from scripts.engine.internal import library
+
+        cls.data = library.BLESSINGS[cls.__name__]
+        cls.name = cls.__name__
+        cls.description = cls.data["description"]
+        cls.level = "Base"  # assume common exists for now
+        cls.removable = cls.data["removable"]
+        cls.conflicts = cls.data["conflicts"]
+        cls.skill_types = cls.data["skill_types"]
+
+        cls.remove_effects = cls.data["base_effects"]["remove_effects"]
+        cls.add_effects = cls.data["base_effects"]["add_effects"]
+        cls.modify_effects_set = cls.data["base_effects"]["modify_effects_set"]
+        cls.modify_effects_tweak_flat = cls.data["base_effects"]["modify_effects_tweak_flat"]
+        cls.modify_effects_tweak_percent = cls.data["base_effects"]["modify_effects_tweak_percent"]
+
+    @property
+    def involved_effects(self) -> Set[str]:
+        """
+        Get the set of effects involved in the blessing.
+        """
+        return set([v["effect_id"] for v in self.add_effects + self.modify_effects_set] + self.remove_effects)
+
+    def roll_level(self):
+        """
+        Runs the level selection algorithm and updates attributes with the applied level.
+        """
+        levels = []
+        level_chances = []
+        total = 0
+
+        for level in self.data["levels"]:
+            levels.append(level)
+            total += self.data["levels"][level]["rarity"]
+            level_chances.append(total)
+
+        random_float = random.random()
+        for i, chance in enumerate(level_chances):
+            if random_float <= chance:
+                break
+
+        self.set_level(levels[i])
+
+    def set_level(self, level):
+        """
+        Refreshes the class attributes with the data for the specific blessing level.
+        """
+        self.level = level
+        if "remove_effects" in self.data["levels"][self.level]["effects"]:
+            self.remove_effects = self.data["levels"][self.level]["effects"]["remove_effects"]
+        if "add_effects" in self.data["levels"][self.level]["effects"]:
+            self.add_effects = self.data["levels"][self.level]["effects"]["add_effects"]
+        if "modify_effects_set" in self.data["levels"][self.level]["effects"]:
+            self.modify_effects_set = self.data["levels"][self.level]["effects"]["modify_effects_set"]
+        if "modify_effects_tweak_flat" in self.data["levels"][self.level]["effects"]:
+            self.modify_effects_tweak_flat = self.data["levels"][self.level]["effects"]["modify_effects_tweak_flat"]
+        if "modify_effects_tweak_percent" in self.data["levels"][self.level]["effects"]:
+            self.modify_effects_tweak_percent = self.data["levels"][self.level]["effects"][
+                "modify_effects_tweak_percent"
+            ]
+
+    def apply(self, effects: List[Effect], owner, target):
+        """
+        This is the core function of the blessing. It takes the effect stack and modifies it with the blessing.
+        """
+
+        # go through the effects backwards so that the .remove() doesn't mess up indexing
+        for effect in effects[::-1]:
+            effect_name = effect.__class__.__name__
+
+            # flat config change
+            for mod in self.modify_effects_tweak_flat:
+                if mod["effect_id"] == effect_name:
+                    for value in mod["values"]:
+                        current_value = getattr(effect, value)
+                        setattr(effect, value, current_value + mod["values"][value])
+
+            # set config change
+            for mod in self.modify_effects_set:
+                if mod["effect_id"] == effect_name:
+                    for value in mod["values"]:
+                        setattr(effect, value, mod["values"][value])
+
+            # percent config change
+            for mod in self.modify_effects_tweak_percent:
+                if mod["effect_id"] == effect_name:
+                    for value in mod["values"]:
+                        current_value = getattr(effect, value)
+                        setattr(effect, value, current_value * mod["values"][value])
+
+            # remove effects from the stack if applicable
+            if effect_name in self.remove_effects:
+                effects.remove(effect)
+
+        # add effects to the stack
+        for add_effect in self.add_effects:
+            # build the effect creation arguments from the config
+            args = {"origin": owner, "target": target, "success_effects": [], "failure_effects": []}
+            args.update(add_effect["args"])
+            if add_effect["effect_id"] in self.custom_args:
+                args.update(self.custom_args)
+            effects.append(_EFFECTS[add_effect["effect_id"]](**args))
+
+
+def register_action(cls: Type[Union[Action, Behaviour, SkillModifier]]):
     """
     Initialises the class properties set by external data, if appropriate, and adds to the action registry for use
     by the engine.
@@ -317,7 +475,7 @@ def register_action(cls: Type[Union[Action, Behaviour]]):
         store.behaviour_registry[cls.__name__] = cls
 
 
-######################### ACTION SUBCLASSES ##########################
+######################### REQUIRED ACTION SUBCLASSES ##########################
 
 
 class Projectile(Behaviour):
@@ -338,17 +496,17 @@ class Projectile(Behaviour):
 
         # get info we definitely need
         entity = self.entity
-        pos = world.get_entitys_component(entity, Position)
+        pos = matter.get_entitys_component(entity, Position)
         current_tile = world.get_tile((pos.x, pos.y))
         dir_x, dir_y = self.data.direction[0], self.data.direction[1]
         target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
 
         # check if already on top of an entity before moving in case something move into the projectile or the projectile was created on top of an entity
-        player_pos = world.get_entitys_component(world.get_player(), Position)
+        player_pos = matter.get_entitys_component(matter.get_player(), Position)
         if world.tile_has_tag(entity, current_tile, TileTag.OTHER_ENTITY):
             self.data.skill_instance.target_tile = current_tile
             should_activate = True
-            logging.debug(f"'{world.get_name(entity)}' collided with an entity on cast at ({pos.x},{pos.y}).")
+            logging.debug(f"'{matter.get_name(entity)}' collided with an entity on cast at ({pos.x},{pos.y}).")
 
         # if we havent travelled max distance or determined we should activate then move
         # N.b. not an elif because we want the precheck above to happen in isolation
@@ -370,29 +528,29 @@ class Projectile(Behaviour):
 
             else:
                 # at max range and not activating so kill attached entity
-                world.kill_entity(entity)
+                matter.kill_entity(entity)
 
         if should_activate:
-            logging.debug(f"'{world.get_name(entity)}' is going to activate at ({pos.x},{pos.y}).")
+            logging.debug(f"'{matter.get_name(entity)}' is going to activate at ({pos.x},{pos.y}).")
 
             # apply skill, rather than using it, as the instance already exists and we are just using the effects
-            world.apply_skill(self.data.skill_instance)
+            matter.apply_skill(self.data.skill_instance)
 
             # die after activating
-            world.kill_entity(entity)
+            matter.kill_entity(entity)
 
         elif should_move:
             logging.debug(
-                f"'{world.get_name(entity)}' has {self.data.range - self.distance_travelled} range left and"
+                f"'{matter.get_name(entity)}' has {self.data.range - self.distance_travelled} range left and"
                 f" is going to move from ({pos.x},{pos.y}) to "
                 f"({pos.x + dir_x},{pos.y + dir_y})."
             )
 
-            move = world.get_known_skill(entity, "Move")
-            world.use_skill(entity, move, current_tile, self.data.direction)
+            move = matter.get_known_skill(entity, "Move")
+            matter.use_skill(entity, move, current_tile, self.data.direction)
 
             self.distance_travelled += 1
-            chronicle.end_turn(entity, self.data.speed)
+            hourglass.end_turn(entity, self.data.speed)
 
     def _handle_collision(self, current_tile: Tile, target_tile: Tile) -> Tuple[bool, bool]:
         """
@@ -412,7 +570,7 @@ class Projectile(Behaviour):
 
             elif collision_type == TerrainCollision.FIZZLE:
                 # get rid of projectile
-                world.kill_entity(self.entity)
+                matter.kill_entity(self.entity)
 
             elif collision_type == TerrainCollision.REFLECT:
                 should_move = True
@@ -449,24 +607,24 @@ class DelayedSkill(Behaviour):
     def act(self):
         if not self.delayed:
             # get time left in round, to align first end of turn to round
-            time_left_in_round = chronicle.get_time_left_in_round()
+            time_left_in_round = hourglass.get_time_left_in_round()
             from scripts.engine.internal import library
 
             time_per_round = library.GAME_CONFIG.default_values.time_per_round
 
             # align to round time and add number of rounds as a delay
             time_delay = (time_per_round * self.data.duration) + time_left_in_round
-            chronicle.end_turn(self.entity, time_delay)
+            hourglass.end_turn(self.entity, time_delay)
 
             # set flag
             self.delayed = True
 
-            logging.debug(f"{world.get_name(self.entity)} will trigger in {self.data.duration} rounds.")
+            logging.debug(f"{matter.get_name(self.entity)} will trigger in {self.data.duration} rounds.")
 
             return
 
         # apply skill, rather than using it, as the instance already exists and we are just using the effects
-        world.apply_skill(self.data.skill_instance)
+        matter.apply_skill(self.data.skill_instance)
 
         # die after activating
-        world.kill_entity(self.entity)
+        matter.kill_entity(self.entity)

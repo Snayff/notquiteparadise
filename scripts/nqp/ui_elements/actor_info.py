@@ -9,6 +9,7 @@ from pygame_gui.core import UIElement as PygameUiElement
 from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar
 from snecs.typedefs import EntityID
 
+import scripts.engine.core.matter
 from scripts.engine.core import utility, world
 from scripts.engine.core.component import Aesthetic, Afflictions, CombatStats, Identity, Resources, Traits
 from scripts.engine.core.utility import get_class_members
@@ -115,22 +116,22 @@ class ActorInfo(Window):
             )
 
             # get aesthetic
-            aesthetic = world.get_entitys_component(entity, Aesthetic)
+            aesthetic = scripts.engine.core.matter.get_entitys_component(entity, Aesthetic)
             info.append(("image", aesthetic.sprites.icon))
 
             # get identity
-            identity = world.get_entitys_component(entity, Identity)
+            identity = scripts.engine.core.matter.get_entitys_component(entity, Identity)
             info.append(("text", identity.name))
 
             # get resources
-            resources = world.get_entitys_component(entity, Resources)
+            resources = scripts.engine.core.matter.get_entitys_component(entity, Resources)
             if resources:
                 info.append(("text", f"Health: {resources.health}"))
                 info.append(("text", f"Stamina: {resources.stamina}"))
                 info.append(("image", section_break_image))
 
             # get stats
-            stats = world.get_entitys_component(entity, CombatStats)
+            stats = scripts.engine.core.matter.get_entitys_component(entity, CombatStats)
             if stats:
                 primary_stats = utility.get_class_members(PrimaryStat)
                 for name in primary_stats:
@@ -162,7 +163,7 @@ class ActorInfo(Window):
 
             #  get traits (skip for projectiles)
             try:
-                traits = world.get_entitys_component(entity, Traits)
+                traits = scripts.engine.core.matter.get_entitys_component(entity, Traits)
                 if traits:
                     names = ""
                     for name in traits.names:
@@ -176,7 +177,7 @@ class ActorInfo(Window):
                 pass
 
             # get afflictions
-            afflictions = world.get_entitys_component(entity, Afflictions)
+            afflictions = scripts.engine.core.matter.get_entitys_component(entity, Afflictions)
             if afflictions:
                 for affliction in afflictions.active:
                     # get duration
