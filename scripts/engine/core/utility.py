@@ -314,8 +314,6 @@ def _calculate_cone_shape(size: int, direction: Tuple[int, int]) -> List[Tuple[i
                 new_row.add(perpendicular)
 
         coord_list += list(last_row)
-        # FIXME - Incompatible types in assignment (expression has type "Set[Tuple[int, int]]", variable has type
-        #  "List[Tuple[int, int]]")
         last_row = new_row  # type: ignore
     return coord_list + list(last_row)
 
@@ -376,5 +374,4 @@ def roll(min_value: int = 0, max_value: int = 99) -> int:
     """
     Roll for a number between min and max
     """
-    # TODO - utilise seed
     return random.randint(min_value, max_value)

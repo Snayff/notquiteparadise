@@ -178,7 +178,6 @@ def get_time_in_round() -> int:
     """
     Get current time in the current round
     """
-    # FIXME - returning negative value for projectiles
     return store.round_time
 
 

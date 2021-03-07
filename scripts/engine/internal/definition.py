@@ -123,7 +123,6 @@ class TraitData:
 
     def __post_init__(self):
         # update sprite path render order
-        # FIXME - this should be handled prior to coming to the dataclass
         trait_render_order = {"npc": 0, "people": 1, "homeland": 2, "savvy": 3}
         self.sprite_paths.render_order = trait_render_order.get(self.group)
 
