@@ -81,7 +81,7 @@ from scripts.engine.internal.definition import (
     ProjectileData,
     TerrainData,
 )
-from scripts.engine.internal.event import event_hub, LoseConditionMetEvent, MessageEvent
+from scripts.engine.internal.event import event_hub, LoseConditionMetEvent, MessageEvent, MoveEvent
 from scripts.engine.world_objects import lighting
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile

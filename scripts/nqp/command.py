@@ -43,7 +43,7 @@ from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.actions.affliction import BoggedDown, Flaming
 from scripts.nqp.actions.behaviour import FollowPlayer, SearchAndAttack, SkipTurn
 from scripts.nqp.actions.skill import BasicAttack, Lightning, Lunge, Move, Splash, TarAndFeather
-from scripts.nqp.actions.blessing import MoveFast, NoMove, AttackMove
+from scripts.nqp.actions.blessing import MoveFast, NoMove, AttackMove, Aftershock, SaltTheWound, KeepAnEvenKeel
 from scripts.nqp.processors.game import GameEventSubscriber
 from scripts.nqp.ui_elements.camera import camera
 from scripts.nqp.ui_elements.character_selector import CharacterSelector
@@ -165,8 +165,10 @@ def start_game(player_data: ActorData):
     # blessing test cases
     knowledge = world.get_entitys_component(player, Knowledge)
     #knowledge.add_blessing(Move, NoMove(player))
-    knowledge.add_blessing(BasicAttack, AttackMove(player))
-    knowledge.remove_blessing(BasicAttack, AttackMove)
+    knowledge.add_blessing(Move, Aftershock(player))
+    #knowledge.remove_blessing(BasicAttack, AttackMove)
+    #knowledge.add_blessing(BasicAttack, SaltTheWound(player))
+    #knowledge.add_blessing(BasicAttack, KeepAnEvenKeel(player))
 
     # create win condition and place next to player
     player_pos = world.get_entitys_component(player, Position)
@@ -395,6 +397,9 @@ def register_actions():
     register_action(MoveFast)
     register_action(NoMove)
     register_action(AttackMove)
+    register_action(Aftershock)
+    register_action(SaltTheWound)
+    register_action(KeepAnEvenKeel)
 
 
 def init_subscribers():

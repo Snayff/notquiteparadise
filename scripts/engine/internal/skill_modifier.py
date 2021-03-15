@@ -139,4 +139,4 @@ class SkillModifier(ABC):
             args.update(add_effect['args'])
             if add_effect['effect_id'] in self.custom_args:
                 args.update(self.custom_args)
-            effects.append(EFFECTS[add_effect['effect_id']](**args))
+            effects.insert(0, EFFECTS[add_effect['effect_id']](**args))
