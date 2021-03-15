@@ -73,14 +73,14 @@ class AftershockEffect(Effect):
         super().__init__(origin, target, success_effects, failure_effects)
 
     def evaluate(self) -> Tuple[bool, List[Effect]]:
-        center_position = world.get_entitys_component(self.target, Position)
+        center_position = scripts.engine.core.matter.get_entitys_component(self.target, Position)
         affected_tiles = [(-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]
         entities_hit = []
         for tile in affected_tiles:
             target_tile_pos = (tile[0] + center_position.x, tile[1] + center_position.y)
             target_tile = world.get_tile(target_tile_pos)
             if world.tile_has_tag(self.origin, target_tile, TileTag.ACTOR):
-                entities_hit += world.get_entities_on_tile(target_tile)
+                entities_hit += scripts.engine.core.matter.get_entities_on_tile(target_tile)
         for entity in entities_hit:
             damage_effect = DamageEffect(
                 origin=self.origin,
