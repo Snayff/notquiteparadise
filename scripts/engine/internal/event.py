@@ -63,11 +63,17 @@ class EventHub:
     def peek(self, event):
         """
         Check if an event exists in the queue.
+        Return None if nothing is found so the result can be used as a bool.
         """
+        found_events = []
         for e in self.events:
             if isinstance(e, event):  # type: ignore
-                return True
-        return False
+                found_events.append(e)
+
+        if found_events != []:
+            return found_events
+
+        return None
 
     def update(self):
         """

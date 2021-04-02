@@ -91,5 +91,65 @@
         "effects": {}
       }
     }
+  },
+  "Aftershock": {
+    "name": "Aftershock",
+    "description": "Damage is dealt to all tiles adjacent to the caster.",
+    "removable": true,
+    "conflicts": [],
+    "skill_types": ["all"],
+    "base_effects": {
+      "remove_effects": [],
+      "add_effects": [{"effect_id": "AftershockEffect", "args": {}}],
+      "modify_effects_set": [],
+      "modify_effects_tweak_flat": [],
+      "modify_effects_tweak_percent": []
+    },
+    "levels": {
+      "Common": {
+        "rarity": 1,
+        "effects": {}
+      }
+    }
+  },
+  "SaltTheWound": {
+    "name": "Salt the Wound",
+    "description": "If the skill crits, a random bane affliction is applied to the affected entity.",
+    "removable": true,
+    "conflicts": [],
+    "skill_types": ["attack"],
+    "base_effects": {
+      "remove_effects": [],
+      "add_effects": [],
+      "modify_effects_set": [],
+      "modify_effects_tweak_flat": [],
+      "modify_effects_tweak_percent": []
+    },
+    "levels": {
+      "Common": {
+        "rarity": 1,
+        "effects": {}
+      }
+    }
+  },
+  "KeepAnEvenKeel": {
+    "name": "Keep an Even Keel",
+    "description": "The blessed skill can no longer graze or crit.",
+    "removable": true,
+    "conflicts": [],
+    "skill_types": ["attack"],
+    "base_effects": {
+      "remove_effects": [],
+      "add_effects": [],
+      "modify_effects_set": [],
+      "modify_effects_tweak_flat": [],
+      "modify_effects_tweak_percent": []
+    },
+    "levels": {
+      "Common": {
+        "rarity": 1,
+        "effects": {}
+      }
+    }
   }
 }

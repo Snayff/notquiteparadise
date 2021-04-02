@@ -10,7 +10,7 @@ import scripts.engine.core.matter
 from scripts.engine.core import query, world
 from scripts.engine.core.component import Afflictions, CombatStats, Identity, Knowledge, Lifespan, Position, Resources
 from scripts.engine.internal import library
-from scripts.engine.internal.constant import DamageTypeType, DirectionType, PrimaryStatType
+from scripts.engine.internal.constant import DamageType, DamageTypeType, Direction, DirectionType, PrimaryStatType, PrimaryStat, TileTag, HitType, HitTypeType
 from scripts.engine.internal.event import (
     AffectCooldownEvent,
     AffectStatEvent,
@@ -22,7 +22,7 @@ from scripts.engine.internal.event import (
 )
 
 if TYPE_CHECKING:
-    from typing import List
+    from typing import List, Dict, Optional
 
 __all__ = [
     "Effect",
@@ -62,6 +62,41 @@ class Effect(ABC):
         """
         pass
 
+class AftershockEffect(Effect):
+    def __init__(
+        self,
+        origin: EntityID,
+        target: EntityID,
+        success_effects: List[Effect],
+        failure_effects: List[Effect],
+    ):
+        super().__init__(origin, target, success_effects, failure_effects)
+
+    def evaluate(self) -> Tuple[bool, List[Effect]]:
+        center_position = scripts.engine.core.matter.get_entitys_component(self.target, Position)
+        affected_tiles = [(-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]
+        entities_hit = []
+        for tile in affected_tiles:
+            target_tile_pos = (tile[0] + center_position.x, tile[1] + center_position.y)
+            target_tile = world.get_tile(target_tile_pos)
+            if world.tile_has_tag(self.origin, target_tile, TileTag.ACTOR):
+                entities_hit += scripts.engine.core.matter.get_entities_on_tile(target_tile)
+        for entity in entities_hit:
+            damage_effect = DamageEffect(
+                origin=self.origin,
+                success_effects=[],
+                failure_effects=[],
+                target=entity,
+                stat_to_target=PrimaryStat.VIGOUR,
+                accuracy=library.GAME_CONFIG.base_values.accuracy,
+                damage=int(library.GAME_CONFIG.base_values.damage * self.potency),
+                damage_type=DamageType.MUNDANE,
+                mod_stat=PrimaryStat.CLOUT,
+                mod_amount=0.1,
+            )
+            self.success_effects.append(damage_effect)
+
+        return True, self.success_effects
 
 class DamageEffect(Effect):
     def __init__(
@@ -87,6 +122,8 @@ class DamageEffect(Effect):
         self.damage_type = damage_type
         self.mod_amount = mod_amount
         self.mod_stat = mod_stat
+        self.hit_type_effects: Dict[HitTypeType, List[Effect]] = {HitType.HIT: [], HitType.GRAZE: [], HitType.CRIT: []}
+        self.force_hit_type: Optional[HitTypeType] = None
 
     def evaluate(self) -> Tuple[bool, List[Effect]]:
         """
@@ -118,7 +155,10 @@ class DamageEffect(Effect):
         to_hit_score = scripts.engine.core.matter.calculate_to_hit_score(
             attackers_stats.accuracy, self.accuracy, stat_to_target_value
         )
-        hit_type = scripts.engine.core.matter.get_hit_type(to_hit_score)
+        if self.force_hit_type:
+            hit_type = self.force_hit_type
+        else:
+            hit_type = scripts.engine.core.matter.get_hit_type(to_hit_score)
 
         # calculate damage
         resist_value = getattr(defenders_stats, "resist_" + self.damage_type.lower())
@@ -127,6 +167,9 @@ class DamageEffect(Effect):
 
         # apply the damage
         if scripts.engine.core.matter.apply_damage(self.target, damage):
+            # add effects relevant to the hit type to the stack
+            self.success_effects += self.hit_type_effects[hit_type]
+
             defenders_resources = scripts.engine.core.matter.get_entitys_component(self.target, Resources)
 
             # post interaction event
