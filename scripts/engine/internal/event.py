@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Any
 
 from snecs.typedefs import EntityID
 
@@ -242,6 +242,16 @@ class ChangeMapEvent(Event):
     def __init__(self):
         super().__init__(EventType.GAME)
 
+class ShrineEvent(Event):
+    def __init__(self, entity_id: int):
+        super().__init__(EventType.GAME)
+        self.target_shrine: int = entity_id
+
+class ShrineMenuEvent(Event):
+    # blessing_options is actually of type List[SkillModifier], but I'm trying to avoid circular imports
+    def __init__(self, blessing_options: List[Any]):
+        super().__init__(EventType.GAME)
+        self.blessing_options: List[Any] = blessing_options
 
 class NewTurnEvent(Event):
     def __init__(self):

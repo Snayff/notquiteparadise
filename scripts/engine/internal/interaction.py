@@ -23,6 +23,7 @@ from scripts.engine.internal.event import (
     AffectStatEvent,
     AfflictionEvent,
     ChangeMapEvent,
+    ShrineEvent,
     DamageEvent,
     event_hub,
     MoveEvent,
@@ -54,8 +55,11 @@ class InteractionEventSubscriber(Subscriber):
 
         elif isinstance(event, MoveEvent):
             _handle_proximity_reaction_trigger(event)
+
+            # these need to be merged
             _process_win_condition(event)
             _process_map_condition(event)
+            _process_shrine(event)
 
             _handle_reaction_trigger(event.origin, ReactionTrigger.MOVE)
             _handle_reaction_trigger(event.target, ReactionTrigger.MOVED)
@@ -289,4 +293,24 @@ def _process_map_condition(event: pygame.event):
         if player_pos.x == position.x and player_pos.y == position.y:
             # post game event
             event_hub.post(ChangeMapEvent())
+            break
+
+def _process_shrine(event: pygame.event):
+    """
+    Check if there has been a shrine collision.
+    Needs to be merged with _process_map_condition and _process_win_condition at some point.
+    """
+    player = scripts.engine.core.matter.get_player()
+
+    # only progress if its the player as only the player can change the map
+    if not player == event.target:
+        return
+
+    player_pos = scripts.engine.core.matter.get_entitys_component(player, Position)
+
+    for entity, (position, _) in query.position_and_shrine:
+        assert isinstance(position, Position)
+        if player_pos.x == position.x and player_pos.y == position.y:
+            # post game event
+            event_hub.post(ShrineEvent(entity))
             break
