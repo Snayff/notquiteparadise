@@ -576,7 +576,7 @@ def create_compatible_blessings(amount: int) -> List[SkillModifier]:
     # get all blessing names
     blessing_options = list(store.blessing_registry)
 
-    blessings = []
+    blessings: List[SkillModifier] = []
 
     # look for compatible blessings until enough are found
     while len(blessings) < amount:

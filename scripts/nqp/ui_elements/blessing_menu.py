@@ -18,7 +18,7 @@ from scripts.engine.core.component import Knowledge
 from scripts.nqp.actions.blessing import MoveFast, NoMove, AttackMove, Aftershock, SaltTheWound, KeepAnEvenKeel
 
 if TYPE_CHECKING:
-    from typing import List, Optional, Tuple, Union
+    from typing import List, Optional, Tuple, Union, Type
 
     from pygame_gui import UIManager
 
@@ -37,7 +37,7 @@ class BlessingMenu(Window):
         self.section_base_positions: List[int] = []
 
         # button tracking
-        self.apply_buttons: List[Tuple[Skill, SkillModifier, UIButton]] = []
+        self.apply_buttons: List[Tuple[Type[Skill], SkillModifier, UIButton]] = []
 
         # complete base class init
         super().__init__(rect, manager, object_id=ObjectID("#blessing_menu", "@menu_window"))
