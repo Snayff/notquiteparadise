@@ -189,7 +189,7 @@ def start_game(player_data: ActorData):
     player_pos = scripts.engine.core.matter.get_entitys_component(player, Position)
     win_x = player_pos.x + 1
     win_y = player_pos.y
-    components: List[Component] = []
+    components = []
     components.append(Position((win_x, win_y)))  # lets hope this doesnt spawn in a wall
     components.append(WinCondition())
     traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/win_flag.png"))]
@@ -304,7 +304,7 @@ def lose_game():
     # quit to main menu after a few seconds
     timer = Timer(2.0, goto_to_title)
     timer.start()
-    
+
 
 def change_map():
     # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH

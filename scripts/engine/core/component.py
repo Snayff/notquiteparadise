@@ -538,7 +538,6 @@ class Knowledge(NQPComponent):
         # check if blessing can be applied and apply if possible
         if self.can_add_blessing(skill, blessing):
             self.skill_blessings[skill.__name__].append(blessing)
-            print(self.skill_blessings)
             return True
         else:
             return False
