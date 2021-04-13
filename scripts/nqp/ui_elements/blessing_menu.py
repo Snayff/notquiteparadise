@@ -11,10 +11,11 @@ from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar, UIButto
 from scripts.engine.core import utility
 import scripts.engine.core.matter
 from scripts.engine.widgets.window import Window
-from scripts.engine.internal.constant import ASSET_PATH, GAP_SIZE, ICON_SIZE
+from scripts.engine.internal.constant import ASSET_PATH, GAP_SIZE, ICON_SIZE, GameState
 from scripts.engine.internal.action import Skill, SkillModifier
 from scripts.engine.internal.data import store
 from scripts.engine.core.component import Knowledge
+from scripts.engine.core import state
 from scripts.nqp.actions.blessing import MoveFast, NoMove, AttackMove, Aftershock, SaltTheWound, KeepAnEvenKeel
 
 if TYPE_CHECKING:
@@ -89,6 +90,7 @@ class BlessingMenu(Window):
                 player = scripts.engine.core.matter.get_player()
                 knowledge = scripts.engine.core.matter.get_entitys_component(player, Knowledge)
                 knowledge.add_blessing(button[0], button[1])
+                state.set_new(GameState.GAME_MAP)
                 self.kill()
 
     def show(self):
@@ -291,6 +293,6 @@ class BlessingMenu(Window):
         self.section_base_positions = section_base_positions
 
     def process_close_button(self):
-        pass
+        state.set_new(GameState.GAME_MAP)
         # post game event
         #event_hub.post(ExitMenuEvent(UIElement.ACTOR_INFO))

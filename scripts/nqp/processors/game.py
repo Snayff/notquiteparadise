@@ -4,7 +4,7 @@ import scripts.engine.core.matter
 from scripts.engine.core import hourglass, system
 from scripts.engine.core.ui import ui
 from scripts.engine.core.component import Shrine
-from scripts.engine.internal.constant import EventType, InputIntent, UIElement
+from scripts.engine.internal.constant import EventType, InputIntent, UIElement, GameState
 from scripts.engine.internal.event import (
     ChangeMapEvent,
     ShrineEvent,
@@ -85,10 +85,13 @@ class GameEventSubscriber(Subscriber):
             _process_end_round()
 
         elif isinstance(event, ShrineMenuEvent):
+            from scripts.engine.core import state
+
             blessing_menu: BlessingMenu = BlessingMenu(
                 command.get_element_rect(UIElement.BLESSING_MENU), ui.get_gui_manager(), event.blessing_options
             )
             ui.register_element(UIElement.BLESSING_MENU, blessing_menu)
+            state.set_new(GameState.MENU)
 
 
 def _process_end_turn():
