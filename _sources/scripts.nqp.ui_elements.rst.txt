@@ -12,6 +12,14 @@ scripts.nqp.ui\_elements.actor\_info module
    :undoc-members:
    :show-inheritance:
 
+scripts.nqp.ui\_elements.blessing\_menu module
+----------------------------------------------
+
+.. automodule:: scripts.nqp.ui_elements.blessing_menu
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.nqp.ui\_elements.camera module
 --------------------------------------
 

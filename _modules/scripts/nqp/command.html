@@ -264,7 +264,9 @@
 <span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">Component</span>
 <span class="kn">from</span> <span class="nn">snecs.world</span> <span class="kn">import</span> <span class="n">default_world</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">hourglass</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Knowledge</span>  <span class="c1"># for demonstration purposes</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Aesthetic</span><span class="p">,</span>
     <span class="n">Exists</span><span class="p">,</span>
@@ -272,9 +274,9 @@
     <span class="n">IsPlayer</span><span class="p">,</span>
     <span class="n">LightSource</span><span class="p">,</span>
     <span class="n">MapCondition</span><span class="p">,</span>
+    <span class="n">Shrine</span><span class="p">,</span>
     <span class="n">Position</span><span class="p">,</span>
     <span class="n">WinCondition</span><span class="p">,</span>
-    <span class="n">Knowledge</span><span class="p">,</span> <span class="c1"># for demonstration purposes</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
@@ -293,11 +295,12 @@
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ActorData</span><span class="p">,</span> <span class="n">TraitSpritePathsData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.interaction</span> <span class="kn">import</span> <span class="n">InteractionEventSubscriber</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.world_objects.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.affliction</span> <span class="kn">import</span> <span class="n">BoggedDown</span><span class="p">,</span> <span class="n">Flaming</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.behaviour</span> <span class="kn">import</span> <span class="n">FollowPlayer</span><span class="p">,</span> <span class="n">SearchAndAttack</span><span class="p">,</span> <span class="n">SkipTurn</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.actions.blessing</span> <span class="kn">import</span> <span class="n">MoveFast</span><span class="p">,</span> <span class="n">NoMove</span><span class="p">,</span> <span class="n">AttackMove</span><span class="p">,</span> <span class="n">Aftershock</span><span class="p">,</span> <span class="n">SaltTheWound</span><span class="p">,</span> <span class="n">KeepAnEvenKeel</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.actions.skill</span> <span class="kn">import</span> <span class="n">BasicAttack</span><span class="p">,</span> <span class="n">Lightning</span><span class="p">,</span> <span class="n">Lunge</span><span class="p">,</span> <span class="n">Move</span><span class="p">,</span> <span class="n">Splash</span><span class="p">,</span> <span class="n">TarAndFeather</span>
-<span class="kn">from</span> <span class="nn">scripts.nqp.actions.blessing</span> <span class="kn">import</span> <span class="n">MoveFast</span><span class="p">,</span> <span class="n">NoMove</span><span class="p">,</span> <span class="n">AttackMove</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors.game</span> <span class="kn">import</span> <span class="n">GameEventSubscriber</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.character_selector</span> <span class="kn">import</span> <span class="n">CharacterSelector</span>
@@ -355,22 +358,22 @@
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">generation_info</span><span class="p">)</span>
 
     <span class="c1"># init the player</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
 
     <span class="c1"># tell places about the player</span>
-    <span class="n">chronicle</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+    <span class="n">hourglass</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
 
     <span class="c1"># create actor near to player</span>
-    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="n">actor_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">ACTORS</span><span class="p">[</span><span class="s2">"crocturion"</span><span class="p">]</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
 
     <span class="c1"># create god</span>
     <span class="n">god_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="s2">"the_small_gods"</span><span class="p">]</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
 
     <span class="c1"># update draw position for all entities</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
@@ -386,13 +389,13 @@
     <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># create terrain next to the player</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_terrain</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">[</span><span class="s2">"bog"</span><span class="p">],</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_terrain</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">[</span><span class="s2">"bog"</span><span class="p">],</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 
     <span class="c1"># loading finished, give player control</span>
     <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">)</span>
 
     <span class="c1"># prompt turn actions</span>
-    <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+    <span class="n">hourglass</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="start_game"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.start_game">[docs]</a><span class="k">def</span> <span class="nf">start_game</span><span class="p">(</span><span class="n">player_data</span><span class="p">:</span> <span class="n">ActorData</span><span class="p">):</span>
@@ -411,46 +414,60 @@
     <span class="n">game_map</span><span class="o">.</span><span class="n">generate_new_map</span><span class="p">(</span><span class="n">player_data</span><span class="p">)</span>
 
     <span class="c1"># init the player</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
 
     <span class="c1"># allocate player skills</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">learn_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="s2">"Lightning"</span><span class="p">)</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">learn_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="s2">"Lightning"</span><span class="p">)</span>
 
     <span class="c1"># blessing test cases</span>
-    <span class="n">knowledge</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
+    <span class="n">knowledge</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
     <span class="c1">#knowledge.add_blessing(Move, NoMove(player))</span>
-    <span class="n">knowledge</span><span class="o">.</span><span class="n">add_blessing</span><span class="p">(</span><span class="n">BasicAttack</span><span class="p">,</span> <span class="n">AttackMove</span><span class="p">(</span><span class="n">player</span><span class="p">))</span>
-    <span class="n">knowledge</span><span class="o">.</span><span class="n">remove_blessing</span><span class="p">(</span><span class="n">BasicAttack</span><span class="p">,</span> <span class="n">AttackMove</span><span class="p">)</span>
+    <span class="c1">#knowledge.add_blessing(Move, Aftershock(player))</span>
+    <span class="c1">#knowledge.remove_blessing(BasicAttack, AttackMove)</span>
+    <span class="c1">#knowledge.add_blessing(BasicAttack, SaltTheWound(player))</span>
+    <span class="c1">#knowledge.add_blessing(BasicAttack, KeepAnEvenKeel(player))</span>
+
+    <span class="c1"># create blessing shrine</span>
+    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">shrine_x</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">3</span>
+    <span class="n">shrine_y</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">components</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">shrine_x</span><span class="p">,</span> <span class="n">shrine_y</span><span class="p">)))</span>  <span class="c1"># lets hope this doesnt spawn in a wall</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Shrine</span><span class="p">())</span>
+    <span class="n">traits_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="n">idle</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">ASSET_PATH</span> <span class="o">/</span> <span class="s2">"world/shrine.png"</span><span class="p">))]</span>
+    <span class="n">sprites</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">build_sprites_from_paths</span><span class="p">(</span><span class="n">traits_paths</span><span class="p">)</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="p">,</span> <span class="n">traits_paths</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">,</span> <span class="p">(</span><span class="n">shrine_x</span><span class="p">,</span> <span class="n">shrine_y</span><span class="p">)))</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_entity</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
 
     <span class="c1"># create win condition and place next to player</span>
-    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="n">win_x</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">win_y</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span>
-    <span class="n">components</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">win_x</span><span class="p">,</span> <span class="n">win_y</span><span class="p">)))</span>  <span class="c1"># lets hope this doesnt spawn in a wall</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">WinCondition</span><span class="p">())</span>
     <span class="n">traits_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="n">idle</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">ASSET_PATH</span> <span class="o">/</span> <span class="s2">"world/win_flag.png"</span><span class="p">))]</span>
     <span class="n">sprites</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">build_sprites_from_paths</span><span class="p">(</span><span class="n">traits_paths</span><span class="p">)</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="p">,</span> <span class="n">traits_paths</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">,</span> <span class="p">(</span><span class="n">win_x</span><span class="p">,</span> <span class="n">win_y</span><span class="p">)))</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_entity</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_entity</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
 
     <span class="c1"># create map change condition and place next to player</span>
-    <span class="n">win_x</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">2</span>
-    <span class="n">win_y</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">map_x</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">2</span>
+    <span class="n">map_y</span> <span class="o">=</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span>
     <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">win_x</span><span class="p">,</span> <span class="n">win_y</span><span class="p">)))</span>  <span class="c1"># lets hope this doesnt spawn in a wall</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">((</span><span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span><span class="p">)))</span>  <span class="c1"># lets hope this doesnt spawn in a wall</span>
     <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MapCondition</span><span class="p">())</span>
     <span class="n">traits_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">TraitSpritePathsData</span><span class="p">(</span><span class="n">idle</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">ASSET_PATH</span> <span class="o">/</span> <span class="s2">"world/map_flag.png"</span><span class="p">))]</span>
     <span class="n">sprites</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">build_sprites_from_paths</span><span class="p">(</span><span class="n">traits_paths</span><span class="p">)</span>
-    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="p">,</span> <span class="n">traits_paths</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">,</span> <span class="p">(</span><span class="n">win_x</span><span class="p">,</span> <span class="n">win_y</span><span class="p">)))</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_entity</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprites</span><span class="p">,</span> <span class="n">traits_paths</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">,</span> <span class="p">(</span><span class="n">map_x</span><span class="p">,</span> <span class="n">map_y</span><span class="p">)))</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_entity</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
 
     <span class="c1"># tell places about the player</span>
-    <span class="n">chronicle</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+    <span class="n">hourglass</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
 
     <span class="c1"># create a god</span>
     <span class="n">god_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="s2">"the_small_gods"</span><span class="p">]</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
 
     <span class="c1"># show the in game screens</span>
     <span class="c1"># message_log = MessageLog(get_element_rect(UIElement.MESSAGE_LOG), ui.get_gui_manager())</span>
@@ -466,7 +483,7 @@
 
     <span class="c1"># FIXME - entities load before camera so they cant get their screen position.</span>
     <span class="c1">#  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aesthetic</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">draw_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
@@ -479,14 +496,14 @@
     <span class="n">system</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
 
     <span class="c1"># point the camera at the player, now that FOV is updated</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># loading finished, give player control</span>
     <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">)</span>
 
     <span class="c1"># prompt turn actions</span>
-    <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+    <span class="n">hourglass</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="load_game"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.load_game">[docs]</a><span class="k">def</span> <span class="nf">load_game</span><span class="p">():</span>
@@ -500,7 +517,7 @@
         <span class="k">break</span>
 
     <span class="c1"># move camera to player</span>
-    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">(),</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">(),</span> <span class="n">Position</span><span class="p">)</span>
     <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># show UI</span>
@@ -548,8 +565,10 @@
     <span class="c1"># extremely scuffed and for testing. copied a bunch of stuff from start_game()</span>
 
     <span class="c1"># entities must be forcefully deleted or components will delete lights from the new lightbox once the delete in main runs</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Exists</span><span class="p">])):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsPlayer</span><span class="p">)</span> <span class="ow">and</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Exists</span><span class="p">])):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span>
+            <span class="n">entity</span><span class="p">,</span> <span class="n">IsPlayer</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">):</span>
             <span class="n">snecs</span><span class="o">.</span><span class="n">delete_entity_immediately</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">default_world</span><span class="p">)</span>
 
     <span class="c1"># init and save map</span>
@@ -557,26 +576,26 @@
     <span class="n">store</span><span class="o">.</span><span class="n">current_game_map</span> <span class="o">=</span> <span class="n">game_map</span>
 
     <span class="c1"># regenerate lights for transferred entities</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">light_source</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">LightSource</span><span class="p">,</span> <span class="n">Position</span><span class="p">])):</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">light_source</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">LightSource</span><span class="p">,</span> <span class="n">Position</span><span class="p">])):</span>
         <span class="c1"># set up light</span>
         <span class="n">radius</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># TODO - pull radius and colour from external data</span>
         <span class="n">colour</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="mi">200</span>
-        <span class="n">light_source</span><span class="o">.</span><span class="n">light_id</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_light</span><span class="p">([</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">],</span> <span class="n">radius</span><span class="p">,</span> <span class="n">colour</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">light_source</span><span class="o">.</span><span class="n">light_id</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_light</span><span class="p">([</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">],</span> <span class="n">radius</span><span class="p">,</span> <span class="n">colour</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
 
     <span class="c1"># populate the map</span>
     <span class="n">game_map</span><span class="o">.</span><span class="n">generate_new_map</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># get the player</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
 
     <span class="c1"># transfer player to new spawn</span>
-    <span class="n">player_position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">player_position</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="n">new_pos</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">get_open_space</span><span class="p">())</span>
     <span class="n">player_position</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="n">new_pos</span><span class="p">)</span>
 
     <span class="c1"># visually update player position</span>
-    <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
+    <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">aesthetic</span><span class="p">:</span>
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span> <span class="o">=</span> <span class="n">new_pos</span>
         <span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span> <span class="o">=</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">sprites</span><span class="o">.</span><span class="n">move</span>
@@ -587,7 +606,7 @@
     <span class="n">system</span><span class="o">.</span><span class="n">process_tile_visibility</span><span class="p">()</span>
 
     <span class="c1"># point the camera at the player, now that FOV is updated</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="n">camera</span><span class="o">.</span><span class="n">set_target</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span></div>
 
 
@@ -648,7 +667,10 @@
     <span class="c1"># blessings</span>
     <span class="n">register_action</span><span class="p">(</span><span class="n">MoveFast</span><span class="p">)</span>
     <span class="n">register_action</span><span class="p">(</span><span class="n">NoMove</span><span class="p">)</span>
-    <span class="n">register_action</span><span class="p">(</span><span class="n">AttackMove</span><span class="p">)</span></div>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">AttackMove</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">Aftershock</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">SaltTheWound</span><span class="p">)</span>
+    <span class="n">register_action</span><span class="p">(</span><span class="n">KeepAnEvenKeel</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="init_subscribers"><a class="viewcode-back" href="../../../scripts.nqp.html#scripts.nqp.command.init_subscribers">[docs]</a><span class="k">def</span> <span class="nf">init_subscribers</span><span class="p">():</span>
@@ -657,7 +679,8 @@
 
 <span class="sd">    N.B. When init'd they are held in reference by the event hub and do not need to be referred to directly.</span>
 <span class="sd">    """</span>
-    <span class="n">game_subscriber</span> <span class="o">=</span> <span class="n">GameEventSubscriber</span><span class="p">()</span></div>
+    <span class="n">game_subscriber</span> <span class="o">=</span> <span class="n">GameEventSubscriber</span><span class="p">()</span>
+    <span class="n">interaction_subscriber</span> <span class="o">=</span> <span class="n">InteractionEventSubscriber</span><span class="p">()</span></div>
 
 
 <span class="c1">##################### UI ######################</span>
@@ -712,6 +735,12 @@
     <span class="n">char_selector_x</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">char_selector_y</span> <span class="o">=</span> <span class="mi">0</span>
 
+    <span class="c1"># blessings menu</span>
+    <span class="n">blessing_menu_width</span> <span class="o">=</span> <span class="n">desired_width</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">blessing_menu_height</span> <span class="o">=</span> <span class="n">desired_width</span> <span class="o">*</span> <span class="mf">0.4</span>
+    <span class="n">blessing_menu_x</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">blessing_menu_y</span> <span class="o">=</span> <span class="mi">10</span>
+
     <span class="n">layout</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">UIElement</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">message_x</span><span class="p">,</span> <span class="n">message_y</span><span class="p">),</span> <span class="p">(</span><span class="n">message_width</span><span class="p">,</span> <span class="n">message_height</span><span class="p">)),</span>
         <span class="n">UIElement</span><span class="o">.</span><span class="n">TILE_INFO</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">tile_info_x</span><span class="p">,</span> <span class="n">tile_info_y</span><span class="p">),</span> <span class="p">(</span><span class="n">tile_info_width</span><span class="p">,</span> <span class="n">tile_info_height</span><span class="p">)),</span>
@@ -720,6 +749,7 @@
             <span class="p">(</span><span class="n">dungen_viewer_x</span><span class="p">,</span> <span class="n">dungen_viewer_y</span><span class="p">),</span> <span class="p">(</span><span class="n">dungen_viewer_width</span><span class="p">,</span> <span class="n">dungen_viewer_height</span><span class="p">)</span>
         <span class="p">),</span>
         <span class="n">UIElement</span><span class="o">.</span><span class="n">ACTOR_INFO</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">npc_info_x</span><span class="p">,</span> <span class="n">npc_info_y</span><span class="p">),</span> <span class="p">(</span><span class="n">npc_info_width</span><span class="p">,</span> <span class="n">npc_info_height</span><span class="p">)),</span>
+        <span class="n">UIElement</span><span class="o">.</span><span class="n">BLESSING_MENU</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">blessing_menu_x</span><span class="p">,</span> <span class="n">blessing_menu_y</span><span class="p">),</span> <span class="p">(</span><span class="n">blessing_menu_width</span><span class="p">,</span> <span class="n">blessing_menu_height</span><span class="p">)),</span>
         <span class="n">UIElement</span><span class="o">.</span><span class="n">TITLE_SCREEN</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span>
             <span class="p">(</span><span class="n">title_screen_x</span><span class="p">,</span> <span class="n">title_screen_y</span><span class="p">),</span> <span class="p">(</span><span class="n">title_screen_width</span><span class="p">,</span> <span class="n">title_screen_height</span><span class="p">)</span>
         <span class="p">),</span>
@@ -753,7 +783,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

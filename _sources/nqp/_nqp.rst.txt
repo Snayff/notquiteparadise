@@ -2,7 +2,6 @@ NQP Documentation
 ============================================
 
 ..  toctree::
-    :caption: NQP
 
     actions/_actions
     elements/_elements

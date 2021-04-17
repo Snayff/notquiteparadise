@@ -2,7 +2,6 @@ UI Elements
 ========================
 
 ..  toctree::
-    :caption: Elements
 
     actor_info
     camera

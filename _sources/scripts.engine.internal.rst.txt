@@ -60,6 +60,14 @@ scripts.engine.internal.extend\_json module
    :undoc-members:
    :show-inheritance:
 
+scripts.engine.internal.interaction module
+------------------------------------------
+
+.. automodule:: scripts.engine.internal.interaction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.engine.internal.library module
 --------------------------------------
 

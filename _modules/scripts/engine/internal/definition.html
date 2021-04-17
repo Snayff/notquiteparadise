@@ -377,7 +377,6 @@
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># update sprite path render order</span>
-        <span class="c1"># FIXME - this should be handled prior to coming to the dataclass</span>
         <span class="n">trait_render_order</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"npc"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"people"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"homeland"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"savvy"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sprite_paths</span><span class="o">.</span><span class="n">render_order</span> <span class="o">=</span> <span class="n">trait_render_order</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">)</span></div>
 
@@ -619,6 +618,9 @@
     <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
+    <span class="c1"># list of types for the skill (used for tracking compatibility with things like blessings)</span>
+    <span class="n">types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># convert directions to their constant values</span>
         <span class="n">_mapped_directions</span> <span class="o">=</span> <span class="p">[]</span>
@@ -804,7 +806,6 @@
 <div class="viewcode-block" id="BaseValueData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.BaseValueData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">BaseValueData</span><span class="p">:</span>
-    <span class="n">move_cost</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">accuracy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">damage</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">bustle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
@@ -825,6 +826,7 @@
 <div class="viewcode-block" id="DefaultValueData"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.definition.DefaultValueData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">DefaultValueData</span><span class="p">:</span>
+    <span class="n">move_cost</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">time_per_round</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">reduced_effectiveness_multi_tile_modifier</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
 
@@ -859,7 +861,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

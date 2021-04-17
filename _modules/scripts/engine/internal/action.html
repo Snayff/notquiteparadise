@@ -256,15 +256,15 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Knowledge</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">hourglass</span><span class="p">,</span> <span class="n">matter</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Position</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.effect</span> <span class="kn">import</span> <span class="n">Effect</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.blessing</span> <span class="kn">import</span> <span class="n">Blessing</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">AfflictionCategoryType</span><span class="p">,</span>
     <span class="n">DirectionType</span><span class="p">,</span>
@@ -285,7 +285,14 @@
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Skill"</span><span class="p">,</span> <span class="s2">"Affliction"</span><span class="p">,</span> <span class="s2">"Behaviour"</span><span class="p">,</span> <span class="s2">"register_action"</span><span class="p">]</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Skill"</span><span class="p">,</span> <span class="s2">"Affliction"</span><span class="p">,</span> <span class="s2">"Behaviour"</span><span class="p">,</span> <span class="s2">"SkillModifier"</span><span class="p">,</span> <span class="s2">"register_action"</span><span class="p">]</span>
+
+
+<span class="c1"># used by skill modifiers</span>
+<span class="kn">import</span> <span class="nn">scripts.engine.core.effect</span>
+
+<span class="n">_EFFECTS</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">effect</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">effect</span><span class="p">)}</span>
 
 
 <div class="viewcode-block" id="Action"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Action">[docs]</a><span class="k">class</span> <span class="nc">Action</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
@@ -342,7 +349,9 @@
     <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span>  <span class="c1"># usable by Tile, Auto  - Doesnt make sense for Direction to have a delayed cast.</span>
     <span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span>
 
-    <span class="n">blessings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Blessings</span><span class="p">]</span>
+    <span class="c1"># blessing related attributes</span>
+    <span class="n">blessings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SkillModifier</span><span class="p">]</span>
+    <span class="n">types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 
 <div class="viewcode-block" id="Skill.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Skill.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">:</span> <span class="n">EntityID</span> <span class="o">=</span> <span class="n">user</span>
@@ -354,14 +363,17 @@
         <span class="c1"># vars needed to keep track of changes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ignore_entities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># to ensure entity not hit more than once</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">innactive_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inactive_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-    <span class="k">def</span> <span class="nf">_post_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">skill_stack</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]</span> <span class="o">=</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_post_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">skill_stack</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]:</span>
         <span class="sd">"""</span>
 <span class="sd">        Build the effects of this skill applying to a single entity. This function will be used to apply any dynamic tweaks to the effects stack after the subclass generates its stack.</span>
 <span class="sd">        """</span>
-        <span class="n">skill_blessings</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span><span class="o">.</span><span class="n">skill_blessings</span>
-        <span class="n">relevant_blessings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># handle mutable default</span>
+        <span class="k">if</span> <span class="n">skill_stack</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">skill_stack</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">skill_blessings</span> <span class="o">=</span> <span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span><span class="o">.</span><span class="n">skill_blessings</span>
+        <span class="n">relevant_blessings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SkillModifier</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">skill_blessings</span><span class="p">:</span>
             <span class="n">relevant_blessings</span> <span class="o">=</span> <span class="n">skill_blessings</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">blessing</span> <span class="ow">in</span> <span class="n">relevant_blessings</span><span class="p">:</span>
@@ -383,6 +395,7 @@
         <span class="bp">cls</span><span class="o">.</span><span class="n">icon_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">icon_path</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">resource_type</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resource_type</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">resource_cost</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resource_cost</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">types</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">types</span>
 
 <div class="viewcode-block" id="Skill.apply"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Skill.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]]]:</span>
         <span class="sd">"""</span>
@@ -390,17 +403,21 @@
 <span class="sd">        times.</span>
 <span class="sd">        """</span>
         <span class="n">entity_names</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_affected_entities</span><span class="p">(</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">matter</span><span class="o">.</span><span class="n">get_affected_entities</span><span class="p">(</span>
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
         <span class="p">):</span>
-            <span class="k">yield</span> <span class="n">entity</span><span class="p">,</span> <span class="p">[</span><span class="n">effect</span> <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_effects</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="k">if</span> <span class="n">effect</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">innactive_effects</span><span class="p">]</span>
-            <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span></div>
+            <span class="k">yield</span> <span class="n">entity</span><span class="p">,</span> <span class="p">[</span>
+                <span class="n">effect</span>
+                <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_effects</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">effect</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inactive_effects</span>
+            <span class="p">]</span>
+            <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Skill.use"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Skill.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply</span>
 <span class="sd">        """</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="si">}</span><span class="s2">' used '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="si">}</span><span class="s2">' used '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span>
 
         <span class="c1"># handle the delivery method of the skill</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uses_projectile</span><span class="p">:</span>
@@ -410,7 +427,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_create_delayed_skill</span><span class="p">()</span>
             <span class="n">is_successful</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">is_successful</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">is_successful</span> <span class="o">=</span> <span class="n">matter</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">is_successful</span><span class="p">:</span>
             <span class="c1"># post interaction event</span>
@@ -432,7 +449,7 @@
         <span class="n">projectile_data</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
 
         <span class="c1"># create the projectile</span>
-        <span class="n">projectile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_projectile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">projectile_data</span><span class="p">)</span>
+        <span class="n">projectile</span> <span class="o">=</span> <span class="n">matter</span><span class="o">.</span><span class="n">create_projectile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">projectile_data</span><span class="p">)</span>
 
         <span class="c1"># add projectile to ignore list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ignore_entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">projectile</span><span class="p">)</span>
@@ -449,7 +466,7 @@
         <span class="n">delayed_skill_data</span><span class="o">.</span><span class="n">skill_instance</span> <span class="o">=</span> <span class="bp">self</span>
 
         <span class="c1"># create the delayed skill</span>
-        <span class="n">delayed_skill</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_delayed_skill</span><span class="p">(</span>
+        <span class="n">delayed_skill</span> <span class="o">=</span> <span class="n">matter</span><span class="o">.</span><span class="n">create_delayed_skill</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">delayed_skill_data</span>
         <span class="p">)</span>
 
@@ -457,7 +474,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ignore_entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">delayed_skill</span><span class="p">)</span>
 
         <span class="c1"># save reference</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delayed_skill</span> <span class="o">=</span> <span class="n">delayed_skill</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delayed_skill</span> <span class="o">=</span> <span class="n">delayed_skill</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Build the effects of this skill applying to a single entity. Must be overridden in subclass.</span>
+<span class="sd">        """</span>
+        <span class="k">pass</span></div>
 
 
 <div class="viewcode-block" id="Affliction"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Affliction">[docs]</a><span class="k">class</span> <span class="nc">Affliction</span><span class="p">(</span><span class="n">Action</span><span class="p">):</span>
@@ -512,14 +536,14 @@
 
         <span class="n">entity_names</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">entities</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="n">position</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_affected_entities</span><span class="p">(</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_size</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">matter</span><span class="o">.</span><span class="n">get_affected_entities</span><span class="p">(</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_size</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">entity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
                     <span class="n">entities</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
                     <span class="k">yield</span> <span class="n">entity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_effects</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-                    <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span></div>
+                    <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Affliction.trigger"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Affliction.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -545,7 +569,144 @@
         <span class="k">pass</span></div></div>
 
 
-<div class="viewcode-block" id="register_action"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.register_action">[docs]</a><span class="k">def</span> <span class="nf">register_action</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Action</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">]]):</span>
+<div class="viewcode-block" id="SkillModifier"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.SkillModifier">[docs]</a><span class="k">class</span> <span class="nc">SkillModifier</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    The base class for blessings. Blessings modify skills through the effects applied.</span>
+<span class="sd">    """</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="n">level</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">removable</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">conflicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">skill_types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="c1"># remove/add are applied when the blessing is applied</span>
+    <span class="n">remove_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">add_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+
+    <span class="c1"># modifications are applied when the effects are built</span>
+    <span class="n">modify_effects_set</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">modify_effects_tweak_flat</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">modify_effects_tweak_percent</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+
+    <span class="c1"># custom args (set by child if JSON doesn't cover the argument needs)</span>
+    <span class="n">custom_args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="SkillModifier.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.SkillModifier.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">owner</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_init_properties</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Sets the class properties of the blessing from the class key</span>
+<span class="sd">        """</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">BLESSINGS</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"description"</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="s2">"Base"</span>  <span class="c1"># assume common exists for now</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">removable</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"removable"</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">conflicts</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"conflicts"</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">skill_types</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"skill_types"</span><span class="p">]</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">remove_effects</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"base_effects"</span><span class="p">][</span><span class="s2">"remove_effects"</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">add_effects</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"base_effects"</span><span class="p">][</span><span class="s2">"add_effects"</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">modify_effects_set</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"base_effects"</span><span class="p">][</span><span class="s2">"modify_effects_set"</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">modify_effects_tweak_flat</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"base_effects"</span><span class="p">][</span><span class="s2">"modify_effects_tweak_flat"</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">modify_effects_tweak_percent</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"base_effects"</span><span class="p">][</span><span class="s2">"modify_effects_tweak_percent"</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">involved_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Get the set of effects involved in the blessing.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="s2">"effect_id"</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_effects</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">modify_effects_set</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_effects</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SkillModifier.roll_level"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.SkillModifier.roll_level">[docs]</a>    <span class="k">def</span> <span class="nf">roll_level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Runs the level selection algorithm and updates attributes with the applied level.</span>
+<span class="sd">        """</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">level_chances</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">]:</span>
+            <span class="n">levels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="n">level</span><span class="p">][</span><span class="s2">"rarity"</span><span class="p">]</span>
+            <span class="n">level_chances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+
+        <span class="n">random_float</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chance</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">level_chances</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">random_float</span> <span class="o">&lt;=</span> <span class="n">chance</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_level</span><span class="p">(</span><span class="n">levels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="SkillModifier.set_level"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.SkillModifier.set_level">[docs]</a>    <span class="k">def</span> <span class="nf">set_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Refreshes the class attributes with the data for the specific blessing level.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">level</span>
+        <span class="k">if</span> <span class="s2">"remove_effects"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">][</span><span class="s2">"effects"</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remove_effects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">][</span><span class="s2">"effects"</span><span class="p">][</span><span class="s2">"remove_effects"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"add_effects"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">][</span><span class="s2">"effects"</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_effects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">][</span><span class="s2">"effects"</span><span class="p">][</span><span class="s2">"add_effects"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"modify_effects_set"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">][</span><span class="s2">"effects"</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">modify_effects_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">][</span><span class="s2">"effects"</span><span class="p">][</span><span class="s2">"modify_effects_set"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"modify_effects_tweak_flat"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">][</span><span class="s2">"effects"</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">modify_effects_tweak_flat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">][</span><span class="s2">"effects"</span><span class="p">][</span><span class="s2">"modify_effects_tweak_flat"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"modify_effects_tweak_percent"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">][</span><span class="s2">"effects"</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">modify_effects_tweak_percent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"levels"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">][</span><span class="s2">"effects"</span><span class="p">][</span>
+                <span class="s2">"modify_effects_tweak_percent"</span>
+            <span class="p">]</span></div>
+
+<div class="viewcode-block" id="SkillModifier.apply"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.SkillModifier.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">],</span> <span class="n">owner</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        This is the core function of the blessing. It takes the effect stack and modifies it with the blessing.</span>
+<span class="sd">        """</span>
+
+        <span class="c1"># go through the effects backwards so that the .remove() doesn't mess up indexing</span>
+        <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">effects</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">effect_name</span> <span class="o">=</span> <span class="n">effect</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+            <span class="c1"># flat config change</span>
+            <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modify_effects_tweak_flat</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mod</span><span class="p">[</span><span class="s2">"effect_id"</span><span class="p">]</span> <span class="o">==</span> <span class="n">effect_name</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mod</span><span class="p">[</span><span class="s2">"values"</span><span class="p">]:</span>
+                        <span class="n">current_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">current_value</span> <span class="o">+</span> <span class="n">mod</span><span class="p">[</span><span class="s2">"values"</span><span class="p">][</span><span class="n">value</span><span class="p">])</span>
+
+            <span class="c1"># set config change</span>
+            <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modify_effects_set</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mod</span><span class="p">[</span><span class="s2">"effect_id"</span><span class="p">]</span> <span class="o">==</span> <span class="n">effect_name</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mod</span><span class="p">[</span><span class="s2">"values"</span><span class="p">]:</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mod</span><span class="p">[</span><span class="s2">"values"</span><span class="p">][</span><span class="n">value</span><span class="p">])</span>
+
+            <span class="c1"># percent config change</span>
+            <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modify_effects_tweak_percent</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mod</span><span class="p">[</span><span class="s2">"effect_id"</span><span class="p">]</span> <span class="o">==</span> <span class="n">effect_name</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mod</span><span class="p">[</span><span class="s2">"values"</span><span class="p">]:</span>
+                        <span class="n">current_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">current_value</span> <span class="o">*</span> <span class="n">mod</span><span class="p">[</span><span class="s2">"values"</span><span class="p">][</span><span class="n">value</span><span class="p">])</span>
+
+            <span class="c1"># remove effects from the stack if applicable</span>
+            <span class="k">if</span> <span class="n">effect_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_effects</span><span class="p">:</span>
+                <span class="n">effects</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span>
+
+        <span class="c1"># add effects to the stack</span>
+        <span class="k">for</span> <span class="n">add_effect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_effects</span><span class="p">:</span>
+            <span class="c1"># build the effect creation arguments from the config</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"origin"</span><span class="p">:</span> <span class="n">owner</span><span class="p">,</span> <span class="s2">"target"</span><span class="p">:</span> <span class="n">target</span><span class="p">,</span> <span class="s2">"success_effects"</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">"failure_effects"</span><span class="p">:</span> <span class="p">[]}</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">add_effect</span><span class="p">[</span><span class="s2">"args"</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">add_effect</span><span class="p">[</span><span class="s2">"effect_id"</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_args</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_args</span><span class="p">)</span>
+            <span class="n">effects</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">_EFFECTS</span><span class="p">[</span><span class="n">add_effect</span><span class="p">[</span><span class="s2">"effect_id"</span><span class="p">]](</span><span class="o">**</span><span class="n">args</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="register_action"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.register_action">[docs]</a><span class="k">def</span> <span class="nf">register_action</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Action</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">,</span> <span class="n">SkillModifier</span><span class="p">]]):</span>
     <span class="sd">"""</span>
 <span class="sd">    Initialises the class properties set by external data, if appropriate, and adds to the action registry for use</span>
 <span class="sd">    by the engine.</span>
@@ -558,7 +719,7 @@
     <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Skill</span><span class="p">):</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">_init_properties</span><span class="p">()</span>
         <span class="n">store</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
-    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Blessing</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">SkillModifier</span><span class="p">):</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">_init_properties</span><span class="p">()</span>
         <span class="n">store</span><span class="o">.</span><span class="n">blessing_registry</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
     <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Affliction</span><span class="p">):</span>
@@ -568,7 +729,7 @@
         <span class="n">store</span><span class="o">.</span><span class="n">behaviour_registry</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span></div>
 
 
-<span class="c1">######################### ACTION SUBCLASSES ##########################</span>
+<span class="c1">######################### REQUIRED ACTION SUBCLASSES ##########################</span>
 
 
 <div class="viewcode-block" id="Projectile"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.Projectile">[docs]</a><span class="k">class</span> <span class="nc">Projectile</span><span class="p">(</span><span class="n">Behaviour</span><span class="p">):</span>
@@ -589,17 +750,17 @@
 
         <span class="c1"># get info we definitely need</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="n">current_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
         <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">target_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">current_tile</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">current_tile</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dir_y</span><span class="p">))</span>
 
         <span class="c1"># check if already on top of an entity before moving in case something move into the projectile or the projectile was created on top of an entity</span>
-        <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">(),</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">player_pos</span> <span class="o">=</span> <span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">(),</span> <span class="n">Position</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">current_tile</span><span class="p">,</span> <span class="n">TileTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">skill_instance</span><span class="o">.</span><span class="n">target_tile</span> <span class="o">=</span> <span class="n">current_tile</span>
             <span class="n">should_activate</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' collided with an entity on cast at (</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' collided with an entity on cast at (</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
 
         <span class="c1"># if we havent travelled max distance or determined we should activate then move</span>
         <span class="c1"># N.b. not an elif because we want the precheck above to happen in isolation</span>
@@ -621,29 +782,29 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># at max range and not activating so kill attached entity</span>
-                <span class="n">world</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="n">matter</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">should_activate</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' is going to activate at (</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' is going to activate at (</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)."</span><span class="p">)</span>
 
             <span class="c1"># apply skill, rather than using it, as the instance already exists and we are just using the effects</span>
-            <span class="n">world</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">skill_instance</span><span class="p">)</span>
+            <span class="n">matter</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">skill_instance</span><span class="p">)</span>
 
             <span class="c1"># die after activating</span>
-            <span class="n">world</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="n">matter</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">should_move</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' has </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">range</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_travelled</span><span class="si">}</span><span class="s2"> range left and"</span>
+                <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">' has </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">range</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_travelled</span><span class="si">}</span><span class="s2"> range left and"</span>
                 <span class="sa">f</span><span class="s2">" is going to move from (</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">) to "</span>
                 <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dir_x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dir_y</span><span class="si">}</span><span class="s2">)."</span>
             <span class="p">)</span>
 
-            <span class="n">move</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_known_skill</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">"Move"</span><span class="p">)</span>
-            <span class="n">world</span><span class="o">.</span><span class="n">use_skill</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="n">current_tile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
+            <span class="n">move</span> <span class="o">=</span> <span class="n">matter</span><span class="o">.</span><span class="n">get_known_skill</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">"Move"</span><span class="p">)</span>
+            <span class="n">matter</span><span class="o">.</span><span class="n">use_skill</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="n">current_tile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">distance_travelled</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">speed</span><span class="p">)</span></div>
+            <span class="n">hourglass</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">speed</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_handle_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
         <span class="sd">"""</span>
@@ -663,7 +824,7 @@
 
             <span class="k">elif</span> <span class="n">collision_type</span> <span class="o">==</span> <span class="n">TerrainCollision</span><span class="o">.</span><span class="n">FIZZLE</span><span class="p">:</span>
                 <span class="c1"># get rid of projectile</span>
-                <span class="n">world</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
+                <span class="n">matter</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">collision_type</span> <span class="o">==</span> <span class="n">TerrainCollision</span><span class="o">.</span><span class="n">REFLECT</span><span class="p">:</span>
                 <span class="n">should_move</span> <span class="o">=</span> <span class="kc">True</span>
@@ -700,27 +861,27 @@
 <div class="viewcode-block" id="DelayedSkill.act"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.action.DelayedSkill.act">[docs]</a>    <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">delayed</span><span class="p">:</span>
             <span class="c1"># get time left in round, to align first end of turn to round</span>
-            <span class="n">time_left_in_round</span> <span class="o">=</span> <span class="n">chronicle</span><span class="o">.</span><span class="n">get_time_left_in_round</span><span class="p">()</span>
+            <span class="n">time_left_in_round</span> <span class="o">=</span> <span class="n">hourglass</span><span class="o">.</span><span class="n">get_time_left_in_round</span><span class="p">()</span>
             <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 
             <span class="n">time_per_round</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span>
 
             <span class="c1"># align to round time and add number of rounds as a delay</span>
             <span class="n">time_delay</span> <span class="o">=</span> <span class="p">(</span><span class="n">time_per_round</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span> <span class="o">+</span> <span class="n">time_left_in_round</span>
-            <span class="n">chronicle</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">time_delay</span><span class="p">)</span>
+            <span class="n">hourglass</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">time_delay</span><span class="p">)</span>
 
             <span class="c1"># set flag</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">delayed</span> <span class="o">=</span> <span class="kc">True</span>
 
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2"> will trigger in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="si">}</span><span class="s2"> rounds."</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2"> will trigger in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="si">}</span><span class="s2"> rounds."</span><span class="p">)</span>
 
             <span class="k">return</span>
 
         <span class="c1"># apply skill, rather than using it, as the instance already exists and we are just using the effects</span>
-        <span class="n">world</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">skill_instance</span><span class="p">)</span>
+        <span class="n">matter</span><span class="o">.</span><span class="n">apply_skill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">skill_instance</span><span class="p">)</span>
 
         <span class="c1"># die after activating</span>
-        <span class="n">world</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span></div></div>
+        <span class="n">matter</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span></div></div>
 </pre></div>
 
           </article>
@@ -745,7 +906,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

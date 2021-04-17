@@ -261,7 +261,8 @@
 <span class="kn">import</span> <span class="nn">tcod</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">hourglass</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Aesthetic</span><span class="p">,</span>
     <span class="n">Afflictions</span><span class="p">,</span>
@@ -324,31 +325,31 @@
 <span class="sd">    """</span>
     <span class="c1"># all entities with no position must be active</span>
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">not_position</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">):</span>
-            <span class="n">world</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">):</span>
+            <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">())</span>
 
     <span class="c1"># check entities in range of player</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-    <span class="n">player_pos</span><span class="p">:</span> <span class="n">Position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="n">player_pos</span><span class="p">:</span> <span class="n">Position</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position</span><span class="p">:</span>
         <span class="c1"># check if they're close enough that we care</span>
         <span class="n">distance_x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
         <span class="n">distance_y</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">distance_x</span><span class="p">,</span> <span class="n">distance_y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">MAX_ACTIVATION_DISTANCE</span><span class="p">:</span>
             <span class="c1"># they're close, now check they arent already active</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">):</span>
-                <span class="n">world</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">())</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">):</span>
+                <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">())</span>
 
                 <span class="c1"># update tracked to current time (otherwise they will be behind and act repeatedly)</span>
-                <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Tracked</span><span class="p">):</span>
-                    <span class="n">tracked</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Tracked</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Tracked</span><span class="p">):</span>
+                    <span class="n">tracked</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Tracked</span><span class="p">)</span>
 
-                    <span class="n">tracked</span><span class="o">.</span><span class="n">time_spent</span> <span class="o">=</span> <span class="n">chronicle</span><span class="o">.</span><span class="n">get_time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">tracked</span><span class="o">.</span><span class="n">time_spent</span> <span class="o">=</span> <span class="n">hourglass</span><span class="o">.</span><span class="n">get_time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># not close enough, remove active</span>
-            <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">):</span>
-                <span class="n">world</span><span class="o">.</span><span class="n">remove_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">)</span></div>
+            <span class="k">if</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">):</span>
+                <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">remove_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">IsActive</span><span class="p">)</span></div>
 
 
 <span class="c1">########################## VISION ##################################</span>
@@ -414,7 +415,7 @@
                 <span class="n">updated_block_sight_map</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># update entities fov map</span>
-        <span class="n">sight_range</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Sight</span><span class="p">)</span><span class="o">.</span><span class="n">sight_range</span>
+        <span class="n">sight_range</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Sight</span><span class="p">)</span><span class="o">.</span><span class="n">sight_range</span>
         <span class="n">fov</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">compute_fov</span><span class="p">(</span>
             <span class="n">updated_block_sight_map</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">sight_range</span><span class="p">,</span> <span class="n">FOV_LIGHT_WALLS</span><span class="p">,</span> <span class="n">FOV_ALGORITHM</span>
         <span class="p">)</span></div>
@@ -425,8 +426,8 @@
 <span class="sd">    Update tile visibility based on player fov</span>
 <span class="sd">    """</span>
     <span class="c1"># get player info</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-    <span class="n">fov_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">FOV</span><span class="p">)</span><span class="o">.</span><span class="n">map</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="n">fov_map</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">FOV</span><span class="p">)</span><span class="o">.</span><span class="n">map</span>
 
     <span class="c1"># get game map details</span>
     <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
@@ -478,8 +479,8 @@
 
             <span class="c1"># handle expiry</span>
             <span class="k">if</span> <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">world</span><span class="o">.</span><span class="n">remove_affliction</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">affliction</span><span class="p">)</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Removed </span><span class="si">{</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from '</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span></div>
+                <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">remove_affliction</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">affliction</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Removed </span><span class="si">{</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from '</span><span class="si">{</span><span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="reduce_lifespan_durations"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.system.reduce_lifespan_durations">[docs]</a><span class="k">def</span> <span class="nf">reduce_lifespan_durations</span><span class="p">():</span>
@@ -495,8 +496,10 @@
 
         <span class="c1"># handle expiry</span>
         <span class="k">if</span> <span class="n">lifespan</span><span class="o">.</span><span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">world</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">'s lifespan has expired and they have been killed."</span><span class="p">)</span></div>
+            <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">kill_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">'s lifespan has expired and they have been killed."</span>
+            <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="reduce_immunity_durations"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.system.reduce_immunity_durations">[docs]</a><span class="k">def</span> <span class="nf">reduce_immunity_durations</span><span class="p">():</span>
@@ -516,264 +519,10 @@
             <span class="c1"># handle expiry</span>
             <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">immunities</span><span class="o">.</span><span class="n">active</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">immunity_name</span><span class="p">)</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Removed </span><span class="si">{</span><span class="n">immunity_name</span><span class="si">}</span><span class="s2"> from '</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">'s "</span> <span class="sa">f</span><span class="s2">"list of immunities."</span><span class="p">)</span></div>
-
-
-<span class="c1">########################### GENERIC REACTION HANDLING ##############################</span>
-
-
-<div class="viewcode-block" id="InteractionEventSubscriber"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.system.InteractionEventSubscriber">[docs]</a><span class="k">class</span> <span class="nc">InteractionEventSubscriber</span><span class="p">(</span><span class="n">Subscriber</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Handle interaction events.</span>
-<span class="sd">    """</span>
-
-<div class="viewcode-block" id="InteractionEventSubscriber.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.system.InteractionEventSubscriber.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"interaction_subscriber"</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">INTERACTION</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="InteractionEventSubscriber.process_event"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.system.InteractionEventSubscriber.process_event">[docs]</a>    <span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">UseSkillEvent</span><span class="p">):</span>
-            <span class="c1"># hacky way to prevent Move causing attack animation to play</span>
-            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">skill_name</span> <span class="o">!=</span> <span class="s2">"Move"</span><span class="p">:</span>
-                <span class="n">_set_sprite</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">SpriteCategory</span><span class="o">.</span><span class="n">ATTACK</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">MoveEvent</span><span class="p">):</span>
-            <span class="n">_handle_proximity_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-            <span class="n">_process_win_condition</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-            <span class="n">_process_map_condition</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">MOVE</span><span class="p">)</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">MOVED</span><span class="p">)</span>
-
-            <span class="c1"># is it a move other or a move self?</span>
-            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">:</span>
-                <span class="n">_set_sprite</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">SpriteCategory</span><span class="o">.</span><span class="n">MOVE</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">new_pos</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">_set_sprite</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">SpriteCategory</span><span class="o">.</span><span class="n">HIT</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">DamageEvent</span><span class="p">):</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">DEAL_DAMAGE</span><span class="p">)</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">TAKE_DAMAGE</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">remaining_hp</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">KILL</span><span class="p">)</span>
-                <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">DIE</span><span class="p">)</span>
-
-                <span class="n">_set_sprite</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">SpriteCategory</span><span class="o">.</span><span class="n">DEAD</span><span class="p">)</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">_set_sprite</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">SpriteCategory</span><span class="o">.</span><span class="n">HIT</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">AffectStatEvent</span><span class="p">):</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">CAUSED_AFFECT_STAT</span><span class="p">)</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">STAT_AFFECTED</span><span class="p">)</span>
-
-            <span class="n">_set_sprite</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">SpriteCategory</span><span class="o">.</span><span class="n">HIT</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">AffectCooldownEvent</span><span class="p">):</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">CAUSED_AFFECT_COOLDOWN</span><span class="p">)</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">COOLDOWN_AFFECTED</span><span class="p">)</span>
-
-            <span class="n">_set_sprite</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">SpriteCategory</span><span class="o">.</span><span class="n">HIT</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">AfflictionEvent</span><span class="p">):</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">CAUSED_AFFLICTION</span><span class="p">)</span>
-            <span class="n">_handle_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">AFFLICTED</span><span class="p">)</span>
-
-            <span class="n">_set_sprite</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">SpriteCategory</span><span class="o">.</span><span class="n">HIT</span><span class="p">)</span></div></div>
-
-
-<span class="n">interaction_subscriber</span> <span class="o">=</span> <span class="n">InteractionEventSubscriber</span><span class="p">()</span>
-
-
-<span class="k">def</span> <span class="nf">_process_opinions</span><span class="p">(</span><span class="n">causing_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">reaction_trigger</span><span class="p">:</span> <span class="n">ReactionTriggerType</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Adjust opinion of entity for any other entities that have an attitude towards the reaction trigger.</span>
-<span class="sd">    """</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">opinion</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">opinion</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opinion</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">reaction_trigger</span> <span class="ow">in</span> <span class="n">opinion</span><span class="o">.</span><span class="n">attitudes</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">causing_entity</span> <span class="ow">in</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">:</span>
-                <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">causing_entity</span><span class="p">]</span> <span class="o">+=</span> <span class="n">opinion</span><span class="o">.</span><span class="n">attitudes</span><span class="p">[</span><span class="n">reaction_trigger</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">causing_entity</span><span class="p">]</span> <span class="o">=</span> <span class="n">opinion</span><span class="o">.</span><span class="n">attitudes</span><span class="p">[</span><span class="n">reaction_trigger</span><span class="p">]</span>
-
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">`s opinion of </span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">causing_entity</span><span class="p">)</span><span class="si">}</span><span class="s2"> is now "</span>
-                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">causing_entity</span><span class="p">]</span><span class="si">}</span><span class="s2"> due to </span><span class="si">{</span><span class="n">reaction_trigger</span><span class="si">}</span><span class="s2">."</span>
-            <span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_handle_affliction</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">reaction_trigger</span><span class="p">:</span> <span class="n">ReactionTriggerType</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Check for any afflictions triggered by the interaction and trigger that interaction.</span>
-<span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">):</span>
-        <span class="n">afflictions</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">reaction_trigger</span> <span class="ow">in</span> <span class="n">affliction</span><span class="o">.</span><span class="n">triggers</span><span class="p">:</span>
-                <span class="n">world</span><span class="o">.</span><span class="n">trigger_affliction</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_handle_reaction_trigger</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">reaction_trigger</span><span class="p">:</span> <span class="n">ReactionTriggerType</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Check for any entities with a reaction to the trigger and handle that reaction.</span>
-<span class="sd">    """</span>
-    <span class="c1"># loop all entities sharing same position that have a reaction</span>
-    <span class="k">for</span> <span class="n">reacting_entity</span><span class="p">,</span> <span class="p">(</span><span class="n">reaction</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">reaction</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reaction</span><span class="p">,</span> <span class="n">Reaction</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">reaction_trigger</span> <span class="ow">in</span> <span class="n">reaction</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">reaction</span><span class="o">.</span><span class="n">reactions</span><span class="p">[</span><span class="n">reaction_trigger</span><span class="p">]</span>
-            <span class="n">_process_opinions</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">reaction_trigger</span><span class="p">)</span>
-            <span class="n">_handle_affliction</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">reaction_trigger</span><span class="p">)</span>
-            <span class="n">_handle_reaction</span><span class="p">(</span><span class="n">reacting_entity</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_handle_reaction</span><span class="p">(</span><span class="n">observer</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">triggering_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ReactionData</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Process a reaction, checking opinion is sufficient and rolling for chance to trigger.</span>
-<span class="sd">    """</span>
-    <span class="n">diff_mod</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># the amount of the opinion difference to consider</span>
-    <span class="n">required_opinion</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">required_opinion</span>
-
-    <span class="c1"># if we dont have a required opinion or have enough opinion carry on</span>
-    <span class="k">if</span> <span class="n">required_opinion</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">observer</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">):</span>
-        <span class="n">opinion_diff</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">opinion</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">observer</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">)</span>
-        <span class="n">current_opinion</span> <span class="o">=</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">triggering_entity</span><span class="p">]</span>
-
-        <span class="c1"># reverse if negative to make it simpler</span>
-        <span class="k">if</span> <span class="n">required_opinion</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">required_opinion</span> <span class="o">=</span> <span class="o">-</span><span class="n">required_opinion</span>
-            <span class="n">current_opinion</span> <span class="o">=</span> <span class="o">-</span><span class="n">current_opinion</span>
-
-        <span class="k">if</span> <span class="n">required_opinion</span> <span class="o">&lt;</span> <span class="n">current_opinion</span><span class="p">:</span>
-            <span class="n">opinion_diff</span> <span class="o">=</span> <span class="n">current_opinion</span> <span class="o">-</span> <span class="n">required_opinion</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># has opinion and doesnt meet requirement</span>
-            <span class="k">return</span>
-
-    <span class="c1"># roll for chance to react</span>
-    <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span>
-
-    <span class="n">roll</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">roll</span><span class="p">()</span>
-    <span class="n">modified_chance</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">chance</span> <span class="o">+</span> <span class="p">(</span><span class="n">opinion_diff</span> <span class="o">*</span> <span class="n">diff_mod</span><span class="p">))</span>  <span class="c1"># the greater the opinion diff the more chance</span>
-
-    <span class="c1"># if roll was unsuccessful return now</span>
-    <span class="k">if</span> <span class="n">roll</span> <span class="o">&gt;</span> <span class="n">modified_chance</span><span class="p">:</span>
-        <span class="k">return</span>
-
-    <span class="c1"># we need position to react to so check we have one (this also prevents triggering on gods)</span>
-    <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">triggering_entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">):</span>
-        <span class="c1"># get tile of the acting entity</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">triggering_entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-        <span class="n">target_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
-
-        <span class="n">_apply_reaction</span><span class="p">(</span><span class="n">observer</span><span class="p">,</span> <span class="n">triggering_entity</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-
-        <span class="c1"># reacted so reduce opinion towards 0</span>
-        <span class="k">if</span> <span class="n">required_opinion</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">observer</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">):</span>
-            <span class="k">return</span>
-
-        <span class="c1"># check if negative value</span>
-        <span class="k">if</span> <span class="mi">0</span> <span class="o">&gt;=</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">triggering_entity</span><span class="p">]:</span>
-            <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">triggering_entity</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">triggering_entity</span><span class="p">]</span> <span class="o">+</span> <span class="n">required_opinion</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">triggering_entity</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">triggering_entity</span><span class="p">]</span> <span class="o">-</span> <span class="n">required_opinion</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_apply_reaction</span><span class="p">(</span><span class="n">observer</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">triggering_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ReactionData</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Create the skill or effect from the reaction and apply it.</span>
-<span class="sd">    """</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">reaction</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">):</span>
-        <span class="n">effect</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_effect</span><span class="p">(</span><span class="n">observer</span><span class="p">,</span> <span class="n">triggering_entity</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">reaction</span><span class="p">)</span>
-        <span class="n">effect</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>  <span class="c1"># skill data</span>
-        <span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
-
-        <span class="n">skill</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">reaction</span><span class="p">]</span>
-        <span class="n">world</span><span class="o">.</span><span class="n">use_skill</span><span class="p">(</span><span class="n">observer</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTRE</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_set_sprite</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">sprite_category</span><span class="p">:</span> <span class="n">SpriteCategoryType</span><span class="p">,</span> <span class="n">new_pos</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Sets an entities sprite</span>
-<span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">entity_has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">):</span>
-        <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
-        <span class="n">animation</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">sprites</span><span class="p">,</span> <span class="n">sprite_category</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">animation</span><span class="p">:</span>
-            <span class="n">aesthetic</span><span class="o">.</span><span class="n">set_current_sprite</span><span class="p">(</span><span class="n">sprite_category</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2"> doesn`t have </span><span class="si">{</span><span class="n">sprite_category</span><span class="si">}</span><span class="s2"> sprite so left as idle."</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">new_pos</span><span class="p">:</span>
-            <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">target_draw_y</span> <span class="o">=</span> <span class="n">new_pos</span>
-
-
-<span class="c1">############### NON-GENERIC REACTION HANDLING ##########################</span>
-
-
-<span class="k">def</span> <span class="nf">_handle_proximity_reaction_trigger</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Special case of _handle_reaction_trigger. Checks for overlapping positions. Check for any entities with a</span>
-<span class="sd">    reaction to proximity and handle that reaction.</span>
-<span class="sd">    """</span>
-    <span class="c1"># loop all entities sharing same position that have a reaction</span>
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">reaction</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_reaction</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reaction</span><span class="p">,</span> <span class="n">Reaction</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">position</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">coord</span> <span class="o">==</span> <span class="n">event</span><span class="o">.</span><span class="n">new_pos</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">PROXIMITY</span> <span class="ow">in</span> <span class="n">reaction</span><span class="o">.</span><span class="n">reactions</span><span class="p">:</span>
-                    <span class="n">data</span> <span class="o">=</span> <span class="n">reaction</span><span class="o">.</span><span class="n">reactions</span><span class="p">[</span><span class="n">ReactionTrigger</span><span class="o">.</span><span class="n">PROXIMITY</span><span class="p">]</span>
-                    <span class="n">_handle_reaction</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_process_win_condition</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Checking if the win condition has been met. Post event if it is.</span>
-<span class="sd">    """</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-
-    <span class="c1"># only progress if its the player as only the player can win</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">player</span> <span class="o">==</span> <span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
-        <span class="k">return</span>
-
-    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_win_condition</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
-            <span class="c1"># post game event</span>
-            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">WinConditionMetEvent</span><span class="p">())</span>
-            <span class="k">break</span>
-
-
-<span class="k">def</span> <span class="nf">_process_map_condition</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Checking if the map change condition has been met. Post event if it is.</span>
-<span class="sd">    """</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-
-    <span class="c1"># only progress if its the player as only the player can change the map</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">player</span> <span class="o">==</span> <span class="n">event</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
-        <span class="k">return</span>
-
-    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">position_and_map_condition</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
-            <span class="c1"># post game event</span>
-            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">ChangeMapEvent</span><span class="p">())</span>
-            <span class="k">break</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"Removed </span><span class="si">{</span><span class="n">immunity_name</span><span class="si">}</span><span class="s2"> from '</span><span class="si">{</span><span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">'s "</span>
+                    <span class="sa">f</span><span class="s2">"list of immunities."</span>
+                <span class="p">)</span></div>
 </pre></div>
 
           </article>
@@ -798,7 +547,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

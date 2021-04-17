@@ -276,15 +276,15 @@
     <span class="n">SpriteCategoryType</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">ReactionData</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.event</span> <span class="kn">import</span> <span class="n">event_hub</span><span class="p">,</span> <span class="n">ShrineMenuEvent</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
 
     <span class="kn">import</span> <span class="nn">pygame</span>
 
-    <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">,</span> <span class="n">Skill</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">,</span> <span class="n">Skill</span><span class="p">,</span> <span class="n">SkillModifier</span>
     <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="n">TraitSpritePathsData</span><span class="p">,</span> <span class="n">TraitSpritesData</span>
-
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"Exists"</span><span class="p">,</span>
@@ -293,6 +293,7 @@
     <span class="s2">"CombatStats"</span><span class="p">,</span>
     <span class="s2">"WinCondition"</span><span class="p">,</span>
     <span class="s2">"MapCondition"</span><span class="p">,</span>
+    <span class="s2">"Shrine"</span><span class="p">,</span>
     <span class="s2">"Position"</span><span class="p">,</span>
     <span class="s2">"Aesthetic"</span><span class="p">,</span>
     <span class="s2">"Tracked"</span><span class="p">,</span>
@@ -310,6 +311,7 @@
     <span class="s2">"Lifespan"</span><span class="p">,</span>
     <span class="s2">"Immunities"</span><span class="p">,</span>
     <span class="s2">"Sight"</span><span class="p">,</span>
+    <span class="s2">"NQPComponent"</span><span class="p">,</span>
 <span class="p">]</span>
 
 
@@ -403,6 +405,35 @@
 <div class="viewcode-block" id="MapCondition.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.MapCondition.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">MapCondition</span><span class="p">()</span></div></div>
+
+<div class="viewcode-block" id="Shrine"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Shrine">[docs]</a><span class="k">class</span> <span class="nc">Shrine</span><span class="p">(</span><span class="n">NQPComponent</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    The component for tracking information relevant to shrines.</span>
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="Shrine.__init__"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Shrine.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">associated_blessings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SkillModifier</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">used</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blessings_count</span> <span class="o">=</span> <span class="mi">4</span></div>
+
+<div class="viewcode-block" id="Shrine.serialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Shrine.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Shrine.deserialize"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Shrine.deserialize">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serialised</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Shrine</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Shrine.interact"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Shrine.interact">[docs]</a>    <span class="k">def</span> <span class="nf">interact</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">associated_blessings</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">associated_blessings</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_compatible_blessings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blessings_count</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">used</span><span class="p">:</span>
+            <span class="n">event_hub</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">ShrineMenuEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">associated_blessings</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">used</span> <span class="o">=</span> <span class="kc">True</span></div></div>
 
 
 <span class="c1">#################### OTHERS #########################</span>
@@ -696,12 +727,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_add_to_order</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="c1"># TODO - make vars private if we should use methods</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_order</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">skill_order</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">cooldowns</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># TODO - do we even need this anymore?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># dont set skills here, use learn skill</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Blessing</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">SkillModifier</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">for</span> <span class="n">skill_class</span> <span class="ow">in</span> <span class="n">skills</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">skill_class</span><span class="p">,</span> <span class="n">_add_to_order</span><span class="p">,</span> <span class="n">_set_cooldown</span><span class="p">)</span></div>
@@ -723,21 +753,18 @@
         <span class="k">if</span> <span class="n">set_cooldown</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Knowledge.add_blessing"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.add_blessing">[docs]</a>    <span class="k">def</span> <span class="nf">add_blessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">blessing</span><span class="p">:</span> <span class="n">Blessing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="Knowledge.can_add_blessing"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.can_add_blessing">[docs]</a>    <span class="k">def</span> <span class="nf">can_add_blessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">blessing</span><span class="p">:</span> <span class="n">SkillModifier</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">"""</span>
-<span class="sd">        Add a new blessing.</span>
+<span class="sd">        Check if a blessing can be added to a skill.</span>
 <span class="sd">        """</span>
-
-        <span class="c1"># generate blessing level (this will probably be moved somewhere else later)</span>
-        <span class="n">blessing</span><span class="o">.</span><span class="n">roll_level</span><span class="p">()</span>
 
         <span class="c1"># create blessing list for the target skill if it doesn't exist yet</span>
         <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># use sets to check for and prevent collisions (modifying the same effect, specified conflicts, duplicates, etc.)</span>
-        <span class="n">used_effects</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="n">blessing_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">used_effects</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">blessing_names</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]:</span>
             <span class="n">used_effects</span> <span class="o">=</span> <span class="n">used_effects</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">involved_effects</span><span class="p">)</span>
             <span class="n">blessing_names</span> <span class="o">=</span> <span class="n">blessing_names</span><span class="o">.</span><span class="n">union</span><span class="p">({</span><span class="n">b</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">})</span>
@@ -748,13 +775,28 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="nb">set</span><span class="p">(</span><span class="n">blessing</span><span class="o">.</span><span class="n">conflicts</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">blessing_names</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">blessing</span><span class="o">.</span><span class="n">skill_types</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">types</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># finally add the blessing if it passed all of the other cases</span>
+            <span class="c1"># all requirements met</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Knowledge.add_blessing"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.add_blessing">[docs]</a>    <span class="k">def</span> <span class="nf">add_blessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">blessing</span><span class="p">:</span> <span class="n">SkillModifier</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Add a blessing to a skill.</span>
+<span class="sd">        """</span>
+
+        <span class="c1"># generate blessing level (this will probably be moved somewhere else later)</span>
+        <span class="n">blessing</span><span class="o">.</span><span class="n">roll_level</span><span class="p">()</span>
+
+        <span class="c1"># check if blessing can be applied and apply if possible</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_add_blessing</span><span class="p">(</span><span class="n">skill</span><span class="p">,</span> <span class="n">blessing</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skill_blessings</span><span class="p">[</span><span class="n">skill</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blessing</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
 
-        <span class="k">return</span> <span class="kc">True</span></div>
-
-<div class="viewcode-block" id="Knowledge.remove_blessing"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.remove_blessing">[docs]</a>    <span class="k">def</span> <span class="nf">remove_blessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">remove_blessing</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Blessing</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="Knowledge.remove_blessing"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.component.Knowledge.remove_blessing">[docs]</a>    <span class="k">def</span> <span class="nf">remove_blessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">],</span> <span class="n">remove_blessing</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">SkillModifier</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        Attempt to remove a blessing.</span>
 <span class="sd">        """</span>
@@ -907,9 +949,9 @@
         <span class="n">colour</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"colour"</span><span class="p">]</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">serialised</span><span class="p">[</span><span class="s2">"alpha"</span><span class="p">]</span>
 
-        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
+        <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">matter</span>
 
-        <span class="n">light_id</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_light</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">colour</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">light_id</span> <span class="o">=</span> <span class="n">matter</span><span class="o">.</span><span class="n">create_light</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">colour</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">LightSource</span><span class="p">(</span><span class="n">light_id</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span></div>
 
@@ -1333,7 +1375,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

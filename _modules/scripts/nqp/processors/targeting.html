@@ -260,6 +260,7 @@
 <span class="kn">from</span> <span class="nn">pygame.rect</span> <span class="kn">import</span> <span class="n">Rect</span>
 <span class="kn">from</span> <span class="nn">pygame.surface</span> <span class="kn">import</span> <span class="n">Surface</span>
 
+<span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Position</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
@@ -326,8 +327,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">is_visible</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">TARGETING</span><span class="p">:</span>
                 <span class="n">active_skill_name</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_active_skill</span><span class="p">()</span>
-                <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-                <span class="n">skill</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_known_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">active_skill_name</span><span class="p">)</span>
+                <span class="n">player</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+                <span class="n">skill</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_known_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">active_skill_name</span><span class="p">)</span>
 
                 <span class="c1"># set the skill target for the skill cast if the hovered tile is a valid target during line of sight targeting</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">targeting_method</span> <span class="o">==</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">DIRECTION</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_line_of_sight</span><span class="p">:</span>
@@ -336,7 +337,7 @@
 
                 <span class="c1"># cancel event triggering if the hovered target is invalid in the target mode</span>
                 <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">targeting_method</span> <span class="o">==</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">TILE</span><span class="p">:</span>
-                    <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+                    <span class="n">position</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
                     <span class="n">dif</span> <span class="o">=</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">hovered_tile</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
                     <span class="k">if</span> <span class="p">(</span>
                         <span class="p">(</span><span class="n">dif</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skill</span><span class="o">.</span><span class="n">target_directions</span><span class="p">)</span>
@@ -353,10 +354,10 @@
 <div class="viewcode-block" id="Targeting.render"><a class="viewcode-back" href="../../../../scripts.nqp.processors.html#scripts.nqp.processors.targeting.Targeting.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">,</span> <span class="n">target_surf</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
         <span class="c1"># targeting mode related indicator rendering</span>
         <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">TARGETING</span><span class="p">:</span>
-            <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-            <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+            <span class="n">player</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
             <span class="n">active_skill_name</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_active_skill</span><span class="p">()</span>
-            <span class="n">skill</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_known_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">active_skill_name</span><span class="p">)</span>
+            <span class="n">skill</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_known_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">active_skill_name</span><span class="p">)</span>
 
             <span class="c1"># if this is a directional attack</span>
             <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">targeting_method</span> <span class="o">==</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">TILE</span><span class="p">:</span>
@@ -431,10 +432,10 @@
 <span class="sd">        Checks if a tile is in the line of sight from the player and returns the visible path to the target tile.</span>
 <span class="sd">        """</span>
         <span class="c1"># get base info and init</span>
-        <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="n">active_skill_name</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_active_skill</span><span class="p">()</span>
-        <span class="n">skill</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_known_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">active_skill_name</span><span class="p">)</span>
+        <span class="n">skill</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_known_skill</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">active_skill_name</span><span class="p">)</span>
         <span class="n">valid_line_of_sight</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">target_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
         <span class="n">tile_path</span> <span class="o">=</span> <span class="p">[]</span>
@@ -523,7 +524,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

@@ -261,8 +261,7 @@
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core.blessing</span> <span class="kn">import</span> <span class="n">Blessing</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">,</span> <span class="n">Skill</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Behaviour</span><span class="p">,</span> <span class="n">Skill</span><span class="p">,</span> <span class="n">SkillModifier</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -310,7 +309,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_registry</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Skill</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">affliction_registry</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Affliction</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">behaviour_registry</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Behaviour</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">blessing_registry</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Blessing</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blessing_registry</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">SkillModifier</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="Store.serialise"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.data.Store.serialise">[docs]</a>    <span class="k">def</span> <span class="nf">serialise</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="sd">"""</span>
@@ -382,7 +381,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

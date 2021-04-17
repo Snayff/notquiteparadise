@@ -262,17 +262,16 @@
 <span class="kn">import</span> <span class="nn">snecs</span>
 <span class="kn">from</span> <span class="nn">snecs.world</span> <span class="kn">import</span> <span class="n">default_world</span>
 
-<span class="kn">import</span> <span class="nn">scripts.nqp.processors.input</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Exists</span><span class="p">,</span> <span class="n">NQPComponent</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">hourglass</span><span class="p">,</span> <span class="n">matter</span><span class="p">,</span> <span class="n">state</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">NQPComponent</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">debug</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.debug</span> <span class="kn">import</span> <span class="n">enable_profiling</span><span class="p">,</span> <span class="n">initialise_logging</span><span class="p">,</span> <span class="n">kill_logging</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.event</span> <span class="kn">import</span> <span class="n">event_hub</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">processors</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.command</span> <span class="kn">import</span> <span class="n">initialise_game</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.processors.input</span> <span class="kn">import</span> <span class="n">process_input_event</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.camera</span> <span class="kn">import</span> <span class="n">camera</span>
 
 
@@ -285,11 +284,11 @@
 
     <span class="c1"># initialise logging</span>
     <span class="k">if</span> <span class="n">debug</span><span class="o">.</span><span class="n">is_logging</span><span class="p">():</span>
-        <span class="n">initialise_logging</span><span class="p">()</span>
+        <span class="n">debug</span><span class="o">.</span><span class="n">initialise_logging</span><span class="p">()</span>
 
     <span class="c1"># initialise profiling</span>
     <span class="k">if</span> <span class="n">debug</span><span class="o">.</span><span class="n">is_profiling</span><span class="p">():</span>
-        <span class="n">enable_profiling</span><span class="p">()</span>
+        <span class="n">debug</span><span class="o">.</span><span class="n">enable_profiling</span><span class="p">()</span>
 
     <span class="c1"># initialise the game</span>
     <span class="n">initialise_game</span><span class="p">()</span>
@@ -312,7 +311,7 @@
 
     <span class="c1"># we've left the game loop so now close everything down</span>
     <span class="k">if</span> <span class="n">debug</span><span class="o">.</span><span class="n">is_logging</span><span class="p">():</span>
-        <span class="n">kill_logging</span><span class="p">()</span>
+        <span class="n">debug</span><span class="o">.</span><span class="n">kill_logging</span><span class="p">()</span>
         <span class="c1"># print debug values</span>
         <span class="n">debug</span><span class="o">.</span><span class="n">print_values_to_console</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">debug</span><span class="o">.</span><span class="n">is_profiling</span><span class="p">():</span>
@@ -335,12 +334,12 @@
 
         <span class="c1"># get info to support UI updates and handling events</span>
         <span class="n">current_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span>
-        <span class="n">turn_holder</span> <span class="o">=</span> <span class="n">chronicle</span><span class="o">.</span><span class="n">get_turn_holder</span><span class="p">()</span>
+        <span class="n">turn_holder</span> <span class="o">=</span> <span class="n">hourglass</span><span class="o">.</span><span class="n">get_turn_holder</span><span class="p">()</span>
 
         <span class="c1"># process any deletions from last frame</span>
         <span class="c1"># this copies snecs.process_pending_deletions() but adds extra steps.</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">default_world</span><span class="o">.</span><span class="n">_entities_to_delete</span><span class="p">):</span>
-            <span class="n">components</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_entitys_components</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
+            <span class="n">components</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_components</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">NQPComponent</span><span class="p">)</span>
                 <span class="n">component</span><span class="o">.</span><span class="n">on_delete</span><span class="p">()</span>
@@ -348,16 +347,16 @@
 
         <span class="c1"># have enemy take turn</span>
         <span class="k">if</span> <span class="n">current_state</span> <span class="o">==</span> <span class="n">GameState</span><span class="o">.</span><span class="n">GAME_MAP</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">turn_holder</span> <span class="o">!=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">turn_holder</span> <span class="o">!=</span> <span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">():</span>
                 <span class="c1"># just in case the turn holder has died but not been replaced as expected</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">world</span><span class="o">.</span><span class="n">take_turn</span><span class="p">(</span><span class="n">turn_holder</span><span class="p">)</span>
+                    <span class="n">matter</span><span class="o">.</span><span class="n">take_turn</span><span class="p">(</span><span class="n">turn_holder</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="n">chronicle</span><span class="o">.</span><span class="n">rebuild_turn_queue</span><span class="p">()</span>
+                    <span class="n">hourglass</span><span class="o">.</span><span class="n">rebuild_turn_queue</span><span class="p">()</span>
 
         <span class="c1"># process pygame events</span>
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
-            <span class="n">processors</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">process_input_event</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">current_state</span><span class="p">)</span>
+            <span class="n">process_input_event</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">current_state</span><span class="p">)</span>
             <span class="n">ui</span><span class="o">.</span><span class="n">process_ui_events</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
         <span class="c1"># process NQP events</span>
@@ -405,7 +404,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

@@ -262,6 +262,7 @@
 <span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">ObjectID</span><span class="p">,</span> <span class="n">UIElement</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIImage</span><span class="p">,</span> <span class="n">UITextBox</span>
 
+<span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">query</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Resources</span><span class="p">,</span> <span class="n">Traits</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GAP_SIZE</span><span class="p">,</span> <span class="n">ICON_IN_TEXT_SIZE</span><span class="p">,</span> <span class="n">RenderLayer</span>
@@ -329,14 +330,14 @@
 
                     <span class="c1">## is it an entity with more useful info?</span>
                     <span class="c1"># get resources</span>
-                    <span class="n">resources</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
+                    <span class="n">resources</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">resources</span><span class="p">:</span>
                         <span class="n">current_info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Health: </span><span class="si">{</span><span class="n">resources</span><span class="o">.</span><span class="n">health</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                         <span class="n">current_info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Stamina: </span><span class="si">{</span><span class="n">resources</span><span class="o">.</span><span class="n">stamina</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
                     <span class="c1">#  get traits (handle projectile exception)</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="n">traits</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Traits</span><span class="p">)</span>
+                        <span class="n">traits</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Traits</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">traits</span><span class="p">:</span>
                             <span class="n">names</span> <span class="o">=</span> <span class="s2">""</span>
                             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">traits</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
@@ -438,7 +439,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

@@ -295,6 +295,13 @@
     <li class="md-nav__item">
     
     
+      <a href="interaction.html" class="md-nav__link">Interaction</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
       <a href="library.html" class="md-nav__link">Library</a>
       
     
@@ -355,23 +362,23 @@
 <span id="data-store"></span><h1 id="engine-internal-data--page-root">Data Store<a class="headerlink" href="#engine-internal-data--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="scripts.engine.internal.data.Store">
-<em class="property">class </em><code class="sig-name descname">Store</code><a class="reference internal" href="../../_modules/scripts/engine/internal/data.html#Store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.data.Store" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Store</span></code><a class="reference internal" href="../../_modules/scripts/engine/internal/data.html#Store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.engine.internal.data.Store" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Hold the current state info required by the engine. Must be serialised.
 Should only be accessed via getters and setters, not directly.</p>
 <dl class="py method">
 <dt id="scripts.engine.internal.data.Store.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/data.html#Store.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.data.Store.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/data.html#Store.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.engine.internal.data.Store.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="scripts.engine.internal.data.Store.deserialise">
-<code class="sig-name descname">deserialise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/data.html#Store.deserialise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.data.Store.deserialise" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">deserialise</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serialised</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/data.html#Store.deserialise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.engine.internal.data.Store.deserialise" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the details from the serialised data back into the store.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="scripts.engine.internal.data.Store.serialise">
-<code class="sig-name descname">serialise</code><span class="sig-paren">(</span><span class="sig-paren">)</span> → Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../../_modules/scripts/engine/internal/data.html#Store.serialise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.data.Store.serialise" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">serialise</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../_modules/scripts/engine/internal/data.html#Store.serialise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.engine.internal.data.Store.serialise" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serialise all data held in the store.</p>
 </dd></dl>
 </dd></dl>
@@ -424,7 +431,7 @@ Should only be accessed via getters and setters, not directly.</p>
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

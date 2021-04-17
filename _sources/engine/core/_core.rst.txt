@@ -2,12 +2,12 @@ Core
 ============================================
 
 ..  toctree::
-    :caption: Core
 
-    chronicle
     component
     dungen
     effect
+    entity
+    hourglass
     key
     query
     state

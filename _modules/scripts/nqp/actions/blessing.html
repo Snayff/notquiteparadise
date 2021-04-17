@@ -252,28 +252,62 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <h1 id="modules-scripts-nqp-actions-blessing--page-root">Source code for scripts.nqp.actions.blessing</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core.effect</span> <span class="kn">import</span> <span class="n">Effect</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.blessing</span> <span class="kn">import</span> <span class="n">Blessing</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.effect</span> <span class="kn">import</span> <span class="n">Effect</span><span class="p">,</span> <span class="n">ApplyAfflictionEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">HitType</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.action</span> <span class="kn">import</span> <span class="n">SkillModifier</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.data</span> <span class="kn">import</span> <span class="n">store</span>
 
 <span class="sd">"""</span>
 <span class="sd">Use Blessing.custom_args to set custom effect initialization for a blessing if</span>
 <span class="sd">an object needs to be used (since objects can't be created in JSON).</span>
 <span class="sd">"""</span>
 
-<div class="viewcode-block" id="MoveFast"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.MoveFast">[docs]</a><span class="k">class</span> <span class="nc">MoveFast</span><span class="p">(</span><span class="n">Blessing</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MoveFast"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.MoveFast">[docs]</a><span class="k">class</span> <span class="nc">MoveFast</span><span class="p">(</span><span class="n">SkillModifier</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="NoMove"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.NoMove">[docs]</a><span class="k">class</span> <span class="nc">NoMove</span><span class="p">(</span><span class="n">Blessing</span><span class="p">):</span>
+
+<div class="viewcode-block" id="NoMove"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.NoMove">[docs]</a><span class="k">class</span> <span class="nc">NoMove</span><span class="p">(</span><span class="n">SkillModifier</span><span class="p">):</span>
     <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Aftershock"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.Aftershock">[docs]</a><span class="k">class</span> <span class="nc">Aftershock</span><span class="p">(</span><span class="n">SkillModifier</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="SaltTheWound"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.SaltTheWound">[docs]</a><span class="k">class</span> <span class="nc">SaltTheWound</span><span class="p">(</span><span class="n">SkillModifier</span><span class="p">):</span>
+<div class="viewcode-block" id="SaltTheWound.apply"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.SaltTheWound.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">],</span> <span class="n">owner</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">effects</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="s1">'hit_type_effects'</span><span class="p">):</span>
+                <span class="n">affliction_choice</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="n">affliction</span> <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">store</span><span class="o">.</span><span class="n">affliction_registry</span> <span class="k">if</span> <span class="n">store</span><span class="o">.</span><span class="n">affliction_registry</span><span class="p">[</span><span class="n">affliction</span><span class="p">]</span><span class="o">.</span><span class="n">category</span> <span class="o">==</span> <span class="s1">'bane'</span><span class="p">])</span>
+
+                <span class="n">new_affliction_effect</span> <span class="o">=</span> <span class="n">ApplyAfflictionEffect</span><span class="p">(</span>
+                    <span class="n">origin</span><span class="o">=</span><span class="n">effect</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
+                    <span class="n">target</span><span class="o">=</span><span class="n">effect</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
+                    <span class="n">success_effects</span><span class="o">=</span><span class="p">[],</span>
+                    <span class="n">failure_effects</span><span class="o">=</span><span class="p">[],</span>
+                    <span class="n">affliction_name</span><span class="o">=</span><span class="n">affliction_choice</span><span class="p">,</span>
+                    <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">effect</span><span class="o">.</span><span class="n">hit_type_effects</span><span class="p">[</span><span class="n">HitType</span><span class="o">.</span><span class="n">CRIT</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_affliction_effect</span><span class="p">)</span> <span class="c1"># type: ignore</span></div></div>
+
+<span class="c1"># this blessing only needs to be written in code because HitTypes can't be written as JSON.</span>
+<div class="viewcode-block" id="KeepAnEvenKeel"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.KeepAnEvenKeel">[docs]</a><span class="k">class</span> <span class="nc">KeepAnEvenKeel</span><span class="p">(</span><span class="n">SkillModifier</span><span class="p">):</span>
+<div class="viewcode-block" id="KeepAnEvenKeel.apply"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.KeepAnEvenKeel.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">],</span> <span class="n">owner</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">effects</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="s1">'force_hit_type'</span><span class="p">):</span>
+                <span class="n">effect</span><span class="o">.</span><span class="n">force_hit_type</span> <span class="o">=</span> <span class="n">HitType</span><span class="o">.</span><span class="n">HIT</span> <span class="c1"># type: ignore</span></div></div>
+
 
 <span class="sd">"""</span>
 <span class="sd">This is one example of how the blessing class can be used to modify blessings</span>
 <span class="sd">in a way that the JSON can't. The move target must be changed to the owner</span>
 <span class="sd">or this blessing won't work with skills that don't self-target.</span>
 <span class="sd">"""</span>
-<div class="viewcode-block" id="AttackMove"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.AttackMove">[docs]</a><span class="k">class</span> <span class="nc">AttackMove</span><span class="p">(</span><span class="n">Blessing</span><span class="p">):</span>
+
+
+<div class="viewcode-block" id="AttackMove"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.AttackMove">[docs]</a><span class="k">class</span> <span class="nc">AttackMove</span><span class="p">(</span><span class="n">SkillModifier</span><span class="p">):</span>
 <div class="viewcode-block" id="AttackMove.apply"><a class="viewcode-back" href="../../../../scripts.nqp.actions.html#scripts.nqp.actions.blessing.AttackMove.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">],</span> <span class="n">owner</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">effects</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">owner</span><span class="p">)</span></div></div>
 </pre></div>
@@ -300,7 +334,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

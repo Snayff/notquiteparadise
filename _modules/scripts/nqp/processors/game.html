@@ -254,11 +254,14 @@
   <h1 id="modules-scripts-nqp-processors-game--page-root">Source code for scripts.nqp.processors.game</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span><span class="p">,</span> <span class="n">system</span>
+<span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">hourglass</span><span class="p">,</span> <span class="n">system</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.ui</span> <span class="kn">import</span> <span class="n">ui</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">UIElement</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Shrine</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">EventType</span><span class="p">,</span> <span class="n">InputIntent</span><span class="p">,</span> <span class="n">UIElement</span><span class="p">,</span> <span class="n">GameState</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.event</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ChangeMapEvent</span><span class="p">,</span>
+    <span class="n">ShrineEvent</span><span class="p">,</span>
     <span class="n">EndRoundEvent</span><span class="p">,</span>
     <span class="n">EndTurnEvent</span><span class="p">,</span>
     <span class="n">ExitGameEvent</span><span class="p">,</span>
@@ -271,9 +274,11 @@
     <span class="n">StartGameEvent</span><span class="p">,</span>
     <span class="n">Subscriber</span><span class="p">,</span>
     <span class="n">WinConditionMetEvent</span><span class="p">,</span>
+    <span class="n">ShrineMenuEvent</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp</span> <span class="kn">import</span> <span class="n">command</span>
 <span class="kn">from</span> <span class="nn">scripts.nqp.processors.intent</span> <span class="kn">import</span> <span class="n">process_intent</span>
+<span class="kn">from</span> <span class="nn">scripts.nqp.ui_elements.blessing_menu</span> <span class="kn">import</span> <span class="n">BlessingMenu</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"GameEventSubscriber"</span><span class="p">]</span>
 
@@ -313,6 +318,11 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">ChangeMapEvent</span><span class="p">):</span>
             <span class="n">command</span><span class="o">.</span><span class="n">change_map</span><span class="p">()</span>
 
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">ShrineEvent</span><span class="p">):</span>
+            <span class="c1"># not sure if this is where this should go...</span>
+            <span class="n">shrine</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target_shrine</span><span class="p">,</span> <span class="n">Shrine</span><span class="p">)</span>
+            <span class="n">shrine</span><span class="o">.</span><span class="n">interact</span><span class="p">()</span>
+
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">LoseConditionMetEvent</span><span class="p">):</span>
             <span class="n">command</span><span class="o">.</span><span class="n">lose_game</span><span class="p">()</span>
 
@@ -326,7 +336,16 @@
             <span class="k">pass</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">EndRoundEvent</span><span class="p">):</span>
-            <span class="n">_process_end_round</span><span class="p">()</span></div></div>
+            <span class="n">_process_end_round</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">ShrineMenuEvent</span><span class="p">):</span>
+            <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">state</span>
+
+            <span class="n">blessing_menu</span><span class="p">:</span> <span class="n">BlessingMenu</span> <span class="o">=</span> <span class="n">BlessingMenu</span><span class="p">(</span>
+                <span class="n">command</span><span class="o">.</span><span class="n">get_element_rect</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">BLESSING_MENU</span><span class="p">),</span> <span class="n">ui</span><span class="o">.</span><span class="n">get_gui_manager</span><span class="p">(),</span> <span class="n">event</span><span class="o">.</span><span class="n">blessing_options</span>
+            <span class="p">)</span>
+            <span class="n">ui</span><span class="o">.</span><span class="n">register_element</span><span class="p">(</span><span class="n">UIElement</span><span class="o">.</span><span class="n">BLESSING_MENU</span><span class="p">,</span> <span class="n">blessing_menu</span><span class="p">)</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">set_new</span><span class="p">(</span><span class="n">GameState</span><span class="o">.</span><span class="n">MENU</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="_process_end_turn"><a class="viewcode-back" href="../../../../nqp/processors/game.html#scripts.nqp.processors.game._process_end_turn">[docs]</a><span class="k">def</span> <span class="nf">_process_end_turn</span><span class="p">():</span>
@@ -341,12 +360,12 @@
     <span class="c1"># if player is current turn holder then save the game</span>
     <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
 
-    <span class="k">if</span> <span class="n">chronicle</span><span class="o">.</span><span class="n">get_turn_holder</span><span class="p">()</span> <span class="o">==</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">hourglass</span><span class="o">.</span><span class="n">get_turn_holder</span><span class="p">()</span> <span class="o">==</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">():</span>
         <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">state</span>
 
         <span class="n">state</span><span class="o">.</span><span class="n">save_game</span><span class="p">()</span>
 
-    <span class="n">chronicle</span><span class="o">.</span><span class="n">next_turn</span><span class="p">()</span></div>
+    <span class="n">hourglass</span><span class="o">.</span><span class="n">next_turn</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="_process_end_round"><a class="viewcode-back" href="../../../../nqp/processors/game.html#scripts.nqp.processors.game._process_end_round">[docs]</a><span class="k">def</span> <span class="nf">_process_end_round</span><span class="p">():</span>
@@ -358,7 +377,7 @@
     <span class="n">system</span><span class="o">.</span><span class="n">reduce_lifespan_durations</span><span class="p">()</span>
     <span class="n">system</span><span class="o">.</span><span class="n">reduce_immunity_durations</span><span class="p">()</span>
 
-    <span class="n">chronicle</span><span class="o">.</span><span class="n">next_round</span><span class="p">()</span></div>
+    <span class="n">hourglass</span><span class="o">.</span><span class="n">next_round</span><span class="p">()</span></div>
 </pre></div>
 
           </article>
@@ -383,7 +402,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

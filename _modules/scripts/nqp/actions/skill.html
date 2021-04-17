@@ -259,6 +259,7 @@
 
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
+<span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Position</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.effect</span> <span class="kn">import</span> <span class="n">AffectCooldownEffect</span><span class="p">,</span> <span class="n">ApplyAfflictionEffect</span><span class="p">,</span> <span class="n">DamageEffect</span><span class="p">,</span> <span class="n">Effect</span><span class="p">,</span> <span class="n">MoveSelfEffect</span>
@@ -315,12 +316,12 @@
 <span class="sd">        """</span>
 
         <span class="c1"># override target</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Move._build_effects"><a class="viewcode-back" href="../../../../nqp/actions/skill.html#scripts.nqp.actions.skill.Move._build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MoveSelfEffect</span><span class="p">]:</span>  <span class="c1"># type:ignore</span>
+<div class="viewcode-block" id="Move._build_effects"><a class="viewcode-back" href="../../../../nqp/actions/skill.html#scripts.nqp.actions.skill.Move._build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]:</span>  <span class="c1"># type:ignore</span>
         <span class="sd">"""</span>
 <span class="sd">        Build the effects of this skill applying to a single entity.</span>
 <span class="sd">        """</span>
@@ -367,7 +368,7 @@
     <span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="BasicAttack._build_effects"><a class="viewcode-back" href="../../../../nqp/actions/skill.html#scripts.nqp.actions.skill.BasicAttack._build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DamageEffect</span><span class="p">]:</span>  <span class="c1"># type:ignore</span>
+<div class="viewcode-block" id="BasicAttack._build_effects"><a class="viewcode-back" href="../../../../nqp/actions/skill.html#scripts.nqp.actions.skill.BasicAttack._build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]:</span>  <span class="c1"># type:ignore</span>
         <span class="sd">"""</span>
 <span class="sd">        Build the effects of this skill applying to a single entity.</span>
 <span class="sd">        """</span>
@@ -423,7 +424,7 @@
 <span class="sd">        Set the target tile as the current tile since we need to move.</span>
 <span class="sd">        N.B. ignores provided tile.</span>
 <span class="sd">        """</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">position</span><span class="p">:</span>
             <span class="n">_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
@@ -484,7 +485,7 @@
 <span class="sd">        """</span>
         <span class="n">increment</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">move_amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">move_amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">target_tile_pos</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">increment</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_tile</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">increment</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">entities</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entities_on_tile</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">target_tile_pos</span><span class="p">))</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entities_on_tile</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">target_tile_pos</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">entities</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -555,12 +556,12 @@
 <span class="sd">        Build the skill effects</span>
 <span class="sd">        """</span>
         <span class="c1"># get position</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">hit_entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">hit_entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">position</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
 
         <span class="c1"># the cone should start where the hit occurred and in the direction of the projectile.</span>
-        <span class="n">entities_in_cone</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_affected_entities</span><span class="p">(</span>
+        <span class="n">entities_in_cone</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_affected_entities</span><span class="p">(</span>
             <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">Shape</span><span class="o">.</span><span class="n">CONE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cone_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
         <span class="p">)</span>
         <span class="c1"># we should also ignore the hit entity and the projectile from the extra effects</span>
@@ -734,7 +735,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

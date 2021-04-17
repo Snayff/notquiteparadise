@@ -568,8 +568,6 @@
                 <span class="n">new_row</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">perpendicular</span><span class="p">)</span>
 
         <span class="n">coord_list</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">last_row</span><span class="p">)</span>
-        <span class="c1"># FIXME - Incompatible types in assignment (expression has type "Set[Tuple[int, int]]", variable has type</span>
-        <span class="c1">#  "List[Tuple[int, int]]")</span>
         <span class="n">last_row</span> <span class="o">=</span> <span class="n">new_row</span>  <span class="c1"># type: ignore</span>
     <span class="k">return</span> <span class="n">coord_list</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">last_row</span><span class="p">)</span>
 
@@ -630,7 +628,6 @@
     <span class="sd">"""</span>
 <span class="sd">    Roll for a number between min and max</span>
 <span class="sd">    """</span>
-    <span class="c1"># TODO - utilise seed</span>
     <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">)</span></div>
 </pre></div>
 
@@ -656,7 +653,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

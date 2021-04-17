@@ -256,6 +256,7 @@
 
 <span class="kn">import</span> <span class="nn">pytest</span>
 
+<span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">state</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">Height</span><span class="p">,</span> <span class="n">SAVE_PATH</span>
 
@@ -308,25 +309,25 @@
     <span class="n">game_map</span><span class="o">.</span><span class="n">generate_new_map</span><span class="p">(</span><span class="n">player_data</span><span class="p">)</span>
 
     <span class="c1"># init the player</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
 
     <span class="c1"># tell places about the player</span>
-    <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">chronicle</span>
-    <span class="n">chronicle</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">hourglass</span>
+    <span class="n">hourglass</span><span class="o">.</span><span class="n">set_turn_holder</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
 
     <span class="c1"># create actor near to player</span>
     <span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Position</span>
-    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+    <span class="n">player_pos</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
     <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
     <span class="n">actor_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">ACTORS</span><span class="p">[</span><span class="s2">"crocturion"</span><span class="p">]</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
 
     <span class="c1"># create god</span>
     <span class="n">god_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">GODS</span><span class="p">[</span><span class="s2">"the_small_gods"</span><span class="p">]</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_god</span><span class="p">(</span><span class="n">god_data</span><span class="p">)</span>
 
     <span class="c1"># create terrain next to the player</span>
-    <span class="n">world</span><span class="o">.</span><span class="n">create_terrain</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">[</span><span class="s2">"bog"</span><span class="p">],</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_terrain</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">[</span><span class="s2">"bog"</span><span class="p">],</span> <span class="p">(</span><span class="n">player_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">player_pos</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="test_save_game"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.test_state.test_save_game">[docs]</a><span class="k">def</span> <span class="nf">test_save_game</span><span class="p">(</span><span class="n">benchmark</span><span class="p">):</span>
@@ -372,7 +373,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

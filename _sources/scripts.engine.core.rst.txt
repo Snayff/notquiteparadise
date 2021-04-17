@@ -4,22 +4,6 @@ scripts.engine.core package
 Submodules
 ----------
 
-scripts.engine.core.blessing module
------------------------------------
-
-.. automodule:: scripts.engine.core.blessing
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-scripts.engine.core.chronicle module
-------------------------------------
-
-.. automodule:: scripts.engine.core.chronicle
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 scripts.engine.core.component module
 ------------------------------------
 
@@ -44,10 +28,26 @@ scripts.engine.core.effect module
    :undoc-members:
    :show-inheritance:
 
+scripts.engine.core.hourglass module
+------------------------------------
+
+.. automodule:: scripts.engine.core.hourglass
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.engine.core.key module
 ------------------------------
 
 .. automodule:: scripts.engine.core.key
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.core.matter module
+---------------------------------
+
+.. automodule:: scripts.engine.core.matter
    :members:
    :undoc-members:
    :show-inheritance:

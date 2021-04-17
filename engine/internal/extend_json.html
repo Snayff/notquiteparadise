@@ -55,7 +55,7 @@
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Library" href="library.html" />
+    <link rel="next" title="Interaction" href="interaction.html" />
     <link rel="prev" title="Event" href="event.html" />
   
    
@@ -295,6 +295,13 @@
     <li class="md-nav__item">
     
     
+      <a href="interaction.html" class="md-nav__link">Interaction</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
       <a href="library.html" class="md-nav__link">Library</a>
       
     
@@ -355,7 +362,7 @@
 <span id="extend-json"></span><h1 id="engine-internal-extend-json--page-root">Extend Json<a class="headerlink" href="#engine-internal-extend-json--page-root" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="scripts.engine.internal.extend_json.ExtendedJsonEncoder">
-<em class="property">class </em><code class="sig-name descname">ExtendedJsonEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">skipkeys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">ensure_ascii</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">check_circular</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">allow_nan</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">sort_keys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">separators</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/extend_json.html#ExtendedJsonEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.extend_json.ExtendedJsonEncoder" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ExtendedJsonEncoder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipkeys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_ascii</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_circular</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/extend_json.html#ExtendedJsonEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.engine.internal.extend_json.ExtendedJsonEncoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">json.encoder.JSONEncoder</span></code></p>
 <p>Extend the json Encoder to handle dataclass types</p>
 <p>Constructor for JSONEncoder, with sensible defaults.</p>
@@ -389,7 +396,7 @@ that can’t otherwise be serialized.  It should return a JSON encodable
 version of the object or raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
 <dl class="py method">
 <dt id="scripts.engine.internal.extend_json.ExtendedJsonEncoder.default">
-<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/extend_json.html#ExtendedJsonEncoder.default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.internal.extend_json.ExtendedJsonEncoder.default" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">default</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/scripts/engine/internal/extend_json.html#ExtendedJsonEncoder.default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.engine.internal.extend_json.ExtendedJsonEncoder.default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override the base default method to handle enum and dataclasses</p>
 </dd></dl>
 </dd></dl>
@@ -419,12 +426,12 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
             </a>
           
           
-            <a href="library.html" title="Library"
+            <a href="interaction.html" title="Interaction"
                class="md-flex md-footer-nav__link md-footer-nav__link--next"
                rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
                 class="md-flex__ellipsis"> <span
-                class="md-footer-nav__direction"> Next </span> Library </span>
+                class="md-footer-nav__direction"> Next </span> Interaction </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink"><i
                 class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
@@ -442,7 +449,7 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

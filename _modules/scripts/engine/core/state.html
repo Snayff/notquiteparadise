@@ -260,6 +260,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
+<span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">MAX_SAVES</span><span class="p">,</span> <span class="n">SAVE_PATH</span><span class="p">,</span> <span class="n">VERSION</span>
@@ -416,8 +417,8 @@
     <span class="n">save</span><span class="p">[</span><span class="s2">"store"</span><span class="p">]</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">serialise</span><span class="p">()</span>
 
     <span class="c1"># prep filename</span>
-    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">"_"</span><span class="p">)</span>  <span class="c1"># clean name</span>
     <span class="n">date_and_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">@%H%M%S"</span><span class="p">)</span>
     <span class="n">save_name_prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
@@ -498,7 +499,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

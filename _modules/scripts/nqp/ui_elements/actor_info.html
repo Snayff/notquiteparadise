@@ -263,6 +263,7 @@
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIImage</span><span class="p">,</span> <span class="n">UITextBox</span><span class="p">,</span> <span class="n">UIVerticalScrollBar</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
+<span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">CombatStats</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">,</span> <span class="n">Traits</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.utility</span> <span class="kn">import</span> <span class="n">get_class_members</span>
@@ -369,22 +370,22 @@
             <span class="p">)</span>
 
             <span class="c1"># get aesthetic</span>
-            <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
+            <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
             <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"image"</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">sprites</span><span class="o">.</span><span class="n">icon</span><span class="p">))</span>
 
             <span class="c1"># get identity</span>
-            <span class="n">identity</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">)</span>
+            <span class="n">identity</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">)</span>
             <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"text"</span><span class="p">,</span> <span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
 
             <span class="c1"># get resources</span>
-            <span class="n">resources</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
+            <span class="n">resources</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">resources</span><span class="p">:</span>
                 <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"text"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Health: </span><span class="si">{</span><span class="n">resources</span><span class="o">.</span><span class="n">health</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
                 <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"text"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Stamina: </span><span class="si">{</span><span class="n">resources</span><span class="o">.</span><span class="n">stamina</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
                 <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"image"</span><span class="p">,</span> <span class="n">section_break_image</span><span class="p">))</span>
 
             <span class="c1"># get stats</span>
-            <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">CombatStats</span><span class="p">)</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">CombatStats</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">stats</span><span class="p">:</span>
                 <span class="n">primary_stats</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_class_members</span><span class="p">(</span><span class="n">PrimaryStat</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">primary_stats</span><span class="p">:</span>
@@ -416,7 +417,7 @@
 
             <span class="c1">#  get traits (skip for projectiles)</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">traits</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Traits</span><span class="p">)</span>
+                <span class="n">traits</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Traits</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">traits</span><span class="p">:</span>
                     <span class="n">names</span> <span class="o">=</span> <span class="s2">""</span>
                     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">traits</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
@@ -430,7 +431,7 @@
                 <span class="k">pass</span>
 
             <span class="c1"># get afflictions</span>
-            <span class="n">afflictions</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>
+            <span class="n">afflictions</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">afflictions</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
                     <span class="c1"># get duration</span>
@@ -583,7 +584,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

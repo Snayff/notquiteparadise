@@ -4,6 +4,5 @@ General
 ============================================
 
 ..  toctree::
-    :caption: General
 
     command

@@ -255,7 +255,7 @@
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
@@ -317,11 +317,17 @@
 <div class="viewcode-block" id="EventHub.peek"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.EventHub.peek">[docs]</a>    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Check if an event exists in the queue.</span>
+<span class="sd">        Return None if nothing is found so the result can be used as a bool.</span>
 <span class="sd">        """</span>
+        <span class="n">found_events</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
+                <span class="n">found_events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">found_events</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="k">return</span> <span class="n">found_events</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="EventHub.update"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.EventHub.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -490,6 +496,16 @@
 <div class="viewcode-block" id="ChangeMapEvent.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.ChangeMapEvent.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">)</span></div></div>
 
+<div class="viewcode-block" id="ShrineEvent"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.ShrineEvent">[docs]</a><span class="k">class</span> <span class="nc">ShrineEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+<div class="viewcode-block" id="ShrineEvent.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.ShrineEvent.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_shrine</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">entity_id</span></div></div>
+
+<div class="viewcode-block" id="ShrineMenuEvent"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.ShrineMenuEvent">[docs]</a><span class="k">class</span> <span class="nc">ShrineMenuEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="c1"># blessing_options is actually of type List[SkillModifier], but I'm trying to avoid circular imports</span>
+<div class="viewcode-block" id="ShrineMenuEvent.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.ShrineMenuEvent.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blessing_options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">GAME</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blessing_options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">blessing_options</span></div></div>
 
 <div class="viewcode-block" id="NewTurnEvent"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.NewTurnEvent">[docs]</a><span class="k">class</span> <span class="nc">NewTurnEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
 <div class="viewcode-block" id="NewTurnEvent.__init__"><a class="viewcode-back" href="../../../../scripts.engine.internal.html#scripts.engine.internal.event.NewTurnEvent.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -540,7 +556,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

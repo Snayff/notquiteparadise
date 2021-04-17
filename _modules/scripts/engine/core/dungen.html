@@ -260,6 +260,7 @@
 
 <span class="kn">import</span> <span class="nn">tcod</span>
 
+<span class="kn">import</span> <span class="nn">scripts.engine.core.matter</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.constant</span> <span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Height</span><span class="p">,</span> <span class="n">MAP_BORDER_SIZE</span><span class="p">,</span> <span class="n">TileCategory</span><span class="p">,</span> <span class="n">TileCategoryType</span>
@@ -549,9 +550,9 @@
 
                 <span class="c1"># create actor</span>
                 <span class="k">if</span> <span class="n">actor_key</span> <span class="o">!=</span> <span class="s2">"player"</span><span class="p">:</span>
-                    <span class="n">actor</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                    <span class="n">actor</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">actor</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="kc">True</span><span class="p">)</span></div>
+                    <span class="n">actor</span> <span class="o">=</span> <span class="n">scripts</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">matter</span><span class="o">.</span><span class="n">create_actor</span><span class="p">(</span><span class="n">actor_data</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DungeonGenerator.set_tile_category"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.dungen.DungeonGenerator.set_tile_category">[docs]</a>    <span class="k">def</span> <span class="nf">set_tile_category</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">category</span><span class="p">:</span> <span class="n">TileCategoryType</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -1048,7 +1049,6 @@
     <span class="sd">"""</span>
 <span class="sd">    Loop the outer edge of the room for two adjoining floors and break through to link the locations.</span>
 <span class="sd">    """</span>
-    <span class="c1"># FIXME - not actually joining to floor spaces so just creating random floors</span>
 
     <span class="n">entrances</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">attempts</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1359,7 +1359,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

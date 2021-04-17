@@ -2,7 +2,6 @@ Internal
 ============================================
 
 ..  toctree::
-    :caption: Internal
 
     action
     constant
@@ -11,4 +10,5 @@ Internal
     definition
     event
     extend_json
+    interaction
     library

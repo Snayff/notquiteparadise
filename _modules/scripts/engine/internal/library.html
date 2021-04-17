@@ -266,13 +266,8 @@
 <span class="kn">from</span> <span class="nn">scripts.engine.internal.definition</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ActorData</span><span class="p">,</span>
     <span class="n">AfflictionData</span><span class="p">,</span>
-    <span class="n">BaseValueData</span><span class="p">,</span>
-    <span class="n">DefaultValueData</span><span class="p">,</span>
-    <span class="n">Dimensions</span><span class="p">,</span>
     <span class="n">GameConfigData</span><span class="p">,</span>
     <span class="n">GodData</span><span class="p">,</span>
-    <span class="n">HitInfoData</span><span class="p">,</span>
-    <span class="n">HitTypeData</span><span class="p">,</span>
     <span class="n">MapData</span><span class="p">,</span>
     <span class="n">RoomConceptData</span><span class="p">,</span>
     <span class="n">SecondaryStatModData</span><span class="p">,</span>
@@ -317,6 +312,7 @@
 <span class="n">SECONDARY_STAT_MODS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SecondaryStatModData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">GODS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">GodData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">SKILLS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SkillData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">BLESSINGS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">MAPS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MapData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">ROOMS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RoomConceptData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">ACTORS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ActorData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -411,12 +407,14 @@
 
     <span class="n">SKILLS</span> <span class="o">=</span> <span class="n">data</span>
 
+
 <span class="k">def</span> <span class="nf">_load_blessings_data</span><span class="p">():</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">DATA_PATH</span> <span class="o">/</span> <span class="s2">"game/blessings.json"</span><span class="p">))</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="n">deserialise_dataclasses</span><span class="p">)</span>
     <span class="k">global</span> <span class="n">BLESSINGS</span>
 
     <span class="n">BLESSINGS</span> <span class="o">=</span> <span class="n">data</span>
+
 
 <span class="k">def</span> <span class="nf">_load_map_data</span><span class="p">():</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">DATA_PATH</span> <span class="o">/</span> <span class="s2">"game/maps.json"</span><span class="p">))</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
@@ -523,7 +521,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

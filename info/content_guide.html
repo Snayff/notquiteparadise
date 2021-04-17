@@ -55,7 +55,7 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Engine API" href="../engine/_engine.html" />
+    <link rel="next" title="Design Notes" href="design_notes.html" />
     <link rel="prev" title="Developer Guide" href="developer_guide.html" />
   
    
@@ -301,6 +301,13 @@
     
     </li></ul>
     
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="design_notes.html" class="md-nav__link">Design Notes</a>
+      
+    
     </li></ul>
     
     </li>
@@ -375,395 +382,307 @@
 <h2 id="playable-traits">Playable Traits<a class="headerlink" href="#playable-traits" title="Permalink to this headline">¶</a></h2>
 <p>Create a new entry in the traits.json and ensure the <cite>group</cite> is not set to “npc”. That’s it!</p>
 <p>One thing to note is that the <cite>known_skills</cite> must match the class name of a <cite>Skill</cite> registered with the engine. See the Action section for more details.</p>
-<p>Example:
-.. code-block:: json</p>
-<blockquote>
-<div><dl>
-<dt>“dandy”: {</dt><dd><blockquote>
-<div><p>“__dataclass__”: “TraitData”,
-“group”:”savvy”,
-“bustle”: 2,
-“clout”: 2,
-“description”: “Lounging around the taverns of the world they can always be found one word away from an indignant splutter and a grasp for their sword.”,
-“exactitude”: -1,
-“name”: “irascible dandy”,
-“sight_range”: 5,
-“known_skills”: [</p>
-<blockquote>
-<div><p>“Lunge”,
-“TarAndFeather”</p>
-</div></blockquote>
-<p>],
-“permanent_afflictions”: [</p>
-<blockquote>
-<div><p>“none”</p>
-</div></blockquote>
-<p>],
-“skullduggery”: 1,
-“sprite_paths”: {</p>
-<blockquote>
-<div><p>“__dataclass__”: “TraitSpritePathsData”,
-“idle”: “actor/savvy/dandy_idle.png”,
-“attack”: “actor/savvy/dandy_attack.png”,
-“hit”: “actor/savvy/dandy_hit.png”,
-“dead”: “actor/savvy/dandy_dead.png”,
-“icon”: “actor/savvy/dandy_icon.png”,
-“move”: “actor/savvy/dandy_move.png”</p>
-</div></blockquote>
-<p>},
-“vigour”: -1</p>
-</div></blockquote>
-<p>},</p>
-</dd>
-</dl>
-</div></blockquote>
+<p>Example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"dandy"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"TraitData"</span><span class="p">,</span>
+    <span class="nt">"group"</span><span class="p">:</span><span class="s2">"savvy"</span><span class="p">,</span>
+    <span class="nt">"bustle"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nt">"clout"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"Lounging around the taverns of the world they can always be found one word away from an indignant splutter and a grasp for their sword."</span><span class="p">,</span>
+    <span class="nt">"exactitude"</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"irascible dandy"</span><span class="p">,</span>
+    <span class="nt">"sight_range"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="nt">"known_skills"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"Lunge"</span><span class="p">,</span>
+        <span class="s2">"TarAndFeather"</span>
+    <span class="p">],</span>
+    <span class="nt">"permanent_afflictions"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"none"</span>
+    <span class="p">],</span>
+    <span class="nt">"skullduggery"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">"sprite_paths"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"TraitSpritePathsData"</span><span class="p">,</span>
+        <span class="nt">"idle"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_idle.png"</span><span class="p">,</span>
+        <span class="nt">"attack"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_attack.png"</span><span class="p">,</span>
+        <span class="nt">"hit"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_hit.png"</span><span class="p">,</span>
+        <span class="nt">"dead"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_dead.png"</span><span class="p">,</span>
+        <span class="nt">"icon"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_icon.png"</span><span class="p">,</span>
+        <span class="nt">"move"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_move.png"</span>
+    <span class="p">},</span>
+    <span class="nt">"vigour"</span><span class="p">:</span> <span class="mi">-1</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 
 
 <h2 id="actors-npcs">Actors (NPCs)<a class="headerlink" href="#actors-npcs" title="Permalink to this headline">¶</a></h2>
 <p>Create a new entry in traits.json and specify <cite>group</cite> as “npc”. Next, create an entry in actors.json and set the <cite>trait_names</cite> to include the key of the trait you just created. The <cite>behaviour_name</cite> must exactly match a <cite>Behaviour</cite> class registered with the engine. See the Action section for more information.</p>
-<p>Trait example:
-.. code-block:: json</p>
-<blockquote>
-<div><dl>
-<dt>“dandy”: {</dt><dd><blockquote>
-<div><p>“__dataclass__”: “TraitData”,
-“group”:”savvy”,
-“bustle”: 2,
-“clout”: 2,
-“description”: “Lounging around the taverns of the world they can always be found one word away from an indignant splutter and a grasp for their sword.”,
-“exactitude”: -1,
-“name”: “irascible dandy”,
-“sight_range”: 5,
-“known_skills”: [</p>
-<blockquote>
-<div><p>“Lunge”,
-“TarAndFeather”</p>
-</div></blockquote>
-<p>],
-“permanent_afflictions”: [</p>
-<blockquote>
-<div><p>“none”</p>
-</div></blockquote>
-<p>],
-“skullduggery”: 1,
-“sprite_paths”: {</p>
-<blockquote>
-<div><p>“__dataclass__”: “TraitSpritePathsData”,
-“idle”: “actor/savvy/dandy_idle.png”,
-“attack”: “actor/savvy/dandy_attack.png”,
-“hit”: “actor/savvy/dandy_hit.png”,
-“dead”: “actor/savvy/dandy_dead.png”,
-“icon”: “actor/savvy/dandy_icon.png”,
-“move”: “actor/savvy/dandy_move.png”</p>
-</div></blockquote>
-<p>},
-“vigour”: -1</p>
-</div></blockquote>
-<p>},</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>Actor example:
-.. code-block:: json</p>
-<blockquote>
-<div><dl>
-<dt>“training_dummy”: {</dt><dd><blockquote>
-<div><p>“__dataclass__”: “ActorData”,
-“key”: “training_dummy”,
-“possible_names”: [</p>
-<blockquote>
-<div><p>“sally dummy”,
-“steve dummy”</p>
-</div></blockquote>
-<p>],
-“description”: “It just looks so darn punchable.”,
-“position_offsets”: [</p>
-<blockquote>
-<div><p>[0, 0]</p>
-</div></blockquote>
-<p>],
-“trait_names”: [</p>
-<blockquote>
-<div><p>“dummy”</p>
-</div></blockquote>
-<p>],
-“behaviour_name”: “SkipTurn”,
-“height”: “diminutive”</p>
-</div></blockquote>
-<p>},</p>
-</dd>
-</dl>
-</div></blockquote>
+<p>Trait example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"dandy"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"TraitData"</span><span class="p">,</span>
+    <span class="nt">"group"</span><span class="p">:</span><span class="s2">"savvy"</span><span class="p">,</span>
+    <span class="nt">"bustle"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nt">"clout"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"Lounging around the taverns of the world they can always be found one word away from an indignant splutter and a grasp for their sword."</span><span class="p">,</span>
+    <span class="nt">"exactitude"</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"irascible dandy"</span><span class="p">,</span>
+    <span class="nt">"sight_range"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="nt">"known_skills"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"Lunge"</span><span class="p">,</span>
+        <span class="s2">"TarAndFeather"</span>
+    <span class="p">],</span>
+    <span class="nt">"permanent_afflictions"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"none"</span>
+    <span class="p">],</span>
+    <span class="nt">"skullduggery"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">"sprite_paths"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"TraitSpritePathsData"</span><span class="p">,</span>
+        <span class="nt">"idle"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_idle.png"</span><span class="p">,</span>
+        <span class="nt">"attack"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_attack.png"</span><span class="p">,</span>
+        <span class="nt">"hit"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_hit.png"</span><span class="p">,</span>
+        <span class="nt">"dead"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_dead.png"</span><span class="p">,</span>
+        <span class="nt">"icon"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_icon.png"</span><span class="p">,</span>
+        <span class="nt">"move"</span><span class="p">:</span> <span class="s2">"actor/savvy/dandy_move.png"</span>
+    <span class="p">},</span>
+    <span class="nt">"vigour"</span><span class="p">:</span> <span class="mi">-1</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Actor example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"training_dummy"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"ActorData"</span><span class="p">,</span>
+    <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"training_dummy"</span><span class="p">,</span>
+    <span class="nt">"possible_names"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"sally dummy"</span><span class="p">,</span>
+        <span class="s2">"steve dummy"</span>
+    <span class="p">],</span>
+    <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"It just looks so darn punchable."</span><span class="p">,</span>
+    <span class="nt">"position_offsets"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="p">],</span>
+    <span class="nt">"trait_names"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"dummy"</span>
+    <span class="p">],</span>
+    <span class="nt">"behaviour_name"</span><span class="p">:</span> <span class="s2">"SkipTurn"</span><span class="p">,</span>
+    <span class="nt">"height"</span><span class="p">:</span> <span class="s2">"diminutive"</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 
 
 <h2 id="terrain">Terrain<a class="headerlink" href="#terrain" title="Permalink to this headline">¶</a></h2>
-<p>Create a new entry in terrain.json.
-Example:
-.. code-block:: json</p>
-<blockquote>
-<div><dl>
-<dt>“bog”: {</dt><dd><p>“__dataclass__”: “TerrainData”,
-“blocks_movement”: false,
-“height”: “min”,
-“description”: “This is a bog. It slows entities down.”,
-“name”: “bog”,
-“sprite_paths”: {</p>
-<blockquote>
-<div><p>“__dataclass__”: “TraitSpritePathsData”,
-“idle”: “terrain/bog.png”</p>
-</div></blockquote>
-<p>},
-“position_offsets”: [</p>
-<blockquote>
-<div><p>[0, 0]</p>
-</div></blockquote>
-<p>],
-“light”: null,
-“reactions”: {</p>
-<blockquote>
-<div><dl>
-<dt>“proximity”: {</dt><dd><p>“__dataclass__”: “ReactionData”,
-“required_opinion”: null,
-“reaction”: {</p>
-<blockquote>
-<div><p>“__dataclass__”: “ApplyAfflictionEffectData”,
-“affliction_name”: “BoggedDown”,
-“duration”: 3</p>
-</div></blockquote>
-<p>}</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>}</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
+<p>Create a new entry in terrain.json.</p>
+<p>Example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"bog"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"TerrainData"</span><span class="p">,</span>
+    <span class="nt">"blocks_movement"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">"height"</span><span class="p">:</span> <span class="s2">"min"</span><span class="p">,</span>
+    <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"This is a bog. It slows entities down."</span><span class="p">,</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"bog"</span><span class="p">,</span>
+    <span class="nt">"sprite_paths"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"TraitSpritePathsData"</span><span class="p">,</span>
+        <span class="nt">"idle"</span><span class="p">:</span> <span class="s2">"terrain/bog.png"</span>
+    <span class="p">},</span>
+    <span class="nt">"position_offsets"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="p">],</span>
+    <span class="nt">"light"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">"reactions"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"proximity"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"ReactionData"</span><span class="p">,</span>
+            <span class="nt">"required_opinion"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">"reaction"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"ApplyAfflictionEffectData"</span><span class="p">,</span>
+                <span class="nt">"affliction_name"</span><span class="p">:</span> <span class="s2">"BoggedDown"</span><span class="p">,</span>
+                <span class="nt">"duration"</span><span class="p">:</span> <span class="mi">3</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 
 
 <h2 id="map-a-game-level">Map (a game level)<a class="headerlink" href="#map-a-game-level" title="Permalink to this headline">¶</a></h2>
-<p>Create the rooms you want to include in the map within rooms.json. Next, create an entry for the map in maps.json.
-Room example:
-.. code-block:: json</p>
-<blockquote>
-<div><dl>
-<dt>“combat”: {</dt><dd><p>“name”: “Combat Room”,
-“key”: “combat”,
-“__dataclass__”: “RoomConceptData”,
-“design”: “square”,
-“min_actors”: 1,
-“max_actors”: 3,
-“min_width”: 8,
-“min_height”: 8,
-“max_width”: 10,
-“max_height”: 10,
-“chance_of_spawning_wall”: 0.45,
-“max_neighbouring_walls_in_room”: 4,
-“sprite_paths”: {</p>
-<blockquote>
-<div><p>“floor”: “world/floor.png”,
-“wall”: “world/wall.png”</p>
-</div></blockquote>
-<p>},
-“actors”: {</p>
-<blockquote>
-<div><p>“training_dummy”: 0.2,
-“crocturion”: 0.8</p>
-</div></blockquote>
-<p>}</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>Map example:
-.. code-block:: json</p>
-<blockquote>
-<div><dl>
-<dt>“cave”: {</dt><dd><p>“name”: “cave”,
-“key”: “cave”,
-“__dataclass__”: “MapData”,
-“min_rooms”: 10,
-“max_rooms”: 30,
-“max_tunnel_length”: 20,
-“min_path_distance_for_shortcut”: 5,
-“width”: 40,
-“height”: 40,
-“rooms”: {</p>
-<blockquote>
-<div><p>“combat”: 0.2,
-“empty”: 0.1</p>
-</div></blockquote>
-<p>},
-“sprite_paths”: {</p>
-<blockquote>
-<div><p>“wall”: “world/wall.png”,
-“floor”: “world/floor.png”</p>
-</div></blockquote>
-<p>},
-“max_room_entrances”: 2,
-“extra_entrance_chance”: 10,
-“chance_of_tunnel_winding”: 10</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
+<p>Create the rooms you want to include in the map within rooms.json. Next, create an entry for the map in maps.json.</p>
+<p>Room example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"combat"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"Combat Room"</span><span class="p">,</span>
+    <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"combat"</span><span class="p">,</span>
+    <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"RoomConceptData"</span><span class="p">,</span>
+    <span class="nt">"design"</span><span class="p">:</span> <span class="s2">"square"</span><span class="p">,</span>
+    <span class="nt">"min_actors"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">"max_actors"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="nt">"min_width"</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="nt">"min_height"</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="nt">"max_width"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="nt">"max_height"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="nt">"chance_of_spawning_wall"</span><span class="p">:</span> <span class="mf">0.45</span><span class="p">,</span>
+    <span class="nt">"max_neighbouring_walls_in_room"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="nt">"sprite_paths"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"floor"</span><span class="p">:</span> <span class="s2">"world/floor.png"</span><span class="p">,</span>
+        <span class="nt">"wall"</span><span class="p">:</span> <span class="s2">"world/wall.png"</span>
+    <span class="p">},</span>
+    <span class="nt">"actors"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"training_dummy"</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+        <span class="nt">"crocturion"</span><span class="p">:</span> <span class="mf">0.8</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Map example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"cave"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"cave"</span><span class="p">,</span>
+    <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"cave"</span><span class="p">,</span>
+    <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"MapData"</span><span class="p">,</span>
+    <span class="nt">"min_rooms"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="nt">"max_rooms"</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="nt">"max_tunnel_length"</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="nt">"min_path_distance_for_shortcut"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="nt">"width"</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span>
+    <span class="nt">"height"</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span>
+    <span class="nt">"rooms"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"combat"</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+        <span class="nt">"empty"</span><span class="p">:</span> <span class="mf">0.1</span>
+    <span class="p">},</span>
+    <span class="nt">"sprite_paths"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"wall"</span><span class="p">:</span> <span class="s2">"world/wall.png"</span><span class="p">,</span>
+        <span class="nt">"floor"</span><span class="p">:</span> <span class="s2">"world/floor.png"</span>
+    <span class="p">},</span>
+    <span class="nt">"max_room_entrances"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nt">"extra_entrance_chance"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="nt">"chance_of_tunnel_winding"</span><span class="p">:</span> <span class="mi">10</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 
 
 <h2 id="god">God<a class="headerlink" href="#god" title="Permalink to this headline">¶</a></h2>
-<p>Create an entry in gods.json. The attitudes and reactions blocks can contain any number of entries.
-Example:
-.. code-block:: json</p>
-<blockquote>
-<div><dl>
-<dt>“the_small_gods”: {</dt><dd><p>“__dataclass__”: “GodData”,
-“name”: “the_small_gods”,
-“description”: “Hordes of small gods banded together to ensure they were finally taken seriously.”,
-“attitudes”: {</p>
-<blockquote>
-<div><p>“deal_damage”:  -5</p>
-</div></blockquote>
-<p>},
-“reactions”: {</p>
-<blockquote>
-<div><dl class="simple">
-<dt>“deal_damage”: {</dt><dd><p>“__dataclass__”: “ReactionData”,
-“required_opinion”: -80,
-“reaction”: “BasicAttack”,
-“chance”: 10</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>}</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
+<p>Create an entry in gods.json. The attitudes and reactions blocks can contain any number of entries.</p>
+<p>Example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"the_small_gods"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"GodData"</span><span class="p">,</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"the_small_gods"</span><span class="p">,</span>
+    <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"Hordes of small gods banded together to ensure they were finally taken seriously."</span><span class="p">,</span>
+    <span class="nt">"attitudes"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"deal_damage"</span><span class="p">:</span>  <span class="mi">-5</span>
+    <span class="p">},</span>
+    <span class="nt">"reactions"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"deal_damage"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"ReactionData"</span><span class="p">,</span>
+            <span class="nt">"required_opinion"</span><span class="p">:</span> <span class="mi">-80</span><span class="p">,</span>
+            <span class="nt">"reaction"</span><span class="p">:</span> <span class="s2">"BasicAttack"</span><span class="p">,</span>
+            <span class="nt">"chance"</span><span class="p">:</span> <span class="mi">10</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 
 
 <h2 id="action">Action<a class="headerlink" href="#action" title="Permalink to this headline">¶</a></h2>
 <p>As a type of Action, things are a little more involved here. In addition to the json entry there must also be a python class registered with the engine using <cite>register_action</cite> from scripts.engine.internal.action. The key in the json must also match the class name exactly.</p>
 
 <h3 id="affliction">Affliction<a class="headerlink" href="#affliction" title="Permalink to this headline">¶</a></h3>
-<p>Example json:
-.. code-block:: json</p>
-<blockquote>
-<div><dl>
-<dt>“BoggedDown”: {</dt><dd><p>“__dataclass__”: “AfflictionData”,
-“category”: “bane”,
-“description”: “It weakens mundane defence and makes you a little bit slower.”,
-“icon_path”: “skills/root.png”,
-“name”: “bogged down”,
-“identity_tags”: [</p>
-<blockquote>
-<div><p>“affect_stat”</p>
-</div></blockquote>
-<p>],
-“triggers”: [</p>
-<blockquote>
-<div><p>“movement”</p>
-</div></blockquote>
-<p>]</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>Example class:
-.. code-block:: python</p>
-<blockquote>
-<div><dl>
-<dt>class BoggedDown(Affliction):</dt><dd><p>“””
-A demo of being stuck in the mud - it`ll ground you
-“””</p>
-<p># targeting
-target_tags: List[TileTagType] = [TileTag.OTHER_ENTITY]
-shape: ShapeType = Shape.TARGET
-shape_size: int = 1</p>
-<p>def _build_effects(self, entity: EntityID, potency: float = 1.0) -&gt; List[AffectStatEffect]:  # type: ignore</p>
-<blockquote>
-<div><dl class="simple">
-<dt>affect_stat_effect = AffectStatEffect(</dt><dd><p>origin=self.origin,
-cause_name=self.name,
-success_effects=[],
-failure_effects=[],
-target=self.affected_entity,
-stat_to_target=PrimaryStat.BUSTLE,
-affect_amount=2,</p>
-</dd>
-</dl>
-<p>)</p>
-<p>return [affect_stat_effect]</p>
-</div></blockquote>
-</dd>
-</dl>
-</div></blockquote>
+<p>Example json:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"BoggedDown"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"AfflictionData"</span><span class="p">,</span>
+    <span class="nt">"category"</span><span class="p">:</span> <span class="s2">"bane"</span><span class="p">,</span>
+    <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"It weakens mundane defence and makes you a little bit slower."</span><span class="p">,</span>
+    <span class="nt">"icon_path"</span><span class="p">:</span> <span class="s2">"skills/root.png"</span><span class="p">,</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"bogged down"</span><span class="p">,</span>
+    <span class="nt">"identity_tags"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"affect_stat"</span>
+    <span class="p">],</span>
+    <span class="nt">"triggers"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"movement"</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Example class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BoggedDown</span><span class="p">(</span><span class="n">Affliction</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    A demo of being stuck in the mud - it`ll ground you</span>
+<span class="sd">    """</span>
+
+    <span class="c1"># targeting</span>
+    <span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">]</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AffectStatEffect</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+
+        <span class="n">affect_stat_effect</span> <span class="o">=</span> <span class="n">AffectStatEffect</span><span class="p">(</span>
+            <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
+            <span class="n">cause_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">success_effects</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">failure_effects</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span><span class="p">,</span>
+            <span class="n">stat_to_target</span><span class="o">=</span><span class="n">PrimaryStat</span><span class="o">.</span><span class="n">BUSTLE</span><span class="p">,</span>
+            <span class="n">affect_amount</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">affect_stat_effect</span><span class="p">]</span>
+</pre></div>
+</div>
 
 
 <h3 id="skill">Skill<a class="headerlink" href="#skill" title="Permalink to this headline">¶</a></h3>
-<p>Example json:
-.. code-block:: json</p>
-<blockquote>
-<div><dl class="simple">
-<dt>“Lightning”: {</dt><dd><p>“__dataclass__”: “SkillData”,
-“name”: “Call Lightning”,
-“description”: “Shocking.”,
-“cooldown”: 1,
-“icon_path”: “”,
-“resource_cost”: 10,
-“resource_type”: “stamina”,
-“time_cost”: 35</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>Example class:
-.. code-block:: python</p>
-<blockquote>
-<div><p>class Lightning(Skill):
-“””
-A demo of lightning - it`s shocking!
-“””
-# casting
-cast_tags: List[TileTagType] = [TileTag.NO_BLOCKING_TILE]</p>
-<p># targeting
-range: int = 3
-target_tags: List[TileTagType] = [TileTag.ANY]
-targeting_method: TargetingMethodType = TargetingMethod.TILE
-target_directions: List[DirectionType] = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT,</p>
-<blockquote>
-<div><p>Direction.UP_LEFT, Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT]</p>
-</div></blockquote>
-<p>shape: ShapeType = Shape.TARGET
-shape_size: int = 1</p>
-<p># delivery
-uses_projectile: bool = False
-projectile_data: Optional[ProjectileData] = None
-is_delayed: bool = True
-delayed_skill_data: Optional[DelayedSkillData] = DelayedSkillData(</p>
-<blockquote>
-<div><p>duration=3</p>
-</div></blockquote>
-<p>)</p>
-<dl>
-<dt>def _build_effects(self, entity: EntityID, potency: float = 1.0) -&gt; List[DamageEffect]:</dt><dd><dl class="simple">
-<dt>damage_effect = DamageEffect(</dt><dd><p>origin=self.user,
-success_effects=[],
-failure_effects=[],
-target=entity,
-stat_to_target=PrimaryStat.VIGOUR,
-accuracy=library.GAME_CONFIG.base_values.accuracy + 20,
-damage=int(library.GAME_CONFIG.base_values.damage * potency),
-damage_type=DamageType.MUNDANE,
-mod_stat=PrimaryStat.CLOUT,
-mod_amount=0.1,</p>
-</dd>
-</dl>
-<p>)
-return [damage_effect]</p>
-</dd>
-</dl>
-</div></blockquote>
+<p>Example json:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"Lightning"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"__dataclass__"</span><span class="p">:</span> <span class="s2">"SkillData"</span><span class="p">,</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"Call Lightning"</span><span class="p">,</span>
+    <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"Shocking."</span><span class="p">,</span>
+    <span class="nt">"cooldown"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">"icon_path"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="nt">"resource_cost"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="nt">"resource_type"</span><span class="p">:</span> <span class="s2">"stamina"</span><span class="p">,</span>
+    <span class="nt">"time_cost"</span><span class="p">:</span> <span class="mi">35</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Example class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Lightning</span><span class="p">(</span><span class="n">Skill</span><span class="p">):</span>
+<span class="sd">"""</span>
+<span class="sd">A demo of lightning - it`s shocking!</span>
+<span class="sd">"""</span>
+<span class="c1"># casting</span>
+<span class="n">cast_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">NO_BLOCKING_TILE</span><span class="p">]</span>
+
+<span class="c1"># targeting</span>
+<span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">target_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TileTagType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">TileTag</span><span class="o">.</span><span class="n">ANY</span><span class="p">]</span>
+<span class="n">targeting_method</span><span class="p">:</span> <span class="n">TargetingMethodType</span> <span class="o">=</span> <span class="n">TargetingMethod</span><span class="o">.</span><span class="n">TILE</span>
+<span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+    <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">]</span>
+<span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+<span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># delivery</span>
+<span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">projectile_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">is_delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">delayed_skill_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DelayedSkillData</span><span class="p">]</span> <span class="o">=</span> <span class="n">DelayedSkillData</span><span class="p">(</span>
+    <span class="n">duration</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DamageEffect</span><span class="p">]:</span>
+    <span class="n">damage_effect</span> <span class="o">=</span> <span class="n">DamageEffect</span><span class="p">(</span>
+        <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
+        <span class="n">success_effects</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">failure_effects</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
+        <span class="n">stat_to_target</span><span class="o">=</span><span class="n">PrimaryStat</span><span class="o">.</span><span class="n">VIGOUR</span><span class="p">,</span>
+        <span class="n">accuracy</span><span class="o">=</span><span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">base_values</span><span class="o">.</span><span class="n">accuracy</span> <span class="o">+</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">damage</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">base_values</span><span class="o">.</span><span class="n">damage</span> <span class="o">*</span> <span class="n">potency</span><span class="p">),</span>
+        <span class="n">damage_type</span><span class="o">=</span><span class="n">DamageType</span><span class="o">.</span><span class="n">MUNDANE</span><span class="p">,</span>
+        <span class="n">mod_stat</span><span class="o">=</span><span class="n">PrimaryStat</span><span class="o">.</span><span class="n">CLOUT</span><span class="p">,</span>
+        <span class="n">mod_amount</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">damage_effect</span><span class="p">]</span>
+</pre></div>
+</div>
 
 
 
@@ -792,12 +711,12 @@ return [damage_effect]</p>
             </a>
           
           
-            <a href="../engine/_engine.html" title="Engine API"
+            <a href="design_notes.html" title="Design Notes"
                class="md-flex md-footer-nav__link md-footer-nav__link--next"
                rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
                 class="md-flex__ellipsis"> <span
-                class="md-footer-nav__direction"> Next </span> Engine API </span>
+                class="md-footer-nav__direction"> Next </span> Design Notes </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink"><i
                 class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
@@ -815,7 +734,7 @@ return [damage_effect]</p>
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>
