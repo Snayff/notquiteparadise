@@ -46,7 +46,7 @@ from scripts.engine.core.effect import (
 )
 from scripts.engine.core.utility import build_sprites_from_paths
 from scripts.engine.internal import library
-from scripts.engine.internal.action import Affliction, Skill
+from scripts.engine.internal.action import Affliction, Skill, SkillModifier
 from scripts.engine.internal.constant import (
     DirectionType,
     EffectType,
@@ -568,6 +568,40 @@ def _create_alter_terrain_effect(
     )
 
     return effect
+
+def create_compatible_blessings(amount: int) -> List[SkillModifier]:
+    player = get_player()
+    knowledge = get_entitys_component(player, Knowledge)
+
+    # get all blessing names
+    blessing_options = list(store.blessing_registry)
+
+    blessings: List[SkillModifier] = []
+
+    # look for compatible blessings until enough are found
+    while len(blessings) < amount:
+        # pick a random blessing from the remaining blessings
+        random_choice = random.choice(blessing_options)
+        # generate the blessing object from the randomly selected blessing
+        possible_option = store.blessing_registry[random_choice](player)
+
+        # go through the player's skills
+        for skill in knowledge.skills.values():
+            # check if the blessing is compatible
+            if knowledge.can_add_blessing(skill, possible_option):
+                # we know that at least one skill is compatible with the blessing.
+                # the full list will be calculated later, so we can break.
+                blessings.append(possible_option)
+                break
+
+        # remove from the list of options so we don't get stuck in a loop
+        blessing_options.remove(random_choice)
+
+        # in case there aren't enough compatible blessings
+        if len(blessing_options) == 0:
+            break
+
+    return blessings
 
 
 ############################# GET - RETURN AN EXISTING SOMETHING  #############################

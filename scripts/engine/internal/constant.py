@@ -153,6 +153,7 @@ class UIElement(IntEnum):
 
     MESSAGE_LOG = auto()
     ACTOR_INFO = auto()
+    BLESSING_MENU = auto()
     SKILL_BAR = auto()
     ENTITY_QUEUE = auto()
     TILE_INFO = auto()

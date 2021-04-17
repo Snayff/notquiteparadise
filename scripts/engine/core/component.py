@@ -22,6 +22,7 @@ from scripts.engine.internal.constant import (
     SpriteCategoryType,
 )
 from scripts.engine.internal.definition import ReactionData
+from scripts.engine.internal.event import event_hub, ShrineMenuEvent
 
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Set, Tuple, Type
@@ -38,6 +39,7 @@ __all__ = [
     "CombatStats",
     "WinCondition",
     "MapCondition",
+    "Shrine",
     "Position",
     "Aesthetic",
     "Tracked",
@@ -149,6 +151,35 @@ class MapCondition(NQPComponent):
     @classmethod
     def deserialize(cls, serialised):
         return MapCondition()
+
+class Shrine(NQPComponent):
+    """
+    The component for tracking information relevant to shrines.
+    """
+
+    def __init__(self):
+        super().__init__()
+
+        self.associated_blessings: List[SkillModifier] = []
+        self.used = False
+        self.blessings_count = 4
+
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Shrine()
+
+    def interact(self):
+        import scripts.engine.core.matter
+
+        if self.associated_blessings == []:
+            self.associated_blessings = scripts.engine.core.matter.create_compatible_blessings(self.blessings_count)
+
+        if not self.used:
+            event_hub.post(ShrineMenuEvent(self.associated_blessings))
+            self.used = True
 
 
 #################### OTHERS #########################
@@ -468,13 +499,10 @@ class Knowledge(NQPComponent):
         if set_cooldown:
             self.cooldowns[skill.__name__] = 0
 
-    def add_blessing(self, skill: Type[Skill], blessing: SkillModifier) -> bool:
+    def can_add_blessing(self, skill: Type[Skill], blessing: SkillModifier) -> bool:
         """
-        Add a new blessing.
+        Check if a blessing can be added to a skill.
         """
-
-        # generate blessing level (this will probably be moved somewhere else later)
-        blessing.roll_level()
 
         # create blessing list for the target skill if it doesn't exist yet
         if skill.__name__ not in self.skill_blessings:
@@ -496,10 +524,23 @@ class Knowledge(NQPComponent):
         elif not set(blessing.skill_types).intersection(set(skill.types)):
             return False
         else:
-            # finally add the blessing if it passed all of the other cases
-            self.skill_blessings[skill.__name__].append(blessing)
+            # all requirements met
+            return True
 
-        return True
+    def add_blessing(self, skill: Type[Skill], blessing: SkillModifier) -> bool:
+        """
+        Add a blessing to a skill.
+        """
+
+        # generate blessing level (this will probably be moved somewhere else later)
+        blessing.roll_level()
+
+        # check if blessing can be applied and apply if possible
+        if self.can_add_blessing(skill, blessing):
+            self.skill_blessings[skill.__name__].append(blessing)
+            return True
+        else:
+            return False
 
     def remove_blessing(self, skill: Type[Skill], remove_blessing: Type[SkillModifier]) -> bool:
         """

@@ -3,9 +3,11 @@ from __future__ import annotations
 import scripts.engine.core.matter
 from scripts.engine.core import hourglass, system
 from scripts.engine.core.ui import ui
-from scripts.engine.internal.constant import EventType, InputIntent, UIElement
+from scripts.engine.core.component import Shrine
+from scripts.engine.internal.constant import EventType, InputIntent, UIElement, GameState
 from scripts.engine.internal.event import (
     ChangeMapEvent,
+    ShrineEvent,
     EndRoundEvent,
     EndTurnEvent,
     ExitGameEvent,
@@ -18,9 +20,11 @@ from scripts.engine.internal.event import (
     StartGameEvent,
     Subscriber,
     WinConditionMetEvent,
+    ShrineMenuEvent,
 )
 from scripts.nqp import command
 from scripts.nqp.processors.intent import process_intent
+from scripts.nqp.ui_elements.blessing_menu import BlessingMenu
 
 __all__ = ["GameEventSubscriber"]
 
@@ -60,6 +64,11 @@ class GameEventSubscriber(Subscriber):
         elif isinstance(event, ChangeMapEvent):
             command.change_map()
 
+        elif isinstance(event, ShrineEvent):
+            # not sure if this is where this should go...
+            shrine = scripts.engine.core.matter.get_entitys_component(event.target_shrine, Shrine)
+            shrine.interact()
+
         elif isinstance(event, LoseConditionMetEvent):
             command.lose_game()
 
@@ -74,6 +83,15 @@ class GameEventSubscriber(Subscriber):
 
         elif isinstance(event, EndRoundEvent):
             _process_end_round()
+
+        elif isinstance(event, ShrineMenuEvent):
+            from scripts.engine.core import state
+
+            blessing_menu: BlessingMenu = BlessingMenu(
+                command.get_element_rect(UIElement.BLESSING_MENU), ui.get_gui_manager(), event.blessing_options
+            )
+            ui.register_element(UIElement.BLESSING_MENU, blessing_menu)
+            state.set_new(GameState.MENU)
 
 
 def _process_end_turn():

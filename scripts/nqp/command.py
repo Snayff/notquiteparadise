@@ -20,6 +20,7 @@ from scripts.engine.core.component import (
     IsPlayer,
     LightSource,
     MapCondition,
+    Shrine,
     Position,
     WinCondition,
 )
@@ -172,11 +173,23 @@ def start_game(player_data: ActorData):
     #knowledge.add_blessing(BasicAttack, SaltTheWound(player))
     #knowledge.add_blessing(BasicAttack, KeepAnEvenKeel(player))
 
+    # create blessing shrine
+    player_pos = scripts.engine.core.matter.get_entitys_component(player, Position)
+    shrine_x = player_pos.x + 3
+    shrine_y = player_pos.y
+    components: List[Component] = []
+    components.append(Position((shrine_x, shrine_y)))  # lets hope this doesnt spawn in a wall
+    components.append(Shrine())
+    traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/shrine.png"))]
+    sprites = utility.build_sprites_from_paths(traits_paths)
+    components.append(Aesthetic(sprites, traits_paths, RenderLayer.ACTOR, (shrine_x, shrine_y)))
+    scripts.engine.core.matter.create_entity(components)
+
     # create win condition and place next to player
     player_pos = scripts.engine.core.matter.get_entitys_component(player, Position)
     win_x = player_pos.x + 1
     win_y = player_pos.y
-    components: List[Component] = []
+    components = []
     components.append(Position((win_x, win_y)))  # lets hope this doesnt spawn in a wall
     components.append(WinCondition())
     traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/win_flag.png"))]
@@ -185,14 +198,14 @@ def start_game(player_data: ActorData):
     scripts.engine.core.matter.create_entity(components)
 
     # create map change condition and place next to player
-    win_x = player_pos.x + 2
-    win_y = player_pos.y
+    map_x = player_pos.x + 2
+    map_y = player_pos.y
     components = []
-    components.append(Position((win_x, win_y)))  # lets hope this doesnt spawn in a wall
+    components.append(Position((map_x, map_y)))  # lets hope this doesnt spawn in a wall
     components.append(MapCondition())
     traits_paths = [TraitSpritePathsData(idle=str(ASSET_PATH / "world/map_flag.png"))]
     sprites = utility.build_sprites_from_paths(traits_paths)
-    components.append(Aesthetic(sprites, traits_paths, RenderLayer.ACTOR, (win_x, win_y)))
+    components.append(Aesthetic(sprites, traits_paths, RenderLayer.ACTOR, (map_x, map_y)))
     scripts.engine.core.matter.create_entity(components)
 
     # tell places about the player
@@ -468,6 +481,12 @@ def get_element_rect(element_type: UIElement) -> pygame.Rect:
     char_selector_x = 0
     char_selector_y = 0
 
+    # blessings menu
+    blessing_menu_width = desired_width / 2
+    blessing_menu_height = desired_width * 0.4
+    blessing_menu_x = 5
+    blessing_menu_y = 10
+
     layout = {
         UIElement.MESSAGE_LOG: pygame.Rect((message_x, message_y), (message_width, message_height)),
         UIElement.TILE_INFO: pygame.Rect((tile_info_x, tile_info_y), (tile_info_width, tile_info_height)),
@@ -476,6 +495,7 @@ def get_element_rect(element_type: UIElement) -> pygame.Rect:
             (dungen_viewer_x, dungen_viewer_y), (dungen_viewer_width, dungen_viewer_height)
         ),
         UIElement.ACTOR_INFO: pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height)),
+        UIElement.BLESSING_MENU: pygame.Rect((blessing_menu_x, blessing_menu_y), (blessing_menu_width, blessing_menu_height)),
         UIElement.TITLE_SCREEN: pygame.Rect(
             (title_screen_x, title_screen_y), (title_screen_width, title_screen_height)
         ),

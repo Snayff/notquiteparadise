@@ -15,6 +15,7 @@ from scripts.engine.core.component import (
     Lifespan,
     LightSource,
     MapCondition,
+    Shrine,
     Opinion,
     Physicality,
     Position,
@@ -87,6 +88,8 @@ position_and_aesthetic = _get_components([Position, Aesthetic]).compile()
 position_and_win_condition = _get_components([Position, WinCondition]).compile()
 
 position_and_map_condition = _get_components([Position, MapCondition]).compile()
+
+position_and_shrine = _get_components([Position, Shrine]).compile()
 
 position_and_reaction = _get_components([Position, Reaction]).compile()
 
